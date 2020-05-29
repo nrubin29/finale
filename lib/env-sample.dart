@@ -1,0 +1,2 @@
+const apiKey = '';
+const apiSecret = '';
