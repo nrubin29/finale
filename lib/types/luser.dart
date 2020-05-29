@@ -65,3 +65,16 @@ class LUser {
 
   Map<String, dynamic> toJson() => _$LUserToJson(this);
 }
+
+@JsonSerializable()
+class LAuthenticationResponseSession {
+  String name;
+  String key;
+
+  LAuthenticationResponseSession(this.name, this.key);
+
+  factory LAuthenticationResponseSession.fromJson(Map<String, dynamic> json) =>
+      _$LAuthenticationResponseSessionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LAuthenticationResponseSessionToJson(this);
+}

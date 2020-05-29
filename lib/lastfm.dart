@@ -41,6 +41,18 @@ class Lastfm {
             .join('&');
   }
 
+  Future<LAuthenticationResponseSession> authenticate(String token) async {
+    final response =
+        await http.post(_buildURL('auth.getSession', data: {'token': token}));
+
+    if (response.statusCode == 200) {
+      return LAuthenticationResponseSession.fromJson(
+          json.decode(response.body)['session']);
+    } else {
+      throw Exception('Could not authenticate.');
+    }
+  }
+
   Future<LUser> getUser(String username) async {
     final response =
         await http.get(_buildURL('user.getInfo', data: {'user': username}));

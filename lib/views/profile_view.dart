@@ -13,13 +13,13 @@ class ProfileView extends StatelessWidget {
     return FutureBuilder<LUser>(
       future: Lastfm().getUser(username),
       builder: (context, snapshot) {
-        final user = snapshot.data;
-
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else if (!snapshot.hasData) {
           return CircularProgressIndicator();
         }
+
+        final user = snapshot.data;
 
         return Scaffold(
           appBar: AppBar(

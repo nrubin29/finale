@@ -55,3 +55,18 @@ Map<String, dynamic> _$LUserToJson(LUser instance) => <String, dynamic>{
       'bootstrap': instance.bootstrap,
       'registered': instance.registered,
     };
+
+LAuthenticationResponseSession _$LAuthenticationResponseSessionFromJson(
+    Map<String, dynamic> json) {
+  return LAuthenticationResponseSession(
+    json['name'] as String,
+    json['key'] as String,
+  );
+}
+
+Map<String, dynamic> _$LAuthenticationResponseSessionToJson(
+        LAuthenticationResponseSession instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'key': instance.key,
+    };

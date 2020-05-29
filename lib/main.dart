@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simplescrobble/views/login_view.dart';
 import 'package:simplescrobble/views/profile_view.dart';
 
 void main() => runApp(MyApp());
@@ -10,6 +12,17 @@ class MyApp extends StatelessWidget {
         title: 'simplescrobble',
         theme:
             ThemeData.from(colorScheme: ColorScheme.light(primary: Colors.red)),
-        home: ProfileView(username: 'nrubin29'));
+        home: FutureBuilder<String>(
+            future: SharedPreferences.getInstance()
+                .then((value) => value.getString('name')),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              } else if (snapshot.hasData) {
+                return ProfileView(username: snapshot.data);
+              } else {
+                return LoginView();
+              }
+            }));
   }
 }
