@@ -58,7 +58,7 @@ class Lastfm {
 
   Future<LUser> getUser(String username) async {
     final response =
-    await http.get(_buildURL('user.getInfo', data: {'user': username}));
+        await http.get(_buildURL('user.getInfo', data: {'user': username}));
 
     if (response.statusCode == 200) {
       return LUser.fromJson(json.decode(response.body)['user']);
@@ -67,8 +67,8 @@ class Lastfm {
     }
   }
 
-  Future<List<BasicScrobbledTrack>> getRecentTracks(String username,
-      int page) async {
+  Future<List<BasicScrobbledTrack>> getRecentTracks(
+      String username, int page) async {
     if (username == null) {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
@@ -77,9 +77,8 @@ class Lastfm {
         data: {'user': username, 'page': page}, encode: ['user']));
 
     if (response.statusCode == 200) {
-      return LRecentTracksResponseRecentTracks
-          .fromJson(
-          json.decode(response.body)['recenttracks'])
+      return LRecentTracksResponseRecentTracks.fromJson(
+              json.decode(response.body)['recenttracks'])
           .tracks;
     } else {
       throw Exception('Could not get recent tracks.');

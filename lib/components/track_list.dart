@@ -76,4 +76,10 @@ class _TrackListComponentState extends State<TrackListComponent> {
                 itemCount: tracks.length,
                 itemBuilder: _itemBuilder)));
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
 }
