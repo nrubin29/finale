@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/views/profile_view.dart';
+import 'package:simplescrobble/views/main_view.dart';
 
 import '../env.dart';
 
@@ -29,8 +29,7 @@ class LoginView extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ProfileView(username: session.name)));
+                      builder: (context) => MainView(username: session.name)));
             },
             color: Colors.red,
             child: Text('Log in with Last.fm',
