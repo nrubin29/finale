@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplescrobble/views/login_view.dart';
-import 'package:simplescrobble/views/profile_view.dart';
+import 'package:simplescrobble/views/main_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               } else if (snapshot.hasData) {
-                return ProfileView(username: snapshot.data);
+                return MainView(username: snapshot.data);
               } else {
                 return LoginView();
               }
