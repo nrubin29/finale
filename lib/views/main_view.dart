@@ -22,11 +22,6 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//        floatingActionButton: FloatingActionButton(
-//          onPressed: () {},
-//          backgroundColor: Colors.red,
-//          child: Icon(Icons.add, color: Colors.white),
-//        ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _index,
           onTap: (int index) {

@@ -10,8 +10,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'simplescrobble',
-        theme:
-            ThemeData.from(colorScheme: ColorScheme.light(primary: Colors.red)),
+        theme: ThemeData.from(
+            colorScheme: ColorScheme.light(
+                primary: Colors.red,
+                secondary: Colors.red,
+                surface: Colors.red)),
+        darkTheme: ThemeData.from(
+            colorScheme: ColorScheme.dark(
+                primary: Colors.red,
+                secondary: Colors.red,
+                surface: Colors.red)),
         home: FutureBuilder<String>(
             future: SharedPreferences.getInstance()
                 .then((value) => value.getString('name')),
