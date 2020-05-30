@@ -1,9 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:simplescrobble/types/generic.dart';
 
 part 'lcommon.g.dart';
 
 @JsonSerializable()
-class LImage {
+class LImage extends GenericImage {
   @JsonKey(name: '#text')
   String url;
   String size;

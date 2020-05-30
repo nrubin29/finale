@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:simplescrobble/components/track_list.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/luser.dart';
 
@@ -58,7 +59,8 @@ class ProfileView extends StatelessWidget {
                     children: [Text('Tracks'), Text('???')],
                   ),
                 ],
-              ))
+              )),
+              TrackListComponent(username: username),
             ],
           )),
         );

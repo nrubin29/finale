@@ -1,3 +1,4 @@
+*.g.dart
 lib/env.dart
 
 # Miscellaneous
