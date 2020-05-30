@@ -15,3 +15,16 @@ class LImage extends GenericImage {
 
   Map<String, dynamic> toJson() => _$LImageToJson(this);
 }
+
+@JsonSerializable()
+class LScrobbleResponseScrobblesAttr {
+  int accepted;
+  int ignored;
+
+  LScrobbleResponseScrobblesAttr(this.accepted, this.ignored);
+
+  factory LScrobbleResponseScrobblesAttr.fromJson(Map<String, dynamic> json) =>
+      _$LScrobbleResponseScrobblesAttrFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LScrobbleResponseScrobblesAttrToJson(this);
+}

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplescrobble/env.dart';
 import 'package:simplescrobble/types/generic.dart';
+import 'package:simplescrobble/types/lcommon.dart';
 import 'package:simplescrobble/types/ltrack.dart';
 import 'package:simplescrobble/types/luser.dart';
 
@@ -82,6 +83,33 @@ class Lastfm {
           .tracks;
     } else {
       throw Exception('Could not get recent tracks.');
+    }
+  }
+
+  Future<LScrobbleResponseScrobblesAttr> scrobble(
+      String track, String artist, String album, DateTime timestamp) async {
+    final sk = (await SharedPreferences.getInstance()).getString('key');
+
+    print(
+        (DateTime.now().millisecondsSinceEpoch * 1000).toStringAsPrecision(16));
+    final response = await http.post(_buildURL('track.scrobble', data: {
+      'album': album,
+      'artist': artist,
+      'sk': sk,
+      'timestamp': timestamp.millisecondsSinceEpoch ~/ 1000,
+      'track': track
+    }, encode: [
+      'album',
+      'artist',
+      'track'
+    ]));
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return LScrobbleResponseScrobblesAttr.fromJson(
+          json.decode(response.body)['scrobbles']['@attr']);
+    } else {
+      throw Exception('Could not scrobble.');
     }
   }
 }

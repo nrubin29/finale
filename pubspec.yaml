@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   crypto: ^2.1.5
+  datetime_picker_formfield: ^1.0.0
   flutter:
     sdk: flutter
   flutter_web_auth: ^0.2.4

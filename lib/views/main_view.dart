@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/views/profile_view.dart';
+import 'package:simplescrobble/views/scrobble_view.dart';
 import 'package:simplescrobble/views/search_view.dart';
 
 class MainView extends StatefulWidget {
@@ -37,12 +38,15 @@ class _MainViewState extends State<MainView> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.person), title: Text('Profile')),
             BottomNavigationBarItem(
-                icon: Icon(Icons.search), title: Text('Search'))
+                icon: Icon(Icons.search), title: Text('Search')),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.add), title: Text('Scrobble')),
           ],
         ),
         body: IndexedStack(index: _index, children: [
           ProfileView(username: _username),
           SearchView(),
+          ScrobbleView(),
         ]));
   }
 }
