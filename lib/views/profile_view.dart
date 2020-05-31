@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:simplescrobble/components/list_component.dart';
+import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/luser.dart';
 
@@ -50,15 +50,15 @@ class ProfileView extends StatelessWidget {
                     children: [Text('Artists'), Text('???')],
                   ),
                   VerticalDivider(),
-                      Column(
-                        children: [Text('Albums'), Text('???')],
-                      ),
-                      VerticalDivider(),
-                      Column(
-                        children: [Text('Tracks'), Text('???')],
-                      ),
-                    ],
-                  )),
+                  Column(
+                    children: [Text('Albums'), Text('???')],
+                  ),
+                  VerticalDivider(),
+                  Column(
+                    children: [Text('Tracks'), Text('???')],
+                  ),
+                ],
+              )),
               SizedBox(height: 10),
               Expanded(
                   child: DefaultTabController(
@@ -71,13 +71,15 @@ class ProfileView extends StatelessWidget {
                         ]),
                         Expanded(
                             child: TabBarView(children: [
-                              ListComponent(
+                              DisplayComponent(
                                   username: username,
                                   getter: Lastfm().getRecentTracks),
-                              ListComponent(
+                              DisplayComponent(
+                                  displayType: DisplayType.grid,
                                   username: username,
                                   getter: Lastfm().getTopArtists),
-                              ListComponent(
+                              DisplayComponent(
+                                  displayType: DisplayType.grid,
                                   username: username,
                                   getter: Lastfm().getTopAlbums),
                             ]))
