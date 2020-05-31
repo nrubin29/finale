@@ -65,9 +65,8 @@ class GetRecentTracksRequest
         data: {'user': username, 'page': page}, encode: ['user']));
 
     if (response.statusCode == 200) {
-      return LRecentTracksResponseRecentTracks
-          .fromJson(
-          json.decode(response.body)['recenttracks'])
+      return LRecentTracksResponseRecentTracks.fromJson(
+              json.decode(response.body)['recenttracks'])
           .tracks;
     } else {
       throw Exception('Could not get recent tracks.');
@@ -120,7 +119,7 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
     if (response.statusCode == 200) {
       return LTopAlbumsResponseTopAlbums
           .fromJson(
-              json.decode(response.body)['topalbums'])
+          json.decode(response.body)['topalbums'])
           .albums;
     } else {
       throw Exception('Could not get top albums.');

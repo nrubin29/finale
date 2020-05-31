@@ -79,12 +79,12 @@ class _DisplayComponentState extends State<DisplayComponent>
       visualDensity: VisualDensity.compact,
       title: Text(item.displayTitle),
       subtitle:
-      item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
+          item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
       leading:
-      item.images != null ? Image.network(item.images.first.url) : null,
+          item.images != null ? Image.network(item.images.first.url) : null,
       trailing: item.displayTrailing != null
           ? Text(item.displayTrailing,
-          style: TextStyle(color: Colors.grey, fontSize: 12))
+              style: TextStyle(color: Colors.grey, fontSize: 12))
           : null,
     );
   }
