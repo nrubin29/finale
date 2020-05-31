@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplescrobble/env.dart';
 import 'package:simplescrobble/types/generic.dart';
+import 'package:simplescrobble/types/lalbum.dart';
+import 'package:simplescrobble/types/lartist.dart';
 import 'package:simplescrobble/types/lcommon.dart';
 import 'package:simplescrobble/types/ltrack.dart';
 import 'package:simplescrobble/types/luser.dart';
@@ -83,6 +85,44 @@ class Lastfm {
           .tracks;
     } else {
       throw Exception('Could not get recent tracks.');
+    }
+  }
+
+  Future<List<BasicScrobbledAlbum>> getTopAlbums(
+      String username, int page) async {
+    if (username == null) {
+      username = (await SharedPreferences.getInstance()).getString('name');
+    }
+
+    final response = await http.get(_buildURL('user.getTopAlbums',
+        data: {'user': username, 'page': page, 'period': '7day'},
+        encode: ['user', 'period']));
+
+    if (response.statusCode == 200) {
+      return LTopAlbumsResponseTopAlbums.fromJson(
+              json.decode(response.body)['topalbums'])
+          .albums;
+    } else {
+      throw Exception('Could not get top albums.');
+    }
+  }
+
+  Future<List<BasicScrobbledArtist>> getTopArtists(
+      String username, int page) async {
+    if (username == null) {
+      username = (await SharedPreferences.getInstance()).getString('name');
+    }
+
+    final response = await http.get(_buildURL('user.getTopArtists',
+        data: {'user': username, 'page': page, 'period': '7day'},
+        encode: ['user', 'period']));
+
+    if (response.statusCode == 200) {
+      return LTopArtistsResponseTopArtists.fromJson(
+              json.decode(response.body)['topartists'])
+          .artists;
+    } else {
+      throw Exception('Could not get top artists.');
     }
   }
 

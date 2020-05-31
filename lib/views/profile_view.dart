@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:simplescrobble/components/track_list.dart';
+import 'package:simplescrobble/components/list_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/luser.dart';
 
 class ProfileView extends StatelessWidget {
-  String username;
+  final String username;
 
-  ProfileView({Key key, this.username}) : super(key: key);
+  ProfileView({Key key, @required this.username}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,7 @@ class ProfileView extends StatelessWidget {
               Text(user.name)
             ]),
           ),
-          body: Center(
-              child: Column(
+          body: Column(
             children: [
               SizedBox(height: 10),
               Text('Scrobbling since ${user.registered.dateFormatted}'),
@@ -51,19 +50,40 @@ class ProfileView extends StatelessWidget {
                     children: [Text('Artists'), Text('???')],
                   ),
                   VerticalDivider(),
-                  Column(
-                    children: [Text('Albums'), Text('???')],
-                  ),
-                  VerticalDivider(),
-                  Column(
-                    children: [Text('Tracks'), Text('???')],
-                  ),
-                ],
-              )),
+                      Column(
+                        children: [Text('Albums'), Text('???')],
+                      ),
+                      VerticalDivider(),
+                      Column(
+                        children: [Text('Tracks'), Text('???')],
+                      ),
+                    ],
+                  )),
               SizedBox(height: 10),
-              TrackListComponent(username: username),
+              Expanded(
+                  child: DefaultTabController(
+                      length: 3,
+                      child: Column(children: [
+                        TabBar(tabs: [
+                          Tab(icon: Icon(Icons.audiotrack)),
+                          Tab(icon: Icon(Icons.people)),
+                          Tab(icon: Icon(Icons.album))
+                        ]),
+                        Expanded(
+                            child: TabBarView(children: [
+                              ListComponent(
+                                  username: username,
+                                  getter: Lastfm().getRecentTracks),
+                              ListComponent(
+                                  username: username,
+                                  getter: Lastfm().getTopArtists),
+                              ListComponent(
+                                  username: username,
+                                  getter: Lastfm().getTopAlbums),
+                            ]))
+                      ])))
             ],
-          )),
+          ),
         );
       },
     );
