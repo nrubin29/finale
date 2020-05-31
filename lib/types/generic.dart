@@ -83,6 +83,13 @@ abstract class BasicArtist extends Displayable {
   String get displayTitle => name;
 }
 
+class ConcreteBasicArtist extends BasicArtist {
+  String name;
+  List<GenericImage> images;
+
+  ConcreteBasicArtist(this.name, this.images);
+}
+
 abstract class BasicScrobbledArtist extends BasicArtist {
   String get playCount;
 

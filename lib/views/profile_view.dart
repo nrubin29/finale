@@ -12,7 +12,7 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LUser>(
-      future: Lastfm().getUser(username),
+      future: Lastfm.getUser(username),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
@@ -71,18 +71,15 @@ class ProfileView extends StatelessWidget {
                         ]),
                         Expanded(
                             child: TabBarView(children: [
-                              DisplayComponent(
-                                  username: username,
-                                  getter: Lastfm().getRecentTracks),
-                              DisplayComponent(
-                                  displayType: DisplayType.grid,
-                                  username: username,
-                                  getter: Lastfm().getTopArtists),
-                              DisplayComponent(
-                                  displayType: DisplayType.grid,
-                                  username: username,
-                                  getter: Lastfm().getTopAlbums),
-                            ]))
+                          DisplayComponent(
+                              request: GetRecentTracksRequest(username)),
+                          DisplayComponent(
+                              displayType: DisplayType.grid,
+                              request: GetTopArtistsRequest(username)),
+                          DisplayComponent(
+                              displayType: DisplayType.grid,
+                              request: GetTopAlbumsRequest(username)),
+                        ]))
                       ])))
             ],
           ),

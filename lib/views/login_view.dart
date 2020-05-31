@@ -20,7 +20,7 @@ class LoginView extends StatelessWidget {
                       {'api_key': apiKey, 'cb': 'scrobble://auth'}).toString(),
                   callbackUrlScheme: 'scrobble');
               final token = Uri.parse(result).queryParameters['token'];
-              final session = await Lastfm().authenticate(token);
+              final session = await Lastfm.authenticate(token);
 
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.setString('name', session.name);

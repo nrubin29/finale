@@ -94,3 +94,34 @@ class LRecentTracksResponseRecentTracks {
   Map<String, dynamic> toJson() =>
       _$LRecentTracksResponseRecentTracksToJson(this);
 }
+
+@JsonSerializable()
+class LTrackMatch extends BasicTrack {
+  String name;
+  String artist;
+
+  @JsonKey(name: 'image')
+  List<LImage> images;
+
+  String get album => 'Album';
+
+  LTrackMatch(this.name, this.artist, this.images);
+
+  factory LTrackMatch.fromJson(Map<String, dynamic> json) =>
+      _$LTrackMatchFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTrackMatchToJson(this);
+}
+
+@JsonSerializable()
+class LTrackSearchResponse {
+  @JsonKey(name: 'track')
+  List<LTrackMatch> tracks;
+
+  LTrackSearchResponse(this.tracks);
+
+  factory LTrackSearchResponse.fromJson(Map<String, dynamic> json) =>
+      _$LTrackSearchResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTrackSearchResponseToJson(this);
+}

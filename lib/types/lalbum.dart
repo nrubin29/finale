@@ -48,3 +48,36 @@ class LTopAlbumsResponseTopAlbums {
 
   Map<String, dynamic> toJson() => _$LTopAlbumsResponseTopAlbumsToJson(this);
 }
+
+@JsonSerializable()
+class LAlbumMatch extends BasicAlbum {
+  String name;
+
+  @JsonKey(name: 'artist')
+  String artistName;
+
+  @JsonKey(name: 'image')
+  List<LImage> images;
+
+  BasicArtist get artist => ConcreteBasicArtist(artistName, null);
+
+  LAlbumMatch(this.name, this.artistName, this.images);
+
+  factory LAlbumMatch.fromJson(Map<String, dynamic> json) =>
+      _$LAlbumMatchFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LAlbumMatchToJson(this);
+}
+
+@JsonSerializable()
+class LAlbumSearchResponse {
+  @JsonKey(name: 'album')
+  List<LAlbumMatch> albums;
+
+  LAlbumSearchResponse(this.albums);
+
+  factory LAlbumSearchResponse.fromJson(Map<String, dynamic> json) =>
+      _$LAlbumSearchResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LAlbumSearchResponseToJson(this);
+}

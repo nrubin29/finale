@@ -17,7 +17,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   var _datetime = DateTime.now();
 
   Future<void> _scrobble() async {
-    final response = await Lastfm().scrobble(_trackController.text,
+    final response = await Lastfm.scrobble(_trackController.text,
         _artistController.text, _albumController.text, _datetime);
 
     if (response.ignored == 0) {

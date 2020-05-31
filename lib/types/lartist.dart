@@ -34,3 +34,31 @@ class LTopArtistsResponseTopArtists {
 
   Map<String, dynamic> toJson() => _$LTopArtistsResponseTopArtistsToJson(this);
 }
+
+@JsonSerializable()
+class LArtistMatch extends BasicArtist {
+  String name;
+
+  @JsonKey(name: 'image')
+  List<LImage> images;
+
+  LArtistMatch(this.name, this.images);
+
+  factory LArtistMatch.fromJson(Map<String, dynamic> json) =>
+      _$LArtistMatchFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LArtistMatchToJson(this);
+}
+
+@JsonSerializable()
+class LArtistSearchResponse {
+  @JsonKey(name: 'artist')
+  List<LArtistMatch> artists;
+
+  LArtistSearchResponse(this.artists);
+
+  factory LArtistSearchResponse.fromJson(Map<String, dynamic> json) =>
+      _$LArtistSearchResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LArtistSearchResponseToJson(this);
+}
