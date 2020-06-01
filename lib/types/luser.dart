@@ -1,18 +1,16 @@
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'lcommon.dart';
+import 'package:simplescrobble/types/generic.dart';
+import 'package:simplescrobble/types/lcommon.dart';
 
 part 'luser.g.dart';
 
 @JsonSerializable()
 class LUserRegistered {
-  @JsonKey(name: '#text')
-  int timestamp;
+  @JsonKey(name: '#text', fromJson: fromSecondsSinceEpoch)
+  DateTime date;
 
-  LUserRegistered(this.timestamp);
-
-  DateTime get date => DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  LUserRegistered(this.date);
 
   String get dateFormatted => DateFormat('dd MMM yyyy').format(date);
 
@@ -24,32 +22,46 @@ class LUserRegistered {
 
 @JsonSerializable()
 class LUser {
-  String id;
+//  @JsonKey(fromJson: int.parse)
+//  int id;
+
   String name;
-  String realname;
+
+  @JsonKey(name: 'realname')
+  String realName;
+
   String url;
 
   @JsonKey(name: 'image')
   List<LImage> images;
 
   String country;
-  String age;
+
+  @JsonKey(fromJson: int.parse)
+  int age;
+
   String gender;
-  String subscriber;
 
-  @JsonKey(name: 'playcount')
-  String playCount;
+  @JsonKey(fromJson: convertStringToBoolean)
+  bool subscriber;
 
-  String playlists;
-  String bootstrap;
+  @JsonKey(name: 'playcount', fromJson: int.parse)
+  int playCount;
+
+  @JsonKey(fromJson: int.parse)
+  int playlists;
+
+  @JsonKey(fromJson: int.parse)
+  int bootstrap;
+
   LUserRegistered registered;
 
-  String get playCountFormatted => NumberFormat().format(int.parse(playCount));
+  String get playCountFormatted => NumberFormat().format(playCount);
 
   LUser(
-      this.id,
+      //      this.id,
       this.name,
-      this.realname,
+      this.realName,
       this.url,
       this.images,
       this.country,

@@ -20,8 +20,8 @@ class LTopAlbumsResponseAlbumArtist extends BasicArtist {
 class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum {
   String name;
 
-  @JsonKey(name: 'playcount')
-  String playCount;
+  @JsonKey(name: 'playcount', fromJson: int.parse)
+  int playCount;
 
   LTopAlbumsResponseAlbumArtist artist;
 

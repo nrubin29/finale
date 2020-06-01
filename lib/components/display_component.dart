@@ -28,8 +28,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
 }
 
 class _DisplayComponentState<T extends Displayable>
-    extends State<DisplayComponent>
-    with AutomaticKeepAliveClientMixin {
+    extends State<DisplayComponent> with AutomaticKeepAliveClientMixin {
   var items = List<T>();
   int page = 1;
 
@@ -82,20 +81,30 @@ class _DisplayComponentState<T extends Displayable>
     return ListTile(
       visualDensity: VisualDensity.compact,
       title: Text(item.displayTitle),
+      onTap: () {
+        if (item.detailWidget != null) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => item.detailWidget));
+        }
+      },
       subtitle:
       item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
       leading:
       item.images != null ? Image.network(item.images.first.url) : null,
-      trailing: item.displayTrailing != null
-          ? Text(item.displayTrailing,
-          style: TextStyle(color: Colors.grey, fontSize: 12))
-          : widget.secondaryAction != null
-          ? IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () {
-            widget.secondaryAction(item);
-          })
-          : null,
+      trailing: IntrinsicWidth(
+          child: Row(
+            children: [
+              if (item.displayTrailing != null)
+                Text(item.displayTrailing,
+                    style: TextStyle(color: Colors.grey, fontSize: 12)),
+              if (widget.secondaryAction != null)
+                IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      widget.secondaryAction(item);
+                    })
+            ],
+          )),
     );
   }
 

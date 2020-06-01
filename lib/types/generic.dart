@@ -1,4 +1,14 @@
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:simplescrobble/views/track_view.dart';
+
+bool convertStringToBoolean(String text) => text == '1';
+
+DateTime fromSecondsSinceEpoch(int timestamp) =>
+    DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+
+DateTime fromSecondsSinceEpochString(String text) =>
+    fromSecondsSinceEpoch(int.parse(text));
 
 abstract class GenericImage {
   String get url;
@@ -12,6 +22,8 @@ abstract class Displayable {
   String get displayTrailing => null;
 
   List<GenericImage> get images => null;
+
+  Widget get detailWidget => null;
 }
 
 abstract class BasicTrack extends Displayable {
@@ -28,6 +40,9 @@ abstract class BasicTrack extends Displayable {
 
   @override
   String get displaySubtitle => artist;
+
+  @override
+  Widget get detailWidget => TrackView(track: this);
 }
 
 abstract class BasicScrobbledTrack extends BasicTrack {
@@ -53,6 +68,14 @@ abstract class BasicScrobbledTrack extends BasicTrack {
   }
 }
 
+abstract class FullTrack {
+  String get name;
+
+  BasicArtist get artist;
+
+  BasicAlbum get album;
+}
+
 abstract class BasicAlbum extends Displayable {
   String get name;
 
@@ -68,7 +91,7 @@ abstract class BasicAlbum extends Displayable {
 }
 
 abstract class BasicScrobbledAlbum extends BasicAlbum {
-  String get playCount;
+  int get playCount;
 
   @override
   String get displayTrailing => '$playCount scrobbles';
@@ -91,7 +114,7 @@ class ConcreteBasicArtist extends BasicArtist {
 }
 
 abstract class BasicScrobbledArtist extends BasicArtist {
-  String get playCount;
+  int get playCount;
 
   @override
   String get displayTrailing => '$playCount scrobbles';

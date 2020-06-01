@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplescrobble/env.dart';
+import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/lalbum.dart';
 import 'package:simplescrobble/types/lartist.dart';
 import 'package:simplescrobble/types/lcommon.dart';
@@ -116,9 +118,8 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
         encode: ['user', 'period']));
 
     if (response.statusCode == 200) {
-      return LTopAlbumsResponseTopAlbums
-          .fromJson(
-          json.decode(response.body)['topalbums'])
+      return LTopAlbumsResponseTopAlbums.fromJson(
+              json.decode(response.body)['topalbums'])
           .albums;
     } else {
       throw Exception('Could not get top albums.');
@@ -193,41 +194,6 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
 }
 
 class Lastfm {
-  static String _base = 'https://ws.audioscrobbler.com/2.0/';
-
-  static String _encode(String str) {
-    return Uri.encodeComponent(str).replaceAll(r'%20', '+');
-  }
-
-  static String _buildURL(String method,
-      {Map<String, dynamic> data = const {}, List<String> encode = const []}) {
-    final allData = {
-      ...data,
-      ...{'api_key': apiKey, 'method': method}
-    };
-    var allDataKeys = allData.keys.toList();
-    allDataKeys.sort();
-
-    final hash =
-        allDataKeys.map((key) => '$key${allData[key]}').join() + apiSecret;
-    final signature = md5.convert(utf8.encode(hash));
-    allData['api_sig'] = signature.toString();
-
-    allDataKeys = allData.keys.toList();
-    allDataKeys.sort();
-    return _base +
-        '?format=json&' +
-        allDataKeys
-            .map((key) =>
-        key +
-            '=' +
-            (encode.indexOf(key.replaceAll(r'\[\d+]', '')) != -1
-                ? _encode(allData[key])
-                : allData[key])
-                .toString())
-            .join('&');
-  }
-
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
     final response =
@@ -245,10 +211,35 @@ class Lastfm {
     final response =
     await http.get(_buildURL('user.getInfo', data: {'user': username}));
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       return LUser.fromJson(json.decode(response.body)['user']);
     } else {
       throw Exception('Could not get user.');
+    }
+  }
+
+  static Future<LTrack> getTrack(BasicTrack track) async {
+    final username = (await SharedPreferences.getInstance()).getString('name');
+
+    final response = await http.get(_buildURL('track.getInfo', data: {
+      'track': track.name,
+      'artist': track.artist,
+      'username': username
+    }, encode: [
+      'track',
+      'artist',
+      'username'
+    ]));
+
+    debugPrint(
+        JsonEncoder.withIndent('  ').convert(json.decode(response.body)));
+
+    if (response.statusCode == 200) {
+      return LTrack.fromJson(json.decode(response.body)['track']);
+    } else {
+      throw Exception('Could not get track.');
     }
   }
 

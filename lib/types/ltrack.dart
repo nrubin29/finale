@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/lcommon.dart';
@@ -11,8 +12,7 @@ class LRecentTracksResponseTrackArtist {
 
   LRecentTracksResponseTrackArtist(this.name);
 
-  factory LRecentTracksResponseTrackArtist.fromJson(
-          Map<String, dynamic> json) =>
+  factory LRecentTracksResponseTrackArtist.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackArtistFromJson(json);
 
   Map<String, dynamic> toJson() =>
@@ -35,13 +35,10 @@ class LRecentTracksResponseTrackAlbum {
 
 @JsonSerializable()
 class LRecentTracksResponseTrackDate {
-  @JsonKey(name: 'uts')
-  String timestamp;
+  @JsonKey(name: 'uts', fromJson: fromSecondsSinceEpochString)
+  DateTime date;
 
-  LRecentTracksResponseTrackDate(this.timestamp);
-
-  DateTime get date =>
-      DateTime.fromMillisecondsSinceEpoch(int.parse(timestamp) * 1000);
+  LRecentTracksResponseTrackDate(this.date);
 
   factory LRecentTracksResponseTrackDate.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackDateFromJson(json);
@@ -87,8 +84,7 @@ class LRecentTracksResponseRecentTracks {
 
   LRecentTracksResponseRecentTracks(this.tracks);
 
-  factory LRecentTracksResponseRecentTracks.fromJson(
-          Map<String, dynamic> json) =>
+  factory LRecentTracksResponseRecentTracks.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseRecentTracksFromJson(json);
 
   Map<String, dynamic> toJson() =>
@@ -124,4 +120,79 @@ class LTrackSearchResponse {
       _$LTrackSearchResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$LTrackSearchResponseToJson(this);
+}
+
+@JsonSerializable()
+class LTrackArtist extends BasicArtist {
+  String name;
+
+  LTrackArtist(this.name);
+
+  factory LTrackArtist.fromJson(Map<String, dynamic> json) =>
+      _$LTrackArtistFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTrackArtistToJson(this);
+}
+
+@JsonSerializable()
+class LTrackAlbum extends BasicAlbum {
+  @JsonKey(name: 'title')
+  String name;
+
+  @JsonKey(name: 'artist')
+  String artistName;
+
+  @JsonKey(name: 'image')
+  List<LImage> images;
+
+  BasicArtist get artist => ConcreteBasicArtist(artistName, null);
+
+  LTrackAlbum(this.name, this.artistName, this.images);
+
+  factory LTrackAlbum.fromJson(Map<String, dynamic> json) =>
+      _$LTrackAlbumFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTrackAlbumToJson(this);
+}
+
+@JsonSerializable()
+class LTrack extends FullTrack {
+  String name;
+
+  @JsonKey(fromJson: int.parse)
+  int listeners;
+
+  @JsonKey(fromJson: int.parse)
+  int duration;
+
+  @JsonKey(name: 'playcount', fromJson: int.parse)
+  int playCount;
+
+  @JsonKey(name: 'userplaycount', fromJson: int.parse)
+  int userPlayCount;
+
+  @JsonKey(name: 'userloved', fromJson: convertStringToBoolean)
+  bool userLoved;
+
+  LTrackArtist artist;
+  LTrackAlbum album;
+
+  @JsonKey(name: 'image')
+  List<LImage> images;
+
+  @JsonKey(name: 'toptags')
+  LTopTags topTags;
+
+  String get listenersFormatted => NumberFormat().format(listeners);
+
+  String get playCountFormatted => NumberFormat().format(playCount);
+
+  String get userPlayCountFormatted => NumberFormat().format(userPlayCount);
+
+  LTrack(this.name, this.listeners, this.duration, this.playCount, this.artist,
+      this.album, this.images, this.topTags);
+
+  factory LTrack.fromJson(Map<String, dynamic> json) => _$LTrackFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTrackToJson(this);
 }

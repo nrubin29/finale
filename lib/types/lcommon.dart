@@ -7,6 +7,7 @@ part 'lcommon.g.dart';
 class LImage extends GenericImage {
   @JsonKey(name: '#text')
   String url;
+
   String size;
 
   LImage(this.url, this.size);
@@ -27,4 +28,28 @@ class LScrobbleResponseScrobblesAttr {
       _$LScrobbleResponseScrobblesAttrFromJson(json);
 
   Map<String, dynamic> toJson() => _$LScrobbleResponseScrobblesAttrToJson(this);
+}
+
+@JsonSerializable()
+class LTag {
+  String name;
+
+  LTag(this.name);
+
+  factory LTag.fromJson(Map<String, dynamic> json) => _$LTagFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTagToJson(this);
+}
+
+@JsonSerializable()
+class LTopTags {
+  @JsonKey(name: 'tag')
+  List<LTag> tags;
+
+  LTopTags(this.tags);
+
+  factory LTopTags.fromJson(Map<String, dynamic> json) =>
+      _$LTopTagsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTopTagsToJson(this);
 }

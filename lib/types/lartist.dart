@@ -8,8 +8,8 @@ part 'lartist.g.dart';
 class LTopArtistsResponseArtist extends BasicScrobbledArtist {
   String name;
 
-  @JsonKey(name: 'playcount')
-  String playCount;
+  @JsonKey(name: 'playcount', fromJson: int.parse)
+  int playCount;
 
   @JsonKey(name: 'image')
   List<LImage> images;
