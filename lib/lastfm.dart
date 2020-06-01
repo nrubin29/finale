@@ -189,6 +189,56 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
   }
 }
 
+class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
+  String artist;
+
+  ArtistGetTopAlbumsRequest(this.artist);
+
+  @override
+  Future<List<LArtistTopAlbum>> doRequest(int limit, int page) async {
+    print('doing request');
+
+    final response = await http.get(_buildURL('artist.getTopAlbums',
+        data: {'artist': artist, 'limit': limit, 'page': page},
+        encode: ['artist']));
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return LArtistGetTopAlbumsResponse.fromJson(
+              json.decode(response.body)['topalbums'])
+          .albums;
+    } else {
+      throw Exception('Could not get artist\'s top albums.');
+    }
+  }
+}
+
+class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
+  String artist;
+
+  ArtistGetTopTracksRequest(this.artist);
+
+  @override
+  Future<List<LArtistTopTrack>> doRequest(int limit, int page) async {
+    print('doing request');
+
+    final response = await http.get(_buildURL('artist.getTopTracks',
+        data: {'artist': artist, 'limit': limit, 'page': page},
+        encode: ['artist']));
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return LArtistGetTopTracksResponse.fromJson(
+              json.decode(response.body)['toptracks'])
+          .tracks;
+    } else {
+      throw Exception('Could not get artist\'s top tracks.');
+    }
+  }
+}
+
 class Lastfm {
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {

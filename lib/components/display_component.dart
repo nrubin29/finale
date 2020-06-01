@@ -71,7 +71,7 @@ class _DisplayComponentState<T extends Displayable>
   }
 
   Future<void> _getInitialItems() async {
-    final initialItems = await _request.doRequest(50, 1);
+    final initialItems = await _request.doRequest(20, 1);
     setState(() {
       items = initialItems;
       page = 2;
@@ -79,7 +79,7 @@ class _DisplayComponentState<T extends Displayable>
   }
 
   Future<void> _getMoreItems() async {
-    final moreItems = await _request.doRequest(50, page);
+    final moreItems = await _request.doRequest(20, page);
     setState(() {
       items.addAll(moreItems);
       page += 1;

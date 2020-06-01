@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
+import 'package:simplescrobble/types/lalbum.dart';
 import 'package:simplescrobble/types/lcommon.dart';
 
 part 'lartist.g.dart';
@@ -94,4 +96,74 @@ class LArtist extends FullArtist {
       _$LArtistFromJson(json);
 
   Map<String, dynamic> toJson() => _$LArtistToJson(this);
+}
+
+@JsonSerializable()
+class LArtistTopAlbum extends BasicAlbum {
+  String name;
+
+  @JsonKey(name: 'playcount')
+  int playCount;
+
+  LTopAlbumsResponseAlbumArtist artist;
+
+  @JsonKey(name: 'image')
+  List<LImage> images;
+
+  LArtistTopAlbum(this.name, this.playCount, this.artist, this.images);
+
+  factory LArtistTopAlbum.fromJson(Map<String, dynamic> json) =>
+      _$LArtistTopAlbumFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LArtistTopAlbumToJson(this);
+}
+
+@JsonSerializable()
+class LArtistGetTopAlbumsResponse {
+  @JsonKey(name: 'album')
+  List<LArtistTopAlbum> albums;
+
+  LArtistGetTopAlbumsResponse(this.albums);
+
+  factory LArtistGetTopAlbumsResponse.fromJson(Map<String, dynamic> json) =>
+      _$LArtistGetTopAlbumsResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LArtistGetTopAlbumsResponseToJson(this);
+}
+
+@JsonSerializable()
+class LArtistTopTrack extends BasicTrack {
+  String name;
+
+  @JsonKey(name: 'artist')
+  LTopAlbumsResponseAlbumArtist artistObject;
+
+  String get artist => artistObject.name;
+
+  String get album => null;
+
+  Future<List<LImage>> get images async {
+    final fullTrack = await Lastfm.getTrack(this);
+    return fullTrack.album.images;
+  }
+
+  LArtistTopTrack(this.name, this.artistObject);
+
+  factory LArtistTopTrack.fromJson(Map<String, dynamic> json) =>
+      _$LArtistTopTrackFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LArtistTopTrackToJson(this);
+}
+
+@JsonSerializable()
+class LArtistGetTopTracksResponse {
+  @JsonKey(name: 'track')
+  List<LArtistTopTrack> tracks;
+
+  LArtistGetTopTracksResponse(this.tracks);
+
+  factory LArtistGetTopTracksResponse.fromJson(Map<String, dynamic> json) =>
+      _$LArtistGetTopTracksResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LArtistGetTopTracksResponseToJson(this);
 }

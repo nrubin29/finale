@@ -53,6 +53,7 @@ class LTopAlbumsResponseTopAlbums {
 @JsonSerializable()
 class LAlbumMatch extends BasicAlbum {
   String name;
+  String url;
 
   @JsonKey(name: 'artist')
   String artistName;
@@ -60,9 +61,10 @@ class LAlbumMatch extends BasicAlbum {
   @JsonKey(name: 'image')
   List<LImage> images;
 
-  BasicArtist get artist => ConcreteBasicArtist(artistName);
+  BasicArtist get artist =>
+      ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
-  LAlbumMatch(this.name, this.artistName, this.images);
+  LAlbumMatch(this.name, this.url, this.artistName, this.images);
 
   factory LAlbumMatch.fromJson(Map<String, dynamic> json) =>
       _$LAlbumMatchFromJson(json);

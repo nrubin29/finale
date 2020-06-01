@@ -97,11 +97,10 @@ class AlbumView extends StatelessWidget {
                       }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
-                  Expanded(
-                      child: DisplayComponent(
+                  DisplayComponent(
                     items: album.tracks,
                     displayNumbers: true,
-                  )),
+                  ),
               ],
             ));
       },
