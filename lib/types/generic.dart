@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simplescrobble/views/album_view.dart';
+import 'package:simplescrobble/views/artist_view.dart';
 import 'package:simplescrobble/views/track_view.dart';
 
 bool convertStringToBoolean(String text) => text == '1';
@@ -116,6 +117,9 @@ abstract class BasicArtist extends Displayable {
 
   @override
   String get displayTitle => name;
+
+  @override
+  Widget get detailWidget => ArtistView(artist: this);
 }
 
 class ConcreteBasicArtist extends BasicArtist {
@@ -131,3 +135,5 @@ abstract class BasicScrobbledArtist extends BasicArtist {
   @override
   String get displayTrailing => '$playCount scrobbles';
 }
+
+abstract class FullArtist extends BasicArtist {}

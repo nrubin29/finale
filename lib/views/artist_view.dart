@@ -1,20 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
-import 'package:simplescrobble/types/lalbum.dart';
-import 'package:simplescrobble/views/artist_view.dart';
+import 'package:simplescrobble/types/lartist.dart';
 
-class AlbumView extends StatelessWidget {
-  final BasicAlbum album;
+class ArtistView extends StatelessWidget {
+  final BasicArtist artist;
 
-  AlbumView({Key key, @required this.album}) : super(key: key);
+  ArtistView({Key key, @required this.artist}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<LAlbum>(
-      future: Lastfm.getAlbum(album),
+    return FutureBuilder<LArtist>(
+      future: Lastfm.getArtist(artist),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
@@ -22,25 +20,17 @@ class AlbumView extends StatelessWidget {
           return CircularProgressIndicator();
         }
 
-        final album = snapshot.data;
+        final artist = snapshot.data;
 
         return Scaffold(
             appBar: AppBar(
-              title: Column(
-                children: [
-                  Text(album.name),
-                  Text(
-                    album.artist.name,
-                    style: TextStyle(fontSize: 12),
-                  )
-                ],
-              ),
+              title: Text(artist.name),
             ),
             body: Center(
               child: Column(
                 children: [
-                  if (album.images != null)
-                    Image.network(album.images.last.url),
+                  if (artist.images != null)
+                    Image.network(artist.images.last.url),
                   SizedBox(height: 10),
                   IntrinsicHeight(
                       child: Row(
@@ -50,7 +40,7 @@ class AlbumView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Scrobbles'),
-                          Text(formatNumber(album.playCount))
+                          Text(formatNumber(artist.stats.playCount))
                         ],
                       ),
                       VerticalDivider(),
@@ -58,7 +48,7 @@ class AlbumView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Listeners'),
-                          Text(formatNumber(album.listeners))
+                          Text(formatNumber(artist.stats.listeners))
                         ],
                       ),
                       VerticalDivider(),
@@ -66,7 +56,7 @@ class AlbumView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Your scrobbles'),
-                          Text(formatNumber(album.userPlayCount))
+                          Text(formatNumber(artist.stats.userPlayCount))
                         ],
                       ),
                     ],
@@ -74,29 +64,12 @@ class AlbumView extends StatelessWidget {
                   SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: album.topTags.tags
+                        children: artist.topTags.tags
                             .map((tag) => Container(
                                 margin: EdgeInsets.symmetric(horizontal: 2),
                                 child: Chip(label: Text(tag.name))))
                             .toList(),
                       )),
-                  if (album.artist != null)
-                    ListTile(
-                        title: Text(album.artist.name),
-                        trailing: Icon(Icons.chevron_right),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ArtistView(artist: album.artist)));
-                        }),
-                  if (album.tracks.isNotEmpty)
-                    Expanded(
-                        child: DisplayComponent(
-                      items: album.tracks,
-                      displayNumbers: true,
-                    )),
                 ],
               ),
             ));

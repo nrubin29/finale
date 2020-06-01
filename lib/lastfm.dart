@@ -261,6 +261,23 @@ class Lastfm {
     }
   }
 
+  static Future<LArtist> getArtist(BasicArtist artist) async {
+    final username = (await SharedPreferences.getInstance()).getString('name');
+
+    final response = await http.get(_buildURL('artist.getInfo',
+        data: {'artist': artist.name, 'username': username},
+        encode: ['artist', 'username']));
+
+    debugPrint(
+        JsonEncoder.withIndent('  ').convert(json.decode(response.body)));
+
+    if (response.statusCode == 200) {
+      return LArtist.fromJson(json.decode(response.body)['artist']);
+    } else {
+      throw Exception('Could not get artist.');
+    }
+  }
+
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
       String track, String artist, String album, DateTime timestamp) async {
     final sk = (await SharedPreferences.getInstance()).getString('key');

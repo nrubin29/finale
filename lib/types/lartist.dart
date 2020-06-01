@@ -62,3 +62,42 @@ class LArtistSearchResponse {
 
   Map<String, dynamic> toJson() => _$LArtistSearchResponseToJson(this);
 }
+
+@JsonSerializable()
+class LArtistStats {
+  @JsonKey(name: 'playcount', fromJson: int.parse)
+  int playCount;
+
+  @JsonKey(fromJson: int.parse)
+  int listeners;
+
+  @JsonKey(name: 'userplaycount', fromJson: int.parse)
+  int userPlayCount;
+
+  LArtistStats(this.playCount, this.userPlayCount, this.listeners);
+
+  factory LArtistStats.fromJson(Map<String, dynamic> json) =>
+      _$LArtistStatsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LArtistStatsToJson(this);
+}
+
+@JsonSerializable()
+class LArtist extends FullArtist {
+  String name;
+
+  @JsonKey(name: 'image')
+  List<LImage> images;
+
+  LArtistStats stats;
+
+  @JsonKey(name: 'tags')
+  LTopTags topTags;
+
+  LArtist(this.name, this.images, this.stats, this.topTags);
+
+  factory LArtist.fromJson(Map<String, dynamic> json) =>
+      _$LArtistFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LArtistToJson(this);
+}

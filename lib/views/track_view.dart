@@ -4,6 +4,7 @@ import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/ltrack.dart';
 import 'package:simplescrobble/views/album_view.dart';
+import 'package:simplescrobble/views/artist_view.dart';
 
 class TrackView extends StatelessWidget {
   final BasicTrack track;
@@ -88,9 +89,15 @@ class TrackView extends StatelessWidget {
                       )),
                   if (track.artist != null)
                     ListTile(
-                      title: Text(track.artist.name),
-                      trailing: Icon(Icons.chevron_right),
-                    ),
+                        title: Text(track.artist.name),
+                        trailing: Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ArtistView(artist: track.artist)));
+                        }),
                   if (track.album != null)
                     ListTile(
                       leading: Image.network(track.album.images.last.url),
