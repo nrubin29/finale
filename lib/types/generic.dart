@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:simplescrobble/views/album_view.dart';
 import 'package:simplescrobble/views/track_view.dart';
 
 bool convertStringToBoolean(String text) => text == '1';
@@ -9,6 +10,10 @@ DateTime fromSecondsSinceEpoch(int timestamp) =>
 
 DateTime fromSecondsSinceEpochString(String text) =>
     fromSecondsSinceEpoch(int.parse(text));
+
+final _numberFormat = NumberFormat();
+
+String formatNumber(int number) => _numberFormat.format(number);
 
 abstract class GenericImage {
   String get url;
@@ -88,6 +93,13 @@ abstract class BasicAlbum extends Displayable {
 
   @override
   String get displaySubtitle => artist.name;
+
+  @override
+  Widget get detailWidget => AlbumView(album: this);
+}
+
+abstract class FullAlbum extends BasicAlbum {
+  List<BasicTrack> get tracks;
 }
 
 abstract class BasicScrobbledAlbum extends BasicAlbum {

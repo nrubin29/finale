@@ -8,19 +8,23 @@ import 'package:simplescrobble/types/generic.dart';
 enum DisplayType { list, grid }
 
 class DisplayComponent<T extends Displayable> extends StatefulWidget {
+  final List<T> items;
   final PagedLastfmRequest<T> request;
   final Stream<PagedLastfmRequest<T>> requestStream;
 
   final void Function(T item) secondaryAction;
 
   final DisplayType displayType;
+  final displayNumbers;
 
   DisplayComponent(
       {Key key,
+      this.items,
       this.request,
       this.requestStream,
       this.secondaryAction,
-      this.displayType = DisplayType.list})
+      this.displayType = DisplayType.list,
+      this.displayNumbers = false})
       : super(key: key);
 
   @override
@@ -40,6 +44,12 @@ class _DisplayComponentState<T extends Displayable>
   @override
   void initState() {
     super.initState();
+
+    if (widget.items != null) {
+      items = widget.items;
+      return;
+    }
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -76,39 +86,44 @@ class _DisplayComponentState<T extends Displayable>
     });
   }
 
+  void _onTap(T item) {
+    if (item.detailWidget != null) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => item.detailWidget));
+    }
+  }
+
   Widget _listItemBuilder(BuildContext context, int index) {
     final item = items[index];
     return ListTile(
       visualDensity: VisualDensity.compact,
-      title: Text(item.displayTitle),
+      title: Text(
+          (widget.displayNumbers ? '${index + 1}. ' : '') + item.displayTitle),
       onTap: () {
-        if (item.detailWidget != null) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => item.detailWidget));
-        }
+        _onTap(item);
       },
       subtitle:
-      item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
+          item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
       leading:
-      item.images != null ? Image.network(item.images.first.url) : null,
+          item.images != null ? Image.network(item.images.first.url) : null,
       trailing: IntrinsicWidth(
           child: Row(
-            children: [
-              if (item.displayTrailing != null)
-                Text(item.displayTrailing,
-                    style: TextStyle(color: Colors.grey, fontSize: 12)),
-              if (widget.secondaryAction != null)
-                IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      widget.secondaryAction(item);
-                    })
-            ],
-          )),
+        children: [
+          if (item.displayTrailing != null)
+            Text(item.displayTrailing,
+                style: TextStyle(color: Colors.grey, fontSize: 12)),
+          if (widget.secondaryAction != null)
+            IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  widget.secondaryAction(item);
+                })
+        ],
+      )),
     );
   }
 
-  Widget _gridItemBuilder(BuildContext context, int index) {
+  Widget _gridTileBuilder(BuildContext context, int index) {
     final item = items[index];
     return GridTile(
       footer: Container(
@@ -130,17 +145,31 @@ class _DisplayComponentState<T extends Displayable>
           Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  colors: [
-                    Colors.grey.withOpacity(0),
-                    Colors.black.withOpacity(0.75)
-                  ],
-                )),
+              begin: FractionalOffset.topCenter,
+              end: FractionalOffset.bottomCenter,
+              colors: [
+                Colors.grey.withOpacity(0),
+                Colors.black.withOpacity(0.75)
+              ],
+            )),
           )
         ],
       ),
     );
+  }
+
+  Widget _gridItemBuilder(BuildContext context, int index) {
+    final item = items[index];
+
+    if (item.detailWidget != null) {
+      return InkWell(
+          onTap: () {
+            _onTap(item);
+          },
+          child: _gridTileBuilder(context, index));
+    }
+
+    return _gridTileBuilder(context, index);
   }
 
   @override
@@ -155,22 +184,22 @@ class _DisplayComponentState<T extends Displayable>
         onRefresh: _getInitialItems,
         child: widget.displayType == DisplayType.list
             ? ListView.builder(
-            controller: _scrollController,
-            itemCount: items.length,
-            itemBuilder: _listItemBuilder)
+                controller: _scrollController,
+                itemCount: items.length,
+                itemBuilder: _listItemBuilder)
             : GridView.builder(
-            controller: _scrollController,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
-            itemCount: items.length,
-            itemBuilder: _gridItemBuilder));
+                controller: _scrollController,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemCount: items.length,
+                itemBuilder: _gridItemBuilder));
   }
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
-    _subscription.cancel();
+    _subscription?.cancel();
   }
 
   @override

@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
-import 'package:simplescrobble/types/ltrack.dart';
-import 'package:simplescrobble/views/album_view.dart';
+import 'package:simplescrobble/types/lalbum.dart';
 
-class TrackView extends StatelessWidget {
-  final BasicTrack track;
+class AlbumView extends StatelessWidget {
+  final BasicAlbum album;
 
-  TrackView({Key key, @required this.track}) : super(key: key);
+  AlbumView({Key key, @required this.album}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<LTrack>(
-      future: Lastfm.getTrack(track),
+    return FutureBuilder<LAlbum>(
+      future: Lastfm.getAlbum(album),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
@@ -21,15 +21,15 @@ class TrackView extends StatelessWidget {
           return CircularProgressIndicator();
         }
 
-        final track = snapshot.data;
+        final album = snapshot.data;
 
         return Scaffold(
             appBar: AppBar(
               title: Column(
                 children: [
-                  Text(track.name),
+                  Text(album.name),
                   Text(
-                    track.artist.name,
+                    album.artist.name,
                     style: TextStyle(fontSize: 12),
                   )
                 ],
@@ -38,8 +38,8 @@ class TrackView extends StatelessWidget {
             body: Center(
               child: Column(
                 children: [
-                  if (track.album?.images != null)
-                    Image.network(track.album.images.last.url),
+                  if (album.images != null)
+                    Image.network(album.images.last.url),
                   SizedBox(height: 10),
                   IntrinsicHeight(
                       child: Row(
@@ -49,7 +49,7 @@ class TrackView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Scrobbles'),
-                          Text(formatNumber(track.playCount))
+                          Text(formatNumber(album.playCount))
                         ],
                       ),
                       VerticalDivider(),
@@ -57,7 +57,7 @@ class TrackView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Listeners'),
-                          Text(formatNumber(track.listeners))
+                          Text(formatNumber(album.listeners))
                         ],
                       ),
                       VerticalDivider(),
@@ -65,46 +65,31 @@ class TrackView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Your scrobbles'),
-                          Text(formatNumber(track.userPlayCount))
+                          Text(formatNumber(album.userPlayCount))
                         ],
-                      ),
-                      VerticalDivider(),
-                      IconButton(
-                        icon: Icon(track.userLoved
-                            ? Icons.favorite
-                            : Icons.favorite_border),
-                        onPressed: () {},
                       ),
                     ],
                   )),
                   SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: track.topTags.tags
+                        children: album.topTags.tags
                             .map((tag) => Container(
                                 margin: EdgeInsets.symmetric(horizontal: 2),
                                 child: Chip(label: Text(tag.name))))
                             .toList(),
                       )),
-                  if (track.artist != null)
+                  if (album.artist != null)
                     ListTile(
-                      title: Text(track.artist.name),
+                      title: Text(album.artist.name),
                       trailing: Icon(Icons.chevron_right),
                     ),
-                  if (track.album != null)
-                    ListTile(
-                      leading: Image.network(track.album.images.last.url),
-                      title: Text(track.album.name),
-                      subtitle: Text(track.artist.name),
-                      trailing: Icon(Icons.chevron_right),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AlbumView(album: track.album)));
-                      },
-                    ),
+                  if (album.tracks.isNotEmpty)
+                    Expanded(
+                        child: DisplayComponent(
+                      items: album.tracks,
+                      displayNumbers: true,
+                    )),
                 ],
               ),
             ));

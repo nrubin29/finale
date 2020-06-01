@@ -81,3 +81,80 @@ class LAlbumSearchResponse {
 
   Map<String, dynamic> toJson() => _$LAlbumSearchResponseToJson(this);
 }
+
+@JsonSerializable()
+class LAlbumTrack extends BasicTrack {
+  String name;
+
+  @JsonKey(fromJson: int.parse)
+  int duration;
+
+  String album;
+
+  @JsonKey(name: 'artist')
+  LTopAlbumsResponseAlbumArtist artistObject;
+
+  String get artist => artistObject.name;
+
+  String get displaySubtitle => null;
+
+  LAlbumTrack(this.name, this.duration, this.artistObject);
+
+  factory LAlbumTrack.fromJson(Map<String, dynamic> json) =>
+      _$LAlbumTrackFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LAlbumTrackToJson(this);
+}
+
+@JsonSerializable()
+class LAlbumTracks {
+  @JsonKey(name: 'track')
+  List<LAlbumTrack> tracks;
+
+  LAlbumTracks(this.tracks);
+
+  factory LAlbumTracks.fromJson(Map<String, dynamic> json) =>
+      _$LAlbumTracksFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LAlbumTracksToJson(this);
+}
+
+@JsonSerializable()
+class LAlbum extends FullAlbum {
+  String name;
+
+  @JsonKey(name: 'artist')
+  String artistName;
+
+  @JsonKey(name: 'image')
+  List<LImage> images;
+
+  @JsonKey(name: 'playcount', fromJson: int.parse)
+  int playCount;
+
+  @JsonKey(fromJson: int.parse)
+  int listeners;
+
+  @JsonKey(name: 'userplaycount', fromJson: int.parse)
+  int userPlayCount;
+
+  @JsonKey(name: 'tracks')
+  LAlbumTracks tracksObject;
+
+  @JsonKey(name: 'tags')
+  LTopTags topTags;
+
+  BasicArtist get artist => ConcreteBasicArtist(artistName, null);
+
+  List<LAlbumTrack> get tracks => tracksObject.tracks
+    ..forEach((element) {
+      element.album = name;
+    });
+
+  LAlbum(this.name, this.artistName, this.images, this.playCount,
+      this.userPlayCount, this.listeners, this.tracksObject, this.topTags);
+
+  factory LAlbum.fromJson(Map<String, dynamic> json) => _$LAlbumFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LAlbumToJson(this);
+}

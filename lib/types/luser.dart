@@ -22,9 +22,6 @@ class LUserRegistered {
 
 @JsonSerializable()
 class LUser {
-//  @JsonKey(fromJson: int.parse)
-//  int id;
-
   String name;
 
   @JsonKey(name: 'realname')
@@ -56,10 +53,7 @@ class LUser {
 
   LUserRegistered registered;
 
-  String get playCountFormatted => NumberFormat().format(playCount);
-
   LUser(
-      //      this.id,
       this.name,
       this.realName,
       this.url,

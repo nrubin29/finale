@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/lcommon.dart';
@@ -12,7 +11,8 @@ class LRecentTracksResponseTrackArtist {
 
   LRecentTracksResponseTrackArtist(this.name);
 
-  factory LRecentTracksResponseTrackArtist.fromJson(Map<String, dynamic> json) =>
+  factory LRecentTracksResponseTrackArtist.fromJson(
+          Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackArtistFromJson(json);
 
   Map<String, dynamic> toJson() =>
@@ -84,7 +84,8 @@ class LRecentTracksResponseRecentTracks {
 
   LRecentTracksResponseRecentTracks(this.tracks);
 
-  factory LRecentTracksResponseRecentTracks.fromJson(Map<String, dynamic> json) =>
+  factory LRecentTracksResponseRecentTracks.fromJson(
+          Map<String, dynamic> json) =>
       _$LRecentTracksResponseRecentTracksFromJson(json);
 
   Map<String, dynamic> toJson() =>
@@ -182,12 +183,6 @@ class LTrack extends FullTrack {
 
   @JsonKey(name: 'toptags')
   LTopTags topTags;
-
-  String get listenersFormatted => NumberFormat().format(listeners);
-
-  String get playCountFormatted => NumberFormat().format(playCount);
-
-  String get userPlayCountFormatted => NumberFormat().format(userPlayCount);
 
   LTrack(this.name, this.listeners, this.duration, this.playCount, this.artist,
       this.album, this.images, this.topTags);

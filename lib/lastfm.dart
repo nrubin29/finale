@@ -139,9 +139,8 @@ class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
         encode: ['track']));
 
     if (response.statusCode == 200) {
-      return LTrackSearchResponse
-          .fromJson(
-          json.decode(response.body)['results']['trackmatches'])
+      return LTrackSearchResponse.fromJson(
+              json.decode(response.body)['results']['trackmatches'])
           .tracks;
     } else {
       throw Exception('Could not search for tracks.');
@@ -161,9 +160,8 @@ class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
         encode: ['artist']));
 
     if (response.statusCode == 200) {
-      return LArtistSearchResponse
-          .fromJson(
-          json.decode(response.body)['results']['artistmatches'])
+      return LArtistSearchResponse.fromJson(
+              json.decode(response.body)['results']['artistmatches'])
           .artists;
     } else {
       throw Exception('Could not search for artists.');
@@ -183,9 +181,8 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
         encode: ['album']));
 
     if (response.statusCode == 200) {
-      return LAlbumSearchResponse
-          .fromJson(
-          json.decode(response.body)['results']['albummatches'])
+      return LAlbumSearchResponse.fromJson(
+              json.decode(response.body)['results']['albummatches'])
           .albums;
     } else {
       throw Exception('Could not search for albums.');
@@ -197,7 +194,7 @@ class Lastfm {
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
     final response =
-    await http.post(_buildURL('auth.getSession', data: {'token': token}));
+        await http.post(_buildURL('auth.getSession', data: {'token': token}));
 
     if (response.statusCode == 200) {
       return LAuthenticationResponseSession.fromJson(
@@ -209,9 +206,7 @@ class Lastfm {
 
   static Future<LUser> getUser(String username) async {
     final response =
-    await http.get(_buildURL('user.getInfo', data: {'user': username}));
-
-    print(response.body);
+        await http.get(_buildURL('user.getInfo', data: {'user': username}));
 
     if (response.statusCode == 200) {
       return LUser.fromJson(json.decode(response.body)['user']);
@@ -243,14 +238,35 @@ class Lastfm {
     }
   }
 
-  static Future<LScrobbleResponseScrobblesAttr> scrobble(String track,
-      String artist, String album, DateTime timestamp) async {
+  static Future<LAlbum> getAlbum(BasicAlbum album) async {
+    final username = (await SharedPreferences.getInstance()).getString('name');
+
+    final response = await http.get(_buildURL('album.getInfo', data: {
+      'album': album.name,
+      'artist': album.artist.name,
+      'username': username
+    }, encode: [
+      'album',
+      'artist',
+      'username'
+    ]));
+
+    debugPrint(
+        JsonEncoder.withIndent('  ').convert(json.decode(response.body)));
+
+    if (response.statusCode == 200) {
+      return LAlbum.fromJson(json.decode(response.body)['album']);
+    } else {
+      throw Exception('Could not get album.');
+    }
+  }
+
+  static Future<LScrobbleResponseScrobblesAttr> scrobble(
+      String track, String artist, String album, DateTime timestamp) async {
     final sk = (await SharedPreferences.getInstance()).getString('key');
 
     print(
-        (DateTime
-            .now()
-            .millisecondsSinceEpoch * 1000).toStringAsPrecision(16));
+        (DateTime.now().millisecondsSinceEpoch * 1000).toStringAsPrecision(16));
     final response = await http.post(_buildURL('track.scrobble', data: {
       'album': album,
       'artist': artist,
