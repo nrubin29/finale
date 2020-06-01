@@ -36,79 +36,80 @@ class AlbumView extends StatelessWidget {
                 ],
               ),
             ),
-            body: Center(
-              child: Column(
-                children: [
-                  if (album.images != null)
-                    Image.network(album.images.last.url),
-                  SizedBox(height: 10),
-                  IntrinsicHeight(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Scrobbles'),
-                          Text(formatNumber(album.playCount))
-                        ],
-                      ),
-                      VerticalDivider(),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Listeners'),
-                          Text(formatNumber(album.listeners))
-                        ],
-                      ),
-                      VerticalDivider(),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Your scrobbles'),
-                          Text(formatNumber(album.userPlayCount))
-                        ],
-                      ),
-                    ],
-                  )),
-                  SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: album.topTags.tags
-                            .map((tag) => Container(
-                                margin: EdgeInsets.symmetric(horizontal: 2),
-                                child: Chip(label: Text(tag.name))))
-                            .toList(),
-                      )),
-                  if (album.artist != null)
-                    ListTile(
-                        leading: FutureBuilder<List<GenericImage>>(
-                          future: album.artist.images,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Image.network(snapshot.data.first.url);
-                            }
-
-                            return SizedBox();
-                          },
-                        ),
-                        title: Text(album.artist.name),
-                        trailing: Icon(Icons.chevron_right),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ArtistView(artist: album.artist)));
-                        }),
-                  if (album.tracks.isNotEmpty)
-                    Expanded(
-                        child: DisplayComponent(
-                      items: album.tracks,
-                      displayNumbers: true,
+            body: ListView(
+              children: [
+                if (album.images != null)
+                  Image.network(album.images.last.url, fit: BoxFit.cover),
+                SizedBox(height: 10),
+                IntrinsicHeight(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Scrobbles'),
+                        Text(formatNumber(album.playCount))
+                      ],
+                    ),
+                    VerticalDivider(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Listeners'),
+                        Text(formatNumber(album.listeners))
+                      ],
+                    ),
+                    VerticalDivider(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Your scrobbles'),
+                        Text(formatNumber(album.userPlayCount))
+                      ],
+                    ),
+                  ],
+                )),
+                Divider(),
+                SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: album.topTags.tags
+                          .map((tag) => Container(
+                              margin: EdgeInsets.symmetric(horizontal: 2),
+                              child: Chip(label: Text(tag.name))))
+                          .toList(),
                     )),
-                ],
-              ),
+                if (album.artist != null) Divider(),
+                if (album.artist != null)
+                  ListTile(
+                      leading: FutureBuilder<List<GenericImage>>(
+                        future: album.artist.images,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Image.network(snapshot.data.first.url);
+                          }
+
+                          return SizedBox();
+                        },
+                      ),
+                      title: Text(album.artist.name),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ArtistView(artist: album.artist)));
+                      }),
+                if (album.tracks.isNotEmpty) Divider(),
+                if (album.tracks.isNotEmpty)
+                  Expanded(
+                      child: DisplayComponent(
+                    items: album.tracks,
+                    displayNumbers: true,
+                  )),
+              ],
             ));
       },
     );

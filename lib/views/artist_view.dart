@@ -26,60 +26,61 @@ class ArtistView extends StatelessWidget {
             appBar: AppBar(
               title: Text(artist.name),
             ),
-            body: Center(
-              child: Column(
-                children: [
-                  FutureBuilder<List<GenericImage>>(
-                    future: artist.images,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Image.network(snapshot.data.last.url);
-                      }
+            body: ListView(
+              children: [
+                FutureBuilder<List<GenericImage>>(
+                  future: artist.images,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Image.network(snapshot.data.last.url,
+                          fit: BoxFit.cover);
+                    }
 
-                      return CircularProgressIndicator();
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  IntrinsicHeight(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Scrobbles'),
-                          Text(formatNumber(artist.stats.playCount))
-                        ],
-                      ),
-                      VerticalDivider(),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Listeners'),
-                          Text(formatNumber(artist.stats.listeners))
-                        ],
-                      ),
-                      VerticalDivider(),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Your scrobbles'),
-                          Text(formatNumber(artist.stats.userPlayCount))
-                        ],
-                      ),
-                    ],
-                  )),
-                  SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: artist.topTags.tags
-                            .map((tag) => Container(
-                                margin: EdgeInsets.symmetric(horizontal: 2),
-                                child: Chip(label: Text(tag.name))))
-                            .toList(),
-                      )),
-                ],
-              ),
+                    return CircularProgressIndicator();
+                  },
+                ),
+                SizedBox(height: 10),
+                IntrinsicHeight(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Scrobbles'),
+                        Text(formatNumber(artist.stats.playCount))
+                      ],
+                    ),
+                    VerticalDivider(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Listeners'),
+                        Text(formatNumber(artist.stats.listeners))
+                      ],
+                    ),
+                    VerticalDivider(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Your scrobbles'),
+                        Text(formatNumber(artist.stats.userPlayCount))
+                      ],
+                    ),
+                  ],
+                )),
+                Divider(),
+                SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: artist.topTags.tags
+                          .map((tag) => Container(
+                              margin: EdgeInsets.symmetric(horizontal: 2),
+                              child: Chip(label: Text(tag.name))))
+                          .toList(),
+                    )),
+                Divider(),
+              ],
             ));
       },
     );

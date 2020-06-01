@@ -211,6 +211,7 @@ class _DisplayComponentState<T extends Displayable>
         onRefresh: _getInitialItems,
         child: widget.displayType == DisplayType.list
             ? ListView.builder(
+                shrinkWrap: true,
                 controller: _scrollController,
                 itemCount: items.length,
                 itemBuilder: _listItemBuilder)
