@@ -5,6 +5,7 @@ import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/ltrack.dart';
 import 'package:simplescrobble/views/album_view.dart';
 import 'package:simplescrobble/views/artist_view.dart';
+import 'package:simplescrobble/views/scrobble_view.dart';
 
 class TrackView extends StatelessWidget {
   final BasicTrack track;
@@ -35,6 +36,16 @@ class TrackView extends StatelessWidget {
                   )
                 ],
               ),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) => ScrobbleView(track: track));
+                  },
+                )
+              ],
             ),
             body: Center(
               child: Column(
