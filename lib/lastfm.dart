@@ -91,9 +91,8 @@ class GetTopArtistsRequest
         encode: ['user', 'period']));
 
     if (response.statusCode == 200) {
-      return LTopArtistsResponseTopArtists
-          .fromJson(
-          json.decode(response.body)['topartists'])
+      return LTopArtistsResponseTopArtists.fromJson(
+              json.decode(response.body)['topartists'])
           .artists;
     } else {
       throw Exception('Could not get top artists.');

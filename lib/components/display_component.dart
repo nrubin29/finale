@@ -7,9 +7,11 @@ import 'package:simplescrobble/types/generic.dart';
 
 enum DisplayType { list, grid }
 
-class DisplayComponent extends StatefulWidget {
-  final PagedLastfmRequest<Displayable> request;
-  final Stream<PagedLastfmRequest<Displayable>> requestStream;
+class DisplayComponent<T extends Displayable> extends StatefulWidget {
+  final PagedLastfmRequest<T> request;
+  final Stream<PagedLastfmRequest<T>> requestStream;
+
+  final void Function(T item) secondaryAction;
 
   final DisplayType displayType;
 
@@ -17,21 +19,23 @@ class DisplayComponent extends StatefulWidget {
       {Key key,
       this.request,
       this.requestStream,
+      this.secondaryAction,
       this.displayType = DisplayType.list})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DisplayComponentState();
+  State<StatefulWidget> createState() => _DisplayComponentState<T>();
 }
 
-class _DisplayComponentState extends State<DisplayComponent>
+class _DisplayComponentState<T extends Displayable>
+    extends State<DisplayComponent>
     with AutomaticKeepAliveClientMixin {
-  var items = List<Displayable>();
+  var items = List<T>();
   int page = 1;
 
   final _scrollController = ScrollController();
 
-  PagedLastfmRequest<Displayable> _request;
+  PagedLastfmRequest<T> _request;
   StreamSubscription _subscription;
 
   @override
@@ -79,12 +83,18 @@ class _DisplayComponentState extends State<DisplayComponent>
       visualDensity: VisualDensity.compact,
       title: Text(item.displayTitle),
       subtitle:
-          item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
+      item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
       leading:
-          item.images != null ? Image.network(item.images.first.url) : null,
+      item.images != null ? Image.network(item.images.first.url) : null,
       trailing: item.displayTrailing != null
           ? Text(item.displayTrailing,
-              style: TextStyle(color: Colors.grey, fontSize: 12))
+          style: TextStyle(color: Colors.grey, fontSize: 12))
+          : widget.secondaryAction != null
+          ? IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            widget.secondaryAction(item);
+          })
           : null,
     );
   }

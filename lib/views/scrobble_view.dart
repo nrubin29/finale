@@ -2,10 +2,15 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:simplescrobble/types/generic.dart';
 
 import '../lastfm.dart';
 
 class ScrobbleView extends StatefulWidget {
+  BasicTrack track;
+
+  ScrobbleView({Key key, this.track}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _ScrobbleViewState();
 }
@@ -15,6 +20,14 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   final _artistController = TextEditingController();
   final _albumController = TextEditingController();
   var _datetime = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _trackController.text = widget.track?.name;
+    _artistController.text = widget.track?.artist;
+    _albumController.text = widget.track?.album;
+  }
 
   Future<void> _scrobble() async {
     final response = await Lastfm.scrobble(_trackController.text,

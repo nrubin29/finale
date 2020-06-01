@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/lastfm.dart';
+import 'package:simplescrobble/views/scrobble_view.dart';
 
 class SearchView extends StatefulWidget {
   @override
@@ -36,6 +37,11 @@ class _SearchViewState extends State<SearchView> {
             children: _query.hasValue && _query.value != ''
                 ? [
                     DisplayComponent(
+                        secondaryAction: (item) {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) => ScrobbleView(track: item));
+                        },
                         requestStream: _query
                             .debounceTime(Duration(
                                 milliseconds:
