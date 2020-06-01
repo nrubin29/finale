@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/ltrack.dart';
@@ -88,15 +89,7 @@ class TrackView extends StatelessWidget {
                   ],
                 )),
                 Divider(),
-                SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: track.topTags.tags
-                          .map((tag) => Container(
-                              margin: EdgeInsets.symmetric(horizontal: 2),
-                              child: Chip(label: Text(tag.name))))
-                          .toList(),
-                    )),
+                TagsComponent(topTags: track.topTags),
                 Divider(),
                 if (track.artist != null)
                   ListTile(

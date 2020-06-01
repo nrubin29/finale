@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/components/display_component.dart';
+import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/lalbum.dart';
@@ -71,15 +72,7 @@ class AlbumView extends StatelessWidget {
                   ],
                 )),
                 Divider(),
-                SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: album.topTags.tags
-                          .map((tag) => Container(
-                              margin: EdgeInsets.symmetric(horizontal: 2),
-                              child: Chip(label: Text(tag.name))))
-                          .toList(),
-                    )),
+                TagsComponent(topTags: album.topTags),
                 if (album.artist != null) Divider(),
                 if (album.artist != null)
                   ListTile(

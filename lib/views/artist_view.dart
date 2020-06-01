@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/lartist.dart';
@@ -70,15 +71,7 @@ class ArtistView extends StatelessWidget {
                   ],
                 )),
                 Divider(),
-                SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: artist.topTags.tags
-                          .map((tag) => Container(
-                              margin: EdgeInsets.symmetric(horizontal: 2),
-                              child: Chip(label: Text(tag.name))))
-                          .toList(),
-                    )),
+                TagsComponent(topTags: artist.topTags),
                 Divider(),
               ],
             ));
