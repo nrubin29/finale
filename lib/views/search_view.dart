@@ -23,7 +23,6 @@ class _SearchViewState extends State<SearchView> {
                 decoration: InputDecoration(hintText: 'Search'),
                 onChanged: (text) {
                   setState(() {
-                    print('Updating query to $text');
                     _query.value = text;
                   });
                 },
@@ -37,10 +36,13 @@ class _SearchViewState extends State<SearchView> {
             children: _query.hasValue && _query.value != ''
                 ? [
                     DisplayComponent(
-                        secondaryAction: (item) {
+                        secondaryAction: (item) async {
+                          final fullTrack = await Lastfm.getTrack(item);
+
                           showModalBottomSheet(
                               context: context,
-                              builder: (context) => ScrobbleView(track: item));
+                              builder: (context) =>
+                                  ScrobbleView(track: fullTrack));
                         },
                         requestStream: _query
                             .debounceTime(Duration(

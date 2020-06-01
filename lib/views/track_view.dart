@@ -89,6 +89,16 @@ class TrackView extends StatelessWidget {
                       )),
                   if (track.artist != null)
                     ListTile(
+                        leading: FutureBuilder<List<GenericImage>>(
+                          future: track.artist.images,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Image.network(snapshot.data.first.url);
+                            }
+
+                            return SizedBox();
+                          },
+                        ),
                         title: Text(track.artist.name),
                         trailing: Icon(Icons.chevron_right),
                         onTap: () {

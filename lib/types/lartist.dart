@@ -7,14 +7,12 @@ part 'lartist.g.dart';
 @JsonSerializable()
 class LTopArtistsResponseArtist extends BasicScrobbledArtist {
   String name;
+  String url;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
   int playCount;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
-
-  LTopArtistsResponseArtist(this.name, this.playCount, this.images);
+  LTopArtistsResponseArtist(this.name, this.url, this.playCount);
 
   factory LTopArtistsResponseArtist.fromJson(Map<String, dynamic> json) =>
       _$LTopArtistsResponseArtistFromJson(json);
@@ -38,11 +36,9 @@ class LTopArtistsResponseTopArtists {
 @JsonSerializable()
 class LArtistMatch extends BasicArtist {
   String name;
+  String url;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
-
-  LArtistMatch(this.name, this.images);
+  LArtistMatch(this.name, this.url);
 
   factory LArtistMatch.fromJson(Map<String, dynamic> json) =>
       _$LArtistMatchFromJson(json);
@@ -85,16 +81,14 @@ class LArtistStats {
 @JsonSerializable()
 class LArtist extends FullArtist {
   String name;
-
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  String url;
 
   LArtistStats stats;
 
   @JsonKey(name: 'tags')
   LTopTags topTags;
 
-  LArtist(this.name, this.images, this.stats, this.topTags);
+  LArtist(this.name, this.url, this.stats, this.topTags);
 
   factory LArtist.fromJson(Map<String, dynamic> json) =>
       _$LArtistFromJson(json);

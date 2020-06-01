@@ -82,6 +82,16 @@ class AlbumView extends StatelessWidget {
                       )),
                   if (album.artist != null)
                     ListTile(
+                        leading: FutureBuilder<List<GenericImage>>(
+                          future: album.artist.images,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Image.network(snapshot.data.first.url);
+                            }
+
+                            return SizedBox();
+                          },
+                        ),
                         title: Text(album.artist.name),
                         trailing: Icon(Icons.chevron_right),
                         onTap: () {

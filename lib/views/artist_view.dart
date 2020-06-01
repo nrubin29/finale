@@ -29,8 +29,16 @@ class ArtistView extends StatelessWidget {
             body: Center(
               child: Column(
                 children: [
-                  if (artist.images != null)
-                    Image.network(artist.images.last.url),
+                  FutureBuilder<List<GenericImage>>(
+                    future: artist.images,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Image.network(snapshot.data.last.url);
+                      }
+
+                      return CircularProgressIndicator();
+                    },
+                  ),
                   SizedBox(height: 10),
                   IntrinsicHeight(
                       child: Row(

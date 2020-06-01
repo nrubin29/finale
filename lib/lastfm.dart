@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplescrobble/env.dart';
@@ -228,9 +227,6 @@ class Lastfm {
       'username'
     ]));
 
-    debugPrint(
-        JsonEncoder.withIndent('  ').convert(json.decode(response.body)));
-
     if (response.statusCode == 200) {
       return LTrack.fromJson(json.decode(response.body)['track']);
     } else {
@@ -251,9 +247,6 @@ class Lastfm {
       'username'
     ]));
 
-    debugPrint(
-        JsonEncoder.withIndent('  ').convert(json.decode(response.body)));
-
     if (response.statusCode == 200) {
       return LAlbum.fromJson(json.decode(response.body)['album']);
     } else {
@@ -268,9 +261,6 @@ class Lastfm {
         data: {'artist': artist.name, 'username': username},
         encode: ['artist', 'username']));
 
-    debugPrint(
-        JsonEncoder.withIndent('  ').convert(json.decode(response.body)));
-
     if (response.statusCode == 200) {
       return LArtist.fromJson(json.decode(response.body)['artist']);
     } else {
@@ -282,8 +272,6 @@ class Lastfm {
       String track, String artist, String album, DateTime timestamp) async {
     final sk = (await SharedPreferences.getInstance()).getString('key');
 
-    print(
-        (DateTime.now().millisecondsSinceEpoch * 1000).toStringAsPrecision(16));
     final response = await http.post(_buildURL('track.scrobble', data: {
       'album': album,
       'artist': artist,
@@ -295,7 +283,6 @@ class Lastfm {
       'artist',
       'track'
     ]));
-    print(response.body);
 
     if (response.statusCode == 200) {
       return LScrobbleResponseScrobblesAttr.fromJson(

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/lcommon.dart';
 
@@ -97,12 +98,16 @@ class LTrackMatch extends BasicTrack {
   String name;
   String artist;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  // LTrackMatches don't give us any indication of the their album, so we need
+  // to fetch the full track in order to get the album.
+  String get album => null;
 
-  String get album => 'Album';
+  Future<List<LImage>> get images async {
+    final fullTrack = await Lastfm.getTrack(this);
+    return fullTrack.album.images;
+  }
 
-  LTrackMatch(this.name, this.artist, this.images);
+  LTrackMatch(this.name, this.artist);
 
   factory LTrackMatch.fromJson(Map<String, dynamic> json) =>
       _$LTrackMatchFromJson(json);
@@ -126,8 +131,9 @@ class LTrackSearchResponse {
 @JsonSerializable()
 class LTrackArtist extends BasicArtist {
   String name;
+  String url;
 
-  LTrackArtist(this.name);
+  LTrackArtist(this.name, this.url);
 
   factory LTrackArtist.fromJson(Map<String, dynamic> json) =>
       _$LTrackArtistFromJson(json);
@@ -178,14 +184,11 @@ class LTrack extends FullTrack {
   LTrackArtist artist;
   LTrackAlbum album;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
-
   @JsonKey(name: 'toptags')
   LTopTags topTags;
 
   LTrack(this.name, this.listeners, this.duration, this.playCount, this.artist,
-      this.album, this.images, this.topTags);
+      this.album, this.topTags);
 
   factory LTrack.fromJson(Map<String, dynamic> json) => _$LTrackFromJson(json);
 

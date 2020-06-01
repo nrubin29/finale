@@ -104,8 +104,20 @@ class _DisplayComponentState<T extends Displayable>
       },
       subtitle:
           item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
-      leading:
-          item.images != null ? Image.network(item.images.first.url) : null,
+      leading: item.images != null
+          ? item.images is Future
+              ? FutureBuilder<List<GenericImage>>(
+                  future: item.images as Future,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Image.network(snapshot.data.first.url);
+                    }
+
+                    return SizedBox();
+                  },
+                )
+              : Image.network((item.images as List<GenericImage>).first.url)
+          : null,
       trailing: IntrinsicWidth(
           child: Row(
         children: [
@@ -140,8 +152,23 @@ class _DisplayComponentState<T extends Displayable>
             ],
           )),
       child: Stack(
+        fit: StackFit.expand,
         children: [
-          Image.network(item.images.last.url),
+          item.images is Future
+              ? FutureBuilder<List<GenericImage>>(
+                  future: item.images as Future,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Image.network(
+                        snapshot.data.last.url,
+                        fit: BoxFit.cover,
+                      );
+                    }
+
+                    return Container();
+                  },
+                )
+              : Image.network((item.images as List<GenericImage>).last.url),
           Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(

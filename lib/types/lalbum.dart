@@ -7,8 +7,9 @@ part 'lalbum.g.dart';
 @JsonSerializable()
 class LTopAlbumsResponseAlbumArtist extends BasicArtist {
   String name;
+  String url;
 
-  LTopAlbumsResponseAlbumArtist(this.name);
+  LTopAlbumsResponseAlbumArtist(this.name, this.url);
 
   factory LTopAlbumsResponseAlbumArtist.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseAlbumArtistFromJson(json);
@@ -59,7 +60,7 @@ class LAlbumMatch extends BasicAlbum {
   @JsonKey(name: 'image')
   List<LImage> images;
 
-  BasicArtist get artist => ConcreteBasicArtist(artistName, null);
+  BasicArtist get artist => ConcreteBasicArtist(artistName);
 
   LAlbumMatch(this.name, this.artistName, this.images);
 
@@ -96,6 +97,10 @@ class LAlbumTrack extends BasicTrack {
 
   String get artist => artistObject.name;
 
+  // This is done on purpose so that the album artwork doesn't isn't displayed
+  // next to tracks in the album view.
+  List<LImage> get images => null;
+
   String get displaySubtitle => null;
 
   LAlbumTrack(this.name, this.duration, this.artistObject);
@@ -126,6 +131,8 @@ class LAlbum extends FullAlbum {
   @JsonKey(name: 'artist')
   String artistName;
 
+  String url;
+
   @JsonKey(name: 'image')
   List<LImage> images;
 
@@ -144,14 +151,15 @@ class LAlbum extends FullAlbum {
   @JsonKey(name: 'tags')
   LTopTags topTags;
 
-  BasicArtist get artist => ConcreteBasicArtist(artistName, null);
+  BasicArtist get artist =>
+      ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
   List<LAlbumTrack> get tracks => tracksObject.tracks
     ..forEach((element) {
       element.album = name;
     });
 
-  LAlbum(this.name, this.artistName, this.images, this.playCount,
+  LAlbum(this.name, this.artistName, this.url, this.images, this.playCount,
       this.userPlayCount, this.listeners, this.tracksObject, this.topTags);
 
   factory LAlbum.fromJson(Map<String, dynamic> json) => _$LAlbumFromJson(json);

@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:beautifulsoup/beautifulsoup.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:simplescrobble/views/album_view.dart';
 import 'package:simplescrobble/views/artist_view.dart';
@@ -20,6 +24,12 @@ abstract class GenericImage {
   String get url;
 }
 
+class ConcreteGenericImage extends GenericImage {
+  String url;
+
+  ConcreteGenericImage(this.url);
+}
+
 abstract class Displayable {
   String get displayTitle;
 
@@ -27,7 +37,7 @@ abstract class Displayable {
 
   String get displayTrailing => null;
 
-  List<GenericImage> get images => null;
+  FutureOr<List<GenericImage>> get images => null;
 
   Widget get detailWidget => null;
 }
@@ -35,7 +45,7 @@ abstract class Displayable {
 abstract class BasicTrack extends Displayable {
   String get name;
 
-  List<GenericImage> get images;
+  FutureOr<List<GenericImage>> get images;
 
   String get artist;
 
@@ -112,8 +122,27 @@ abstract class BasicScrobbledAlbum extends BasicAlbum {
 
 abstract class BasicArtist extends Displayable {
   String get name;
+  String get url;
 
-  List<GenericImage> get images;
+  Future<List<GenericImage>> get images async {
+    try {
+      final lastfmResponse = await http.get(this.url);
+      final soup = Beautifulsoup(lastfmResponse.body);
+      final rawUrl =
+          soup.find_all('.header-new-gallery--link').first.attributes['href'];
+      final url =
+          'https://lastfm.freetls.fastly.net/i/u/^/${rawUrl.substring(rawUrl.lastIndexOf('/'))}';
+      return [
+        ConcreteGenericImage(url.replaceFirst('^', 'avatar300s')),
+        ConcreteGenericImage(url.replaceFirst('^', 'a0'))
+      ];
+    } catch (e) {
+      return [
+        ConcreteGenericImage(
+            'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.jpg')
+      ];
+    }
+  }
 
   @override
   String get displayTitle => name;
@@ -124,9 +153,9 @@ abstract class BasicArtist extends Displayable {
 
 class ConcreteBasicArtist extends BasicArtist {
   String name;
-  List<GenericImage> images;
+  String url;
 
-  ConcreteBasicArtist(this.name, this.images);
+  ConcreteBasicArtist(this.name, [this.url]);
 }
 
 abstract class BasicScrobbledArtist extends BasicArtist {

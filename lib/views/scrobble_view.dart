@@ -7,7 +7,7 @@ import 'package:simplescrobble/types/generic.dart';
 import '../lastfm.dart';
 
 class ScrobbleView extends StatefulWidget {
-  BasicTrack track;
+  final FullTrack track;
 
   ScrobbleView({Key key, this.track}) : super(key: key);
 
@@ -25,8 +25,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   void initState() {
     super.initState();
     _trackController.text = widget.track?.name;
-    _artistController.text = widget.track?.artist;
-    _albumController.text = widget.track?.album;
+    _artistController.text = widget.track?.artist?.name;
+    _albumController.text = widget.track?.album?.name;
   }
 
   Future<void> _scrobble() async {
