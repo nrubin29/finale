@@ -202,16 +202,22 @@ class LTopTracksResponseTrack extends BasicTrack {
   @JsonKey(name: 'artist')
   LRecentTracksResponseTrack artistObject;
 
+  @JsonKey(name: 'playcount', fromJson: int.parse)
+  int playCount;
+
   String get artist => artistObject.name;
 
   String get album => null;
 
   Future<List<LImage>> get images async {
     final fullTrack = await Lastfm.getTrack(this);
-    return fullTrack.album.images;
+    return fullTrack.album?.images;
   }
 
-  LTopTracksResponseTrack(this.name, this.artistObject);
+  @override
+  String get displayTrailing => '$playCount scrobbles';
+
+  LTopTracksResponseTrack(this.name, this.artistObject, this.playCount);
 
   factory LTopTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
       _$LTopTracksResponseTrackFromJson(json);

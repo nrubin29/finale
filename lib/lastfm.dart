@@ -126,6 +126,31 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
   }
 }
 
+class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
+  String username;
+
+  GetTopTracksRequest(this.username);
+
+  @override
+  doRequest(int limit, int page) async {
+    if (username == null) {
+      username = (await SharedPreferences.getInstance()).getString('name');
+    }
+
+    final response = await http.get(_buildURL('user.getTopTracks',
+        data: {'user': username, 'page': page, 'period': '7day'},
+        encode: ['user', 'period']));
+
+    if (response.statusCode == 200) {
+      return LTopTracksResponseTopTracks.fromJson(
+              json.decode(response.body)['toptracks'])
+          .tracks;
+    } else {
+      throw Exception('Could not get top tracks.');
+    }
+  }
+}
+
 class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
   String query;
 

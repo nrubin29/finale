@@ -84,12 +84,13 @@ class ProfileView extends StatelessWidget {
               SizedBox(height: 10),
               Expanded(
                   child: DefaultTabController(
-                      length: 3,
+                      length: 4,
                       child: Column(children: [
                         TabBar(tabs: [
-                          Tab(icon: Icon(Icons.audiotrack)),
+                          Tab(icon: Icon(Icons.list)),
                           Tab(icon: Icon(Icons.people)),
-                          Tab(icon: Icon(Icons.album))
+                          Tab(icon: Icon(Icons.album)),
+                          Tab(icon: Icon(Icons.audiotrack)),
                         ]),
                         Expanded(
                             child: TabBarView(children: [
@@ -101,6 +102,8 @@ class ProfileView extends StatelessWidget {
                           DisplayComponent(
                               displayType: DisplayType.grid,
                               request: GetTopAlbumsRequest(username)),
+                          DisplayComponent(
+                              request: GetTopTracksRequest(username)),
                         ]))
                       ])))
             ],
