@@ -194,3 +194,43 @@ class LTrack extends FullTrack {
 
   Map<String, dynamic> toJson() => _$LTrackToJson(this);
 }
+
+@JsonSerializable()
+class LTopTracksResponseTrack extends BasicTrack {
+  String name;
+
+  @JsonKey(name: 'artist')
+  LRecentTracksResponseTrack artistObject;
+
+  String get artist => artistObject.name;
+
+  String get album => null;
+
+  Future<List<LImage>> get images async {
+    final fullTrack = await Lastfm.getTrack(this);
+    return fullTrack.album.images;
+  }
+
+  LTopTracksResponseTrack(this.name, this.artistObject);
+
+  factory LTopTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
+      _$LTopTracksResponseTrackFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTopTracksResponseTrackToJson(this);
+}
+
+@JsonSerializable()
+class LTopTracksResponseTopTracks {
+  @JsonKey(name: 'track')
+  List<LTopTracksResponseTrack> tracks;
+
+  @JsonKey(name: '@attr')
+  LAttr attr;
+
+  LTopTracksResponseTopTracks(this.tracks, this.attr);
+
+  factory LTopTracksResponseTopTracks.fromJson(Map<String, dynamic> json) =>
+      _$LTopTracksResponseTopTracksFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LTopTracksResponseTopTracksToJson(this);
+}

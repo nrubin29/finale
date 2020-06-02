@@ -53,3 +53,26 @@ class LTopTags {
 
   Map<String, dynamic> toJson() => _$LTopTagsToJson(this);
 }
+
+@JsonSerializable()
+class LAttr {
+  @JsonKey(fromJson: int.parse)
+  int page;
+
+  @JsonKey(fromJson: int.parse)
+  int total;
+
+  String user;
+
+  @JsonKey(fromJson: int.parse)
+  int perPage;
+
+  @JsonKey(fromJson: int.parse)
+  int totalPages;
+
+  LAttr(this.page, this.total, this.user, this.perPage, this.totalPages);
+
+  factory LAttr.fromJson(Map<String, dynamic> json) => _$LAttrFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LAttrToJson(this);
+}

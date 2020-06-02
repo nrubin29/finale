@@ -48,15 +48,36 @@ class ProfileView extends StatelessWidget {
                   ),
                   VerticalDivider(),
                   Column(
-                    children: [Text('Artists'), Text('???')],
+                    children: [
+                      Text('Artists'),
+                      FutureBuilder<int>(
+                          future: Lastfm.getNumArtists(username),
+                          builder: (context, snapshot) => Text(snapshot.hasData
+                              ? formatNumber(snapshot.data)
+                              : '---'))
+                    ],
                   ),
                   VerticalDivider(),
                   Column(
-                    children: [Text('Albums'), Text('???')],
+                    children: [
+                      Text('Albums'),
+                      FutureBuilder<int>(
+                          future: Lastfm.getNumAlbums(username),
+                          builder: (context, snapshot) => Text(snapshot.hasData
+                              ? formatNumber(snapshot.data)
+                              : '---'))
+                    ],
                   ),
                   VerticalDivider(),
                   Column(
-                    children: [Text('Tracks'), Text('???')],
+                    children: [
+                      Text('Tracks'),
+                      FutureBuilder<int>(
+                          future: Lastfm.getNumTracks(username),
+                          builder: (context, snapshot) => Text(snapshot.hasData
+                              ? formatNumber(snapshot.data)
+                              : '---'))
+                    ],
                   ),
                 ],
               )),

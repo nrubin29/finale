@@ -42,7 +42,10 @@ class LTopAlbumsResponseTopAlbums {
   @JsonKey(name: 'album')
   List<LTopAlbumsResponseAlbum> albums;
 
-  LTopAlbumsResponseTopAlbums(this.albums);
+  @JsonKey(name: '@attr')
+  LAttr attr;
+
+  LTopAlbumsResponseTopAlbums(this.albums, this.attr);
 
   factory LTopAlbumsResponseTopAlbums.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseTopAlbumsFromJson(json);

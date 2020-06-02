@@ -27,7 +27,10 @@ class LTopArtistsResponseTopArtists {
   @JsonKey(name: 'artist')
   List<LTopArtistsResponseArtist> artists;
 
-  LTopArtistsResponseTopArtists(this.artists);
+  @JsonKey(name: '@attr')
+  LAttr attr;
+
+  LTopArtistsResponseTopArtists(this.artists, this.attr);
 
   factory LTopArtistsResponseTopArtists.fromJson(Map<String, dynamic> json) =>
       _$LTopArtistsResponseTopArtistsFromJson(json);

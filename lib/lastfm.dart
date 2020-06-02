@@ -318,6 +318,69 @@ class Lastfm {
     }
   }
 
+  static Future<int> getNumArtists(String username) async {
+    final response = await http.get(_buildURL('user.getTopArtists', data: {
+      'user': username,
+      'period': 'overall',
+      'limit': '1',
+      'page': '1'
+    }, encode: [
+      'user',
+      'period'
+    ]));
+
+    if (response.statusCode == 200) {
+      return LTopArtistsResponseTopArtists.fromJson(
+              json.decode(response.body)['topartists'])
+          .attr
+          .total;
+    } else {
+      throw Exception('Could not get num artists.');
+    }
+  }
+
+  static Future<int> getNumAlbums(String username) async {
+    final response = await http.get(_buildURL('user.getTopAlbums', data: {
+      'user': username,
+      'period': 'overall',
+      'limit': '1',
+      'page': '1'
+    }, encode: [
+      'user',
+      'period'
+    ]));
+
+    if (response.statusCode == 200) {
+      return LTopAlbumsResponseTopAlbums.fromJson(
+              json.decode(response.body)['topalbums'])
+          .attr
+          .total;
+    } else {
+      throw Exception('Could not get num albums.');
+    }
+  }
+
+  static Future<int> getNumTracks(String username) async {
+    final response = await http.get(_buildURL('user.getTopTracks', data: {
+      'user': username,
+      'period': 'overall',
+      'limit': '1',
+      'page': '1'
+    }, encode: [
+      'user',
+      'period'
+    ]));
+
+    if (response.statusCode == 200) {
+      return LTopTracksResponseTopTracks.fromJson(
+              json.decode(response.body)['toptracks'])
+          .attr
+          .total;
+    } else {
+      throw Exception('Could not get num albums.');
+    }
+  }
+
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
       String track, String artist, String album, DateTime timestamp) async {
     final sk = (await SharedPreferences.getInstance()).getString('key');
