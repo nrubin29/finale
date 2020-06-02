@@ -50,10 +50,11 @@ class TrackView extends StatelessWidget {
             ),
             body: ListView(
               children: [
-                ImageComponent(
-                    displayable: track.album,
-                    quality: ImageQuality.high,
-                    fit: BoxFit.cover),
+                if (track.album != null)
+                  ImageComponent(
+                      displayable: track.album,
+                      quality: ImageQuality.high,
+                      fit: BoxFit.cover),
                 SizedBox(height: 10),
                 IntrinsicHeight(
                     child: Row(

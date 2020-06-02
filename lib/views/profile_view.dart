@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/components/display_component.dart';
@@ -26,7 +27,9 @@ class ProfileView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              CircleAvatar(backgroundImage: NetworkImage(user.images.last.url)),
+              CircleAvatar(
+                  backgroundImage:
+                      CachedNetworkImageProvider(user.images.last.url)),
               SizedBox(width: 8),
               Text(user.name)
             ]),
