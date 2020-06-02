@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:beautifulsoup/beautifulsoup.dart';
+import 'package:dcache/dcache.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -28,6 +29,7 @@ ImageSize convertStringToImageSize(String text) => ImageSize.values.firstWhere(
 
 abstract class GenericImage {
   String get url;
+
   ImageSize get size;
 }
 
@@ -49,6 +51,8 @@ abstract class Displayable {
 
   String get displayTrailing => null;
 
+  // TODO: Whenever [images] is a [FutureOr], the result of the [Future] should
+  //  be cached like [ArtistImageCache]
   FutureOr<List<GenericImage>> get images => null;
 
   Widget get detailWidget => null;
@@ -138,26 +142,52 @@ abstract class BasicScrobbledAlbum extends BasicAlbum {
   String get displayTrailing => '$playCount scrobbles';
 }
 
+// TODO: Use sqflite instead of an in-memory cache - CachedNetworkImage uses it
+class ArtistImageCache {
+  static final _cache = SimpleCache<String, List<GenericImage>>(
+      storage: SimpleStorage(size: 100));
+
+  static List<GenericImage> get(String url) => _cache.get(url);
+
+  static void set(String url, List<GenericImage> value) =>
+      _cache.set(url, value);
+}
+
 abstract class BasicArtist extends Displayable {
   String get name;
+
   String get url;
 
   Future<List<GenericImage>> get images async {
+    List<GenericImage> cachedImages = ArtistImageCache.get(url);
+
+    if (cachedImages != null) {
+      return cachedImages;
+    }
+
+    final lastfmResponse = await http.get(this.url);
+
     try {
-      final lastfmResponse = await http.get(this.url);
       final soup = Beautifulsoup(lastfmResponse.body);
       final rawUrl =
           soup.find_all('.header-new-gallery--link').first.attributes['href'];
-      final url =
-          'https://lastfm.freetls.fastly.net/i/u/^/${rawUrl.substring(rawUrl.lastIndexOf('/'))}';
-      return [
-        ConcreteGenericImage(url.replaceFirst('^', '34s'), ImageSize.small),
-        ConcreteGenericImage(url.replaceFirst('^', '64s'), ImageSize.medium),
-        ConcreteGenericImage(url.replaceFirst('^', '174s'), ImageSize.large),
+      final imageUrl =
+          'https://lastfm.freetls.fastly.net/i/u/^/${rawUrl.substring(rawUrl.lastIndexOf('/'))}.jpg';
+
+      final images = [
         ConcreteGenericImage(
-            url.replaceFirst('^', '300x300'), ImageSize.extraLarge),
+            imageUrl.replaceFirst('^', '34s'), ImageSize.small),
+        ConcreteGenericImage(
+            imageUrl.replaceFirst('^', '64s'), ImageSize.medium),
+        ConcreteGenericImage(
+            imageUrl.replaceFirst('^', '174s'), ImageSize.large),
+        ConcreteGenericImage(
+            imageUrl.replaceFirst('^', '300x300'), ImageSize.extraLarge),
       ];
+      ArtistImageCache.set(url, images);
+      return images;
     } catch (e) {
+      ArtistImageCache.set(url, null);
       return null;
     }
   }

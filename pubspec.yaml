@@ -22,8 +22,10 @@ environment:
 
 dependencies:
   beautifulsoup: ^0.0.1
+  cached_network_image: ^2.2.0+1
   crypto: ^2.1.5
   datetime_picker_formfield: ^1.0.0
+  dcache: ^0.3.0
   flutter:
     sdk: flutter
   flutter_web_auth: ^0.2.4

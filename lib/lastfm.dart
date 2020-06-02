@@ -221,13 +221,9 @@ class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
 
   @override
   Future<List<LArtistTopAlbum>> doRequest(int limit, int page) async {
-    print('doing request');
-
     final response = await http.get(_buildURL('artist.getTopAlbums',
         data: {'artist': artist, 'limit': limit, 'page': page},
         encode: ['artist']));
-
-    print(response.body);
 
     if (response.statusCode == 200) {
       return LArtistGetTopAlbumsResponse.fromJson(
@@ -246,13 +242,9 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
 
   @override
   Future<List<LArtistTopTrack>> doRequest(int limit, int page) async {
-    print('doing request');
-
     final response = await http.get(_buildURL('artist.getTopTracks',
         data: {'artist': artist, 'limit': limit, 'page': page},
         encode: ['artist']));
-
-    print(response.body);
 
     if (response.statusCode == 200) {
       return LArtistGetTopTracksResponse.fromJson(

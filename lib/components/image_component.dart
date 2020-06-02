@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:simplescrobble/types/generic.dart';
 
 enum ImageQuality { low, high }
@@ -40,16 +41,18 @@ class ImageComponent extends StatelessWidget {
       return Image(image: placeholder);
     }
 
-    return FadeInImage(
-        placeholder: placeholder,
-        image: NetworkImage(images
-            .firstWhere((image) =>
-                image.size ==
-                (quality == ImageQuality.high
-                    ? ImageSize.extraLarge
-                    : ImageSize.medium))
-            .url),
-        fit: fit);
+    return CachedNetworkImage(
+      imageUrl: images
+          .firstWhere((image) =>
+              image.size ==
+              (quality == ImageQuality.high
+                  ? ImageSize.extraLarge
+                  : ImageSize.medium))
+          .url,
+      placeholder: (context, url) => Image(image: placeholder),
+      errorWidget: (context, url, error) => Icon(Icons.error),
+      fit: fit,
+    );
   }
 
   @override

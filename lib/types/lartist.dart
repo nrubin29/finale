@@ -147,7 +147,7 @@ class LArtistTopTrack extends BasicTrack {
 
   Future<List<LImage>> get images async {
     final fullTrack = await Lastfm.getTrack(this);
-    return fullTrack.album.images;
+    return fullTrack.album?.images;
   }
 
   LArtistTopTrack(this.name, this.artistObject);
