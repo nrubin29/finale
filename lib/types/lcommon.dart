@@ -8,7 +8,8 @@ class LImage extends GenericImage {
   @JsonKey(name: '#text')
   String url;
 
-  String size;
+  @JsonKey(fromJson: convertStringToImageSize)
+  ImageSize size;
 
   LImage(this.url, this.size);
 

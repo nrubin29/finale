@@ -20,17 +20,29 @@ final _numberFormat = NumberFormat();
 
 String formatNumber(int number) => _numberFormat.format(number);
 
+enum ImageSize { small, medium, large, extraLarge, unknown }
+
+ImageSize convertStringToImageSize(String text) => ImageSize.values.firstWhere(
+    (size) => size.toString().split('.')[1].toLowerCase() == text,
+    orElse: () => ImageSize.unknown);
+
 abstract class GenericImage {
   String get url;
+  ImageSize get size;
 }
 
 class ConcreteGenericImage extends GenericImage {
   String url;
+  ImageSize size;
 
-  ConcreteGenericImage(this.url);
+  ConcreteGenericImage(this.url, this.size);
 }
 
+enum DisplayableType { track, album, artist }
+
 abstract class Displayable {
+  DisplayableType get type;
+
   String get displayTitle;
 
   String get displaySubtitle => null;
@@ -50,6 +62,9 @@ abstract class BasicTrack extends Displayable {
   String get artist;
 
   String get album;
+
+  @override
+  DisplayableType get type => DisplayableType.track;
 
   @override
   String get displayTitle => name;
@@ -100,6 +115,9 @@ abstract class BasicAlbum extends Displayable {
   List<GenericImage> get images;
 
   @override
+  DisplayableType get type => DisplayableType.album;
+
+  @override
   String get displayTitle => name;
 
   @override
@@ -133,16 +151,19 @@ abstract class BasicArtist extends Displayable {
       final url =
           'https://lastfm.freetls.fastly.net/i/u/^/${rawUrl.substring(rawUrl.lastIndexOf('/'))}';
       return [
-        ConcreteGenericImage(url.replaceFirst('^', 'avatar300s')),
-        ConcreteGenericImage(url.replaceFirst('^', 'a0'))
+        ConcreteGenericImage(url.replaceFirst('^', '34s'), ImageSize.small),
+        ConcreteGenericImage(url.replaceFirst('^', '64s'), ImageSize.medium),
+        ConcreteGenericImage(url.replaceFirst('^', '174s'), ImageSize.large),
+        ConcreteGenericImage(
+            url.replaceFirst('^', '300x300'), ImageSize.extraLarge),
       ];
     } catch (e) {
-      return [
-        ConcreteGenericImage(
-            'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.jpg')
-      ];
+      return null;
     }
   }
+
+  @override
+  DisplayableType get type => DisplayableType.artist;
 
   @override
   String get displayTitle => name;

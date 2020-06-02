@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 
@@ -15,7 +16,8 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final void Function(T item) secondaryAction;
 
   final DisplayType displayType;
-  final displayNumbers;
+  final bool displayNumbers;
+  final bool displayImages;
 
   DisplayComponent(
       {Key key,
@@ -24,7 +26,8 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.requestStream,
       this.secondaryAction,
       this.displayType = DisplayType.list,
-      this.displayNumbers = false})
+      this.displayNumbers = false,
+      this.displayImages = true})
       : super(key: key);
 
   @override
@@ -104,19 +107,11 @@ class _DisplayComponentState<T extends Displayable>
       },
       subtitle:
           item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
-      leading: item.images != null
-          ? item.images is Future
-              ? FutureBuilder<List<GenericImage>>(
-                  future: item.images as Future,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Image.network(snapshot.data.first.url);
-                    }
-
-                    return SizedBox();
-                  },
-                )
-              : Image.network((item.images as List<GenericImage>).first.url)
+      leading: widget.displayImages
+          ? ImageComponent(
+              displayable: item,
+              quality: ImageQuality.low,
+            )
           : null,
       trailing: IntrinsicWidth(
           child: Row(
@@ -154,21 +149,8 @@ class _DisplayComponentState<T extends Displayable>
       child: Stack(
         fit: StackFit.expand,
         children: [
-          item.images is Future
-              ? FutureBuilder<List<GenericImage>>(
-                  future: item.images as Future,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Image.network(
-                        snapshot.data.last.url,
-                        fit: BoxFit.cover,
-                      );
-                    }
-
-                    return Container();
-                  },
-                )
-              : Image.network((item.images as List<GenericImage>).last.url),
+          if (widget.displayImages)
+            ImageComponent(displayable: item, fit: BoxFit.cover),
           Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(

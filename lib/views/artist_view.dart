@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/components/display_component.dart';
+import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
@@ -45,17 +46,7 @@ class _ArtistViewState extends State<ArtistView>
             ),
             body: ListView(
               children: [
-                FutureBuilder<List<GenericImage>>(
-                  future: artist.images,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Image.network(snapshot.data.last.url,
-                          fit: BoxFit.cover);
-                    }
-
-                    return CircularProgressIndicator();
-                  },
-                ),
+                ImageComponent(displayable: artist, fit: BoxFit.cover),
                 SizedBox(height: 10),
                 IntrinsicHeight(
                     child: Row(

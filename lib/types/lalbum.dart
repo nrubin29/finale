@@ -102,10 +102,6 @@ class LAlbumTrack extends BasicTrack {
 
   String get artist => artistObject.name;
 
-  // This is done on purpose so that the album artwork doesn't isn't displayed
-  // next to tracks in the album view.
-  List<LImage> get images => null;
-
   String get displaySubtitle => null;
 
   LAlbumTrack(this.name, this.duration, this.artistObject);

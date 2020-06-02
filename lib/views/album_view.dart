@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/components/display_component.dart';
+import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
@@ -39,8 +39,10 @@ class AlbumView extends StatelessWidget {
             ),
             body: ListView(
               children: [
-                if (album.images != null)
-                  Image.network(album.images.last.url, fit: BoxFit.cover),
+                ImageComponent(
+                    displayable: album,
+                    quality: ImageQuality.high,
+                    fit: BoxFit.cover),
                 SizedBox(height: 10),
                 IntrinsicHeight(
                     child: Row(
@@ -76,16 +78,7 @@ class AlbumView extends StatelessWidget {
                 if (album.artist != null) Divider(),
                 if (album.artist != null)
                   ListTile(
-                      leading: FutureBuilder<List<GenericImage>>(
-                        future: album.artist.images,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Image.network(snapshot.data.first.url);
-                          }
-
-                          return SizedBox();
-                        },
-                      ),
+                      leading: ImageComponent(displayable: album.artist),
                       title: Text(album.artist.name),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
@@ -100,6 +93,7 @@ class AlbumView extends StatelessWidget {
                   DisplayComponent(
                     items: album.tracks,
                     displayNumbers: true,
+                    displayImages: false,
                   ),
               ],
             ));

@@ -104,7 +104,7 @@ class LTrackMatch extends BasicTrack {
 
   Future<List<LImage>> get images async {
     final fullTrack = await Lastfm.getTrack(this);
-    return fullTrack.album.images;
+    return fullTrack.album?.images;
   }
 
   LTrackMatch(this.name, this.artist);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
@@ -49,8 +50,10 @@ class TrackView extends StatelessWidget {
             ),
             body: ListView(
               children: [
-                if (track.album?.images != null)
-                  Image.network(track.album.images.last.url, fit: BoxFit.cover),
+                ImageComponent(
+                    displayable: track.album,
+                    quality: ImageQuality.high,
+                    fit: BoxFit.cover),
                 SizedBox(height: 10),
                 IntrinsicHeight(
                     child: Row(
@@ -93,16 +96,7 @@ class TrackView extends StatelessWidget {
                 Divider(),
                 if (track.artist != null)
                   ListTile(
-                      leading: FutureBuilder<List<GenericImage>>(
-                        future: track.artist.images,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Image.network(snapshot.data.first.url);
-                          }
-
-                          return SizedBox();
-                        },
-                      ),
+                      leading: ImageComponent(displayable: track.artist),
                       title: Text(track.artist.name),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
@@ -114,7 +108,7 @@ class TrackView extends StatelessWidget {
                       }),
                 if (track.album != null)
                   ListTile(
-                    leading: Image.network(track.album.images.last.url),
+                    leading: ImageComponent(displayable: track.album),
                     title: Text(track.album.name),
                     subtitle: Text(track.artist.name),
                     trailing: Icon(Icons.chevron_right),
