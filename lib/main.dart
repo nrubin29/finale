@@ -26,6 +26,8 @@ class MyApp extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text('${snapshot.error}');
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox();
               } else if (snapshot.hasData) {
                 return MainView(username: snapshot.data);
               } else {
