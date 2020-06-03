@@ -110,10 +110,10 @@ class LArtistTopAlbum extends BasicAlbum {
 
   LTopAlbumsResponseAlbumArtist artist;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
 
-  LArtistTopAlbum(this.name, this.playCount, this.artist, this.images);
+  LArtistTopAlbum(this.name, this.playCount, this.artist, this.imageId);
 
   factory LArtistTopAlbum.fromJson(Map<String, dynamic> json) =>
       _$LArtistTopAlbumFromJson(json);
@@ -145,9 +145,9 @@ class LArtistTopTrack extends BasicTrack {
 
   String get album => null;
 
-  Future<List<LImage>> get images async {
+  Future<String> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
-    return fullTrack.album?.images;
+    return fullTrack.album?.imageId;
   }
 
   LArtistTopTrack(this.name, this.artistObject);

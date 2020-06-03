@@ -21,23 +21,16 @@ final _numberFormat = NumberFormat();
 
 String formatNumber(int number) => _numberFormat.format(number);
 
-enum ImageSize { small, medium, large, extraLarge, unknown }
+String extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
+  if (images == null ||
+      images.isEmpty ||
+      !images.first.containsKey('#text') ||
+      images.first['#text'].isEmpty) {
+    return null;
+  }
 
-ImageSize convertStringToImageSize(String text) => ImageSize.values.firstWhere(
-    (size) => size.toString().split('.')[1].toLowerCase() == text,
-    orElse: () => ImageSize.unknown);
-
-abstract class GenericImage {
-  String get url;
-
-  ImageSize get size;
-}
-
-class ConcreteGenericImage extends GenericImage {
-  String url;
-  ImageSize size;
-
-  ConcreteGenericImage(this.url, this.size);
+  final String imageUrl = images.first['#text'];
+  return imageUrl.substring(imageUrl.lastIndexOf('/'));
 }
 
 enum DisplayableType { track, album, artist }
@@ -51,9 +44,9 @@ abstract class Displayable {
 
   String get displayTrailing => null;
 
-  // TODO: Whenever [images] is a [FutureOr], the result of the [Future] should
-  //  be cached like [ArtistImageCache]
-  FutureOr<List<GenericImage>> get images => null;
+  // TODO: Whenever [imageId] is a [Future], the result should be cached like
+  //  [ArtistImageCache]
+  FutureOr<String> get imageId => null;
 
   Widget get detailWidget => null;
 }
@@ -61,7 +54,8 @@ abstract class Displayable {
 abstract class BasicTrack extends Displayable {
   String get name;
 
-  FutureOr<List<GenericImage>> get images;
+  @override
+  FutureOr<String> get imageId;
 
   String get artist;
 
@@ -116,7 +110,8 @@ abstract class BasicAlbum extends Displayable {
 
   BasicArtist get artist;
 
-  List<GenericImage> get images;
+  @override
+  String get imageId;
 
   @override
   DisplayableType get type => DisplayableType.album;
@@ -144,13 +139,12 @@ abstract class BasicScrobbledAlbum extends BasicAlbum {
 
 // TODO: Use sqflite instead of an in-memory cache - CachedNetworkImage uses it
 class ArtistImageCache {
-  static final _cache = SimpleCache<String, List<GenericImage>>(
-      storage: SimpleStorage(size: 100));
+  static final _cache =
+      SimpleCache<String, String>(storage: SimpleStorage(size: 100));
 
-  static List<GenericImage> get(String url) => _cache.get(url);
+  static String get(String url) => _cache.get(url);
 
-  static void set(String url, List<GenericImage> value) =>
-      _cache.set(url, value);
+  static void set(String url, String value) => _cache.set(url, value);
 }
 
 abstract class BasicArtist extends Displayable {
@@ -158,11 +152,12 @@ abstract class BasicArtist extends Displayable {
 
   String get url;
 
-  Future<List<GenericImage>> get images async {
-    List<GenericImage> cachedImages = ArtistImageCache.get(url);
+  @override
+  Future<String> get imageId async {
+    String cachedImageId = ArtistImageCache.get(url);
 
-    if (cachedImages != null) {
-      return cachedImages;
+    if (cachedImageId != null) {
+      return cachedImageId;
     }
 
     final lastfmResponse = await http.get(this.url);
@@ -171,21 +166,9 @@ abstract class BasicArtist extends Displayable {
       final soup = Beautifulsoup(lastfmResponse.body);
       final rawUrl =
           soup.find_all('.header-new-gallery--link').first.attributes['href'];
-      final imageUrl =
-          'https://lastfm.freetls.fastly.net/i/u/^/${rawUrl.substring(rawUrl.lastIndexOf('/'))}.jpg';
-
-      final images = [
-        ConcreteGenericImage(
-            imageUrl.replaceFirst('^', '34s'), ImageSize.small),
-        ConcreteGenericImage(
-            imageUrl.replaceFirst('^', '64s'), ImageSize.medium),
-        ConcreteGenericImage(
-            imageUrl.replaceFirst('^', '174s'), ImageSize.large),
-        ConcreteGenericImage(
-            imageUrl.replaceFirst('^', '300x300'), ImageSize.extraLarge),
-      ];
-      ArtistImageCache.set(url, images);
-      return images;
+      final imageId = rawUrl.substring(rawUrl.lastIndexOf('/'));
+      ArtistImageCache.set(url, imageId);
+      return imageId;
     } catch (e) {
       ArtistImageCache.set(url, null);
       return null;

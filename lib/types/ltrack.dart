@@ -51,8 +51,8 @@ class LRecentTracksResponseTrackDate {
 class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   String name;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
 
   @JsonKey(name: 'artist')
   LRecentTracksResponseTrackArtist artistObject;
@@ -63,7 +63,7 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   @JsonKey(name: 'date')
   LRecentTracksResponseTrackDate timestamp;
 
-  LRecentTracksResponseTrack(this.name, this.images, this.artistObject,
+  LRecentTracksResponseTrack(this.name, this.imageId, this.artistObject,
       this.albumObject, this.timestamp);
 
   String get artist => artistObject.name;
@@ -102,9 +102,9 @@ class LTrackMatch extends BasicTrack {
   // to fetch the full track in order to get the album.
   String get album => null;
 
-  Future<List<LImage>> get images async {
+  Future<String> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
-    return fullTrack.album?.images;
+    return fullTrack.album?.imageId;
   }
 
   LTrackMatch(this.name, this.artist);
@@ -149,12 +149,12 @@ class LTrackAlbum extends BasicAlbum {
   @JsonKey(name: 'artist')
   String artistName;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
 
   BasicArtist get artist => ConcreteBasicArtist(artistName, null);
 
-  LTrackAlbum(this.name, this.artistName, this.images);
+  LTrackAlbum(this.name, this.artistName, this.imageId);
 
   factory LTrackAlbum.fromJson(Map<String, dynamic> json) =>
       _$LTrackAlbumFromJson(json);
@@ -209,9 +209,9 @@ class LTopTracksResponseTrack extends BasicTrack {
 
   String get album => null;
 
-  Future<List<LImage>> get images async {
+  Future<String> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
-    return fullTrack.album?.images;
+    return fullTrack.album?.imageId;
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:simplescrobble/types/generic.dart';
-import 'package:simplescrobble/types/lcommon.dart';
 
 part 'luser.g.dart';
 
@@ -29,8 +28,8 @@ class LUser {
 
   String url;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
 
   String country;
 
@@ -57,7 +56,7 @@ class LUser {
       this.name,
       this.realName,
       this.url,
-      this.images,
+      this.imageId,
       this.country,
       this.age,
       this.gender,

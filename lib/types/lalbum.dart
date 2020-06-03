@@ -26,10 +26,10 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum {
 
   LTopAlbumsResponseAlbumArtist artist;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
 
-  LTopAlbumsResponseAlbum(this.name, this.playCount, this.artist, this.images);
+  LTopAlbumsResponseAlbum(this.name, this.playCount, this.artist, this.imageId);
 
   factory LTopAlbumsResponseAlbum.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseAlbumFromJson(json);
@@ -61,13 +61,13 @@ class LAlbumMatch extends BasicAlbum {
   @JsonKey(name: 'artist')
   String artistName;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
 
   BasicArtist get artist =>
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
-  LAlbumMatch(this.name, this.url, this.artistName, this.images);
+  LAlbumMatch(this.name, this.url, this.artistName, this.imageId);
 
   factory LAlbumMatch.fromJson(Map<String, dynamic> json) =>
       _$LAlbumMatchFromJson(json);
@@ -134,8 +134,8 @@ class LAlbum extends FullAlbum {
 
   String url;
 
-  @JsonKey(name: 'image')
-  List<LImage> images;
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
   int playCount;
@@ -160,7 +160,7 @@ class LAlbum extends FullAlbum {
       element.album = name;
     });
 
-  LAlbum(this.name, this.artistName, this.url, this.images, this.playCount,
+  LAlbum(this.name, this.artistName, this.url, this.imageId, this.playCount,
       this.userPlayCount, this.listeners, this.tracksObject, this.topTags);
 
   factory LAlbum.fromJson(Map<String, dynamic> json) => _$LAlbumFromJson(json);
