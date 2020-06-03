@@ -90,7 +90,7 @@ class ProfileView extends StatelessWidget {
                       length: 4,
                       child: Column(children: [
                         TabBar(tabs: [
-                          Tab(icon: Icon(Icons.list)),
+                          Tab(icon: Icon(Icons.queue_music)),
                           Tab(icon: Icon(Icons.people)),
                           Tab(icon: Icon(Icons.album)),
                           Tab(icon: Icon(Icons.audiotrack)),
