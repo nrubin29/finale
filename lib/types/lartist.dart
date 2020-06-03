@@ -104,6 +104,7 @@ class LArtist extends FullArtist {
 @JsonSerializable()
 class LArtistTopAlbum extends BasicAlbum {
   String name;
+  String url;
 
   @JsonKey(name: 'playcount')
   int playCount;
@@ -113,7 +114,8 @@ class LArtistTopAlbum extends BasicAlbum {
   @JsonKey(name: 'image', fromJson: extractImageId)
   String imageId;
 
-  LArtistTopAlbum(this.name, this.playCount, this.artist, this.imageId);
+  LArtistTopAlbum(
+      this.name, this.url, this.playCount, this.artist, this.imageId);
 
   factory LArtistTopAlbum.fromJson(Map<String, dynamic> json) =>
       _$LArtistTopAlbumFromJson(json);
@@ -137,6 +139,7 @@ class LArtistGetTopAlbumsResponse {
 @JsonSerializable()
 class LArtistTopTrack extends BasicTrack {
   String name;
+  String url;
 
   @JsonKey(name: 'artist')
   LTopAlbumsResponseAlbumArtist artistObject;
@@ -150,7 +153,7 @@ class LArtistTopTrack extends BasicTrack {
     return fullTrack.album?.imageId;
   }
 
-  LArtistTopTrack(this.name, this.artistObject);
+  LArtistTopTrack(this.name, this.url, this.artistObject);
 
   factory LArtistTopTrack.fromJson(Map<String, dynamic> json) =>
       _$LArtistTopTrackFromJson(json);

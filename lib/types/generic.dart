@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:beautifulsoup/beautifulsoup.dart';
-import 'package:dcache/dcache.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -37,6 +36,8 @@ enum DisplayableType { track, album, artist }
 
 abstract class Displayable {
   DisplayableType get type;
+
+  String get url;
 
   String get displayTitle;
 
@@ -137,29 +138,11 @@ abstract class BasicScrobbledAlbum extends BasicAlbum {
   String get displayTrailing => '$playCount scrobbles';
 }
 
-// TODO: Use sqflite instead of an in-memory cache - CachedNetworkImage uses it
-class ArtistImageCache {
-  static final _cache =
-      SimpleCache<String, String>(storage: SimpleStorage(size: 100));
-
-  static String get(String url) => _cache.get(url);
-
-  static void set(String url, String value) => _cache.set(url, value);
-}
-
 abstract class BasicArtist extends Displayable {
   String get name;
 
-  String get url;
-
   @override
   Future<String> get imageId async {
-    String cachedImageId = ArtistImageCache.get(url);
-
-    if (cachedImageId != null) {
-      return cachedImageId;
-    }
-
     final lastfmResponse = await http.get(this.url);
 
     try {
@@ -167,10 +150,8 @@ abstract class BasicArtist extends Displayable {
       final rawUrl =
           soup.find_all('.header-new-gallery--link').first.attributes['href'];
       final imageId = rawUrl.substring(rawUrl.lastIndexOf('/'));
-      ArtistImageCache.set(url, imageId);
       return imageId;
     } catch (e) {
-      ArtistImageCache.set(url, null);
       return null;
     }
   }

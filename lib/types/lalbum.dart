@@ -20,6 +20,7 @@ class LTopAlbumsResponseAlbumArtist extends BasicArtist {
 @JsonSerializable()
 class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum {
   String name;
+  String url;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
   int playCount;
@@ -29,7 +30,8 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum {
   @JsonKey(name: 'image', fromJson: extractImageId)
   String imageId;
 
-  LTopAlbumsResponseAlbum(this.name, this.playCount, this.artist, this.imageId);
+  LTopAlbumsResponseAlbum(
+      this.name, this.url, this.playCount, this.artist, this.imageId);
 
   factory LTopAlbumsResponseAlbum.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseAlbumFromJson(json);
@@ -91,6 +93,7 @@ class LAlbumSearchResponse {
 @JsonSerializable()
 class LAlbumTrack extends BasicTrack {
   String name;
+  String url;
 
   @JsonKey(fromJson: int.parse)
   int duration;
@@ -104,7 +107,7 @@ class LAlbumTrack extends BasicTrack {
 
   String get displaySubtitle => null;
 
-  LAlbumTrack(this.name, this.duration, this.artistObject);
+  LAlbumTrack(this.name, this.url, this.duration, this.artistObject);
 
   factory LAlbumTrack.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTrackFromJson(json);

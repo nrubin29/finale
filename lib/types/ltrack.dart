@@ -50,6 +50,7 @@ class LRecentTracksResponseTrackDate {
 @JsonSerializable()
 class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   String name;
+  String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   String imageId;
@@ -63,8 +64,8 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   @JsonKey(name: 'date')
   LRecentTracksResponseTrackDate timestamp;
 
-  LRecentTracksResponseTrack(this.name, this.imageId, this.artistObject,
-      this.albumObject, this.timestamp);
+  LRecentTracksResponseTrack(this.name, this.url, this.imageId,
+      this.artistObject, this.albumObject, this.timestamp);
 
   String get artist => artistObject.name;
 
@@ -96,6 +97,7 @@ class LRecentTracksResponseRecentTracks {
 @JsonSerializable()
 class LTrackMatch extends BasicTrack {
   String name;
+  String url;
   String artist;
 
   // LTrackMatches don't give us any indication of the their album, so we need
@@ -107,7 +109,7 @@ class LTrackMatch extends BasicTrack {
     return fullTrack.album?.imageId;
   }
 
-  LTrackMatch(this.name, this.artist);
+  LTrackMatch(this.name, this.url, this.artist);
 
   factory LTrackMatch.fromJson(Map<String, dynamic> json) =>
       _$LTrackMatchFromJson(json);
@@ -146,6 +148,8 @@ class LTrackAlbum extends BasicAlbum {
   @JsonKey(name: 'title')
   String name;
 
+  String url;
+
   @JsonKey(name: 'artist')
   String artistName;
 
@@ -154,7 +158,7 @@ class LTrackAlbum extends BasicAlbum {
 
   BasicArtist get artist => ConcreteBasicArtist(artistName, null);
 
-  LTrackAlbum(this.name, this.artistName, this.imageId);
+  LTrackAlbum(this.name, this.url, this.artistName, this.imageId);
 
   factory LTrackAlbum.fromJson(Map<String, dynamic> json) =>
       _$LTrackAlbumFromJson(json);
@@ -198,6 +202,7 @@ class LTrack extends FullTrack {
 @JsonSerializable()
 class LTopTracksResponseTrack extends BasicTrack {
   String name;
+  String url;
 
   @JsonKey(name: 'artist')
   LRecentTracksResponseTrack artistObject;
@@ -217,7 +222,8 @@ class LTopTracksResponseTrack extends BasicTrack {
   @override
   String get displayTrailing => '$playCount scrobbles';
 
-  LTopTracksResponseTrack(this.name, this.artistObject, this.playCount);
+  LTopTracksResponseTrack(
+      this.name, this.url, this.artistObject, this.playCount);
 
   factory LTopTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
       _$LTopTracksResponseTrackFromJson(json);
