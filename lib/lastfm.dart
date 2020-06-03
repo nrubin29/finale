@@ -63,7 +63,8 @@ class GetRecentTracksRequest
     }
 
     final response = await http.get(_buildURL('user.getRecentTracks',
-        data: {'user': username, 'page': page}, encode: ['user']));
+        data: {'user': username, 'limit': limit, 'page': page},
+        encode: ['user']));
 
     if (response.statusCode == 200) {
       return LRecentTracksResponseRecentTracks.fromJson(
@@ -87,9 +88,15 @@ class GetTopArtistsRequest
       username = (await SharedPreferences.getInstance()).getString('name');
     }
 
-    final response = await http.get(_buildURL('user.getTopArtists',
-        data: {'user': username, 'page': page, 'period': '7day'},
-        encode: ['user', 'period']));
+    final response = await http.get(_buildURL('user.getTopArtists', data: {
+      'user': username,
+      'limit': limit,
+      'page': page,
+      'period': '7day'
+    }, encode: [
+      'user',
+      'period'
+    ]));
 
     if (response.statusCode == 200) {
       return LTopArtistsResponseTopArtists.fromJson(
@@ -112,9 +119,15 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
 
-    final response = await http.get(_buildURL('user.getTopAlbums',
-        data: {'user': username, 'page': page, 'period': '7day'},
-        encode: ['user', 'period']));
+    final response = await http.get(_buildURL('user.getTopAlbums', data: {
+      'user': username,
+      'limit': limit,
+      'page': page,
+      'period': '7day'
+    }, encode: [
+      'user',
+      'period'
+    ]));
 
     if (response.statusCode == 200) {
       return LTopAlbumsResponseTopAlbums.fromJson(
@@ -137,9 +150,15 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
 
-    final response = await http.get(_buildURL('user.getTopTracks',
-        data: {'user': username, 'page': page, 'period': '7day'},
-        encode: ['user', 'period']));
+    final response = await http.get(_buildURL('user.getTopTracks', data: {
+      'user': username,
+      'limit': limit,
+      'page': page,
+      'period': '7day'
+    }, encode: [
+      'user',
+      'period'
+    ]));
 
     if (response.statusCode == 200) {
       return LTopTracksResponseTopTracks.fromJson(
