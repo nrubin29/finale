@@ -186,7 +186,7 @@ class _DisplayComponentState<T extends Displayable>
     super.build(context);
 
     if (items.isEmpty) {
-      return CircularProgressIndicator();
+      return Center(child: CircularProgressIndicator());
     }
 
     return RefreshIndicator(

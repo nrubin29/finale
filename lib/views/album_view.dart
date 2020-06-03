@@ -20,7 +20,7 @@ class AlbumView extends StatelessWidget {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
 
         final album = snapshot.data;

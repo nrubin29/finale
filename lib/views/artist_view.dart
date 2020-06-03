@@ -35,7 +35,7 @@ class _ArtistViewState extends State<ArtistView>
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
 
         final artist = snapshot.data;
