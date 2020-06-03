@@ -37,6 +37,10 @@ class ImageComponent extends StatelessWidget {
       ImageQuality.low: AssetImage('assets/images/default_artist_low.jpg'),
       ImageQuality.high: AssetImage('assets/images/default_artist.jpg'),
     },
+    DisplayableType.user: {
+      ImageQuality.low: AssetImage('assets/images/default_user_low.jpg'),
+      ImageQuality.high: AssetImage('assets/images/default_user.jpg'),
+    },
   };
 
   ImageComponent(

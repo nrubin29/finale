@@ -10,11 +10,11 @@ import 'package:simplescrobble/views/track_view.dart';
 
 bool convertStringToBoolean(String text) => text == '1';
 
-DateTime fromSecondsSinceEpoch(int timestamp) =>
-    DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+int intParseSafe(String text) => text != null ? int.tryParse(text) : null;
 
-DateTime fromSecondsSinceEpochString(String text) =>
-    fromSecondsSinceEpoch(int.parse(text));
+DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
+    DateTime.fromMillisecondsSinceEpoch(
+        (timestamp is int ? timestamp : int.parse(timestamp)) * 1000);
 
 final _numberFormat = NumberFormat();
 
@@ -32,7 +32,7 @@ String extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
   return imageUrl.substring(imageUrl.lastIndexOf('/'));
 }
 
-enum DisplayableType { track, album, artist }
+enum DisplayableType { track, album, artist, user }
 
 abstract class Displayable {
   DisplayableType get type;

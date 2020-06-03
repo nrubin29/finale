@@ -27,6 +27,7 @@ class ProfileView extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               CircleAvatar(
                   backgroundImage: CachedNetworkImageProvider(
@@ -88,13 +89,14 @@ class ProfileView extends StatelessWidget {
               SizedBox(height: 10),
               Expanded(
                   child: DefaultTabController(
-                      length: 4,
+                      length: 5,
                       child: Column(children: [
                         TabBar(tabs: [
                           Tab(icon: Icon(Icons.queue_music)),
                           Tab(icon: Icon(Icons.people)),
                           Tab(icon: Icon(Icons.album)),
                           Tab(icon: Icon(Icons.audiotrack)),
+                          Tab(icon: Icon(Icons.person)),
                         ]),
                         Expanded(
                             child: TabBarView(children: [
@@ -108,6 +110,8 @@ class ProfileView extends StatelessWidget {
                               request: GetTopAlbumsRequest(username)),
                           DisplayComponent(
                               request: GetTopTracksRequest(username)),
+                          DisplayComponent(
+                              request: GetFriendsRequest(username)),
                         ]))
                       ])))
             ],

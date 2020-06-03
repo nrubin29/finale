@@ -170,6 +170,29 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
   }
 }
 
+class GetFriendsRequest extends PagedLastfmRequest<LUser> {
+  String username;
+
+  GetFriendsRequest(this.username);
+
+  @override
+  doRequest(int limit, int page) async {
+    final response = await http.get(_buildURL('user.getFriends',
+        data: {'user': username, 'limit': limit, 'page': page},
+        encode: ['user']));
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return LUserFriendsResponse.fromJson(
+              json.decode(response.body)['friends'])
+          .friends;
+    } else {
+      throw Exception('Could not get friends.');
+    }
+  }
+}
+
 class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
   String query;
 

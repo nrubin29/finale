@@ -36,7 +36,7 @@ class LRecentTracksResponseTrackAlbum {
 
 @JsonSerializable()
 class LRecentTracksResponseTrackDate {
-  @JsonKey(name: 'uts', fromJson: fromSecondsSinceEpochString)
+  @JsonKey(name: 'uts', fromJson: fromSecondsSinceEpoch)
   DateTime date;
 
   LRecentTracksResponseTrackDate(this.date);

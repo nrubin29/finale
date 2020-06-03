@@ -1,12 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:simplescrobble/types/generic.dart';
+import 'package:simplescrobble/views/profile_view.dart';
 
 part 'luser.g.dart';
 
 @JsonSerializable()
 class LUserRegistered {
-  @JsonKey(name: '#text', fromJson: fromSecondsSinceEpoch)
+  @JsonKey(name: 'unixtime', fromJson: fromSecondsSinceEpoch)
   DateTime date;
 
   LUserRegistered(this.date);
@@ -20,7 +22,7 @@ class LUserRegistered {
 }
 
 @JsonSerializable()
-class LUser {
+class LUser extends Displayable {
   String name;
 
   @JsonKey(name: 'realname')
@@ -33,7 +35,7 @@ class LUser {
 
   String country;
 
-  @JsonKey(fromJson: int.parse)
+  @JsonKey(fromJson: intParseSafe)
   int age;
 
   String gender;
@@ -66,9 +68,34 @@ class LUser {
       this.bootstrap,
       this.registered);
 
+  @override
+  DisplayableType get type => DisplayableType.user;
+
+  @override
+  String get displayTitle => name;
+
+  @override
+  String get displaySubtitle => realName;
+
+  @override
+  Widget get detailWidget => ProfileView(username: name);
+
   factory LUser.fromJson(Map<String, dynamic> json) => _$LUserFromJson(json);
 
   Map<String, dynamic> toJson() => _$LUserToJson(this);
+}
+
+@JsonSerializable()
+class LUserFriendsResponse {
+  @JsonKey(name: 'user')
+  List<LUser> friends;
+
+  LUserFriendsResponse(this.friends);
+
+  factory LUserFriendsResponse.fromJson(Map<String, dynamic> json) =>
+      _$LUserFriendsResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LUserFriendsResponseToJson(this);
 }
 
 @JsonSerializable()

@@ -74,19 +74,27 @@ class _DisplayComponentState<T extends Displayable>
   }
 
   Future<void> _getInitialItems() async {
-    final initialItems = await _request.doRequest(20, 1);
-    setState(() {
-      items = initialItems;
-      page = 2;
-    });
+    try {
+      final initialItems = await _request.doRequest(20, 1);
+      setState(() {
+        items = initialItems;
+        page = 2;
+      });
+    } catch (_) {
+      // Could not get page.
+    }
   }
 
   Future<void> _getMoreItems() async {
-    final moreItems = await _request.doRequest(20, page);
-    setState(() {
-      items.addAll(moreItems);
-      page += 1;
-    });
+    try {
+      final moreItems = await _request.doRequest(20, page);
+      setState(() {
+        items.addAll(moreItems);
+        page += 1;
+      });
+    } catch (_) {
+      // Could not get page.
+    }
   }
 
   void _onTap(T item) {
