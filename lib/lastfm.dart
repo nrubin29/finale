@@ -398,6 +398,19 @@ class Lastfm {
     }
   }
 
+  static Future<List<LTopArtistsResponseArtist>> getGlobalTopArtists(
+      int limit) async {
+    final response = await http.get(
+        _buildURL('chart.getTopArtists', data: {'limit': limit, 'page': 1}));
+
+    if (response.statusCode == 200) {
+      return LChartTopArtists.fromJson(json.decode(response.body)['artists'])
+          .artists;
+    } else {
+      throw Exception('Could not get global top artists.');
+    }
+  }
+
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
       String track, String artist, String album, DateTime timestamp) async {
     final sk = (await SharedPreferences.getInstance()).getString('key');

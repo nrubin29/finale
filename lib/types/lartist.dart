@@ -173,3 +173,16 @@ class LArtistGetTopTracksResponse {
 
   Map<String, dynamic> toJson() => _$LArtistGetTopTracksResponseToJson(this);
 }
+
+@JsonSerializable()
+class LChartTopArtists {
+  @JsonKey(name: 'artist')
+  List<LTopArtistsResponseArtist> artists;
+
+  LChartTopArtists(this.artists);
+
+  factory LChartTopArtists.fromJson(Map<String, dynamic> json) =>
+      _$LChartTopArtistsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LChartTopArtistsToJson(this);
+}
