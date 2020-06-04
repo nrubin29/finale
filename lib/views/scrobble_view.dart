@@ -19,7 +19,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   final _trackController = TextEditingController();
   final _artistController = TextEditingController();
   final _albumController = TextEditingController();
-  var _datetime = DateTime.now();
+
+  var _scrobbleNow = true;
+  DateTime _datetime;
 
   @override
   void initState() {
@@ -30,8 +32,11 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   }
 
   Future<void> _scrobble() async {
-    final response = await Lastfm.scrobble(_trackController.text,
-        _artistController.text, _albumController.text, _datetime);
+    final response = await Lastfm.scrobble(
+        _trackController.text,
+        _artistController.text,
+        _albumController.text,
+        _scrobbleNow ? DateTime.now() : _datetime);
 
     if (response.ignored == 0) {
       Scaffold.of(context)
@@ -69,34 +74,54 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                       controller: _albumController,
                       decoration: InputDecoration(labelText: 'Album'),
                     ),
-                    DateTimeField(
-                        decoration: InputDecoration(labelText: 'Timestamp'),
-                        format: DateFormat('yyyy-MM-dd HH:mm:ss'),
-                        initialValue: _datetime,
-                        onShowPicker: (context, currentValue) async {
-                          final date = await showDatePicker(
-                              context: context,
-                              initialDate: currentValue ?? DateTime.now(),
-                              firstDate:
-                                  DateTime.now().subtract(Duration(days: 14)),
-                              lastDate: DateTime.now().add(Duration(days: 1)));
+                    CheckboxListTile(
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: EdgeInsets.zero,
+                      activeColor: Colors.red,
+                      title: Text('Scrobble now'),
+                      value: _scrobbleNow,
+                      onChanged: (value) {
+                        setState(() {
+                          _scrobbleNow = value;
 
-                          if (date != null) {
-                            final time = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.fromDateTime(
-                                    currentValue ?? DateTime.now()));
-
-                            return DateTimeField.combine(date, time);
+                          if (!_scrobbleNow) {
+                            _datetime = DateTime.now();
                           }
+                        });
+                      },
+                    ),
+                    Visibility(
+                      visible: !_scrobbleNow,
+                      child: DateTimeField(
+                          decoration: InputDecoration(labelText: 'Timestamp'),
+                          format: DateFormat('yyyy-MM-dd HH:mm:ss'),
+                          initialValue: _datetime,
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                                context: context,
+                                initialDate: currentValue ?? DateTime.now(),
+                                firstDate:
+                                    DateTime.now().subtract(Duration(days: 14)),
+                                lastDate:
+                                    DateTime.now().add(Duration(days: 1)));
 
-                          return currentValue;
-                        },
-                        onChanged: (datetime) {
-                          setState(() {
-                            _datetime = datetime;
-                          });
-                        }),
+                            if (date != null) {
+                              final time = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.fromDateTime(
+                                      currentValue ?? DateTime.now()));
+
+                              return DateTimeField.combine(date, time);
+                            }
+
+                            return currentValue;
+                          },
+                          onChanged: (datetime) {
+                            setState(() {
+                              _datetime = datetime;
+                            });
+                          }),
+                    ),
                   ],
                 ))));
   }
