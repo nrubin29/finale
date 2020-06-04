@@ -31,7 +31,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _albumController.text = widget.track?.album?.name;
   }
 
-  Future<void> _scrobble() async {
+  Future<void> _scrobble(BuildContext context) async {
     final response = await Lastfm.scrobble(
         _trackController.text,
         _artistController.text,
@@ -55,7 +55,11 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Scrobble'),
-          actions: [IconButton(icon: Icon(Icons.add), onPressed: _scrobble)],
+          actions: [
+            Builder(
+                builder: (context) => IconButton(
+                    icon: Icon(Icons.add), onPressed: () => _scrobble(context)))
+          ],
         ),
         body: Form(
             child: Container(
