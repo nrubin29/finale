@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/lastfm.dart';
@@ -39,9 +40,10 @@ class _SearchViewState extends State<SearchView> {
                         secondaryAction: (item) async {
                           final fullTrack = await Lastfm.getTrack(item);
 
-                          showModalBottomSheet(
+                          showBarModalBottomSheet(
                               context: context,
-                              builder: (context) =>
+                              duration: Duration(milliseconds: 200),
+                              builder: (context, controller) =>
                                   ScrobbleView(track: fullTrack));
                         },
                         requestStream: _query

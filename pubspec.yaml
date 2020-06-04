@@ -32,6 +32,7 @@ dependencies:
   http: ^0.12.1
   intl: ^0.16.1
   json_annotation: ^3.0.1
+  modal_bottom_sheet: ^0.1.6+1
   rxdart: ^0.24.1
   shared_preferences: ^0.5.7+3
   transparent_image: ^1.0.0

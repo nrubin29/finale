@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
@@ -41,9 +42,11 @@ class TrackView extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-                    showModalBottomSheet(
+                    showBarModalBottomSheet(
                         context: context,
-                        builder: (context) => ScrobbleView(track: track));
+                        duration: Duration(milliseconds: 200),
+                        builder: (context, controller) =>
+                            ScrobbleView(track: track));
                   },
                 )
               ],
