@@ -152,11 +152,14 @@ class _DisplayComponentState<T extends Displayable>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(item.displayTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white)),
               if (item.displaySubtitle != null)
-                Text(item.displaySubtitle, style: TextStyle(fontSize: 13)),
+                Text(item.displaySubtitle,
+                    style: TextStyle(fontSize: 13, color: Colors.white)),
               if (item.displayTrailing != null)
-                Text(item.displayTrailing, style: TextStyle(fontSize: 13))
+                Text(item.displayTrailing,
+                    style: TextStyle(fontSize: 13, color: Colors.white))
             ],
           )),
       child: Stack(
