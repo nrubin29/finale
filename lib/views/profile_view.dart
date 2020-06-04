@@ -91,13 +91,17 @@ class ProfileView extends StatelessWidget {
                   child: DefaultTabController(
                       length: 5,
                       child: Column(children: [
-                        TabBar(tabs: [
-                          Tab(icon: Icon(Icons.queue_music)),
-                          Tab(icon: Icon(Icons.people)),
-                          Tab(icon: Icon(Icons.album)),
-                          Tab(icon: Icon(Icons.audiotrack)),
-                          Tab(icon: Icon(Icons.person)),
-                        ]),
+                        TabBar(
+                            labelColor: Colors.red,
+                            unselectedLabelColor: Colors.grey,
+                            indicatorColor: Colors.red,
+                            tabs: [
+                              Tab(icon: Icon(Icons.queue_music)),
+                              Tab(icon: Icon(Icons.people)),
+                              Tab(icon: Icon(Icons.album)),
+                              Tab(icon: Icon(Icons.audiotrack)),
+                              Tab(icon: Icon(Icons.person)),
+                            ]),
                         Expanded(
                             child: TabBarView(children: [
                           DisplayComponent(

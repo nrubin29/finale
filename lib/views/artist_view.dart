@@ -81,6 +81,9 @@ class _ArtistViewState extends State<ArtistView>
                 TagsComponent(topTags: artist.topTags),
                 Divider(),
                 TabBar(
+                    labelColor: Colors.red,
+                    unselectedLabelColor: Colors.grey,
+                    indicatorColor: Colors.red,
                     controller: _tabController,
                     tabs: [
                       Tab(icon: Icon(Icons.album)),
@@ -106,21 +109,6 @@ class _ArtistViewState extends State<ArtistView>
                         request: ArtistGetTopTracksRequest(artist.name)),
                   ),
                 ])
-//                DefaultTabController(
-//                    length: 2,
-//                    child: Column(children: [
-//                      TabBar(tabs: [
-//                        Tab(icon: Icon(Icons.album)),
-//                        Tab(icon: Icon(Icons.audiotrack)),
-//                      ]),
-//                      Expanded(
-//                          child: TabBarView(children: [
-//                        DisplayComponent(
-//                            request: ArtistGetTopAlbumsRequest(artist.name)),
-//                        DisplayComponent(
-//                            request: ArtistGetTopAlbumsRequest(artist.name)),
-//                      ]))
-//                    ]))
               ],
             ));
       },
