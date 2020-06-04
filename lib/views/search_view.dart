@@ -21,7 +21,10 @@ class _SearchViewState extends State<SearchView> {
       child: Scaffold(
           appBar: AppBar(
               title: TextField(
-                decoration: InputDecoration(hintText: 'Search'),
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    hintText: 'Search',
+                    hintStyle: TextStyle(color: Colors.white)),
                 onChanged: (text) {
                   setState(() {
                     _query.value = text;
