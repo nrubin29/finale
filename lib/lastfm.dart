@@ -467,20 +467,19 @@ class Lastfm {
   }
 
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
-      String track, String artist, String album, DateTime timestamp) async {
-    final sk = (await SharedPreferences.getInstance()).getString('key');
+      List<BasicTrack> tracks, List<DateTime> timestamps) async {
+    final Map<String, dynamic> data = {};
+    data['sk'] = (await SharedPreferences.getInstance()).getString('key');
 
-    final response = await http.post(_buildURL('track.scrobble', data: {
-      'album': album,
-      'artist': artist,
-      'sk': sk,
-      'timestamp': timestamp.millisecondsSinceEpoch ~/ 1000,
-      'track': track
-    }, encode: [
-      'album',
-      'artist',
-      'track'
-    ]));
+    tracks.asMap().forEach((i, track) {
+      data['album[$i]'] = track.album;
+      data['artist[$i]'] = track.artist;
+      data['track[$i]'] = track.name;
+      data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
+    });
+
+    final response = await http.post(_buildURL('track.scrobble',
+        data: data, encode: ['album', 'artist', 'track']));
 
     if (response.statusCode == 200) {
       return LScrobbleResponseScrobblesAttr.fromJson(

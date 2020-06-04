@@ -146,6 +146,19 @@ class _DisplayComponentState<T extends Displayable>
   Widget _gridTileBuilder(BuildContext context, int index) {
     final item = items[index];
     return GridTile(
+      header: widget.secondaryAction != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                IconButton(
+                    icon: Icon(Icons.add),
+                    color: Colors.white,
+                    onPressed: () {
+                      widget.secondaryAction(item);
+                    })
+              ],
+            )
+          : null,
       footer: Container(
           margin: EdgeInsets.all(16),
           child: Column(

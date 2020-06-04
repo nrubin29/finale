@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
@@ -6,6 +7,7 @@ import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/lalbum.dart';
 import 'package:simplescrobble/views/artist_view.dart';
+import 'package:simplescrobble/views/scrobble_album_view.dart';
 
 class AlbumView extends StatelessWidget {
   final BasicAlbum album;
@@ -36,6 +38,27 @@ class AlbumView extends StatelessWidget {
                   )
                 ],
               ),
+              actions: [
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () async {
+                      final result = await showBarModalBottomSheet<bool>(
+                          context: context,
+                          duration: Duration(milliseconds: 200),
+                          builder: (context, controller) =>
+                              ScrobbleAlbumView(album: album));
+
+                      if (result != null) {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text(result
+                                ? 'Scrobbled successfully!'
+                                : 'An error occurred while scrobbling')));
+                      }
+                    },
+                  ),
+                )
+              ],
             ),
             body: ListView(
               children: [

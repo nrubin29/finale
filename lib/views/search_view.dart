@@ -4,6 +4,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/lastfm.dart';
+import 'package:simplescrobble/views/scrobble_album_view.dart';
 import 'package:simplescrobble/views/scrobble_view.dart';
 
 class SearchView extends StatefulWidget {
@@ -71,6 +72,37 @@ class _SearchViewState extends State<SearchView> {
                                     Duration.millisecondsPerSecond ~/ 2))
                             .map((query) => SearchArtistsRequest(query))),
                     DisplayComponent(
+                        secondaryAction: (item) async {
+                          final fullAlbum = await Lastfm.getAlbum(item);
+
+                          if (fullAlbum.tracks.isEmpty) {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'This album doesn\'t have any tracks')));
+                            return;
+                          }
+
+                          else if (!fullAlbum.tracks.every((track) =>
+                              track.duration != null && track.duration > 0)) {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'Can\'t scrobble album because Last.fm is missing track duration data')));
+                            return;
+                          }
+
+                          final result = await showBarModalBottomSheet<bool>(
+                              context: context,
+                              duration: Duration(milliseconds: 200),
+                              builder: (context, controller) =>
+                                  ScrobbleAlbumView(album: fullAlbum));
+
+                          if (result != null) {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(result
+                                    ? 'Scrobbled successfully!'
+                                    : 'An error occurred while scrobbling')));
+                          }
+                        },
                         displayType: DisplayType.grid,
                         requestStream: _query
                             .debounceTime(Duration(

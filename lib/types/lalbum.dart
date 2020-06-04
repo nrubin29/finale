@@ -91,7 +91,7 @@ class LAlbumSearchResponse {
 }
 
 @JsonSerializable()
-class LAlbumTrack extends BasicTrack {
+class LAlbumTrack extends BasicScrobbleableTrack {
   String name;
   String url;
 

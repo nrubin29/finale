@@ -2,56 +2,38 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:simplescrobble/components/image_component.dart';
+import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 
-import '../lastfm.dart';
+class ScrobbleAlbumView extends StatefulWidget {
+  final FullAlbum album;
 
-class ScrobbleView extends StatefulWidget {
-  final FullTrack track;
-  final bool isModal;
-
-  ScrobbleView({Key key, this.track, this.isModal = false}) : super(key: key);
+  ScrobbleAlbumView({Key key, this.album}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ScrobbleViewState();
+  State<StatefulWidget> createState() => _ScrobbleAlbumViewState();
 }
 
-class _ScrobbleViewState extends State<ScrobbleView> {
-  final _trackController = TextEditingController();
-  final _artistController = TextEditingController();
-  final _albumController = TextEditingController();
-
+class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
   var _scrobbleNow = true;
   DateTime _datetime;
 
   @override
   void initState() {
     super.initState();
-    _trackController.text = widget.track?.name;
-    _artistController.text = widget.track?.artist?.name;
-    _albumController.text = widget.track?.album?.name;
   }
 
   Future<void> _scrobble(BuildContext context) async {
-    final response = await Lastfm.scrobble([
-      BasicConcreteTrack(
-          _trackController.text, _artistController.text, _albumController.text)
-    ], [
-      _scrobbleNow ? DateTime.now() : _datetime
-    ]);
+    final timestamps = [_scrobbleNow ? DateTime.now() : _datetime];
 
-    if (widget.isModal) {
-      Navigator.pop(context, response.ignored == 0);
-    } else if (response.ignored == 0) {
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Scrobbled successfully!')));
-      _trackController.text = '';
-      _artistController.text = '';
-      _albumController.text = '';
-    } else {
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred while scrobbling')));
-    }
+    widget.album.tracks.forEach((track) {
+      timestamps.add(timestamps.last.add(Duration(seconds: track.duration)));
+    });
+
+    final response = await Lastfm.scrobble(widget.album.tracks, timestamps);
+
+    Navigator.pop(context, response.ignored == 0);
   }
 
   @override
@@ -70,23 +52,15 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 margin: EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: _trackController,
-                      decoration: InputDecoration(labelText: 'Song'),
-                    ),
-                    TextFormField(
-                      controller: _artistController,
-                      decoration: InputDecoration(labelText: 'Artist'),
-                    ),
-                    TextFormField(
-                      controller: _albumController,
-                      decoration: InputDecoration(labelText: 'Album'),
-                    ),
+                    ListTile(
+                        leading: ImageComponent(displayable: widget.album),
+                        title: Text(widget.album.name),
+                        subtitle: Text(widget.album.artist.name)),
                     CheckboxListTile(
                       controlAffinity: ListTileControlAffinity.leading,
                       contentPadding: EdgeInsets.zero,
                       activeColor: Colors.red,
-                      title: Text('Scrobble now'),
+                      title: Text('Scrobble starting now'),
                       value: _scrobbleNow,
                       onChanged: (value) {
                         setState(() {
@@ -132,13 +106,5 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                     ),
                   ],
                 ))));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _trackController.dispose();
-    _artistController.dispose();
-    _albumController.dispose();
   }
 }

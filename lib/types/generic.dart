@@ -75,6 +75,17 @@ abstract class BasicTrack extends Displayable {
   Widget get detailWidget => TrackView(track: this);
 }
 
+class BasicConcreteTrack extends BasicTrack {
+  String name;
+  String artist;
+  String album;
+  String url;
+  int duration;
+
+  BasicConcreteTrack(this.name, this.artist, this.album,
+      {this.url, this.duration});
+}
+
 abstract class BasicScrobbledTrack extends BasicTrack {
   DateTime get date;
 
@@ -96,6 +107,10 @@ abstract class BasicScrobbledTrack extends BasicTrack {
 
     return DateFormat('dd MMM HH:mm aa').format(date);
   }
+}
+
+abstract class BasicScrobbleableTrack extends BasicTrack {
+  int get duration;
 }
 
 abstract class FullTrack {
@@ -128,7 +143,7 @@ abstract class BasicAlbum extends Displayable {
 }
 
 abstract class FullAlbum extends BasicAlbum {
-  List<BasicTrack> get tracks;
+  List<BasicScrobbleableTrack> get tracks;
 }
 
 abstract class BasicScrobbledAlbum extends BasicAlbum {
