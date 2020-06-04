@@ -43,11 +43,20 @@ class _SearchViewState extends State<SearchView> {
                         secondaryAction: (item) async {
                           final fullTrack = await Lastfm.getTrack(item);
 
-                          showBarModalBottomSheet(
+                          final result = await showBarModalBottomSheet<bool>(
                               context: context,
                               duration: Duration(milliseconds: 200),
-                              builder: (context, controller) =>
-                                  ScrobbleView(track: fullTrack));
+                              builder: (context, controller) => ScrobbleView(
+                                    track: fullTrack,
+                                    isModal: true,
+                                  ));
+
+                          if (result != null) {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(result
+                                    ? 'Scrobbled successfully!'
+                                    : 'An error occurred while scrobbling')));
+                          }
                         },
                         requestStream: _query
                             .debounceTime(Duration(

@@ -8,8 +8,9 @@ import '../lastfm.dart';
 
 class ScrobbleView extends StatefulWidget {
   final FullTrack track;
+  final bool isModal;
 
-  ScrobbleView({Key key, this.track}) : super(key: key);
+  ScrobbleView({Key key, this.track, this.isModal = false}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ScrobbleViewState();
@@ -38,7 +39,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
         _albumController.text,
         _scrobbleNow ? DateTime.now() : _datetime);
 
-    if (response.ignored == 0) {
+    if (widget.isModal) {
+      Navigator.pop(context, response.ignored == 0);
+    } else if (response.ignored == 0) {
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Scrobbled successfully!')));
       _trackController.text = '';

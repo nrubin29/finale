@@ -39,16 +39,26 @@ class TrackView extends StatelessWidget {
                 ],
               ),
               actions: [
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    showBarModalBottomSheet(
-                        context: context,
-                        duration: Duration(milliseconds: 200),
-                        builder: (context, controller) =>
-                            ScrobbleView(track: track));
-                  },
-                )
+                Builder(
+                    builder: (context) => IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () async {
+                            final result = await showBarModalBottomSheet<bool>(
+                                context: context,
+                                duration: Duration(milliseconds: 200),
+                                builder: (context, controller) => ScrobbleView(
+                                      track: track,
+                                      isModal: true,
+                                    ));
+
+                            if (result != null) {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text(result
+                                      ? 'Scrobbled successfully!'
+                                      : 'An error occurred while scrobbling')));
+                            }
+                          },
+                        ))
               ],
             ),
             body: ListView(
