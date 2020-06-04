@@ -67,9 +67,17 @@ class GetRecentTracksRequest
         encode: ['user']));
 
     if (response.statusCode == 200) {
-      return LRecentTracksResponseRecentTracks.fromJson(
+      final tracks = LRecentTracksResponseRecentTracks.fromJson(
               json.decode(response.body)['recenttracks'])
           .tracks;
+
+      // For some reason, this endpoint always returns the currently-playing
+      // song regardless of which page you request.
+      if (page != 1 && tracks.isNotEmpty && tracks.first.date == null) {
+        tracks.removeAt(0);
+      }
+
+      return tracks;
     } else {
       throw Exception('Could not get recent tracks.');
     }
