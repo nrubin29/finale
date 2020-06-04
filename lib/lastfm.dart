@@ -47,7 +47,7 @@ String _buildURL(String method,
 }
 
 abstract class PagedLastfmRequest<T> {
-  Future<List<T>> doRequest(int limit, int page);
+  Future<List<T>> doRequest(int limit, int page, {String period});
 }
 
 class GetRecentTracksRequest
@@ -57,7 +57,7 @@ class GetRecentTracksRequest
   GetRecentTracksRequest(this.username);
 
   @override
-  doRequest(int limit, int page) async {
+  doRequest(int limit, int page, {String period}) async {
     if (username == null) {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
@@ -83,7 +83,7 @@ class GetTopArtistsRequest
   GetTopArtistsRequest(this.username);
 
   @override
-  doRequest(int limit, int page) async {
+  doRequest(int limit, int page, {String period}) async {
     if (username == null) {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
@@ -92,7 +92,7 @@ class GetTopArtistsRequest
       'user': username,
       'limit': limit,
       'page': page,
-      'period': '7day'
+      'period': period
     }, encode: [
       'user',
       'period'
@@ -114,7 +114,7 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
   GetTopAlbumsRequest(this.username);
 
   @override
-  doRequest(int limit, int page) async {
+  doRequest(int limit, int page, {String period}) async {
     if (username == null) {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
@@ -123,7 +123,7 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
       'user': username,
       'limit': limit,
       'page': page,
-      'period': '7day'
+      'period': period
     }, encode: [
       'user',
       'period'
@@ -145,7 +145,7 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
   GetTopTracksRequest(this.username);
 
   @override
-  doRequest(int limit, int page) async {
+  doRequest(int limit, int page, {String period}) async {
     if (username == null) {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
@@ -154,7 +154,7 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
       'user': username,
       'limit': limit,
       'page': page,
-      'period': '7day'
+      'period': period
     }, encode: [
       'user',
       'period'
@@ -176,7 +176,7 @@ class GetFriendsRequest extends PagedLastfmRequest<LUser> {
   GetFriendsRequest(this.username);
 
   @override
-  doRequest(int limit, int page) async {
+  doRequest(int limit, int page, {String period}) async {
     final response = await http.get(_buildURL('user.getFriends',
         data: {'user': username, 'limit': limit, 'page': page},
         encode: ['user']));
@@ -199,7 +199,8 @@ class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
   SearchTracksRequest(this.query);
 
   @override
-  Future<List<LTrackMatch>> doRequest(int limit, int page) async {
+  Future<List<LTrackMatch>> doRequest(int limit, int page,
+      {String period}) async {
     final response = await http.get(_buildURL('track.search',
         data: {'track': query, 'limit': limit, 'page': page},
         encode: ['track']));
@@ -220,7 +221,8 @@ class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
   SearchArtistsRequest(this.query);
 
   @override
-  Future<List<LArtistMatch>> doRequest(int limit, int page) async {
+  Future<List<LArtistMatch>> doRequest(int limit, int page,
+      {String period}) async {
     final response = await http.get(_buildURL('artist.search',
         data: {'artist': query, 'limit': limit, 'page': page},
         encode: ['artist']));
@@ -241,7 +243,8 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
   SearchAlbumsRequest(this.query);
 
   @override
-  Future<List<LAlbumMatch>> doRequest(int limit, int page) async {
+  Future<List<LAlbumMatch>> doRequest(int limit, int page,
+      {String period}) async {
     final response = await http.get(_buildURL('album.search',
         data: {'album': query, 'limit': limit, 'page': page},
         encode: ['album']));
@@ -262,7 +265,8 @@ class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
   ArtistGetTopAlbumsRequest(this.artist);
 
   @override
-  Future<List<LArtistTopAlbum>> doRequest(int limit, int page) async {
+  Future<List<LArtistTopAlbum>> doRequest(int limit, int page,
+      {String period}) async {
     final response = await http.get(_buildURL('artist.getTopAlbums',
         data: {'artist': artist, 'limit': limit, 'page': page},
         encode: ['artist']));
@@ -283,7 +287,8 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
   ArtistGetTopTracksRequest(this.artist);
 
   @override
-  Future<List<LArtistTopTrack>> doRequest(int limit, int page) async {
+  Future<List<LArtistTopTrack>> doRequest(int limit, int page,
+      {String period}) async {
     final response = await http.get(_buildURL('artist.getTopTracks',
         data: {'artist': artist, 'limit': limit, 'page': page},
         encode: ['artist']));

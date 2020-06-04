@@ -135,7 +135,7 @@ abstract class BasicScrobbledAlbum extends BasicAlbum {
   int get playCount;
 
   @override
-  String get displayTrailing => '$playCount scrobbles';
+  String get displayTrailing => '${formatNumber(playCount)} scrobbles';
 }
 
 abstract class BasicArtist extends Displayable {
@@ -177,7 +177,7 @@ abstract class BasicScrobbledArtist extends BasicArtist {
   int get playCount;
 
   @override
-  String get displayTrailing => '$playCount scrobbles';
+  String get displayTrailing => '${formatNumber(playCount)} scrobbles';
 }
 
 abstract class FullArtist extends BasicArtist {}

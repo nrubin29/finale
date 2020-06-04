@@ -18,6 +18,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final DisplayType displayType;
   final bool displayNumbers;
   final bool displayImages;
+  final bool displayPeriodSelector;
 
   DisplayComponent(
       {Key key,
@@ -27,7 +28,8 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.secondaryAction,
       this.displayType = DisplayType.list,
       this.displayNumbers = false,
-      this.displayImages = true})
+      this.displayImages = true,
+      this.displayPeriodSelector = false})
       : super(key: key);
 
   @override
@@ -38,6 +40,7 @@ class _DisplayComponentState<T extends Displayable>
     extends State<DisplayComponent> with AutomaticKeepAliveClientMixin {
   var items = List<T>();
   int page = 1;
+  String period = '7day';
 
   final _scrollController = ScrollController();
 
@@ -74,8 +77,10 @@ class _DisplayComponentState<T extends Displayable>
   }
 
   Future<void> _getInitialItems() async {
+    items = [];
+
     try {
-      final initialItems = await _request.doRequest(20, 1);
+      final initialItems = await _request.doRequest(20, 1, period: period);
       setState(() {
         items = initialItems;
         page = 2;
@@ -87,7 +92,7 @@ class _DisplayComponentState<T extends Displayable>
 
   Future<void> _getMoreItems() async {
     try {
-      final moreItems = await _request.doRequest(20, page);
+      final moreItems = await _request.doRequest(20, page, period: period);
       setState(() {
         items.addAll(moreItems);
         page += 1;
@@ -189,6 +194,21 @@ class _DisplayComponentState<T extends Displayable>
     return _gridTileBuilder(context, index);
   }
 
+  Widget _mainBuilder(BuildContext context) {
+    return widget.displayType == DisplayType.list
+        ? ListView.builder(
+            shrinkWrap: true,
+            controller: _scrollController,
+            itemCount: items.length,
+            itemBuilder: _listItemBuilder)
+        : GridView.builder(
+            controller: _scrollController,
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemCount: items.length,
+            itemBuilder: _gridItemBuilder);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -199,18 +219,40 @@ class _DisplayComponentState<T extends Displayable>
 
     return RefreshIndicator(
         onRefresh: _getInitialItems,
-        child: widget.displayType == DisplayType.list
-            ? ListView.builder(
-                shrinkWrap: true,
-                controller: _scrollController,
-                itemCount: items.length,
-                itemBuilder: _listItemBuilder)
-            : GridView.builder(
-                controller: _scrollController,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemCount: items.length,
-                itemBuilder: _gridItemBuilder));
+        child: widget.displayPeriodSelector
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 10),
+                    child: DropdownButton<String>(
+                      value: period,
+                      items: {
+                        '7 days': '7day',
+                        '1 month': '1month',
+                        '3 months': '3month',
+                        '6 months': '6month',
+                        '12 months': '12month',
+                        'Overall': 'overall'
+                      }
+                          .entries
+                          .map((e) => DropdownMenuItem(
+                              value: e.value, child: Text(e.key)))
+                          .toList(),
+                      onChanged: (value) {
+                        if (value != period) {
+                          setState(() {
+                            period = value;
+                            _getInitialItems();
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  Expanded(child: _mainBuilder(context))
+                ],
+              )
+            : _mainBuilder(context));
   }
 
   @override

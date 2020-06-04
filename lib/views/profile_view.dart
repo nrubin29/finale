@@ -104,11 +104,14 @@ class ProfileView extends StatelessWidget {
                               request: GetRecentTracksRequest(username)),
                           DisplayComponent(
                               displayType: DisplayType.grid,
+                              displayPeriodSelector: true,
                               request: GetTopArtistsRequest(username)),
                           DisplayComponent(
                               displayType: DisplayType.grid,
+                              displayPeriodSelector: true,
                               request: GetTopAlbumsRequest(username)),
                           DisplayComponent(
+                              displayPeriodSelector: true,
                               request: GetTopTracksRequest(username)),
                           DisplayComponent(
                               request: GetFriendsRequest(username)),
