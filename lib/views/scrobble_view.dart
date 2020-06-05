@@ -1,7 +1,9 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:intl/intl.dart';
+import 'package:simplescrobble/env.dart';
 import 'package:simplescrobble/types/generic.dart';
 
 import '../lastfm.dart';
@@ -30,6 +32,11 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _trackController.text = widget.track?.name;
     _artistController.text = widget.track?.artist?.name;
     _albumController.text = widget.track?.album?.name;
+
+    if (!widget.isModal) {
+      ACRCloud.setUp(ACRCloudConfig(
+          acrCloudAccessKey, acrCloudAccessSecret, acrCloudHost));
+    }
   }
 
   Future<void> _scrobble(BuildContext context) async {
@@ -54,6 +61,25 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     }
   }
 
+  // This widget is a circle whose size depends on the volume that the
+  // microphone picks up. Unfortunately, it's too laggy and the size doesn't
+  // change that much unless you make a noise very close to the microphone.
+  // ignore: unused_element
+  Widget _buildAudioIndicator(BuildContext context, ACRCloudSession session) {
+    return StreamBuilder(
+      stream: session.volume,
+      initialData: 0.0,
+      builder: (context, snapshot) => Container(
+          height: 50,
+          child: Center(
+              child: ClipOval(
+                  child: SizedBox(
+                      width: 100 * snapshot.data + 10,
+                      height: 100 * snapshot.data + 10,
+                      child: Container(color: Colors.red))))),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,6 +96,50 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 margin: EdgeInsets.all(10),
                 child: Column(
                   children: [
+                    if (!widget.isModal)
+                      Builder(
+                          builder: (context) => FlatButton(
+                                child: Text('Tap to recognize'),
+                                onPressed: () async {
+                                  final session = ACRCloud.startSession();
+
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) => AlertDialog(
+                                            title: Text('Listening...'),
+                                            actions: [
+                                              FlatButton(
+                                                child: Text('Cancel'),
+                                                onPressed: () {
+                                                  session.cancel();
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          ));
+
+                                  final result = await session.result;
+                                  session.dispose();
+                                  Navigator.pop(context);
+
+                                  if (result.metadata?.music?.isNotEmpty ??
+                                      false) {
+                                    final track = result.metadata.music.first;
+
+                                    setState(() {
+                                      _trackController.text = track.title;
+                                      _albumController.text = track.album?.name;
+                                      _artistController.text =
+                                          track.artists?.first?.name;
+                                    });
+                                  } else {
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                        content:
+                                            Text('Could not recognize track')));
+                                  }
+                                },
+                              )),
                     TextFormField(
                       controller: _trackController,
                       decoration: InputDecoration(labelText: 'Song'),
