@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +95,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 margin: EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    if (!widget.isModal && Platform.isIOS)
+                    if (!widget.isModal)
                       Builder(
                           builder: (context) => FlatButton(
                                 child: Text('Tap to recognize'),
@@ -114,6 +112,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                                                 child: Text('Cancel'),
                                                 onPressed: () {
                                                   session.cancel();
+                                                  // TODO: On Android, this pops
+                                                  //  the whole screen
                                                   Navigator.pop(context);
                                                 },
                                               )
