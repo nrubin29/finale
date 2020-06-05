@@ -1,12 +1,13 @@
+import 'dart:io';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:intl/intl.dart';
 import 'package:simplescrobble/env.dart';
+import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
-
-import '../lastfm.dart';
 
 class ScrobbleView extends StatefulWidget {
   final FullTrack track;
@@ -96,7 +97,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 margin: EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    if (!widget.isModal)
+                    if (!widget.isModal && Platform.isIOS)
                       Builder(
                           builder: (context) => FlatButton(
                                 child: Text('Tap to recognize'),
