@@ -28,8 +28,7 @@ dependencies:
   dcache: ^0.3.0
   flutter:
     sdk: flutter
-  flutter_acrcloud:
-    path: /Users/nrubin29/Documents/FlutterProjects/flutter_acrcloud
+  flutter_acrcloud: ^0.0.1
   flutter_web_auth: ^0.2.4
   http: ^0.12.1
   intl: ^0.16.1

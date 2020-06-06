@@ -58,7 +58,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_acrcloud: 93c91b43fe7450707ac2a0c8cf2666d173fe14fb
+  flutter_acrcloud: 85096e0649217498fccd1cbe4a30d6bda7734b74
   flutter_web_auth: b7465086188ce4413d7e8b23622583784b9007a7
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c

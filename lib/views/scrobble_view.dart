@@ -110,12 +110,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                                             actions: [
                                               FlatButton(
                                                 child: Text('Cancel'),
-                                                onPressed: () {
-                                                  session.cancel();
-                                                  // TODO: On Android, this pops
-                                                  //  the whole screen
-                                                  Navigator.pop(context);
-                                                },
+                                                onPressed: session.cancel,
                                               )
                                             ],
                                           ));
@@ -123,6 +118,11 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                                   final result = await session.result;
                                   session.dispose();
                                   Navigator.pop(context);
+
+                                  if (result == null) {
+                                    // Cancelled
+                                    return;
+                                  }
 
                                   if (result.metadata?.music?.isNotEmpty ??
                                       false) {
