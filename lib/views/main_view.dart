@@ -39,7 +39,7 @@ class _MainViewState extends State<MainView> {
           ],
         ),
         body: IndexedStack(index: _index, children: [
-          ProfileView(username: _username),
+          ProfileView(username: _username, isTab: true),
           SearchView(),
           ScrobbleView(),
         ]));

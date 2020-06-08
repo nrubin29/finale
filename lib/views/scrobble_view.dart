@@ -97,9 +97,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                   children: [
                     if (!widget.isModal)
                       Builder(
-                          builder: (context) => FlatButton(
-                                child: Text('Tap to recognize'),
-                                onPressed: () async {
+                          builder: (context) => ListTile(
+                                title: Text('Tap to recognize'),
+                                onTap: () async {
                                   final session = ACRCloud.startSession();
 
                                   showDialog(

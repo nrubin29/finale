@@ -6,11 +6,14 @@ import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/luser.dart';
+import 'package:simplescrobble/views/settings_view.dart';
 
 class ProfileView extends StatelessWidget {
   final String username;
+  final bool isTab;
 
-  ProfileView({Key key, @required this.username}) : super(key: key);
+  ProfileView({Key key, @required this.username, this.isTab = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,18 @@ class ProfileView extends StatelessWidget {
               SizedBox(width: 8),
               Text(user.name)
             ]),
+            actions: [
+              if (isTab)
+                IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SettingsView()));
+                  },
+                )
+            ],
           ),
           body: Column(
             children: [

@@ -35,9 +35,11 @@ dependencies:
   intl: ^0.16.1
   json_annotation: ^3.0.1
   modal_bottom_sheet: ^0.1.6+1
+  package_info: ^0.4.1
   rxdart: ^0.24.1
   shared_preferences: ^0.5.7+3
   transparent_image: ^1.0.0
+  url_launcher: ^5.4.10
 
 
   # The following adds the Cupertino Icons font to your application.
