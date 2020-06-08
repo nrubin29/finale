@@ -27,11 +27,11 @@ class AboutView extends StatelessWidget {
                               'simplescrobble',
                               style: TextStyle(fontSize: 24),
                             ),
-                            FutureBuilder(
-                                future: PackageInfo.fromPlatform()
-                                    .then((info) => info.version),
+                            FutureBuilder<PackageInfo>(
+                                future: PackageInfo.fromPlatform(),
                                 builder: (context, snapshot) => snapshot.hasData
-                                    ? Text('Version ${snapshot.data}')
+                                    ? Text(
+                                        'Version ${snapshot.data.version}+${snapshot.data.buildNumber}')
                                     : SizedBox())
                           ],
                         )
