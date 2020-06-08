@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/loading_component.dart';
@@ -29,6 +30,7 @@ class ProfileView extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             title: IntrinsicWidth(
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -37,6 +39,12 @@ class ProfileView extends StatelessWidget {
               Text(user.name)
             ])),
             actions: [
+              IconButton(
+                icon: Icon(Icons.share),
+                onPressed: () {
+                  Share.share(user.url);
+                },
+              ),
               if (isTab)
                 IconButton(
                   icon: Icon(Icons.settings),

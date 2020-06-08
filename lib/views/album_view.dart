@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:share/share.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/loading_component.dart';
@@ -30,6 +31,7 @@ class AlbumView extends StatelessWidget {
 
         return Scaffold(
             appBar: AppBar(
+              centerTitle: true,
               title: Column(
                 children: [
                   Text(album.name),
@@ -40,6 +42,12 @@ class AlbumView extends StatelessWidget {
                 ],
               ),
               actions: [
+                IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () {
+                    Share.share(album.url);
+                  },
+                ),
                 Builder(
                   builder: (context) => IconButton(
                     icon: Icon(Icons.add),

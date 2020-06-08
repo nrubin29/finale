@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/loading_component.dart';
@@ -42,7 +43,16 @@ class _ArtistViewState extends State<ArtistView>
 
         return Scaffold(
             appBar: AppBar(
+              centerTitle: true,
               title: Text(artist.name),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () {
+                    Share.share(artist.url);
+                  },
+                ),
+              ],
             ),
             body: ListView(
               children: [

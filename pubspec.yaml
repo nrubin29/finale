@@ -37,6 +37,7 @@ dependencies:
   modal_bottom_sheet: ^0.1.6+1
   package_info: ^0.4.1
   rxdart: ^0.24.1
+  share: ^0.6.4+3
   shared_preferences: ^0.5.7+3
   transparent_image: ^1.0.0
   url_launcher: ^5.4.10

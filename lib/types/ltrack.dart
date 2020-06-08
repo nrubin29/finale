@@ -169,6 +169,7 @@ class LTrackAlbum extends BasicAlbum {
 @JsonSerializable()
 class LTrack extends FullTrack {
   String name;
+  String url;
 
   @JsonKey(fromJson: int.parse)
   int listeners;
@@ -191,8 +192,8 @@ class LTrack extends FullTrack {
   @JsonKey(name: 'toptags')
   LTopTags topTags;
 
-  LTrack(this.name, this.listeners, this.duration, this.playCount, this.artist,
-      this.album, this.topTags);
+  LTrack(this.name, this.url, this.listeners, this.duration, this.playCount,
+      this.artist, this.album, this.topTags);
 
   factory LTrack.fromJson(Map<String, dynamic> json) => _$LTrackFromJson(json);
 
