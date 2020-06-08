@@ -29,6 +29,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_acrcloud: ^0.0.1
+  flutter_launcher_icons: ^0.7.5
   flutter_web_auth: ^0.2.4
   http: ^0.12.1
   intl: ^0.16.1
@@ -90,3 +91,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  image_path: 'assets/images/icon.png'
+  android: true
+  ios: true
