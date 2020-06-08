@@ -29,12 +29,13 @@ class ProfileView extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            centerTitle: true,
-            title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            title: IntrinsicWidth(
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               ImageComponent(displayable: user, isCircular: true, width: 40),
               SizedBox(width: 8),
               Text(user.name)
-            ]),
+            ])),
             actions: [
               if (isTab)
                 IconButton(
