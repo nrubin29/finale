@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,6 +12,7 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
+  final _textController = TextEditingController();
   final _query = BehaviorSubject<String>();
 
   @override
@@ -22,6 +22,7 @@ class _SearchViewState extends State<SearchView> {
       child: Scaffold(
           appBar: AppBar(
               title: TextField(
+                controller: _textController,
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                     hintText: 'Search',
@@ -32,6 +33,23 @@ class _SearchViewState extends State<SearchView> {
                   });
                 },
               ),
+              actions: [
+                Visibility(
+                    visible:
+                        _textController != null && _textController.text != '',
+                    maintainState: true,
+                    maintainAnimation: true,
+                    maintainSize: true,
+                    child: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          _textController.value = TextEditingValue.empty;
+                          _query.value = '';
+                        });
+                      },
+                    ))
+              ],
               bottom: TabBar(tabs: [
                 Tab(icon: Icon(Icons.audiotrack)),
                 Tab(icon: Icon(Icons.people)),
@@ -80,9 +98,7 @@ class _SearchViewState extends State<SearchView> {
                                 content: Text(
                                     'This album doesn\'t have any tracks')));
                             return;
-                          }
-
-                          else if (!fullAlbum.tracks.every((track) =>
+                          } else if (!fullAlbum.tracks.every((track) =>
                               track.duration != null && track.duration > 0)) {
                             Scaffold.of(context).showSnackBar(SnackBar(
                                 content: Text(
@@ -118,6 +134,7 @@ class _SearchViewState extends State<SearchView> {
   @override
   void dispose() {
     super.dispose();
+    _textController.dispose();
     _query.close();
   }
 }
