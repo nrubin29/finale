@@ -22,6 +22,8 @@ class ImageComponent extends StatelessWidget {
   final Displayable displayable;
   final ImageQuality quality;
   final BoxFit fit;
+  final double width;
+  final bool isCircular;
 
   static final Map<DisplayableType, Map<ImageQuality, AssetImage>>
       placeholders = {
@@ -43,26 +45,37 @@ class ImageComponent extends StatelessWidget {
     },
   };
 
-  ImageComponent(
-      {Key key,
-      @required this.displayable,
-      this.quality = ImageQuality.high,
-      this.fit})
-      : super(key: key);
+  ImageComponent({
+    Key key,
+    @required this.displayable,
+    this.quality = ImageQuality.high,
+    this.fit,
+    this.width,
+    this.isCircular = false,
+  }) : super(key: key);
+
+  Widget _buildCircularImage(BuildContext context, Widget image) => Container(
+      width: width,
+      child: Material(
+          shape: CircleBorder(), clipBehavior: Clip.hardEdge, child: image));
 
   Widget _buildImage(BuildContext context, String imageId) {
     AssetImage placeholder = placeholders[displayable.type][quality];
 
     if (imageId == null) {
-      return Image(image: placeholder);
+      return isCircular
+          ? _buildCircularImage(context, Image(image: placeholder))
+          : Image(image: placeholder, width: width);
     }
 
-    return CachedNetworkImage(
-      imageUrl: buildImageUrl(imageId, quality),
-      placeholder: (context, url) => Image(image: placeholder),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-      fit: fit,
-    );
+    final image = CachedNetworkImage(
+        imageUrl: buildImageUrl(imageId, quality),
+        placeholder: (context, url) => Image(image: placeholder),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        fit: fit,
+        width: width);
+
+    return isCircular ? _buildCircularImage(context, image) : image;
   }
 
   @override

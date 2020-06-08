@@ -19,6 +19,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final bool displayNumbers;
   final bool displayImages;
   final bool displayPeriodSelector;
+  final bool displayCircularImages;
 
   DisplayComponent(
       {Key key,
@@ -29,7 +30,8 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.displayType = DisplayType.list,
       this.displayNumbers = false,
       this.displayImages = true,
-      this.displayPeriodSelector = false})
+      this.displayPeriodSelector = false,
+      this.displayCircularImages = false})
       : super(key: key);
 
   @override
@@ -124,6 +126,7 @@ class _DisplayComponentState<T extends Displayable>
           ? ImageComponent(
               displayable: item,
               quality: ImageQuality.low,
+              isCircular: widget.displayCircularImages,
             )
           : null,
       trailing: IntrinsicWidth(

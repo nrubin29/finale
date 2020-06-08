@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
@@ -32,9 +30,7 @@ class ProfileView extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(
-                      buildImageUrl(user.imageId, ImageQuality.high))),
+              ImageComponent(displayable: user, isCircular: true, width: 40),
               SizedBox(width: 8),
               Text(user.name)
             ]),
@@ -133,6 +129,7 @@ class ProfileView extends StatelessWidget {
                               displayPeriodSelector: true,
                               request: GetTopTracksRequest(username)),
                           DisplayComponent(
+                              displayCircularImages: true,
                               request: GetFriendsRequest(username)),
                         ]))
                       ])))
