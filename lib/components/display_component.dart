@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/components/image_component.dart';
+import 'package:simplescrobble/components/loading_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 
@@ -233,7 +234,7 @@ class _DisplayComponentState<T extends Displayable>
     super.build(context);
 
     if (items.isEmpty) {
-      return Center(child: CircularProgressIndicator());
+      return LoadingComponent();
     }
 
     return RefreshIndicator(

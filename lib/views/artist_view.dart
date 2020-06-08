@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
+import 'package:simplescrobble/components/loading_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
@@ -35,7 +35,7 @@ class _ArtistViewState extends State<ArtistView>
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return LoadingComponent();
         }
 
         final artist = snapshot.data;

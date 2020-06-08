@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:simplescrobble/components/image_component.dart';
+import 'package:simplescrobble/components/loading_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
@@ -22,7 +23,7 @@ class TrackView extends StatelessWidget {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return LoadingComponent();
         }
 
         final track = snapshot.data;

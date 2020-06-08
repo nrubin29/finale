@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simplescrobble/components/display_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
+import 'package:simplescrobble/components/loading_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/luser.dart';
@@ -21,7 +22,7 @@ class ProfileView extends StatelessWidget {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return LoadingComponent();
         }
 
         final user = snapshot.data;
