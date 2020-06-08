@@ -189,12 +189,13 @@ class GetFriendsRequest extends PagedLastfmRequest<LUser> {
         data: {'user': username, 'limit': limit, 'page': page},
         encode: ['user']));
 
-    print(response.body);
+    final Map<String, dynamic> result = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      return LUserFriendsResponse.fromJson(
-              json.decode(response.body)['friends'])
-          .friends;
+      return LUserFriendsResponse.fromJson(result['friends']).friends;
+    } else if (result['error'] == 6) {
+      // "No such page" error
+      return [];
     } else {
       throw Exception('Could not get friends.');
     }

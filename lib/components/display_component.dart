@@ -44,6 +44,7 @@ class _DisplayComponentState<T extends Displayable>
   var items = List<T>();
   int page = 1;
   String period = '7day';
+  bool didInitialRequest = false;
 
   final _scrollController = ScrollController();
 
@@ -56,6 +57,7 @@ class _DisplayComponentState<T extends Displayable>
 
     if (widget.items != null) {
       items = widget.items;
+      didInitialRequest = true;
       return;
     }
 
@@ -87,6 +89,7 @@ class _DisplayComponentState<T extends Displayable>
       setState(() {
         items = initialItems;
         page = 2;
+        didInitialRequest = true;
       });
     } catch (_) {
       // Could not get page.
@@ -215,6 +218,13 @@ class _DisplayComponentState<T extends Displayable>
   }
 
   Widget _mainBuilder(BuildContext context) {
+    if (items.isEmpty) {
+      // The Stack is a hack to make the RefreshIndicator work.
+      return Stack(children: [ListView(), Center(child: Text("No results."))]);
+    }
+
+    // TODO: When the ListView/GridView isn't tall enough to go off-screen, the
+    //  RefreshIndicator doesn't work.
     return widget.displayType == DisplayType.list
         ? ListView.builder(
             shrinkWrap: true,
@@ -233,7 +243,7 @@ class _DisplayComponentState<T extends Displayable>
   Widget build(BuildContext context) {
     super.build(context);
 
-    if (items.isEmpty) {
+    if (!didInitialRequest) {
       return LoadingComponent();
     }
 
