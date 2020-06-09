@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
+import 'package:simplescrobble/components/error_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/loading_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
@@ -22,7 +23,7 @@ class TrackView extends StatelessWidget {
       future: Lastfm.getTrack(track),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('${snapshot.error}');
+          return ErrorComponent(error: snapshot.error);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }

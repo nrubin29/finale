@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:simplescrobble/components/display_component.dart';
+import 'package:simplescrobble/components/error_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/loading_component.dart';
 import 'package:simplescrobble/lastfm.dart';
@@ -21,7 +22,7 @@ class ProfileView extends StatelessWidget {
       future: Lastfm.getUser(username),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('${snapshot.error}');
+          return ErrorComponent(error: snapshot.error);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }

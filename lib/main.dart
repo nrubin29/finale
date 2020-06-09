@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simplescrobble/components/error_component.dart';
 import 'package:simplescrobble/views/login_view.dart';
 import 'package:simplescrobble/views/main_view.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
                 .then((value) => value.getString('name')),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text('${snapshot.error}');
+                return ErrorComponent(error: snapshot.error);
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox();
               } else if (snapshot.hasData) {
