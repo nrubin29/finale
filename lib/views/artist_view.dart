@@ -5,6 +5,7 @@ import 'package:simplescrobble/components/error_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/loading_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
+import 'package:simplescrobble/components/wiki_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/lartist.dart';
@@ -91,6 +92,8 @@ class _ArtistViewState extends State<ArtistView>
                 if (artist.topTags.tags.isNotEmpty) Divider(),
                 if (artist.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: artist.topTags),
+                if (artist.bio != null) Divider(),
+                if (artist.bio != null) WikiComponent(wiki: artist.bio),
                 Divider(),
                 TabBar(
                     labelColor: Colors.red,

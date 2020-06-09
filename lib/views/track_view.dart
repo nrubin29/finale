@@ -5,6 +5,7 @@ import 'package:simplescrobble/components/error_component.dart';
 import 'package:simplescrobble/components/image_component.dart';
 import 'package:simplescrobble/components/loading_component.dart';
 import 'package:simplescrobble/components/tags_component.dart';
+import 'package:simplescrobble/components/wiki_component.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
 import 'package:simplescrobble/types/ltrack.dart';
@@ -118,6 +119,8 @@ class TrackView extends StatelessWidget {
                 if (track.topTags.tags.isNotEmpty) Divider(),
                 if (track.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: track.topTags),
+                if (track.wiki != null) Divider(),
+                if (track.wiki != null) WikiComponent(wiki: track.wiki),
                 if (track.artist != null || track.album != null) Divider(),
                 if (track.artist != null)
                   ListTile(

@@ -61,3 +61,16 @@ class LAttr {
 
   Map<String, dynamic> toJson() => _$LAttrToJson(this);
 }
+
+@JsonSerializable()
+class LWiki {
+  String published;
+  String summary;
+  String content;
+
+  LWiki(this.published, this.summary, this.content);
+
+  factory LWiki.fromJson(Map<String, dynamic> json) => _$LWikiFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LWikiToJson(this);
+}

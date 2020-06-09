@@ -192,8 +192,10 @@ class LTrack extends FullTrack {
   @JsonKey(name: 'toptags')
   LTopTags topTags;
 
+  LWiki wiki;
+
   LTrack(this.name, this.url, this.listeners, this.duration, this.playCount,
-      this.artist, this.album, this.topTags);
+      this.artist, this.album, this.topTags, this.wiki);
 
   factory LTrack.fromJson(Map<String, dynamic> json) => _$LTrackFromJson(json);
 

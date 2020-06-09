@@ -155,6 +155,8 @@ class LAlbum extends FullAlbum {
   @JsonKey(name: 'tags')
   LTopTags topTags;
 
+  LWiki wiki;
+
   BasicArtist get artist =>
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
@@ -163,8 +165,17 @@ class LAlbum extends FullAlbum {
       element.album = name;
     });
 
-  LAlbum(this.name, this.artistName, this.url, this.imageId, this.playCount,
-      this.userPlayCount, this.listeners, this.tracksObject, this.topTags);
+  LAlbum(
+      this.name,
+      this.artistName,
+      this.url,
+      this.imageId,
+      this.playCount,
+      this.userPlayCount,
+      this.listeners,
+      this.tracksObject,
+      this.topTags,
+      this.wiki);
 
   factory LAlbum.fromJson(Map<String, dynamic> json) => _$LAlbumFromJson(json);
 

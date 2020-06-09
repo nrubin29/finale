@@ -93,7 +93,9 @@ class LArtist extends FullArtist {
   @JsonKey(name: 'tags')
   LTopTags topTags;
 
-  LArtist(this.name, this.url, this.stats, this.topTags);
+  LWiki bio;
+
+  LArtist(this.name, this.url, this.stats, this.topTags, this.bio);
 
   factory LArtist.fromJson(Map<String, dynamic> json) =>
       _$LArtistFromJson(json);
