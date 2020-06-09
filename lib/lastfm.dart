@@ -489,4 +489,24 @@ class Lastfm {
       throw Exception('Could not scrobble.');
     }
   }
+
+  /// Loves or unloves a track. If [love] is true, the track will be loved;
+  /// otherwise, it will be unloved.
+  static Future<bool> love(FullTrack track, bool love) async {
+    final response =
+        await http.post(_buildURL(love ? 'track.love' : 'track.unlove', data: {
+      'track': track.name,
+      'artist': track.artist.name,
+      'sk': (await SharedPreferences.getInstance()).getString('key')
+    }, encode: [
+      'track',
+      'artist'
+    ]));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Could not love/unlove track.');
+    }
+  }
 }

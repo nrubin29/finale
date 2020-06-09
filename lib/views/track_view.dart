@@ -13,15 +13,22 @@ import 'package:simplescrobble/views/album_view.dart';
 import 'package:simplescrobble/views/artist_view.dart';
 import 'package:simplescrobble/views/scrobble_view.dart';
 
-class TrackView extends StatelessWidget {
+class TrackView extends StatefulWidget {
   final BasicTrack track;
 
   TrackView({Key key, @required this.track}) : super(key: key);
 
   @override
+  State<StatefulWidget> createState() => _TrackViewState();
+}
+
+class _TrackViewState extends State<TrackView> {
+  bool loved;
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<LTrack>(
-      future: Lastfm.getTrack(track),
+      future: Lastfm.getTrack(widget.track),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorComponent(error: snapshot.error);
@@ -30,6 +37,7 @@ class TrackView extends StatelessWidget {
         }
 
         final track = snapshot.data;
+        loved = track.userLoved;
 
         return Scaffold(
             appBar: AppBar(
@@ -109,10 +117,15 @@ class TrackView extends StatelessWidget {
                     ),
                     VerticalDivider(),
                     IconButton(
-                      icon: Icon(track.userLoved
-                          ? Icons.favorite
-                          : Icons.favorite_border),
-                      onPressed: () {},
+                      icon:
+                          Icon(loved ? Icons.favorite : Icons.favorite_border),
+                      onPressed: () async {
+                        if (await Lastfm.love(track, !loved)) {
+                          setState(() {
+                            loved = !loved;
+                          });
+                        }
+                      },
                     ),
                   ],
                 )),
