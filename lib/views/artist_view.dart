@@ -88,8 +88,9 @@ class _ArtistViewState extends State<ArtistView>
                     ),
                   ],
                 )),
-                Divider(),
-                TagsComponent(topTags: artist.topTags),
+                if (artist.topTags.tags.isNotEmpty) Divider(),
+                if (artist.topTags.tags.isNotEmpty)
+                  TagsComponent(topTags: artist.topTags),
                 Divider(),
                 TabBar(
                     labelColor: Colors.red,

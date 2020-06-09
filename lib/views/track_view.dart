@@ -115,9 +115,10 @@ class TrackView extends StatelessWidget {
                     ),
                   ],
                 )),
-                Divider(),
-                TagsComponent(topTags: track.topTags),
-                Divider(),
+                if (track.topTags.tags.isNotEmpty) Divider(),
+                if (track.topTags.tags.isNotEmpty)
+                  TagsComponent(topTags: track.topTags),
+                if (track.artist != null || track.album != null) Divider(),
                 if (track.artist != null)
                   ListTile(
                       leading: ImageComponent(displayable: track.artist),
