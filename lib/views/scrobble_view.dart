@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:simplescrobble/env.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScrobbleView extends StatefulWidget {
   final FullTrack track;
@@ -98,7 +99,23 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                     if (!widget.isModal)
                       Builder(
                           builder: (context) => ListTile(
+                                contentPadding: EdgeInsets.only(left: 8),
                                 title: Text('Tap to recognize'),
+                                trailing: FlatButton(
+                                    child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('Powered by ',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption),
+                                          Image.asset(
+                                              'assets/images/acrcloud.png',
+                                              height: 20)
+                                        ]),
+                                    onPressed: () {
+                                      launch('https://acrcloud.com');
+                                    }),
                                 onTap: () async {
                                   final session = ACRCloud.startSession();
 
