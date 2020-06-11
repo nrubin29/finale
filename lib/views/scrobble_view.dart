@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:intl/intl.dart';
+import 'package:simplescrobble/components/acrcloud_dialog_component.dart';
 import 'package:simplescrobble/env.dart';
 import 'package:simplescrobble/lastfm.dart';
 import 'package:simplescrobble/types/generic.dart';
@@ -117,44 +118,28 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                                       launch('https://acrcloud.com');
                                     }),
                                 onTap: () async {
-                                  final session = ACRCloud.startSession();
+                                  final result =
+                                      await showDialog<ACRCloudDialogResult>(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (context) =>
+                                              ACRCloudDialogComponent());
 
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) => AlertDialog(
-                                            title: Text('Listening...'),
-                                            actions: [
-                                              FlatButton(
-                                                child: Text('Cancel'),
-                                                onPressed: session.cancel,
-                                              )
-                                            ],
-                                          ));
+                                  if (result.wasCancelled) return;
 
-                                  final result = await session.result;
-                                  session.dispose();
-                                  Navigator.pop(context);
-
-                                  if (result == null) {
-                                    // Cancelled
-                                    return;
-                                  }
-
-                                  if (result.metadata?.music?.isNotEmpty ??
-                                      false) {
-                                    final track = result.metadata.music.first;
-
+                                  if (result.track != null) {
                                     setState(() {
-                                      _trackController.text = track.title;
-                                      _albumController.text = track.album?.name;
+                                      _trackController.text =
+                                          result.track.title;
+                                      _albumController.text =
+                                          result.track.album?.name;
                                       _artistController.text =
-                                          track.artists?.first?.name;
+                                          result.track.artists?.first?.name;
                                     });
                                   } else {
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content:
-                                            Text('Could not recognize track')));
+                                            Text('Could not recognize song')));
                                   }
                                 },
                               )),
