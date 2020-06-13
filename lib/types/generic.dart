@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:beautifulsoup/beautifulsoup.dart';
+import 'package:finale/views/album_view.dart';
+import 'package:finale/views/artist_view.dart';
+import 'package:finale/views/track_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:simplescrobble/views/album_view.dart';
-import 'package:simplescrobble/views/artist_view.dart';
-import 'package:simplescrobble/views/track_view.dart';
 
 bool convertStringToBoolean(String text) => text == '1';
 

@@ -1,10 +1,10 @@
+import 'package:finale/components/display_component.dart';
+import 'package:finale/lastfm.dart';
+import 'package:finale/views/scrobble_album_view.dart';
+import 'package:finale/views/scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:simplescrobble/components/display_component.dart';
-import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/views/scrobble_album_view.dart';
-import 'package:simplescrobble/views/scrobble_view.dart';
 
 class SearchView extends StatefulWidget {
   @override

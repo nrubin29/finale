@@ -1,17 +1,17 @@
+import 'package:finale/components/error_component.dart';
+import 'package:finale/components/image_component.dart';
+import 'package:finale/components/loading_component.dart';
+import 'package:finale/components/tags_component.dart';
+import 'package:finale/components/wiki_component.dart';
+import 'package:finale/lastfm.dart';
+import 'package:finale/types/generic.dart';
+import 'package:finale/types/ltrack.dart';
+import 'package:finale/views/album_view.dart';
+import 'package:finale/views/artist_view.dart';
+import 'package:finale/views/scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
-import 'package:simplescrobble/components/error_component.dart';
-import 'package:simplescrobble/components/image_component.dart';
-import 'package:simplescrobble/components/loading_component.dart';
-import 'package:simplescrobble/components/tags_component.dart';
-import 'package:simplescrobble/components/wiki_component.dart';
-import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/types/generic.dart';
-import 'package:simplescrobble/types/ltrack.dart';
-import 'package:simplescrobble/views/album_view.dart';
-import 'package:simplescrobble/views/artist_view.dart';
-import 'package:simplescrobble/views/scrobble_view.dart';
 
 class TrackView extends StatefulWidget {
   final BasicTrack track;

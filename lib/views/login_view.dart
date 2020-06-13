@@ -1,20 +1,19 @@
-import 'package:flutter/cupertino.dart';
+import 'package:finale/components/image_component.dart';
+import 'package:finale/env.dart';
+import 'package:finale/lastfm.dart';
+import 'package:finale/types/lartist.dart';
+import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simplescrobble/components/image_component.dart';
-import 'package:simplescrobble/env.dart';
-import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/types/lartist.dart';
-import 'package:simplescrobble/views/main_view.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class LoginView extends StatelessWidget {
   void _logIn(BuildContext context) async {
     final result = await FlutterWebAuth.authenticate(
         url: Uri.https('last.fm', 'api/auth',
-            {'api_key': apiKey, 'cb': 'scrobble://auth'}).toString(),
-        callbackUrlScheme: 'scrobble');
+            {'api_key': apiKey, 'cb': 'finale://auth'}).toString(),
+        callbackUrlScheme: 'finale');
     final token = Uri.parse(result).queryParameters['token'];
     final session = await Lastfm.authenticate(token);
 
@@ -78,12 +77,11 @@ class LoginView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('simplescrobble',
+                        Text('Finale',
                             style:
                                 TextStyle(fontSize: 24, color: Colors.white)),
                         SizedBox(height: 10),
-                        Text(
-                            'A fully-featured Last.fm client with support for scrobbling',
+                        Text('A fully-featured Last.fm client and scrobbler',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white)),
                         SizedBox(height: 10),

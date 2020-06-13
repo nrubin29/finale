@@ -1,8 +1,8 @@
+import 'package:finale/lastfm.dart';
+import 'package:finale/types/generic.dart';
+import 'package:finale/types/lalbum.dart';
+import 'package:finale/types/lcommon.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/types/generic.dart';
-import 'package:simplescrobble/types/lalbum.dart';
-import 'package:simplescrobble/types/lcommon.dart';
 
 part 'lartist.g.dart';
 

@@ -1,8 +1,8 @@
+import 'package:finale/types/generic.dart';
+import 'package:finale/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:simplescrobble/types/generic.dart';
-import 'package:simplescrobble/views/profile_view.dart';
 
 part 'luser.g.dart';
 

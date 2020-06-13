@@ -1,18 +1,18 @@
-# simplescrobble-mobile
+# Finale
 
-A fully-featured Last.fm client written in Flutter.
+A fully-featured Last.fm client and scrobbler with Shazam-like scrobbling written in Flutter.
 
 ## Running the app
 
-To run simplescrobble-mobile, you'll need:
+To run Finale, you'll need:
 * [Flutter](https://flutter.dev/docs/get-started/install) (channel `master`) - if you have the wrong channel installed, you can run `$ flutter channel master`
 * A [Last.fm API key and secret](https://www.last.fm/api/account/create)
-* If you want to run simplescrobble on an iOS device, you'll also need:
+* If you want to run Finale on an iOS device, you'll also need:
     * A Mac
     * Xcode 11 or greater
     * An [Apple Developer account](https://developer.apple.com) (personal account will work)
 
-1. `$ git clone https://github.com/nrubin29/simplescrobble-mobile.git`
+1. `$ git clone https://github.com/nrubin29/finale.git`
 2. Rename `env-sample.dart` in `lib/` to `env.dart` and fill in your Last.fm API key and secret.
 3. `$ flutter pub get`
 4. `$ flutter pub run build_runner build`

@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:finale/views/about_view.dart';
+import 'package:finale/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simplescrobble/views/about_view.dart';
-import 'package:simplescrobble/views/login_view.dart';
 
 class SettingsView extends StatelessWidget {
   @override

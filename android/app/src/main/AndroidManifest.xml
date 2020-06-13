@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nrubintech.simplescrobble">
+    package="com.nrubintech.finale">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -10,7 +10,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="simplescrobble"
+        android:label="Finale"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -46,7 +46,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="scrobble" />
+                <data android:scheme="finale" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

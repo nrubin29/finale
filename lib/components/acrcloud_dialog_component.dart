@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/acrcloud_response.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
@@ -60,7 +59,7 @@ class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
                 trailing: IconButton(
                     icon: Icon(Icons.info),
                     onPressed: () => launch(
-                        'https://aha-music.com/${track.acrId}?utm_source=simplescrobble&utm_medium=app')),
+                        'https://aha-music.com/${track.acrId}?utm_source=finale&utm_medium=app')),
                 onTap: () =>
                     Navigator.pop(context, ACRCloudDialogResult(track: track)));
           }));

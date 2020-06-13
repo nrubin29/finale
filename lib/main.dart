@@ -1,8 +1,8 @@
+import 'package:finale/components/error_component.dart';
+import 'package:finale/views/login_view.dart';
+import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simplescrobble/components/error_component.dart';
-import 'package:simplescrobble/views/login_view.dart';
-import 'package:simplescrobble/views/main_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'simplescrobble',
+        title: 'Finale',
         theme: ThemeData.from(
             colorScheme: ColorScheme.light(
                 primary: Colors.red,

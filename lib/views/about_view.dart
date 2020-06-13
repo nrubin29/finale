@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,7 +23,7 @@ class AboutView extends StatelessWidget {
                         Column(
                           children: [
                             Text(
-                              'simplescrobble',
+                              'Finale',
                               style: TextStyle(fontSize: 24),
                             ),
                             FutureBuilder<PackageInfo>(
@@ -71,8 +70,7 @@ class AboutView extends StatelessWidget {
                         title: Text('View source on GitHub'),
                         trailing: Icon(Icons.chevron_right),
                         onTap: () {
-                          launch(
-                              'https://github.com/nrubin29/simplescrobble-mobile');
+                          launch('https://github.com/nrubin29/finale');
                         })
                   ],
                 ))));

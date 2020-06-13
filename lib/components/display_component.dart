@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:finale/components/image_component.dart';
+import 'package:finale/components/loading_component.dart';
+import 'package:finale/lastfm.dart';
+import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
-import 'package:simplescrobble/components/image_component.dart';
-import 'package:simplescrobble/components/loading_component.dart';
-import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/types/generic.dart';
 
 enum DisplayType { list, grid }
 

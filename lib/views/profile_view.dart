@@ -1,13 +1,13 @@
+import 'package:finale/components/display_component.dart';
+import 'package:finale/components/error_component.dart';
+import 'package:finale/components/image_component.dart';
+import 'package:finale/components/loading_component.dart';
+import 'package:finale/lastfm.dart';
+import 'package:finale/types/generic.dart';
+import 'package:finale/types/luser.dart';
+import 'package:finale/views/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:simplescrobble/components/display_component.dart';
-import 'package:simplescrobble/components/error_component.dart';
-import 'package:simplescrobble/components/image_component.dart';
-import 'package:simplescrobble/components/loading_component.dart';
-import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/types/generic.dart';
-import 'package:simplescrobble/types/luser.dart';
-import 'package:simplescrobble/views/settings_view.dart';
 
 class ProfileView extends StatelessWidget {
   final String username;

@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:finale/env.dart';
+import 'package:finale/types/generic.dart';
+import 'package:finale/types/lalbum.dart';
+import 'package:finale/types/lartist.dart';
+import 'package:finale/types/lcommon.dart';
+import 'package:finale/types/ltrack.dart';
+import 'package:finale/types/luser.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simplescrobble/env.dart';
-import 'package:simplescrobble/types/generic.dart';
-import 'package:simplescrobble/types/lalbum.dart';
-import 'package:simplescrobble/types/lartist.dart';
-import 'package:simplescrobble/types/lcommon.dart';
-import 'package:simplescrobble/types/ltrack.dart';
-import 'package:simplescrobble/types/luser.dart';
 
 String _base = 'https://ws.audioscrobbler.com/2.0/';
 

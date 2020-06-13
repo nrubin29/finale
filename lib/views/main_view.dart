@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:finale/views/profile_view.dart';
+import 'package:finale/views/scrobble_view.dart';
+import 'package:finale/views/search_view.dart';
 import 'package:flutter/material.dart';
-import 'package:simplescrobble/views/profile_view.dart';
-import 'package:simplescrobble/views/scrobble_view.dart';
-import 'package:simplescrobble/views/search_view.dart';
 
 class MainView extends StatefulWidget {
   final String username;

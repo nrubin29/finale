@@ -1,10 +1,9 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:finale/components/image_component.dart';
+import 'package:finale/lastfm.dart';
+import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:simplescrobble/components/image_component.dart';
-import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/types/generic.dart';
 
 class ScrobbleAlbumView extends StatefulWidget {
   final FullAlbum album;

@@ -1,12 +1,11 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:finale/components/acrcloud_dialog_component.dart';
+import 'package:finale/env.dart';
+import 'package:finale/lastfm.dart';
+import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:intl/intl.dart';
-import 'package:simplescrobble/components/acrcloud_dialog_component.dart';
-import 'package:simplescrobble/env.dart';
-import 'package:simplescrobble/lastfm.dart';
-import 'package:simplescrobble/types/generic.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ScrobbleView extends StatefulWidget {

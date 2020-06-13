@@ -1,5 +1,5 @@
+import 'package:finale/types/lcommon.dart';
 import 'package:flutter/material.dart';
-import 'package:simplescrobble/types/lcommon.dart';
 
 class TagsComponent extends StatelessWidget {
   final LTopTags topTags;
