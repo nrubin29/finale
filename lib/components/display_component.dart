@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
@@ -228,12 +229,15 @@ class _DisplayComponentState<T extends Displayable>
         ? ListView.builder(
             shrinkWrap: true,
             controller: _scrollController,
+            physics: AlwaysScrollableScrollPhysics(),
             itemCount: items.length,
             itemBuilder: _listItemBuilder)
         : GridView.builder(
             controller: _scrollController,
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            physics: AlwaysScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:
+                    max(MediaQuery.of(context).size.width ~/ 250, 2)),
             itemCount: items.length,
             itemBuilder: _gridItemBuilder);
   }

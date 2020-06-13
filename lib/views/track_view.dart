@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
@@ -81,12 +83,16 @@ class _TrackViewState extends State<TrackView> {
               ],
             ),
             body: ListView(
+              shrinkWrap: true,
               children: [
                 if (track.album != null)
-                  ImageComponent(
-                      displayable: track.album,
-                      quality: ImageQuality.high,
-                      fit: BoxFit.cover),
+                  Center(
+                      child: ImageComponent(
+                          displayable: track.album,
+                          quality: ImageQuality.high,
+                          fit: BoxFit.cover,
+                          width: min(MediaQuery.of(context).size.width,
+                              MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
                 IntrinsicHeight(
                     child: Row(

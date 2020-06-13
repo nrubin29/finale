@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:finale/components/image_component.dart';
 import 'package:finale/env.dart';
 import 'package:finale/lastfm.dart';
@@ -35,7 +37,7 @@ class LoginView extends StatelessWidget {
         body: Stack(
           children: [
             FutureBuilder<List<LTopArtistsResponseArtist>>(
-              future: Lastfm.getGlobalTopArtists(21),
+              future: Lastfm.getGlobalTopArtists(50),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return SizedBox();
@@ -44,7 +46,8 @@ class LoginView extends StatelessWidget {
                 return GridView.count(
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.zero,
-                  crossAxisCount: 3,
+                  crossAxisCount:
+                      max(MediaQuery.of(context).size.width ~/ 200, 3),
                   children: snapshot.data
                       .map((artist) => FutureBuilder<List<LArtistTopAlbum>>(
                           future: ArtistGetTopAlbumsRequest(artist.name)
@@ -64,6 +67,9 @@ class LoginView extends StatelessWidget {
                 );
               },
             ),
+            Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey.shade800.withOpacity(2 / 3))),
             Center(
                 child: Container(
                     decoration: BoxDecoration(
@@ -78,18 +84,26 @@ class LoginView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('Finale',
-                            style:
-                                TextStyle(fontSize: 24, color: Colors.white)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline2
+                                .copyWith(color: Colors.white)),
                         SizedBox(height: 10),
                         Text('A fully-featured Last.fm client and scrobbler',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                .copyWith(color: Colors.white)),
                         SizedBox(height: 10),
                         FlatButton(
                           onPressed: () => _logIn(context),
                           color: Colors.red,
                           child: Text('Log in with Last.fm',
-                              style: TextStyle(color: Colors.white)),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(color: Colors.white)),
                         )
                       ],
                     )))),

@@ -25,7 +25,7 @@ class ImageComponent extends StatelessWidget {
   final double width;
   final bool isCircular;
 
-  static final Map<DisplayableType, Map<ImageQuality, AssetImage>>
+  static const Map<DisplayableType, Map<ImageQuality, AssetImage>>
       placeholders = {
     DisplayableType.track: {
       ImageQuality.low: AssetImage('assets/images/default_track_low.jpg'),
@@ -64,13 +64,15 @@ class ImageComponent extends StatelessWidget {
 
     if (imageId == null) {
       return isCircular
-          ? _buildCircularImage(context, Image(image: placeholder))
-          : Image(image: placeholder, width: width);
+          ? _buildCircularImage(
+              context, Image(image: placeholder, fit: fit, width: width))
+          : Image(image: placeholder, width: width, fit: fit);
     }
 
     final image = CachedNetworkImage(
         imageUrl: buildImageUrl(imageId, quality),
-        placeholder: (context, url) => Image(image: placeholder),
+        placeholder: (context, url) =>
+            Image(image: placeholder, width: width, fit: fit),
         errorWidget: (context, url, error) => Icon(Icons.error),
         fit: fit,
         width: width);
