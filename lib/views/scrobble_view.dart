@@ -98,8 +98,11 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                   children: [
                     if (!widget.isModal)
                       Builder(
-                          builder: (context) => ListTile(
-                                contentPadding: EdgeInsets.only(left: 8),
+                          builder: (context) => OutlineButton(
+                              padding: EdgeInsets.zero,
+                              borderSide: BorderSide(color: Colors.red),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.only(left: 12),
                                 title: Text('Tap to recognize'),
                                 trailing: FlatButton(
                                     child: Row(
@@ -116,32 +119,31 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                                     onPressed: () {
                                       launch('https://acrcloud.com');
                                     }),
-                                onTap: () async {
-                                  final result =
-                                      await showDialog<ACRCloudDialogResult>(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: (context) =>
-                                              ACRCloudDialogComponent());
+                              ),
+                              onPressed: () async {
+                                final result =
+                                    await showDialog<ACRCloudDialogResult>(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (context) =>
+                                            ACRCloudDialogComponent());
 
-                                  if (result.wasCancelled) return;
+                                if (result.wasCancelled) return;
 
-                                  if (result.track != null) {
-                                    setState(() {
-                                      _trackController.text =
-                                          result.track.title;
-                                      _albumController.text =
-                                          result.track.album?.name;
-                                      _artistController.text =
-                                          result.track.artists?.first?.name;
-                                    });
-                                  } else {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content:
-                                            Text('Could not recognize song')));
-                                  }
-                                },
-                              )),
+                                if (result.track != null) {
+                                  setState(() {
+                                    _trackController.text = result.track.title;
+                                    _albumController.text =
+                                        result.track.album?.name;
+                                    _artistController.text =
+                                        result.track.artists?.first?.name;
+                                  });
+                                } else {
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                      content:
+                                          Text('Could not recognize song')));
+                                }
+                              })),
                     TextFormField(
                       controller: _trackController,
                       decoration: InputDecoration(labelText: 'Song'),
