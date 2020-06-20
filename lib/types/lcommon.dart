@@ -11,8 +11,6 @@ class LScrobbleResponseScrobblesAttr {
 
   factory LScrobbleResponseScrobblesAttr.fromJson(Map<String, dynamic> json) =>
       _$LScrobbleResponseScrobblesAttrFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LScrobbleResponseScrobblesAttrToJson(this);
 }
 
 @JsonSerializable()
@@ -22,8 +20,6 @@ class LTag {
   LTag(this.name);
 
   factory LTag.fromJson(Map<String, dynamic> json) => _$LTagFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTagToJson(this);
 }
 
 @JsonSerializable()
@@ -35,8 +31,6 @@ class LTopTags {
 
   factory LTopTags.fromJson(Map<String, dynamic> json) =>
       _$LTopTagsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTopTagsToJson(this);
 }
 
 @JsonSerializable()
@@ -58,8 +52,6 @@ class LAttr {
   LAttr(this.page, this.total, this.user, this.perPage, this.totalPages);
 
   factory LAttr.fromJson(Map<String, dynamic> json) => _$LAttrFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LAttrToJson(this);
 }
 
 @JsonSerializable()
@@ -71,6 +63,4 @@ class LWiki {
   LWiki(this.published, this.summary, this.content);
 
   factory LWiki.fromJson(Map<String, dynamic> json) => _$LWikiFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LWikiToJson(this);
 }

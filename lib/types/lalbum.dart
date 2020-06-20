@@ -13,8 +13,6 @@ class LTopAlbumsResponseAlbumArtist extends BasicArtist {
 
   factory LTopAlbumsResponseAlbumArtist.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseAlbumArtistFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTopAlbumsResponseAlbumArtistToJson(this);
 }
 
 @JsonSerializable()
@@ -35,8 +33,6 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum {
 
   factory LTopAlbumsResponseAlbum.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseAlbumFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTopAlbumsResponseAlbumToJson(this);
 }
 
 @JsonSerializable()
@@ -51,8 +47,6 @@ class LTopAlbumsResponseTopAlbums {
 
   factory LTopAlbumsResponseTopAlbums.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseTopAlbumsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTopAlbumsResponseTopAlbumsToJson(this);
 }
 
 @JsonSerializable()
@@ -73,8 +67,6 @@ class LAlbumMatch extends BasicAlbum {
 
   factory LAlbumMatch.fromJson(Map<String, dynamic> json) =>
       _$LAlbumMatchFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LAlbumMatchToJson(this);
 }
 
 @JsonSerializable()
@@ -86,8 +78,6 @@ class LAlbumSearchResponse {
 
   factory LAlbumSearchResponse.fromJson(Map<String, dynamic> json) =>
       _$LAlbumSearchResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LAlbumSearchResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -111,8 +101,6 @@ class LAlbumTrack extends BasicScrobbleableTrack {
 
   factory LAlbumTrack.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTrackFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LAlbumTrackToJson(this);
 }
 
 @JsonSerializable()
@@ -124,8 +112,6 @@ class LAlbumTracks {
 
   factory LAlbumTracks.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTracksFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LAlbumTracksToJson(this);
 }
 
 @JsonSerializable()
@@ -178,6 +164,4 @@ class LAlbum extends FullAlbum {
       this.wiki);
 
   factory LAlbum.fromJson(Map<String, dynamic> json) => _$LAlbumFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LAlbumToJson(this);
 }

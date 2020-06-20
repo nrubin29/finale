@@ -17,8 +17,6 @@ class LUserRegistered {
 
   factory LUserRegistered.fromJson(Map<String, dynamic> json) =>
       _$LUserRegisteredFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LUserRegisteredToJson(this);
 }
 
 @JsonSerializable()
@@ -81,8 +79,6 @@ class LUser extends Displayable {
   Widget get detailWidget => ProfileView(username: name);
 
   factory LUser.fromJson(Map<String, dynamic> json) => _$LUserFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LUserToJson(this);
 }
 
 @JsonSerializable()
@@ -94,8 +90,6 @@ class LUserFriendsResponse {
 
   factory LUserFriendsResponse.fromJson(Map<String, dynamic> json) =>
       _$LUserFriendsResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LUserFriendsResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -107,6 +101,4 @@ class LAuthenticationResponseSession {
 
   factory LAuthenticationResponseSession.fromJson(Map<String, dynamic> json) =>
       _$LAuthenticationResponseSessionFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LAuthenticationResponseSessionToJson(this);
 }

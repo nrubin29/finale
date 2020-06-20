@@ -18,8 +18,6 @@ class LTopArtistsResponseArtist extends BasicScrobbledArtist {
 
   factory LTopArtistsResponseArtist.fromJson(Map<String, dynamic> json) =>
       _$LTopArtistsResponseArtistFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTopArtistsResponseArtistToJson(this);
 }
 
 @JsonSerializable()
@@ -34,8 +32,6 @@ class LTopArtistsResponseTopArtists {
 
   factory LTopArtistsResponseTopArtists.fromJson(Map<String, dynamic> json) =>
       _$LTopArtistsResponseTopArtistsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTopArtistsResponseTopArtistsToJson(this);
 }
 
 @JsonSerializable()
@@ -47,8 +43,6 @@ class LArtistMatch extends BasicArtist {
 
   factory LArtistMatch.fromJson(Map<String, dynamic> json) =>
       _$LArtistMatchFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LArtistMatchToJson(this);
 }
 
 @JsonSerializable()
@@ -60,8 +54,6 @@ class LArtistSearchResponse {
 
   factory LArtistSearchResponse.fromJson(Map<String, dynamic> json) =>
       _$LArtistSearchResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LArtistSearchResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -79,8 +71,6 @@ class LArtistStats {
 
   factory LArtistStats.fromJson(Map<String, dynamic> json) =>
       _$LArtistStatsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LArtistStatsToJson(this);
 }
 
 @JsonSerializable()
@@ -99,8 +89,6 @@ class LArtist extends FullArtist {
 
   factory LArtist.fromJson(Map<String, dynamic> json) =>
       _$LArtistFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LArtistToJson(this);
 }
 
 @JsonSerializable()
@@ -121,8 +109,6 @@ class LArtistTopAlbum extends BasicAlbum {
 
   factory LArtistTopAlbum.fromJson(Map<String, dynamic> json) =>
       _$LArtistTopAlbumFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LArtistTopAlbumToJson(this);
 }
 
 @JsonSerializable()
@@ -134,8 +120,6 @@ class LArtistGetTopAlbumsResponse {
 
   factory LArtistGetTopAlbumsResponse.fromJson(Map<String, dynamic> json) =>
       _$LArtistGetTopAlbumsResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LArtistGetTopAlbumsResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -159,8 +143,6 @@ class LArtistTopTrack extends BasicTrack {
 
   factory LArtistTopTrack.fromJson(Map<String, dynamic> json) =>
       _$LArtistTopTrackFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LArtistTopTrackToJson(this);
 }
 
 @JsonSerializable()
@@ -172,8 +154,6 @@ class LArtistGetTopTracksResponse {
 
   factory LArtistGetTopTracksResponse.fromJson(Map<String, dynamic> json) =>
       _$LArtistGetTopTracksResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LArtistGetTopTracksResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -185,6 +165,4 @@ class LChartTopArtists {
 
   factory LChartTopArtists.fromJson(Map<String, dynamic> json) =>
       _$LChartTopArtistsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LChartTopArtistsToJson(this);
 }

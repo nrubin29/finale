@@ -15,9 +15,6 @@ class LRecentTracksResponseTrackArtist {
   factory LRecentTracksResponseTrackArtist.fromJson(
           Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackArtistFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$LRecentTracksResponseTrackArtistToJson(this);
 }
 
 @JsonSerializable()
@@ -29,9 +26,6 @@ class LRecentTracksResponseTrackAlbum {
 
   factory LRecentTracksResponseTrackAlbum.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackAlbumFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$LRecentTracksResponseTrackAlbumToJson(this);
 }
 
 @JsonSerializable()
@@ -43,8 +37,6 @@ class LRecentTracksResponseTrackDate {
 
   factory LRecentTracksResponseTrackDate.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackDateFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LRecentTracksResponseTrackDateToJson(this);
 }
 
 @JsonSerializable()
@@ -75,8 +67,6 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
 
   factory LRecentTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LRecentTracksResponseTrackToJson(this);
 }
 
 @JsonSerializable()
@@ -89,9 +79,6 @@ class LRecentTracksResponseRecentTracks {
   factory LRecentTracksResponseRecentTracks.fromJson(
           Map<String, dynamic> json) =>
       _$LRecentTracksResponseRecentTracksFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$LRecentTracksResponseRecentTracksToJson(this);
 }
 
 @JsonSerializable()
@@ -113,8 +100,6 @@ class LTrackMatch extends BasicTrack {
 
   factory LTrackMatch.fromJson(Map<String, dynamic> json) =>
       _$LTrackMatchFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTrackMatchToJson(this);
 }
 
 @JsonSerializable()
@@ -126,8 +111,6 @@ class LTrackSearchResponse {
 
   factory LTrackSearchResponse.fromJson(Map<String, dynamic> json) =>
       _$LTrackSearchResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTrackSearchResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -139,8 +122,6 @@ class LTrackArtist extends BasicArtist {
 
   factory LTrackArtist.fromJson(Map<String, dynamic> json) =>
       _$LTrackArtistFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTrackArtistToJson(this);
 }
 
 @JsonSerializable()
@@ -162,8 +143,6 @@ class LTrackAlbum extends BasicAlbum {
 
   factory LTrackAlbum.fromJson(Map<String, dynamic> json) =>
       _$LTrackAlbumFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTrackAlbumToJson(this);
 }
 
 @JsonSerializable()
@@ -198,8 +177,6 @@ class LTrack extends FullTrack {
       this.artist, this.album, this.topTags, this.wiki);
 
   factory LTrack.fromJson(Map<String, dynamic> json) => _$LTrackFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTrackToJson(this);
 }
 
 @JsonSerializable()
@@ -230,8 +207,6 @@ class LTopTracksResponseTrack extends BasicTrack {
 
   factory LTopTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
       _$LTopTracksResponseTrackFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTopTracksResponseTrackToJson(this);
 }
 
 @JsonSerializable()
@@ -246,6 +221,4 @@ class LTopTracksResponseTopTracks {
 
   factory LTopTracksResponseTopTracks.fromJson(Map<String, dynamic> json) =>
       _$LTopTracksResponseTopTracksFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LTopTracksResponseTopTracksToJson(this);
 }
