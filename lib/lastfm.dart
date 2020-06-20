@@ -68,7 +68,7 @@ class GetRecentTracksRequest
 
     if (response.statusCode == 200) {
       final tracks = LRecentTracksResponseRecentTracks.fromJson(
-              json.decode(response.body)['recenttracks'])
+              json.decode(utf8.decode(response.bodyBytes))['recenttracks'])
           .tracks;
 
       // For some reason, this endpoint always returns the currently-playing
@@ -108,7 +108,7 @@ class GetTopArtistsRequest
 
     if (response.statusCode == 200) {
       return LTopArtistsResponseTopArtists.fromJson(
-              json.decode(response.body)['topartists'])
+              json.decode(utf8.decode(response.bodyBytes))['topartists'])
           .artists;
     } else {
       throw Exception('Could not get top artists.');
@@ -139,7 +139,7 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
 
     if (response.statusCode == 200) {
       return LTopAlbumsResponseTopAlbums.fromJson(
-              json.decode(response.body)['topalbums'])
+              json.decode(utf8.decode(response.bodyBytes))['topalbums'])
           .albums;
     } else {
       throw Exception('Could not get top albums.');
@@ -170,7 +170,7 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
 
     if (response.statusCode == 200) {
       return LTopTracksResponseTopTracks.fromJson(
-              json.decode(response.body)['toptracks'])
+              json.decode(utf8.decode(response.bodyBytes))['toptracks'])
           .tracks;
     } else {
       throw Exception('Could not get top tracks.');
@@ -189,7 +189,8 @@ class GetFriendsRequest extends PagedLastfmRequest<LUser> {
         data: {'user': username, 'limit': limit, 'page': page},
         encode: ['user']));
 
-    final Map<String, dynamic> result = json.decode(response.body);
+    final Map<String, dynamic> result =
+        json.decode(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       return LUserFriendsResponse.fromJson(result['friends']).friends;
@@ -216,7 +217,8 @@ class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
 
     if (response.statusCode == 200) {
       return LTrackSearchResponse.fromJson(
-              json.decode(response.body)['results']['trackmatches'])
+              json.decode(utf8.decode(response.bodyBytes))['results']
+                  ['trackmatches'])
           .tracks;
     } else {
       throw Exception('Could not search for tracks.');
@@ -238,7 +240,8 @@ class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
 
     if (response.statusCode == 200) {
       return LArtistSearchResponse.fromJson(
-              json.decode(response.body)['results']['artistmatches'])
+              json.decode(utf8.decode(response.bodyBytes))['results']
+                  ['artistmatches'])
           .artists;
     } else {
       throw Exception('Could not search for artists.');
@@ -260,7 +263,8 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
 
     if (response.statusCode == 200) {
       return LAlbumSearchResponse.fromJson(
-              json.decode(response.body)['results']['albummatches'])
+              json.decode(utf8.decode(response.bodyBytes))['results']
+                  ['albummatches'])
           .albums;
     } else {
       throw Exception('Could not search for albums.');
@@ -282,7 +286,7 @@ class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
 
     if (response.statusCode == 200) {
       return LArtistGetTopAlbumsResponse.fromJson(
-              json.decode(response.body)['topalbums'])
+              json.decode(utf8.decode(response.bodyBytes))['topalbums'])
           .albums;
     } else {
       throw Exception('Could not get artist\'s top albums.');
@@ -304,7 +308,7 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
 
     if (response.statusCode == 200) {
       return LArtistGetTopTracksResponse.fromJson(
-              json.decode(response.body)['toptracks'])
+              json.decode(utf8.decode(response.bodyBytes))['toptracks'])
           .tracks;
     } else {
       throw Exception('Could not get artist\'s top tracks.');
@@ -320,7 +324,7 @@ class Lastfm {
 
     if (response.statusCode == 200) {
       return LAuthenticationResponseSession.fromJson(
-          json.decode(response.body)['session']);
+          json.decode(utf8.decode(response.bodyBytes))['session']);
     } else {
       throw Exception('Could not authenticate.');
     }
@@ -331,7 +335,8 @@ class Lastfm {
         await http.get(_buildURL('user.getInfo', data: {'user': username}));
 
     if (response.statusCode == 200) {
-      return LUser.fromJson(json.decode(response.body)['user']);
+      return LUser.fromJson(
+          json.decode(utf8.decode(response.bodyBytes))['user']);
     } else {
       throw Exception('Could not get user.');
     }
@@ -351,7 +356,8 @@ class Lastfm {
     ]));
 
     if (response.statusCode == 200) {
-      return LTrack.fromJson(json.decode(response.body)['track']);
+      return LTrack.fromJson(
+          json.decode(utf8.decode(response.bodyBytes))['track']);
     } else {
       throw Exception('Could not get track.');
     }
@@ -371,7 +377,8 @@ class Lastfm {
     ]));
 
     if (response.statusCode == 200) {
-      return LAlbum.fromJson(json.decode(response.body)['album']);
+      return LAlbum.fromJson(
+          json.decode(utf8.decode(response.bodyBytes))['album']);
     } else {
       throw Exception('Could not get album.');
     }
@@ -385,7 +392,8 @@ class Lastfm {
         encode: ['artist', 'username']));
 
     if (response.statusCode == 200) {
-      return LArtist.fromJson(json.decode(response.body)['artist']);
+      return LArtist.fromJson(
+          json.decode(utf8.decode(response.bodyBytes))['artist']);
     } else {
       throw Exception('Could not get artist.');
     }
@@ -404,7 +412,7 @@ class Lastfm {
 
     if (response.statusCode == 200) {
       return LTopArtistsResponseTopArtists.fromJson(
-              json.decode(response.body)['topartists'])
+              json.decode(utf8.decode(response.bodyBytes))['topartists'])
           .attr
           .total;
     } else {
@@ -425,7 +433,7 @@ class Lastfm {
 
     if (response.statusCode == 200) {
       return LTopAlbumsResponseTopAlbums.fromJson(
-              json.decode(response.body)['topalbums'])
+              json.decode(utf8.decode(response.bodyBytes))['topalbums'])
           .attr
           .total;
     } else {
@@ -446,7 +454,7 @@ class Lastfm {
 
     if (response.statusCode == 200) {
       return LTopTracksResponseTopTracks.fromJson(
-              json.decode(response.body)['toptracks'])
+              json.decode(utf8.decode(response.bodyBytes))['toptracks'])
           .attr
           .total;
     } else {
@@ -460,7 +468,8 @@ class Lastfm {
         _buildURL('chart.getTopArtists', data: {'limit': limit, 'page': 1}));
 
     if (response.statusCode == 200) {
-      return LChartTopArtists.fromJson(json.decode(response.body)['artists'])
+      return LChartTopArtists.fromJson(
+              json.decode(utf8.decode(response.bodyBytes))['artists'])
           .artists;
     } else {
       throw Exception('Could not get global top artists.');
@@ -484,7 +493,7 @@ class Lastfm {
 
     if (response.statusCode == 200) {
       return LScrobbleResponseScrobblesAttr.fromJson(
-          json.decode(response.body)['scrobbles']['@attr']);
+          json.decode(utf8.decode(response.bodyBytes))['scrobbles']['@attr']);
     } else {
       throw Exception('Could not scrobble.');
     }
