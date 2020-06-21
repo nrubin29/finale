@@ -60,20 +60,18 @@ class ImageComponent extends StatelessWidget {
           shape: CircleBorder(), clipBehavior: Clip.hardEdge, child: image));
 
   Widget _buildImage(BuildContext context, String imageId) {
-    AssetImage placeholder = placeholders[displayable.type][quality];
+    Image placeholder = Image(
+        image: placeholders[displayable.type][quality], width: width, fit: fit);
 
     if (imageId == null) {
       return isCircular
-          ? _buildCircularImage(
-              context, Image(image: placeholder, fit: fit, width: width))
-          : Image(image: placeholder, width: width, fit: fit);
+          ? _buildCircularImage(context, placeholder)
+          : placeholder;
     }
 
     final image = CachedNetworkImage(
         imageUrl: buildImageUrl(imageId, quality),
-        placeholder: (context, url) =>
-            Image(image: placeholder, width: width, fit: fit),
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        placeholder: (context, url) => placeholder,
         fit: fit,
         width: width);
 
