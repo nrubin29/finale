@@ -45,8 +45,6 @@ abstract class Displayable {
 
   String get displayTrailing => null;
 
-  // TODO: Whenever [imageId] is a [Future], the result should be cached like
-  //  [ArtistImageCache]
   FutureOr<String> get imageId => null;
 
   Widget get detailWidget => null;
