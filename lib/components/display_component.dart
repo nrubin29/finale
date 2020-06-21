@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
@@ -223,23 +222,33 @@ class _DisplayComponentState<T extends Displayable>
       return Stack(children: [ListView(), Center(child: Text("No results."))]);
     }
 
-    // TODO: When the ListView/GridView isn't tall enough to go off-screen, the
-    //  RefreshIndicator doesn't work.
-    return widget.displayType == DisplayType.list
-        ? ListView.builder(
-            shrinkWrap: true,
-            controller: _scrollController,
-            physics: AlwaysScrollableScrollPhysics(),
-            itemCount: items.length,
-            itemBuilder: _listItemBuilder)
-        : GridView.builder(
-            controller: _scrollController,
-            physics: AlwaysScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount:
-                    max(MediaQuery.of(context).size.width ~/ 250, 2)),
-            itemCount: items.length,
-            itemBuilder: _gridItemBuilder);
+    return CustomScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        shrinkWrap: true,
+        controller: _scrollController,
+        slivers: [
+          if (widget.displayType == DisplayType.list)
+            SliverList(
+                delegate: SliverChildBuilderDelegate(_listItemBuilder,
+                    childCount: items.length)),
+          if (widget.displayType == DisplayType.grid)
+            SliverGrid(
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 250),
+                delegate: SliverChildBuilderDelegate(_gridItemBuilder,
+                    childCount: items.length)),
+          // TODO: If there are no more items, or if the request fails, the
+          //  loading indicator shouldn't be displayed.
+          // TODO: If there aren't enough items to fill the screen (i.e. artist
+          //  grid on iPad Pro 12.9-inch), the loading indicator shouldn't be
+          //  displayed unless the user swipes up - though having to swipe up
+          //  when the screen isn't full is kind of awkward.
+          if (_request != null)
+            SliverToBoxAdapter(
+                child: ListTile(
+                    leading: CircularProgressIndicator(),
+                    title: Text('Loading...')))
+        ]);
   }
 
   @override
