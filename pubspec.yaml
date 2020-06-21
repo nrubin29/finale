@@ -21,7 +21,6 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  beautifulsoup: ^0.0.1
   cached_network_image: ^2.2.0+1
   crypto: ^2.1.5
   datetime_picker_formfield: ^1.0.0

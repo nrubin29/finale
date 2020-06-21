@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:beautifulsoup/beautifulsoup.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/widgets.dart';
+import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -161,9 +161,11 @@ abstract class BasicArtist extends Displayable {
     final lastfmResponse = await http.get(this.url);
 
     try {
-      final soup = Beautifulsoup(lastfmResponse.body);
-      final rawUrl =
-          soup.find_all('.header-new-gallery--link').first.attributes['href'];
+      final doc = parse(lastfmResponse.body);
+      final rawUrl = doc
+          .querySelectorAll('.header-new-gallery--link')
+          .first
+          .attributes['href'];
       final imageId = rawUrl.substring(rawUrl.lastIndexOf('/'));
       return imageId;
     } catch (e) {
