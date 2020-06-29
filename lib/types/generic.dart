@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:finale/lastfm.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 bool convertStringToBoolean(String text) => text == '1';
@@ -45,16 +45,15 @@ abstract class Displayable {
 
   String get displayTrailing => null;
 
-  FutureOr<String> get imageId => null;
+  String get imageId => null;
+
+  Future<String> get imageIdFuture => null;
 
   Widget get detailWidget => null;
 }
 
 abstract class BasicTrack extends Displayable {
   String get name;
-
-  @override
-  FutureOr<String> get imageId;
 
   String get artist;
 
@@ -155,8 +154,8 @@ abstract class BasicArtist extends Displayable {
   String get name;
 
   @override
-  Future<String> get imageId async {
-    final lastfmResponse = await http.get(this.url);
+  Future<String> get imageIdFuture async {
+    final lastfmResponse = await Lastfm.get(url);
 
     try {
       final doc = parse(lastfmResponse.body);

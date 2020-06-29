@@ -1,3 +1,4 @@
+import 'package:finale/cache.dart';
 import 'package:finale/views/about_view.dart';
 import 'package:finale/views/login_view.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,9 @@ class SettingsView extends StatelessWidget {
                     ),
                     ListTile(
                       title: Text('Empty image cache'),
-                      onTap: () {
-                        DefaultCacheManager().emptyCache();
+                      onTap: () async {
+                        await DefaultCacheManager().emptyCache();
+                        await ImageIdCache().drop();
 
                         showDialog(
                             context: context,

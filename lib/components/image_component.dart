@@ -1,7 +1,5 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dcache/dcache.dart';
+import 'package:finale/cache.dart';
 import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +11,6 @@ small=34s, medium=64s, large=174s, extralarge=300x300
 String buildImageUrl(String imageId, ImageQuality quality) {
   return 'https://lastfm.freetls.fastly.net/i/u/${quality == ImageQuality.high ? '300x300' : '64s'}/$imageId.jpg';
 }
-
-/// A cache for imageId Futures.
-/// TODO: Use sqflite instead of an in-memory cache - CachedNetworkImage uses it
-final _cache = SimpleCache<String, String>(storage: SimpleStorage(size: 100));
 
 class ImageComponent extends StatelessWidget {
   final Displayable displayable;
@@ -80,28 +74,34 @@ class ImageComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (displayable.imageId == null) {
-      return _buildImage(context, null);
-    } else if (displayable.imageId is String) {
-      return _buildImage(context, displayable.imageId as String);
-    }
-
-    final cachedImageId = _cache.get(displayable.url);
-
-    if (cachedImageId != null) {
-      return _buildImage(context, cachedImageId);
+    if (displayable.imageId != null) {
+      return _buildImage(context, displayable.imageId);
     }
 
     return FutureBuilder<String>(
-      future: displayable.imageId as Future,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          // TODO: Move this logic out of the Widget builder.
-          _cache.set(displayable.url, snapshot.data);
-        }
+        future: ImageIdCache().get(displayable.url),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return _buildImage(context, null);
+          }
 
-        return _buildImage(context, snapshot.data);
-      },
-    );
+          final cachedImageId = snapshot.data;
+
+          if (cachedImageId != null) {
+            return _buildImage(context, cachedImageId);
+          }
+
+          return FutureBuilder<String>(
+            future: displayable.imageIdFuture,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                // TODO: Move this logic out of the Widget builder.
+                ImageIdCache().insert(displayable.url, snapshot.data);
+              }
+
+              return _buildImage(context, snapshot.data);
+            },
+          );
+        });
   }
 }

@@ -91,7 +91,7 @@ class LTrackMatch extends BasicTrack {
   // to fetch the full track in order to get the album.
   String get album => null;
 
-  Future<String> get imageId async {
+  Future<String> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }
@@ -194,7 +194,7 @@ class LTopTracksResponseTrack extends BasicTrack {
 
   String get album => null;
 
-  Future<String> get imageId async {
+  Future<String> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }
