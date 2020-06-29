@@ -134,7 +134,7 @@ class LArtistTopTrack extends BasicTrack {
 
   String get album => null;
 
-  Future<String> get imageId async {
+  Future<String> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }

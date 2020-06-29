@@ -8,6 +8,7 @@ import 'package:finale/types/lartist.dart';
 import 'package:finale/types/lcommon.dart';
 import 'package:finale/types/ltrack.dart';
 import 'package:finale/types/luser.dart';
+import 'package:http/http.dart';
 import 'package:http_throttle/http_throttle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -278,6 +279,8 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
 }
 
 class Lastfm {
+  static Future<Response> get(String url) => _client.get(url);
+
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
     final response =

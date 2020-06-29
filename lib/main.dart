@@ -1,10 +1,15 @@
+import 'package:finale/cache.dart';
 import 'package:finale/components/error_component.dart';
 import 'package:finale/views/login_view.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ImageIdCache().setup();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
