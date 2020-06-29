@@ -8,42 +8,31 @@ import 'package:finale/types/lartist.dart';
 import 'package:finale/types/lcommon.dart';
 import 'package:finale/types/ltrack.dart';
 import 'package:finale/types/luser.dart';
-import 'package:http/http.dart' as http;
+import 'package:http_throttle/http_throttle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String _base = 'https://ws.audioscrobbler.com/2.0/';
+final _client = ThrottleClient(10);
 
-String _encode(String str) {
-  return Uri.encodeComponent(str).replaceAll(r'%20', '+');
-}
-
-String _buildURL(String method,
-    {Map<String, dynamic> data = const {}, List<String> encode = const []}) {
+Uri _buildUri(String method, Map<String, dynamic> data) {
   final allData = {
-    ...data,
-    ...{'api_key': apiKey, 'method': method}
+    ...data.map((key, value) => MapEntry(key, value.toString())),
+    'api_key': apiKey,
+    'method': method,
   };
-  var allDataKeys = allData.keys.toList();
-  allDataKeys.sort();
 
-  final hash =
-      allDataKeys.map((key) => '$key${allData[key]}').join() + apiSecret;
+  final hash = (allData.keys.toList()..sort())
+          .map((key) => '$key${allData[key]}')
+          .join() +
+      apiSecret;
   final signature = md5.convert(utf8.encode(hash));
   allData['api_sig'] = signature.toString();
+  allData['format'] = 'json';
 
-  allDataKeys = allData.keys.toList();
-  allDataKeys.sort();
-  return _base +
-      '?format=json&' +
-      allDataKeys
-          .map((key) =>
-              key +
-              '=' +
-              (encode.indexOf(key.replaceAll(r'\[\d+]', '')) != -1
-                      ? _encode(allData[key])
-                      : allData[key])
-                  .toString())
-          .join('&');
+  return Uri(
+      scheme: 'https',
+      host: 'ws.audioscrobbler.com',
+      path: '2.0',
+      queryParameters: allData);
 }
 
 abstract class PagedLastfmRequest<T> {
@@ -62,9 +51,8 @@ class GetRecentTracksRequest
       username = (await SharedPreferences.getInstance()).getString('name');
     }
 
-    final response = await http.get(_buildURL('user.getRecentTracks',
-        data: {'user': username, 'limit': limit, 'page': page},
-        encode: ['user']));
+    final response = await _client.get(_buildUri('user.getRecentTracks',
+        {'user': username, 'limit': limit, 'page': page}));
 
     if (response.statusCode == 200) {
       final tracks = LRecentTracksResponseRecentTracks.fromJson(
@@ -96,15 +84,8 @@ class GetTopArtistsRequest
       username = (await SharedPreferences.getInstance()).getString('name');
     }
 
-    final response = await http.get(_buildURL('user.getTopArtists', data: {
-      'user': username,
-      'limit': limit,
-      'page': page,
-      'period': period
-    }, encode: [
-      'user',
-      'period'
-    ]));
+    final response = await _client.get(_buildUri('user.getTopArtists',
+        {'user': username, 'limit': limit, 'page': page, 'period': period}));
 
     if (response.statusCode == 200) {
       return LTopArtistsResponseTopArtists.fromJson(
@@ -127,15 +108,8 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
 
-    final response = await http.get(_buildURL('user.getTopAlbums', data: {
-      'user': username,
-      'limit': limit,
-      'page': page,
-      'period': period
-    }, encode: [
-      'user',
-      'period'
-    ]));
+    final response = await _client.get(_buildUri('user.getTopAlbums',
+        {'user': username, 'limit': limit, 'page': page, 'period': period}));
 
     if (response.statusCode == 200) {
       return LTopAlbumsResponseTopAlbums.fromJson(
@@ -158,15 +132,8 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
       username = (await SharedPreferences.getInstance()).getString('name');
     }
 
-    final response = await http.get(_buildURL('user.getTopTracks', data: {
-      'user': username,
-      'limit': limit,
-      'page': page,
-      'period': period
-    }, encode: [
-      'user',
-      'period'
-    ]));
+    final response = await _client.get(_buildUri('user.getTopTracks',
+        {'user': username, 'limit': limit, 'page': page, 'period': period}));
 
     if (response.statusCode == 200) {
       return LTopTracksResponseTopTracks.fromJson(
@@ -185,9 +152,8 @@ class GetFriendsRequest extends PagedLastfmRequest<LUser> {
 
   @override
   doRequest(int limit, int page, {String period}) async {
-    final response = await http.get(_buildURL('user.getFriends',
-        data: {'user': username, 'limit': limit, 'page': page},
-        encode: ['user']));
+    final response = await _client.get(_buildUri(
+        'user.getFriends', {'user': username, 'limit': limit, 'page': page}));
 
     final Map<String, dynamic> result =
         json.decode(utf8.decode(response.bodyBytes));
@@ -211,9 +177,8 @@ class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
   @override
   Future<List<LTrackMatch>> doRequest(int limit, int page,
       {String period}) async {
-    final response = await http.get(_buildURL('track.search',
-        data: {'track': query, 'limit': limit, 'page': page},
-        encode: ['track']));
+    final response = await _client.get(_buildUri(
+        'track.search', {'track': query, 'limit': limit, 'page': page}));
 
     if (response.statusCode == 200) {
       return LTrackSearchResponse.fromJson(
@@ -234,9 +199,8 @@ class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
   @override
   Future<List<LArtistMatch>> doRequest(int limit, int page,
       {String period}) async {
-    final response = await http.get(_buildURL('artist.search',
-        data: {'artist': query, 'limit': limit, 'page': page},
-        encode: ['artist']));
+    final response = await _client.get(_buildUri(
+        'artist.search', {'artist': query, 'limit': limit, 'page': page}));
 
     if (response.statusCode == 200) {
       return LArtistSearchResponse.fromJson(
@@ -257,9 +221,8 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
   @override
   Future<List<LAlbumMatch>> doRequest(int limit, int page,
       {String period}) async {
-    final response = await http.get(_buildURL('album.search',
-        data: {'album': query, 'limit': limit, 'page': page},
-        encode: ['album']));
+    final response = await _client.get(_buildUri(
+        'album.search', {'album': query, 'limit': limit, 'page': page}));
 
     if (response.statusCode == 200) {
       return LAlbumSearchResponse.fromJson(
@@ -280,9 +243,8 @@ class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
   @override
   Future<List<LArtistTopAlbum>> doRequest(int limit, int page,
       {String period}) async {
-    final response = await http.get(_buildURL('artist.getTopAlbums',
-        data: {'artist': artist, 'limit': limit, 'page': page},
-        encode: ['artist']));
+    final response = await _client.get(_buildUri('artist.getTopAlbums',
+        {'artist': artist, 'limit': limit, 'page': page}));
 
     if (response.statusCode == 200) {
       return LArtistGetTopAlbumsResponse.fromJson(
@@ -302,9 +264,8 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
   @override
   Future<List<LArtistTopTrack>> doRequest(int limit, int page,
       {String period}) async {
-    final response = await http.get(_buildURL('artist.getTopTracks',
-        data: {'artist': artist, 'limit': limit, 'page': page},
-        encode: ['artist']));
+    final response = await _client.get(_buildUri('artist.getTopTracks',
+        {'artist': artist, 'limit': limit, 'page': page}));
 
     if (response.statusCode == 200) {
       return LArtistGetTopTracksResponse.fromJson(
@@ -320,7 +281,7 @@ class Lastfm {
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
     final response =
-        await http.post(_buildURL('auth.getSession', data: {'token': token}));
+        await _client.post(_buildUri('auth.getSession', {'token': token}));
 
     if (response.statusCode == 200) {
       return LAuthenticationResponseSession.fromJson(
@@ -332,12 +293,13 @@ class Lastfm {
 
   static Future<LUser> getUser(String username) async {
     final response =
-        await http.get(_buildURL('user.getInfo', data: {'user': username}));
+        await _client.get(_buildUri('user.getInfo', {'user': username}));
 
     if (response.statusCode == 200) {
       return LUser.fromJson(
           json.decode(utf8.decode(response.bodyBytes))['user']);
     } else {
+      print(response.body);
       throw Exception('Could not get user.');
     }
   }
@@ -345,15 +307,8 @@ class Lastfm {
   static Future<LTrack> getTrack(BasicTrack track) async {
     final username = (await SharedPreferences.getInstance()).getString('name');
 
-    final response = await http.get(_buildURL('track.getInfo', data: {
-      'track': track.name,
-      'artist': track.artist,
-      'username': username
-    }, encode: [
-      'track',
-      'artist',
-      'username'
-    ]));
+    final response = await _client.get(_buildUri('track.getInfo',
+        {'track': track.name, 'artist': track.artist, 'username': username}));
 
     if (response.statusCode == 200) {
       return LTrack.fromJson(
@@ -366,15 +321,11 @@ class Lastfm {
   static Future<LAlbum> getAlbum(BasicAlbum album) async {
     final username = (await SharedPreferences.getInstance()).getString('name');
 
-    final response = await http.get(_buildURL('album.getInfo', data: {
+    final response = await _client.get(_buildUri('album.getInfo', {
       'album': album.name,
       'artist': album.artist.name,
       'username': username
-    }, encode: [
-      'album',
-      'artist',
-      'username'
-    ]));
+    }));
 
     if (response.statusCode == 200) {
       return LAlbum.fromJson(
@@ -387,9 +338,8 @@ class Lastfm {
   static Future<LArtist> getArtist(BasicArtist artist) async {
     final username = (await SharedPreferences.getInstance()).getString('name');
 
-    final response = await http.get(_buildURL('artist.getInfo',
-        data: {'artist': artist.name, 'username': username},
-        encode: ['artist', 'username']));
+    final response = await _client.get(_buildUri(
+        'artist.getInfo', {'artist': artist.name, 'username': username}));
 
     if (response.statusCode == 200) {
       return LArtist.fromJson(
@@ -400,15 +350,8 @@ class Lastfm {
   }
 
   static Future<int> getNumArtists(String username) async {
-    final response = await http.get(_buildURL('user.getTopArtists', data: {
-      'user': username,
-      'period': 'overall',
-      'limit': '1',
-      'page': '1'
-    }, encode: [
-      'user',
-      'period'
-    ]));
+    final response = await _client.get(_buildUri('user.getTopArtists',
+        {'user': username, 'period': 'overall', 'limit': '1', 'page': '1'}));
 
     if (response.statusCode == 200) {
       return LTopArtistsResponseTopArtists.fromJson(
@@ -421,15 +364,8 @@ class Lastfm {
   }
 
   static Future<int> getNumAlbums(String username) async {
-    final response = await http.get(_buildURL('user.getTopAlbums', data: {
-      'user': username,
-      'period': 'overall',
-      'limit': '1',
-      'page': '1'
-    }, encode: [
-      'user',
-      'period'
-    ]));
+    final response = await _client.get(_buildUri('user.getTopAlbums',
+        {'user': username, 'period': 'overall', 'limit': '1', 'page': '1'}));
 
     if (response.statusCode == 200) {
       return LTopAlbumsResponseTopAlbums.fromJson(
@@ -442,15 +378,8 @@ class Lastfm {
   }
 
   static Future<int> getNumTracks(String username) async {
-    final response = await http.get(_buildURL('user.getTopTracks', data: {
-      'user': username,
-      'period': 'overall',
-      'limit': '1',
-      'page': '1'
-    }, encode: [
-      'user',
-      'period'
-    ]));
+    final response = await _client.get(_buildUri('user.getTopTracks',
+        {'user': username, 'period': 'overall', 'limit': '1', 'page': '1'}));
 
     if (response.statusCode == 200) {
       return LTopTracksResponseTopTracks.fromJson(
@@ -464,8 +393,8 @@ class Lastfm {
 
   static Future<List<LTopArtistsResponseArtist>> getGlobalTopArtists(
       int limit) async {
-    final response = await http.get(
-        _buildURL('chart.getTopArtists', data: {'limit': limit, 'page': 1}));
+    final response = await _client
+        .get(_buildUri('chart.getTopArtists', {'limit': limit, 'page': 1}));
 
     if (response.statusCode == 200) {
       return LChartTopArtists.fromJson(
@@ -488,8 +417,7 @@ class Lastfm {
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
     });
 
-    final response = await http.post(_buildURL('track.scrobble',
-        data: data, encode: ['album', 'artist', 'track']));
+    final response = await _client.post(_buildUri('track.scrobble', data));
 
     if (response.statusCode == 200) {
       return LScrobbleResponseScrobblesAttr.fromJson(
@@ -503,14 +431,11 @@ class Lastfm {
   /// otherwise, it will be unloved.
   static Future<bool> love(FullTrack track, bool love) async {
     final response =
-        await http.post(_buildURL(love ? 'track.love' : 'track.unlove', data: {
+        await _client.post(_buildUri(love ? 'track.love' : 'track.unlove', {
       'track': track.name,
       'artist': track.artist.name,
       'sk': (await SharedPreferences.getInstance()).getString('key')
-    }, encode: [
-      'track',
-      'artist'
-    ]));
+    }));
 
     if (response.statusCode == 200) {
       return true;
