@@ -23,8 +23,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   final _artistController = TextEditingController();
   final _albumController = TextEditingController();
 
-  var _scrobbleNow = true;
-  DateTime _datetime;
+  var _useCustomTimestamp = false;
+  DateTime _customTimestamp;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       BasicConcreteTrack(
           _trackController.text, _artistController.text, _albumController.text)
     ], [
-      _scrobbleNow ? DateTime.now() : _datetime
+      _useCustomTimestamp ? _customTimestamp : DateTime.now()
     ]);
 
     if (widget.isModal) {
@@ -156,28 +156,29 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                       controller: _albumController,
                       decoration: InputDecoration(labelText: 'Album'),
                     ),
-                    CheckboxListTile(
+                    SwitchListTile(
                       controlAffinity: ListTileControlAffinity.leading,
                       contentPadding: EdgeInsets.zero,
                       activeColor: Colors.red,
-                      title: Text('Scrobble now'),
-                      value: _scrobbleNow,
+                      title: Text('Custom timestamp'),
+                      value: _useCustomTimestamp,
                       onChanged: (value) {
                         setState(() {
-                          _scrobbleNow = value;
+                          _useCustomTimestamp = value;
 
-                          if (!_scrobbleNow) {
-                            _datetime = DateTime.now();
+                          if (_useCustomTimestamp) {
+                            _customTimestamp = DateTime.now();
                           }
                         });
                       },
                     ),
                     Visibility(
-                      visible: !_scrobbleNow,
+                      visible: _useCustomTimestamp,
                       child: DateTimeField(
                           decoration: InputDecoration(labelText: 'Timestamp'),
+                          resetIcon: null,
                           format: DateFormat('yyyy-MM-dd HH:mm:ss'),
-                          initialValue: _datetime,
+                          initialValue: _customTimestamp,
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(
                                 context: context,
@@ -200,7 +201,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                           },
                           onChanged: (datetime) {
                             setState(() {
-                              _datetime = datetime;
+                              _customTimestamp = datetime;
                             });
                           }),
                     ),
