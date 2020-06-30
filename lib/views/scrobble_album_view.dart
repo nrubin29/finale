@@ -5,6 +5,13 @@ import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+enum ScrobbleTimestampBehavior {
+  startingNow,
+  endingNow,
+  startingCustom,
+  endingCustom
+}
+
 class ScrobbleAlbumView extends StatefulWidget {
   final FullAlbum album;
 
@@ -15,8 +22,8 @@ class ScrobbleAlbumView extends StatefulWidget {
 }
 
 class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
-  var _scrobbleNow = true;
-  DateTime _datetime;
+  var _behavior = ScrobbleTimestampBehavior.startingNow;
+  DateTime _customTimestamp;
 
   @override
   void initState() {
@@ -24,14 +31,35 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
   }
 
   Future<void> _scrobble(BuildContext context) async {
-    final timestamps = [_scrobbleNow ? DateTime.now() : _datetime];
+    List<BasicScrobbleableTrack> tracks = widget.album.tracks;
+    List<DateTime> timestamps;
 
-    widget.album.tracks.forEach((track) {
-      timestamps.add(timestamps.last.add(Duration(seconds: track.duration)));
-    });
+    if (_behavior == ScrobbleTimestampBehavior.startingNow ||
+        _behavior == ScrobbleTimestampBehavior.startingCustom) {
+      timestamps = [
+        _behavior == ScrobbleTimestampBehavior.startingNow
+            ? DateTime.now()
+            : _customTimestamp
+      ];
 
-    final response = await Lastfm.scrobble(widget.album.tracks, timestamps);
+      tracks.forEach((track) {
+        timestamps.add(timestamps.last.add(Duration(seconds: track.duration)));
+      });
+    } else {
+      timestamps = [
+        _behavior == ScrobbleTimestampBehavior.endingNow
+            ? DateTime.now()
+            : _customTimestamp
+      ];
 
+      tracks = tracks.reversed.toList(growable: false);
+      tracks.forEach((track) {
+        timestamps
+            .add(timestamps.last.subtract(Duration(seconds: track.duration)));
+      });
+    }
+
+    final response = await Lastfm.scrobble(tracks, timestamps);
     Navigator.pop(context, response.ignored == 0);
   }
 
@@ -55,28 +83,57 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
                         leading: ImageComponent(displayable: widget.album),
                         title: Text(widget.album.name),
                         subtitle: Text(widget.album.artist.name)),
-                    CheckboxListTile(
-                      controlAffinity: ListTileControlAffinity.leading,
-                      contentPadding: EdgeInsets.zero,
-                      activeColor: Colors.red,
-                      title: Text('Scrobble starting now'),
-                      value: _scrobbleNow,
-                      onChanged: (value) {
-                        setState(() {
-                          _scrobbleNow = value;
-
-                          if (!_scrobbleNow) {
-                            _datetime = DateTime.now();
-                          }
-                        });
-                      },
-                    ),
+                    SizedBox(height: 10),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Scrobble behavior',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .caption
+                                        .color))),
+                    RadioListTile(
+                        activeColor: Colors.red,
+                        value: ScrobbleTimestampBehavior.startingNow,
+                        groupValue: _behavior,
+                        onChanged: (value) => setState(() => _behavior = value),
+                        title: Text('Starting now')),
+                    RadioListTile(
+                        activeColor: Colors.red,
+                        value: ScrobbleTimestampBehavior.startingCustom,
+                        groupValue: _behavior,
+                        onChanged: (value) => setState(() {
+                              _behavior = value;
+                              _customTimestamp = DateTime.now();
+                            }),
+                        title: Text('Starting at a custom timestamp')),
+                    RadioListTile(
+                        activeColor: Colors.red,
+                        value: ScrobbleTimestampBehavior.endingNow,
+                        groupValue: _behavior,
+                        onChanged: (value) => setState(() => _behavior = value),
+                        title: Text('Ending now')),
+                    RadioListTile(
+                        activeColor: Colors.red,
+                        value: ScrobbleTimestampBehavior.endingCustom,
+                        groupValue: _behavior,
+                        onChanged: (value) => setState(() {
+                              _behavior = value;
+                              _customTimestamp = DateTime.now();
+                            }),
+                        title: Text('Ending at a custom timestamp')),
                     Visibility(
-                      visible: !_scrobbleNow,
+                      visible: _behavior ==
+                              ScrobbleTimestampBehavior.startingCustom ||
+                          _behavior == ScrobbleTimestampBehavior.endingCustom,
                       child: DateTimeField(
                           decoration: InputDecoration(labelText: 'Timestamp'),
+                          resetIcon: null,
                           format: DateFormat('yyyy-MM-dd HH:mm:ss'),
-                          initialValue: _datetime,
+                          initialValue: _customTimestamp,
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(
                                 context: context,
@@ -99,7 +156,7 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
                           },
                           onChanged: (datetime) {
                             setState(() {
-                              _datetime = datetime;
+                              _customTimestamp = datetime;
                             });
                           }),
                     ),
