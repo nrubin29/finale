@@ -17,15 +17,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Finale',
         theme: ThemeData.from(
-            colorScheme: ColorScheme.light(
-                primary: Colors.red,
-                secondary: Colors.red,
-                surface: Colors.red)),
+                colorScheme: ColorScheme.light(
+                    primary: Colors.red,
+                    secondary: Colors.red,
+                    surface: Colors.red))
+            .copyWith(
+                timePickerTheme: TimePickerThemeData(
+                    backgroundColor: ColorScheme.light().background)),
         darkTheme: ThemeData.from(
-            colorScheme: ColorScheme.dark(
-                primary: Colors.red,
-                secondary: Colors.red,
-                surface: Colors.red)),
+                colorScheme: ColorScheme.dark(
+                    primary: Colors.red,
+                    secondary: Colors.red,
+                    surface: Colors.red))
+            .copyWith(
+                timePickerTheme: TimePickerThemeData(
+                    backgroundColor: ColorScheme.dark().background)),
         home: FutureBuilder<String>(
             future: SharedPreferences.getInstance()
                 .then((value) => value.getString('name')),
