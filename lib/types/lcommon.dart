@@ -64,3 +64,15 @@ class LWiki {
 
   factory LWiki.fromJson(Map<String, dynamic> json) => _$LWikiFromJson(json);
 }
+
+@JsonSerializable()
+class LError {
+  @JsonKey(name: 'error')
+  int code;
+
+  String message;
+
+  LError(this.code, this.message);
+
+  factory LError.fromJson(Map<String, dynamic> json) => _$LErrorFromJson(json);
+}

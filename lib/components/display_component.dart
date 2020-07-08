@@ -44,6 +44,7 @@ class _DisplayComponentState<T extends Displayable>
   int page = 1;
   String period = '7day';
   bool didInitialRequest = false;
+  bool hasMorePages = true;
 
   final _scrollController = ScrollController();
 
@@ -86,24 +87,38 @@ class _DisplayComponentState<T extends Displayable>
     try {
       final initialItems = await _request.doRequest(20, 1, period: period);
       setState(() {
-        items = initialItems;
-        page = 2;
-        didInitialRequest = true;
+        if (initialItems.isEmpty) {
+          hasMorePages = false;
+        } else {
+          items = initialItems;
+          page = 2;
+          didInitialRequest = true;
+        }
       });
     } catch (_) {
-      // Could not get page.
+      setState(() {
+        hasMorePages = false;
+      });
     }
   }
 
   Future<void> _getMoreItems() async {
+    if (!hasMorePages) return;
+
     try {
       final moreItems = await _request.doRequest(20, page, period: period);
       setState(() {
-        items.addAll(moreItems);
-        page += 1;
+        if (moreItems.isEmpty) {
+          hasMorePages = false;
+        } else {
+          items.addAll(moreItems);
+          page += 1;
+        }
       });
     } catch (_) {
-      // Could not get page.
+      setState(() {
+        hasMorePages = false;
+      });
     }
   }
 
@@ -237,13 +252,11 @@ class _DisplayComponentState<T extends Displayable>
                     maxCrossAxisExtent: 250),
                 delegate: SliverChildBuilderDelegate(_gridItemBuilder,
                     childCount: items.length)),
-          // TODO: If there are no more items, or if the request fails, the
-          //  loading indicator shouldn't be displayed.
           // TODO: If there aren't enough items to fill the screen (i.e. artist
           //  grid on iPad Pro 12.9-inch), the loading indicator shouldn't be
           //  displayed unless the user swipes up - though having to swipe up
           //  when the screen isn't full is kind of awkward.
-          if (_request != null)
+          if (_request != null && hasMorePages)
             SliverToBoxAdapter(
                 child: ListTile(
                     leading: CircularProgressIndicator(),
