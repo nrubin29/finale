@@ -41,7 +41,7 @@ class AboutView extends StatelessWidget {
                         text: TextSpan(
                             style: Theme.of(context).textTheme.bodyText2,
                             children: [
-                          TextSpan(text: 'Created with '),
+                          TextSpan(text: 'Made with '),
                           WidgetSpan(
                               child: Icon(
                             Icons.favorite,
