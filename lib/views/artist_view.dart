@@ -123,12 +123,14 @@ class _ArtistViewState extends State<ArtistView>
                     visible: selectedIndex == 0,
                     maintainState: true,
                     child: DisplayComponent(
+                        scrollable: false,
                         request: ArtistGetTopAlbumsRequest(artist.name)),
                   ),
                   Visibility(
                     visible: selectedIndex == 1,
                     maintainState: true,
                     child: DisplayComponent(
+                        scrollable: false,
                         request: ArtistGetTopTracksRequest(artist.name)),
                   ),
                 ])

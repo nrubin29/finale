@@ -16,6 +16,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final void Function(T item) secondaryAction;
 
   final DisplayType displayType;
+  final bool scrollable;
   final bool displayNumbers;
   final bool displayImages;
   final bool displayPeriodSelector;
@@ -28,6 +29,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.requestStream,
       this.secondaryAction,
       this.displayType = DisplayType.list,
+      this.scrollable = true,
       this.displayNumbers = false,
       this.displayImages = true,
       this.displayPeriodSelector = false,
@@ -238,7 +240,9 @@ class _DisplayComponentState<T extends Displayable>
     }
 
     return CustomScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: widget.scrollable
+            ? AlwaysScrollableScrollPhysics()
+            : NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         controller: _scrollController,
         slivers: [

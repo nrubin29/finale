@@ -134,6 +134,7 @@ class AlbumView extends StatelessWidget {
                 if (album.tracks.isNotEmpty)
                   DisplayComponent(
                     items: album.tracks,
+                    scrollable: false,
                     displayNumbers: true,
                     displayImages: false,
                   ),
