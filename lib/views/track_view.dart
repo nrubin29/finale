@@ -67,7 +67,7 @@ class _TrackViewState extends State<TrackView> {
                             final result = await showBarModalBottomSheet<bool>(
                                 context: context,
                                 duration: Duration(milliseconds: 200),
-                                builder: (context, controller) => ScrobbleView(
+                                builder: (context) => ScrobbleView(
                                       track: track,
                                       isModal: true,
                                     ));

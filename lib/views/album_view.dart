@@ -59,7 +59,7 @@ class AlbumView extends StatelessWidget {
                       final result = await showBarModalBottomSheet<bool>(
                           context: context,
                           duration: Duration(milliseconds: 200),
-                          builder: (context, controller) =>
+                          builder: (context) =>
                               ScrobbleAlbumView(album: album));
 
                       if (result != null) {

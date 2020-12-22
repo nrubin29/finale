@@ -65,7 +65,7 @@ class _SearchViewState extends State<SearchView> {
                           final result = await showBarModalBottomSheet<bool>(
                               context: context,
                               duration: Duration(milliseconds: 200),
-                              builder: (context, controller) => ScrobbleView(
+                              builder: (context) => ScrobbleView(
                                     track: fullTrack,
                                     isModal: true,
                                   ));
@@ -109,7 +109,7 @@ class _SearchViewState extends State<SearchView> {
                           final result = await showBarModalBottomSheet<bool>(
                               context: context,
                               duration: Duration(milliseconds: 200),
-                              builder: (context, controller) =>
+                              builder: (context) =>
                                   ScrobbleAlbumView(album: fullAlbum));
 
                           if (result != null) {
