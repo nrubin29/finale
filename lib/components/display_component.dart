@@ -84,17 +84,18 @@ class _DisplayComponentState<T extends Displayable>
   }
 
   Future<void> _getInitialItems() async {
+    didInitialRequest = false;
     items = [];
 
     try {
       final initialItems = await _request.doRequest(20, 1, period: period);
       setState(() {
-        if (initialItems.isEmpty) {
-          hasMorePages = false;
-        } else {
-          items = initialItems;
+        items = initialItems;
+        hasMorePages = initialItems.length >= 20;
+        didInitialRequest = true;
+
+        if (hasMorePages) {
           page = 2;
-          didInitialRequest = true;
         }
       });
     } catch (_) {
@@ -110,10 +111,10 @@ class _DisplayComponentState<T extends Displayable>
     try {
       final moreItems = await _request.doRequest(20, page, period: period);
       setState(() {
-        if (moreItems.isEmpty) {
-          hasMorePages = false;
-        } else {
-          items.addAll(moreItems);
+        items.addAll(moreItems);
+        hasMorePages = moreItems.length >= 20;
+
+        if (hasMorePages) {
           page += 1;
         }
       });
