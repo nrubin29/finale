@@ -19,6 +19,8 @@ class ScrobbleView extends StatefulWidget {
 }
 
 class _ScrobbleViewState extends State<ScrobbleView> {
+  final _formKey = GlobalKey<FormState>();
+
   final _trackController = TextEditingController();
   final _artistController = TextEditingController();
   final _albumController = TextEditingController();
@@ -37,6 +39,14 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       ACRCloud.setUp(ACRCloudConfig(
           acrCloudAccessKey, acrCloudAccessSecret, acrCloudHost));
     }
+  }
+
+  String _required(String value) {
+    if (value.isEmpty) {
+      return 'Required';
+    }
+
+    return null;
   }
 
   Future<void> _scrobble(BuildContext context) async {
@@ -88,10 +98,16 @@ class _ScrobbleViewState extends State<ScrobbleView> {
           actions: [
             Builder(
                 builder: (context) => IconButton(
-                    icon: Icon(Icons.add), onPressed: () => _scrobble(context)))
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        _scrobble(context);
+                      }
+                    }))
           ],
         ),
         body: Form(
+            key: _formKey,
             child: Container(
                 margin: EdgeInsets.all(10),
                 child: Column(
@@ -146,11 +162,13 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                               })),
                     TextFormField(
                       controller: _trackController,
-                      decoration: InputDecoration(labelText: 'Song'),
+                      decoration: InputDecoration(labelText: 'Song *'),
+                      validator: _required,
                     ),
                     TextFormField(
                       controller: _artistController,
-                      decoration: InputDecoration(labelText: 'Artist'),
+                      decoration: InputDecoration(labelText: 'Artist *'),
+                      validator: _required,
                     ),
                     TextFormField(
                       controller: _albumController,
