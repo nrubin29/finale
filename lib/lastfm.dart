@@ -296,7 +296,10 @@ class Lastfm {
     data['sk'] = (await SharedPreferences.getInstance()).getString('key');
 
     tracks.asMap().forEach((i, track) {
-      data['album[$i]'] = track.album;
+      if (track.album.isNotEmpty) {
+        data['album[$i]'] = track.album;
+      }
+
       data['artist[$i]'] = track.artist;
       data['track[$i]'] = track.name;
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
