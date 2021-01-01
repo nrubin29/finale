@@ -71,7 +71,7 @@ class _SearchViewState extends State<SearchView> {
                                   ));
 
                           if (result != null) {
-                            Scaffold.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(result
                                     ? 'Scrobbled successfully!'
                                     : 'An error occurred while scrobbling')));
@@ -94,13 +94,13 @@ class _SearchViewState extends State<SearchView> {
                           final fullAlbum = await Lastfm.getAlbum(item);
 
                           if (fullAlbum.tracks.isEmpty) {
-                            Scaffold.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                     'This album doesn\'t have any tracks')));
                             return;
                           } else if (!fullAlbum.tracks.every((track) =>
                               track.duration != null && track.duration > 0)) {
-                            Scaffold.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                     'Can\'t scrobble album because Last.fm is missing track duration data')));
                             return;
@@ -113,7 +113,7 @@ class _SearchViewState extends State<SearchView> {
                                   ScrobbleAlbumView(album: fullAlbum));
 
                           if (result != null) {
-                            Scaffold.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(result
                                     ? 'Scrobbled successfully!'
                                     : 'An error occurred while scrobbling')));

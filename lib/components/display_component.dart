@@ -42,11 +42,11 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
 
 class _DisplayComponentState<T extends Displayable>
     extends State<DisplayComponent> with AutomaticKeepAliveClientMixin {
-  var items = List<T>();
-  int page = 1;
-  String period = '7day';
-  bool didInitialRequest = false;
-  bool hasMorePages = true;
+  var items = <T>[];
+  var page = 1;
+  var period = '7day';
+  var didInitialRequest = false;
+  var hasMorePages = true;
 
   final _scrollController = ScrollController();
 

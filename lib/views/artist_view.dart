@@ -24,7 +24,7 @@ class ArtistView extends StatefulWidget {
 class _ArtistViewState extends State<ArtistView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  int selectedIndex = 0;
+  var selectedIndex = 0;
 
   @override
   void initState() {

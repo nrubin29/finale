@@ -73,7 +73,7 @@ class _TrackViewState extends State<TrackView> {
                                     ));
 
                             if (result != null) {
-                              Scaffold.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                   content: Text(result
                                       ? 'Scrobbled successfully!'
                                       : 'An error occurred while scrobbling')));

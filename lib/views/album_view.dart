@@ -63,7 +63,7 @@ class AlbumView extends StatelessWidget {
                               ScrobbleAlbumView(album: album));
 
                       if (result != null) {
-                        Scaffold.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(result
                                 ? 'Scrobbled successfully!'
                                 : 'An error occurred while scrobbling')));

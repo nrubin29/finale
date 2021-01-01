@@ -9,14 +9,11 @@ class MainView extends StatefulWidget {
   MainView({Key key, this.username}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _MainViewState(username);
+  State<StatefulWidget> createState() => _MainViewState();
 }
 
 class _MainViewState extends State<MainView> {
-  final String _username;
-  int _index = 0;
-
-  _MainViewState(this._username);
+  var _index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +26,13 @@ class _MainViewState extends State<MainView> {
             });
           },
           items: [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person), title: Text('Profile')),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.search), title: Text('Search')),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.add), title: Text('Scrobble')),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+            BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Scrobble'),
           ],
         ),
         body: IndexedStack(index: _index, children: [
-          ProfileView(username: _username, isTab: true),
+          ProfileView(username: widget.username, isTab: true),
           SearchView(),
           ScrobbleView(),
         ]));

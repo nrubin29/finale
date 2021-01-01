@@ -60,20 +60,20 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     if (widget.isModal) {
       Navigator.pop(context, response.ignored == 0);
     } else if (response.ignored == 0) {
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Scrobbled successfully!')));
       _trackController.text = '';
       _artistController.text = '';
       _albumController.text = '';
     } else {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('An error occurred while scrobbling')));
     }
   }
 
-  // This widget is a circle whose size depends on the volume that the
-  // microphone picks up. Unfortunately, it's too laggy and the size doesn't
-  // change that much unless you make a noise very close to the microphone.
+  /// This widget is a circle whose size depends on the volume that the
+  /// microphone picks up. Unfortunately, it's too laggy and the size doesn't
+  /// change that much unless you make a noise very close to the microphone.
   // ignore: unused_element
   Widget _buildAudioIndicator(BuildContext context, ACRCloudSession session) {
     return StreamBuilder(
@@ -155,9 +155,10 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                                         result.track.artists?.first?.name;
                                   });
                                 } else {
-                                  Scaffold.of(context).showSnackBar(SnackBar(
-                                      content:
-                                          Text('Could not recognize song')));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Could not recognize song')));
                                 }
                               })),
                     TextFormField(
