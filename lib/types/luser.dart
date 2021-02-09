@@ -1,4 +1,6 @@
+import 'package:finale/lastfm.dart';
 import 'package:finale/types/generic.dart';
+import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -151,16 +153,13 @@ class LUserWeeklyTrackChartTrack extends BasicTrack {
 
   String url;
 
-  @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
-
   String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
   int playCount;
 
   LUserWeeklyTrackChartTrack(
-      this.artistObject, this.url, this.imageId, this.name, this.playCount);
+      this.artistObject, this.url, this.name, this.playCount);
 
   factory LUserWeeklyTrackChartTrack.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyTrackChartTrackFromJson(json);
@@ -174,6 +173,22 @@ class LUserWeeklyTrackChartTrack extends BasicTrack {
   @override
   String get displayTrailing => Intl.plural(playCount,
       one: '$playCount scrobble', other: '$playCount scrobbles');
+
+  @override
+  Future<String> get imageIdFuture async {
+    final lastfmResponse = await Lastfm.get(url);
+
+    try {
+      final doc = parse(lastfmResponse.body);
+      final rawUrl =
+          doc.querySelector('.cover-art').children.first.attributes['src'];
+      final imageId = rawUrl.substring(
+          rawUrl.lastIndexOf('/') + 1, rawUrl.lastIndexOf('.'));
+      return imageId;
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 @JsonSerializable()
@@ -207,16 +222,12 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
 
   String url;
 
-  @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
-
   String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
   int playCount;
 
-  LUserWeeklyAlbumChartAlbum(
-      this.artist, this.url, this.imageId, this.name, this.playCount);
+  LUserWeeklyAlbumChartAlbum(this.artist, this.url, this.name, this.playCount);
 
   factory LUserWeeklyAlbumChartAlbum.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyAlbumChartAlbumFromJson(json);
@@ -224,6 +235,21 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
   @override
   String get displayTrailing => Intl.plural(playCount,
       one: '$playCount scrobble', other: '$playCount scrobbles');
+
+  @override
+  Future<String> get imageIdFuture async {
+    final lastfmResponse = await Lastfm.get(url);
+
+    try {
+      final doc = parse(lastfmResponse.body);
+      final rawUrl =
+          doc.querySelector('.link-block-cover-link').attributes['href'];
+      final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1);
+      return imageId;
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 @JsonSerializable()
