@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:social_media_buttons/social_media_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutView extends StatelessWidget {
@@ -9,7 +10,8 @@ class AboutView extends StatelessWidget {
         appBar: AppBar(title: Text('About')),
         body: Builder(
             builder: (context) => Center(
-                    child: Column(
+                    child: SafeArea(
+                        child: Column(
                   children: [
                     SizedBox(height: 20),
                     Row(
@@ -18,9 +20,10 @@ class AboutView extends StatelessWidget {
                         ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.asset('assets/images/icon.png',
-                                width: 96)),
+                                width: 84)),
                         SizedBox(width: 10),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Finale',
@@ -56,23 +59,33 @@ class AboutView extends StatelessWidget {
                           TextSpan(text: ' by Noah Rubin')
                         ])),
                     SizedBox(height: 10),
-                    Text('\u00a9 2020 Noah Rubin Technologies LLC'),
-                    Text('All rights reserved'),
-                    SizedBox(height: 10),
                     ListTile(
-                      title: Text('Author\'s website'),
+                      title: Text('Follow me on Twitter'),
+                      leading: Icon(SocialMediaIcons.twitter),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        launch('https://twitter.com/nrubin29');
+                      },
+                    ),
+                    ListTile(
+                      title: Text('My website'),
+                      leading: Icon(Icons.web),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
                         launch('https://nrubintech.com');
                       },
                     ),
                     ListTile(
-                        title: Text('View source on GitHub'),
+                        title: Text('Source code'),
+                        leading: Icon(SocialMediaIcons.github_circled),
                         trailing: Icon(Icons.chevron_right),
                         onTap: () {
                           launch('https://github.com/nrubin29/finale');
-                        })
+                        }),
+                    Spacer(),
+                    Text('\u00a9 2021 Noah Rubin Technologies LLC'),
+                    Text('All rights reserved'),
                   ],
-                ))));
+                )))));
   }
 }
