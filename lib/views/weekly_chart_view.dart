@@ -147,6 +147,7 @@ class _WeeklyChartViewState extends State<WeeklyChartView> {
                                     body: DisplayComponent<
                                         LUserWeeklyAlbumChartAlbum>(
                                       items: _albums,
+                                      displayType: DisplayType.grid,
                                       detailWidgetProvider: (album) =>
                                           AlbumView(album: album),
                                     ),
@@ -193,6 +194,7 @@ class _WeeklyChartViewState extends State<WeeklyChartView> {
                                     body: DisplayComponent<
                                         LUserWeeklyArtistChartArtist>(
                                       items: _artists,
+                                      displayType: DisplayType.grid,
                                       detailWidgetProvider: (artist) =>
                                           ArtistView(artist: artist),
                                     ),
