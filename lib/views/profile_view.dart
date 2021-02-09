@@ -4,8 +4,14 @@ import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/lastfm.dart';
 import 'package:finale/types/generic.dart';
+import 'package:finale/types/lalbum.dart';
+import 'package:finale/types/lartist.dart';
+import 'package:finale/types/ltrack.dart';
 import 'package:finale/types/luser.dart';
+import 'package:finale/views/album_view.dart';
+import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/settings_view.dart';
+import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
@@ -111,7 +117,7 @@ class ProfileView extends StatelessWidget {
               SizedBox(height: 10),
               Expanded(
                   child: DefaultTabController(
-                      length: 5,
+                      length: 6,
                       child: Column(children: [
                         TabBar(
                             labelColor: Colors.red,
@@ -126,22 +132,37 @@ class ProfileView extends StatelessWidget {
                             ]),
                         Expanded(
                             child: TabBarView(children: [
-                          DisplayComponent(
-                              request: GetRecentTracksRequest(username)),
-                          DisplayComponent(
-                              displayType: DisplayType.grid,
-                              displayPeriodSelector: true,
-                              request: GetTopArtistsRequest(username)),
-                          DisplayComponent(
-                              displayType: DisplayType.grid,
-                              displayPeriodSelector: true,
-                              request: GetTopAlbumsRequest(username)),
-                          DisplayComponent(
-                              displayPeriodSelector: true,
-                              request: GetTopTracksRequest(username)),
-                          DisplayComponent(
-                              displayCircularImages: true,
-                              request: GetFriendsRequest(username)),
+                          DisplayComponent<LRecentTracksResponseTrack>(
+                            request: GetRecentTracksRequest(username),
+                            detailWidgetProvider: (track) =>
+                                TrackView(track: track),
+                          ),
+                          DisplayComponent<LTopArtistsResponseArtist>(
+                            displayType: DisplayType.grid,
+                            displayPeriodSelector: true,
+                            request: GetTopArtistsRequest(username),
+                            detailWidgetProvider: (artist) =>
+                                ArtistView(artist: artist),
+                          ),
+                          DisplayComponent<LTopAlbumsResponseAlbum>(
+                            displayType: DisplayType.grid,
+                            displayPeriodSelector: true,
+                            request: GetTopAlbumsRequest(username),
+                            detailWidgetProvider: (album) =>
+                                AlbumView(album: album),
+                          ),
+                          DisplayComponent<LTopTracksResponseTrack>(
+                            displayPeriodSelector: true,
+                            request: GetTopTracksRequest(username),
+                            detailWidgetProvider: (track) =>
+                                TrackView(track: track),
+                          ),
+                          DisplayComponent<LUser>(
+                            displayCircularImages: true,
+                            request: GetFriendsRequest(username),
+                            detailWidgetProvider: (user) =>
+                                ProfileView(username: user.name),
+                          ),
                         ]))
                       ])))
             ],

@@ -1,10 +1,6 @@
 import 'dart:async';
 
 import 'package:finale/lastfm.dart';
-import 'package:finale/views/album_view.dart';
-import 'package:finale/views/artist_view.dart';
-import 'package:finale/views/track_view.dart';
-import 'package:flutter/widgets.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
@@ -48,8 +44,6 @@ abstract class Displayable {
   String get imageId => null;
 
   Future<String> get imageIdFuture => null;
-
-  Widget get detailWidget => null;
 }
 
 abstract class BasicTrack extends Displayable {
@@ -67,9 +61,6 @@ abstract class BasicTrack extends Displayable {
 
   @override
   String get displaySubtitle => artist;
-
-  @override
-  Widget get detailWidget => TrackView(track: this);
 }
 
 class BasicConcreteTrack extends BasicTrack {
@@ -134,9 +125,6 @@ abstract class BasicAlbum extends Displayable {
 
   @override
   String get displaySubtitle => artist.name;
-
-  @override
-  Widget get detailWidget => AlbumView(album: this);
 }
 
 abstract class FullAlbum extends BasicAlbum {
@@ -175,9 +163,6 @@ abstract class BasicArtist extends Displayable {
 
   @override
   String get displayTitle => name;
-
-  @override
-  Widget get detailWidget => ArtistView(artist: this);
 }
 
 class ConcreteBasicArtist extends BasicArtist {

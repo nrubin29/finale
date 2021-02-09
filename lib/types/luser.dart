@@ -1,6 +1,4 @@
 import 'package:finale/types/generic.dart';
-import 'package:finale/views/profile_view.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -74,9 +72,6 @@ class LUser extends Displayable {
 
   @override
   String get displaySubtitle => realName;
-
-  @override
-  Widget get detailWidget => ProfileView(username: name);
 
   factory LUser.fromJson(Map<String, dynamic> json) => _$LUserFromJson(json);
 }

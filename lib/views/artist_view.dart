@@ -9,6 +9,8 @@ import 'package:finale/components/wiki_component.dart';
 import 'package:finale/lastfm.dart';
 import 'package:finale/types/generic.dart';
 import 'package:finale/types/lartist.dart';
+import 'package:finale/views/album_view.dart';
+import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
@@ -122,16 +124,20 @@ class _ArtistViewState extends State<ArtistView>
                   Visibility(
                     visible: selectedIndex == 0,
                     maintainState: true,
-                    child: DisplayComponent(
+                    child: DisplayComponent<LArtistTopAlbum>(
                         scrollable: false,
-                        request: ArtistGetTopAlbumsRequest(artist.name)),
+                        request: ArtistGetTopAlbumsRequest(artist.name),
+                        detailWidgetProvider: (album) =>
+                            AlbumView(album: album)),
                   ),
                   Visibility(
                     visible: selectedIndex == 1,
                     maintainState: true,
-                    child: DisplayComponent(
+                    child: DisplayComponent<LArtistTopTrack>(
                         scrollable: false,
-                        request: ArtistGetTopTracksRequest(artist.name)),
+                        request: ArtistGetTopTracksRequest(artist.name),
+                        detailWidgetProvider: (track) =>
+                            TrackView(track: track)),
                   ),
                 ])
               ],

@@ -1,7 +1,13 @@
 import 'package:finale/components/display_component.dart';
 import 'package:finale/lastfm.dart';
+import 'package:finale/types/lalbum.dart';
+import 'package:finale/types/lartist.dart';
+import 'package:finale/types/ltrack.dart';
+import 'package:finale/views/album_view.dart';
+import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/scrobble_view.dart';
+import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
@@ -58,7 +64,7 @@ class _SearchViewState extends State<SearchView> {
           body: TabBarView(
             children: _query.hasValue && _query.value != ''
                 ? [
-                    DisplayComponent(
+                    DisplayComponent<LTrackMatch>(
                         secondaryAction: (item) async {
                           final fullTrack = await Lastfm.getTrack(item);
 
@@ -81,15 +87,19 @@ class _SearchViewState extends State<SearchView> {
                             .debounceTime(Duration(
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => SearchTracksRequest(query))),
-                    DisplayComponent(
+                            .map((query) => SearchTracksRequest(query)),
+                        detailWidgetProvider: (track) =>
+                            TrackView(track: track)),
+                    DisplayComponent<LArtistMatch>(
                         displayType: DisplayType.grid,
                         requestStream: _query
                             .debounceTime(Duration(
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => SearchArtistsRequest(query))),
-                    DisplayComponent(
+                            .map((query) => SearchArtistsRequest(query)),
+                        detailWidgetProvider: (artist) =>
+                            ArtistView(artist: artist)),
+                    DisplayComponent<LAlbumMatch>(
                         secondaryAction: (item) async {
                           final fullAlbum = await Lastfm.getAlbum(item);
 
@@ -124,7 +134,9 @@ class _SearchViewState extends State<SearchView> {
                             .debounceTime(Duration(
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => SearchAlbumsRequest(query))),
+                            .map((query) => SearchAlbumsRequest(query)),
+                        detailWidgetProvider: (album) =>
+                            AlbumView(album: album)),
                   ]
                 : [Container(), Container(), Container()],
           )),

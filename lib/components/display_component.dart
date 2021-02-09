@@ -13,6 +13,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final PagedLastfmRequest<T> request;
   final Stream<PagedLastfmRequest<T>> requestStream;
 
+  final Widget Function(T item) detailWidgetProvider;
   final void Function(T item) secondaryAction;
 
   final DisplayType displayType;
@@ -27,6 +28,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.items,
       this.request,
       this.requestStream,
+      this.detailWidgetProvider,
       this.secondaryAction,
       this.displayType = DisplayType.list,
       this.scrollable = true,
@@ -41,7 +43,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
 }
 
 class _DisplayComponentState<T extends Displayable>
-    extends State<DisplayComponent> with AutomaticKeepAliveClientMixin {
+    extends State<DisplayComponent<T>> with AutomaticKeepAliveClientMixin {
   var items = <T>[];
   var page = 1;
   var period = '7day';
@@ -126,9 +128,11 @@ class _DisplayComponentState<T extends Displayable>
   }
 
   void _onTap(T item) {
-    if (item.detailWidget != null) {
+    if (widget.detailWidgetProvider != null) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => item.detailWidget));
+          context,
+          MaterialPageRoute(
+              builder: (context) => widget.detailWidgetProvider(item)));
     }
   }
 
@@ -221,12 +225,10 @@ class _DisplayComponentState<T extends Displayable>
   }
 
   Widget _gridItemBuilder(BuildContext context, int index) {
-    final item = items[index];
-
-    if (item.detailWidget != null) {
+    if (widget.detailWidgetProvider != null) {
       return InkWell(
           onTap: () {
-            _onTap(item);
+            _onTap(items[index]);
           },
           child: _gridTileBuilder(context, index));
     }

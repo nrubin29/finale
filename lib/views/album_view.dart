@@ -11,6 +11,7 @@ import 'package:finale/types/generic.dart';
 import 'package:finale/types/lalbum.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';
+import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
@@ -132,11 +133,12 @@ class AlbumView extends StatelessWidget {
                       }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
-                  DisplayComponent(
+                  DisplayComponent<LAlbumTrack>(
                     items: album.tracks,
                     scrollable: false,
                     displayNumbers: true,
                     displayImages: false,
+                    detailWidgetProvider: (track) => TrackView(track: track),
                   ),
               ],
             ));
