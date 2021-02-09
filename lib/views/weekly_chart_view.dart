@@ -2,7 +2,6 @@ import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
 import 'package:finale/types/luser.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
@@ -52,16 +51,6 @@ class _WeeklyChartViewState extends State<WeeklyChartView> {
     });
   }
 
-  Widget _createSeeMoreList(
-          String title, List<Displayable> data, DisplayType displayType) =>
-      Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: DisplayComponent(
-          items: data,
-          displayType: displayType,
-        ),
-      );
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: Text(widget.chart.displayTitle)),
@@ -109,8 +98,15 @@ class _WeeklyChartViewState extends State<WeeklyChartView> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      _createSeeMoreList('Top Tracks', _tracks, DisplayType.list),
+                                  builder: (context) => Scaffold(
+                                    appBar: AppBar(title: Text('Top Tracks')),
+                                    body: DisplayComponent<
+                                        LUserWeeklyTrackChartTrack>(
+                                      items: _tracks,
+                                      detailWidgetProvider: (track) =>
+                                          TrackView(track: track),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -146,8 +142,15 @@ class _WeeklyChartViewState extends State<WeeklyChartView> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      _createSeeMoreList('Top Albums', _albums, DisplayType.grid),
+                                  builder: (context) => Scaffold(
+                                    appBar: AppBar(title: Text('Top Albums')),
+                                    body: DisplayComponent<
+                                        LUserWeeklyAlbumChartAlbum>(
+                                      items: _albums,
+                                      detailWidgetProvider: (album) =>
+                                          AlbumView(album: album),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -185,8 +188,15 @@ class _WeeklyChartViewState extends State<WeeklyChartView> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => _createSeeMoreList(
-                                      'Top Artists', _artists, DisplayType.grid),
+                                  builder: (context) => Scaffold(
+                                    appBar: AppBar(title: Text('Top Artists')),
+                                    body: DisplayComponent<
+                                        LUserWeeklyArtistChartArtist>(
+                                      items: _artists,
+                                      detailWidgetProvider: (artist) =>
+                                          ArtistView(artist: artist),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
