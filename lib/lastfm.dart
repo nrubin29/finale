@@ -259,6 +259,42 @@ class Lastfm {
     return LArtist.fromJson(rawResponse['artist']);
   }
 
+  static Future<LUserWeeklyChartList> getWeeklyChartList(LUser user) async {
+    final rawResponse =
+        await _doRequest('user.getWeeklyChartList', {'user': user.name});
+    return LUserWeeklyChartList.fromJson(rawResponse['weeklychartlist']);
+  }
+
+  static Future<LUserWeeklyTrackChart> getWeeklyTrackChart(
+      LUser user, LUserWeeklyChart chart) async {
+    final rawResponse = await _doRequest('user.getWeeklyTrackChart', {
+      'user': user.name,
+      'from': chart.from,
+      'to': chart.to,
+    });
+    return LUserWeeklyTrackChart.fromJson(rawResponse['weeklytrackchart']);
+  }
+
+  static Future<LUserWeeklyAlbumChart> getWeeklyAlbumChart(
+      LUser user, LUserWeeklyChart chart) async {
+    final rawResponse = await _doRequest('user.getWeeklyAlbumChart', {
+      'user': user.name,
+      'from': chart.from,
+      'to': chart.to,
+    });
+    return LUserWeeklyAlbumChart.fromJson(rawResponse['weeklyalbumchart']);
+  }
+
+  static Future<LUserWeeklyArtistChart> getWeeklyArtistChart(
+      LUser user, LUserWeeklyChart chart) async {
+    final rawResponse = await _doRequest('user.getWeeklyArtistChart', {
+      'user': user.name,
+      'from': chart.from,
+      'to': chart.to,
+    });
+    return LUserWeeklyArtistChart.fromJson(rawResponse['weeklyartistchart']);
+  }
+
   static Future<int> getNumArtists(String username) async {
     final rawResponse = await _doRequest('user.getTopArtists',
         {'user': username, 'period': 'overall', 'limit': '1', 'page': '1'});

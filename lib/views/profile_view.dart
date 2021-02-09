@@ -12,6 +12,7 @@ import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/settings_view.dart';
 import 'package:finale/views/track_view.dart';
+import 'package:finale/views/weekly_chart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
@@ -129,6 +130,7 @@ class ProfileView extends StatelessWidget {
                               Tab(icon: Icon(Icons.album)),
                               Tab(icon: Icon(Icons.audiotrack)),
                               Tab(icon: Icon(Icons.person)),
+                              Tab(icon: Icon(Icons.access_time)),
                             ]),
                         Expanded(
                             child: TabBarView(children: [
@@ -162,6 +164,15 @@ class ProfileView extends StatelessWidget {
                             request: GetFriendsRequest(username),
                             detailWidgetProvider: (user) =>
                                 ProfileView(username: user.name),
+                          ),
+                          DisplayComponent<LUserWeeklyChart>(
+                            displayImages: false,
+                            itemsFuture: Lastfm.getWeeklyChartList(user).then(
+                              (chartsList) => chartsList.charts.reversed
+                                  .toList(growable: false),
+                            ),
+                            detailWidgetProvider: (chart) =>
+                                WeeklyChartView(user: user, chart: chart),
                           ),
                         ]))
                       ])))

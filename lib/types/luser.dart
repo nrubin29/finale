@@ -97,3 +97,176 @@ class LAuthenticationResponseSession {
   factory LAuthenticationResponseSession.fromJson(Map<String, dynamic> json) =>
       _$LAuthenticationResponseSessionFromJson(json);
 }
+
+@JsonSerializable()
+class LUserWeeklyChart extends Displayable {
+  String from;
+  String to;
+
+  LUserWeeklyChart(this.from, this.to);
+
+  factory LUserWeeklyChart.fromJson(Map<String, dynamic> json) =>
+      _$LUserWeeklyChartFromJson(json);
+
+  DateTime get fromDate => fromSecondsSinceEpoch(from);
+
+  DateTime get toDate => fromSecondsSinceEpoch(to);
+
+  @override
+  DisplayableType get type => null;
+
+  String get url => null;
+
+  String get displayTitle =>
+      '${DateFormat('d MMM').format(fromDate)} - ${DateFormat('d MMM yyyy').format(toDate)}';
+}
+
+@JsonSerializable()
+class LUserWeeklyChartList {
+  @JsonKey(name: 'chart')
+  List<LUserWeeklyChart> charts;
+
+  LUserWeeklyChartList(this.charts);
+
+  factory LUserWeeklyChartList.fromJson(Map<String, dynamic> json) =>
+      _$LUserWeeklyChartListFromJson(json);
+}
+
+@JsonSerializable()
+class LUserWeeklyTrackChartTrackArtist {
+  @JsonKey(name: '#text')
+  String name;
+
+  LUserWeeklyTrackChartTrackArtist(this.name);
+
+  factory LUserWeeklyTrackChartTrackArtist.fromJson(
+          Map<String, dynamic> json) =>
+      _$LUserWeeklyTrackChartTrackArtistFromJson(json);
+}
+
+@JsonSerializable()
+class LUserWeeklyTrackChartTrack extends BasicTrack {
+  @JsonKey(name: 'artist')
+  LUserWeeklyTrackChartTrackArtist artistObject;
+
+  String url;
+
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
+
+  String name;
+
+  @JsonKey(name: 'playcount', fromJson: intParseSafe)
+  int playCount;
+
+  LUserWeeklyTrackChartTrack(
+      this.artistObject, this.url, this.imageId, this.name, this.playCount);
+
+  factory LUserWeeklyTrackChartTrack.fromJson(Map<String, dynamic> json) =>
+      _$LUserWeeklyTrackChartTrackFromJson(json);
+
+  @override
+  String get album => null;
+
+  @override
+  String get artist => artistObject.name;
+
+  @override
+  String get displayTrailing => Intl.plural(playCount,
+      one: '$playCount scrobble', other: '$playCount scrobbles');
+}
+
+@JsonSerializable()
+class LUserWeeklyTrackChart {
+  @JsonKey(name: 'track')
+  List<LUserWeeklyTrackChartTrack> tracks;
+
+  LUserWeeklyTrackChart(this.tracks);
+
+  factory LUserWeeklyTrackChart.fromJson(Map<String, dynamic> json) =>
+      _$LUserWeeklyTrackChartFromJson(json);
+}
+
+@JsonSerializable()
+class LUserWeeklyAlbumChartAlbumArtist extends BasicArtist {
+  @JsonKey(name: '#text')
+  String name;
+
+  LUserWeeklyAlbumChartAlbumArtist(this.name);
+
+  factory LUserWeeklyAlbumChartAlbumArtist.fromJson(
+          Map<String, dynamic> json) =>
+      _$LUserWeeklyAlbumChartAlbumArtistFromJson(json);
+
+  String get url => null;
+}
+
+@JsonSerializable()
+class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
+  LUserWeeklyAlbumChartAlbumArtist artist;
+
+  String url;
+
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
+
+  String name;
+
+  @JsonKey(name: 'playcount', fromJson: intParseSafe)
+  int playCount;
+
+  LUserWeeklyAlbumChartAlbum(
+      this.artist, this.url, this.imageId, this.name, this.playCount);
+
+  factory LUserWeeklyAlbumChartAlbum.fromJson(Map<String, dynamic> json) =>
+      _$LUserWeeklyAlbumChartAlbumFromJson(json);
+
+  @override
+  String get displayTrailing => Intl.plural(playCount,
+      one: '$playCount scrobble', other: '$playCount scrobbles');
+}
+
+@JsonSerializable()
+class LUserWeeklyAlbumChart {
+  @JsonKey(name: 'album')
+  List<LUserWeeklyAlbumChartAlbum> albums;
+
+  LUserWeeklyAlbumChart(this.albums);
+
+  factory LUserWeeklyAlbumChart.fromJson(Map<String, dynamic> json) =>
+      _$LUserWeeklyAlbumChartFromJson(json);
+}
+
+@JsonSerializable()
+class LUserWeeklyArtistChartArtist extends BasicArtist {
+  String url;
+
+  @JsonKey(name: 'image', fromJson: extractImageId)
+  String imageId;
+
+  String name;
+
+  @JsonKey(name: 'playcount', fromJson: intParseSafe)
+  int playCount;
+
+  LUserWeeklyArtistChartArtist(
+      this.url, this.imageId, this.name, this.playCount);
+
+  factory LUserWeeklyArtistChartArtist.fromJson(Map<String, dynamic> json) =>
+      _$LUserWeeklyArtistChartArtistFromJson(json);
+
+  @override
+  String get displayTrailing => Intl.plural(playCount,
+      one: '$playCount scrobble', other: '$playCount scrobbles');
+}
+
+@JsonSerializable()
+class LUserWeeklyArtistChart {
+  @JsonKey(name: 'artist')
+  List<LUserWeeklyArtistChartArtist> artists;
+
+  LUserWeeklyArtistChart(this.artists);
+
+  factory LUserWeeklyArtistChart.fromJson(Map<String, dynamic> json) =>
+      _$LUserWeeklyArtistChartFromJson(json);
+}

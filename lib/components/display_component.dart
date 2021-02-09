@@ -10,6 +10,7 @@ enum DisplayType { list, grid }
 
 class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final List<T> items;
+  final Future<List<T>> itemsFuture;
   final PagedLastfmRequest<T> request;
   final Stream<PagedLastfmRequest<T>> requestStream;
 
@@ -26,6 +27,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   DisplayComponent(
       {Key key,
       this.items,
+      this.itemsFuture,
       this.request,
       this.requestStream,
       this.detailWidgetProvider,
@@ -62,6 +64,14 @@ class _DisplayComponentState<T extends Displayable>
     if (widget.items != null) {
       items = widget.items;
       didInitialRequest = true;
+      return;
+    } else if (widget.itemsFuture != null) {
+      widget.itemsFuture.then((value) {
+        setState(() {
+          items = value;
+          didInitialRequest = true;
+        });
+      });
       return;
     }
 
