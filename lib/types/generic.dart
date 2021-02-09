@@ -25,7 +25,8 @@ String extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
   }
 
   final String imageUrl = images.first['#text'];
-  return imageUrl.substring(imageUrl.lastIndexOf('/'));
+  return imageUrl.substring(
+      imageUrl.lastIndexOf('/') + 1, imageUrl.lastIndexOf('.'));
 }
 
 enum DisplayableType { track, album, artist, user }
@@ -147,11 +148,9 @@ abstract class BasicArtist extends Displayable {
 
     try {
       final doc = parse(lastfmResponse.body);
-      final rawUrl = doc
-          .querySelectorAll('.header-new-gallery--link')
-          .first
-          .attributes['href'];
-      final imageId = rawUrl.substring(rawUrl.lastIndexOf('/'));
+      final rawUrl =
+          doc.querySelector('.header-new-gallery--link').attributes['href'];
+      final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1);
       return imageId;
     } catch (e) {
       return null;
