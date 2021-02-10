@@ -35,12 +35,15 @@ class _WeeklyChartViewState extends State<WeeklyChartView> {
   }
 
   void _initData() async {
-    final tracks =
-        (await Lastfm.getWeeklyTrackChart(widget.user, widget.chart)).tracks;
-    final albums =
-        (await Lastfm.getWeeklyAlbumChart(widget.user, widget.chart)).albums;
-    final artists =
-        (await Lastfm.getWeeklyArtistChart(widget.user, widget.chart)).artists;
+    final data = await Future.wait([
+      Lastfm.getWeeklyTrackChart(widget.user, widget.chart),
+      Lastfm.getWeeklyAlbumChart(widget.user, widget.chart),
+      Lastfm.getWeeklyArtistChart(widget.user, widget.chart),
+    ]);
+
+    final tracks = (data[0] as LUserWeeklyTrackChart).tracks;
+    final albums = (data[1] as LUserWeeklyAlbumChart).albums;
+    final artists = (data[2] as LUserWeeklyArtistChart).artists;
     final numScrobbles = tracks.fold(0, (sum, track) => sum + track.playCount);
 
     setState(() {
