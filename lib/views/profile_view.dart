@@ -1,9 +1,9 @@
+import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
 import 'package:finale/types/lalbum.dart';
 import 'package:finale/types/lartist.dart';
 import 'package:finale/types/ltrack.dart';
@@ -70,51 +70,12 @@ class ProfileView extends StatelessWidget {
               SizedBox(height: 10),
               Text('Scrobbling since ${user.registered.dateFormatted}'),
               SizedBox(height: 10),
-              IntrinsicHeight(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Text('Scrobbles'),
-                      Text(formatNumber(user.playCount))
-                    ],
-                  ),
-                  VerticalDivider(),
-                  Column(
-                    children: [
-                      Text('Artists'),
-                      FutureBuilder<int>(
-                          future: Lastfm.getNumArtists(username),
-                          builder: (context, snapshot) => Text(snapshot.hasData
-                              ? formatNumber(snapshot.data)
-                              : '---'))
-                    ],
-                  ),
-                  VerticalDivider(),
-                  Column(
-                    children: [
-                      Text('Albums'),
-                      FutureBuilder<int>(
-                          future: Lastfm.getNumAlbums(username),
-                          builder: (context, snapshot) => Text(snapshot.hasData
-                              ? formatNumber(snapshot.data)
-                              : '---'))
-                    ],
-                  ),
-                  VerticalDivider(),
-                  Column(
-                    children: [
-                      Text('Tracks'),
-                      FutureBuilder<int>(
-                          future: Lastfm.getNumTracks(username),
-                          builder: (context, snapshot) => Text(snapshot.hasData
-                              ? formatNumber(snapshot.data)
-                              : '---'))
-                    ],
-                  ),
-                ],
-              )),
+              CountsComponent(
+                scrobbles: user.playCount,
+                artists: Lastfm.getNumArtists(username),
+                albums: Lastfm.getNumAlbums(username),
+                tracks: Lastfm.getNumTracks(username),
+              ),
               SizedBox(height: 10),
               Expanded(
                   child: DefaultTabController(

@@ -1,3 +1,4 @@
+import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
@@ -59,10 +60,11 @@ class _WeeklyChartViewState extends State<WeeklyChartView> {
             : ListView(
                 children: [
                   SizedBox(height: 10),
-                  Text(
-                    '$_numScrobbles scrobbles',
-                    style: TextStyle(fontSize: 18),
-                    textAlign: TextAlign.center,
+                  CountsComponent(
+                    scrobbles: _numScrobbles,
+                    artists: Future.value(_artists.length),
+                    albums: Future.value(_albums.length),
+                    tracks: Future.value(_tracks.length),
                   ),
                   SizedBox(height: 10),
                   if (_tracks.isNotEmpty)
