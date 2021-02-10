@@ -16,7 +16,7 @@ import 'package:finale/views/weekly_chart_selector_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   final String username;
   final bool isTab;
 
@@ -24,9 +24,30 @@ class ProfileView extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<StatefulWidget> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  var _tab = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 6, vsync: this);
+
+    _tabController.addListener(() {
+      setState(() {
+        _tab = _tabController.index;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<LUser>(
-      future: Lastfm.getUser(username),
+      future: Lastfm.getUser(widget.username),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorComponent(error: snapshot.error);
@@ -40,12 +61,16 @@ class ProfileView extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: IntrinsicWidth(
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              ImageComponent(displayable: user, isCircular: true, width: 40),
-              SizedBox(width: 8),
-              Text(user.name)
-            ])),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ImageComponent(
+                      displayable: user, isCircular: true, width: 40),
+                  SizedBox(width: 8),
+                  Text(user.name),
+                ],
+              ),
+            ),
             actions: [
               IconButton(
                 icon: Icon(Icons.share),
@@ -53,14 +78,14 @@ class ProfileView extends StatelessWidget {
                   Share.share(user.url);
                 },
               ),
-              if (isTab)
+              if (widget.isTab)
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SettingsView()));
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsView()),
+                    );
                   },
                 )
             ],
@@ -69,70 +94,88 @@ class ProfileView extends StatelessWidget {
             children: [
               SizedBox(height: 10),
               Text('Scrobbling since ${user.registered.dateFormatted}'),
-              SizedBox(height: 10),
-              CountsComponent(
-                scrobbles: user.playCount,
-                artists: Lastfm.getNumArtists(username),
-                albums: Lastfm.getNumAlbums(username),
-                tracks: Lastfm.getNumTracks(username),
-              ),
-              SizedBox(height: 10),
+              Visibility(
+                  visible: _tab != 5,
+                  maintainState: true,
+                  child: Column(children: [
+                    SizedBox(height: 10),
+                    CountsComponent(
+                      scrobbles: user.playCount,
+                      artists: Lastfm.getNumArtists(widget.username),
+                      albums: Lastfm.getNumAlbums(widget.username),
+                      tracks: Lastfm.getNumTracks(widget.username),
+                    ),
+                    SizedBox(height: 10),
+                  ])),
               Expanded(
-                  child: DefaultTabController(
-                      length: 6,
-                      child: Column(children: [
-                        TabBar(
-                            labelColor: Colors.red,
-                            unselectedLabelColor: Colors.grey,
-                            indicatorColor: Colors.red,
-                            tabs: [
-                              Tab(icon: Icon(Icons.queue_music)),
-                              Tab(icon: Icon(Icons.people)),
-                              Tab(icon: Icon(Icons.album)),
-                              Tab(icon: Icon(Icons.audiotrack)),
-                              Tab(icon: Icon(Icons.person)),
-                              Tab(icon: Icon(Icons.access_time)),
-                            ]),
-                        Expanded(
-                            child: TabBarView(children: [
+                child: Column(
+                  children: [
+                    TabBar(
+                      controller: _tabController,
+                      labelColor: Colors.red,
+                      unselectedLabelColor: Colors.grey,
+                      indicatorColor: Colors.red,
+                      tabs: [
+                        Tab(icon: Icon(Icons.queue_music)),
+                        Tab(icon: Icon(Icons.people)),
+                        Tab(icon: Icon(Icons.album)),
+                        Tab(icon: Icon(Icons.audiotrack)),
+                        Tab(icon: Icon(Icons.person)),
+                        Tab(icon: Icon(Icons.access_time)),
+                      ],
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
                           DisplayComponent<LRecentTracksResponseTrack>(
-                            request: GetRecentTracksRequest(username),
+                            request: GetRecentTracksRequest(widget.username),
                             detailWidgetProvider: (track) =>
                                 TrackView(track: track),
                           ),
                           DisplayComponent<LTopArtistsResponseArtist>(
                             displayType: DisplayType.grid,
                             displayPeriodSelector: true,
-                            request: GetTopArtistsRequest(username),
+                            request: GetTopArtistsRequest(widget.username),
                             detailWidgetProvider: (artist) =>
                                 ArtistView(artist: artist),
                           ),
                           DisplayComponent<LTopAlbumsResponseAlbum>(
                             displayType: DisplayType.grid,
                             displayPeriodSelector: true,
-                            request: GetTopAlbumsRequest(username),
+                            request: GetTopAlbumsRequest(widget.username),
                             detailWidgetProvider: (album) =>
                                 AlbumView(album: album),
                           ),
                           DisplayComponent<LTopTracksResponseTrack>(
                             displayPeriodSelector: true,
-                            request: GetTopTracksRequest(username),
+                            request: GetTopTracksRequest(widget.username),
                             detailWidgetProvider: (track) =>
                                 TrackView(track: track),
                           ),
                           DisplayComponent<LUser>(
                             displayCircularImages: true,
-                            request: GetFriendsRequest(username),
+                            request: GetFriendsRequest(widget.username),
                             detailWidgetProvider: (user) =>
                                 ProfileView(username: user.name),
                           ),
                           WeeklyChartSelectorView(user: user),
-                        ]))
-                      ])))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
             ],
           ),
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
   }
 }
