@@ -42,7 +42,7 @@ abstract class Displayable {
 
   String get displayTrailing => null;
 
-  String get imageId => null;
+  String imageId;
 
   Future<String> get imageIdFuture => null;
 }

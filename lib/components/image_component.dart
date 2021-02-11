@@ -66,6 +66,7 @@ class ImageComponent extends StatelessWidget {
     final image = CachedNetworkImage(
         imageUrl: buildImageUrl(imageId, quality),
         placeholder: (context, url) => placeholder,
+        errorWidget: (context, url, error) => placeholder,
         fit: fit,
         width: width);
 
@@ -88,6 +89,7 @@ class ImageComponent extends StatelessWidget {
           final cachedImageId = snapshot.data;
 
           if (cachedImageId != null) {
+            displayable.imageId = cachedImageId;
             return _buildImage(context, cachedImageId);
           }
 
@@ -97,6 +99,7 @@ class ImageComponent extends StatelessWidget {
               if (snapshot.hasData) {
                 // TODO: Move this logic out of the Widget builder.
                 ImageIdCache().insert(displayable.url, snapshot.data);
+                displayable.imageId = snapshot.data;
               }
 
               return _buildImage(context, snapshot.data);
