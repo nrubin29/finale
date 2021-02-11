@@ -8,19 +8,20 @@ import 'package:flutter/material.dart';
 
 enum DisplayType { list, grid }
 
+typedef DetailWidgetProvider<T extends Displayable> = Widget Function(T item);
+
 class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final List<T> items;
   final PagedLastfmRequest<T> request;
   final Stream<PagedLastfmRequest<T>> requestStream;
 
-  final Widget Function(T item) detailWidgetProvider;
+  final DetailWidgetProvider<T> detailWidgetProvider;
   final void Function(T item) secondaryAction;
 
   final DisplayType displayType;
   final bool scrollable;
   final bool displayNumbers;
   final bool displayImages;
-  final bool displayPeriodSelector;
   final bool displayCircularImages;
 
   DisplayComponent(
@@ -34,19 +35,17 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.scrollable = true,
       this.displayNumbers = false,
       this.displayImages = true,
-      this.displayPeriodSelector = false,
       this.displayCircularImages = false})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DisplayComponentState<T>();
+  State<StatefulWidget> createState() => DisplayComponentState<T>();
 }
 
-class _DisplayComponentState<T extends Displayable>
+class DisplayComponentState<T extends Displayable>
     extends State<DisplayComponent<T>> with AutomaticKeepAliveClientMixin {
   var items = <T>[];
   var page = 1;
-  var period = '7day';
   var didInitialRequest = false;
   var hasMorePages = true;
 
@@ -74,23 +73,23 @@ class _DisplayComponentState<T extends Displayable>
 
     if (widget.request != null) {
       _request = widget.request;
-      _getInitialItems();
+      getInitialItems();
     } else {
       _subscription = widget.requestStream?.listen((newRequest) {
         setState(() {
           _request = newRequest;
-          _getInitialItems();
+          getInitialItems();
         });
       });
     }
   }
 
-  Future<void> _getInitialItems() async {
+  Future<void> getInitialItems() async {
     didInitialRequest = false;
     items = [];
 
     try {
-      final initialItems = await _request.doRequest(20, 1, period: period);
+      final initialItems = await _request.doRequest(20, 1);
       setState(() {
         items = initialItems;
         hasMorePages = initialItems.length >= 20;
@@ -111,7 +110,7 @@ class _DisplayComponentState<T extends Displayable>
     if (!hasMorePages) return;
 
     try {
-      final moreItems = await _request.doRequest(20, page, period: period);
+      final moreItems = await _request.doRequest(20, page);
       setState(() {
         items.addAll(moreItems);
         hasMorePages = moreItems.length >= 20;
@@ -280,41 +279,9 @@ class _DisplayComponentState<T extends Displayable>
     }
 
     return RefreshIndicator(
-        onRefresh: _getInitialItems,
-        child: widget.displayPeriodSelector
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(right: 10),
-                    child: DropdownButton<String>(
-                      value: period,
-                      items: {
-                        '7 days': '7day',
-                        '1 month': '1month',
-                        '3 months': '3month',
-                        '6 months': '6month',
-                        '12 months': '12month',
-                        'Overall': 'overall'
-                      }
-                          .entries
-                          .map((e) => DropdownMenuItem(
-                              value: e.value, child: Text(e.key)))
-                          .toList(),
-                      onChanged: (value) {
-                        if (value != period) {
-                          setState(() {
-                            period = value;
-                            _getInitialItems();
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  Expanded(child: _mainBuilder(context))
-                ],
-              )
-            : _mainBuilder(context));
+      onRefresh: getInitialItems,
+      child: _mainBuilder(context),
+    );
   }
 
   @override

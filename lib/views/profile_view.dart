@@ -3,6 +3,7 @@ import 'package:finale/components/display_component.dart';
 import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
+import 'package:finale/components/period_selector_component.dart';
 import 'package:finale/lastfm.dart';
 import 'package:finale/types/lalbum.dart';
 import 'package:finale/types/lartist.dart';
@@ -133,22 +134,19 @@ class _ProfileViewState extends State<ProfileView>
                             detailWidgetProvider: (track) =>
                                 TrackView(track: track),
                           ),
-                          DisplayComponent<LTopArtistsResponseArtist>(
+                          PeriodSelectorComponent<LTopArtistsResponseArtist>(
                             displayType: DisplayType.grid,
-                            displayPeriodSelector: true,
                             request: GetTopArtistsRequest(widget.username),
                             detailWidgetProvider: (artist) =>
                                 ArtistView(artist: artist),
                           ),
-                          DisplayComponent<LTopAlbumsResponseAlbum>(
+                          PeriodSelectorComponent<LTopAlbumsResponseAlbum>(
                             displayType: DisplayType.grid,
-                            displayPeriodSelector: true,
                             request: GetTopAlbumsRequest(widget.username),
                             detailWidgetProvider: (album) =>
                                 AlbumView(album: album),
                           ),
-                          DisplayComponent<LTopTracksResponseTrack>(
-                            displayPeriodSelector: true,
+                          PeriodSelectorComponent<LTopTracksResponseTrack>(
                             request: GetTopTracksRequest(widget.username),
                             detailWidgetProvider: (track) =>
                                 TrackView(track: track),

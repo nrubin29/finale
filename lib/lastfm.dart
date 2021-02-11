@@ -58,7 +58,7 @@ Future<Map<String, dynamic>> _doRequest(
 }
 
 abstract class PagedLastfmRequest<T> {
-  Future<List<T>> doRequest(int limit, int page, {String period});
+  Future<List<T>> doRequest(int limit, int page);
 }
 
 class GetRecentTracksRequest
@@ -68,7 +68,7 @@ class GetRecentTracksRequest
   GetRecentTracksRequest(this.username);
 
   @override
-  doRequest(int limit, int page, {String period}) async {
+  doRequest(int limit, int page) async {
     final rawResponse = await _doRequest('user.getRecentTracks',
         {'user': username, 'limit': limit, 'page': page});
     final tracks =
@@ -92,7 +92,10 @@ class GetTopArtistsRequest
   GetTopArtistsRequest(this.username);
 
   @override
-  doRequest(int limit, int page, {String period}) async {
+  doRequest(int limit, int page) async {
+    final period =
+        (await SharedPreferences.getInstance()).getString('period') ?? '7day';
+
     final rawResponse = await _doRequest('user.getTopArtists',
         {'user': username, 'limit': limit, 'page': page, 'period': period});
     return LTopArtistsResponseTopArtists.fromJson(rawResponse['topartists'])
@@ -106,7 +109,10 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
   GetTopAlbumsRequest(this.username);
 
   @override
-  doRequest(int limit, int page, {String period}) async {
+  doRequest(int limit, int page) async {
+    final period =
+        (await SharedPreferences.getInstance()).getString('period') ?? '7day';
+
     final rawResponse = await _doRequest('user.getTopAlbums',
         {'user': username, 'limit': limit, 'page': page, 'period': period});
     return LTopAlbumsResponseTopAlbums.fromJson(rawResponse['topalbums'])
@@ -120,7 +126,10 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
   GetTopTracksRequest(this.username);
 
   @override
-  doRequest(int limit, int page, {String period}) async {
+  doRequest(int limit, int page) async {
+    final period =
+        (await SharedPreferences.getInstance()).getString('period') ?? '7day';
+
     final rawResponse = await _doRequest('user.getTopTracks',
         {'user': username, 'limit': limit, 'page': page, 'period': period});
     return LTopTracksResponseTopTracks.fromJson(rawResponse['toptracks'])
@@ -134,7 +143,7 @@ class GetFriendsRequest extends PagedLastfmRequest<LUser> {
   GetFriendsRequest(this.username);
 
   @override
-  doRequest(int limit, int page, {String period}) async {
+  doRequest(int limit, int page) async {
     final rawResponse = await _doRequest(
         'user.getFriends', {'user': username, 'limit': limit, 'page': page});
     return LUserFriendsResponse.fromJson(rawResponse['friends']).friends;
@@ -147,8 +156,7 @@ class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
   SearchTracksRequest(this.query);
 
   @override
-  Future<List<LTrackMatch>> doRequest(int limit, int page,
-      {String period}) async {
+  Future<List<LTrackMatch>> doRequest(int limit, int page) async {
     final rawResponse = await _doRequest(
         'track.search', {'track': query, 'limit': limit, 'page': page});
     return LTrackSearchResponse.fromJson(rawResponse['results']['trackmatches'])
@@ -162,8 +170,7 @@ class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
   SearchArtistsRequest(this.query);
 
   @override
-  Future<List<LArtistMatch>> doRequest(int limit, int page,
-      {String period}) async {
+  Future<List<LArtistMatch>> doRequest(int limit, int page) async {
     final rawResponse = await _doRequest(
         'artist.search', {'artist': query, 'limit': limit, 'page': page});
     return LArtistSearchResponse.fromJson(
@@ -178,8 +185,7 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
   SearchAlbumsRequest(this.query);
 
   @override
-  Future<List<LAlbumMatch>> doRequest(int limit, int page,
-      {String period}) async {
+  Future<List<LAlbumMatch>> doRequest(int limit, int page) async {
     final rawResponse = await _doRequest(
         'album.search', {'album': query, 'limit': limit, 'page': page});
     return LAlbumSearchResponse.fromJson(rawResponse['results']['albummatches'])
@@ -193,8 +199,7 @@ class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
   ArtistGetTopAlbumsRequest(this.artist);
 
   @override
-  Future<List<LArtistTopAlbum>> doRequest(int limit, int page,
-      {String period}) async {
+  Future<List<LArtistTopAlbum>> doRequest(int limit, int page) async {
     final rawResponse = await _doRequest('artist.getTopAlbums',
         {'artist': artist, 'limit': limit, 'page': page});
     return LArtistGetTopAlbumsResponse.fromJson(rawResponse['topalbums'])
@@ -208,8 +213,7 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
   ArtistGetTopTracksRequest(this.artist);
 
   @override
-  Future<List<LArtistTopTrack>> doRequest(int limit, int page,
-      {String period}) async {
+  Future<List<LArtistTopTrack>> doRequest(int limit, int page) async {
     final rawResponse = await _doRequest('artist.getTopTracks',
         {'artist': artist, 'limit': limit, 'page': page});
     return LArtistGetTopTracksResponse.fromJson(rawResponse['toptracks'])
