@@ -21,8 +21,7 @@ class ProfileView extends StatefulWidget {
   final String username;
   final bool isTab;
 
-  ProfileView({Key key, @required this.username, this.isTab = false})
-      : super(key: key);
+  ProfileView({@required this.username, this.isTab = false});
 
   @override
   State<StatefulWidget> createState() => _ProfileViewState();

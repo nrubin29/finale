@@ -18,11 +18,10 @@ class PeriodSelectorComponent<T extends Displayable> extends StatefulWidget {
   final DetailWidgetProvider<T> detailWidgetProvider;
 
   PeriodSelectorComponent({
-    Key key,
     this.displayType = DisplayType.list,
     this.request,
     this.detailWidgetProvider,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _PeriodSelectorComponentState<T>();

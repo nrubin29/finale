@@ -19,7 +19,7 @@ import 'package:share/share.dart';
 class AlbumView extends StatelessWidget {
   final BasicAlbum album;
 
-  AlbumView({Key key, @required this.album}) : super(key: key);
+  AlbumView({@required this.album});
 
   @override
   Widget build(BuildContext context) {

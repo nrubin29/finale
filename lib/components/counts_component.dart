@@ -8,12 +8,11 @@ class CountsComponent extends StatelessWidget {
   final Future<int> tracks;
 
   CountsComponent({
-    Key key,
     @required this.scrobbles,
     @required this.artists,
     @required this.albums,
     @required this.tracks,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => IntrinsicHeight(

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class WeeklyChartSelectorView extends StatefulWidget {
   final LUser user;
 
-  WeeklyChartSelectorView({Key key, @required this.user}) : super(key: key);
+  WeeklyChartSelectorView({@required this.user});
 
   @override
   State<StatefulWidget> createState() => _WeeklyChartSelectorViewState();

@@ -18,7 +18,7 @@ import 'package:share/share.dart';
 class TrackView extends StatefulWidget {
   final BasicTrack track;
 
-  TrackView({Key key, @required this.track}) : super(key: key);
+  TrackView({@required this.track});
 
   @override
   State<StatefulWidget> createState() => _TrackViewState();

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class TagsComponent extends StatelessWidget {
   final LTopTags topTags;
 
-  TagsComponent({Key key, @required this.topTags}) : super(key: key);
+  TagsComponent({@required this.topTags});
 
   @override
   Widget build(BuildContext context) {

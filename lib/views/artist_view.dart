@@ -17,7 +17,7 @@ import 'package:share/share.dart';
 class ArtistView extends StatefulWidget {
   final BasicArtist artist;
 
-  ArtistView({Key key, @required this.artist}) : super(key: key);
+  ArtistView({@required this.artist});
 
   @override
   State<StatefulWidget> createState() => _ArtistViewState();

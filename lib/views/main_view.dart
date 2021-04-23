@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class MainView extends StatefulWidget {
   final String username;
 
-  MainView({Key key, this.username}) : super(key: key);
+  MainView({this.username});
 
   @override
   State<StatefulWidget> createState() => _MainViewState();

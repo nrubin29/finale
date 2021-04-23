@@ -12,7 +12,7 @@ class ScrobbleView extends StatefulWidget {
   final FullTrack track;
   final bool isModal;
 
-  ScrobbleView({Key key, this.track, this.isModal = false}) : super(key: key);
+  ScrobbleView({this.track, this.isModal = false});
 
   @override
   State<StatefulWidget> createState() => _ScrobbleViewState();

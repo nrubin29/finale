@@ -15,7 +15,7 @@ enum ScrobbleTimestampBehavior {
 class ScrobbleAlbumView extends StatefulWidget {
   final FullAlbum album;
 
-  ScrobbleAlbumView({Key key, this.album}) : super(key: key);
+  ScrobbleAlbumView({this.album});
 
   @override
   State<StatefulWidget> createState() => _ScrobbleAlbumViewState();

@@ -40,13 +40,12 @@ class ImageComponent extends StatelessWidget {
   };
 
   ImageComponent({
-    Key key,
     @required this.displayable,
     this.quality = ImageQuality.high,
     this.fit,
     this.width,
     this.isCircular = false,
-  }) : super(key: key);
+  });
 
   Widget _buildCircularImage(BuildContext context, Widget image) => Container(
       width: width,

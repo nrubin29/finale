@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class WikiComponent extends StatelessWidget {
   final LWiki wiki;
 
-  WikiComponent({Key key, @required this.wiki}) : super(key: key);
+  WikiComponent({@required this.wiki});
 
   Widget _buildPage(BuildContext context) => Scaffold(
       appBar: AppBar(centerTitle: true, title: Text('Wiki')),
