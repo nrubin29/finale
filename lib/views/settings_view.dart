@@ -35,7 +35,7 @@ class SettingsView extends StatelessWidget {
                                   title: Text('Success'),
                                   content: Text('Image cache emptied.'),
                                   actions: [
-                                    FlatButton(
+                                    TextButton(
                                         child: Text('Dismiss'),
                                         onPressed: () => Navigator.pop(context))
                                   ],

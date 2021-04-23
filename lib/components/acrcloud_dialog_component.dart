@@ -70,7 +70,7 @@ class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
       title: Text(results != null ? 'Results' : 'Listening...'),
       content: results != null ? _buildResultsList(context) : null,
       actions: [
-        FlatButton(
+        TextButton(
             child: Text('Cancel'),
             onPressed: results != null
                 ? () => Navigator.pop(

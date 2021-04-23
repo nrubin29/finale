@@ -96,9 +96,11 @@ class LoginView extends StatelessWidget {
                                 .subtitle1
                                 .copyWith(color: Colors.white)),
                         SizedBox(height: 10),
-                        FlatButton(
+                        TextButton(
                           onPressed: () => _logIn(context),
-                          color: Colors.red,
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.red)),
                           child: Text('Log in with Last.fm',
                               style: Theme.of(context)
                                   .textTheme

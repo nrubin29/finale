@@ -114,13 +114,15 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                   children: [
                     if (!widget.isModal)
                       Builder(
-                          builder: (context) => OutlineButton(
-                              padding: EdgeInsets.zero,
-                              borderSide: BorderSide(color: Colors.red),
+                          builder: (context) => OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                side: BorderSide(color: Colors.red),
+                              ),
                               child: ListTile(
                                 contentPadding: EdgeInsets.only(left: 12),
                                 title: Text('Tap to recognize'),
-                                trailing: FlatButton(
+                                trailing: TextButton(
                                     child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
