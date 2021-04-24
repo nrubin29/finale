@@ -130,6 +130,9 @@ abstract class BasicAlbum extends Displayable {
 
 abstract class FullAlbum extends BasicAlbum {
   List<BasicScrobbleableTrack> get tracks;
+
+  bool get canScrobble =>
+      tracks.every((track) => track.duration != null && track.duration > 0);
 }
 
 abstract class BasicScrobbledAlbum extends BasicAlbum {

@@ -108,8 +108,7 @@ class _SearchViewState extends State<SearchView> {
                                 content: Text(
                                     'This album doesn\'t have any tracks')));
                             return;
-                          } else if (!fullAlbum.tracks.every((track) =>
-                              track.duration != null && track.duration > 0)) {
+                          } else if (!fullAlbum.canScrobble) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                     'Can\'t scrobble album because Last.fm is missing track duration data')));

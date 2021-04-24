@@ -53,25 +53,26 @@ class AlbumView extends StatelessWidget {
                     Share.share(album.url);
                   },
                 ),
-                Builder(
-                  builder: (context) => IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () async {
-                      final result = await showBarModalBottomSheet<bool>(
-                          context: context,
-                          duration: Duration(milliseconds: 200),
-                          builder: (context) =>
-                              ScrobbleAlbumView(album: album));
+                if (album.canScrobble)
+                  Builder(
+                    builder: (context) => IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () async {
+                        final result = await showBarModalBottomSheet<bool>(
+                            context: context,
+                            duration: Duration(milliseconds: 200),
+                            builder: (context) =>
+                                ScrobbleAlbumView(album: album));
 
-                      if (result != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(result
-                                ? 'Scrobbled successfully!'
-                                : 'An error occurred while scrobbling')));
-                      }
-                    },
-                  ),
-                )
+                        if (result != null) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(result
+                                  ? 'Scrobbled successfully!'
+                                  : 'An error occurred while scrobbling')));
+                        }
+                      },
+                    ),
+                  )
               ],
             ),
             body: ListView(
