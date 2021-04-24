@@ -139,7 +139,7 @@ class AlbumView extends StatelessWidget {
                     scrollable: false,
                     displayNumbers: true,
                     displayImages: false,
-                    detailWidgetProvider: (track) => TrackView(track: track),
+                    detailWidgetBuilder: (track) => TrackView(track: track),
                   ),
               ],
             ));

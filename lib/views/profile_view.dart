@@ -4,6 +4,7 @@ import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/period_selector_component.dart';
+import 'package:finale/components/play_count_bar_component.dart';
 import 'package:finale/lastfm.dart';
 import 'package:finale/types/lalbum.dart';
 import 'package:finale/types/lartist.dart';
@@ -130,30 +131,36 @@ class _ProfileViewState extends State<ProfileView>
                         children: [
                           DisplayComponent<LRecentTracksResponseTrack>(
                             request: GetRecentTracksRequest(widget.username),
-                            detailWidgetProvider: (track) =>
+                            detailWidgetBuilder: (track) =>
                                 TrackView(track: track),
                           ),
                           PeriodSelectorComponent<LTopArtistsResponseArtist>(
                             displayType: DisplayType.grid,
                             request: GetTopArtistsRequest(widget.username),
-                            detailWidgetProvider: (artist) =>
+                            detailWidgetBuilder: (artist) =>
                                 ArtistView(artist: artist),
+                            subtitleWidgetBuilder: (item, items) =>
+                                PlayCountBarComponent(item, items),
                           ),
                           PeriodSelectorComponent<LTopAlbumsResponseAlbum>(
                             displayType: DisplayType.grid,
                             request: GetTopAlbumsRequest(widget.username),
-                            detailWidgetProvider: (album) =>
+                            detailWidgetBuilder: (album) =>
                                 AlbumView(album: album),
+                            subtitleWidgetBuilder: (item, items) =>
+                                PlayCountBarComponent(item, items),
                           ),
                           PeriodSelectorComponent<LTopTracksResponseTrack>(
                             request: GetTopTracksRequest(widget.username),
-                            detailWidgetProvider: (track) =>
+                            detailWidgetBuilder: (track) =>
                                 TrackView(track: track),
+                            subtitleWidgetBuilder: (item, items) =>
+                                PlayCountBarComponent(item, items),
                           ),
                           DisplayComponent<LUser>(
                             displayCircularImages: true,
                             request: GetFriendsRequest(widget.username),
-                            detailWidgetProvider: (user) =>
+                            detailWidgetBuilder: (user) =>
                                 ProfileView(username: user.name),
                           ),
                           WeeklyChartSelectorView(user: user),

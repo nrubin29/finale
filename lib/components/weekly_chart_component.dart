@@ -105,7 +105,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
                         appBar: AppBar(title: Text('Top Tracks')),
                         body: DisplayComponent<LUserWeeklyTrackChartTrack>(
                           items: _tracks,
-                          detailWidgetProvider: (track) =>
+                          detailWidgetBuilder: (track) =>
                               TrackView(track: track),
                         ),
                       ),
@@ -147,7 +147,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
                         body: DisplayComponent<LUserWeeklyAlbumChartAlbum>(
                           items: _albums,
                           displayType: DisplayType.grid,
-                          detailWidgetProvider: (album) =>
+                          detailWidgetBuilder: (album) =>
                               AlbumView(album: album),
                         ),
                       ),
@@ -190,7 +190,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
                         body: DisplayComponent<LUserWeeklyArtistChartArtist>(
                           items: _artists,
                           displayType: DisplayType.grid,
-                          detailWidgetProvider: (artist) =>
+                          detailWidgetBuilder: (artist) =>
                               ArtistView(artist: artist),
                         ),
                       ),

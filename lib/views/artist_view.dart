@@ -127,7 +127,7 @@ class _ArtistViewState extends State<ArtistView>
                     child: DisplayComponent<LArtistTopAlbum>(
                         scrollable: false,
                         request: ArtistGetTopAlbumsRequest(artist.name),
-                        detailWidgetProvider: (album) =>
+                        detailWidgetBuilder: (album) =>
                             AlbumView(album: album)),
                   ),
                   Visibility(
@@ -136,7 +136,7 @@ class _ArtistViewState extends State<ArtistView>
                     child: DisplayComponent<LArtistTopTrack>(
                         scrollable: false,
                         request: ArtistGetTopTracksRequest(artist.name),
-                        detailWidgetProvider: (track) =>
+                        detailWidgetBuilder: (track) =>
                             TrackView(track: track)),
                   ),
                 ])

@@ -88,7 +88,7 @@ class _SearchViewState extends State<SearchView> {
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
                             .map((query) => SearchTracksRequest(query)),
-                        detailWidgetProvider: (track) =>
+                        detailWidgetBuilder: (track) =>
                             TrackView(track: track)),
                     DisplayComponent<LArtistMatch>(
                         displayType: DisplayType.grid,
@@ -97,7 +97,7 @@ class _SearchViewState extends State<SearchView> {
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
                             .map((query) => SearchArtistsRequest(query)),
-                        detailWidgetProvider: (artist) =>
+                        detailWidgetBuilder: (artist) =>
                             ArtistView(artist: artist)),
                     DisplayComponent<LAlbumMatch>(
                         secondaryAction: (item) async {
@@ -134,7 +134,7 @@ class _SearchViewState extends State<SearchView> {
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
                             .map((query) => SearchAlbumsRequest(query)),
-                        detailWidgetProvider: (album) =>
+                        detailWidgetBuilder: (album) =>
                             AlbumView(album: album)),
                   ]
                 : [Container(), Container(), Container()],

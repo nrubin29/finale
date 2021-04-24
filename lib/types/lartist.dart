@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'lartist.g.dart';
 
 @JsonSerializable()
-class LTopArtistsResponseArtist extends BasicScrobbledArtist {
+class LTopArtistsResponseArtist extends BasicScrobbledArtist with HasPlayCount {
   String name;
   String url;
 

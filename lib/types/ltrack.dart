@@ -180,7 +180,7 @@ class LTrack extends FullTrack {
 }
 
 @JsonSerializable()
-class LTopTracksResponseTrack extends BasicTrack {
+class LTopTracksResponseTrack extends BasicTrack with HasPlayCount {
   String name;
   String url;
 

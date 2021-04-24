@@ -47,6 +47,10 @@ abstract class Displayable {
   Future<String> get imageIdFuture => null;
 }
 
+mixin HasPlayCount on Displayable {
+  int get playCount;
+}
+
 abstract class BasicTrack extends Displayable {
   String get name;
 

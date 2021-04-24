@@ -16,7 +16,7 @@ class LTopAlbumsResponseAlbumArtist extends BasicArtist {
 }
 
 @JsonSerializable()
-class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum {
+class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
   String name;
   String url;
 

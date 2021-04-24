@@ -15,12 +15,14 @@ class PeriodSelectorComponent<T extends Displayable> extends StatefulWidget {
 
   final DisplayType displayType;
   final PagedLastfmRequest<T> request;
-  final DetailWidgetProvider<T> detailWidgetProvider;
+  final DisplayableWidgetBuilder<T> detailWidgetBuilder;
+  final DisplayableAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
 
   PeriodSelectorComponent({
     this.displayType = DisplayType.list,
     this.request,
-    this.detailWidgetProvider,
+    this.detailWidgetBuilder,
+    this.subtitleWidgetBuilder,
   });
 
   @override
@@ -116,7 +118,8 @@ class _PeriodSelectorComponentState<T extends Displayable>
               key: _displayComponentKey,
               displayType: _displayType,
               request: widget.request,
-              detailWidgetProvider: widget.detailWidgetProvider,
+              detailWidgetBuilder: widget.detailWidgetBuilder,
+              subtitleWidgetBuilder: widget.subtitleWidgetBuilder,
             ),
           ),
         ],

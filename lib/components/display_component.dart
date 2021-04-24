@@ -8,14 +8,19 @@ import 'package:flutter/material.dart';
 
 enum DisplayType { list, grid }
 
-typedef DetailWidgetProvider<T extends Displayable> = Widget Function(T item);
+typedef DisplayableWidgetBuilder<T extends Displayable> = Widget Function(
+    T item);
+
+typedef DisplayableAndItemsWidgetBuilder<T extends Displayable> = Widget
+    Function(T item, List<T> items);
 
 class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final List<T> items;
   final PagedLastfmRequest<T> request;
   final Stream<PagedLastfmRequest<T>> requestStream;
 
-  final DetailWidgetProvider<T> detailWidgetProvider;
+  final DisplayableWidgetBuilder<T> detailWidgetBuilder;
+  final DisplayableAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
   final void Function(T item) secondaryAction;
 
   final DisplayType displayType;
@@ -29,7 +34,8 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.items,
       this.request,
       this.requestStream,
-      this.detailWidgetProvider,
+      this.detailWidgetBuilder,
+      this.subtitleWidgetBuilder,
       this.secondaryAction,
       this.displayType = DisplayType.list,
       this.scrollable = true,
@@ -128,11 +134,11 @@ class DisplayComponentState<T extends Displayable>
   }
 
   void _onTap(T item) {
-    if (widget.detailWidgetProvider != null) {
+    if (widget.detailWidgetBuilder != null) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => widget.detailWidgetProvider(item)));
+              builder: (context) => widget.detailWidgetBuilder(item)));
     }
   }
 
@@ -145,8 +151,17 @@ class DisplayComponentState<T extends Displayable>
       onTap: () {
         _onTap(item);
       },
-      subtitle:
-          item.displaySubtitle != null ? Text(item.displaySubtitle) : null,
+      subtitle: item.displaySubtitle != null ||
+              widget.subtitleWidgetBuilder != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (item.displaySubtitle != null) Text(item.displaySubtitle),
+                if (widget.subtitleWidgetBuilder != null)
+                  widget.subtitleWidgetBuilder(item, items),
+              ],
+            )
+          : null,
       leading: widget.displayImages
           ? ImageComponent(
               displayable: item,
@@ -225,7 +240,7 @@ class DisplayComponentState<T extends Displayable>
   }
 
   Widget _gridItemBuilder(BuildContext context, int index) {
-    if (widget.detailWidgetProvider != null) {
+    if (widget.detailWidgetBuilder != null) {
       return InkWell(
           onTap: () {
             _onTap(items[index]);
