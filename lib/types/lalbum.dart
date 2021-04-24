@@ -85,7 +85,7 @@ class LAlbumTrack extends BasicScrobbleableTrack {
   String name;
   String url;
 
-  @JsonKey(fromJson: int.parse)
+  @JsonKey(fromJson: intParseSafe)
   int duration;
 
   String album;

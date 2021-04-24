@@ -149,15 +149,19 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
                                   initialTime: TimeOfDay.fromDateTime(
                                       currentValue ?? DateTime.now()));
 
-                              return DateTimeField.combine(date, time);
+                              if (time != null) {
+                                return DateTimeField.combine(date, time);
+                              }
                             }
 
                             return currentValue;
                           },
-                          onChanged: (datetime) {
-                            setState(() {
-                              _customTimestamp = datetime;
-                            });
+                          onChanged: (dateTime) {
+                            if (dateTime != null) {
+                              setState(() {
+                                _customTimestamp = dateTime;
+                              });
+                            }
                           }),
                     ),
                   ],

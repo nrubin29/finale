@@ -31,9 +31,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   @override
   void initState() {
     super.initState();
-    _trackController.text = widget.track?.name;
-    _artistController.text = widget.track?.artist?.name;
-    _albumController.text = widget.track?.album?.name;
+    _trackController.text = widget.track?.name ?? '';
+    _artistController.text = widget.track?.artist?.name ?? '';
+    _albumController.text = widget.track?.album?.name ?? '';
 
     if (!widget.isModal) {
       ACRCloud.setUp(ACRCloudConfig(
@@ -42,7 +42,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   }
 
   String _required(String value) {
-    if (value.isEmpty) {
+    if (value?.isEmpty ?? true) {
       return 'Required';
     }
 
@@ -100,7 +100,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 builder: (context) => IconButton(
                     icon: Icon(Icons.add),
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState?.validate() ?? false) {
                         _scrobble(context);
                       }
                     }))
@@ -146,7 +146,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                                         builder: (context) =>
                                             ACRCloudDialogComponent());
 
-                                if (result.wasCancelled) return;
+                                if (result?.wasCancelled ?? true) return;
 
                                 if (result.track != null) {
                                   setState(() {
@@ -215,15 +215,19 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                                   initialTime: TimeOfDay.fromDateTime(
                                       currentValue ?? DateTime.now()));
 
-                              return DateTimeField.combine(date, time);
+                              if (time != null) {
+                                return DateTimeField.combine(date, time);
+                              }
                             }
 
                             return currentValue;
                           },
-                          onChanged: (datetime) {
-                            setState(() {
-                              _customTimestamp = datetime;
-                            });
+                          onChanged: (dateTime) {
+                            if (dateTime != null) {
+                              setState(() {
+                                _customTimestamp = dateTime;
+                              });
+                            }
                           }),
                     ),
                   ],

@@ -44,7 +44,8 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
     final tracks = (data[0] as LUserWeeklyTrackChart).tracks;
     final albums = (data[1] as LUserWeeklyAlbumChart).albums;
     final artists = (data[2] as LUserWeeklyArtistChart).artists;
-    final numScrobbles = tracks.fold(0, (sum, track) => sum + track.playCount);
+    final numScrobbles =
+        tracks.fold<int>(0, (sum, track) => sum + (track.playCount ?? 0));
 
     // The user can change charts before the Future resolves, so we should only
     // update the state if this component is still in the tree.

@@ -47,10 +47,11 @@ class _TrackViewState extends State<TrackView> {
               title: Column(
                 children: [
                   Text(track.name),
-                  Text(
-                    track.artist.name,
-                    style: TextStyle(fontSize: 12),
-                  )
+                  if (track.artist != null)
+                    Text(
+                      track.artist.name,
+                      style: TextStyle(fontSize: 12),
+                    )
                 ],
               ),
               actions: [
@@ -157,7 +158,8 @@ class _TrackViewState extends State<TrackView> {
                   ListTile(
                     leading: ImageComponent(displayable: track.album),
                     title: Text(track.album.name),
-                    subtitle: Text(track.artist.name),
+                    subtitle:
+                        track.artist != null ? Text(track.artist.name) : null,
                     trailing: Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.push(

@@ -171,7 +171,7 @@ class LUserWeeklyTrackChartTrack extends BasicTrack {
   String get artist => artistObject.name;
 
   @override
-  String get displayTrailing => Intl.plural(playCount,
+  String get displayTrailing => Intl.plural(playCount ?? 0,
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
@@ -233,7 +233,7 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
       _$LUserWeeklyAlbumChartAlbumFromJson(json);
 
   @override
-  String get displayTrailing => Intl.plural(playCount,
+  String get displayTrailing => Intl.plural(playCount ?? 0,
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
@@ -282,7 +282,7 @@ class LUserWeeklyArtistChartArtist extends BasicArtist {
       _$LUserWeeklyArtistChartArtistFromJson(json);
 
   @override
-  String get displayTrailing => Intl.plural(playCount,
+  String get displayTrailing => Intl.plural(playCount ?? 0,
       one: '$playCount scrobble', other: '$playCount scrobbles');
 }
 

@@ -35,7 +35,7 @@ class _SearchViewState extends State<SearchView> {
                     hintStyle: TextStyle(color: Colors.white)),
                 onChanged: (text) {
                   setState(() {
-                    _query.value = text;
+                    _query.add(text);
                   });
                 },
               ),
@@ -51,7 +51,7 @@ class _SearchViewState extends State<SearchView> {
                       onPressed: () {
                         setState(() {
                           _textController.value = TextEditingValue.empty;
-                          _query.value = '';
+                          _query.add('');
                         });
                       },
                     ))

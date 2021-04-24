@@ -53,7 +53,9 @@ class LoginView extends StatelessWidget {
                           future: ArtistGetTopAlbumsRequest(artist.name)
                               .doRequest(1, 1),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData || snapshot.data.isEmpty) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.isEmpty ||
+                                snapshot.data.first.imageId == null) {
                               return SizedBox();
                             }
 

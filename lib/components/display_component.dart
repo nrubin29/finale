@@ -36,7 +36,8 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.displayNumbers = false,
       this.displayImages = true,
       this.displayCircularImages = false})
-      : super(key: key);
+      : assert(items != null || request != null || requestStream != null),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() => DisplayComponentState<T>();

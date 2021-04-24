@@ -185,7 +185,7 @@ class LTopTracksResponseTrack extends BasicTrack {
   String url;
 
   @JsonKey(name: 'artist')
-  LRecentTracksResponseTrack artistObject;
+  LTrackArtist artistObject;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
   int playCount;

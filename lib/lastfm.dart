@@ -222,7 +222,7 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
 }
 
 class Lastfm {
-  static Future<Response> get(String url) => _client.get(url);
+  static Future<Response> get(String url) => _client.get(Uri.parse(url));
 
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
@@ -336,7 +336,7 @@ class Lastfm {
     data['sk'] = (await SharedPreferences.getInstance()).getString('key');
 
     tracks.asMap().forEach((i, track) {
-      if (track.album.isNotEmpty) {
+      if (track.album?.isNotEmpty ?? false) {
         data['album[$i]'] = track.album;
       }
 
@@ -354,6 +354,10 @@ class Lastfm {
   /// Loves or unloves a track. If [love] is true, the track will be loved;
   /// otherwise, it will be unloved.
   static Future<bool> love(FullTrack track, bool love) async {
+    if (track.artist == null) {
+      return false;
+    }
+
     await _doRequest(
         love ? 'track.love' : 'track.unlove',
         {

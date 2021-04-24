@@ -37,7 +37,7 @@ class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
           results = result.metadata.music;
         });
       } else {
-        Navigator.pop(context, ACRCloudDialogResult(track: null));
+        Navigator.pop(context, ACRCloudDialogResult());
       }
     });
   }

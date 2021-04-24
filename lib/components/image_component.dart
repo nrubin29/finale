@@ -76,6 +76,8 @@ class ImageComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     if (displayable.imageId != null) {
       return _buildImage(context, displayable.imageId);
+    } else if (displayable.url == null) {
+      return _buildImage(context, null);
     }
 
     return FutureBuilder<String>(
