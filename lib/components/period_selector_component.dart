@@ -38,6 +38,7 @@ class _PeriodSelectorComponentState<T extends Displayable>
     'Overall': 'overall'
   };
 
+  DisplayType _displayType;
   String _period;
 
   final _displayComponentKey = GlobalKey<DisplayComponentState>();
@@ -46,6 +47,8 @@ class _PeriodSelectorComponentState<T extends Displayable>
   @override
   void initState() {
     super.initState();
+
+    _displayType = widget.displayType;
 
     _periodChangeSubscription =
         PeriodSelectorComponent._periodChange.listen((value) {
@@ -69,31 +72,49 @@ class _PeriodSelectorComponentState<T extends Displayable>
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: DropdownButton<String>(
-              value: _period,
-              items: _periods.entries
-                  .map((e) => DropdownMenuItem(
-                        value: e.value,
-                        child: Text(e.key),
-                      ))
-                  .toList(),
-              onChanged: (value) async {
-                if (value != _period) {
-                  final sharedPrefs = await SharedPreferences.getInstance();
-                  await sharedPrefs.setString('period', value);
-                  PeriodSelectorComponent._periodChange.add(value);
-                }
-              },
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                DropdownButton<DisplayType>(
+                    value: _displayType,
+                    items: DisplayType.values
+                        .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Icon(e == DisplayType.grid
+                                ? Icons.grid_view
+                                : Icons.list)))
+                        .toList(growable: false),
+                    onChanged: (value) {
+                      setState(() {
+                        _displayType = value;
+                      });
+                    }),
+                DropdownButton<String>(
+                  value: _period,
+                  items: _periods.entries
+                      .map((e) => DropdownMenuItem(
+                            value: e.value,
+                            child: Text(e.key),
+                          ))
+                      .toList(growable: false),
+                  onChanged: (value) async {
+                    if (value != _period) {
+                      final sharedPrefs = await SharedPreferences.getInstance();
+                      await sharedPrefs.setString('period', value);
+                      PeriodSelectorComponent._periodChange.add(value);
+                    }
+                  },
+                ),
+              ],
             ),
           ),
           Expanded(
             child: DisplayComponent<T>(
               key: _displayComponentKey,
-              displayType: widget.displayType,
+              displayType: _displayType,
               request: widget.request,
               detailWidgetProvider: widget.detailWidgetProvider,
             ),
