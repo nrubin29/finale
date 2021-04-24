@@ -80,20 +80,20 @@ class _PeriodSelectorComponentState<T extends Displayable>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                DropdownButton<DisplayType>(
-                    value: _displayType,
-                    items: DisplayType.values
-                        .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Icon(e == DisplayType.grid
-                                ? Icons.grid_view
-                                : Icons.list)))
-                        .toList(growable: false),
-                    onChanged: (value) {
-                      setState(() {
-                        _displayType = value;
-                      });
-                    }),
+                IntrinsicWidth(
+                    child: DefaultTabController(
+                  length: 2,
+                  initialIndex: _displayType.index,
+                  child: TabBar(
+                      labelColor: Colors.red,
+                      unselectedLabelColor: Colors.grey,
+                      tabs: [Icon(Icons.list), Icon(Icons.grid_view)],
+                      onTap: (index) {
+                        setState(() {
+                          _displayType = DisplayType.values[index];
+                        });
+                      }),
+                )),
                 DropdownButton<String>(
                   value: _period,
                   items: _periods.entries
