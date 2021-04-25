@@ -29,6 +29,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final bool displayNumbers;
   final bool displayImages;
   final bool displayCircularImages;
+  final bool showNoResultsMessage;
 
   DisplayComponent(
       {Key key,
@@ -43,7 +44,8 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.scrollable = true,
       this.displayNumbers = false,
       this.displayImages = true,
-      this.displayCircularImages = false})
+      this.displayCircularImages = false,
+      this.showNoResultsMessage = true})
       : assert(items != null || request != null || requestStream != null),
         super(key: key);
 
@@ -258,7 +260,12 @@ class DisplayComponentState<T extends Displayable>
   Widget _mainBuilder(BuildContext context) {
     if (items.isEmpty) {
       // The Stack is a hack to make the RefreshIndicator work.
-      return Stack(children: [ListView(), Center(child: Text("No results."))]);
+      return Stack(children: [
+        ListView(),
+        widget.showNoResultsMessage
+            ? Center(child: Text("No results."))
+            : SizedBox()
+      ]);
     }
 
     return CustomScrollView(

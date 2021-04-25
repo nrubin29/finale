@@ -17,7 +17,8 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
         super(name, artist, album);
 
   ListenContinuouslyTrack.noResults()
-      : this('No results', null, null, ListenContinuouslyTrackStatus.noResults);
+      : this('No music detected', null, null,
+            ListenContinuouslyTrackStatus.noResults);
 
   bool get hasResult =>
       status == ListenContinuouslyTrackStatus.scrobbled ||
@@ -100,14 +101,15 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text('Listen Continuously')),
+        appBar: AppBar(title: Text('Listening Continuously')),
         body: Column(children: [
           Padding(
             padding: EdgeInsets.all(10),
             child: Text(
-              'Please keep your device on this page and ensure that it '
-              'doesn\'t go to sleep. Your device will listen for music every '
-              'minute or so and scrobble all new songs.',
+              'Keep your device on this page and ensure that it doesn\'t go to '
+              'sleep. Your device will listen for music every minute or so '
+              'and automatically scrobble the songs it detects. Duplicate '
+              'songs will be skipped',
               textAlign: TextAlign.center,
             ),
           ),
@@ -116,6 +118,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
             items: _tracks,
             leadingWidgetBuilder: (track) =>
                 Icon(_iconForTrackStatus[track.status]),
+            showNoResultsMessage: false,
           ))
         ]),
       );
