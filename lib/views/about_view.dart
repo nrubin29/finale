@@ -82,6 +82,15 @@ class AboutView extends StatelessWidget {
                         onTap: () {
                           launch('https://github.com/nrubin29/finale');
                         }),
+                    ListTile(
+                      title: Text('Send feedback'),
+                      leading: Icon(Icons.email),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        launch(
+                            'mailto:nrubin29@gmail.com?subject=Finale%20feedback');
+                      },
+                    ),
                     Spacer(),
                     Text('\u00a9 2021 Noah Rubin Technologies LLC'),
                     Text('All rights reserved'),
