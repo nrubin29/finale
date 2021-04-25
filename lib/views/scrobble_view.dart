@@ -5,6 +5,7 @@ import 'package:finale/lastfm.dart';
 import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 
 class ScrobbleView extends StatefulWidget {
@@ -64,6 +65,12 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       _trackController.text = '';
       _artistController.text = '';
       _albumController.text = '';
+
+      // Ask for a review
+      final InAppReview inAppReview = InAppReview.instance;
+      if (await inAppReview.isAvailable()) {
+        inAppReview.requestReview();
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('An error occurred while scrobbling')));

@@ -18,6 +18,7 @@ dependencies:
   html: ^0.14.0+4
   http: ^0.12.2
   http_throttle: ^1.0.4
+  in_app_review: ^1.0.4
   intl: ^0.16.1
   json_annotation: ^3.1.1
   modal_bottom_sheet: ^1.0.0+1

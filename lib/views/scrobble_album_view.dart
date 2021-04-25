@@ -3,6 +3,7 @@ import 'package:finale/components/image_component.dart';
 import 'package:finale/lastfm.dart';
 import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 
 enum ScrobbleTimestampBehavior {
@@ -60,7 +61,16 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
     }
 
     final response = await Lastfm.scrobble(tracks, timestamps);
-    Navigator.pop(context, response.ignored == 0);
+    final success = response.ignored == 0;
+    Navigator.pop(context, success);
+
+    // Ask for a review
+    if (success) {
+      final InAppReview inAppReview = InAppReview.instance;
+      if (await inAppReview.isAvailable()) {
+        inAppReview.requestReview();
+      }
+    }
   }
 
   @override
