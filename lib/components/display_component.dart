@@ -21,6 +21,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
 
   final DisplayableWidgetBuilder<T> detailWidgetBuilder;
   final DisplayableAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
+  final DisplayableWidgetBuilder<T> leadingWidgetBuilder;
   final void Function(T item) secondaryAction;
 
   final DisplayType displayType;
@@ -36,6 +37,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
       this.requestStream,
       this.detailWidgetBuilder,
       this.subtitleWidgetBuilder,
+      this.leadingWidgetBuilder,
       this.secondaryAction,
       this.displayType = DisplayType.list,
       this.scrollable = true,
@@ -162,13 +164,15 @@ class DisplayComponentState<T extends Displayable>
               ],
             )
           : null,
-      leading: widget.displayImages
-          ? ImageComponent(
-              displayable: item,
-              quality: ImageQuality.low,
-              isCircular: widget.displayCircularImages,
-            )
-          : null,
+      leading: widget.leadingWidgetBuilder != null
+          ? widget.leadingWidgetBuilder(item)
+          : widget.displayImages
+              ? ImageComponent(
+                  displayable: item,
+                  quality: ImageQuality.low,
+                  isCircular: widget.displayCircularImages,
+                )
+              : null,
       trailing: IntrinsicWidth(
           child: Row(
         children: [

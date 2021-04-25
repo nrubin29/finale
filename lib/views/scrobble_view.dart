@@ -1,12 +1,11 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:finale/components/acrcloud_dialog_component.dart';
+import 'package:finale/components/music_recognition.dart';
 import 'package:finale/env.dart';
 import 'package:finale/lastfm.dart';
 import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ScrobbleView extends StatefulWidget {
   final FullTrack track;
@@ -113,56 +112,13 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 child: Column(
                   children: [
                     if (!widget.isModal)
-                      Builder(
-                          builder: (context) => OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                side: BorderSide(color: Colors.red),
-                              ),
-                              child: ListTile(
-                                contentPadding: EdgeInsets.only(left: 12),
-                                title: Text('Tap to recognize'),
-                                trailing: TextButton(
-                                    child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text('Powered by ',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption),
-                                          Image.asset(
-                                              'assets/images/acrcloud.png',
-                                              height: 20)
-                                        ]),
-                                    onPressed: () {
-                                      launch('https://acrcloud.com');
-                                    }),
-                              ),
-                              onPressed: () async {
-                                final result =
-                                    await showDialog<ACRCloudDialogResult>(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (context) =>
-                                            ACRCloudDialogComponent());
-
-                                if (result?.wasCancelled ?? true) return;
-
-                                if (result.track != null) {
-                                  setState(() {
-                                    _trackController.text = result.track.title;
-                                    _albumController.text =
-                                        result.track.album?.name;
-                                    _artistController.text =
-                                        result.track.artists?.first?.name;
-                                  });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Could not recognize song')));
-                                }
-                              })),
+                      MusicRecognitionComponent(onTrackRecognized: (track) {
+                        setState(() {
+                          _trackController.text = track.title;
+                          _albumController.text = track.album?.name;
+                          _artistController.text = track.artists?.first?.name;
+                        });
+                      }),
                     TextFormField(
                       controller: _trackController,
                       decoration: InputDecoration(labelText: 'Song *'),
