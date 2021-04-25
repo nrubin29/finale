@@ -87,6 +87,7 @@ class _PeriodSelectorComponentState<T extends Displayable>
                   child: TabBar(
                       labelColor: Colors.red,
                       unselectedLabelColor: Colors.grey,
+                      indicatorColor: Colors.transparent,
                       tabs: [Icon(Icons.list), Icon(Icons.grid_view)],
                       onTap: (index) {
                         setState(() {
