@@ -1,5 +1,5 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:finale/components/music_recognition.dart';
+import 'package:finale/components/music_recognition_component.dart';
 import 'package:finale/env.dart';
 import 'package:finale/lastfm.dart';
 import 'package:finale/types/generic.dart';
