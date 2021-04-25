@@ -294,6 +294,10 @@ class DisplayComponentState<T extends Displayable>
       return LoadingComponent();
     }
 
+    if (widget.items != null) {
+      return _mainBuilder(context);
+    }
+
     return RefreshIndicator(
       onRefresh: getInitialItems,
       child: _mainBuilder(context),
