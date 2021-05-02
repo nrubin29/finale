@@ -4,6 +4,7 @@ import 'package:finale/types/generic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:intl/intl.dart';
+import 'package:wakelock/wakelock.dart';
 
 enum ListenContinuouslyTrackStatus { scrobbled, skipped, noResults, error }
 
@@ -57,6 +58,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   @override
   void initState() {
     super.initState();
+    Wakelock.enable();
     _listen();
   }
 
@@ -106,10 +108,9 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
           Padding(
             padding: EdgeInsets.all(10),
             child: Text(
-              'Keep your device on this page and ensure that it doesn\'t go to '
-              'sleep. Your device will listen for music every minute or so '
-              'and automatically scrobble the songs it detects. Duplicate '
-              'songs will be skipped',
+              'Keep your device on this page with the screen on. Your device '
+              'will listen for music every minute or so and automatically '
+              'scrobble the songs it detects. Duplicate songs will be skipped.',
               textAlign: TextAlign.center,
             ),
           ),
@@ -122,4 +123,10 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
           ))
         ]),
       );
+
+  @override
+  void dispose() {
+    super.dispose();
+    Wakelock.disable();
+  }
 }
