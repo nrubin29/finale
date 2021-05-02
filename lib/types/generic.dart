@@ -77,6 +77,10 @@ class BasicConcreteTrack extends BasicTrack {
 
   BasicConcreteTrack(this.name, this.artist, this.album,
       {this.url, this.duration});
+
+  @override
+  String toString() =>
+      'BasicConcreteTrack(name=$name, artist=$artist, album=$album)';
 }
 
 abstract class BasicScrobbledTrack extends BasicTrack {

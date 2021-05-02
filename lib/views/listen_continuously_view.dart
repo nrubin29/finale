@@ -76,7 +76,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
         final track = ListenContinuouslyTrack(resultMusicItem.title,
             resultMusicItem.artists?.first?.name, resultMusicItem.album?.name);
 
-        if (_tracks.lastWhere((track) => track.hasResult, orElse: () => null) ==
+        if (_tracks.firstWhere((t) => t.hasResult, orElse: () => null) ==
             track) {
           track.status = ListenContinuouslyTrackStatus.skipped;
         } else {
