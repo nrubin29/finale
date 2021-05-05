@@ -2,11 +2,20 @@ import 'dart:async';
 
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:html/parser.dart' show parse;
+import 'package:http_throttle/http_throttle.dart';
 import 'package:intl/intl.dart';
+
+enum RequestVerb { get, post }
+
+final httpClient = ThrottleClient(10);
 
 final _numberFormat = NumberFormat();
 
 String formatNumber(int number) => _numberFormat.format(number);
+
+abstract class PagedRequest<T extends Displayable> {
+  Future<List<T>> doRequest(int limit, int page);
+}
 
 enum DisplayableType { track, album, artist, user }
 

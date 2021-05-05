@@ -9,12 +9,7 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:http/http.dart';
-import 'package:http_throttle/http_throttle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-enum RequestVerb { get, post }
-
-final _client = ThrottleClient(10);
 
 Uri _buildUri(String method, Map<String, dynamic> data) {
   final allData = {
@@ -44,8 +39,8 @@ Future<Map<String, dynamic>> _doRequest(
   final uri = _buildUri(method, data);
 
   final response = verb == RequestVerb.get
-      ? await _client.get(uri)
-      : await _client.post(uri);
+      ? await httpClient.get(uri)
+      : await httpClient.post(uri);
 
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
@@ -57,12 +52,7 @@ Future<Map<String, dynamic>> _doRequest(
   }
 }
 
-abstract class PagedLastfmRequest<T> {
-  Future<List<T>> doRequest(int limit, int page);
-}
-
-class GetRecentTracksRequest
-    extends PagedLastfmRequest<LRecentTracksResponseTrack> {
+class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   String username;
 
   GetRecentTracksRequest(this.username);
@@ -85,8 +75,7 @@ class GetRecentTracksRequest
   }
 }
 
-class GetTopArtistsRequest
-    extends PagedLastfmRequest<LTopArtistsResponseArtist> {
+class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
   String username;
 
   GetTopArtistsRequest(this.username);
@@ -103,7 +92,7 @@ class GetTopArtistsRequest
   }
 }
 
-class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
+class GetTopAlbumsRequest extends PagedRequest<LTopAlbumsResponseAlbum> {
   String username;
 
   GetTopAlbumsRequest(this.username);
@@ -120,7 +109,7 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
   }
 }
 
-class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
+class GetTopTracksRequest extends PagedRequest<LTopTracksResponseTrack> {
   String username;
 
   GetTopTracksRequest(this.username);
@@ -137,7 +126,7 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
   }
 }
 
-class GetFriendsRequest extends PagedLastfmRequest<LUser> {
+class GetFriendsRequest extends PagedRequest<LUser> {
   String username;
 
   GetFriendsRequest(this.username);
@@ -150,7 +139,7 @@ class GetFriendsRequest extends PagedLastfmRequest<LUser> {
   }
 }
 
-class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
+class SearchTracksRequest extends PagedRequest<LTrackMatch> {
   String query;
 
   SearchTracksRequest(this.query);
@@ -164,7 +153,7 @@ class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
   }
 }
 
-class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
+class SearchArtistsRequest extends PagedRequest<LArtistMatch> {
   String query;
 
   SearchArtistsRequest(this.query);
@@ -179,7 +168,7 @@ class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
   }
 }
 
-class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
+class SearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
   String query;
 
   SearchAlbumsRequest(this.query);
@@ -193,7 +182,7 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
   }
 }
 
-class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
+class ArtistGetTopAlbumsRequest extends PagedRequest<LArtistTopAlbum> {
   String artist;
 
   ArtistGetTopAlbumsRequest(this.artist);
@@ -207,7 +196,7 @@ class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
   }
 }
 
-class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
+class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
   String artist;
 
   ArtistGetTopTracksRequest(this.artist);
@@ -222,7 +211,7 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
 }
 
 class Lastfm {
-  static Future<Response> get(String url) => _client.get(Uri.parse(url));
+  static Future<Response> get(String url) => httpClient.get(Uri.parse(url));
 
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
