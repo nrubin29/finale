@@ -1,4 +1,5 @@
 import 'package:finale/components/display_component.dart';
+import 'package:finale/components/spotify_dialog_component.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -11,6 +12,22 @@ import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:social_media_buttons/social_media_icons.dart';
+
+enum SearchEngine { lastfm, spotify }
+
+extension SearchEngineIcon on SearchEngine {
+  IconData get icon {
+    switch (this) {
+      case SearchEngine.lastfm:
+        return Icons.music_note;
+      case SearchEngine.spotify:
+        return SocialMediaIcons.spotify;
+    }
+
+    return Icons.error;
+  }
+}
 
 class SearchView extends StatefulWidget {
   @override
@@ -19,6 +36,7 @@ class SearchView extends StatefulWidget {
 
 class _SearchViewState extends State<SearchView> {
   final _textController = TextEditingController();
+  var _searchEngine = SearchEngine.lastfm;
   final _query = BehaviorSubject<String>();
 
   @override
@@ -37,6 +55,22 @@ class _SearchViewState extends State<SearchView> {
                   setState(() {
                     _query.add(text);
                   });
+                },
+              ),
+              leading: DropdownButton(
+                items: SearchEngine.values
+                    .map((searchEngine) => DropdownMenuItem(
+                        value: searchEngine,
+                        child: Icon(searchEngine.icon, color: Colors.black)))
+                    .toList(growable: false),
+                value: _searchEngine,
+                onChanged: (choice) async {
+                  if (choice == SearchEngine.spotify) {
+                    _searchEngine = SearchEngine.lastfm;
+                    await showDialog(
+                        context: context,
+                        builder: (context) => SpotifyDialogComponent());
+                  }
                 },
               ),
               actions: [
