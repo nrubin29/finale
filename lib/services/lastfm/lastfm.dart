@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
-import 'package:finale/types/generic.dart';
-import 'package:finale/types/lalbum.dart';
-import 'package:finale/types/lartist.dart';
-import 'package:finale/types/lcommon.dart';
-import 'package:finale/types/ltrack.dart';
-import 'package:finale/types/luser.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/album.dart';
+import 'package:finale/services/lastfm/artist.dart';
+import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/services/lastfm/user.dart';
 import 'package:http/http.dart';
 import 'package:http_throttle/http_throttle.dart';
 import 'package:shared_preferences/shared_preferences.dart';

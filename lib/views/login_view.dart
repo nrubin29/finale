@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:finale/components/image_component.dart';
 import 'package:finale/env.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/lartist.dart';
+import 'package:finale/services/lastfm/artist.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';

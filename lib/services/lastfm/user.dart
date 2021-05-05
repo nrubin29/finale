@@ -1,10 +1,11 @@
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'luser.g.dart';
+part 'user.g.dart';
 
 @JsonSerializable()
 class LUserRegistered {

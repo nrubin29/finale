@@ -1,4 +1,4 @@
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:flutter/material.dart';
 
 class PlayCountBarComponent<T extends HasPlayCount> extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:finale/components/display_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';

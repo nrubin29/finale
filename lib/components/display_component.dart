@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/material.dart';
 
 enum DisplayType { list, grid }

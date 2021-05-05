@@ -1,8 +1,8 @@
-import 'package:finale/types/generic.dart';
-import 'package:finale/types/lcommon.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'lalbum.g.dart';
+part 'album.g.dart';
 
 @JsonSerializable()
 class LTopAlbumsResponseAlbumArtist extends BasicArtist {

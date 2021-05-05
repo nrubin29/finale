@@ -1,8 +1,8 @@
 import 'package:finale/components/display_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/lalbum.dart';
-import 'package:finale/types/lartist.dart';
-import 'package:finale/types/ltrack.dart';
+import 'package:finale/services/lastfm/album.dart';
+import 'package:finale/services/lastfm/artist.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';

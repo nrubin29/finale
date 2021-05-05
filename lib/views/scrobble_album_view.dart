@@ -1,7 +1,7 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/components/image_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';

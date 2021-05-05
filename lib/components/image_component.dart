@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/cache.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
 import 'package:flutter/material.dart';
 
 enum ImageQuality { low, high }

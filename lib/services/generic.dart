@@ -1,33 +1,12 @@
 import 'dart:async';
 
-import 'package:finale/lastfm.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
-
-bool convertStringToBoolean(String text) => text == '1';
-
-int intParseSafe(String text) => text != null ? int.tryParse(text) : null;
-
-DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
-    DateTime.fromMillisecondsSinceEpoch(
-        (timestamp is int ? timestamp : int.parse(timestamp)) * 1000);
 
 final _numberFormat = NumberFormat();
 
 String formatNumber(int number) => _numberFormat.format(number);
-
-String extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
-  if (images == null ||
-      images.isEmpty ||
-      !images.first.containsKey('#text') ||
-      images.first['#text'].isEmpty) {
-    return null;
-  }
-
-  final String imageUrl = images.first['#text'];
-  return imageUrl.substring(
-      imageUrl.lastIndexOf('/') + 1, imageUrl.lastIndexOf('.'));
-}
 
 enum DisplayableType { track, album, artist, user }
 
@@ -45,10 +24,6 @@ abstract class Displayable {
   String imageId;
 
   Future<String> get imageIdFuture => null;
-}
-
-mixin HasPlayCount on Displayable {
-  int get playCount;
 }
 
 abstract class BasicTrack extends Displayable {
@@ -81,29 +56,6 @@ class BasicConcreteTrack extends BasicTrack {
   @override
   String toString() =>
       'BasicConcreteTrack(name=$name, artist=$artist, album=$album)';
-}
-
-abstract class BasicScrobbledTrack extends BasicTrack {
-  DateTime get date;
-
-  @override
-  String get displayTrailing {
-    if (date == null) {
-      return 'scrobbling now';
-    }
-
-    final delta = DateTime.now().difference(date);
-
-    if (delta.inDays == 0) {
-      if (delta.inHours == 0) {
-        return '${delta.inMinutes} min${delta.inMinutes == 1 ? '' : 's'} ago';
-      }
-
-      return '${delta.inHours} hour${delta.inHours == 1 ? '' : 's'} ago';
-    }
-
-    return DateFormat('dd MMM HH:mm aa').format(date);
-  }
 }
 
 abstract class BasicScrobbleableTrack extends BasicTrack {
@@ -143,13 +95,6 @@ abstract class FullAlbum extends BasicAlbum {
       tracks.every((track) => track.duration != null && track.duration > 0);
 }
 
-abstract class BasicScrobbledAlbum extends BasicAlbum {
-  int get playCount;
-
-  @override
-  String get displayTrailing => '${formatNumber(playCount)} scrobbles';
-}
-
 abstract class BasicArtist extends Displayable {
   String get name;
 
@@ -180,13 +125,6 @@ class ConcreteBasicArtist extends BasicArtist {
   String url;
 
   ConcreteBasicArtist(this.name, [this.url]);
-}
-
-abstract class BasicScrobbledArtist extends BasicArtist {
-  int get playCount;
-
-  @override
-  String get displayTrailing => '${formatNumber(playCount)} scrobbles';
 }
 
 abstract class FullArtist extends BasicArtist {}
