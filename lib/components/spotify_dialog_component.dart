@@ -8,7 +8,11 @@ class SpotifyDialogComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Row(children: [Icon(SocialMediaIcons.spotify), SizedBox(width: 5), Text('Spotify')]),
+      title: Row(children: [
+        Icon(SocialMediaIcons.spotify),
+        SizedBox(width: 5),
+        Text('Spotify Search')
+      ]),
       content:
           Text('Sign in with your Spotify account to search and scrobble from '
               'Spotify\'s database. Spotify\'s database is much cleaner than '
@@ -16,7 +20,7 @@ class SpotifyDialogComponent extends StatelessWidget {
       actions: [
         TextButton(
           child: Text('Cancel'),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context, false),
         ),
         TextButton(
           child: Text('Sign in'),
@@ -39,7 +43,9 @@ class SpotifyDialogComponent extends StatelessWidget {
                   DateTime.now()
                       .add(Duration(seconds: response.expiresIn))
                       .millisecondsSinceEpoch);
-              print('Got access token ${response.accessToken}');
+              Navigator.pop(context, true);
+            } else {
+              Navigator.pop(context, false);
             }
           },
         ),

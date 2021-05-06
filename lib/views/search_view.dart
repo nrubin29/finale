@@ -57,7 +57,7 @@ class _SearchViewState extends State<SearchView> {
                   });
                 },
               ),
-              leading: DropdownButton(
+              leading: DropdownButton<SearchEngine>(
                 items: SearchEngine.values
                     .map((searchEngine) => DropdownMenuItem(
                         value: searchEngine,
@@ -65,11 +65,22 @@ class _SearchViewState extends State<SearchView> {
                     .toList(growable: false),
                 value: _searchEngine,
                 onChanged: (choice) async {
-                  if (choice == SearchEngine.spotify) {
-                    _searchEngine = SearchEngine.lastfm;
-                    await showDialog(
+                  if (choice == _searchEngine) {
+                    return;
+                  } else if (choice == SearchEngine.spotify) {
+                    final loggedIn = await showDialog<bool>(
                         context: context,
                         builder: (context) => SpotifyDialogComponent());
+
+                    if (loggedIn) {
+                      setState(() {
+                        _searchEngine = SearchEngine.spotify;
+                      });
+                    }
+                  } else {
+                    setState(() {
+                      _searchEngine = choice;
+                    });
                   }
                 },
               ),
