@@ -152,17 +152,24 @@ class Spotify {
         'refresh_token': refreshToken,
       });
 
-  static Future<bool> get isLoggedIn async {
+  /// Returns true if Spotify auth data is saved.
+  static Future<bool> get hasAuthData async {
     final sharedPreferences = await SharedPreferences.getInstance();
 
-    if (!sharedPreferences.containsKey('spotifyAccessToken') ||
-        !sharedPreferences.containsKey('spotifyRefreshToken') ||
-        !sharedPreferences.containsKey('spotifyExpiration')) {
+    return sharedPreferences.containsKey('spotifyAccessToken') &&
+        sharedPreferences.containsKey('spotifyRefreshToken') &&
+        sharedPreferences.containsKey('spotifyExpiration');
+  }
+
+  /// Returns true if Spotify auth data is saved and the access token hasn't
+  /// expired.
+  static Future<bool> get isLoggedIn async {
+    if (!(await hasAuthData)) {
       return false;
     }
 
     final expiration = DateTime.fromMillisecondsSinceEpoch(
-        sharedPreferences.getInt('spotifyExpiration'));
+        (await SharedPreferences.getInstance()).getInt('spotifyExpiration'));
     return DateTime.now().isBefore(expiration);
   }
 }
