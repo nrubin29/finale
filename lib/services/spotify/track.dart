@@ -7,8 +7,7 @@ part 'track.g.dart';
 
 @JsonSerializable()
 class STrack extends Track {
-  @JsonKey(name: 'album')
-  SAlbumSimple albumObject;
+  SAlbumSimple album;
 
   List<SArtistSimple> artists; // Should be SArtist
 
@@ -20,11 +19,13 @@ class STrack extends Track {
 
   String name;
 
-  String get albumName => albumObject.name;
+  String get albumName => album.name;
 
   String get artistName => artists.first.name;
 
-  STrack(this.albumObject, this.artists, this.durationMs, this.url, this.name);
+  String get imageUrl => album.imageUrl;
+
+  STrack(this.album, this.artists, this.durationMs, this.url, this.name);
 
   factory STrack.fromJson(Map<String, dynamic> json) => _$STrackFromJson(json);
 }

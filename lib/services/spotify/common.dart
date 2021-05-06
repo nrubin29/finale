@@ -6,6 +6,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';
 
+String extractImageUrl(List<dynamic> /* List<Map<String, dynamic>> */ images) =>
+    images == null || images.isEmpty ? null : images.first['url'];
+
 @JsonSerializable(genericArgumentFactories: true)
 class SPage<T extends Displayable> {
   List<T> items;

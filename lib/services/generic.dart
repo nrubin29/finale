@@ -30,6 +30,10 @@ abstract class Displayable {
 
   String get displayTrailing => null;
 
+  String get imageUrl => null;
+
+  // TODO: imageId and imageIdFuture are Last.fm-specific.
+
   String imageId;
 
   Future<String> get imageIdFuture => null;
