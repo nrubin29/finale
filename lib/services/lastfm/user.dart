@@ -148,9 +148,8 @@ class LUserWeeklyTrackChartTrackArtist {
 }
 
 @JsonSerializable()
-class LUserWeeklyTrackChartTrack extends BasicTrack {
-  @JsonKey(name: 'artist')
-  LUserWeeklyTrackChartTrackArtist artistObject;
+class LUserWeeklyTrackChartTrack extends Track {
+  LUserWeeklyTrackChartTrackArtist artist;
 
   String url;
 
@@ -159,17 +158,16 @@ class LUserWeeklyTrackChartTrack extends BasicTrack {
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
   int playCount;
 
-  LUserWeeklyTrackChartTrack(
-      this.artistObject, this.url, this.name, this.playCount);
+  LUserWeeklyTrackChartTrack(this.artist, this.url, this.name, this.playCount);
 
   factory LUserWeeklyTrackChartTrack.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyTrackChartTrackFromJson(json);
 
   @override
-  String get album => null;
+  String get albumName => null;
 
   @override
-  String get artist => artistObject.name;
+  String get artistName => artist.name;
 
   @override
   String get displayTrailing => Intl.plural(playCount ?? 0,

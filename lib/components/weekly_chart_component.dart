@@ -81,7 +81,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
             for (final track in _tracks.take(3))
               ListTile(
                 title: Text(track.name),
-                subtitle: Text(track.artist),
+                subtitle: Text(track.artistName),
                 trailing: Text('${track.playCount} scrobbles'),
                 leading: ImageComponent(displayable: track),
                 onTap: () {

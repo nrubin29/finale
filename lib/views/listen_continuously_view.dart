@@ -36,7 +36,7 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
     // it's also a single).
     return other is ListenContinuouslyTrack &&
         other.name == name &&
-        other.artist == artist;
+        other.artistName == artistName;
   }
 }
 

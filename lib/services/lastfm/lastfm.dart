@@ -139,10 +139,10 @@ class GetFriendsRequest extends PagedRequest<LUser> {
   }
 }
 
-class SearchTracksRequest extends PagedRequest<LTrackMatch> {
+class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
   String query;
 
-  SearchTracksRequest(this.query);
+  LSearchTracksRequest(this.query);
 
   @override
   Future<List<LTrackMatch>> doRequest(int limit, int page) async {
@@ -225,11 +225,14 @@ class Lastfm {
     return LUser.fromJson(rawResponse['user']);
   }
 
-  static Future<LTrack> getTrack(BasicTrack track) async {
+  static Future<LTrack> getTrack(Track track) async {
     final username = (await SharedPreferences.getInstance()).getString('name');
 
-    final rawResponse = await _doRequest('track.getInfo',
-        {'track': track.name, 'artist': track.artist, 'username': username});
+    final rawResponse = await _doRequest('track.getInfo', {
+      'track': track.name,
+      'artist': track.artistName,
+      'username': username
+    });
     return LTrack.fromJson(rawResponse['track']);
   }
 
@@ -320,16 +323,16 @@ class Lastfm {
   }
 
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
-      List<BasicTrack> tracks, List<DateTime> timestamps) async {
+      List<Track> tracks, List<DateTime> timestamps) async {
     final Map<String, dynamic> data = {};
     data['sk'] = (await SharedPreferences.getInstance()).getString('key');
 
     tracks.asMap().forEach((i, track) {
-      if (track.album?.isNotEmpty ?? false) {
-        data['album[$i]'] = track.album;
+      if (track.albumName?.isNotEmpty ?? false) {
+        data['album[$i]'] = track.albumName;
       }
 
-      data['artist[$i]'] = track.artist;
+      data['artist[$i]'] = track.artistName;
       data['track[$i]'] = track.name;
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
     });
@@ -342,8 +345,8 @@ class Lastfm {
 
   /// Loves or unloves a track. If [love] is true, the track will be loved;
   /// otherwise, it will be unloved.
-  static Future<bool> love(FullTrack track, bool love) async {
-    if (track.artist == null) {
+  static Future<bool> love(Track track, bool love) async {
+    if (track.artistName == null) {
       return false;
     }
 
@@ -351,7 +354,7 @@ class Lastfm {
         love ? 'track.love' : 'track.unlove',
         {
           'track': track.name,
-          'artist': track.artist.name,
+          'artist': track.artistName,
           'sk': (await SharedPreferences.getInstance()).getString('key')
         },
         verb: RequestVerb.post);

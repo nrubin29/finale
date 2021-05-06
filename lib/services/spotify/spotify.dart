@@ -5,6 +5,53 @@ import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/spotify/auth.dart';
+import 'package:finale/services/spotify/common.dart';
+import 'package:finale/services/spotify/track.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Uri _buildUri(String method, Map<String, dynamic> data) => Uri.https(
+    'api.spotify.com',
+    'v1/$method',
+    data.map((key, value) => MapEntry(key, value.toString())));
+
+Future<Map<String, dynamic>> _doRequest(
+    String method, Map<String, dynamic> data) async {
+  final accessToken =
+      (await SharedPreferences.getInstance()).getString('spotifyAccessToken');
+
+  // TODO: If the access token is expired, use the refresh token.
+
+  final uri = _buildUri(method, data);
+
+  final response = await httpClient
+      .get(uri, headers: {'Authorization': 'Bearer $accessToken'});
+
+  if (response.statusCode == 200) {
+    return json.decode(utf8.decode(response.bodyBytes));
+  } else if (response.statusCode == 400) {
+    final error = SError.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    throw SException(error.message, error.status);
+  } else {
+    throw Exception('Could not do request $method');
+  }
+}
+
+class SSearchTracksRequest extends PagedRequest<STrack> {
+  String query;
+
+  SSearchTracksRequest(this.query);
+
+  @override
+  Future<List<STrack>> doRequest(int limit, int page) async {
+    final rawResponse = await _doRequest('search', {
+      'q': query,
+      'type': 'track',
+      'limit': limit,
+      'offset': (page - 1) * limit
+    });
+    return SPage<STrack>.fromJson(rawResponse['tracks']).items;
+  }
+}
 
 class PkcePair {
   static const _alphabet =
@@ -59,4 +106,11 @@ class Spotify {
     );
     return SpotifyTokenResponse.fromJson(json.decode(response.body));
   }
+}
+
+class SException implements Exception {
+  final String message;
+  final int status;
+
+  const SException(this.message, this.status);
 }

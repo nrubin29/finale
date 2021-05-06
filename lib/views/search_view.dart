@@ -1,9 +1,11 @@
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/spotify_dialog_component.dart';
+import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/services/spotify/spotify.dart';
+import 'package:finale/services/spotify/track.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';
@@ -26,6 +28,19 @@ extension SearchEngineIcon on SearchEngine {
     }
 
     return Icons.error;
+  }
+}
+
+extension SearchEngineQuery on SearchEngine {
+  PagedRequest searchTracks(String query) {
+    switch (this) {
+      case SearchEngine.lastfm:
+        return LSearchTracksRequest(query);
+      case SearchEngine.spotify:
+        return SSearchTracksRequest(query);
+    }
+
+    throw Exception('Unknown search engine $this');
   }
 }
 
@@ -109,15 +124,21 @@ class _SearchViewState extends State<SearchView> {
           body: TabBarView(
             children: _query.hasValue && _query.value != ''
                 ? [
-                    DisplayComponent<LTrackMatch>(
+                    DisplayComponent<Track>(
                         secondaryAction: (item) async {
-                          final fullTrack = await Lastfm.getTrack(item);
+                          Track track;
+
+                          if (item is STrack) {
+                            track = item;
+                          } else {
+                            track = await Lastfm.getTrack(item);
+                          }
 
                           final result = await showBarModalBottomSheet<bool>(
                               context: context,
                               duration: Duration(milliseconds: 200),
                               builder: (context) => ScrobbleView(
-                                    track: fullTrack,
+                                    track: track,
                                     isModal: true,
                                   ));
 
@@ -132,9 +153,11 @@ class _SearchViewState extends State<SearchView> {
                             .debounceTime(Duration(
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => SearchTracksRequest(query)),
-                        detailWidgetBuilder: (track) =>
-                            TrackView(track: track)),
+                            .map((query) => _searchEngine.searchTracks(query)),
+                        detailWidgetBuilder:
+                            _searchEngine == SearchEngine.spotify
+                                ? null
+                                : (track) => TrackView(track: track)),
                     DisplayComponent<LArtistMatch>(
                         displayType: DisplayType.grid,
                         requestStream: _query

@@ -35,12 +35,12 @@ abstract class Displayable {
   Future<String> get imageIdFuture => null;
 }
 
-abstract class BasicTrack extends Displayable {
+abstract class Track extends Displayable {
   String get name;
 
-  String get artist;
+  String get artistName;
 
-  String get album;
+  String get albumName;
 
   @override
   DisplayableType get type => DisplayableType.track;
@@ -49,34 +49,26 @@ abstract class BasicTrack extends Displayable {
   String get displayTitle => name;
 
   @override
-  String get displaySubtitle => artist;
+  String get displaySubtitle => artistName;
 }
 
-class BasicConcreteTrack extends BasicTrack {
+class BasicConcreteTrack extends Track {
   String name;
-  String artist;
-  String album;
+  String artistName;
+  String albumName;
   String url;
   int duration;
 
-  BasicConcreteTrack(this.name, this.artist, this.album,
+  BasicConcreteTrack(this.name, this.artistName, this.albumName,
       {this.url, this.duration});
 
   @override
   String toString() =>
-      'BasicConcreteTrack(name=$name, artist=$artist, album=$album)';
+      'BasicConcreteTrack(name=$name, artist=$artistName, album=$albumName)';
 }
 
-abstract class BasicScrobbleableTrack extends BasicTrack {
+abstract class BasicScrobbleableTrack extends Track {
   int get duration;
-}
-
-abstract class FullTrack {
-  String get name;
-
-  BasicArtist get artist;
-
-  BasicAlbum get album;
 }
 
 abstract class BasicAlbum extends Displayable {

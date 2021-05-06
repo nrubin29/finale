@@ -29,7 +29,7 @@ mixin HasPlayCount on Displayable {
   int get playCount;
 }
 
-abstract class BasicScrobbledTrack extends BasicTrack {
+abstract class BasicScrobbledTrack extends Track {
   DateTime get date;
 
   @override

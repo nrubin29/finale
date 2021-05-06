@@ -9,7 +9,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 
 class ScrobbleView extends StatefulWidget {
-  final FullTrack track;
+  final Track track;
   final bool isModal;
 
   ScrobbleView({this.track, this.isModal = false});
@@ -32,8 +32,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   void initState() {
     super.initState();
     _trackController.text = widget.track?.name ?? '';
-    _artistController.text = widget.track?.artist?.name ?? '';
-    _albumController.text = widget.track?.album?.name ?? '';
+    _artistController.text = widget.track?.artistName ?? '';
+    _albumController.text = widget.track?.albumName ?? '';
 
     if (!widget.isModal) {
       ACRCloud.setUp(ACRCloudConfig(

@@ -123,23 +123,22 @@ class LArtistGetTopAlbumsResponse {
 }
 
 @JsonSerializable()
-class LArtistTopTrack extends BasicTrack {
+class LArtistTopTrack extends Track {
   String name;
   String url;
 
-  @JsonKey(name: 'artist')
-  LTopAlbumsResponseAlbumArtist artistObject;
+  LTopAlbumsResponseAlbumArtist artist;
 
-  String get artist => artistObject.name;
+  String get artistName => artist.name;
 
-  String get album => null;
+  String get albumName => null;
 
   Future<String> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }
 
-  LArtistTopTrack(this.name, this.url, this.artistObject);
+  LArtistTopTrack(this.name, this.url, this.artist);
 
   factory LArtistTopTrack.fromJson(Map<String, dynamic> json) =>
       _$LArtistTopTrackFromJson(json);

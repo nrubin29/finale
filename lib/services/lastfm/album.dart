@@ -90,14 +90,15 @@ class LAlbumTrack extends BasicScrobbleableTrack {
 
   String album;
 
-  @JsonKey(name: 'artist')
-  LTopAlbumsResponseAlbumArtist artistObject;
+  LTopAlbumsResponseAlbumArtist artist;
 
-  String get artist => artistObject.name;
+  String get albumName => album;
+
+  String get artistName => artist.name;
 
   String get displaySubtitle => null;
 
-  LAlbumTrack(this.name, this.url, this.duration, this.artistObject);
+  LAlbumTrack(this.name, this.url, this.duration, this.album, this.artist);
 
   factory LAlbumTrack.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTrackFromJson(json);
