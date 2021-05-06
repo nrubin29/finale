@@ -71,12 +71,19 @@ class _SearchViewState extends State<SearchView> {
       length: 3,
       child: Scaffold(
           appBar: AppBar(
+              backgroundColor: _searchEngine == SearchEngine.lastfm
+                  ? null
+                  : Color.fromRGBO(30, 215, 96, 1),
               title: TextField(
                 controller: _textController,
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: TextStyle(color: Colors.white)),
+                  hintText: 'Search',
+                  hintStyle: TextStyle(color: Colors.white),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)),
+                ),
+                cursorColor: Colors.white,
                 onChanged: (text) {
                   setState(() {
                     _query.add(text);
