@@ -1,7 +1,6 @@
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
 
 class SpotifyDialogComponent extends StatelessWidget {
@@ -32,17 +31,7 @@ class SpotifyDialogComponent extends StatelessWidget {
             final code = Uri.parse(result).queryParameters['code'];
 
             if (code != null) {
-              final response = await Spotify.getAccessToken(code, pkcePair);
-              final sharedPreferences = await SharedPreferences.getInstance();
-              sharedPreferences.setString(
-                  'spotifyAccessToken', response.accessToken);
-              sharedPreferences.setString(
-                  'spotifyRefreshToken', response.refreshToken);
-              sharedPreferences.setInt(
-                  'spotifyExpiration',
-                  DateTime.now()
-                      .add(Duration(seconds: response.expiresIn))
-                      .millisecondsSinceEpoch);
+              await Spotify.getAccessToken(code, pkcePair);
               Navigator.pop(context, true);
             } else {
               Navigator.pop(context, false);

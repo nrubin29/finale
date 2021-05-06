@@ -16,10 +16,14 @@ Uri _buildUri(String method, Map<String, dynamic> data) => Uri.https(
 
 Future<Map<String, dynamic>> _doRequest(
     String method, Map<String, dynamic> data) async {
-  final accessToken =
-      (await SharedPreferences.getInstance()).getString('spotifyAccessToken');
+  final sharedPreferences = await SharedPreferences.getInstance();
 
-  // TODO: If the access token is expired, use the refresh token.
+  if (!(await Spotify.isLoggedIn)) {
+    final refreshToken = sharedPreferences.getString('spotifyRefreshToken');
+    await Spotify.refreshAccessToken(refreshToken);
+  }
+
+  final accessToken = sharedPreferences.getString('spotifyAccessToken');
 
   final uri = _buildUri(method, data);
 
@@ -92,19 +96,51 @@ class Spotify {
         'code_challenge': pkcePair.codeChallenge,
       });
 
-  static Future<SpotifyTokenResponse> getAccessToken(
-      String code, PkcePair pkcePair) async {
-    final response = await httpClient.post(
+  static Future<void> _callTokenEndpoint(Map<String, dynamic> body) async {
+    final rawResponse = await httpClient.post(
       Uri.https('accounts.spotify.com', 'api/token'),
-      body: {
+      body: body,
+    );
+    final response =
+        SpotifyTokenResponse.fromJson(json.decode(rawResponse.body));
+    final sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString('spotifyAccessToken', response.accessToken);
+    sharedPreferences.setString('spotifyRefreshToken', response.refreshToken);
+    sharedPreferences.setInt(
+        'spotifyExpiration',
+        DateTime.now()
+            .add(Duration(seconds: response.expiresIn))
+            .millisecondsSinceEpoch);
+  }
+
+  static Future<void> getAccessToken(String code, PkcePair pkcePair) =>
+      _callTokenEndpoint({
         'client_id': spotifyClientId,
         'grant_type': 'authorization_code',
         'code': code,
         'redirect_uri': _redirectUri,
         'code_verifier': pkcePair.codeVerifier,
-      },
-    );
-    return SpotifyTokenResponse.fromJson(json.decode(response.body));
+      });
+
+  static Future<void> refreshAccessToken(String refreshToken) =>
+      _callTokenEndpoint({
+        'client_id': spotifyClientId,
+        'grant_type': 'refresh_token',
+        'refresh_token': refreshToken,
+      });
+
+  static Future<bool> get isLoggedIn async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+
+    if (!sharedPreferences.containsKey('spotifyAccessToken') ||
+        !sharedPreferences.containsKey('spotifyRefreshToken') ||
+        !sharedPreferences.containsKey('spotifyExpiration')) {
+      return false;
+    }
+
+    final expiration = DateTime.fromMillisecondsSinceEpoch(
+        sharedPreferences.getInt('spotifyExpiration'));
+    return DateTime.now().isBefore(expiration);
   }
 }
 

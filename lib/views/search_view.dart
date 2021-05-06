@@ -82,7 +82,8 @@ class _SearchViewState extends State<SearchView> {
                 onChanged: (choice) async {
                   if (choice == _searchEngine) {
                     return;
-                  } else if (choice == SearchEngine.spotify) {
+                  } else if (choice == SearchEngine.spotify &&
+                      !(await Spotify.isLoggedIn)) {
                     final loggedIn = await showDialog<bool>(
                         context: context,
                         builder: (context) => SpotifyDialogComponent());
