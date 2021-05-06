@@ -83,33 +83,42 @@ class _SearchViewState extends State<SearchView> {
                   });
                 },
               ),
-              leading: DropdownButton<SearchEngine>(
-                items: SearchEngine.values
-                    .map((searchEngine) => DropdownMenuItem(
-                        value: searchEngine,
-                        child: Icon(searchEngine.icon, color: Colors.black)))
-                    .toList(growable: false),
-                value: _searchEngine,
-                onChanged: (choice) async {
-                  if (choice == _searchEngine) {
-                    return;
-                  } else if (choice == SearchEngine.spotify &&
-                      !(await Spotify.isLoggedIn)) {
-                    final loggedIn = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => SpotifyDialogComponent());
+              leading: Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: Center(
+                    child: DropdownButton<SearchEngine>(
+                      iconEnabledColor: Colors.white,
+                      isDense: true,
+                      underline: SizedBox(),
+                      items: SearchEngine.values
+                          .map((searchEngine) => DropdownMenuItem(
+                              value: searchEngine,
+                              child:
+                                  Icon(searchEngine.icon, color: Colors.black)))
+                          .toList(growable: false),
+                      value: _searchEngine,
+                      onChanged: (choice) async {
+                        if (choice == _searchEngine) {
+                          return;
+                        } else if (choice == SearchEngine.spotify &&
+                            !(await Spotify.isLoggedIn)) {
+                          final loggedIn = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => SpotifyDialogComponent());
 
-                    if (loggedIn) {
-                      setState(() {
-                        _searchEngine = SearchEngine.spotify;
-                      });
-                    }
-                  } else {
-                    setState(() {
-                      _searchEngine = choice;
-                    });
-                  }
-                },
+                          if (loggedIn) {
+                            setState(() {
+                              _searchEngine = SearchEngine.spotify;
+                            });
+                          }
+                        } else {
+                          setState(() {
+                            _searchEngine = choice;
+                          });
+                        }
+                      },
+                    ),
+                  ),
               ),
               actions: [
                 Visibility(
