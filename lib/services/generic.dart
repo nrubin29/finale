@@ -71,7 +71,8 @@ class BasicConcreteTrack extends Track {
       'BasicConcreteTrack(name=$name, artist=$artistName, album=$albumName)';
 }
 
-abstract class BasicScrobbleableTrack extends Track {
+abstract class ScrobbleableTrack extends Track {
+  /// The duration of the track in seconds.
   int get duration;
 }
 
@@ -94,7 +95,7 @@ abstract class BasicAlbum extends Displayable {
 }
 
 abstract class FullAlbum extends BasicAlbum {
-  List<BasicScrobbleableTrack> get tracks;
+  List<ScrobbleableTrack> get tracks;
 
   bool get canScrobble =>
       tracks.every((track) => track.duration != null && track.duration > 0);

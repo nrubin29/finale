@@ -168,10 +168,10 @@ class SearchArtistsRequest extends PagedRequest<LArtistMatch> {
   }
 }
 
-class SearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
+class LSearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
   String query;
 
-  SearchAlbumsRequest(this.query);
+  LSearchAlbumsRequest(this.query);
 
   @override
   Future<List<LAlbumMatch>> doRequest(int limit, int page) async {

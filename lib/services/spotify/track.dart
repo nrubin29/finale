@@ -6,7 +6,31 @@ import 'package:json_annotation/json_annotation.dart';
 part 'track.g.dart';
 
 @JsonSerializable()
-class STrack extends Track {
+class STrackSimple extends ScrobbleableTrack {
+  List<SArtistSimple> artists;
+
+  @JsonKey(name: 'duration_ms')
+  int durationMs;
+
+  @JsonKey(name: 'href')
+  String url;
+
+  String name;
+
+  String get albumName => null;
+
+  String get artistName => artists.first.name;
+
+  int get duration => durationMs ~/ 1000;
+
+  STrackSimple(this.artists, this.durationMs, this.url, this.name);
+
+  factory STrackSimple.fromJson(Map<String, dynamic> json) =>
+      _$STrackSimpleFromJson(json);
+}
+
+@JsonSerializable()
+class STrack extends ScrobbleableTrack {
   SAlbumSimple album;
 
   List<SArtistSimple> artists; // Should be SArtist
@@ -24,6 +48,8 @@ class STrack extends Track {
   String get artistName => artists.first.name;
 
   String get imageUrl => album.imageUrl;
+
+  int get duration => durationMs ~/ 1000;
 
   STrack(this.album, this.artists, this.durationMs, this.url, this.name);
 

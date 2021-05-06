@@ -1,9 +1,9 @@
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/spotify_dialog_component.dart';
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/views/album_view.dart';
@@ -32,12 +32,23 @@ extension SearchEngineIcon on SearchEngine {
 }
 
 extension SearchEngineQuery on SearchEngine {
-  PagedRequest searchTracks(String query) {
+  PagedRequest<Track> searchTracks(String query) {
     switch (this) {
       case SearchEngine.lastfm:
         return LSearchTracksRequest(query);
       case SearchEngine.spotify:
         return SSearchTracksRequest(query);
+    }
+
+    throw Exception('Unknown search engine $this');
+  }
+
+  PagedRequest<BasicAlbum> searchAlbums(String query) {
+    switch (this) {
+      case SearchEngine.lastfm:
+        return LSearchAlbumsRequest(query);
+      case SearchEngine.spotify:
+        return SSearchAlbumsRequest(query);
     }
 
     throw Exception('Unknown search engine $this');
@@ -168,19 +179,26 @@ class _SearchViewState extends State<SearchView> {
                             .map((query) => SearchArtistsRequest(query)),
                         detailWidgetBuilder: (artist) =>
                             ArtistView(artist: artist)),
-                    DisplayComponent<LAlbumMatch>(
+                    DisplayComponent<BasicAlbum>(
                         secondaryAction: (item) async {
-                          final fullAlbum = await Lastfm.getAlbum(item);
+                          FullAlbum album;
 
-                          if (fullAlbum.tracks.isEmpty) {
+                          if (item is SAlbumSimple) {
+                            album = await Spotify.getFullAlbum(item);
+                          } else {
+                            album = await Lastfm.getAlbum(item);
+                          }
+
+                          if (album.tracks.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                     'This album doesn\'t have any tracks')));
                             return;
-                          } else if (!fullAlbum.canScrobble) {
+                          } else if (!album.canScrobble) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                    'Can\'t scrobble album because Last.fm is missing track duration data')));
+                                content:
+                                    Text('Can\'t scrobble album because track '
+                                        'duration data is missing')));
                             return;
                           }
 
@@ -188,7 +206,7 @@ class _SearchViewState extends State<SearchView> {
                               context: context,
                               duration: Duration(milliseconds: 200),
                               builder: (context) =>
-                                  ScrobbleAlbumView(album: fullAlbum));
+                                  ScrobbleAlbumView(album: album));
 
                           if (result != null) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -202,9 +220,11 @@ class _SearchViewState extends State<SearchView> {
                             .debounceTime(Duration(
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => SearchAlbumsRequest(query)),
-                        detailWidgetBuilder: (album) =>
-                            AlbumView(album: album)),
+                            .map((query) => _searchEngine.searchAlbums(query)),
+                        detailWidgetBuilder:
+                            _searchEngine == SearchEngine.spotify
+                                ? null
+                                : (album) => AlbumView(album: album)),
                   ]
                 : [Container(), Container(), Container()],
           )),

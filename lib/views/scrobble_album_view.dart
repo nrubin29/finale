@@ -32,7 +32,7 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
   }
 
   Future<void> _scrobble(BuildContext context) async {
-    List<BasicScrobbleableTrack> tracks = widget.album.tracks;
+    List<ScrobbleableTrack> tracks = widget.album.tracks;
     List<DateTime> timestamps;
 
     if (_behavior == ScrobbleTimestampBehavior.startingNow ||
