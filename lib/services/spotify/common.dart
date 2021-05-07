@@ -21,7 +21,7 @@ class SPage<T extends Displayable> {
   static T _fromJson<T extends Displayable>(Object json) {
     if (json is Map<String, dynamic>) {
       if (json['type'] == 'artist') {
-        return SArtistSimple.fromJson(json) as T;
+        return SArtist.fromJson(json) as T;
       } else if (json['type'] == 'album') {
         return SAlbumSimple.fromJson(json) as T;
       } else if (json['type'] == 'track') {

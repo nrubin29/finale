@@ -153,10 +153,10 @@ class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
   }
 }
 
-class SearchArtistsRequest extends PagedRequest<LArtistMatch> {
+class LSearchArtistsRequest extends PagedRequest<LArtistMatch> {
   String query;
 
-  SearchArtistsRequest(this.query);
+  LSearchArtistsRequest(this.query);
 
   @override
   Future<List<LArtistMatch>> doRequest(int limit, int page) async {

@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/spotify/album.dart';
+import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
@@ -55,6 +56,23 @@ class SSearchTracksRequest extends PagedRequest<STrack> {
       'offset': (page - 1) * limit
     });
     return SPage<STrack>.fromJson(rawResponse['tracks']).items;
+  }
+}
+
+class SSearchArtistsRequest extends PagedRequest<SArtist> {
+  String query;
+
+  SSearchArtistsRequest(this.query);
+
+  @override
+  Future<List<SArtist>> doRequest(int limit, int page) async {
+    final rawResponse = await _doRequest('search', {
+      'q': query,
+      'type': 'artist',
+      'limit': limit,
+      'offset': (page - 1) * limit
+    });
+    return SPage<SArtist>.fromJson(rawResponse['artists']).items;
   }
 }
 

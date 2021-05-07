@@ -1,7 +1,6 @@
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/spotify_dialog_component.dart';
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/spotify.dart';
@@ -38,6 +37,17 @@ extension SearchEngineQuery on SearchEngine {
         return LSearchTracksRequest(query);
       case SearchEngine.spotify:
         return SSearchTracksRequest(query);
+    }
+
+    throw Exception('Unknown search engine $this');
+  }
+
+  PagedRequest<BasicArtist> searchArtists(String query) {
+    switch (this) {
+      case SearchEngine.lastfm:
+        return LSearchArtistsRequest(query);
+      case SearchEngine.spotify:
+        return SSearchArtistsRequest(query);
     }
 
     throw Exception('Unknown search engine $this');
@@ -188,15 +198,17 @@ class _SearchViewState extends State<SearchView> {
                             _searchEngine == SearchEngine.spotify
                                 ? null
                                 : (track) => TrackView(track: track)),
-                    DisplayComponent<LArtistMatch>(
+                    DisplayComponent<BasicArtist>(
                         displayType: DisplayType.grid,
                         requestStream: _query
                             .debounceTime(Duration(
                                 milliseconds:
                                     Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => SearchArtistsRequest(query)),
-                        detailWidgetBuilder: (artist) =>
-                            ArtistView(artist: artist)),
+                            .map((query) => _searchEngine.searchArtists(query)),
+                        detailWidgetBuilder:
+                            _searchEngine == SearchEngine.spotify
+                                ? null
+                                : (artist) => ArtistView(artist: artist)),
                     DisplayComponent<BasicAlbum>(
                         secondaryAction: (item) async {
                           FullAlbum album;
