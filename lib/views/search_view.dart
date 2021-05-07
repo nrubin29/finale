@@ -106,6 +106,20 @@ class _SearchViewState extends State<SearchView> {
     SearchView.spotifyEnabledChanged.listen((_) {
       _setSpotifyEnabled();
     });
+
+    _query.listen((_) async {
+      (await SharedPreferences.getInstance())
+          .setInt('searchEngine', _searchEngine.index);
+    });
+
+    SharedPreferences.getInstance().then((sp) {
+      if (sp.containsKey('searchEngine')) {
+        setState(() {
+          _query.add(_currentQuery.copyWith(
+              searchEngine: SearchEngine.values[sp.getInt('searchEngine')]));
+        });
+      }
+    });
   }
 
   void _setSpotifyEnabled() async {
