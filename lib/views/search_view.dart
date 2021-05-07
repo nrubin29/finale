@@ -65,15 +65,43 @@ extension SearchEngineQuery on SearchEngine {
   }
 }
 
+class SearchQuery {
+  final SearchEngine searchEngine;
+  final String text;
+
+  const SearchQuery._(this.searchEngine, this.text);
+  const SearchQuery.empty() : this._(SearchEngine.lastfm, '');
+
+  SearchQuery copyWith({SearchEngine searchEngine, String text}) =>
+      SearchQuery._(searchEngine ?? this.searchEngine, text ?? this.text);
+
+  @override
+  String toString() => 'SearchQuery(searchEngine=$searchEngine, text=$text)';
+}
+
 class SearchView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SearchViewState();
 }
 
 class _SearchViewState extends State<SearchView> {
+  static const debounceDuration =
+      Duration(milliseconds: Duration.millisecondsPerSecond ~/ 2);
+
   final _textController = TextEditingController();
-  var _searchEngine = SearchEngine.lastfm;
-  final _query = BehaviorSubject<String>();
+  final _query = ReplaySubject<SearchQuery>(maxSize: 2)
+    ..add(SearchQuery.empty());
+
+  SearchQuery get _currentQuery => _query.values.last;
+
+  SearchEngine get _searchEngine => _currentQuery.searchEngine;
+
+  /// Determine whether or not we should debounce before the given query.
+  ///
+  /// We want to debounce if the text changes, but we want search engine changes
+  /// to be immediate.
+  bool _shouldDebounce(SearchQuery query) =>
+      query.text != _query.values.first.text;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +124,7 @@ class _SearchViewState extends State<SearchView> {
                 cursorColor: Colors.white,
                 onChanged: (text) {
                   setState(() {
-                    _query.add(text);
+                    _query.add(_currentQuery.copyWith(text: text));
                   });
                 },
               ),
@@ -127,12 +155,14 @@ class _SearchViewState extends State<SearchView> {
 
                         if (loggedIn) {
                           setState(() {
-                            _searchEngine = SearchEngine.spotify;
+                            _query.add(_currentQuery.copyWith(
+                                searchEngine: SearchEngine.spotify));
                           });
                         }
                       } else {
                         setState(() {
-                          _searchEngine = choice;
+                          _query.add(
+                              _currentQuery.copyWith(searchEngine: choice));
                         });
                       }
                     },
@@ -151,7 +181,7 @@ class _SearchViewState extends State<SearchView> {
                       onPressed: () {
                         setState(() {
                           _textController.value = TextEditingValue.empty;
-                          _query.add('');
+                          _query.add(_currentQuery.copyWith(text: ''));
                         });
                       },
                     ))
@@ -162,7 +192,7 @@ class _SearchViewState extends State<SearchView> {
                 Tab(icon: Icon(Icons.album))
               ])),
           body: TabBarView(
-            children: _query.hasValue && _query.value != ''
+            children: _currentQuery.text != ''
                 ? [
                     DisplayComponent<Track>(
                         secondaryAction: (item) async {
@@ -190,10 +220,9 @@ class _SearchViewState extends State<SearchView> {
                           }
                         },
                         requestStream: _query
-                            .debounceTime(Duration(
-                                milliseconds:
-                                    Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => _searchEngine.searchTracks(query)),
+                            .debounceWhere(_shouldDebounce, debounceDuration)
+                            .map((query) =>
+                                query.searchEngine.searchTracks(query.text)),
                         detailWidgetBuilder:
                             _searchEngine == SearchEngine.spotify
                                 ? null
@@ -201,10 +230,9 @@ class _SearchViewState extends State<SearchView> {
                     DisplayComponent<BasicArtist>(
                         displayType: DisplayType.grid,
                         requestStream: _query
-                            .debounceTime(Duration(
-                                milliseconds:
-                                    Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => _searchEngine.searchArtists(query)),
+                            .debounceWhere(_shouldDebounce, debounceDuration)
+                            .map((query) =>
+                                query.searchEngine.searchArtists(query.text)),
                         detailWidgetBuilder:
                             _searchEngine == SearchEngine.spotify
                                 ? null
@@ -247,10 +275,9 @@ class _SearchViewState extends State<SearchView> {
                         },
                         displayType: DisplayType.grid,
                         requestStream: _query
-                            .debounceTime(Duration(
-                                milliseconds:
-                                    Duration.millisecondsPerSecond ~/ 2))
-                            .map((query) => _searchEngine.searchAlbums(query)),
+                            .debounceWhere(_shouldDebounce, debounceDuration)
+                            .map((query) =>
+                                query.searchEngine.searchAlbums(query.text)),
                         detailWidgetBuilder:
                             _searchEngine == SearchEngine.spotify
                                 ? null
@@ -266,5 +293,12 @@ class _SearchViewState extends State<SearchView> {
     super.dispose();
     _textController.dispose();
     _query.close();
+  }
+}
+
+extension _DebounceWhere<T> on Stream<T> {
+  Stream<T> debounceWhere(bool Function(T) test, Duration duration) {
+    return debounce(
+        (e) => test(e) ? TimerStream(true, duration) : Stream.value(true));
   }
 }
