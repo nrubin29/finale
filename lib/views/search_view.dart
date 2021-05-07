@@ -127,7 +127,8 @@ class _SearchViewState extends State<SearchView> {
         (await SharedPreferences.getInstance()).getBool('spotifyEnabled') ??
             true;
 
-    if (!_spotifyEnabled && _searchEngine == SearchEngine.spotify) {
+    if (_searchEngine == SearchEngine.spotify &&
+        (!_spotifyEnabled || !(await Spotify.isLoggedIn))) {
       setState(() {
         _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
       });
