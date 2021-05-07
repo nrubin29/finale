@@ -11,6 +11,7 @@ import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
@@ -18,15 +19,19 @@ import 'package:social_media_buttons/social_media_icons.dart';
 enum SearchEngine { lastfm, spotify }
 
 extension SearchEngineIcon on SearchEngine {
-  IconData get icon {
+  Widget getIcon(Color color) {
     switch (this) {
       case SearchEngine.lastfm:
-        return Icons.music_note;
+        return SvgPicture.asset(
+          'assets/images/lastfm.svg',
+          color: color,
+          width: 24,
+        );
       case SearchEngine.spotify:
-        return SocialMediaIcons.spotify;
+        return Icon(SocialMediaIcons.spotify, color: color);
     }
 
-    return Icons.error;
+    return Icon(Icons.error, color: color);
   }
 }
 
@@ -138,10 +143,11 @@ class _SearchViewState extends State<SearchView> {
                     items: SearchEngine.values
                         .map((searchEngine) => DropdownMenuItem(
                             value: searchEngine,
-                            child: Icon(searchEngine.icon, color: Colors.red)))
+                            child: searchEngine.getIcon(Colors.red)))
                         .toList(growable: false),
                     selectedItemBuilder: (context) => SearchEngine.values
-                        .map((searchEngine) => Icon(searchEngine.icon))
+                        .map((searchEngine) =>
+                            searchEngine.getIcon(Colors.white))
                         .toList(growable: false),
                     value: _searchEngine,
                     onChanged: (choice) async {

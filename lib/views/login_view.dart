@@ -6,6 +6,7 @@ import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -98,16 +99,27 @@ class LoginView extends StatelessWidget {
                                 .subtitle1
                                 .copyWith(color: Colors.white)),
                         SizedBox(height: 10),
-                        TextButton(
+                        OutlinedButton(
                           onPressed: () => _logIn(context),
                           style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red)),
-                          child: Text('Log in with Last.fm',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  .copyWith(color: Colors.white)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/images/lastfm.svg',
+                                color: Colors.white,
+                                width: 24,
+                              ),
+                              SizedBox(width: 8),
+                              Text('Log in with Last.fm',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      .copyWith(color: Colors.white))
+                            ],
+                          ),
                         )
                       ],
                     )))),
