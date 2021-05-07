@@ -15,6 +15,7 @@ class SettingsView extends StatelessWidget {
                   children: [
                     ListTile(
                       title: Text('About'),
+                      leading: Icon(Icons.info),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.push(
@@ -25,6 +26,7 @@ class SettingsView extends StatelessWidget {
                     ),
                     ListTile(
                       title: Text('Empty image cache'),
+                      leading: Icon(Icons.delete),
                       onTap: () async {
                         await DefaultCacheManager().emptyCache();
                         await ImageIdCache().drop();
@@ -44,6 +46,7 @@ class SettingsView extends StatelessWidget {
                     ),
                     ListTile(
                         title: Text('Log out'),
+                        leading: Icon(Icons.logout),
                         onTap: () async {
                           await (await SharedPreferences.getInstance()).clear();
                           Navigator.popUntil(context, (route) => false);
