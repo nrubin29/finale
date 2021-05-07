@@ -1,5 +1,6 @@
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/spotify_dialog_component.dart';
+import 'package:finale/constants.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/album.dart';
@@ -114,66 +115,74 @@ class _SearchViewState extends State<SearchView> {
       length: 3,
       child: Scaffold(
           appBar: AppBar(
-              backgroundColor: _searchEngine == SearchEngine.lastfm
-                  ? null
-                  : Color.fromRGBO(30, 215, 96, 1),
-              title: TextField(
-                controller: _textController,
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  hintStyle: TextStyle(color: Colors.white),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white)),
-                ),
-                cursorColor: Colors.white,
-                onChanged: (text) {
-                  setState(() {
-                    _query.add(_currentQuery.copyWith(text: text));
-                  });
-                },
-              ),
-              leading: Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Center(
-                  child: DropdownButton<SearchEngine>(
-                    iconEnabledColor: Colors.white,
-                    isDense: true,
-                    underline: SizedBox(),
-                    items: SearchEngine.values
-                        .map((searchEngine) => DropdownMenuItem(
-                            value: searchEngine,
-                            child: searchEngine.getIcon(Colors.red)))
-                        .toList(growable: false),
-                    selectedItemBuilder: (context) => SearchEngine.values
-                        .map((searchEngine) =>
-                            searchEngine.getIcon(Colors.white))
-                        .toList(growable: false),
-                    value: _searchEngine,
-                    onChanged: (choice) async {
-                      if (choice == _searchEngine) {
-                        return;
-                      } else if (choice == SearchEngine.spotify &&
-                          !(await Spotify.hasAuthData)) {
-                        final loggedIn = await showDialog<bool>(
-                            context: context,
-                            builder: (context) => SpotifyDialogComponent());
+              backgroundColor:
+                  _searchEngine == SearchEngine.lastfm ? null : spotifyGreen,
+              titleSpacing: 0,
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButton<SearchEngine>(
+                      iconEnabledColor: Colors.white,
+                      isDense: true,
+                      underline: SizedBox(),
+                      items: SearchEngine.values
+                          .map((searchEngine) => DropdownMenuItem(
+                              value: searchEngine,
+                              child: searchEngine.getIcon(
+                                  _searchEngine == SearchEngine.lastfm
+                                      ? Colors.red
+                                      : spotifyGreen)))
+                          .toList(growable: false),
+                      selectedItemBuilder: (context) => SearchEngine.values
+                          .map((searchEngine) =>
+                              searchEngine.getIcon(Colors.white))
+                          .toList(growable: false),
+                      value: _searchEngine,
+                      onChanged: (choice) async {
+                        if (choice == _searchEngine) {
+                          return;
+                        } else if (choice == SearchEngine.spotify &&
+                            !(await Spotify.hasAuthData)) {
+                          final loggedIn = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => SpotifyDialogComponent());
 
-                        if (loggedIn) {
+                          if (loggedIn) {
+                            setState(() {
+                              _query.add(_currentQuery.copyWith(
+                                  searchEngine: SearchEngine.spotify));
+                            });
+                          }
+                        } else {
                           setState(() {
-                            _query.add(_currentQuery.copyWith(
-                                searchEngine: SearchEngine.spotify));
+                            _query.add(
+                                _currentQuery.copyWith(searchEngine: choice));
                           });
                         }
-                      } else {
-                        setState(() {
-                          _query.add(
-                              _currentQuery.copyWith(searchEngine: choice));
-                        });
-                      }
-                    },
+                      },
+                    ),
                   ),
-                ),
+                  SizedBox(width: 10),
+                  Expanded(
+                      child: TextField(
+                    controller: _textController,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      hintStyle: TextStyle(color: Colors.white),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                    ),
+                    cursorColor: Colors.white,
+                    onChanged: (text) {
+                      setState(() {
+                        _query.add(_currentQuery.copyWith(text: text));
+                      });
+                    },
+                  )),
+                ],
               ),
               actions: [
                 Visibility(
