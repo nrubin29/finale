@@ -9,13 +9,14 @@ class SpotifyDialogComponent extends StatelessWidget {
     return AlertDialog(
       title: Row(children: [
         Icon(SocialMediaIcons.spotify),
-        SizedBox(width: 5),
+        SizedBox(width: 10),
         Text('Spotify Search')
       ]),
-      content:
-          Text('Sign in with your Spotify account to search and scrobble from '
-              'Spotify\'s database. Spotify\'s database is much cleaner than '
-              'Last.fm\'s, but it may not have some tracks.'),
+      content: Text(
+          'Sign in with your Spotify account to search and scrobble from '
+          'Spotify\'s database. Spotify\'s database is much cleaner than '
+          'Last.fm\'s, but it may not have some tracks.\n\nIf you don\'t want '
+          'to use this feature, you can disable it in the in-app settings.'),
       actions: [
         TextButton(
           child: Text('Cancel'),

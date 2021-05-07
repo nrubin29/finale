@@ -1,6 +1,7 @@
 import 'package:finale/cache.dart';
 import 'package:finale/views/about_view.dart';
 import 'package:finale/views/login_view.dart';
+import 'package:finale/views/search_engine_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +23,18 @@ class SettingsView extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AboutView()));
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Search Engines'),
+                      leading: Icon(Icons.search),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SearchEngineSettingsView()));
                       },
                     ),
                     ListTile(

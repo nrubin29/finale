@@ -12,9 +12,9 @@ import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
 
 enum SearchEngine { lastfm, spotify }
@@ -23,11 +23,7 @@ extension SearchEngineIcon on SearchEngine {
   Widget getIcon(Color color) {
     switch (this) {
       case SearchEngine.lastfm:
-        return SvgPicture.asset(
-          'assets/images/lastfm.svg',
-          color: color,
-          width: 24,
-        );
+        return getLastfmIcon(color);
       case SearchEngine.spotify:
         return Icon(SocialMediaIcons.spotify, color: color);
     }
@@ -86,6 +82,10 @@ class SearchQuery {
 }
 
 class SearchView extends StatefulWidget {
+  // This stream needs to be open for the entire lifetime of the app.
+  // ignore: close_sinks
+  static final spotifyEnabledChanged = PublishSubject<void>();
+
   @override
   State<StatefulWidget> createState() => _SearchViewState();
 }
@@ -97,6 +97,28 @@ class _SearchViewState extends State<SearchView> {
   final _textController = TextEditingController();
   final _query = ReplaySubject<SearchQuery>(maxSize: 2)
     ..add(SearchQuery.empty());
+  var _spotifyEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _setSpotifyEnabled();
+    SearchView.spotifyEnabledChanged.listen((_) {
+      _setSpotifyEnabled();
+    });
+  }
+
+  void _setSpotifyEnabled() async {
+    _spotifyEnabled =
+        (await SharedPreferences.getInstance()).getBool('spotifyEnabled') ??
+            true;
+
+    if (!_spotifyEnabled && _searchEngine == SearchEngine.spotify) {
+      setState(() {
+        _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
+      });
+    }
+  }
 
   SearchQuery get _currentQuery => _query.values.last;
 
@@ -117,54 +139,60 @@ class _SearchViewState extends State<SearchView> {
           appBar: AppBar(
               backgroundColor:
                   _searchEngine == SearchEngine.lastfm ? null : spotifyGreen,
-              titleSpacing: 0,
+              titleSpacing: _spotifyEnabled ? 0 : null,
               title: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropdownButton<SearchEngine>(
-                      iconEnabledColor: Colors.white,
-                      isDense: true,
-                      underline: SizedBox(),
-                      items: SearchEngine.values
-                          .map((searchEngine) => DropdownMenuItem(
-                              value: searchEngine,
-                              child: searchEngine.getIcon(
-                                  _searchEngine == SearchEngine.lastfm
-                                      ? Colors.red
-                                      : spotifyGreen)))
-                          .toList(growable: false),
-                      selectedItemBuilder: (context) => SearchEngine.values
-                          .map((searchEngine) =>
-                              searchEngine.getIcon(Colors.white))
-                          .toList(growable: false),
-                      value: _searchEngine,
-                      onChanged: (choice) async {
-                        if (choice == _searchEngine) {
-                          return;
-                        } else if (choice == SearchEngine.spotify &&
-                            !(await Spotify.hasAuthData)) {
-                          final loggedIn = await showDialog<bool>(
-                              context: context,
-                              builder: (context) => SpotifyDialogComponent());
+                  _spotifyEnabled
+                      ? Row(children: [
+                          ButtonTheme(
+                            alignedDropdown: true,
+                            child: DropdownButton<SearchEngine>(
+                              iconEnabledColor: Colors.white,
+                              isDense: true,
+                              underline: SizedBox(),
+                              items: SearchEngine.values
+                                  .map((searchEngine) => DropdownMenuItem(
+                                      value: searchEngine,
+                                      child: searchEngine.getIcon(
+                                          _searchEngine == SearchEngine.lastfm
+                                              ? Colors.red
+                                              : spotifyGreen)))
+                                  .toList(growable: false),
+                              selectedItemBuilder: (context) => SearchEngine
+                                  .values
+                                  .map((searchEngine) =>
+                                      searchEngine.getIcon(Colors.white))
+                                  .toList(growable: false),
+                              value: _searchEngine,
+                              onChanged: (choice) async {
+                                if (choice == _searchEngine) {
+                                  return;
+                                } else if (choice == SearchEngine.spotify &&
+                                    !(await Spotify.hasAuthData)) {
+                                  final loggedIn = await showDialog<bool>(
+                                      context: context,
+                                      builder: (context) =>
+                                          SpotifyDialogComponent());
 
-                          if (loggedIn) {
-                            setState(() {
-                              _query.add(_currentQuery.copyWith(
-                                  searchEngine: SearchEngine.spotify));
-                            });
-                          }
-                        } else {
-                          setState(() {
-                            _query.add(
-                                _currentQuery.copyWith(searchEngine: choice));
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 10),
+                                  if (loggedIn) {
+                                    setState(() {
+                                      _query.add(_currentQuery.copyWith(
+                                          searchEngine: SearchEngine.spotify));
+                                    });
+                                  }
+                                } else {
+                                  setState(() {
+                                    _query.add(_currentQuery.copyWith(
+                                        searchEngine: choice));
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                        ])
+                      : Container(),
                   Expanded(
                       child: TextField(
                     controller: _textController,
