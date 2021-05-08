@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
@@ -37,10 +38,9 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: createAppBar(
+          widget.artist.name,
           backgroundColor: spotifyGreen,
-          centerTitle: true,
-          title: Text(widget.artist.name),
         ),
         body: ListView(
           children: [

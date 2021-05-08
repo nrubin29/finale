@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/tags_component.dart';
@@ -42,18 +43,9 @@ class _TrackViewState extends State<TrackView> {
         loved = track.userLoved;
 
         return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Column(
-                children: [
-                  Text(track.name),
-                  if (track.artist != null)
-                    Text(
-                      track.artist.name,
-                      style: TextStyle(fontSize: 12),
-                    )
-                ],
-              ),
+            appBar: createAppBar(
+              track.name,
+              subtitle: track.artist?.name,
               actions: [
                 IconButton(
                   icon: Icon(Icons.share),

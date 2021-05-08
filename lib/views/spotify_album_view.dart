@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
@@ -32,18 +33,10 @@ class SpotifyAlbumView extends StatelessWidget {
         final album = snapshot.data;
 
         return Scaffold(
-            appBar: AppBar(
+            appBar: createAppBar(
+              album.name,
+              subtitle: album.artist.name,
               backgroundColor: spotifyGreen,
-              centerTitle: true,
-              title: Column(
-                children: [
-                  Text(album.name),
-                  Text(
-                    album.artist.name,
-                    style: TextStyle(fontSize: 12),
-                  )
-                ],
-              ),
               actions: [
                 if (album.canScrobble)
                   Builder(

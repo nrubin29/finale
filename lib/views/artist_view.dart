@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
@@ -48,9 +49,8 @@ class _ArtistViewState extends State<ArtistView>
         final artist = snapshot.data;
 
         return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text(artist.name),
+            appBar: createAppBar(
+              artist.name,
               actions: [
                 IconButton(
                   icon: Icon(Icons.share),

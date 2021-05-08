@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
@@ -35,17 +36,9 @@ class AlbumView extends StatelessWidget {
         final album = snapshot.data;
 
         return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Column(
-                children: [
-                  Text(album.name),
-                  Text(
-                    album.artist.name,
-                    style: TextStyle(fontSize: 12),
-                  )
-                ],
-              ),
+            appBar: createAppBar(
+              album.name,
+              subtitle: album.artist.name,
               actions: [
                 IconButton(
                   icon: Icon(Icons.share),
