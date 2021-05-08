@@ -44,7 +44,10 @@ class _SearchEngineSettingsViewState extends State<SearchEngineSettingsView> {
       body: Column(children: [
         ListTile(
           title: Text('Last.fm'),
-          leading: getLastfmIcon(Colors.grey),
+          leading: getLastfmIcon(
+              Theme.of(context).brightness == Brightness.light
+                  ? Colors.black45
+                  : Colors.white),
           trailing: Switch(
             value: true,
             onChanged: (_) {},

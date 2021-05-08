@@ -31,10 +31,14 @@ class MyApp extends StatelessWidget {
                     surface: Colors.red))
             .copyWith(
                 timePickerTheme: TimePickerThemeData(
-                    backgroundColor: ColorScheme.dark().background)),
+                    backgroundColor: ColorScheme.dark().background),
+                switchTheme: SwitchThemeData(
+                    thumbColor:
+                        MaterialStateColor.resolveWith((_) => Colors.red),
+                    trackColor: MaterialStateColor.resolveWith(
+                        (_) => Colors.red.shade200))),
         home: FutureBuilder<String>(
-            future: SharedPreferences.getInstance()
-                .then((value) => value.getString('name')),
+            future: SharedPreferences.getInstance().then((value) => value.getString('name')),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return ErrorView(error: snapshot.error);
