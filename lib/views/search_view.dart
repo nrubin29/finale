@@ -10,6 +10,7 @@ import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/scrobble_view.dart';
+import 'package:finale/views/spotify_album_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -336,10 +337,10 @@ class _SearchViewState extends State<SearchView> {
                             .debounceWhere(_shouldDebounce, debounceDuration)
                             .map((query) =>
                                 query.searchEngine.searchAlbums(query.text)),
-                        detailWidgetBuilder:
+                        detailWidgetBuilder: (album) =>
                             _searchEngine == SearchEngine.spotify
-                                ? null
-                                : (album) => AlbumView(album: album)),
+                                ? SpotifyAlbumView(album: album)
+                                : AlbumView(album: album)),
                   ]
                 : [Container(), Container(), Container()],
           )),

@@ -29,7 +29,7 @@ class SAlbumSimple extends BasicAlbum {
 
 @JsonSerializable()
 class SAlbumFull extends FullAlbum {
-  List<SArtistSimple> artists; // Should be SArtistFull
+  List<SArtistSimple> artists;
 
   @JsonKey(name: 'href')
   String url;
@@ -41,12 +41,17 @@ class SAlbumFull extends FullAlbum {
   String imageUrl;
 
   @JsonKey(fromJson: extractItems)
-  List<STrackSimple> tracks;
+  List<STrackSimple> rawTracks;
 
   BasicArtist get artist => artists.first;
 
-  SAlbumFull(
-      this.artists, this.url, this.name, this.id, this.imageUrl, this.tracks);
+  @override
+  List<SAlbumTrack> get tracks => rawTracks
+      .map((track) => SAlbumTrack(track, name))
+      .toList(growable: false);
+
+  SAlbumFull(this.artists, this.url, this.name, this.id, this.imageUrl,
+      this.rawTracks);
 
   factory SAlbumFull.fromJson(Map<String, dynamic> json) =>
       _$SAlbumFullFromJson(json);
@@ -55,4 +60,15 @@ class SAlbumFull extends FullAlbum {
       (object['items'] as List<dynamic>)
           .map((item) => STrackSimple.fromJson(item))
           .toList(growable: false);
+}
+
+class SAlbumTrack extends STrackSimple {
+  @override
+  final String albumName;
+
+  SAlbumTrack(STrackSimple track, this.albumName)
+      : super(track.artists, track.durationMs, track.url, track.name);
+
+  @override
+  String get displaySubtitle => null;
 }

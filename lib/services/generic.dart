@@ -61,10 +61,8 @@ class BasicConcreteTrack extends Track {
   String artistName;
   String albumName;
   String url;
-  int duration;
 
-  BasicConcreteTrack(this.name, this.artistName, this.albumName,
-      {this.url, this.duration});
+  BasicConcreteTrack(this.name, this.artistName, this.albumName, [this.url]);
 
   @override
   String toString() =>
@@ -74,6 +72,22 @@ class BasicConcreteTrack extends Track {
 abstract class ScrobbleableTrack extends Track {
   /// The duration of the track in seconds.
   int get duration;
+}
+
+class ConcreteScrobbleableTrack extends ScrobbleableTrack {
+  String name;
+  String artistName;
+  String albumName;
+  String url;
+  int duration;
+
+  ConcreteScrobbleableTrack(this.name, this.artistName, this.albumName,
+      [this.url, this.duration]);
+
+  @override
+  String toString() =>
+      'ConcreteScrobbleableTrack(name=$name, artist=$artistName, '
+      'album=$albumName, duration:$duration)';
 }
 
 abstract class BasicAlbum extends Displayable {

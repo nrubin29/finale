@@ -8,7 +8,7 @@ import 'package:wakelock/wakelock.dart';
 
 enum ListenContinuouslyTrackStatus { scrobbled, skipped, noResults, error }
 
-class ListenContinuouslyTrack extends BasicConcreteTrack {
+class ListenContinuouslyTrack extends ConcreteScrobbleableTrack {
   DateTime timestamp;
   ListenContinuouslyTrackStatus status;
 
