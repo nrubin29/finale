@@ -2,8 +2,8 @@ import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/luser.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/track_view.dart';
@@ -81,7 +81,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
             for (final track in _tracks.take(3))
               ListTile(
                 title: Text(track.name),
-                subtitle: Text(track.artist),
+                subtitle: Text(track.artistName),
                 trailing: Text('${track.playCount} scrobbles'),
                 leading: ImageComponent(displayable: track),
                 onTap: () {

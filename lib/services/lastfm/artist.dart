@@ -1,10 +1,10 @@
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
-import 'package:finale/types/lalbum.dart';
-import 'package:finale/types/lcommon.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/album.dart';
+import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'lartist.g.dart';
+part 'artist.g.dart';
 
 @JsonSerializable()
 class LTopArtistsResponseArtist extends BasicScrobbledArtist with HasPlayCount {
@@ -123,23 +123,22 @@ class LArtistGetTopAlbumsResponse {
 }
 
 @JsonSerializable()
-class LArtistTopTrack extends BasicTrack {
+class LArtistTopTrack extends Track {
   String name;
   String url;
 
-  @JsonKey(name: 'artist')
-  LTopAlbumsResponseAlbumArtist artistObject;
+  LTopAlbumsResponseAlbumArtist artist;
 
-  String get artist => artistObject.name;
+  String get artistName => artist.name;
 
-  String get album => null;
+  String get albumName => null;
 
   Future<String> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }
 
-  LArtistTopTrack(this.name, this.url, this.artistObject);
+  LArtistTopTrack(this.name, this.url, this.artist);
 
   factory LArtistTopTrack.fromJson(Map<String, dynamic> json) =>
       _$LArtistTopTrackFromJson(json);

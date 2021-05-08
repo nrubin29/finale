@@ -1,5 +1,5 @@
 import 'package:finale/cache.dart';
-import 'package:finale/components/error_component.dart';
+import 'package:finale/views/error_view.dart';
 import 'package:finale/views/login_view.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +31,17 @@ class MyApp extends StatelessWidget {
                     surface: Colors.red))
             .copyWith(
                 timePickerTheme: TimePickerThemeData(
-                    backgroundColor: ColorScheme.dark().background)),
+                    backgroundColor: ColorScheme.dark().background),
+                switchTheme: SwitchThemeData(
+                    thumbColor:
+                        MaterialStateColor.resolveWith((_) => Colors.red),
+                    trackColor: MaterialStateColor.resolveWith(
+                        (_) => Colors.red.shade200))),
         home: FutureBuilder<String>(
-            future: SharedPreferences.getInstance()
-                .then((value) => value.getString('name')),
+            future: SharedPreferences.getInstance().then((value) => value.getString('name')),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return ErrorComponent(error: snapshot.error);
+                return ErrorView(error: snapshot.error);
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox();
               } else if (snapshot.hasData) {

@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:finale/components/image_component.dart';
+import 'package:finale/constants.dart';
 import 'package:finale/env.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/lartist.dart';
+import 'package:finale/services/lastfm/artist.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
@@ -98,16 +99,23 @@ class LoginView extends StatelessWidget {
                                 .subtitle1
                                 .copyWith(color: Colors.white)),
                         SizedBox(height: 10),
-                        TextButton(
+                        OutlinedButton(
                           onPressed: () => _logIn(context),
                           style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red)),
-                          child: Text('Log in with Last.fm',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  .copyWith(color: Colors.white)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              getLastfmIcon(Colors.white),
+                              SizedBox(width: 8),
+                              Text('Log in with Last.fm',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      .copyWith(color: Colors.white))
+                            ],
+                          ),
                         )
                       ],
                     )))),

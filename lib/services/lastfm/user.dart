@@ -1,10 +1,11 @@
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'luser.g.dart';
+part 'user.g.dart';
 
 @JsonSerializable()
 class LUserRegistered {
@@ -147,9 +148,8 @@ class LUserWeeklyTrackChartTrackArtist {
 }
 
 @JsonSerializable()
-class LUserWeeklyTrackChartTrack extends BasicTrack {
-  @JsonKey(name: 'artist')
-  LUserWeeklyTrackChartTrackArtist artistObject;
+class LUserWeeklyTrackChartTrack extends Track {
+  LUserWeeklyTrackChartTrackArtist artist;
 
   String url;
 
@@ -158,17 +158,16 @@ class LUserWeeklyTrackChartTrack extends BasicTrack {
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
   int playCount;
 
-  LUserWeeklyTrackChartTrack(
-      this.artistObject, this.url, this.name, this.playCount);
+  LUserWeeklyTrackChartTrack(this.artist, this.url, this.name, this.playCount);
 
   factory LUserWeeklyTrackChartTrack.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyTrackChartTrackFromJson(json);
 
   @override
-  String get album => null;
+  String get albumName => null;
 
   @override
-  String get artist => artistObject.name;
+  String get artistName => artist.name;
 
   @override
   String get displayTrailing => Intl.plural(playCount ?? 0,

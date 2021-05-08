@@ -1,22 +1,23 @@
 import 'dart:math';
 
-import 'package:finale/components/error_component.dart';
+import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/tags_component.dart';
 import 'package:finale/components/wiki_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
-import 'package:finale/types/ltrack.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
+import 'package:finale/views/error_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
 
 class TrackView extends StatefulWidget {
-  final BasicTrack track;
+  final Track track;
 
   TrackView({@required this.track});
 
@@ -33,7 +34,7 @@ class _TrackViewState extends State<TrackView> {
       future: Lastfm.getTrack(widget.track),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorComponent(error: snapshot.error);
+          return ErrorView(error: snapshot.error);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }
@@ -42,18 +43,9 @@ class _TrackViewState extends State<TrackView> {
         loved = track.userLoved;
 
         return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Column(
-                children: [
-                  Text(track.name),
-                  if (track.artist != null)
-                    Text(
-                      track.artist.name,
-                      style: TextStyle(fontSize: 12),
-                    )
-                ],
-              ),
+            appBar: createAppBar(
+              track.name,
+              subtitle: track.artist?.name,
               actions: [
                 IconButton(
                   icon: Icon(Icons.share),

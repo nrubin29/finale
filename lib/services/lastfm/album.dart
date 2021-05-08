@@ -1,8 +1,8 @@
-import 'package:finale/types/generic.dart';
-import 'package:finale/types/lcommon.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'lalbum.g.dart';
+part 'album.g.dart';
 
 @JsonSerializable()
 class LTopAlbumsResponseAlbumArtist extends BasicArtist {
@@ -81,7 +81,7 @@ class LAlbumSearchResponse {
 }
 
 @JsonSerializable()
-class LAlbumTrack extends BasicScrobbleableTrack {
+class LAlbumTrack extends ScrobbleableTrack {
   String name;
   String url;
 
@@ -90,14 +90,15 @@ class LAlbumTrack extends BasicScrobbleableTrack {
 
   String album;
 
-  @JsonKey(name: 'artist')
-  LTopAlbumsResponseAlbumArtist artistObject;
+  LTopAlbumsResponseAlbumArtist artist;
 
-  String get artist => artistObject.name;
+  String get albumName => album;
+
+  String get artistName => artist.name;
 
   String get displaySubtitle => null;
 
-  LAlbumTrack(this.name, this.url, this.duration, this.artistObject);
+  LAlbumTrack(this.name, this.url, this.duration, this.album, this.artist);
 
   factory LAlbumTrack.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTrackFromJson(json);

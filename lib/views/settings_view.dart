@@ -1,6 +1,7 @@
 import 'package:finale/cache.dart';
 import 'package:finale/views/about_view.dart';
 import 'package:finale/views/login_view.dart';
+import 'package:finale/views/search_engine_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,7 @@ class SettingsView extends StatelessWidget {
                   children: [
                     ListTile(
                       title: Text('About'),
+                      leading: Icon(Icons.info),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.push(
@@ -24,7 +26,20 @@ class SettingsView extends StatelessWidget {
                       },
                     ),
                     ListTile(
+                      title: Text('Search Engines'),
+                      leading: Icon(Icons.search),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SearchEngineSettingsView()));
+                      },
+                    ),
+                    ListTile(
                       title: Text('Empty image cache'),
+                      leading: Icon(Icons.delete),
                       onTap: () async {
                         await DefaultCacheManager().emptyCache();
                         await ImageIdCache().drop();
@@ -44,6 +59,7 @@ class SettingsView extends StatelessWidget {
                     ),
                     ListTile(
                         title: Text('Log out'),
+                        leading: Icon(Icons.logout),
                         onTap: () async {
                           await (await SharedPreferences.getInstance()).clear();
                           Navigator.popUntil(context, (route) => false);

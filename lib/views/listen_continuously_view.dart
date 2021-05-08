@@ -1,6 +1,6 @@
 import 'package:finale/components/display_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +8,7 @@ import 'package:wakelock/wakelock.dart';
 
 enum ListenContinuouslyTrackStatus { scrobbled, skipped, noResults, error }
 
-class ListenContinuouslyTrack extends BasicConcreteTrack {
+class ListenContinuouslyTrack extends ConcreteScrobbleableTrack {
   DateTime timestamp;
   ListenContinuouslyTrackStatus status;
 
@@ -36,7 +36,7 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
     // it's also a single).
     return other is ListenContinuouslyTrack &&
         other.name == name &&
-        other.artist == artist;
+        other.artistName == artistName;
   }
 }
 

@@ -2,19 +2,14 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
-import 'package:finale/types/generic.dart';
-import 'package:finale/types/lalbum.dart';
-import 'package:finale/types/lartist.dart';
-import 'package:finale/types/lcommon.dart';
-import 'package:finale/types/ltrack.dart';
-import 'package:finale/types/luser.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/album.dart';
+import 'package:finale/services/lastfm/artist.dart';
+import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/services/lastfm/user.dart';
 import 'package:http/http.dart';
-import 'package:http_throttle/http_throttle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-enum RequestVerb { get, post }
-
-final _client = ThrottleClient(10);
 
 Uri _buildUri(String method, Map<String, dynamic> data) {
   final allData = {
@@ -44,8 +39,8 @@ Future<Map<String, dynamic>> _doRequest(
   final uri = _buildUri(method, data);
 
   final response = verb == RequestVerb.get
-      ? await _client.get(uri)
-      : await _client.post(uri);
+      ? await httpClient.get(uri)
+      : await httpClient.post(uri);
 
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
@@ -57,12 +52,7 @@ Future<Map<String, dynamic>> _doRequest(
   }
 }
 
-abstract class PagedLastfmRequest<T> {
-  Future<List<T>> doRequest(int limit, int page);
-}
-
-class GetRecentTracksRequest
-    extends PagedLastfmRequest<LRecentTracksResponseTrack> {
+class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   String username;
 
   GetRecentTracksRequest(this.username);
@@ -85,8 +75,7 @@ class GetRecentTracksRequest
   }
 }
 
-class GetTopArtistsRequest
-    extends PagedLastfmRequest<LTopArtistsResponseArtist> {
+class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
   String username;
 
   GetTopArtistsRequest(this.username);
@@ -103,7 +92,7 @@ class GetTopArtistsRequest
   }
 }
 
-class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
+class GetTopAlbumsRequest extends PagedRequest<LTopAlbumsResponseAlbum> {
   String username;
 
   GetTopAlbumsRequest(this.username);
@@ -120,7 +109,7 @@ class GetTopAlbumsRequest extends PagedLastfmRequest<LTopAlbumsResponseAlbum> {
   }
 }
 
-class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
+class GetTopTracksRequest extends PagedRequest<LTopTracksResponseTrack> {
   String username;
 
   GetTopTracksRequest(this.username);
@@ -137,7 +126,7 @@ class GetTopTracksRequest extends PagedLastfmRequest<LTopTracksResponseTrack> {
   }
 }
 
-class GetFriendsRequest extends PagedLastfmRequest<LUser> {
+class GetFriendsRequest extends PagedRequest<LUser> {
   String username;
 
   GetFriendsRequest(this.username);
@@ -150,10 +139,10 @@ class GetFriendsRequest extends PagedLastfmRequest<LUser> {
   }
 }
 
-class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
+class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
   String query;
 
-  SearchTracksRequest(this.query);
+  LSearchTracksRequest(this.query);
 
   @override
   Future<List<LTrackMatch>> doRequest(int limit, int page) async {
@@ -164,10 +153,10 @@ class SearchTracksRequest extends PagedLastfmRequest<LTrackMatch> {
   }
 }
 
-class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
+class LSearchArtistsRequest extends PagedRequest<LArtistMatch> {
   String query;
 
-  SearchArtistsRequest(this.query);
+  LSearchArtistsRequest(this.query);
 
   @override
   Future<List<LArtistMatch>> doRequest(int limit, int page) async {
@@ -179,10 +168,10 @@ class SearchArtistsRequest extends PagedLastfmRequest<LArtistMatch> {
   }
 }
 
-class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
+class LSearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
   String query;
 
-  SearchAlbumsRequest(this.query);
+  LSearchAlbumsRequest(this.query);
 
   @override
   Future<List<LAlbumMatch>> doRequest(int limit, int page) async {
@@ -193,7 +182,7 @@ class SearchAlbumsRequest extends PagedLastfmRequest<LAlbumMatch> {
   }
 }
 
-class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
+class ArtistGetTopAlbumsRequest extends PagedRequest<LArtistTopAlbum> {
   String artist;
 
   ArtistGetTopAlbumsRequest(this.artist);
@@ -207,7 +196,7 @@ class ArtistGetTopAlbumsRequest extends PagedLastfmRequest<LArtistTopAlbum> {
   }
 }
 
-class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
+class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
   String artist;
 
   ArtistGetTopTracksRequest(this.artist);
@@ -222,7 +211,7 @@ class ArtistGetTopTracksRequest extends PagedLastfmRequest<LArtistTopTrack> {
 }
 
 class Lastfm {
-  static Future<Response> get(String url) => _client.get(Uri.parse(url));
+  static Future<Response> get(String url) => httpClient.get(Uri.parse(url));
 
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
@@ -236,11 +225,14 @@ class Lastfm {
     return LUser.fromJson(rawResponse['user']);
   }
 
-  static Future<LTrack> getTrack(BasicTrack track) async {
+  static Future<LTrack> getTrack(Track track) async {
     final username = (await SharedPreferences.getInstance()).getString('name');
 
-    final rawResponse = await _doRequest('track.getInfo',
-        {'track': track.name, 'artist': track.artist, 'username': username});
+    final rawResponse = await _doRequest('track.getInfo', {
+      'track': track.name,
+      'artist': track.artistName,
+      'username': username
+    });
     return LTrack.fromJson(rawResponse['track']);
   }
 
@@ -331,16 +323,16 @@ class Lastfm {
   }
 
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
-      List<BasicTrack> tracks, List<DateTime> timestamps) async {
+      List<Track> tracks, List<DateTime> timestamps) async {
     final Map<String, dynamic> data = {};
     data['sk'] = (await SharedPreferences.getInstance()).getString('key');
 
     tracks.asMap().forEach((i, track) {
-      if (track.album?.isNotEmpty ?? false) {
-        data['album[$i]'] = track.album;
+      if (track.albumName?.isNotEmpty ?? false) {
+        data['album[$i]'] = track.albumName;
       }
 
-      data['artist[$i]'] = track.artist;
+      data['artist[$i]'] = track.artistName;
       data['track[$i]'] = track.name;
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
     });
@@ -353,8 +345,8 @@ class Lastfm {
 
   /// Loves or unloves a track. If [love] is true, the track will be loved;
   /// otherwise, it will be unloved.
-  static Future<bool> love(FullTrack track, bool love) async {
-    if (track.artist == null) {
+  static Future<bool> love(Track track, bool love) async {
+    if (track.artistName == null) {
       return false;
     }
 
@@ -362,7 +354,7 @@ class Lastfm {
         love ? 'track.love' : 'track.unlove',
         {
           'track': track.name,
-          'artist': track.artist.name,
+          'artist': track.artistName,
           'sk': (await SharedPreferences.getInstance()).getString('key')
         },
         verb: RequestVerb.post);

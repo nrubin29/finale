@@ -1,4 +1,4 @@
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
 import 'package:flutter/material.dart';
 
 class CountsComponent extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/components/image_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
@@ -32,7 +32,7 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
   }
 
   Future<void> _scrobble(BuildContext context) async {
-    List<BasicScrobbleableTrack> tracks = widget.album.tracks;
+    List<ScrobbleableTrack> tracks = widget.album.tracks;
     List<DateTime> timestamps;
 
     if (_behavior == ScrobbleTimestampBehavior.startingNow ||

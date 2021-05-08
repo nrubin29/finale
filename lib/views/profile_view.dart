@@ -1,17 +1,17 @@
 import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/display_component.dart';
-import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/period_selector_component.dart';
 import 'package:finale/components/play_count_bar_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/lalbum.dart';
-import 'package:finale/types/lartist.dart';
-import 'package:finale/types/ltrack.dart';
-import 'package:finale/types/luser.dart';
+import 'package:finale/services/lastfm/album.dart';
+import 'package:finale/services/lastfm/artist.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
+import 'package:finale/views/error_view.dart';
 import 'package:finale/views/settings_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:finale/views/weekly_chart_selector_view.dart';
@@ -51,7 +51,7 @@ class _ProfileViewState extends State<ProfileView>
       future: Lastfm.getUser(widget.username),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorComponent(error: snapshot.error);
+          return ErrorView(error: snapshot.error);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }

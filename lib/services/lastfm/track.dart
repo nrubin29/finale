@@ -1,9 +1,9 @@
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
-import 'package:finale/types/lcommon.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'ltrack.g.dart';
+part 'track.g.dart';
 
 @JsonSerializable()
 class LRecentTracksResponseTrackArtist {
@@ -47,21 +47,19 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   @JsonKey(name: 'image', fromJson: extractImageId)
   String imageId;
 
-  @JsonKey(name: 'artist')
-  LRecentTracksResponseTrackArtist artistObject;
+  LRecentTracksResponseTrackArtist artist;
 
-  @JsonKey(name: 'album')
-  LRecentTracksResponseTrackAlbum albumObject;
+  LRecentTracksResponseTrackAlbum album;
 
   @JsonKey(name: 'date')
   LRecentTracksResponseTrackDate timestamp;
 
-  LRecentTracksResponseTrack(this.name, this.url, this.imageId,
-      this.artistObject, this.albumObject, this.timestamp);
+  LRecentTracksResponseTrack(this.name, this.url, this.imageId, this.artist,
+      this.album, this.timestamp);
 
-  String get artist => artistObject.name;
+  String get artistName => artist.name;
 
-  String get album => albumObject.title;
+  String get albumName => album.title;
 
   DateTime get date => timestamp?.date ?? null;
 
@@ -82,14 +80,16 @@ class LRecentTracksResponseRecentTracks {
 }
 
 @JsonSerializable()
-class LTrackMatch extends BasicTrack {
+class LTrackMatch extends Track {
   String name;
   String url;
   String artist;
 
   // LTrackMatches don't give us any indication of the their album, so we need
   // to fetch the full track in order to get the album.
-  String get album => null;
+  String get albumName => null;
+
+  String get artistName => artist;
 
   Future<String> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
@@ -146,7 +146,7 @@ class LTrackAlbum extends BasicAlbum {
 }
 
 @JsonSerializable()
-class LTrack extends FullTrack {
+class LTrack extends Track {
   String name;
   String url;
 
@@ -173,6 +173,10 @@ class LTrack extends FullTrack {
 
   LWiki wiki;
 
+  String get artistName => artist.name;
+
+  String get albumName => album?.name;
+
   LTrack(this.name, this.url, this.listeners, this.duration, this.playCount,
       this.artist, this.album, this.topTags, this.wiki);
 
@@ -180,19 +184,17 @@ class LTrack extends FullTrack {
 }
 
 @JsonSerializable()
-class LTopTracksResponseTrack extends BasicTrack with HasPlayCount {
+class LTopTracksResponseTrack extends Track with HasPlayCount {
   String name;
   String url;
-
-  @JsonKey(name: 'artist')
-  LTrackArtist artistObject;
+  LTrackArtist artist;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
   int playCount;
 
-  String get artist => artistObject.name;
+  String get artistName => artist.name;
 
-  String get album => null;
+  String get albumName => null;
 
   Future<String> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
@@ -202,8 +204,7 @@ class LTopTracksResponseTrack extends BasicTrack with HasPlayCount {
   @override
   String get displayTrailing => '$playCount scrobbles';
 
-  LTopTracksResponseTrack(
-      this.name, this.url, this.artistObject, this.playCount);
+  LTopTracksResponseTrack(this.name, this.url, this.artist, this.playCount);
 
   factory LTopTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
       _$LTopTracksResponseTrackFromJson(json);

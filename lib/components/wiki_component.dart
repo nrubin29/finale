@@ -1,4 +1,4 @@
-import 'package:finale/types/lcommon.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:flutter/material.dart';
 
 class WikiComponent extends StatelessWidget {

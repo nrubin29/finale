@@ -1,15 +1,15 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/components/music_recognition_component.dart';
 import 'package:finale/env.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 
 class ScrobbleView extends StatefulWidget {
-  final FullTrack track;
+  final Track track;
   final bool isModal;
 
   ScrobbleView({this.track, this.isModal = false});
@@ -32,8 +32,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   void initState() {
     super.initState();
     _trackController.text = widget.track?.name ?? '';
-    _artistController.text = widget.track?.artist?.name ?? '';
-    _albumController.text = widget.track?.album?.name ?? '';
+    _artistController.text = widget.track?.artistName ?? '';
+    _albumController.text = widget.track?.albumName ?? '';
 
     if (!widget.isModal) {
       ACRCloud.setUp(ACRCloudConfig(

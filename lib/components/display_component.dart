@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
-import 'package:finale/lastfm.dart';
-import 'package:finale/types/generic.dart';
+import 'package:finale/services/generic.dart';
 import 'package:flutter/material.dart';
 
 enum DisplayType { list, grid }
@@ -16,8 +15,8 @@ typedef DisplayableAndItemsWidgetBuilder<T extends Displayable> = Widget
 
 class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final List<T> items;
-  final PagedLastfmRequest<T> request;
-  final Stream<PagedLastfmRequest<T>> requestStream;
+  final PagedRequest<T> request;
+  final Stream<PagedRequest<T>> requestStream;
 
   final DisplayableWidgetBuilder<T> detailWidgetBuilder;
   final DisplayableAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
@@ -62,7 +61,7 @@ class DisplayComponentState<T extends Displayable>
 
   final _scrollController = ScrollController();
 
-  PagedLastfmRequest<T> _request;
+  PagedRequest<T> _request;
   StreamSubscription _subscription;
 
   @override
@@ -75,6 +74,10 @@ class DisplayComponentState<T extends Displayable>
       return;
     }
 
+    // TODO: Check if Loading... cell is visible to trigger loading more items.
+    //  Right now, the Last.fm artist's top albums and tracks won't load more
+    //  pages because they have [widget.scrollable] = false. This should also
+    //  fix the other TODO below.
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
