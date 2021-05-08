@@ -35,7 +35,8 @@ Future<Map<String, dynamic>> _doRequest(String method,
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
   } else if (response.statusCode == 400) {
-    final error = SError.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    final error =
+        SError.fromJson(json.decode(utf8.decode(response.bodyBytes))['error']);
     throw SException(error.message, error.status);
   } else {
     throw Exception('Could not do request $method');
@@ -93,6 +94,19 @@ class SSearchAlbumsRequest extends PagedRequest<SAlbumSimple> {
   }
 }
 
+class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
+  SArtist artist;
+
+  SArtistAlbumsRequest(this.artist);
+
+  @override
+  Future<List<SAlbumSimple>> doRequest(int limit, int page) async {
+    final rawResponse = await _doRequest('artists/${artist.id}/albums',
+        {'limit': limit, 'offset': (page - 1) * limit});
+    return SPage<SAlbumSimple>.fromJson(rawResponse).items;
+  }
+}
+
 class PkcePair {
   static const _alphabet =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~';
@@ -126,6 +140,14 @@ class Spotify {
   static Future<SAlbumFull> getFullAlbum(SAlbumSimple simpleAlbum) async {
     final rawResponse = await _doRequest('albums/${simpleAlbum.id}');
     return SAlbumFull.fromJson(rawResponse);
+  }
+
+  static Future<List<STrack>> getTopTracksForArtist(SArtist artist) async {
+    final rawResponse =
+        await _doRequest('artists/${artist.id}/top-tracks', {'market': 'US'});
+    return (rawResponse['tracks'] as List<dynamic>)
+        .map((track) => STrack.fromJson(track))
+        .toList(growable: false);
   }
 
   static Uri createAuthorizationUri(PkcePair pkcePair) =>
@@ -197,4 +219,7 @@ class SException implements Exception {
   final int status;
 
   const SException(this.message, this.status);
+
+  @override
+  String toString() => 'SException(status=$status, message=$message)';
 }

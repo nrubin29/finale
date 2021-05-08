@@ -40,7 +40,7 @@ class SAlbumFull extends FullAlbum {
   @JsonKey(name: 'images', fromJson: extractImageUrl)
   String imageUrl;
 
-  @JsonKey(fromJson: extractItems)
+  @JsonKey(name: 'tracks', fromJson: extractItems)
   List<STrackSimple> rawTracks;
 
   BasicArtist get artist => artists.first;

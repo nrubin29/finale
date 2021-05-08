@@ -19,6 +19,7 @@ class SArtistSimple extends BasicArtist {
 
 @JsonSerializable()
 class SArtist extends FullArtist {
+  String id;
   String name;
 
   @JsonKey(name: 'href')
@@ -27,7 +28,7 @@ class SArtist extends FullArtist {
   @JsonKey(name: 'images', fromJson: extractImageUrl)
   String imageUrl;
 
-  SArtist(this.name, this.url, this.imageUrl);
+  SArtist(this.id, this.name, this.url, this.imageUrl);
 
   factory SArtist.fromJson(Map<String, dynamic> json) =>
       _$SArtistFromJson(json);

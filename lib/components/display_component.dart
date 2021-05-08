@@ -74,6 +74,10 @@ class DisplayComponentState<T extends Displayable>
       return;
     }
 
+    // TODO: Check if Loading... cell is visible to trigger loading more items.
+    //  Right now, the Last.fm artist's top albums and tracks won't load more
+    //  pages because they have [widget.scrollable] = false. This should also
+    //  fix the other TODO below.
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
