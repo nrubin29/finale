@@ -175,7 +175,7 @@ class LTrack extends Track {
 
   String get artistName => artist.name;
 
-  String get albumName => album.name;
+  String get albumName => album?.name;
 
   LTrack(this.name, this.url, this.listeners, this.duration, this.playCount,
       this.artist, this.album, this.topTags, this.wiki);
