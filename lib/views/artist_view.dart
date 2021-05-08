@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:finale/components/display_component.dart';
-import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/tags_component.dart';
@@ -10,6 +9,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/views/album_view.dart';
+import 'package:finale/views/error_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
@@ -40,7 +40,7 @@ class _ArtistViewState extends State<ArtistView>
       future: Lastfm.getArtist(widget.artist),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorComponent(error: snapshot.error);
+          return ErrorView(error: snapshot.error);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }

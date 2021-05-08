@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:finale/components/display_component.dart';
-import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/constants.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/views/artist_view.dart';
+import 'package:finale/views/error_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class SpotifyAlbumView extends StatelessWidget {
       future: Spotify.getFullAlbum(album),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorComponent(error: snapshot.error);
+          return ErrorView(error: snapshot.error);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/tags_component.dart';
@@ -10,6 +9,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
+import 'package:finale/views/error_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -33,7 +33,7 @@ class _TrackViewState extends State<TrackView> {
       future: Lastfm.getTrack(widget.track),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorComponent(error: snapshot.error);
+          return ErrorView(error: snapshot.error);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }
