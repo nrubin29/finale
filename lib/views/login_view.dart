@@ -9,7 +9,6 @@ import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class LoginView extends StatelessWidget {
   void _logIn(BuildContext context) async {
@@ -53,19 +52,11 @@ class LoginView extends StatelessWidget {
                       .map((artist) => FutureBuilder<List<LArtistTopAlbum>>(
                           future: ArtistGetTopAlbumsRequest(artist.name)
                               .doRequest(1, 1),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData ||
-                                snapshot.data.isEmpty ||
-                                snapshot.data.first.imageId == null) {
-                              return SizedBox();
-                            }
-
-                            return FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: buildImageUrl(
-                                    snapshot.data.first.imageId,
-                                    ImageQuality.high));
-                          }))
+                          builder: (context, snapshot) => snapshot.hasData
+                              ? ImageComponent(
+                                  displayable: snapshot.data.first,
+                                  showPlaceholder: false)
+                              : Container()))
                       .toList(),
                 );
               },

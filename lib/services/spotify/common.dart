@@ -1,4 +1,5 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/track.dart';
@@ -6,8 +7,21 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';
 
-String extractImageUrl(List<dynamic> /* List<Map<String, dynamic>> */ images) =>
-    images == null || images.isEmpty ? null : images.first['url'];
+ImageId extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
+  if (images == null || images.isEmpty) {
+    return null;
+  }
+
+  var lowQualityImageId = images.first['url'] as String;
+  lowQualityImageId =
+      lowQualityImageId.substring(lowQualityImageId.lastIndexOf('/') + 1);
+
+  var highQualityImageId = images.first['url'] as String;
+  highQualityImageId =
+      highQualityImageId.substring(highQualityImageId.lastIndexOf('/') + 1);
+
+  return ImageId.spotify(lowQualityImageId, highQualityImageId);
+}
 
 @JsonSerializable(genericArgumentFactories: true)
 class SPage<T extends Displayable> {

@@ -1,13 +1,16 @@
 import 'dart:async';
 
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:http_throttle/http_throttle.dart';
 import 'package:intl/intl.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 enum RequestVerb { get, post }
 
-final httpClient = ThrottleClient(10);
+final httpClient = ThrottleClient(15);
 
 final _numberFormat = NumberFormat();
 
@@ -30,13 +33,12 @@ abstract class Displayable {
 
   String get displayTrailing => null;
 
-  String get imageUrl => null;
+  FutureOr<ImageId> get imageId => null;
 
-  // TODO: imageId and imageIdFuture are Last.fm-specific.
-
-  String imageId;
-
-  Future<String> get imageIdFuture => null;
+  /// Used by ImageComponent. Should not be overridden.
+  @JsonKey(ignore: true)
+  @nonVirtual
+  ImageId cachedImageId;
 }
 
 abstract class Track extends Displayable {
@@ -96,9 +98,6 @@ abstract class BasicAlbum extends Displayable {
   BasicArtist get artist;
 
   @override
-  String get imageId;
-
-  @override
   DisplayableType get type => DisplayableType.album;
 
   @override
@@ -119,7 +118,7 @@ abstract class BasicArtist extends Displayable {
   String get name;
 
   @override
-  Future<String> get imageIdFuture async {
+  FutureOr<ImageId> get imageId async {
     final lastfmResponse = await Lastfm.get(url);
 
     try {
@@ -127,7 +126,7 @@ abstract class BasicArtist extends Displayable {
       final rawUrl =
           doc.querySelector('.header-new-gallery--link').attributes['href'];
       final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1);
-      return imageId;
+      return ImageId.lastfm(imageId);
     } catch (e) {
       return null;
     }

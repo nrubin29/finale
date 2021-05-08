@@ -1,5 +1,7 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/common.dart';
+import 'package:finale/services/spotify/spotify.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'artist.g.dart';
@@ -11,6 +13,10 @@ class SArtistSimple extends BasicArtist {
 
   @JsonKey(name: 'href')
   String url;
+
+  @override
+  Future<ImageId> get imageId async =>
+      (await Spotify.getFullArtist(this)).imageId;
 
   SArtistSimple(this.id, this.name, this.url);
 
@@ -26,10 +32,11 @@ class SArtist extends FullArtist {
   @JsonKey(name: 'href')
   String url;
 
-  @JsonKey(name: 'images', fromJson: extractImageUrl)
-  String imageUrl;
+  @JsonKey(name: 'images', fromJson: extractImageId)
+  @override
+  ImageId imageId;
 
-  SArtist(this.id, this.name, this.url, this.imageUrl);
+  SArtist(this.id, this.name, this.url, this.imageId);
 
   factory SArtist.fromJson(Map<String, dynamic> json) =>
       _$SArtistFromJson(json);

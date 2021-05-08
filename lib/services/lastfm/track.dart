@@ -1,4 +1,5 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -45,7 +46,8 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
+  @override
+  ImageId imageId;
 
   LRecentTracksResponseTrackArtist artist;
 
@@ -91,7 +93,8 @@ class LTrackMatch extends Track {
 
   String get artistName => artist;
 
-  Future<String> get imageIdFuture async {
+  @override
+  Future<ImageId> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }
@@ -135,7 +138,8 @@ class LTrackAlbum extends BasicAlbum {
   String artistName;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
+  @override
+  ImageId imageId;
 
   BasicArtist get artist => ConcreteBasicArtist(artistName, null);
 
@@ -196,7 +200,8 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
 
   String get albumName => null;
 
-  Future<String> get imageIdFuture async {
+  @override
+  Future<ImageId> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }

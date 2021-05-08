@@ -1,4 +1,5 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -102,7 +103,8 @@ class LArtistTopAlbum extends BasicAlbum {
   LTopAlbumsResponseAlbumArtist artist;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
+  @override
+  ImageId imageId;
 
   LArtistTopAlbum(
       this.name, this.url, this.playCount, this.artist, this.imageId);
@@ -133,7 +135,8 @@ class LArtistTopTrack extends Track {
 
   String get albumName => null;
 
-  Future<String> get imageIdFuture async {
+  @override
+  Future<ImageId> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }

@@ -1,4 +1,5 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -12,7 +13,7 @@ DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
     DateTime.fromMillisecondsSinceEpoch(
         (timestamp is int ? timestamp : int.parse(timestamp)) * 1000);
 
-String extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
+ImageId extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
   if (images == null ||
       images.isEmpty ||
       !images.first.containsKey('#text') ||
@@ -21,8 +22,8 @@ String extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
   }
 
   final String imageUrl = images.first['#text'];
-  return imageUrl.substring(
-      imageUrl.lastIndexOf('/') + 1, imageUrl.lastIndexOf('.'));
+  return ImageId.lastfm(imageUrl.substring(
+      imageUrl.lastIndexOf('/') + 1, imageUrl.lastIndexOf('.')));
 }
 
 mixin HasPlayCount on Displayable {

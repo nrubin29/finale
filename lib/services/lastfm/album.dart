@@ -1,4 +1,5 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -26,7 +27,8 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
   LTopAlbumsResponseAlbumArtist artist;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
+  @override
+  ImageId imageId;
 
   LTopAlbumsResponseAlbum(
       this.name, this.url, this.playCount, this.artist, this.imageId);
@@ -58,7 +60,8 @@ class LAlbumMatch extends BasicAlbum {
   String artistName;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
+  @override
+  ImageId imageId;
 
   BasicArtist get artist =>
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
@@ -125,7 +128,8 @@ class LAlbum extends FullAlbum {
   String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
+  @override
+  ImageId imageId;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
   int playCount;

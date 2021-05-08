@@ -82,7 +82,6 @@ class _TrackViewState extends State<TrackView> {
                   Center(
                       child: ImageComponent(
                           displayable: track.album,
-                          quality: ImageQuality.high,
                           fit: BoxFit.cover,
                           width: min(MediaQuery.of(context).size.width,
                               MediaQuery.of(context).size.height / 2))),

@@ -62,7 +62,6 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                 Center(
                     child: ImageComponent(
                         displayable: artist,
-                        quality: ImageQuality.high,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),

@@ -1,4 +1,5 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
@@ -16,12 +17,13 @@ class SAlbumSimple extends BasicAlbum {
   String name;
   String id;
 
-  @JsonKey(name: 'images', fromJson: extractImageUrl)
-  String imageUrl;
+  @JsonKey(name: 'images', fromJson: extractImageId)
+  @override
+  ImageId imageId;
 
   BasicArtist get artist => artists.first;
 
-  SAlbumSimple(this.artists, this.url, this.name, this.id, this.imageUrl);
+  SAlbumSimple(this.artists, this.url, this.name, this.id, this.imageId);
 
   factory SAlbumSimple.fromJson(Map<String, dynamic> json) =>
       _$SAlbumSimpleFromJson(json);
@@ -37,8 +39,9 @@ class SAlbumFull extends FullAlbum {
   String name;
   String id;
 
-  @JsonKey(name: 'images', fromJson: extractImageUrl)
-  String imageUrl;
+  @JsonKey(name: 'images', fromJson: extractImageId)
+  @override
+  ImageId imageId;
 
   @JsonKey(name: 'tracks', fromJson: extractItems)
   List<STrackSimple> rawTracks;
@@ -50,8 +53,8 @@ class SAlbumFull extends FullAlbum {
       .map((track) => SAlbumTrack(track, name))
       .toList(growable: false);
 
-  SAlbumFull(this.artists, this.url, this.name, this.id, this.imageUrl,
-      this.rawTracks);
+  SAlbumFull(
+      this.artists, this.url, this.name, this.id, this.imageId, this.rawTracks);
 
   factory SAlbumFull.fromJson(Map<String, dynamic> json) =>
       _$SAlbumFullFromJson(json);

@@ -1,4 +1,5 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:html/parser.dart';
@@ -30,7 +31,8 @@ class LUser extends Displayable {
   String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
+  @override
+  ImageId imageId;
 
   String country;
 
@@ -174,7 +176,7 @@ class LUserWeeklyTrackChartTrack extends Track {
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
-  Future<String> get imageIdFuture async {
+  Future<ImageId> get imageId async {
     final lastfmResponse = await Lastfm.get(url);
 
     try {
@@ -183,7 +185,7 @@ class LUserWeeklyTrackChartTrack extends Track {
           doc.querySelector('.cover-art').children.first.attributes['src'];
       final imageId = rawUrl.substring(
           rawUrl.lastIndexOf('/') + 1, rawUrl.lastIndexOf('.'));
-      return imageId;
+      return ImageId.lastfm(imageId);
     } catch (e) {
       return null;
     }
@@ -236,7 +238,7 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
-  Future<String> get imageIdFuture async {
+  Future<ImageId> get imageId async {
     final lastfmResponse = await Lastfm.get(url);
 
     try {
@@ -244,7 +246,7 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
       final rawUrl =
           doc.querySelector('.link-block-cover-link').attributes['href'];
       final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1);
-      return imageId;
+      return ImageId.lastfm(imageId);
     } catch (e) {
       return null;
     }
@@ -267,15 +269,15 @@ class LUserWeeklyArtistChartArtist extends BasicArtist {
   String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
-  String imageId;
+  @override
+  Future<ImageId> get imageId async => (await Lastfm.getArtist(this)).imageId;
 
   String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
   int playCount;
 
-  LUserWeeklyArtistChartArtist(
-      this.url, this.imageId, this.name, this.playCount);
+  LUserWeeklyArtistChartArtist(this.url, this.name, this.playCount);
 
   factory LUserWeeklyArtistChartArtist.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyArtistChartArtistFromJson(json);

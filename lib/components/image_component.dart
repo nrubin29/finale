@@ -1,14 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/cache.dart';
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:flutter/material.dart';
-
-enum ImageQuality { low, high }
-
-// small=34s, medium=64s, large=174s, extralarge=300x300
-String buildImageUrl(String imageId, ImageQuality quality) => imageId == null
-    ? null
-    : 'https://lastfm.freetls.fastly.net/i/u/${quality == ImageQuality.high ? '300x300' : '64s'}/$imageId.jpg';
 
 class ImageComponent extends StatelessWidget {
   final Displayable displayable;
@@ -16,9 +10,9 @@ class ImageComponent extends StatelessWidget {
   final BoxFit fit;
   final double width;
   final bool isCircular;
+  final bool showPlaceholder;
 
-  static const Map<DisplayableType, Map<ImageQuality, AssetImage>>
-      placeholders = {
+  static const placeholders = {
     DisplayableType.track: {
       ImageQuality.low: AssetImage('assets/images/default_track_low.jpg'),
       ImageQuality.high: AssetImage('assets/images/default_track.jpg'),
@@ -43,6 +37,7 @@ class ImageComponent extends StatelessWidget {
     this.fit,
     this.width,
     this.isCircular = false,
+    this.showPlaceholder = true,
   });
 
   Widget _buildCircularImage(BuildContext context, Widget image) => Container(
@@ -50,18 +45,22 @@ class ImageComponent extends StatelessWidget {
       child: Material(
           shape: CircleBorder(), clipBehavior: Clip.hardEdge, child: image));
 
-  Widget _buildImage(BuildContext context, String imageUrl) {
-    Image placeholder = Image(
-        image: placeholders[displayable.type][quality], width: width, fit: fit);
+  Widget _buildImage(BuildContext context, ImageId imageId) {
+    final placeholder = showPlaceholder
+        ? Image(
+            image: placeholders[displayable.type][quality],
+            width: width,
+            fit: fit)
+        : Container();
 
-    if (imageUrl == null) {
+    if (imageId == null) {
       return isCircular
           ? _buildCircularImage(context, placeholder)
           : placeholder;
     }
 
     final image = CachedNetworkImage(
-        imageUrl: imageUrl,
+        imageUrl: imageId.getUrl(quality),
         placeholder: (context, url) => placeholder,
         errorWidget: (context, url, error) => placeholder,
         fit: fit,
@@ -72,12 +71,12 @@ class ImageComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (displayable.imageUrl != null) {
-      return _buildImage(context, displayable.imageUrl);
-    } else if (displayable.imageId != null) {
-      return _buildImage(context, buildImageUrl(displayable.imageId, quality));
-    } else if (displayable.url == null) {
+    if (displayable.cachedImageId != null) {
+      return _buildImage(context, displayable.cachedImageId);
+    } else if (displayable.imageId == null) {
       return _buildImage(context, null);
+    } else if (displayable.imageId is ImageId) {
+      return _buildImage(context, displayable.imageId);
     }
 
     return FutureBuilder<String>(
@@ -90,21 +89,21 @@ class ImageComponent extends StatelessWidget {
           final cachedImageId = snapshot.data;
 
           if (cachedImageId != null) {
-            displayable.imageId = cachedImageId;
-            return _buildImage(context, buildImageUrl(cachedImageId, quality));
+            final imageId = ImageId.fromSerializedValue(cachedImageId);
+            displayable.cachedImageId = imageId;
+            return _buildImage(context, imageId);
           }
 
-          return FutureBuilder<String>(
-            future: displayable.imageIdFuture,
+          return FutureBuilder<ImageId>(
+            future: displayable.imageId,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                // TODO: Move this logic out of the Widget builder.
-                ImageIdCache().insert(displayable.url, snapshot.data);
-                displayable.imageId = snapshot.data;
+                ImageIdCache()
+                    .insert(displayable.url, snapshot.data.serializedValue);
+                displayable.cachedImageId = snapshot.data;
               }
 
-              return _buildImage(
-                  context, buildImageUrl(snapshot.data, quality));
+              return _buildImage(context, snapshot.data);
             },
           );
         });

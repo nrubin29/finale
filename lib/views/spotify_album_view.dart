@@ -65,7 +65,6 @@ class SpotifyAlbumView extends StatelessWidget {
                 Center(
                     child: ImageComponent(
                         displayable: album,
-                        quality: ImageQuality.high,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
