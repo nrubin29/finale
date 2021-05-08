@@ -142,6 +142,11 @@ class Spotify {
     return SAlbumFull.fromJson(rawResponse);
   }
 
+  static Future<SArtist> getFullArtist(SArtistSimple simpleArtist) async {
+    final rawResponse = await _doRequest('artists/${simpleArtist.id}');
+    return SArtist.fromJson(rawResponse);
+  }
+
   static Future<List<STrack>> getTopTracksForArtist(SArtist artist) async {
     final rawResponse =
         await _doRequest('artists/${artist.id}/top-tracks', {'market': 'US'});

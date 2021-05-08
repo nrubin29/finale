@@ -7,10 +7,10 @@ import 'package:finale/components/loading_component.dart';
 import 'package:finale/constants.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/spotify.dart';
-import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/error_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/scrobble_view.dart';
+import 'package:finale/views/spotify_artist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -79,8 +79,8 @@ class SpotifyAlbumView extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => // TODO: SpotifyArtistView
-                                    ArtistView(artist: album.artist)));
+                                builder: (context) =>
+                                    SpotifyArtistView(artist: album.artist)));
                       }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
