@@ -8,7 +8,8 @@ class ACRCloudDialogResult {
   bool wasCancelled;
   ACRCloudResponseMusicItem track;
 
-  ACRCloudDialogResult({this.wasCancelled = false, this.track});
+  ACRCloudDialogResult([this.track]) : wasCancelled = false;
+  ACRCloudDialogResult.cancelled() : wasCancelled = true;
 }
 
 class ACRCloudDialogComponent extends StatefulWidget {
@@ -29,7 +30,7 @@ class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
       session.dispose();
 
       if (result == null) {
-        Navigator.pop(context, ACRCloudDialogResult(wasCancelled: true));
+        Navigator.pop(context, ACRCloudDialogResult.cancelled());
         return;
       }
 
@@ -62,7 +63,7 @@ class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
                     onPressed: () => launch(
                         'https://aha-music.com/${track.acrId}?utm_source=finale&utm_medium=app')),
                 onTap: () =>
-                    Navigator.pop(context, ACRCloudDialogResult(track: track)));
+                    Navigator.pop(context, ACRCloudDialogResult(track)));
           }));
 
   @override
@@ -74,8 +75,7 @@ class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
         TextButton(
             child: Text('Cancel'),
             onPressed: results != null
-                ? () => Navigator.pop(
-                    context, ACRCloudDialogResult(wasCancelled: true))
+                ? () => Navigator.pop(context, ACRCloudDialogResult.cancelled())
                 : session.cancel)
       ],
     );
