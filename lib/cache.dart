@@ -1,19 +1,18 @@
-// @dart=2.9
-
+import 'package:finale/services/image_id.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Stores image IDs in an SQLite database.
 class ImageIdCache {
-  Database db;
+  late Database db;
 
-  static ImageIdCache _instance;
+  static ImageIdCache? _instance;
 
   factory ImageIdCache() {
     if (_instance == null) {
       _instance = ImageIdCache._();
     }
 
-    return _instance;
+    return _instance!;
   }
 
   ImageIdCache._();
@@ -25,15 +24,15 @@ class ImageIdCache {
             db.execute('CREATE TABLE ImageId (url TEXT, imageId TEXT)'));
   }
 
-  Future<int> insert(String url, String imageId) =>
-      db.insert('ImageId', {'url': url, 'imageId': imageId});
+  Future<int> insert(String url, ImageId imageId) =>
+      db.insert('ImageId', {'url': url, 'imageId': imageId.serializedValue});
 
-  Future<String> get(String url) async {
+  Future<ImageId?> get(String url) async {
     final results = await db.query('ImageId',
         columns: ['imageId'], where: 'url = ?', whereArgs: [url]);
 
-    if (results.length > 0) {
-      return results.first['imageId'];
+    if (results.isNotEmpty) {
+      return ImageId.fromSerializedValue(results.first['imageId']!.toString());
     }
 
     return null;

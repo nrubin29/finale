@@ -81,7 +81,7 @@ class ImageComponent extends StatelessWidget {
       return _buildImage(context, displayable.imageId);
     }
 
-    return FutureBuilder<String>(
+    return FutureBuilder<ImageId>(
         future: ImageIdCache().get(displayable.url),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -91,17 +91,15 @@ class ImageComponent extends StatelessWidget {
           final cachedImageId = snapshot.data;
 
           if (cachedImageId != null) {
-            final imageId = ImageId.fromSerializedValue(cachedImageId);
-            displayable.cachedImageId = imageId;
-            return _buildImage(context, imageId);
+            displayable.cachedImageId = cachedImageId;
+            return _buildImage(context, cachedImageId);
           }
 
           return FutureBuilder<ImageId>(
             future: displayable.imageId,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                ImageIdCache()
-                    .insert(displayable.url, snapshot.data.serializedValue);
+                ImageIdCache().insert(displayable.url, snapshot.data);
                 displayable.cachedImageId = snapshot.data;
               }
 
