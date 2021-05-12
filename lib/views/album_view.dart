@@ -111,8 +111,10 @@ class AlbumView extends StatelessWidget {
                 if (album.topTags.tags.isNotEmpty) Divider(),
                 if (album.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: album.topTags),
-                if (album.wiki != null) Divider(),
-                if (album.wiki != null) WikiComponent(wiki: album.wiki),
+                if (album.wiki != null && album.wiki.isNotEmpty) ...[
+                  Divider(),
+                  WikiComponent(wiki: album.wiki)
+                ],
                 if (album.artist != null) Divider(),
                 if (album.artist != null)
                   ListTile(

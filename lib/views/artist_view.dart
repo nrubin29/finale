@@ -103,8 +103,10 @@ class _ArtistViewState extends State<ArtistView>
                 if (artist.topTags.tags.isNotEmpty) Divider(),
                 if (artist.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: artist.topTags),
-                if (artist.bio != null) Divider(),
-                if (artist.bio != null) WikiComponent(wiki: artist.bio),
+                if (artist.bio != null && artist.bio.isNotEmpty) ...[
+                  Divider(),
+                  WikiComponent(wiki: artist.bio),
+                ],
                 Divider(),
                 TabBar(
                     labelColor: Colors.red,

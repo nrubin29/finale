@@ -123,12 +123,28 @@ class LAttr {
 @JsonSerializable()
 class LWiki {
   final String published;
+
+  @JsonKey(fromJson: trim)
   final String summary;
+
+  @JsonKey(fromJson: trim)
   final String content;
+
+  bool get isNotEmpty => summary.isNotEmpty && content.isNotEmpty;
 
   const LWiki(this.published, this.summary, this.content);
 
   factory LWiki.fromJson(Map<String, dynamic> json) => _$LWikiFromJson(json);
+
+  static String trim(String content) {
+    var result = content.trim();
+
+    if (result.indexOf('<a') != -1) {
+      result = result.substring(0, result.indexOf('<a')).trim();
+    }
+
+    return result;
+  }
 }
 
 @JsonSerializable()

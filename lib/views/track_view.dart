@@ -132,8 +132,10 @@ class _TrackViewState extends State<TrackView> {
                 if (track.topTags.tags.isNotEmpty) Divider(),
                 if (track.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: track.topTags),
-                if (track.wiki != null) Divider(),
-                if (track.wiki != null) WikiComponent(wiki: track.wiki),
+                if (track.wiki != null && track.wiki.isNotEmpty) ...[
+                  Divider(),
+                  WikiComponent(wiki: track.wiki),
+                ],
                 if (track.artist != null || track.album != null) Divider(),
                 if (track.artist != null)
                   ListTile(
