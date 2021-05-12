@@ -8,8 +8,6 @@ import 'package:http_throttle/http_throttle.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-enum RequestVerb { get, post }
-
 final httpClient = ThrottleClient(15);
 
 final _numberFormat = NumberFormat();

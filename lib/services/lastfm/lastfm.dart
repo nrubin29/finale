@@ -35,12 +35,11 @@ Uri _buildUri(String method, Map<String, dynamic> data) {
 
 Future<Map<String, dynamic>> _doRequest(
     String method, Map<String, dynamic> data,
-    {RequestVerb verb = RequestVerb.get}) async {
+    {bool post = false}) async {
   final uri = _buildUri(method, data);
 
-  final response = verb == RequestVerb.get
-      ? await httpClient.get(uri)
-      : await httpClient.post(uri);
+  final response =
+      post ? await httpClient.post(uri) : await httpClient.get(uri);
 
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
@@ -215,8 +214,8 @@ class Lastfm {
 
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
-    final rawResponse = await _doRequest('auth.getSession', {'token': token},
-        verb: RequestVerb.post);
+    final rawResponse =
+        await _doRequest('auth.getSession', {'token': token}, post: true);
     return LAuthenticationResponseSession.fromJson(rawResponse['session']);
   }
 
@@ -337,8 +336,7 @@ class Lastfm {
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
     });
 
-    final rawResponse =
-        await _doRequest('track.scrobble', data, verb: RequestVerb.post);
+    final rawResponse = await _doRequest('track.scrobble', data, post: true);
     return LScrobbleResponseScrobblesAttr.fromJson(
         rawResponse['scrobbles']['@attr']);
   }
@@ -357,7 +355,7 @@ class Lastfm {
           'artist': track.artistName,
           'sk': (await SharedPreferences.getInstance()).getString('key')
         },
-        verb: RequestVerb.post);
+        post: true);
     return true;
   }
 }
