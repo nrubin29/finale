@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:finale/http_throttle.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:http_throttle/http_throttle.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 

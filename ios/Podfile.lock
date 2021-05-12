@@ -2,7 +2,7 @@ PODS:
   - Flutter (1.0.0)
   - flutter_acrcloud (0.0.1):
     - Flutter
-  - flutter_web_auth (0.2.4):
+  - flutter_web_auth (0.3.0):
     - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -69,7 +69,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_acrcloud: 85096e0649217498fccd1cbe4a30d6bda7734b74
-  flutter_web_auth: b7465086188ce4413d7e8b23622583784b9007a7
+  flutter_web_auth: ede89bf8107b021cf16e769756d267d84d24e88b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   in_app_review: 4a97249f7a2f539a0f294c2d9196b7fe35e49541
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
