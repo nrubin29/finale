@@ -1,11 +1,9 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 
 class ErrorComponent extends StatelessWidget {
   final Object error;
 
-  ErrorComponent({@required this.error});
+  ErrorComponent({required this.error});
 
   @override
   Widget build(BuildContext context) => Center(

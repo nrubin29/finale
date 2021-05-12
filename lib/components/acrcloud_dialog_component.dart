@@ -1,12 +1,10 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ACRCloudDialogResult {
   bool wasCancelled;
-  ACRCloudResponseMusicItem track;
+  ACRCloudResponseMusicItem? track;
 
   ACRCloudDialogResult([this.track]) : wasCancelled = false;
   ACRCloudDialogResult.cancelled() : wasCancelled = true;
@@ -18,8 +16,8 @@ class ACRCloudDialogComponent extends StatefulWidget {
 }
 
 class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
-  ACRCloudSession session;
-  List<ACRCloudResponseMusicItem> results;
+  late ACRCloudSession session;
+  List<ACRCloudResponseMusicItem>? results;
 
   @override
   void initState() {
@@ -34,9 +32,9 @@ class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
         return;
       }
 
-      if (result.metadata?.music?.isNotEmpty ?? false) {
+      if (result.metadata != null && result.metadata!.music.isNotEmpty) {
         setState(() {
-          results = result.metadata.music;
+          results = result.metadata!.music;
         });
       } else {
         Navigator.pop(context, ACRCloudDialogResult());
@@ -49,9 +47,9 @@ class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
       child: ListView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.zero,
-          itemCount: results.length,
+          itemCount: results!.length,
           itemBuilder: (BuildContext context, int index) {
-            final track = results[index];
+            final track = results![index];
             return ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(track.title),

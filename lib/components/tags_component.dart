@@ -1,12 +1,10 @@
-// @dart=2.9
-
 import 'package:finale/services/lastfm/common.dart';
 import 'package:flutter/material.dart';
 
 class TagsComponent extends StatelessWidget {
   final LTopTags topTags;
 
-  TagsComponent({@required this.topTags});
+  TagsComponent({required this.topTags});
 
   @override
   Widget build(BuildContext context) {

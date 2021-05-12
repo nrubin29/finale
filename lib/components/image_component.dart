@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/cache.dart';
 import 'package:finale/services/generic.dart';
@@ -9,8 +7,8 @@ import 'package:flutter/material.dart';
 class ImageComponent extends StatelessWidget {
   final Displayable displayable;
   final ImageQuality quality;
-  final BoxFit fit;
-  final double width;
+  final BoxFit? fit;
+  final double? width;
   final bool isCircular;
   final bool showPlaceholder;
 
@@ -34,7 +32,7 @@ class ImageComponent extends StatelessWidget {
   };
 
   ImageComponent({
-    @required this.displayable,
+    required this.displayable,
     this.quality = ImageQuality.high,
     this.fit,
     this.width,
@@ -47,10 +45,10 @@ class ImageComponent extends StatelessWidget {
       child: Material(
           shape: CircleBorder(), clipBehavior: Clip.hardEdge, child: image));
 
-  Widget _buildImage(BuildContext context, ImageId imageId) {
+  Widget _buildImage(BuildContext context, ImageId? imageId) {
     final placeholder = showPlaceholder
         ? Image(
-            image: placeholders[displayable.type][quality],
+            image: placeholders[displayable.type]![quality]!,
             width: width,
             fit: fit)
         : Container();
@@ -78,11 +76,13 @@ class ImageComponent extends StatelessWidget {
     } else if (displayable.imageId == null) {
       return _buildImage(context, null);
     } else if (displayable.imageId is ImageId) {
-      return _buildImage(context, displayable.imageId);
+      return _buildImage(context, displayable.imageId as ImageId);
+    } else if (displayable.url == null) {
+      return _buildImage(context, null);
     }
 
-    return FutureBuilder<ImageId>(
-        future: ImageIdCache().get(displayable.url),
+    return FutureBuilder<ImageId?>(
+        future: ImageIdCache().get(displayable.url!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return _buildImage(context, null);
@@ -95,11 +95,11 @@ class ImageComponent extends StatelessWidget {
             return _buildImage(context, cachedImageId);
           }
 
-          return FutureBuilder<ImageId>(
-            future: displayable.imageId,
+          return FutureBuilder<ImageId?>(
+            future: displayable.imageId as Future<ImageId?>,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                ImageIdCache().insert(displayable.url, snapshot.data);
+                ImageIdCache().insert(displayable.url!, snapshot.data!);
                 displayable.cachedImageId = snapshot.data;
               }
 

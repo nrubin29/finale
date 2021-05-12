@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:async';
 
 import 'package:finale/components/display_component.dart';
@@ -21,9 +19,9 @@ class PeriodSelectorComponent<T extends Displayable> extends StatefulWidget {
 
   PeriodSelectorComponent({
     this.displayType = DisplayType.list,
-    this.request,
-    this.detailWidgetBuilder,
-    this.subtitleWidgetBuilder,
+    required this.request,
+    required this.detailWidgetBuilder,
+    required this.subtitleWidgetBuilder,
   });
 
   @override
@@ -41,11 +39,11 @@ class _PeriodSelectorComponentState<T extends Displayable>
     'Overall': 'overall'
   };
 
-  DisplayType _displayType;
-  String _period;
+  late DisplayType _displayType;
+  String? _period;
 
   final _displayComponentKey = GlobalKey<DisplayComponentState>();
-  StreamSubscription _periodChangeSubscription;
+  late StreamSubscription _periodChangeSubscription;
 
   @override
   void initState() {
@@ -57,7 +55,7 @@ class _PeriodSelectorComponentState<T extends Displayable>
         PeriodSelectorComponent._periodChange.listen((value) {
       setState(() {
         _period = value;
-        _displayComponentKey.currentState.getInitialItems();
+        _displayComponentKey.currentState?.getInitialItems();
       });
     });
 
@@ -105,7 +103,7 @@ class _PeriodSelectorComponentState<T extends Displayable>
                           ))
                       .toList(growable: false),
                   onChanged: (value) async {
-                    if (value != _period) {
+                    if (value != null && value != _period) {
                       final sharedPrefs = await SharedPreferences.getInstance();
                       await sharedPrefs.setString('period', value);
                       PeriodSelectorComponent._periodChange.add(value);

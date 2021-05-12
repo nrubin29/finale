@@ -1,12 +1,10 @@
-// @dart=2.9
-
 import 'package:finale/services/lastfm/common.dart';
 import 'package:flutter/material.dart';
 
 class WikiComponent extends StatelessWidget {
   final LWiki wiki;
 
-  WikiComponent({@required this.wiki});
+  WikiComponent({required this.wiki});
 
   Widget _buildPage(BuildContext context) => Scaffold(
       appBar: AppBar(centerTitle: true, title: Text('Wiki')),

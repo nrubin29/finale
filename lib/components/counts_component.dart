@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/services/generic.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +8,10 @@ class CountsComponent extends StatelessWidget {
   final Future<int> tracks;
 
   CountsComponent({
-    @required this.scrobbles,
-    @required this.artists,
-    @required this.albums,
-    @required this.tracks,
+    required this.scrobbles,
+    required this.artists,
+    required this.albums,
+    required this.tracks,
   });
 
   @override
@@ -34,7 +32,7 @@ class CountsComponent extends StatelessWidget {
                 FutureBuilder<int>(
                   future: artists,
                   builder: (context, snapshot) => Text(
-                      snapshot.hasData ? formatNumber(snapshot.data) : '---'),
+                      snapshot.hasData ? formatNumber(snapshot.data!) : '---'),
                 )
               ],
             ),
@@ -45,7 +43,7 @@ class CountsComponent extends StatelessWidget {
                 FutureBuilder<int>(
                   future: albums,
                   builder: (context, snapshot) => Text(
-                      snapshot.hasData ? formatNumber(snapshot.data) : '---'),
+                      snapshot.hasData ? formatNumber(snapshot.data!) : '---'),
                 ),
               ],
             ),
@@ -56,7 +54,7 @@ class CountsComponent extends StatelessWidget {
                 FutureBuilder<int>(
                   future: tracks,
                   builder: (context, snapshot) => Text(
-                      snapshot.hasData ? formatNumber(snapshot.data) : '---'),
+                      snapshot.hasData ? formatNumber(snapshot.data!) : '---'),
                 )
               ],
             ),

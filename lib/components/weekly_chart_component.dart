@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';
@@ -15,7 +13,7 @@ class WeeklyChartComponent extends StatefulWidget {
   final LUser user;
   final LUserWeeklyChart chart;
 
-  WeeklyChartComponent({Key key, @required this.user, @required this.chart})
+  WeeklyChartComponent({Key? key, required this.user, required this.chart})
       : super(key: key);
 
   @override
@@ -25,10 +23,10 @@ class WeeklyChartComponent extends StatefulWidget {
 class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
   var _loaded = false;
 
-  int _numScrobbles;
-  List<LUserWeeklyTrackChartTrack> _tracks;
-  List<LUserWeeklyAlbumChartAlbum> _albums;
-  List<LUserWeeklyArtistChartArtist> _artists;
+  late int _numScrobbles;
+  late List<LUserWeeklyTrackChartTrack> _tracks;
+  late List<LUserWeeklyAlbumChartAlbum> _albums;
+  late List<LUserWeeklyArtistChartArtist> _artists;
 
   @override
   void initState() {

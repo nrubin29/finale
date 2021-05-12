@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:async';
 
 import 'package:finale/components/image_component.dart';
@@ -17,14 +15,14 @@ typedef DisplayableAndItemsWidgetBuilder<T extends Displayable> = Widget
     Function(T item, List<T> items);
 
 class DisplayComponent<T extends Displayable> extends StatefulWidget {
-  final List<T> items;
-  final PagedRequest<T> request;
-  final Stream<PagedRequest<T>> requestStream;
+  final List<T>? items;
+  final PagedRequest<T>? request;
+  final Stream<PagedRequest<T>>? requestStream;
 
-  final DisplayableWidgetBuilder<T> detailWidgetBuilder;
-  final DisplayableAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
-  final DisplayableWidgetBuilder<T> leadingWidgetBuilder;
-  final void Function(T item) secondaryAction;
+  final DisplayableWidgetBuilder<T>? detailWidgetBuilder;
+  final DisplayableAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
+  final DisplayableWidgetBuilder<T>? leadingWidgetBuilder;
+  final void Function(T item)? secondaryAction;
 
   final DisplayType displayType;
   final bool scrollable;
@@ -34,7 +32,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final bool showNoResultsMessage;
 
   DisplayComponent(
-      {Key key,
+      {Key? key,
       this.items,
       this.request,
       this.requestStream,
@@ -64,15 +62,15 @@ class DisplayComponentState<T extends Displayable>
 
   final _scrollController = ScrollController();
 
-  PagedRequest<T> _request;
-  StreamSubscription _subscription;
+  PagedRequest<T>? _request;
+  StreamSubscription? _subscription;
 
   @override
   void initState() {
     super.initState();
 
     if (widget.items != null) {
-      items = widget.items;
+      items = widget.items!;
       didInitialRequest = true;
       return;
     }
@@ -106,7 +104,7 @@ class DisplayComponentState<T extends Displayable>
     items = [];
 
     try {
-      final initialItems = await _request.doRequest(20, 1);
+      final initialItems = await _request!.doRequest(20, 1);
       setState(() {
         items = initialItems;
         hasMorePages = initialItems.length >= 20;
@@ -127,7 +125,7 @@ class DisplayComponentState<T extends Displayable>
     if (!hasMorePages) return;
 
     try {
-      final moreItems = await _request.doRequest(20, page);
+      final moreItems = await _request!.doRequest(20, page);
       setState(() {
         items.addAll(moreItems);
         hasMorePages = moreItems.length >= 20;
@@ -144,12 +142,12 @@ class DisplayComponentState<T extends Displayable>
   }
 
   void _onTap(T item) {
-    if (widget.detailWidgetBuilder != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => widget.detailWidgetBuilder(item)));
-    }
+    assert(widget.detailWidgetBuilder != null);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => widget.detailWidgetBuilder!(item)));
   }
 
   Widget _listItemBuilder(BuildContext context, int index) {
@@ -158,22 +156,24 @@ class DisplayComponentState<T extends Displayable>
       visualDensity: VisualDensity.compact,
       title: Text(
           (widget.displayNumbers ? '${index + 1}. ' : '') + item.displayTitle),
-      onTap: () {
-        _onTap(item);
-      },
+      onTap: widget.detailWidgetBuilder != null
+          ? () {
+              _onTap(item);
+            }
+          : null,
       subtitle: item.displaySubtitle != null ||
               widget.subtitleWidgetBuilder != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (item.displaySubtitle != null) Text(item.displaySubtitle),
+                if (item.displaySubtitle != null) Text(item.displaySubtitle!),
                 if (widget.subtitleWidgetBuilder != null)
-                  widget.subtitleWidgetBuilder(item, items),
+                  widget.subtitleWidgetBuilder!(item, items),
               ],
             )
           : null,
       leading: widget.leadingWidgetBuilder != null
-          ? widget.leadingWidgetBuilder(item)
+          ? widget.leadingWidgetBuilder!(item)
           : widget.displayImages
               ? ImageComponent(
                   displayable: item,
@@ -185,13 +185,13 @@ class DisplayComponentState<T extends Displayable>
           child: Row(
         children: [
           if (item.displayTrailing != null)
-            Text(item.displayTrailing,
+            Text(item.displayTrailing!,
                 style: TextStyle(color: Colors.grey, fontSize: 12)),
           if (widget.secondaryAction != null)
             IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  widget.secondaryAction(item);
+                  widget.secondaryAction!(item);
                 })
         ],
       )),
@@ -209,7 +209,7 @@ class DisplayComponentState<T extends Displayable>
                     icon: Icon(Icons.add),
                     color: Colors.white,
                     onPressed: () {
-                      widget.secondaryAction(item);
+                      widget.secondaryAction!(item);
                     })
               ],
             )
@@ -223,10 +223,10 @@ class DisplayComponentState<T extends Displayable>
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.white)),
               if (item.displaySubtitle != null)
-                Text(item.displaySubtitle,
+                Text(item.displaySubtitle!,
                     style: TextStyle(fontSize: 13, color: Colors.white)),
               if (item.displayTrailing != null)
-                Text(item.displayTrailing,
+                Text(item.displayTrailing!,
                     style: TextStyle(fontSize: 13, color: Colors.white))
             ],
           )),

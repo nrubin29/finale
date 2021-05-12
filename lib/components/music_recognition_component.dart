@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/components/acrcloud_dialog_component.dart';
 import 'package:finale/views/listen_continuously_view.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class MusicRecognitionComponent extends StatefulWidget {
   final ValueChanged<ACRCloudResponseMusicItem> onTrackRecognized;
 
-  MusicRecognitionComponent({@required this.onTrackRecognized});
+  MusicRecognitionComponent({required this.onTrackRecognized});
 
   @override
   _MusicRecognitionComponentState createState() =>
@@ -53,8 +51,8 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
 
                   if (result?.wasCancelled ?? true) return;
 
-                  if (result.track != null) {
-                    widget.onTrackRecognized(result.track);
+                  if (result!.track != null) {
+                    widget.onTrackRecognized(result.track!);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Could not recognize song')));
