@@ -8,20 +8,25 @@ part 'track.g.dart';
 
 @JsonSerializable()
 class STrackSimple extends ScrobbleableTrack {
-  List<SArtistSimple> artists;
+  final List<SArtistSimple> artists;
 
   @JsonKey(name: 'duration_ms')
-  int durationMs;
+  final int durationMs;
 
   @JsonKey(name: 'href')
-  String url;
+  @override
+  final String url;
 
-  String name;
+  @override
+  final String name;
 
+  @override
   String get albumName => null;
 
+  @override
   String get artistName => artists.first.name;
 
+  @override
   int get duration => durationMs ~/ 1000;
 
   STrackSimple(this.artists, this.durationMs, this.url, this.name);
@@ -32,25 +37,30 @@ class STrackSimple extends ScrobbleableTrack {
 
 @JsonSerializable()
 class STrack extends ScrobbleableTrack {
-  SAlbumSimple album;
+  final SAlbumSimple album;
 
-  List<SArtistSimple> artists; // Should be SArtist
+  final List<SArtistSimple> artists; // Should be SArtist
 
   @JsonKey(name: 'duration_ms')
-  int durationMs;
+  final int durationMs;
 
   @JsonKey(name: 'href')
-  String url;
+  @override
+  final String url;
 
-  String name;
+  @override
+  final String name;
 
+  @override
   String get albumName => album.name;
 
+  @override
   String get artistName => artists.first.name;
 
   @override
   ImageId get imageId => album.imageId;
 
+  @override
   int get duration => durationMs ~/ 1000;
 
   STrack(this.album, this.artists, this.durationMs, this.url, this.name);

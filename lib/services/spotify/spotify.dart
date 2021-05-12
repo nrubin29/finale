@@ -44,9 +44,9 @@ Future<Map<String, dynamic>> _doRequest(String method,
 }
 
 class SSearchTracksRequest extends PagedRequest<STrack> {
-  String query;
+  final String query;
 
-  SSearchTracksRequest(this.query);
+  const SSearchTracksRequest(this.query);
 
   @override
   Future<List<STrack>> doRequest(int limit, int page) async {
@@ -61,9 +61,9 @@ class SSearchTracksRequest extends PagedRequest<STrack> {
 }
 
 class SSearchArtistsRequest extends PagedRequest<SArtist> {
-  String query;
+  final String query;
 
-  SSearchArtistsRequest(this.query);
+  const SSearchArtistsRequest(this.query);
 
   @override
   Future<List<SArtist>> doRequest(int limit, int page) async {
@@ -78,9 +78,9 @@ class SSearchArtistsRequest extends PagedRequest<SArtist> {
 }
 
 class SSearchAlbumsRequest extends PagedRequest<SAlbumSimple> {
-  String query;
+  final String query;
 
-  SSearchAlbumsRequest(this.query);
+  const SSearchAlbumsRequest(this.query);
 
   @override
   Future<List<SAlbumSimple>> doRequest(int limit, int page) async {
@@ -95,9 +95,9 @@ class SSearchAlbumsRequest extends PagedRequest<SAlbumSimple> {
 }
 
 class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
-  SArtist artist;
+  final SArtist artist;
 
-  SArtistAlbumsRequest(this.artist);
+  const SArtistAlbumsRequest(this.artist);
 
   @override
   Future<List<SAlbumSimple>> doRequest(int limit, int page) async {
@@ -111,10 +111,10 @@ class PkcePair {
   static const _alphabet =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~';
 
-  final String _codeVerifier;
-  final String _codeChallenge;
+  final String codeVerifier;
+  final String codeChallenge;
 
-  const PkcePair._(this._codeVerifier, this._codeChallenge);
+  const PkcePair._(this.codeVerifier, this.codeChallenge);
 
   factory PkcePair.generate() {
     final random = Random.secure();
@@ -129,9 +129,6 @@ class PkcePair {
 
     return PkcePair._(verifier, challenge);
   }
-
-  String get codeVerifier => _codeVerifier;
-  String get codeChallenge => _codeChallenge;
 }
 
 class Spotify {

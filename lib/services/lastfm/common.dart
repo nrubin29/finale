@@ -69,10 +69,10 @@ abstract class BasicScrobbledArtist extends BasicArtist {
 
 @JsonSerializable()
 class LScrobbleResponseScrobblesAttr {
-  int accepted;
-  int ignored;
+  final int accepted;
+  final int ignored;
 
-  LScrobbleResponseScrobblesAttr(this.accepted, this.ignored);
+  const LScrobbleResponseScrobblesAttr(this.accepted, this.ignored);
 
   factory LScrobbleResponseScrobblesAttr.fromJson(Map<String, dynamic> json) =>
       _$LScrobbleResponseScrobblesAttrFromJson(json);
@@ -80,9 +80,9 @@ class LScrobbleResponseScrobblesAttr {
 
 @JsonSerializable()
 class LTag {
-  String name;
+  final String name;
 
-  LTag(this.name);
+  const LTag(this.name);
 
   factory LTag.fromJson(Map<String, dynamic> json) => _$LTagFromJson(json);
 }
@@ -90,9 +90,9 @@ class LTag {
 @JsonSerializable()
 class LTopTags {
   @JsonKey(name: 'tag')
-  List<LTag> tags;
+  final List<LTag> tags;
 
-  LTopTags(this.tags);
+  const LTopTags(this.tags);
 
   factory LTopTags.fromJson(Map<String, dynamic> json) =>
       _$LTopTagsFromJson(json);
@@ -101,31 +101,31 @@ class LTopTags {
 @JsonSerializable()
 class LAttr {
   @JsonKey(fromJson: int.parse)
-  int page;
+  final int page;
 
   @JsonKey(fromJson: int.parse)
-  int total;
+  final int total;
 
-  String user;
-
-  @JsonKey(fromJson: int.parse)
-  int perPage;
+  final String user;
 
   @JsonKey(fromJson: int.parse)
-  int totalPages;
+  final int perPage;
 
-  LAttr(this.page, this.total, this.user, this.perPage, this.totalPages);
+  @JsonKey(fromJson: int.parse)
+  final int totalPages;
+
+  const LAttr(this.page, this.total, this.user, this.perPage, this.totalPages);
 
   factory LAttr.fromJson(Map<String, dynamic> json) => _$LAttrFromJson(json);
 }
 
 @JsonSerializable()
 class LWiki {
-  String published;
-  String summary;
-  String content;
+  final String published;
+  final String summary;
+  final String content;
 
-  LWiki(this.published, this.summary, this.content);
+  const LWiki(this.published, this.summary, this.content);
 
   factory LWiki.fromJson(Map<String, dynamic> json) => _$LWikiFromJson(json);
 }
@@ -133,11 +133,11 @@ class LWiki {
 @JsonSerializable()
 class LError {
   @JsonKey(name: 'error')
-  int code;
+  final int code;
 
-  String message;
+  final String message;
 
-  LError(this.code, this.message);
+  const LError(this.code, this.message);
 
   factory LError.fromJson(Map<String, dynamic> json) => _$LErrorFromJson(json);
 }

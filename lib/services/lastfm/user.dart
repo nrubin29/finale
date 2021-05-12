@@ -11,9 +11,9 @@ part 'user.g.dart';
 @JsonSerializable()
 class LUserRegistered {
   @JsonKey(name: 'unixtime', fromJson: fromSecondsSinceEpoch)
-  DateTime date;
+  final DateTime date;
 
-  LUserRegistered(this.date);
+  const LUserRegistered(this.date);
 
   String get dateFormatted => DateFormat('dd MMM yyyy').format(date);
 
@@ -23,50 +23,24 @@ class LUserRegistered {
 
 @JsonSerializable()
 class LUser extends Displayable {
-  String name;
+  final String name;
 
   @JsonKey(name: 'realname')
-  String realName;
+  final String realName;
 
-  String url;
+  @override
+  final String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  ImageId imageId;
-
-  String country;
-
-  @JsonKey(fromJson: intParseSafe)
-  int age;
-
-  String gender;
-
-  @JsonKey(fromJson: convertStringToBoolean)
-  bool subscriber;
+  final ImageId imageId;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
-  int playCount;
+  final int playCount;
 
-  @JsonKey(fromJson: int.parse)
-  int playlists;
+  final LUserRegistered registered;
 
-  @JsonKey(fromJson: int.parse)
-  int bootstrap;
-
-  LUserRegistered registered;
-
-  LUser(
-      this.name,
-      this.realName,
-      this.url,
-      this.imageId,
-      this.country,
-      this.age,
-      this.gender,
-      this.subscriber,
-      this.playCount,
-      this.playlists,
-      this.bootstrap,
+  LUser(this.name, this.realName, this.url, this.imageId, this.playCount,
       this.registered);
 
   @override
@@ -84,9 +58,9 @@ class LUser extends Displayable {
 @JsonSerializable()
 class LUserFriendsResponse {
   @JsonKey(name: 'user')
-  List<LUser> friends;
+  final List<LUser> friends;
 
-  LUserFriendsResponse(this.friends);
+  const LUserFriendsResponse(this.friends);
 
   factory LUserFriendsResponse.fromJson(Map<String, dynamic> json) =>
       _$LUserFriendsResponseFromJson(json);
@@ -94,10 +68,10 @@ class LUserFriendsResponse {
 
 @JsonSerializable()
 class LAuthenticationResponseSession {
-  String name;
-  String key;
+  final String name;
+  final String key;
 
-  LAuthenticationResponseSession(this.name, this.key);
+  const LAuthenticationResponseSession(this.name, this.key);
 
   factory LAuthenticationResponseSession.fromJson(Map<String, dynamic> json) =>
       _$LAuthenticationResponseSessionFromJson(json);
@@ -105,8 +79,8 @@ class LAuthenticationResponseSession {
 
 @JsonSerializable()
 class LUserWeeklyChart extends Displayable {
-  String from;
-  String to;
+  final String from;
+  final String to;
 
   LUserWeeklyChart(this.from, this.to);
 
@@ -120,8 +94,10 @@ class LUserWeeklyChart extends Displayable {
   @override
   DisplayableType get type => null;
 
+  @override
   String get url => null;
 
+  @override
   String get displayTitle =>
       '${DateFormat('d MMM').format(fromDate)} - ${DateFormat('d MMM yyyy').format(toDate)}';
 }
@@ -129,9 +105,9 @@ class LUserWeeklyChart extends Displayable {
 @JsonSerializable()
 class LUserWeeklyChartList {
   @JsonKey(name: 'chart')
-  List<LUserWeeklyChart> charts;
+  final List<LUserWeeklyChart> charts;
 
-  LUserWeeklyChartList(this.charts);
+  const LUserWeeklyChartList(this.charts);
 
   factory LUserWeeklyChartList.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyChartListFromJson(json);
@@ -140,9 +116,9 @@ class LUserWeeklyChartList {
 @JsonSerializable()
 class LUserWeeklyTrackChartTrackArtist {
   @JsonKey(name: '#text')
-  String name;
+  final String name;
 
-  LUserWeeklyTrackChartTrackArtist(this.name);
+  const LUserWeeklyTrackChartTrackArtist(this.name);
 
   factory LUserWeeklyTrackChartTrackArtist.fromJson(
           Map<String, dynamic> json) =>
@@ -151,14 +127,16 @@ class LUserWeeklyTrackChartTrackArtist {
 
 @JsonSerializable()
 class LUserWeeklyTrackChartTrack extends Track {
-  LUserWeeklyTrackChartTrackArtist artist;
+  final LUserWeeklyTrackChartTrackArtist artist;
 
-  String url;
+  @override
+  final String url;
 
-  String name;
+  @override
+  final String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
-  int playCount;
+  final int playCount;
 
   LUserWeeklyTrackChartTrack(this.artist, this.url, this.name, this.playCount);
 
@@ -195,9 +173,9 @@ class LUserWeeklyTrackChartTrack extends Track {
 @JsonSerializable()
 class LUserWeeklyTrackChart {
   @JsonKey(name: 'track')
-  List<LUserWeeklyTrackChartTrack> tracks;
+  final List<LUserWeeklyTrackChartTrack> tracks;
 
-  LUserWeeklyTrackChart(this.tracks);
+  const LUserWeeklyTrackChart(this.tracks);
 
   factory LUserWeeklyTrackChart.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyTrackChartFromJson(json);
@@ -206,7 +184,8 @@ class LUserWeeklyTrackChart {
 @JsonSerializable()
 class LUserWeeklyAlbumChartAlbumArtist extends BasicArtist {
   @JsonKey(name: '#text')
-  String name;
+  @override
+  final String name;
 
   LUserWeeklyAlbumChartAlbumArtist(this.name);
 
@@ -214,19 +193,23 @@ class LUserWeeklyAlbumChartAlbumArtist extends BasicArtist {
           Map<String, dynamic> json) =>
       _$LUserWeeklyAlbumChartAlbumArtistFromJson(json);
 
+  @override
   String get url => null;
 }
 
 @JsonSerializable()
 class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
-  LUserWeeklyAlbumChartAlbumArtist artist;
+  @override
+  final LUserWeeklyAlbumChartAlbumArtist artist;
 
-  String url;
+  @override
+  final String url;
 
-  String name;
+  @override
+  final String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
-  int playCount;
+  final int playCount;
 
   LUserWeeklyAlbumChartAlbum(this.artist, this.url, this.name, this.playCount);
 
@@ -256,9 +239,9 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
 @JsonSerializable()
 class LUserWeeklyAlbumChart {
   @JsonKey(name: 'album')
-  List<LUserWeeklyAlbumChartAlbum> albums;
+  final List<LUserWeeklyAlbumChartAlbum> albums;
 
-  LUserWeeklyAlbumChart(this.albums);
+  const LUserWeeklyAlbumChart(this.albums);
 
   factory LUserWeeklyAlbumChart.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyAlbumChartFromJson(json);
@@ -266,16 +249,18 @@ class LUserWeeklyAlbumChart {
 
 @JsonSerializable()
 class LUserWeeklyArtistChartArtist extends BasicArtist {
-  String url;
+  @override
+  final String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
   Future<ImageId> get imageId async => (await Lastfm.getArtist(this)).imageId;
 
-  String name;
+  @override
+  final String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
-  int playCount;
+  final int playCount;
 
   LUserWeeklyArtistChartArtist(this.url, this.name, this.playCount);
 
@@ -290,9 +275,9 @@ class LUserWeeklyArtistChartArtist extends BasicArtist {
 @JsonSerializable()
 class LUserWeeklyArtistChart {
   @JsonKey(name: 'artist')
-  List<LUserWeeklyArtistChartArtist> artists;
+  final List<LUserWeeklyArtistChartArtist> artists;
 
-  LUserWeeklyArtistChart(this.artists);
+  const LUserWeeklyArtistChart(this.artists);
 
   factory LUserWeeklyArtistChart.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyArtistChartFromJson(json);

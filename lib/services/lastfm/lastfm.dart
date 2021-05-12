@@ -53,9 +53,9 @@ Future<Map<String, dynamic>> _doRequest(
 }
 
 class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
-  String username;
+  final String username;
 
-  GetRecentTracksRequest(this.username);
+  const GetRecentTracksRequest(this.username);
 
   @override
   doRequest(int limit, int page) async {
@@ -76,9 +76,9 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
 }
 
 class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
-  String username;
+  final String username;
 
-  GetTopArtistsRequest(this.username);
+  const GetTopArtistsRequest(this.username);
 
   @override
   doRequest(int limit, int page) async {
@@ -93,9 +93,9 @@ class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
 }
 
 class GetTopAlbumsRequest extends PagedRequest<LTopAlbumsResponseAlbum> {
-  String username;
+  final String username;
 
-  GetTopAlbumsRequest(this.username);
+  const GetTopAlbumsRequest(this.username);
 
   @override
   doRequest(int limit, int page) async {
@@ -110,9 +110,9 @@ class GetTopAlbumsRequest extends PagedRequest<LTopAlbumsResponseAlbum> {
 }
 
 class GetTopTracksRequest extends PagedRequest<LTopTracksResponseTrack> {
-  String username;
+  final String username;
 
-  GetTopTracksRequest(this.username);
+  const GetTopTracksRequest(this.username);
 
   @override
   doRequest(int limit, int page) async {
@@ -127,9 +127,9 @@ class GetTopTracksRequest extends PagedRequest<LTopTracksResponseTrack> {
 }
 
 class GetFriendsRequest extends PagedRequest<LUser> {
-  String username;
+  final String username;
 
-  GetFriendsRequest(this.username);
+  const GetFriendsRequest(this.username);
 
   @override
   doRequest(int limit, int page) async {
@@ -140,9 +140,9 @@ class GetFriendsRequest extends PagedRequest<LUser> {
 }
 
 class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
-  String query;
+  final String query;
 
-  LSearchTracksRequest(this.query);
+  const LSearchTracksRequest(this.query);
 
   @override
   Future<List<LTrackMatch>> doRequest(int limit, int page) async {
@@ -154,9 +154,9 @@ class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
 }
 
 class LSearchArtistsRequest extends PagedRequest<LArtistMatch> {
-  String query;
+  final String query;
 
-  LSearchArtistsRequest(this.query);
+  const LSearchArtistsRequest(this.query);
 
   @override
   Future<List<LArtistMatch>> doRequest(int limit, int page) async {
@@ -169,9 +169,9 @@ class LSearchArtistsRequest extends PagedRequest<LArtistMatch> {
 }
 
 class LSearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
-  String query;
+  final String query;
 
-  LSearchAlbumsRequest(this.query);
+  const LSearchAlbumsRequest(this.query);
 
   @override
   Future<List<LAlbumMatch>> doRequest(int limit, int page) async {
@@ -183,9 +183,9 @@ class LSearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
 }
 
 class ArtistGetTopAlbumsRequest extends PagedRequest<LArtistTopAlbum> {
-  String artist;
+  final String artist;
 
-  ArtistGetTopAlbumsRequest(this.artist);
+  const ArtistGetTopAlbumsRequest(this.artist);
 
   @override
   Future<List<LArtistTopAlbum>> doRequest(int limit, int page) async {
@@ -197,9 +197,9 @@ class ArtistGetTopAlbumsRequest extends PagedRequest<LArtistTopAlbum> {
 }
 
 class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
-  String artist;
+  final String artist;
 
-  ArtistGetTopTracksRequest(this.artist);
+  const ArtistGetTopTracksRequest(this.artist);
 
   @override
   Future<List<LArtistTopTrack>> doRequest(int limit, int page) async {
@@ -363,10 +363,10 @@ class Lastfm {
 }
 
 class LException implements Exception {
-  int code;
-  String message;
+  final int code;
+  final String message;
 
-  LException(this.code, this.message);
+  const LException(this.code, this.message);
 
   @override
   String toString() {

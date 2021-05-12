@@ -17,6 +17,8 @@ final _numberFormat = NumberFormat();
 String formatNumber(int number) => _numberFormat.format(number);
 
 abstract class PagedRequest<T extends Displayable> {
+  const PagedRequest();
+
   Future<List<T>> doRequest(int limit, int page);
 }
 
@@ -59,10 +61,17 @@ abstract class Track extends Displayable {
 }
 
 class BasicConcreteTrack extends Track {
-  String name;
-  String artistName;
-  String albumName;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String artistName;
+
+  @override
+  final String albumName;
+
+  @override
+  final String url;
 
   BasicConcreteTrack(this.name, this.artistName, this.albumName, [this.url]);
 
@@ -77,11 +86,20 @@ abstract class ScrobbleableTrack extends Track {
 }
 
 class ConcreteScrobbleableTrack extends ScrobbleableTrack {
-  String name;
-  String artistName;
-  String albumName;
-  String url;
-  int duration;
+  @override
+  final String name;
+
+  @override
+  final String artistName;
+
+  @override
+  final String albumName;
+
+  @override
+  final String url;
+
+  @override
+  final int duration;
 
   ConcreteScrobbleableTrack(this.name, this.artistName, this.albumName,
       [this.url, this.duration]);
@@ -140,8 +158,11 @@ abstract class BasicArtist extends Displayable {
 }
 
 class ConcreteBasicArtist extends BasicArtist {
-  String name;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String url;
 
   ConcreteBasicArtist(this.name, [this.url]);
 }

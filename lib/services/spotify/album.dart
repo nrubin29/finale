@@ -9,18 +9,22 @@ part 'album.g.dart';
 
 @JsonSerializable()
 class SAlbumSimple extends BasicAlbum {
-  List<SArtistSimple> artists;
+  final List<SArtistSimple> artists;
 
   @JsonKey(name: 'href')
-  String url;
+  @override
+  final String url;
 
-  String name;
-  String id;
+  @override
+  final String name;
+
+  final String id;
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  ImageId imageId;
+  final ImageId imageId;
 
+  @override
   BasicArtist get artist => artists.first;
 
   SAlbumSimple(this.artists, this.url, this.name, this.id, this.imageId);
@@ -31,21 +35,25 @@ class SAlbumSimple extends BasicAlbum {
 
 @JsonSerializable()
 class SAlbumFull extends FullAlbum {
-  List<SArtistSimple> artists;
+  final List<SArtistSimple> artists;
 
   @JsonKey(name: 'href')
-  String url;
+  @override
+  final String url;
 
-  String name;
-  String id;
+  @override
+  final String name;
+
+  final String id;
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  ImageId imageId;
+  final ImageId imageId;
 
   @JsonKey(name: 'tracks', fromJson: extractItems)
-  List<STrackSimple> rawTracks;
+  final List<STrackSimple> rawTracks;
 
+  @override
   BasicArtist get artist => artists.first;
 
   @override

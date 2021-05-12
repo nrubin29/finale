@@ -7,8 +7,11 @@ part 'album.g.dart';
 
 @JsonSerializable()
 class LTopAlbumsResponseAlbumArtist extends BasicArtist {
-  String name;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String url;
 
   LTopAlbumsResponseAlbumArtist(this.name, this.url);
 
@@ -18,17 +21,21 @@ class LTopAlbumsResponseAlbumArtist extends BasicArtist {
 
 @JsonSerializable()
 class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
-  String name;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String url;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
-  int playCount;
+  final int playCount;
 
-  LTopAlbumsResponseAlbumArtist artist;
+  @override
+  final LTopAlbumsResponseAlbumArtist artist;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  ImageId imageId;
+  final ImageId imageId;
 
   LTopAlbumsResponseAlbum(
       this.name, this.url, this.playCount, this.artist, this.imageId);
@@ -40,12 +47,12 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
 @JsonSerializable()
 class LTopAlbumsResponseTopAlbums {
   @JsonKey(name: 'album')
-  List<LTopAlbumsResponseAlbum> albums;
+  final List<LTopAlbumsResponseAlbum> albums;
 
   @JsonKey(name: '@attr')
-  LAttr attr;
+  final LAttr attr;
 
-  LTopAlbumsResponseTopAlbums(this.albums, this.attr);
+  const LTopAlbumsResponseTopAlbums(this.albums, this.attr);
 
   factory LTopAlbumsResponseTopAlbums.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseTopAlbumsFromJson(json);
@@ -53,16 +60,20 @@ class LTopAlbumsResponseTopAlbums {
 
 @JsonSerializable()
 class LAlbumMatch extends BasicAlbum {
-  String name;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String url;
 
   @JsonKey(name: 'artist')
-  String artistName;
+  final String artistName;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  ImageId imageId;
+  final ImageId imageId;
 
+  @override
   BasicArtist get artist =>
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
@@ -75,9 +86,9 @@ class LAlbumMatch extends BasicAlbum {
 @JsonSerializable()
 class LAlbumSearchResponse {
   @JsonKey(name: 'album')
-  List<LAlbumMatch> albums;
+  final List<LAlbumMatch> albums;
 
-  LAlbumSearchResponse(this.albums);
+  const LAlbumSearchResponse(this.albums);
 
   factory LAlbumSearchResponse.fromJson(Map<String, dynamic> json) =>
       _$LAlbumSearchResponseFromJson(json);
@@ -85,20 +96,28 @@ class LAlbumSearchResponse {
 
 @JsonSerializable()
 class LAlbumTrack extends ScrobbleableTrack {
-  String name;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String url;
 
   @JsonKey(fromJson: intParseSafe)
-  int duration;
+  @override
+  final int duration;
 
+  // Not final because it's set by LAlbum.
   String album;
 
-  LTopAlbumsResponseAlbumArtist artist;
+  final LTopAlbumsResponseAlbumArtist artist;
 
+  @override
   String get albumName => album;
 
+  @override
   String get artistName => artist.name;
 
+  @override
   String get displaySubtitle => null;
 
   LAlbumTrack(this.name, this.url, this.duration, this.album, this.artist);
@@ -110,9 +129,9 @@ class LAlbumTrack extends ScrobbleableTrack {
 @JsonSerializable()
 class LAlbumTracks {
   @JsonKey(name: 'track')
-  List<LAlbumTrack> tracks;
+  final List<LAlbumTrack> tracks;
 
-  LAlbumTracks(this.tracks);
+  const LAlbumTracks(this.tracks);
 
   factory LAlbumTracks.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTracksFromJson(json);
@@ -120,37 +139,41 @@ class LAlbumTracks {
 
 @JsonSerializable()
 class LAlbum extends FullAlbum {
-  String name;
+  @override
+  final String name;
 
   @JsonKey(name: 'artist')
-  String artistName;
+  final String artistName;
 
-  String url;
+  @override
+  final String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  ImageId imageId;
+  final ImageId imageId;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
-  int playCount;
+  final int playCount;
 
   @JsonKey(fromJson: int.parse)
-  int listeners;
+  final int listeners;
 
   @JsonKey(name: 'userplaycount', fromJson: int.parse)
-  int userPlayCount;
+  final int userPlayCount;
 
   @JsonKey(name: 'tracks')
-  LAlbumTracks tracksObject;
+  final LAlbumTracks tracksObject;
 
   @JsonKey(name: 'tags')
-  LTopTags topTags;
+  final LTopTags topTags;
 
-  LWiki wiki;
+  final LWiki wiki;
 
+  @override
   BasicArtist get artist =>
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
+  @override
   List<LAlbumTrack> get tracks => tracksObject.tracks
     ..forEach((element) {
       element.album = name;

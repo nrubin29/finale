@@ -9,11 +9,15 @@ part 'artist.g.dart';
 
 @JsonSerializable()
 class LTopArtistsResponseArtist extends BasicScrobbledArtist with HasPlayCount {
-  String name;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String url;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
-  int playCount;
+  @override
+  final int playCount;
 
   LTopArtistsResponseArtist(this.name, this.url, this.playCount);
 
@@ -24,12 +28,12 @@ class LTopArtistsResponseArtist extends BasicScrobbledArtist with HasPlayCount {
 @JsonSerializable()
 class LTopArtistsResponseTopArtists {
   @JsonKey(name: 'artist')
-  List<LTopArtistsResponseArtist> artists;
+  final List<LTopArtistsResponseArtist> artists;
 
   @JsonKey(name: '@attr')
-  LAttr attr;
+  final LAttr attr;
 
-  LTopArtistsResponseTopArtists(this.artists, this.attr);
+  const LTopArtistsResponseTopArtists(this.artists, this.attr);
 
   factory LTopArtistsResponseTopArtists.fromJson(Map<String, dynamic> json) =>
       _$LTopArtistsResponseTopArtistsFromJson(json);
@@ -37,8 +41,11 @@ class LTopArtistsResponseTopArtists {
 
 @JsonSerializable()
 class LArtistMatch extends BasicArtist {
-  String name;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String url;
 
   LArtistMatch(this.name, this.url);
 
@@ -49,9 +56,9 @@ class LArtistMatch extends BasicArtist {
 @JsonSerializable()
 class LArtistSearchResponse {
   @JsonKey(name: 'artist')
-  List<LArtistMatch> artists;
+  final List<LArtistMatch> artists;
 
-  LArtistSearchResponse(this.artists);
+  const LArtistSearchResponse(this.artists);
 
   factory LArtistSearchResponse.fromJson(Map<String, dynamic> json) =>
       _$LArtistSearchResponseFromJson(json);
@@ -60,15 +67,15 @@ class LArtistSearchResponse {
 @JsonSerializable()
 class LArtistStats {
   @JsonKey(name: 'playcount', fromJson: int.parse)
-  int playCount;
+  final int playCount;
 
   @JsonKey(fromJson: int.parse)
-  int listeners;
+  final int listeners;
 
   @JsonKey(name: 'userplaycount', fromJson: int.parse)
-  int userPlayCount;
+  final int userPlayCount;
 
-  LArtistStats(this.playCount, this.userPlayCount, this.listeners);
+  const LArtistStats(this.playCount, this.userPlayCount, this.listeners);
 
   factory LArtistStats.fromJson(Map<String, dynamic> json) =>
       _$LArtistStatsFromJson(json);
@@ -76,15 +83,18 @@ class LArtistStats {
 
 @JsonSerializable()
 class LArtist extends FullArtist {
-  String name;
-  String url;
+  @override
+  final String name;
 
-  LArtistStats stats;
+  @override
+  final String url;
+
+  final LArtistStats stats;
 
   @JsonKey(name: 'tags')
-  LTopTags topTags;
+  final LTopTags topTags;
 
-  LWiki bio;
+  final LWiki bio;
 
   LArtist(this.name, this.url, this.stats, this.topTags, this.bio);
 
@@ -94,17 +104,21 @@ class LArtist extends FullArtist {
 
 @JsonSerializable()
 class LArtistTopAlbum extends BasicAlbum {
-  String name;
-  String url;
+  @override
+  final String name;
+
+  @override
+  final String url;
 
   @JsonKey(name: 'playcount')
-  int playCount;
+  final int playCount;
 
-  LTopAlbumsResponseAlbumArtist artist;
+  @override
+  final LTopAlbumsResponseAlbumArtist artist;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  ImageId imageId;
+  final ImageId imageId;
 
   LArtistTopAlbum(
       this.name, this.url, this.playCount, this.artist, this.imageId);
@@ -116,9 +130,9 @@ class LArtistTopAlbum extends BasicAlbum {
 @JsonSerializable()
 class LArtistGetTopAlbumsResponse {
   @JsonKey(name: 'album')
-  List<LArtistTopAlbum> albums;
+  final List<LArtistTopAlbum> albums;
 
-  LArtistGetTopAlbumsResponse(this.albums);
+  const LArtistGetTopAlbumsResponse(this.albums);
 
   factory LArtistGetTopAlbumsResponse.fromJson(Map<String, dynamic> json) =>
       _$LArtistGetTopAlbumsResponseFromJson(json);
@@ -126,13 +140,18 @@ class LArtistGetTopAlbumsResponse {
 
 @JsonSerializable()
 class LArtistTopTrack extends Track {
-  String name;
-  String url;
+  @override
+  final String name;
 
-  LTopAlbumsResponseAlbumArtist artist;
+  @override
+  final String url;
 
+  final LTopAlbumsResponseAlbumArtist artist;
+
+  @override
   String get artistName => artist.name;
 
+  @override
   String get albumName => null;
 
   @override
@@ -150,9 +169,9 @@ class LArtistTopTrack extends Track {
 @JsonSerializable()
 class LArtistGetTopTracksResponse {
   @JsonKey(name: 'track')
-  List<LArtistTopTrack> tracks;
+  final List<LArtistTopTrack> tracks;
 
-  LArtistGetTopTracksResponse(this.tracks);
+  const LArtistGetTopTracksResponse(this.tracks);
 
   factory LArtistGetTopTracksResponse.fromJson(Map<String, dynamic> json) =>
       _$LArtistGetTopTracksResponseFromJson(json);
@@ -161,9 +180,9 @@ class LArtistGetTopTracksResponse {
 @JsonSerializable()
 class LChartTopArtists {
   @JsonKey(name: 'artist')
-  List<LTopArtistsResponseArtist> artists;
+  final List<LTopArtistsResponseArtist> artists;
 
-  LChartTopArtists(this.artists);
+  const LChartTopArtists(this.artists);
 
   factory LChartTopArtists.fromJson(Map<String, dynamic> json) =>
       _$LChartTopArtistsFromJson(json);

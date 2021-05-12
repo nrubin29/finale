@@ -25,9 +25,9 @@ ImageId extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
 
 @JsonSerializable(genericArgumentFactories: true)
 class SPage<T extends Displayable> {
-  List<T> items;
+  final List<T> items;
 
-  SPage(this.items);
+  const SPage(this.items);
 
   factory SPage.fromJson(Map<String, dynamic> json) =>
       _$SPageFromJson(json, _fromJson);
@@ -50,10 +50,10 @@ class SPage<T extends Displayable> {
 
 @JsonSerializable()
 class SError {
-  String message;
-  int status;
+  final String message;
+  final int status;
 
-  SError(this.message, this.status);
+  const SError(this.message, this.status);
 
   factory SError.fromJson(Map<String, dynamic> json) => _$SErrorFromJson(json);
 }
