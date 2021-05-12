@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/views/profile_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:finale/views/search_view.dart';
@@ -8,7 +6,7 @@ import 'package:flutter/material.dart';
 class MainView extends StatefulWidget {
   final String username;
 
-  MainView({this.username});
+  MainView({required this.username});
 
   @override
   State<StatefulWidget> createState() => _MainViewState();

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/cache.dart';
 import 'package:finale/views/error_view.dart';
 import 'package:finale/views/login_view.dart';
@@ -39,15 +37,15 @@ class MyApp extends StatelessWidget {
                         MaterialStateColor.resolveWith((_) => Colors.red),
                     trackColor: MaterialStateColor.resolveWith(
                         (_) => Colors.red.shade200))),
-        home: FutureBuilder<String>(
+        home: FutureBuilder<String?>(
             future: SharedPreferences.getInstance().then((value) => value.getString('name')),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return ErrorView(error: snapshot.error);
+                return ErrorView(error: snapshot.error!);
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox();
               } else if (snapshot.hasData) {
-                return MainView(username: snapshot.data);
+                return MainView(username: snapshot.data!);
               } else {
                 return LoginView();
               }

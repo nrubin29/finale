@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/weekly_chart_component.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -9,7 +7,7 @@ import 'package:flutter/material.dart';
 class WeeklyChartSelectorView extends StatefulWidget {
   final LUser user;
 
-  WeeklyChartSelectorView({@required this.user});
+  WeeklyChartSelectorView({required this.user});
 
   @override
   State<StatefulWidget> createState() => _WeeklyChartSelectorViewState();
@@ -17,8 +15,8 @@ class WeeklyChartSelectorView extends StatefulWidget {
 
 class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView> {
   var _loaded = false;
-  List<LUserWeeklyChart> _charts;
-  int _index;
+  late List<LUserWeeklyChart> _charts;
+  late int _index;
 
   @override
   void initState() {

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/components/music_recognition_component.dart';
 import 'package:finale/env.dart';
@@ -11,7 +9,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 
 class ScrobbleView extends StatefulWidget {
-  final Track track;
+  final Track? track;
   final bool isModal;
 
   ScrobbleView({this.track, this.isModal = false});
@@ -28,7 +26,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   final _albumController = TextEditingController();
 
   var _useCustomTimestamp = false;
-  DateTime _customTimestamp;
+  DateTime? _customTimestamp;
 
   @override
   void initState() {
@@ -43,7 +41,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     }
   }
 
-  String _required(String value) {
+  String? _required(String? value) {
     if (value?.isEmpty ?? true) {
       return 'Required';
     }
@@ -56,7 +54,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       BasicConcreteTrack(
           _trackController.text, _artistController.text, _albumController.text)
     ], [
-      _useCustomTimestamp ? _customTimestamp : DateTime.now()
+      _useCustomTimestamp ? _customTimestamp! : DateTime.now()
     ]);
 
     if (widget.isModal) {
@@ -84,7 +82,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   /// change that much unless you make a noise very close to the microphone.
   // ignore: unused_element
   Widget _buildAudioIndicator(BuildContext context, ACRCloudSession session) {
-    return StreamBuilder(
+    return StreamBuilder<double>(
       stream: session.volume,
       initialData: 0.0,
       builder: (context, snapshot) => Container(
@@ -92,8 +90,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
           child: Center(
               child: ClipOval(
                   child: SizedBox(
-                      width: 100 * snapshot.data + 10,
-                      height: 100 * snapshot.data + 10,
+                      width: 100 * snapshot.data! + 10,
+                      height: 100 * snapshot.data! + 10,
                       child: Container(color: Colors.red))))),
     );
   }
@@ -124,8 +122,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                       MusicRecognitionComponent(onTrackRecognized: (track) {
                         setState(() {
                           _trackController.text = track.title;
-                          _albumController.text = track.album?.name;
-                          _artistController.text = track.artists?.first?.name;
+                          _albumController.text = track.album.name;
+                          _artistController.text = track.artists.first.name;
                         });
                       }),
                     TextFormField(

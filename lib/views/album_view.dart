@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
@@ -22,20 +20,22 @@ import 'package:share/share.dart';
 class AlbumView extends StatelessWidget {
   final BasicAlbum album;
 
-  AlbumView({@required this.album});
+  AlbumView({required this.album});
 
   @override
   Widget build(BuildContext context) {
+    Lastfm.getAlbum(album);
+
     return FutureBuilder<LAlbum>(
       future: Lastfm.getAlbum(album),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorView(error: snapshot.error);
+          return ErrorView(error: snapshot.error!);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }
 
-        final album = snapshot.data;
+        final album = snapshot.data!;
 
         return Scaffold(
             appBar: createAppBar(
@@ -111,23 +111,22 @@ class AlbumView extends StatelessWidget {
                 if (album.topTags.tags.isNotEmpty) Divider(),
                 if (album.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: album.topTags),
-                if (album.wiki != null && album.wiki.isNotEmpty) ...[
+                if (album.wiki != null && album.wiki!.isNotEmpty) ...[
                   Divider(),
-                  WikiComponent(wiki: album.wiki)
+                  WikiComponent(wiki: album.wiki!)
                 ],
-                if (album.artist != null) Divider(),
-                if (album.artist != null)
-                  ListTile(
-                      leading: ImageComponent(displayable: album.artist),
-                      title: Text(album.artist.name),
-                      trailing: Icon(Icons.chevron_right),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ArtistView(artist: album.artist)));
-                      }),
+                Divider(),
+                ListTile(
+                    leading: ImageComponent(displayable: album.artist),
+                    title: Text(album.artist.name),
+                    trailing: Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ArtistView(artist: album.artist)));
+                    }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
                   DisplayComponent<LAlbumTrack>(

@@ -1,5 +1,4 @@
-// @dart=2.9
-
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:finale/components/display_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -11,10 +10,10 @@ import 'package:wakelock/wakelock.dart';
 enum ListenContinuouslyTrackStatus { scrobbled, skipped, noResults, error }
 
 class ListenContinuouslyTrack extends BasicConcreteTrack {
-  DateTime timestamp;
-  ListenContinuouslyTrackStatus status;
+  final DateTime timestamp;
+  ListenContinuouslyTrackStatus? status;
 
-  ListenContinuouslyTrack(String name, String artist, String album,
+  ListenContinuouslyTrack(String name, String? artist, String? album,
       [this.status])
       : timestamp = DateTime.now(),
         super(name, artist, album);
@@ -75,13 +74,12 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
         break;
       }
 
-      if (result?.metadata?.music?.isNotEmpty ?? false) {
-        final resultMusicItem = result.metadata.music.first;
+      if (result?.metadata?.music.isNotEmpty ?? false) {
+        final resultMusicItem = result!.metadata!.music.first;
         final track = ListenContinuouslyTrack(resultMusicItem.title,
-            resultMusicItem.artists?.first?.name, resultMusicItem.album?.name);
+            resultMusicItem.artists.first.name, resultMusicItem.album.name);
 
-        if (_tracks.firstWhere((t) => t.hasResult, orElse: () => null) ==
-            track) {
+        if (_tracks.firstWhereOrNull((t) => t.hasResult) == track) {
           track.status = ListenContinuouslyTrackStatus.skipped;
         } else {
           final response = await Lastfm.scrobble([track], [track.timestamp]);

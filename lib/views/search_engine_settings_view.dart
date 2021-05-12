@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/components/spotify_dialog_component.dart';
 import 'package:finale/constants.dart';
 import 'package:finale/services/spotify/spotify.dart';
@@ -63,7 +61,7 @@ class _SearchEngineSettingsViewState extends State<SearchEngineSettingsView> {
               FutureBuilder<bool>(
                 future: Spotify.hasAuthData,
                 initialData: false,
-                builder: (context, snapshot) => snapshot.data
+                builder: (context, snapshot) => snapshot.data!
                     ? TextButton(
                         child: Text('Log Out'),
                         onPressed: _logOutSpotify,

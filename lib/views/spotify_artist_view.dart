@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
@@ -21,7 +19,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class SpotifyArtistView extends StatefulWidget {
   final dynamic /* SArtist|SArtistSimple */ artist;
 
-  SpotifyArtistView({@required this.artist})
+  SpotifyArtistView({required this.artist})
       : assert(artist is SArtist || artist is SArtistSimple);
 
   @override
@@ -30,7 +28,7 @@ class SpotifyArtistView extends StatefulWidget {
 
 class _SpotifyArtistViewState extends State<SpotifyArtistView>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
   var selectedIndex = 0;
 
   @override
@@ -47,12 +45,12 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
           : Spotify.getFullArtist(widget.artist),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorView(error: snapshot.error);
+          return ErrorView(error: snapshot.error!);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }
 
-        final artist = snapshot.data;
+        final artist = snapshot.data!;
 
         return Scaffold(
             appBar: createAppBar(
@@ -99,7 +97,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                         future: Spotify.getTopTracksForArtist(artist),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
-                            return ErrorComponent(error: snapshot.error);
+                            return ErrorComponent(error: snapshot.error!);
                           } else if (!snapshot.hasData) {
                             return LoadingComponent();
                           }

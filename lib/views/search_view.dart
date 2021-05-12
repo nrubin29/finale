@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/spotify_dialog_component.dart';
 import 'package:finale/constants.dart';
@@ -31,8 +29,6 @@ extension SearchEngineIcon on SearchEngine {
       case SearchEngine.spotify:
         return Icon(SocialMediaIcons.spotify, color: color);
     }
-
-    return Icon(Icons.error, color: color);
   }
 }
 
@@ -44,8 +40,6 @@ extension SearchEngineQuery on SearchEngine {
       case SearchEngine.spotify:
         return SSearchTracksRequest(query);
     }
-
-    throw Exception('Unknown search engine $this');
   }
 
   PagedRequest<BasicArtist> searchArtists(String query) {
@@ -55,8 +49,6 @@ extension SearchEngineQuery on SearchEngine {
       case SearchEngine.spotify:
         return SSearchArtistsRequest(query);
     }
-
-    throw Exception('Unknown search engine $this');
   }
 
   PagedRequest<BasicAlbum> searchAlbums(String query) {
@@ -66,8 +58,6 @@ extension SearchEngineQuery on SearchEngine {
       case SearchEngine.spotify:
         return SSearchAlbumsRequest(query);
     }
-
-    throw Exception('Unknown search engine $this');
   }
 }
 
@@ -78,7 +68,7 @@ class SearchQuery {
   const SearchQuery._(this.searchEngine, this.text);
   const SearchQuery.empty() : this._(SearchEngine.lastfm, '');
 
-  SearchQuery copyWith({SearchEngine searchEngine, String text}) =>
+  SearchQuery copyWith({SearchEngine? searchEngine, String? text}) =>
       SearchQuery._(searchEngine ?? this.searchEngine, text ?? this.text);
 
   @override
@@ -120,7 +110,7 @@ class _SearchViewState extends State<SearchView> {
       if (sp.containsKey('searchEngine')) {
         setState(() {
           _query.add(_currentQuery.copyWith(
-              searchEngine: SearchEngine.values[sp.getInt('searchEngine')]));
+              searchEngine: SearchEngine.values[sp.getInt('searchEngine')!]));
         });
       }
     });
@@ -194,7 +184,7 @@ class _SearchViewState extends State<SearchView> {
                                       builder: (context) =>
                                           SpotifyDialogComponent());
 
-                                  if (loggedIn) {
+                                  if (loggedIn ?? false) {
                                     setState(() {
                                       _query.add(_currentQuery.copyWith(
                                           searchEngine: SearchEngine.spotify));
@@ -233,8 +223,7 @@ class _SearchViewState extends State<SearchView> {
               ),
               actions: [
                 Visibility(
-                    visible:
-                        _textController != null && _textController.text != '',
+                    visible: _textController.text != '',
                     maintainState: true,
                     maintainAnimation: true,
                     maintainSize: true,
@@ -342,7 +331,7 @@ class _SearchViewState extends State<SearchView> {
                                 query.searchEngine.searchAlbums(query.text)),
                         detailWidgetBuilder: (album) =>
                             _searchEngine == SearchEngine.spotify
-                                ? SpotifyAlbumView(album: album)
+                                ? SpotifyAlbumView(album: album as SAlbumSimple)
                                 : AlbumView(album: album)),
                   ]
                 : [Container(), Container(), Container()],

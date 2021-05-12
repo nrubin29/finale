@@ -63,10 +63,10 @@ class BasicConcreteTrack extends Track {
   final String name;
 
   @override
-  final String artistName;
+  final String? artistName;
 
   @override
-  final String albumName;
+  final String? albumName;
 
   @override
   final String? url;

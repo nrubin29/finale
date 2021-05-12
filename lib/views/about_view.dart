@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
@@ -35,7 +33,7 @@ class AboutView extends StatelessWidget {
                                 future: PackageInfo.fromPlatform(),
                                 builder: (context, snapshot) => snapshot.hasData
                                     ? Text(
-                                        'Version ${snapshot.data.version}+${snapshot.data.buildNumber}')
+                                        'Version ${snapshot.data!.version}+${snapshot.data!.buildNumber}')
                                     : SizedBox())
                           ],
                         )

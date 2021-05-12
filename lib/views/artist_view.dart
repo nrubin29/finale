@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
@@ -20,7 +18,7 @@ import 'package:share/share.dart';
 class ArtistView extends StatefulWidget {
   final BasicArtist artist;
 
-  ArtistView({@required this.artist});
+  ArtistView({required this.artist});
 
   @override
   State<StatefulWidget> createState() => _ArtistViewState();
@@ -28,7 +26,7 @@ class ArtistView extends StatefulWidget {
 
 class _ArtistViewState extends State<ArtistView>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
   var selectedIndex = 0;
 
   @override
@@ -43,12 +41,12 @@ class _ArtistViewState extends State<ArtistView>
       future: Lastfm.getArtist(widget.artist),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorView(error: snapshot.error);
+          return ErrorView(error: snapshot.error!);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }
 
-        final artist = snapshot.data;
+        final artist = snapshot.data!;
 
         return Scaffold(
             appBar: createAppBar(
@@ -103,9 +101,9 @@ class _ArtistViewState extends State<ArtistView>
                 if (artist.topTags.tags.isNotEmpty) Divider(),
                 if (artist.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: artist.topTags),
-                if (artist.bio != null && artist.bio.isNotEmpty) ...[
+                if (artist.bio != null && artist.bio!.isNotEmpty) ...[
                   Divider(),
-                  WikiComponent(wiki: artist.bio),
+                  WikiComponent(wiki: artist.bio!),
                 ],
                 Divider(),
                 TabBar(

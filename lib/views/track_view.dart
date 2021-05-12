@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
@@ -21,14 +19,14 @@ import 'package:share/share.dart';
 class TrackView extends StatefulWidget {
   final Track track;
 
-  TrackView({@required this.track});
+  TrackView({required this.track});
 
   @override
   State<StatefulWidget> createState() => _TrackViewState();
 }
 
 class _TrackViewState extends State<TrackView> {
-  bool loved;
+  late bool loved;
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +34,12 @@ class _TrackViewState extends State<TrackView> {
       future: Lastfm.getTrack(widget.track),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorView(error: snapshot.error);
+          return ErrorView(error: snapshot.error!);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }
 
-        final track = snapshot.data;
+        final track = snapshot.data!;
         loved = track.userLoved;
 
         return Scaffold(
@@ -83,7 +81,7 @@ class _TrackViewState extends State<TrackView> {
                 if (track.album != null)
                   Center(
                       child: ImageComponent(
-                          displayable: track.album,
+                          displayable: track.album!,
                           fit: BoxFit.cover,
                           width: min(MediaQuery.of(context).size.width,
                               MediaQuery.of(context).size.height / 2))),
@@ -132,36 +130,36 @@ class _TrackViewState extends State<TrackView> {
                 if (track.topTags.tags.isNotEmpty) Divider(),
                 if (track.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: track.topTags),
-                if (track.wiki != null && track.wiki.isNotEmpty) ...[
+                if (track.wiki != null && track.wiki!.isNotEmpty) ...[
                   Divider(),
-                  WikiComponent(wiki: track.wiki),
+                  WikiComponent(wiki: track.wiki!),
                 ],
                 if (track.artist != null || track.album != null) Divider(),
                 if (track.artist != null)
                   ListTile(
-                      leading: ImageComponent(displayable: track.artist),
-                      title: Text(track.artist.name),
+                      leading: ImageComponent(displayable: track.artist!),
+                      title: Text(track.artist!.name),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    ArtistView(artist: track.artist)));
+                                    ArtistView(artist: track.artist!)));
                       }),
                 if (track.album != null)
                   ListTile(
-                    leading: ImageComponent(displayable: track.album),
-                    title: Text(track.album.name),
+                    leading: ImageComponent(displayable: track.album!),
+                    title: Text(track.album!.name),
                     subtitle:
-                        track.artist != null ? Text(track.artist.name) : null,
+                        track.artist != null ? Text(track.artist!.name) : null,
                     trailing: Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  AlbumView(album: track.album)));
+                                  AlbumView(album: track.album!)));
                     },
                   ),
               ],

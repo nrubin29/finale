@@ -1,12 +1,10 @@
-// @dart=2.9
-
 import 'package:finale/components/error_component.dart';
 import 'package:flutter/material.dart';
 
 class ErrorView extends StatelessWidget {
   final Object error;
 
-  ErrorView({@required this.error});
+  ErrorView({required this.error});
 
   @override
   Widget build(BuildContext context) => Scaffold(

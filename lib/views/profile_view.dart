@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';
@@ -24,7 +22,7 @@ class ProfileView extends StatefulWidget {
   final String username;
   final bool isTab;
 
-  ProfileView({@required this.username, this.isTab = false});
+  ProfileView({required this.username, this.isTab = false});
 
   @override
   State<StatefulWidget> createState() => _ProfileViewState();
@@ -32,7 +30,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
   var _tab = 0;
 
   @override
@@ -53,12 +51,12 @@ class _ProfileViewState extends State<ProfileView>
       future: Lastfm.getUser(widget.username),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorView(error: snapshot.error);
+          return ErrorView(error: snapshot.error!);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }
 
-        final user = snapshot.data;
+        final user = snapshot.data!;
 
         return Scaffold(
           appBar: AppBar(

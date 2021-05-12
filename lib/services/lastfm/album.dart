@@ -107,12 +107,14 @@ class LAlbumTrack extends ScrobbleableTrack {
   final int? duration;
 
   // Not final because it's set by LAlbum.
-  String album;
+  String? album;
 
   final LTopAlbumsResponseAlbumArtist artist;
 
+  // The non-null assertion is safe because [album] will be set before this is
+  // called.
   @override
-  String get albumName => album;
+  String get albumName => album!;
 
   @override
   String get artistName => artist.name;

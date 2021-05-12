@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/services/generic.dart';
@@ -18,7 +16,7 @@ enum ScrobbleTimestampBehavior {
 class ScrobbleAlbumView extends StatefulWidget {
   final FullAlbum album;
 
-  ScrobbleAlbumView({this.album}) : assert(album.canScrobble);
+  ScrobbleAlbumView({required this.album}) : assert(album.canScrobble);
 
   @override
   State<StatefulWidget> createState() => _ScrobbleAlbumViewState();
@@ -26,7 +24,7 @@ class ScrobbleAlbumView extends StatefulWidget {
 
 class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
   var _behavior = ScrobbleTimestampBehavior.startingNow;
-  DateTime _customTimestamp;
+  DateTime? _customTimestamp;
 
   @override
   void initState() {
@@ -42,23 +40,23 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
       timestamps = [
         _behavior == ScrobbleTimestampBehavior.startingNow
             ? DateTime.now()
-            : _customTimestamp
+            : _customTimestamp!
       ];
 
       tracks.forEach((track) {
-        timestamps.add(timestamps.last.add(Duration(seconds: track.duration)));
+        timestamps.add(timestamps.last.add(Duration(seconds: track.duration!)));
       });
     } else {
       timestamps = [
         _behavior == ScrobbleTimestampBehavior.endingNow
             ? DateTime.now()
-            : _customTimestamp
+            : _customTimestamp!
       ];
 
       tracks = tracks.reversed.toList(growable: false);
       tracks.forEach((track) {
         timestamps
-            .add(timestamps.last.subtract(Duration(seconds: track.duration)));
+            .add(timestamps.last.subtract(Duration(seconds: track.duration!)));
       });
     }
 
@@ -101,41 +99,61 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
                         child: Text('Scrobble behavior',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText2
+                                .bodyText2!
                                 .copyWith(
                                     color: Theme.of(context)
                                         .textTheme
-                                        .caption
+                                        .caption!
                                         .color))),
-                    RadioListTile(
+                    RadioListTile<ScrobbleTimestampBehavior>(
                         activeColor: Colors.red,
                         value: ScrobbleTimestampBehavior.startingNow,
                         groupValue: _behavior,
-                        onChanged: (value) => setState(() => _behavior = value),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _behavior = value;
+                            });
+                          }
+                        },
                         title: Text('Starting now')),
-                    RadioListTile(
+                    RadioListTile<ScrobbleTimestampBehavior>(
                         activeColor: Colors.red,
                         value: ScrobbleTimestampBehavior.startingCustom,
                         groupValue: _behavior,
-                        onChanged: (value) => setState(() {
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
                               _behavior = value;
                               _customTimestamp = DateTime.now();
-                            }),
+                            });
+                          }
+                        },
                         title: Text('Starting at a custom timestamp')),
-                    RadioListTile(
+                    RadioListTile<ScrobbleTimestampBehavior>(
                         activeColor: Colors.red,
                         value: ScrobbleTimestampBehavior.endingNow,
                         groupValue: _behavior,
-                        onChanged: (value) => setState(() => _behavior = value),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _behavior = value;
+                            });
+                          }
+                        },
                         title: Text('Ending now')),
-                    RadioListTile(
+                    RadioListTile<ScrobbleTimestampBehavior>(
                         activeColor: Colors.red,
                         value: ScrobbleTimestampBehavior.endingCustom,
                         groupValue: _behavior,
-                        onChanged: (value) => setState(() {
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
                               _behavior = value;
                               _customTimestamp = DateTime.now();
-                            }),
+                            });
+                          }
+                        },
                         title: Text('Ending at a custom timestamp')),
                     Visibility(
                       visible: _behavior ==

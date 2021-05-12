@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:finale/components/image_component.dart';
@@ -18,7 +16,7 @@ class LoginView extends StatelessWidget {
         url: Uri.https('last.fm', 'api/auth',
             {'api_key': apiKey, 'cb': 'finale://auth'}).toString(),
         callbackUrlScheme: 'finale');
-    final token = Uri.parse(result).queryParameters['token'];
+    final token = Uri.parse(result).queryParameters['token']!;
     final session = await Lastfm.authenticate(token);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,13 +48,13 @@ class LoginView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   crossAxisCount:
                       max(MediaQuery.of(context).size.width ~/ 200, 3),
-                  children: snapshot.data
+                  children: snapshot.data!
                       .map((artist) => FutureBuilder<List<LArtistTopAlbum>>(
                           future: ArtistGetTopAlbumsRequest(artist.name)
                               .doRequest(1, 1),
                           builder: (context, snapshot) => snapshot.hasData
                               ? ImageComponent(
-                                  displayable: snapshot.data.first,
+                                  displayable: snapshot.data!.first,
                                   showPlaceholder: false)
                               : Container()))
                       .toList(),
@@ -82,14 +80,14 @@ class LoginView extends StatelessWidget {
                         Text('Finale',
                             style: Theme.of(context)
                                 .textTheme
-                                .headline2
+                                .headline2!
                                 .copyWith(color: Colors.white)),
                         SizedBox(height: 10),
                         Text('A fully-featured Last.fm client and scrobbler',
                             textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
-                                .subtitle1
+                                .subtitle1!
                                 .copyWith(color: Colors.white)),
                         SizedBox(height: 10),
                         OutlinedButton(
@@ -105,7 +103,7 @@ class LoginView extends StatelessWidget {
                               Text('Log in with Last.fm',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle1
+                                      .subtitle1!
                                       .copyWith(color: Colors.white))
                             ],
                           ),

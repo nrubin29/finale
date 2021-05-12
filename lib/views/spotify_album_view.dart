@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
@@ -19,7 +17,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class SpotifyAlbumView extends StatelessWidget {
   final SAlbumSimple album;
 
-  SpotifyAlbumView({@required this.album});
+  SpotifyAlbumView({required this.album});
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +25,12 @@ class SpotifyAlbumView extends StatelessWidget {
       future: Spotify.getFullAlbum(album),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorView(error: snapshot.error);
+          return ErrorView(error: snapshot.error!);
         } else if (!snapshot.hasData) {
           return LoadingComponent();
         }
 
-        final album = snapshot.data;
+        final album = snapshot.data!;
 
         return Scaffold(
             appBar: createAppBar(
@@ -71,18 +69,17 @@ class SpotifyAlbumView extends StatelessWidget {
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
-                if (album.artist != null)
-                  ListTile(
-                      leading: ImageComponent(displayable: album.artist),
-                      title: Text(album.artist.name),
-                      trailing: Icon(Icons.chevron_right),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    SpotifyArtistView(artist: album.artist)));
-                      }),
+                ListTile(
+                    leading: ImageComponent(displayable: album.artist),
+                    title: Text(album.artist.name),
+                    trailing: Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SpotifyArtistView(artist: album.artist)));
+                    }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
                   DisplayComponent<SAlbumTrack>(
