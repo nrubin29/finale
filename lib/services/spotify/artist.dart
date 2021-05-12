@@ -18,7 +18,7 @@ class SArtistSimple extends BasicArtist {
   final String url;
 
   @override
-  Future<ImageId> get imageId async =>
+  Future<ImageId?> get imageId async =>
       (await Spotify.getFullArtist(this)).imageId;
 
   SArtistSimple(this.id, this.name, this.url);
@@ -40,7 +40,7 @@ class SArtist extends FullArtist {
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   SArtist(this.id, this.name, this.url, this.imageId);
 

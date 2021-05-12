@@ -20,33 +20,33 @@ abstract class PagedRequest<T extends Displayable> {
   Future<List<T>> doRequest(int limit, int page);
 }
 
-enum DisplayableType { track, album, artist, user }
+enum DisplayableType { track, album, artist, user, chart }
 
 abstract class Displayable {
   DisplayableType get type;
 
-  String get url;
+  String? get url;
 
   String get displayTitle;
 
-  String get displaySubtitle => null;
+  String? get displaySubtitle => null;
 
-  String get displayTrailing => null;
+  String? get displayTrailing => null;
 
-  FutureOr<ImageId> get imageId => null;
+  FutureOr<ImageId?> get imageId => null;
 
   /// Used by ImageComponent. Should not be overridden.
   @JsonKey(ignore: true)
   @nonVirtual
-  ImageId cachedImageId;
+  ImageId? cachedImageId;
 }
 
 abstract class Track extends Displayable {
   String get name;
 
-  String get artistName;
+  String? get artistName;
 
-  String get albumName;
+  String? get albumName;
 
   @override
   DisplayableType get type => DisplayableType.track;
@@ -55,7 +55,7 @@ abstract class Track extends Displayable {
   String get displayTitle => name;
 
   @override
-  String get displaySubtitle => artistName;
+  String? get displaySubtitle => artistName;
 }
 
 class BasicConcreteTrack extends Track {
@@ -69,7 +69,7 @@ class BasicConcreteTrack extends Track {
   final String albumName;
 
   @override
-  final String url;
+  final String? url;
 
   BasicConcreteTrack(this.name, this.artistName, this.albumName, [this.url]);
 
@@ -80,32 +80,7 @@ class BasicConcreteTrack extends Track {
 
 abstract class ScrobbleableTrack extends Track {
   /// The duration of the track in seconds.
-  int get duration;
-}
-
-class ConcreteScrobbleableTrack extends ScrobbleableTrack {
-  @override
-  final String name;
-
-  @override
-  final String artistName;
-
-  @override
-  final String albumName;
-
-  @override
-  final String url;
-
-  @override
-  final int duration;
-
-  ConcreteScrobbleableTrack(this.name, this.artistName, this.albumName,
-      [this.url, this.duration]);
-
-  @override
-  String toString() =>
-      'ConcreteScrobbleableTrack(name=$name, artist=$artistName, '
-      'album=$albumName, duration:$duration)';
+  int? get duration;
 }
 
 abstract class BasicAlbum extends Displayable {
@@ -127,20 +102,29 @@ abstract class FullAlbum extends BasicAlbum {
   List<ScrobbleableTrack> get tracks;
 
   bool get canScrobble =>
-      tracks.every((track) => track.duration != null && track.duration > 0);
+      tracks.every((track) => track.duration != null && track.duration! > 0);
 }
 
 abstract class BasicArtist extends Displayable {
   String get name;
 
   @override
-  FutureOr<ImageId> get imageId async {
-    final lastfmResponse = await Lastfm.get(url);
+  FutureOr<ImageId?> get imageId async {
+    if (url == null) {
+      return null;
+    }
+
+    final lastfmResponse = await Lastfm.get(url!);
 
     try {
       final doc = parse(lastfmResponse.body);
       final rawUrl =
-          doc.querySelector('.header-new-gallery--link').attributes['href'];
+          doc.querySelector('.header-new-gallery--link')?.attributes['href'];
+
+      if (rawUrl == null) {
+        return null;
+      }
+
       final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1);
       return ImageId.lastfm(imageId);
     } catch (e) {
@@ -160,7 +144,7 @@ class ConcreteBasicArtist extends BasicArtist {
   final String name;
 
   @override
-  final String url;
+  final String? url;
 
   ConcreteBasicArtist(this.name, [this.url]);
 }

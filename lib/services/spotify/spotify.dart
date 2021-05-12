@@ -11,17 +11,17 @@ import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Uri _buildUri(String method, Map<String, dynamic> data) => Uri.https(
+Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
     'api.spotify.com',
     'v1/$method',
     data?.map((key, value) => MapEntry(key, value.toString())));
 
 Future<Map<String, dynamic>> _doRequest(String method,
-    [Map<String, dynamic> data]) async {
+    [Map<String, dynamic>? data]) async {
   final sharedPreferences = await SharedPreferences.getInstance();
 
   if (!(await Spotify.isLoggedIn)) {
-    final refreshToken = sharedPreferences.getString('spotifyRefreshToken');
+    final refreshToken = sharedPreferences.getString('spotifyRefreshToken')!;
     await Spotify.refreshAccessToken(refreshToken);
   }
 
@@ -211,7 +211,7 @@ class Spotify {
     }
 
     final expiration = DateTime.fromMillisecondsSinceEpoch(
-        (await SharedPreferences.getInstance()).getInt('spotifyExpiration'));
+        (await SharedPreferences.getInstance()).getInt('spotifyExpiration')!);
     return DateTime.now().isBefore(expiration);
   }
 }

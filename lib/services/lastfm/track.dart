@@ -50,14 +50,14 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   final LRecentTracksResponseTrackArtist artist;
 
   final LRecentTracksResponseTrackAlbum album;
 
   @JsonKey(name: 'date')
-  final LRecentTracksResponseTrackDate timestamp;
+  final LRecentTracksResponseTrackDate? timestamp;
 
   LRecentTracksResponseTrack(this.name, this.url, this.imageId, this.artist,
       this.album, this.timestamp);
@@ -69,7 +69,7 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   String get albumName => album.title;
 
   @override
-  DateTime get date => timestamp?.date ?? null;
+  DateTime? get date => timestamp?.date;
 
   factory LRecentTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackFromJson(json);
@@ -99,13 +99,13 @@ class LTrackMatch extends Track {
   // LTrackMatches don't give us any indication of the their album, so we need
   // to fetch the full track in order to get the album.
   @override
-  String get albumName => null;
+  String? get albumName => null;
 
   @override
   String get artistName => artist;
 
   @override
-  Future<ImageId> get imageId async {
+  Future<ImageId?> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }
@@ -155,10 +155,10 @@ class LTrackAlbum extends BasicAlbum {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   @override
-  BasicArtist get artist => ConcreteBasicArtist(artistName, null);
+  BasicArtist get artist => ConcreteBasicArtist(artistName);
 
   LTrackAlbum(this.name, this.url, this.artistName, this.imageId);
 
@@ -189,19 +189,19 @@ class LTrack extends Track {
   @JsonKey(name: 'userloved', fromJson: convertStringToBoolean)
   final bool userLoved;
 
-  final LTrackArtist artist;
-  final LTrackAlbum album;
+  final LTrackArtist? artist;
+  final LTrackAlbum? album;
 
   @JsonKey(name: 'toptags')
   final LTopTags topTags;
 
-  final LWiki wiki;
+  final LWiki? wiki;
 
   @override
-  String get artistName => artist.name;
+  String? get artistName => artist?.name;
 
   @override
-  String get albumName => album?.name;
+  String? get albumName => album?.name;
 
   LTrack(
       this.name,
@@ -237,10 +237,10 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
   String get artistName => artist.name;
 
   @override
-  String get albumName => null;
+  String? get albumName => null;
 
   @override
-  Future<ImageId> get imageId async {
+  Future<ImageId?> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }

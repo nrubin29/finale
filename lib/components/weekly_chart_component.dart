@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/image_component.dart';

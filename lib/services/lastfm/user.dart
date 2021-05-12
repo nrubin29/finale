@@ -26,14 +26,14 @@ class LUser extends Displayable {
   final String name;
 
   @JsonKey(name: 'realname')
-  final String realName;
+  final String? realName;
 
   @override
   final String url;
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
   final int playCount;
@@ -50,7 +50,7 @@ class LUser extends Displayable {
   String get displayTitle => name;
 
   @override
-  String get displaySubtitle => realName;
+  String? get displaySubtitle => realName;
 
   factory LUser.fromJson(Map<String, dynamic> json) => _$LUserFromJson(json);
 }
@@ -92,10 +92,10 @@ class LUserWeeklyChart extends Displayable {
   DateTime get toDate => fromSecondsSinceEpoch(to);
 
   @override
-  DisplayableType get type => null;
+  DisplayableType get type => DisplayableType.chart;
 
   @override
-  String get url => null;
+  String? get url => null;
 
   @override
   String get displayTitle =>
@@ -136,7 +136,7 @@ class LUserWeeklyTrackChartTrack extends Track {
   final String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
-  final int playCount;
+  final int? playCount;
 
   LUserWeeklyTrackChartTrack(this.artist, this.url, this.name, this.playCount);
 
@@ -144,7 +144,7 @@ class LUserWeeklyTrackChartTrack extends Track {
       _$LUserWeeklyTrackChartTrackFromJson(json);
 
   @override
-  String get albumName => null;
+  String? get albumName => null;
 
   @override
   String get artistName => artist.name;
@@ -154,13 +154,18 @@ class LUserWeeklyTrackChartTrack extends Track {
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
-  Future<ImageId> get imageId async {
+  Future<ImageId?> get imageId async {
     final lastfmResponse = await Lastfm.get(url);
 
     try {
       final doc = parse(lastfmResponse.body);
       final rawUrl =
-          doc.querySelector('.cover-art').children.first.attributes['src'];
+          doc.querySelector('.cover-art')?.children.first.attributes['src'];
+
+      if (rawUrl == null) {
+        return null;
+      }
+
       final imageId = rawUrl.substring(
           rawUrl.lastIndexOf('/') + 1, rawUrl.lastIndexOf('.'));
       return ImageId.lastfm(imageId);
@@ -194,7 +199,7 @@ class LUserWeeklyAlbumChartAlbumArtist extends BasicArtist {
       _$LUserWeeklyAlbumChartAlbumArtistFromJson(json);
 
   @override
-  String get url => null;
+  String? get url => null;
 }
 
 @JsonSerializable()
@@ -209,7 +214,7 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
   final String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
-  final int playCount;
+  final int? playCount;
 
   LUserWeeklyAlbumChartAlbum(this.artist, this.url, this.name, this.playCount);
 
@@ -221,13 +226,18 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
-  Future<ImageId> get imageId async {
+  Future<ImageId?> get imageId async {
     final lastfmResponse = await Lastfm.get(url);
 
     try {
       final doc = parse(lastfmResponse.body);
       final rawUrl =
-          doc.querySelector('.link-block-cover-link').attributes['href'];
+          doc.querySelector('.link-block-cover-link')?.attributes['href'];
+
+      if (rawUrl == null) {
+        return null;
+      }
+
       final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1);
       return ImageId.lastfm(imageId);
     } catch (e) {
@@ -254,13 +264,13 @@ class LUserWeeklyArtistChartArtist extends BasicArtist {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  Future<ImageId> get imageId async => (await Lastfm.getArtist(this)).imageId;
+  Future<ImageId?> get imageId async => (await Lastfm.getArtist(this)).imageId;
 
   @override
   final String name;
 
   @JsonKey(name: 'playcount', fromJson: intParseSafe)
-  final int playCount;
+  final int? playCount;
 
   LUserWeeklyArtistChartArtist(this.url, this.name, this.playCount);
 

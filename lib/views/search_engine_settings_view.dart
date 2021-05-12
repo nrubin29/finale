@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:finale/components/spotify_dialog_component.dart';
 import 'package:finale/constants.dart';
 import 'package:finale/services/spotify/spotify.dart';

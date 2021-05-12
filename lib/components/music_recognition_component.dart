@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:finale/components/acrcloud_dialog_component.dart';
 import 'package:finale/views/listen_continuously_view.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:finale/views/profile_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:finale/views/search_view.dart';

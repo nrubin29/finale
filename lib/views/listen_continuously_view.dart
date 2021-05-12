@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:finale/components/display_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -8,7 +10,7 @@ import 'package:wakelock/wakelock.dart';
 
 enum ListenContinuouslyTrackStatus { scrobbled, skipped, noResults, error }
 
-class ListenContinuouslyTrack extends ConcreteScrobbleableTrack {
+class ListenContinuouslyTrack extends BasicConcreteTrack {
   DateTime timestamp;
   ListenContinuouslyTrackStatus status;
 

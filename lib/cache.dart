@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:sqflite/sqflite.dart';
 
 /// Stores image IDs in an SQLite database.

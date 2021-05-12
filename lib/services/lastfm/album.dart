@@ -35,7 +35,7 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   LTopAlbumsResponseAlbum(
       this.name, this.url, this.playCount, this.artist, this.imageId);
@@ -71,7 +71,7 @@ class LAlbumMatch extends BasicAlbum {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   @override
   BasicArtist get artist =>
@@ -104,7 +104,7 @@ class LAlbumTrack extends ScrobbleableTrack {
 
   @JsonKey(fromJson: intParseSafe)
   @override
-  final int duration;
+  final int? duration;
 
   // Not final because it's set by LAlbum.
   String album;
@@ -118,7 +118,7 @@ class LAlbumTrack extends ScrobbleableTrack {
   String get artistName => artist.name;
 
   @override
-  String get displaySubtitle => null;
+  String? get displaySubtitle => null;
 
   LAlbumTrack(this.name, this.url, this.duration, this.album, this.artist);
 
@@ -150,7 +150,7 @@ class LAlbum extends FullAlbum {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   @JsonKey(name: 'playcount', fromJson: int.parse)
   final int playCount;
@@ -167,7 +167,7 @@ class LAlbum extends FullAlbum {
   @JsonKey(name: 'tags')
   final LTopTags topTags;
 
-  final LWiki wiki;
+  final LWiki? wiki;
 
   @override
   BasicArtist get artist =>

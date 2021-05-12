@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:social_media_buttons/social_media_icons.dart';

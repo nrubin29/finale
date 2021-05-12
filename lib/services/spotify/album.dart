@@ -22,7 +22,7 @@ class SAlbumSimple extends BasicAlbum {
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   @override
   BasicArtist get artist => artists.first;
@@ -48,7 +48,7 @@ class SAlbumFull extends FullAlbum {
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   @JsonKey(name: 'tracks', fromJson: extractItems)
   final List<STrackSimple> rawTracks;
@@ -81,5 +81,5 @@ class SAlbumTrack extends STrackSimple {
       : super(track.artists, track.durationMs, track.url, track.name);
 
   @override
-  String get displaySubtitle => null;
+  String? get displaySubtitle => null;
 }

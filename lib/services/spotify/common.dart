@@ -7,7 +7,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';
 
-ImageId extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
+ImageId? extractImageId(
+    List<dynamic>? /* List<Map<String, dynamic>>? */ images) {
   if (images == null || images.isEmpty) {
     return null;
   }
@@ -32,7 +33,7 @@ class SPage<T extends Displayable> {
   factory SPage.fromJson(Map<String, dynamic> json) =>
       _$SPageFromJson(json, _fromJson);
 
-  static T _fromJson<T extends Displayable>(Object json) {
+  static T _fromJson<T extends Displayable>(Object? json) {
     if (json is Map<String, dynamic>) {
       if (json['type'] == 'artist') {
         return SArtist.fromJson(json) as T;

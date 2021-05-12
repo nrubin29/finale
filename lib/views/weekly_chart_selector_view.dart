@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/weekly_chart_component.dart';
 import 'package:finale/services/lastfm/lastfm.dart';

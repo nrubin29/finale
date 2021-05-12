@@ -21,7 +21,7 @@ class STrackSimple extends ScrobbleableTrack {
   final String name;
 
   @override
-  String get albumName => null;
+  String? get albumName => null;
 
   @override
   String get artistName => artists.first.name;
@@ -58,7 +58,7 @@ class STrack extends ScrobbleableTrack {
   String get artistName => artists.first.name;
 
   @override
-  ImageId get imageId => album.imageId;
+  ImageId? get imageId => album.imageId;
 
   @override
   int get duration => durationMs ~/ 1000;

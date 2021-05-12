@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:finale/cache.dart';
 import 'package:finale/views/error_view.dart';
 import 'package:finale/views/login_view.dart';

@@ -5,15 +5,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';
 
-bool convertStringToBoolean(String text) => text == '1';
+bool convertStringToBoolean(String? text) => text == '1';
 
-int intParseSafe(String text) => text != null ? int.tryParse(text) : null;
+int? intParseSafe(String? text) => text != null ? int.tryParse(text) : null;
 
 DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
     DateTime.fromMillisecondsSinceEpoch(
         (timestamp is int ? timestamp : int.parse(timestamp)) * 1000);
 
-ImageId extractImageId(List<dynamic> /* List<Map<String, dynamic>> */ images) {
+ImageId? extractImageId(
+    List<dynamic>? /* List<Map<String, dynamic>>? */ images) {
   if (images == null ||
       images.isEmpty ||
       !images.first.containsKey('#text') ||
@@ -31,7 +32,7 @@ mixin HasPlayCount on Displayable {
 }
 
 abstract class BasicScrobbledTrack extends Track {
-  DateTime get date;
+  DateTime? get date;
 
   @override
   String get displayTrailing {
@@ -39,7 +40,7 @@ abstract class BasicScrobbledTrack extends Track {
       return 'scrobbling now';
     }
 
-    final delta = DateTime.now().difference(date);
+    final delta = DateTime.now().difference(date!);
 
     if (delta.inDays == 0) {
       if (delta.inHours == 0) {
@@ -49,7 +50,7 @@ abstract class BasicScrobbledTrack extends Track {
       return '${delta.inHours} hour${delta.inHours == 1 ? '' : 's'} ago';
     }
 
-    return DateFormat('dd MMM HH:mm aa').format(date);
+    return DateFormat('dd MMM HH:mm aa').format(date!);
   }
 }
 

@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 
 /// Creates an [AppBar] whose [title] and [subtitle] will always fit.

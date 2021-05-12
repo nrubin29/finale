@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';

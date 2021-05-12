@@ -21,7 +21,7 @@ class ThrottleClient extends BaseClient {
   ///
   /// If [inner] is passed, it's used as the inner client for sending HTTP
   /// requests. It defaults to `http.Client()`.
-  ThrottleClient(int maxActiveRequests, [Client inner])
+  ThrottleClient(int maxActiveRequests, [Client? inner])
       : _pool = Pool(maxActiveRequests),
         _inner = inner == null ? Client() : inner;
 

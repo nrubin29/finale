@@ -94,7 +94,7 @@ class LArtist extends FullArtist {
   @JsonKey(name: 'tags')
   final LTopTags topTags;
 
-  final LWiki bio;
+  final LWiki? bio;
 
   LArtist(this.name, this.url, this.stats, this.topTags, this.bio);
 
@@ -118,7 +118,7 @@ class LArtistTopAlbum extends BasicAlbum {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId imageId;
+  final ImageId? imageId;
 
   LArtistTopAlbum(
       this.name, this.url, this.playCount, this.artist, this.imageId);
@@ -152,10 +152,10 @@ class LArtistTopTrack extends Track {
   String get artistName => artist.name;
 
   @override
-  String get albumName => null;
+  String? get albumName => null;
 
   @override
-  Future<ImageId> get imageId async {
+  Future<ImageId?> get imageId async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }
