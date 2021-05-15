@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
-import 'package:finale/components/display_component.dart';
+import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/tags_component.dart';
@@ -64,7 +64,7 @@ class _ArtistViewState extends State<ArtistView>
               children: [
                 Center(
                     child: ImageComponent(
-                        displayable: artist,
+                        entity: artist,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
@@ -125,7 +125,7 @@ class _ArtistViewState extends State<ArtistView>
                   Visibility(
                     visible: selectedIndex == 0,
                     maintainState: true,
-                    child: DisplayComponent<LArtistTopAlbum>(
+                    child: EntityDisplayComponent<LArtistTopAlbum>(
                         scrollable: false,
                         request: ArtistGetTopAlbumsRequest(artist.name),
                         detailWidgetBuilder: (album) =>
@@ -134,7 +134,7 @@ class _ArtistViewState extends State<ArtistView>
                   Visibility(
                     visible: selectedIndex == 1,
                     maintainState: true,
-                    child: DisplayComponent<LArtistTopTrack>(
+                    child: EntityDisplayComponent<LArtistTopTrack>(
                         scrollable: false,
                         request: ArtistGetTopTracksRequest(artist.name),
                         detailWidgetBuilder: (track) =>

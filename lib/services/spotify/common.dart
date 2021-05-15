@@ -25,7 +25,7 @@ ImageId? extractImageId(
 }
 
 @JsonSerializable(genericArgumentFactories: true)
-class SPage<T extends Displayable> {
+class SPage<T extends Entity> {
   final List<T> items;
 
   const SPage(this.items);
@@ -33,7 +33,7 @@ class SPage<T extends Displayable> {
   factory SPage.fromJson(Map<String, dynamic> json) =>
       _$SPageFromJson(json, _fromJson);
 
-  static T _fromJson<T extends Displayable>(Object? json) {
+  static T _fromJson<T extends Entity>(Object? json) {
     if (json is Map<String, dynamic>) {
       if (json['type'] == 'artist') {
         return SArtist.fromJson(json) as T;

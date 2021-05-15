@@ -81,7 +81,7 @@ class _TrackViewState extends State<TrackView> {
                 if (track.album != null)
                   Center(
                       child: ImageComponent(
-                          displayable: track.album!,
+                          entity: track.album!,
                           fit: BoxFit.cover,
                           width: min(MediaQuery.of(context).size.width,
                               MediaQuery.of(context).size.height / 2))),
@@ -137,7 +137,7 @@ class _TrackViewState extends State<TrackView> {
                 if (track.artist != null || track.album != null) Divider(),
                 if (track.artist != null)
                   ListTile(
-                      leading: ImageComponent(displayable: track.artist!),
+                      leading: ImageComponent(entity: track.artist!),
                       title: Text(track.artist!.name),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
@@ -149,7 +149,7 @@ class _TrackViewState extends State<TrackView> {
                       }),
                 if (track.album != null)
                   ListTile(
-                    leading: ImageComponent(displayable: track.album!),
+                    leading: ImageComponent(entity: track.album!),
                     title: Text(track.album!.name),
                     subtitle:
                         track.artist != null ? Text(track.artist!.name) : null,

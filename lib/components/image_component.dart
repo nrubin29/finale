@@ -5,7 +5,7 @@ import 'package:finale/services/image_id.dart';
 import 'package:flutter/material.dart';
 
 class ImageComponent extends StatelessWidget {
-  final Displayable displayable;
+  final Entity entity;
   final ImageQuality quality;
   final BoxFit? fit;
   final double? width;
@@ -13,26 +13,26 @@ class ImageComponent extends StatelessWidget {
   final bool showPlaceholder;
 
   static const placeholders = {
-    DisplayableType.track: {
+    EntityType.track: {
       ImageQuality.low: AssetImage('assets/images/default_track_low.jpg'),
       ImageQuality.high: AssetImage('assets/images/default_track.jpg'),
     },
-    DisplayableType.album: {
+    EntityType.album: {
       ImageQuality.low: AssetImage('assets/images/default_album_low.jpg'),
       ImageQuality.high: AssetImage('assets/images/default_album.jpg'),
     },
-    DisplayableType.artist: {
+    EntityType.artist: {
       ImageQuality.low: AssetImage('assets/images/default_artist_low.jpg'),
       ImageQuality.high: AssetImage('assets/images/default_artist.jpg'),
     },
-    DisplayableType.user: {
+    EntityType.user: {
       ImageQuality.low: AssetImage('assets/images/default_user_low.jpg'),
       ImageQuality.high: AssetImage('assets/images/default_user.jpg'),
     },
   };
 
   ImageComponent({
-    required this.displayable,
+    required this.entity,
     this.quality = ImageQuality.high,
     this.fit,
     this.width,
@@ -48,9 +48,7 @@ class ImageComponent extends StatelessWidget {
   Widget _buildImage(BuildContext context, ImageId? imageId) {
     final placeholder = showPlaceholder
         ? Image(
-            image: placeholders[displayable.type]![quality]!,
-            width: width,
-            fit: fit)
+            image: placeholders[entity.type]![quality]!, width: width, fit: fit)
         : Container();
 
     if (imageId == null) {
@@ -71,18 +69,18 @@ class ImageComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (displayable.cachedImageId != null) {
-      return _buildImage(context, displayable.cachedImageId);
-    } else if (displayable.imageId == null) {
+    if (entity.cachedImageId != null) {
+      return _buildImage(context, entity.cachedImageId);
+    } else if (entity.imageId == null) {
       return _buildImage(context, null);
-    } else if (displayable.imageId is ImageId) {
-      return _buildImage(context, displayable.imageId as ImageId);
-    } else if (displayable.url == null) {
+    } else if (entity.imageId is ImageId) {
+      return _buildImage(context, entity.imageId as ImageId);
+    } else if (entity.url == null) {
       return _buildImage(context, null);
     }
 
     return FutureBuilder<ImageId?>(
-        future: ImageIdCache().get(displayable.url!),
+        future: ImageIdCache().get(entity.url!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return _buildImage(context, null);
@@ -91,16 +89,16 @@ class ImageComponent extends StatelessWidget {
           final cachedImageId = snapshot.data;
 
           if (cachedImageId != null) {
-            displayable.cachedImageId = cachedImageId;
+            entity.cachedImageId = cachedImageId;
             return _buildImage(context, cachedImageId);
           }
 
           return FutureBuilder<ImageId?>(
-            future: displayable.imageId as Future<ImageId?>,
+            future: entity.imageId as Future<ImageId?>,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                ImageIdCache().insert(displayable.url!, snapshot.data!);
-                displayable.cachedImageId = snapshot.data;
+                ImageIdCache().insert(entity.url!, snapshot.data!);
+                entity.cachedImageId = snapshot.data;
               }
 
               return _buildImage(context, snapshot.data);

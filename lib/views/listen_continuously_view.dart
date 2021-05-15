@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:finale/components/app_bar_component.dart';
-import 'package:finale/components/display_component.dart';
+import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/constants.dart';
 import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
@@ -139,7 +139,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
             ),
           ),
           Expanded(
-              child: DisplayComponent<ListenContinuouslyTrack>(
+              child: EntityDisplayComponent<ListenContinuouslyTrack>(
             items: _tracks,
             leadingWidgetBuilder: (track) =>
                 Icon(_iconForTrackStatus[track.status]),

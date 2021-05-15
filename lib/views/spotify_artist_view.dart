@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
-import 'package:finale/components/display_component.dart';
+import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/error_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
@@ -61,7 +61,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
               children: [
                 Center(
                     child: ImageComponent(
-                        displayable: artist,
+                        entity: artist,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
@@ -84,7 +84,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                   Visibility(
                     visible: selectedIndex == 0,
                     maintainState: true,
-                    child: DisplayComponent<SAlbumSimple>(
+                    child: EntityDisplayComponent<SAlbumSimple>(
                         scrollable: false,
                         request: SArtistAlbumsRequest(artist),
                         detailWidgetBuilder: (album) =>
@@ -102,7 +102,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                             return LoadingComponent();
                           }
 
-                          return DisplayComponent<STrack>(
+                          return EntityDisplayComponent<STrack>(
                             scrollable: false,
                             items: snapshot.data,
                             secondaryAction: (track) async {

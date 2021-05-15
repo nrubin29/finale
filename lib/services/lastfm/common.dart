@@ -27,7 +27,7 @@ ImageId? extractImageId(
       imageUrl.lastIndexOf('/') + 1, imageUrl.lastIndexOf('.')));
 }
 
-mixin HasPlayCount on Displayable {
+mixin HasPlayCount on Entity {
   int get playCount;
 }
 

@@ -90,7 +90,7 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
                 child: Column(
                   children: [
                     ListTile(
-                        leading: ImageComponent(displayable: widget.album),
+                        leading: ImageComponent(entity: widget.album),
                         title: Text(widget.album.name),
                         subtitle: Text(widget.album.artist.name)),
                     SizedBox(height: 10),

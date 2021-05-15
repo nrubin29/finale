@@ -54,7 +54,7 @@ class LoginView extends StatelessWidget {
                               .doRequest(1, 1),
                           builder: (context, snapshot) => snapshot.hasData
                               ? ImageComponent(
-                                  displayable: snapshot.data!.first,
+                                  entity: snapshot.data!.first,
                                   showPlaceholder: false)
                               : Container()))
                       .toList(),

@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:finale/components/display_component.dart';
+import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:flutter/material.dart';
 
-class PeriodSelectorComponent<T extends Displayable> extends StatefulWidget {
+class PeriodSelectorComponent<T extends Entity> extends StatefulWidget {
   final DisplayType displayType;
   final PagedRequest<T> request;
-  final DisplayableWidgetBuilder<T> detailWidgetBuilder;
-  final DisplayableAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
+  final EntityWidgetBuilder<T> detailWidgetBuilder;
+  final EntityAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
 
   PeriodSelectorComponent({
     this.displayType = DisplayType.list,
@@ -22,12 +22,12 @@ class PeriodSelectorComponent<T extends Displayable> extends StatefulWidget {
   State<StatefulWidget> createState() => _PeriodSelectorComponentState<T>();
 }
 
-class _PeriodSelectorComponentState<T extends Displayable>
+class _PeriodSelectorComponentState<T extends Entity>
     extends State<PeriodSelectorComponent<T>> {
   late DisplayType _displayType;
   late Period _period;
 
-  final _displayComponentKey = GlobalKey<DisplayComponentState>();
+  final _entityDisplayComponentKey = GlobalKey<EntityDisplayComponentState>();
   late StreamSubscription _periodChangeSubscription;
 
   @override
@@ -39,7 +39,7 @@ class _PeriodSelectorComponentState<T extends Displayable>
     _periodChangeSubscription = Preferences().periodChange.listen((value) {
       setState(() {
         _period = value;
-        _displayComponentKey.currentState?.getInitialItems();
+        _entityDisplayComponentKey.currentState?.getInitialItems();
       });
     });
 
@@ -87,8 +87,8 @@ class _PeriodSelectorComponentState<T extends Displayable>
             ),
           ),
           Expanded(
-            child: DisplayComponent<T>(
-              key: _displayComponentKey,
+            child: EntityDisplayComponent<T>(
+              key: _entityDisplayComponentKey,
               displayType: _displayType,
               request: widget.request,
               detailWidgetBuilder: widget.detailWidgetBuilder,

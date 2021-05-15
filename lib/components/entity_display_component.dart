@@ -8,20 +8,19 @@ import 'package:flutter/material.dart';
 
 enum DisplayType { list, grid }
 
-typedef DisplayableWidgetBuilder<T extends Displayable> = Widget Function(
-    T item);
+typedef EntityWidgetBuilder<T extends Entity> = Widget Function(T item);
 
-typedef DisplayableAndItemsWidgetBuilder<T extends Displayable> = Widget
-    Function(T item, List<T> items);
+typedef EntityAndItemsWidgetBuilder<T extends Entity> = Widget Function(
+    T item, List<T> items);
 
-class DisplayComponent<T extends Displayable> extends StatefulWidget {
+class EntityDisplayComponent<T extends Entity> extends StatefulWidget {
   final List<T>? items;
   final PagedRequest<T>? request;
   final Stream<PagedRequest<T>>? requestStream;
 
-  final DisplayableWidgetBuilder<T>? detailWidgetBuilder;
-  final DisplayableAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
-  final DisplayableWidgetBuilder<T>? leadingWidgetBuilder;
+  final EntityWidgetBuilder<T>? detailWidgetBuilder;
+  final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
+  final EntityWidgetBuilder<T>? leadingWidgetBuilder;
   final void Function(T item)? secondaryAction;
 
   final DisplayType displayType;
@@ -31,7 +30,7 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
   final bool displayCircularImages;
   final bool showNoResultsMessage;
 
-  DisplayComponent(
+  EntityDisplayComponent(
       {Key? key,
       this.items,
       this.request,
@@ -50,11 +49,12 @@ class DisplayComponent<T extends Displayable> extends StatefulWidget {
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() => DisplayComponentState<T>();
+  State<StatefulWidget> createState() => EntityDisplayComponentState<T>();
 }
 
-class DisplayComponentState<T extends Displayable>
-    extends State<DisplayComponent<T>> with AutomaticKeepAliveClientMixin {
+class EntityDisplayComponentState<T extends Entity>
+    extends State<EntityDisplayComponent<T>>
+    with AutomaticKeepAliveClientMixin {
   var items = <T>[];
   var page = 1;
   var didInitialRequest = false;
@@ -176,7 +176,7 @@ class DisplayComponentState<T extends Displayable>
           ? widget.leadingWidgetBuilder!(item)
           : widget.displayImages
               ? ImageComponent(
-                  displayable: item,
+                  entity: item,
                   quality: ImageQuality.low,
                   isCircular: widget.displayCircularImages,
                 )
@@ -234,7 +234,7 @@ class DisplayComponentState<T extends Displayable>
         fit: StackFit.expand,
         children: [
           if (widget.displayImages)
-            ImageComponent(displayable: item, fit: BoxFit.cover),
+            ImageComponent(entity: item, fit: BoxFit.cover),
           Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(

@@ -1,5 +1,5 @@
 import 'package:finale/components/counts_component.dart';
-import 'package:finale/components/display_component.dart';
+import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/period_selector_component.dart';
@@ -65,8 +65,7 @@ class _ProfileViewState extends State<ProfileView>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ImageComponent(
-                      displayable: user, isCircular: true, width: 40),
+                  ImageComponent(entity: user, isCircular: true, width: 40),
                   SizedBox(width: 8),
                   Text(user.name),
                 ],
@@ -129,7 +128,7 @@ class _ProfileViewState extends State<ProfileView>
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          DisplayComponent<LRecentTracksResponseTrack>(
+                          EntityDisplayComponent<LRecentTracksResponseTrack>(
                             request: GetRecentTracksRequest(widget.username),
                             detailWidgetBuilder: (track) =>
                                 TrackView(track: track),
@@ -157,7 +156,7 @@ class _ProfileViewState extends State<ProfileView>
                             subtitleWidgetBuilder: (item, items) =>
                                 PlayCountBarComponent(item, items),
                           ),
-                          DisplayComponent<LUser>(
+                          EntityDisplayComponent<LUser>(
                             displayCircularImages: true,
                             request: GetFriendsRequest(widget.username),
                             detailWidgetBuilder: (user) =>

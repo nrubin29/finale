@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
-import 'package:finale/components/display_component.dart';
+import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/constants.dart';
@@ -64,13 +64,13 @@ class SpotifyAlbumView extends StatelessWidget {
               children: [
                 Center(
                     child: ImageComponent(
-                        displayable: album,
+                        entity: album,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
                 ListTile(
-                    leading: ImageComponent(displayable: album.artist),
+                    leading: ImageComponent(entity: album.artist),
                     title: Text(album.artist.name),
                     trailing: Icon(Icons.chevron_right),
                     onTap: () {
@@ -82,7 +82,7 @@ class SpotifyAlbumView extends StatelessWidget {
                     }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
-                  DisplayComponent<SAlbumTrack>(
+                  EntityDisplayComponent<SAlbumTrack>(
                     items: album.tracks,
                     scrollable: false,
                     displayNumbers: true,

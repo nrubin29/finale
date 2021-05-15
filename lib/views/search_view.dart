@@ -1,4 +1,4 @@
-import 'package:finale/components/display_component.dart';
+import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/spotify_dialog_component.dart';
 import 'package:finale/constants.dart';
 import 'package:finale/preferences.dart';
@@ -227,7 +227,7 @@ class _SearchViewState extends State<SearchView> {
           body: TabBarView(
             children: _currentQuery.text != ''
                 ? [
-                    DisplayComponent<Track>(
+                    EntityDisplayComponent<Track>(
                         secondaryAction: (item) async {
                           Track track;
 
@@ -260,7 +260,7 @@ class _SearchViewState extends State<SearchView> {
                             _searchEngine == SearchEngine.spotify
                                 ? null
                                 : (track) => TrackView(track: track)),
-                    DisplayComponent<BasicArtist>(
+                    EntityDisplayComponent<BasicArtist>(
                         displayType: DisplayType.grid,
                         requestStream: _query
                             .debounceWhere(_shouldDebounce, debounceDuration)
@@ -270,7 +270,7 @@ class _SearchViewState extends State<SearchView> {
                             _searchEngine == SearchEngine.spotify
                                 ? SpotifyArtistView(artist: artist)
                                 : ArtistView(artist: artist)),
-                    DisplayComponent<BasicAlbum>(
+                    EntityDisplayComponent<BasicAlbum>(
                         secondaryAction: (item) async {
                           FullAlbum album;
 

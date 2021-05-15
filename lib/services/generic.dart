@@ -14,16 +14,16 @@ final _numberFormat = NumberFormat();
 
 String formatNumber(int number) => _numberFormat.format(number);
 
-abstract class PagedRequest<T extends Displayable> {
+abstract class PagedRequest<T extends Entity> {
   const PagedRequest();
 
   Future<List<T>> doRequest(int limit, int page);
 }
 
-enum DisplayableType { track, album, artist, user }
+enum EntityType { track, album, artist, user }
 
-abstract class Displayable {
-  DisplayableType get type;
+abstract class Entity {
+  EntityType get type;
 
   String? get url;
 
@@ -41,7 +41,7 @@ abstract class Displayable {
   ImageId? cachedImageId;
 }
 
-abstract class Track extends Displayable {
+abstract class Track extends Entity {
   String get name;
 
   String? get artistName;
@@ -49,7 +49,7 @@ abstract class Track extends Displayable {
   String? get albumName;
 
   @override
-  DisplayableType get type => DisplayableType.track;
+  EntityType get type => EntityType.track;
 
   @override
   String get displayTitle => name;
@@ -83,13 +83,13 @@ abstract class ScrobbleableTrack extends Track {
   int? get duration;
 }
 
-abstract class BasicAlbum extends Displayable {
+abstract class BasicAlbum extends Entity {
   String get name;
 
   BasicArtist get artist;
 
   @override
-  DisplayableType get type => DisplayableType.album;
+  EntityType get type => EntityType.album;
 
   @override
   String get displayTitle => name;
@@ -105,7 +105,7 @@ abstract class FullAlbum extends BasicAlbum {
       tracks.every((track) => track.duration != null && track.duration! > 0);
 }
 
-abstract class BasicArtist extends Displayable {
+abstract class BasicArtist extends Entity {
   String get name;
 
   @override
@@ -133,7 +133,7 @@ abstract class BasicArtist extends Displayable {
   }
 
   @override
-  DisplayableType get type => DisplayableType.artist;
+  EntityType get type => EntityType.artist;
 
   @override
   String get displayTitle => name;

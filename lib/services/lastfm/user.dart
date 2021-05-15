@@ -23,7 +23,7 @@ class LUserRegistered {
 }
 
 @JsonSerializable()
-class LUser extends Displayable {
+class LUser extends Entity {
   final String name;
 
   @JsonKey(name: 'realname')
@@ -45,7 +45,7 @@ class LUser extends Displayable {
       this.registered);
 
   @override
-  DisplayableType get type => DisplayableType.user;
+  EntityType get type => EntityType.user;
 
   @override
   String get displayTitle => name;
