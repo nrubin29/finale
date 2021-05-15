@@ -24,6 +24,7 @@ dependencies:
   json_annotation: ^4.0.1
   modal_bottom_sheet: ^2.0.0
   package_info: ^2.0.0
+  pkce: ^1.0.0
   rxdart: ^0.27.0
   share: ^2.0.1
   shared_preferences: ^2.0.5

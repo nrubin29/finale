@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
 
-import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
 import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
@@ -10,6 +8,7 @@ import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
+import 'package:pkce/pkce.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
     'api.spotify.com',
@@ -101,30 +100,6 @@ class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
     final rawResponse = await _doRequest('artists/${artist.id}/albums',
         {'limit': limit, 'offset': (page - 1) * limit});
     return SPage<SAlbumSimple>.fromJson(rawResponse).items;
-  }
-}
-
-class PkcePair {
-  static const _alphabet =
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~';
-
-  final String codeVerifier;
-  final String codeChallenge;
-
-  const PkcePair._(this.codeVerifier, this.codeChallenge);
-
-  factory PkcePair.generate() {
-    final random = Random.secure();
-    final verifier = List.generate(
-        128, (index) => _alphabet[random.nextInt(_alphabet.length)]).join();
-    var challenge =
-        base64UrlEncode(sha256.convert(ascii.encode(verifier)).bytes);
-
-    while (challenge.endsWith('=')) {
-      challenge = challenge.substring(0, challenge.length - 1);
-    }
-
-    return PkcePair._(verifier, challenge);
   }
 }
 
