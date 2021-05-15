@@ -34,7 +34,8 @@ class _TrackViewState extends State<TrackView> {
       future: Lastfm.getTrack(widget.track),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorView(error: snapshot.error!);
+          return ErrorView(
+              error: snapshot.error!, stackTrace: snapshot.stackTrace!);
         } else if (!snapshot.hasData) {
           return LoadingView();
         }

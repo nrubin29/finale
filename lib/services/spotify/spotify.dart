@@ -196,5 +196,5 @@ class SException implements Exception {
   const SException(this.message, this.status);
 
   @override
-  String toString() => 'SException(status=$status, message=$message)';
+  String toString() => 'Error $status: $message';
 }
