@@ -11,6 +11,7 @@ import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/views/error_view.dart';
+import 'package:finale/views/loading_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:finale/views/spotify_album_view.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
         if (snapshot.hasError) {
           return ErrorView(error: snapshot.error!);
         } else if (!snapshot.hasData) {
-          return LoadingComponent();
+          return LoadingView();
         }
 
         final artist = snapshot.data!;
