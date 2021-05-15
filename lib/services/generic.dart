@@ -20,7 +20,7 @@ abstract class PagedRequest<T extends Displayable> {
   Future<List<T>> doRequest(int limit, int page);
 }
 
-enum DisplayableType { track, album, artist, user, chart }
+enum DisplayableType { track, album, artist, user }
 
 abstract class Displayable {
   DisplayableType get type;

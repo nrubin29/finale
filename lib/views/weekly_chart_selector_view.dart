@@ -53,7 +53,7 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView> {
                         : null,
                   ),
                   Text(
-                    _charts[_index].displayTitle,
+                    _charts[_index].title,
                     style: TextStyle(color: Colors.white),
                   ),
                   IconButton(

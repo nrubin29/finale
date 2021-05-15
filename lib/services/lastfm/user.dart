@@ -78,11 +78,14 @@ class LAuthenticationResponseSession {
 }
 
 @JsonSerializable()
-class LUserWeeklyChart extends Displayable {
+class LUserWeeklyChart {
+  static final _fromDateFormat = DateFormat('d MMM');
+  static final _toDateFormat = DateFormat('d MMM yyyy');
+
   final String from;
   final String to;
 
-  LUserWeeklyChart(this.from, this.to);
+  const LUserWeeklyChart(this.from, this.to);
 
   factory LUserWeeklyChart.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyChartFromJson(json);
@@ -91,15 +94,8 @@ class LUserWeeklyChart extends Displayable {
 
   DateTime get toDate => fromSecondsSinceEpoch(to);
 
-  @override
-  DisplayableType get type => DisplayableType.chart;
-
-  @override
-  String? get url => null;
-
-  @override
-  String get displayTitle =>
-      '${DateFormat('d MMM').format(fromDate)} - ${DateFormat('d MMM yyyy').format(toDate)}';
+  String get title =>
+      '${_fromDateFormat.format(fromDate)} - ${_toDateFormat.format(toDate)}';
 }
 
 @JsonSerializable()
