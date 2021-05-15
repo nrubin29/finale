@@ -37,10 +37,12 @@ class _PeriodSelectorComponentState<T extends Entity>
     _displayType = widget.displayType;
 
     _periodChangeSubscription = Preferences().periodChange.listen((value) {
-      setState(() {
-        _period = value;
-        _entityDisplayComponentKey.currentState?.getInitialItems();
-      });
+      if (mounted) {
+        setState(() {
+          _period = value;
+          _entityDisplayComponentKey.currentState?.getInitialItems();
+        });
+      }
     });
 
     _period = Preferences().period;
