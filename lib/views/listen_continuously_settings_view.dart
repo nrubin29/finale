@@ -24,7 +24,7 @@ class _ListenContinuouslySettingsViewState
       body: Column(children: [
         ListTile(
           title: Text('Strip tags'),
-          leading: Icon(Icons.cancel_presentation),
+          leading: Icon(Icons.label_off),
           trailing: Switch(
             value: _stripTags,
             onChanged: (_) {
