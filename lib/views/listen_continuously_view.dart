@@ -1,10 +1,14 @@
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/display_component.dart';
+import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/views/listen_continuously_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wakelock/wakelock.dart';
 
 enum ListenContinuouslyTrackStatus { scrobbled, skipped, noResults, error }
@@ -54,6 +58,9 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
     ListenContinuouslyTrackStatus.noResults: Icons.cancel,
   };
 
+  static final _tagRegex = RegExp(r'[[(].*?[\])]');
+  static final _spaceRegex = RegExp(r' {2,}');
+
   var _tracks = <ListenContinuouslyTrack>[];
 
   @override
@@ -76,7 +83,16 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
 
       if (result?.metadata?.music.isNotEmpty ?? false) {
         final resultMusicItem = result!.metadata!.music.first;
-        final track = ListenContinuouslyTrack(resultMusicItem.title,
+        var title = resultMusicItem.title;
+
+        if (Preferences().stripTags) {
+          title = title
+              .replaceAll(_tagRegex, '')
+              .replaceAll(_spaceRegex, ' ')
+              .trim();
+        }
+
+        final track = ListenContinuouslyTrack(title,
             resultMusicItem.artists.first.name, resultMusicItem.album.name);
 
         if (_tracks.firstWhereOrNull((t) => t.hasResult) == track) {
@@ -103,7 +119,15 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text('Listening Continuously')),
+        appBar: createAppBar('Listening Continuously', actions: [
+          IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                showBarModalBottomSheet(
+                    context: context,
+                    builder: (context) => ListenContinuouslySettingsView());
+              })
+        ]),
         body: Column(children: [
           Padding(
             padding: EdgeInsets.all(10),

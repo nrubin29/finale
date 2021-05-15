@@ -1,6 +1,7 @@
 import 'package:finale/cache.dart';
 import 'package:finale/preferences.dart';
 import 'package:finale/views/about_view.dart';
+import 'package:finale/views/listen_continuously_settings_view.dart';
 import 'package:finale/views/login_view.dart';
 import 'package:finale/views/search_engine_settings_view.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,18 @@ class SettingsView extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) =>
                                     SearchEngineSettingsView()));
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Listen Continuously'),
+                      leading: Icon(Icons.mic),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ListenContinuouslySettingsView()));
                       },
                     ),
                     ListTile(

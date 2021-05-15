@@ -194,6 +194,12 @@ class Preferences {
     _preferences.setInt('searchEngine', value.index);
   }
 
+  bool get stripTags => _preferences.getBool('stripTags') ?? false;
+
+  set stripTags(bool value) {
+    _preferences.setBool('stripTags', value);
+  }
+
   void clear() {
     _preferences.clear();
   }
