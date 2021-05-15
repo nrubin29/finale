@@ -5,6 +5,7 @@ import 'package:finale/components/loading_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:flutter/material.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 enum DisplayType { list, grid }
 
@@ -58,9 +59,8 @@ class EntityDisplayComponentState<T extends Entity>
   var items = <T>[];
   var page = 1;
   var didInitialRequest = false;
+  var isDoingRequest = false;
   var hasMorePages = true;
-
-  final _scrollController = ScrollController();
 
   PagedRequest<T>? _request;
   StreamSubscription? _subscription;
@@ -74,17 +74,6 @@ class EntityDisplayComponentState<T extends Entity>
       didInitialRequest = true;
       return;
     }
-
-    // TODO: Check if Loading... cell is visible to trigger loading more items.
-    //  Right now, the Last.fm artist's top albums and tracks won't load more
-    //  pages because they have [widget.scrollable] = false. This should also
-    //  fix the other TODO below.
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        _getMoreItems();
-      }
-    });
 
     if (widget.request != null) {
       _request = widget.request;
@@ -122,7 +111,9 @@ class EntityDisplayComponentState<T extends Entity>
   }
 
   Future<void> _getMoreItems() async {
-    if (!hasMorePages) return;
+    if (isDoingRequest || !hasMorePages) return;
+
+    isDoingRequest = true;
 
     try {
       final moreItems = await _request!.doRequest(20, page);
@@ -139,6 +130,8 @@ class EntityDisplayComponentState<T extends Entity>
         hasMorePages = false;
       });
     }
+
+    isDoingRequest = false;
   }
 
   void _onTap(T item) {
@@ -279,7 +272,6 @@ class EntityDisplayComponentState<T extends Entity>
             ? AlwaysScrollableScrollPhysics()
             : NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        controller: _scrollController,
         slivers: [
           if (widget.displayType == DisplayType.list)
             SliverList(
@@ -291,15 +283,20 @@ class EntityDisplayComponentState<T extends Entity>
                     maxCrossAxisExtent: 250),
                 delegate: SliverChildBuilderDelegate(_gridItemBuilder,
                     childCount: items.length)),
-          // TODO: If there aren't enough items to fill the screen (i.e. artist
-          //  grid on iPad Pro 12.9-inch), the loading indicator shouldn't be
-          //  displayed unless the user swipes up - though having to swipe up
-          //  when the screen isn't full is kind of awkward.
           if (_request != null && hasMorePages)
-            SliverToBoxAdapter(
-                child: ListTile(
-                    leading: CircularProgressIndicator(),
-                    title: Text('Loading...')))
+            SliverVisibilityDetector(
+              key: UniqueKey(),
+              sliver: SliverToBoxAdapter(
+                  child: ListTile(
+                leading: CircularProgressIndicator(),
+                title: Text('Loading...'),
+              )),
+              onVisibilityChanged: (visibilityInfo) {
+                if (visibilityInfo.visibleFraction > 0.5) {
+                  _getMoreItems();
+                }
+              },
+            )
         ]);
   }
 
@@ -324,7 +321,6 @@ class EntityDisplayComponentState<T extends Entity>
   @override
   void dispose() {
     super.dispose();
-    _scrollController.dispose();
     _subscription?.cancel();
   }
 
