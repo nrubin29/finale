@@ -7,6 +7,7 @@ import 'package:finale/components/wiki_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/util.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/error_view.dart';
@@ -95,7 +96,7 @@ class _TrackViewState extends State<TrackView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Scrobbles'),
-                        Text(formatNumber(track.playCount))
+                        Text(numberFormat.format(track.playCount))
                       ],
                     ),
                     VerticalDivider(),
@@ -103,7 +104,7 @@ class _TrackViewState extends State<TrackView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Listeners'),
-                        Text(formatNumber(track.listeners))
+                        Text(numberFormat.format(track.listeners))
                       ],
                     ),
                     VerticalDivider(),
@@ -111,7 +112,7 @@ class _TrackViewState extends State<TrackView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Your scrobbles'),
-                        Text(formatNumber(track.userPlayCount))
+                        Text(numberFormat.format(track.userPlayCount))
                       ],
                     ),
                     VerticalDivider(),

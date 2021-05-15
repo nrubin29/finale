@@ -5,14 +5,9 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 final httpClient = ThrottleClient(15);
-
-final _numberFormat = NumberFormat();
-
-String formatNumber(int number) => _numberFormat.format(number);
 
 abstract class PagedRequest<T extends Entity> {
   const PagedRequest();

@@ -8,6 +8,7 @@ import 'package:finale/components/wiki_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/error_view.dart';
 import 'package:finale/views/loading_view.dart';
@@ -78,7 +79,7 @@ class _ArtistViewState extends State<ArtistView>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Scrobbles'),
-                        Text(formatNumber(artist.stats.playCount))
+                        Text(numberFormat.format(artist.stats.playCount))
                       ],
                     ),
                     VerticalDivider(),
@@ -86,7 +87,7 @@ class _ArtistViewState extends State<ArtistView>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Listeners'),
-                        Text(formatNumber(artist.stats.listeners))
+                        Text(numberFormat.format(artist.stats.listeners))
                       ],
                     ),
                     VerticalDivider(),
@@ -94,7 +95,7 @@ class _ArtistViewState extends State<ArtistView>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Your scrobbles'),
-                        Text(formatNumber(artist.stats.userPlayCount))
+                        Text(numberFormat.format(artist.stats.userPlayCount))
                       ],
                     ),
                   ],

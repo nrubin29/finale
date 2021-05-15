@@ -10,6 +10,10 @@ SvgPicture getLastfmIcon(Color color) => SvgPicture.asset(
       width: 24,
     );
 
+String formatScrobbles(int playCount) => Intl.plural(playCount,
+    one: '$playCount scrobble', other: '$playCount scrobbles');
+
+final numberFormat = NumberFormat();
 final dateFormat = DateFormat('d MMM');
 final dateFormatWithYear = DateFormat('d MMM yyyy');
 final timeFormat = DateFormat.jms();

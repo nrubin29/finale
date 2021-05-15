@@ -1,6 +1,6 @@
-import 'package:finale/constants.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
+import 'package:finale/util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';
@@ -58,14 +58,14 @@ abstract class BasicScrobbledAlbum extends BasicAlbum {
   int get playCount;
 
   @override
-  String get displayTrailing => '${formatNumber(playCount)} scrobbles';
+  String get displayTrailing => formatScrobbles(playCount);
 }
 
 abstract class BasicScrobbledArtist extends BasicArtist {
   int get playCount;
 
   @override
-  String get displayTrailing => '${formatNumber(playCount)} scrobbles';
+  String get displayTrailing => formatScrobbles(playCount);
 }
 
 @JsonSerializable()

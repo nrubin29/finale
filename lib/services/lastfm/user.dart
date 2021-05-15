@@ -1,8 +1,8 @@
-import 'package:finale/constants.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -144,8 +144,7 @@ class LUserWeeklyTrackChartTrack extends Track {
   String get artistName => artist.name;
 
   @override
-  String get displayTrailing => Intl.plural(playCount ?? 0,
-      one: '$playCount scrobble', other: '$playCount scrobbles');
+  String get displayTrailing => formatScrobbles(playCount ?? 0);
 
   @override
   Future<ImageId?> get imageId async {

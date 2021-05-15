@@ -1,12 +1,12 @@
 import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/spotify_dialog_component.dart';
-import 'package:finale/constants.dart';
 import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
+import 'package:finale/util.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';

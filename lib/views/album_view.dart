@@ -8,6 +8,7 @@ import 'package:finale/components/wiki_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/error_view.dart';
 import 'package:finale/views/loading_view.dart';
@@ -88,7 +89,7 @@ class AlbumView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Scrobbles'),
-                        Text(formatNumber(album.playCount))
+                        Text(numberFormat.format(album.playCount))
                       ],
                     ),
                     VerticalDivider(),
@@ -96,7 +97,7 @@ class AlbumView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Listeners'),
-                        Text(formatNumber(album.listeners))
+                        Text(numberFormat.format(album.listeners))
                       ],
                     ),
                     VerticalDivider(),
@@ -104,7 +105,7 @@ class AlbumView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Your scrobbles'),
-                        Text(formatNumber(album.userPlayCount))
+                        Text(numberFormat.format(album.userPlayCount))
                       ],
                     ),
                   ],

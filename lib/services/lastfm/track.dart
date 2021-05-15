@@ -2,6 +2,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'track.g.dart';
@@ -246,7 +247,7 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
   }
 
   @override
-  String get displayTrailing => '$playCount scrobbles';
+  String get displayTrailing => formatScrobbles(playCount);
 
   LTopTracksResponseTrack(this.name, this.url, this.artist, this.playCount);
 

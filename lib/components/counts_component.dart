@@ -1,4 +1,4 @@
-import 'package:finale/services/generic.dart';
+import 'package:finale/util.dart';
 import 'package:flutter/material.dart';
 
 class CountsComponent extends StatelessWidget {
@@ -22,7 +22,7 @@ class CountsComponent extends StatelessWidget {
             Column(
               children: [
                 Text('Scrobbles'),
-                Text(formatNumber(scrobbles)),
+                Text(numberFormat.format(scrobbles)),
               ],
             ),
             VerticalDivider(),
@@ -31,8 +31,9 @@ class CountsComponent extends StatelessWidget {
                 Text('Artists'),
                 FutureBuilder<int>(
                   future: artists,
-                  builder: (context, snapshot) => Text(
-                      snapshot.hasData ? formatNumber(snapshot.data!) : '---'),
+                  builder: (context, snapshot) => Text(snapshot.hasData
+                      ? numberFormat.format(snapshot.data!)
+                      : '---'),
                 )
               ],
             ),
@@ -42,8 +43,9 @@ class CountsComponent extends StatelessWidget {
                 Text('Albums'),
                 FutureBuilder<int>(
                   future: albums,
-                  builder: (context, snapshot) => Text(
-                      snapshot.hasData ? formatNumber(snapshot.data!) : '---'),
+                  builder: (context, snapshot) => Text(snapshot.hasData
+                      ? numberFormat.format(snapshot.data!)
+                      : '---'),
                 ),
               ],
             ),
@@ -53,8 +55,9 @@ class CountsComponent extends StatelessWidget {
                 Text('Tracks'),
                 FutureBuilder<int>(
                   future: tracks,
-                  builder: (context, snapshot) => Text(
-                      snapshot.hasData ? formatNumber(snapshot.data!) : '---'),
+                  builder: (context, snapshot) => Text(snapshot.hasData
+                      ? numberFormat.format(snapshot.data!)
+                      : '---'),
                 )
               ],
             ),

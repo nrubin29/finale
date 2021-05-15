@@ -1,6 +1,6 @@
 import 'package:finale/components/spotify_dialog_component.dart';
-import 'package:finale/constants.dart';
 import 'package:finale/preferences.dart';
+import 'package:finale/util.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
 
