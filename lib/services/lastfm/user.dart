@@ -1,3 +1,4 @@
+import 'package:finale/constants.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
@@ -15,7 +16,7 @@ class LUserRegistered {
 
   const LUserRegistered(this.date);
 
-  String get dateFormatted => DateFormat('dd MMM yyyy').format(date);
+  String get dateFormatted => dateFormatWithYear.format(date);
 
   factory LUserRegistered.fromJson(Map<String, dynamic> json) =>
       _$LUserRegisteredFromJson(json);
@@ -79,9 +80,6 @@ class LAuthenticationResponseSession {
 
 @JsonSerializable()
 class LUserWeeklyChart {
-  static final _fromDateFormat = DateFormat('d MMM');
-  static final _toDateFormat = DateFormat('d MMM yyyy');
-
   final String from;
   final String to;
 
@@ -95,7 +93,7 @@ class LUserWeeklyChart {
   DateTime get toDate => fromSecondsSinceEpoch(to);
 
   String get title =>
-      '${_fromDateFormat.format(fromDate)} - ${_toDateFormat.format(toDate)}';
+      '${dateFormat.format(fromDate)} - ${dateFormatWithYear.format(toDate)}';
 }
 
 @JsonSerializable()

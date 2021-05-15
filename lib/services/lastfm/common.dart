@@ -1,6 +1,6 @@
+import 'package:finale/constants.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';
@@ -50,7 +50,7 @@ abstract class BasicScrobbledTrack extends Track {
       return '${delta.inHours} hour${delta.inHours == 1 ? '' : 's'} ago';
     }
 
-    return DateFormat('dd MMM HH:mm aa').format(date!);
+    return dateTimeFormat.format(date!);
   }
 }
 

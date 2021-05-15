@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/display_component.dart';
+import 'package:finale/constants.dart';
 import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/views/listen_continuously_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -31,7 +31,7 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
       status == ListenContinuouslyTrackStatus.skipped;
 
   @override
-  String get displayTrailing => DateFormat.jms().format(timestamp);
+  String get displayTrailing => timeFormat.format(timestamp);
 
   @override
   // ignore: hash_and_equals

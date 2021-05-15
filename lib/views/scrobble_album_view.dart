@@ -1,10 +1,10 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/components/image_component.dart';
+import 'package:finale/constants.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:intl/intl.dart';
 
 enum ScrobbleTimestampBehavior {
   startingNow,
@@ -162,7 +162,7 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
                       child: DateTimeField(
                           decoration: InputDecoration(labelText: 'Timestamp'),
                           resetIcon: null,
-                          format: DateFormat('yyyy-MM-dd HH:mm:ss'),
+                          format: dateTimeFormatWithYear,
                           initialValue: _customTimestamp,
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(

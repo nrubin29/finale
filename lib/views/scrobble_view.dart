@@ -1,12 +1,12 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/components/music_recognition_component.dart';
+import 'package:finale/constants.dart';
 import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:intl/intl.dart';
 
 class ScrobbleView extends StatefulWidget {
   final Track? track;
@@ -161,7 +161,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                       child: DateTimeField(
                           decoration: InputDecoration(labelText: 'Timestamp'),
                           resetIcon: null,
-                          format: DateFormat('yyyy-MM-dd HH:mm:ss'),
+                          format: dateTimeFormatWithYear,
                           initialValue: _customTimestamp,
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(
