@@ -1,6 +1,7 @@
 import 'package:finale/components/display_component.dart';
 import 'package:finale/components/spotify_dialog_component.dart';
 import 'package:finale/constants.dart';
+import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/album.dart';
@@ -16,10 +17,7 @@ import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
-
-enum SearchEngine { lastfm, spotify }
 
 extension SearchEngineIcon on SearchEngine {
   Widget getIcon(Color color) {
@@ -66,7 +64,7 @@ class SearchQuery {
   final String text;
 
   const SearchQuery._(this.searchEngine, this.text);
-  const SearchQuery.empty() : this._(SearchEngine.lastfm, '');
+  const SearchQuery.empty(SearchEngine searchEngine) : this._(searchEngine, '');
 
   SearchQuery copyWith({SearchEngine? searchEngine, String? text}) =>
       SearchQuery._(searchEngine ?? this.searchEngine, text ?? this.text);
@@ -76,10 +74,6 @@ class SearchQuery {
 }
 
 class SearchView extends StatefulWidget {
-  // This stream needs to be open for the entire lifetime of the app.
-  // ignore: close_sinks
-  static final spotifyEnabledChanged = PublishSubject<void>();
-
   @override
   State<StatefulWidget> createState() => _SearchViewState();
 }
@@ -90,39 +84,27 @@ class _SearchViewState extends State<SearchView> {
 
   final _textController = TextEditingController();
   final _query = ReplaySubject<SearchQuery>(maxSize: 2)
-    ..add(SearchQuery.empty());
+    ..add(SearchQuery.empty(Preferences().searchEngine));
   var _spotifyEnabled = true;
 
   @override
   void initState() {
     super.initState();
     _setSpotifyEnabled();
-    SearchView.spotifyEnabledChanged.listen((_) {
+    Preferences().spotifyEnabledChange.listen((_) {
       _setSpotifyEnabled();
     });
 
     _query.listen((_) async {
-      (await SharedPreferences.getInstance())
-          .setInt('searchEngine', _searchEngine.index);
-    });
-
-    SharedPreferences.getInstance().then((sp) {
-      if (sp.containsKey('searchEngine')) {
-        setState(() {
-          _query.add(_currentQuery.copyWith(
-              searchEngine: SearchEngine.values[sp.getInt('searchEngine')!]));
-        });
-      }
+      Preferences().searchEngine = _searchEngine;
     });
   }
 
-  void _setSpotifyEnabled() async {
-    _spotifyEnabled =
-        (await SharedPreferences.getInstance()).getBool('spotifyEnabled') ??
-            true;
+  void _setSpotifyEnabled() {
+    _spotifyEnabled = Preferences().spotifyEnabled;
 
     if (_searchEngine == SearchEngine.spotify &&
-        (!_spotifyEnabled || !(await Spotify.isLoggedIn))) {
+        (!_spotifyEnabled || !Preferences().isSpotifyLoggedIn)) {
       setState(() {
         _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
       });
@@ -178,7 +160,7 @@ class _SearchViewState extends State<SearchView> {
                                 if (choice == _searchEngine) {
                                   return;
                                 } else if (choice == SearchEngine.spotify &&
-                                    !(await Spotify.hasAuthData)) {
+                                    !Preferences().hasSpotifyAuthData) {
                                   final loggedIn = await showDialog<bool>(
                                       context: context,
                                       builder: (context) =>

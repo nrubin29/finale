@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/constants.dart';
 import 'package:finale/env.dart';
+import 'package:finale/preferences.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatelessWidget {
   void _logIn(BuildContext context) async {
@@ -19,9 +19,9 @@ class LoginView extends StatelessWidget {
     final token = Uri.parse(result).queryParameters['token']!;
     final session = await Lastfm.authenticate(token);
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('name', session.name);
-    await prefs.setString('key', session.key);
+    Preferences()
+      ..name = session.name
+      ..key = session.key;
 
     await Navigator.pushReplacement(
         context,

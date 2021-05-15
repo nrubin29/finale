@@ -3,13 +3,13 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
+import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
     'api.spotify.com',
@@ -18,14 +18,11 @@ Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
 
 Future<Map<String, dynamic>> _doRequest(String method,
     [Map<String, dynamic>? data]) async {
-  final sharedPreferences = await SharedPreferences.getInstance();
-
-  if (!(await Spotify.isLoggedIn)) {
-    final refreshToken = sharedPreferences.getString('spotifyRefreshToken')!;
-    await Spotify.refreshAccessToken(refreshToken);
+  if (!Preferences().isSpotifyLoggedIn) {
+    await Spotify.refreshAccessToken(Preferences().spotifyRefreshToken!);
   }
 
-  final accessToken = sharedPreferences.getString('spotifyAccessToken');
+  final accessToken = Preferences().spotifyAccessToken;
 
   final uri = _buildUri(method, data);
 
@@ -168,14 +165,11 @@ class Spotify {
     );
     final response =
         SpotifyTokenResponse.fromJson(json.decode(rawResponse.body));
-    final sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('spotifyAccessToken', response.accessToken);
-    sharedPreferences.setString('spotifyRefreshToken', response.refreshToken);
-    sharedPreferences.setInt(
-        'spotifyExpiration',
-        DateTime.now()
-            .add(Duration(seconds: response.expiresIn))
-            .millisecondsSinceEpoch);
+    Preferences()
+      ..spotifyAccessToken = response.accessToken
+      ..spotifyRefreshToken = response.refreshToken
+      ..spotifyExpiration =
+          DateTime.now().add(Duration(seconds: response.expiresIn));
   }
 
   static Future<void> getAccessToken(String code, PkcePair pkcePair) =>
@@ -193,27 +187,6 @@ class Spotify {
         'grant_type': 'refresh_token',
         'refresh_token': refreshToken,
       });
-
-  /// Returns true if Spotify auth data is saved.
-  static Future<bool> get hasAuthData async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-
-    return sharedPreferences.containsKey('spotifyAccessToken') &&
-        sharedPreferences.containsKey('spotifyRefreshToken') &&
-        sharedPreferences.containsKey('spotifyExpiration');
-  }
-
-  /// Returns true if Spotify auth data is saved and the access token hasn't
-  /// expired.
-  static Future<bool> get isLoggedIn async {
-    if (!(await hasAuthData)) {
-      return false;
-    }
-
-    final expiration = DateTime.fromMillisecondsSinceEpoch(
-        (await SharedPreferences.getInstance()).getInt('spotifyExpiration')!);
-    return DateTime.now().isBefore(expiration);
-  }
 }
 
 class SException implements Exception {

@@ -1,17 +1,11 @@
 import 'dart:async';
 
 import 'package:finale/components/display_component.dart';
+import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PeriodSelectorComponent<T extends Displayable> extends StatefulWidget {
-  // This Subject must remain open for the entire lifetime of the app, so no
-  // need to close it.
-  // ignore: close_sinks
-  static final _periodChange = PublishSubject<String>();
-
   final DisplayType displayType;
   final PagedRequest<T> request;
   final DisplayableWidgetBuilder<T> detailWidgetBuilder;
@@ -30,17 +24,8 @@ class PeriodSelectorComponent<T extends Displayable> extends StatefulWidget {
 
 class _PeriodSelectorComponentState<T extends Displayable>
     extends State<PeriodSelectorComponent<T>> {
-  static const _periods = {
-    '7 days': '7day',
-    '1 month': '1month',
-    '3 months': '3month',
-    '6 months': '6month',
-    '12 months': '12month',
-    'Overall': 'overall'
-  };
-
   late DisplayType _displayType;
-  String? _period;
+  late Period _period;
 
   final _displayComponentKey = GlobalKey<DisplayComponentState>();
   late StreamSubscription _periodChangeSubscription;
@@ -51,24 +36,14 @@ class _PeriodSelectorComponentState<T extends Displayable>
 
     _displayType = widget.displayType;
 
-    _periodChangeSubscription =
-        PeriodSelectorComponent._periodChange.listen((value) {
+    _periodChangeSubscription = Preferences().periodChange.listen((value) {
       setState(() {
         _period = value;
         _displayComponentKey.currentState?.getInitialItems();
       });
     });
 
-    SharedPreferences.getInstance().then((sharedPrefs) {
-      setState(() {
-        if (!sharedPrefs.containsKey('period')) {
-          sharedPrefs.setString('period', '7day');
-          PeriodSelectorComponent._periodChange.add('7day');
-        }
-
-        _period = sharedPrefs.getString('period');
-      });
-    });
+    _period = Preferences().period;
   }
 
   @override
@@ -94,19 +69,17 @@ class _PeriodSelectorComponentState<T extends Displayable>
                         });
                       }),
                 )),
-                DropdownButton<String>(
+                DropdownButton<Period>(
                   value: _period,
-                  items: _periods.entries
+                  items: Period.values
                       .map((e) => DropdownMenuItem(
-                            value: e.value,
-                            child: Text(e.key),
+                            value: e,
+                            child: Text(e.display),
                           ))
                       .toList(growable: false),
-                  onChanged: (value) async {
+                  onChanged: (value) {
                     if (value != null && value != _period) {
-                      final sharedPrefs = await SharedPreferences.getInstance();
-                      await sharedPrefs.setString('period', value);
-                      PeriodSelectorComponent._periodChange.add(value);
+                      Preferences().period = value;
                     }
                   },
                 ),

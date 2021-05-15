@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
+import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
@@ -9,7 +10,6 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data) {
   final allData = {
@@ -81,11 +81,12 @@ class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
 
   @override
   doRequest(int limit, int page) async {
-    final period =
-        (await SharedPreferences.getInstance()).getString('period') ?? '7day';
-
-    final rawResponse = await _doRequest('user.getTopArtists',
-        {'user': username, 'limit': limit, 'page': page, 'period': period});
+    final rawResponse = await _doRequest('user.getTopArtists', {
+      'user': username,
+      'limit': limit,
+      'page': page,
+      'period': Preferences().period.value
+    });
     return LTopArtistsResponseTopArtists.fromJson(rawResponse['topartists'])
         .artists;
   }
@@ -98,11 +99,12 @@ class GetTopAlbumsRequest extends PagedRequest<LTopAlbumsResponseAlbum> {
 
   @override
   doRequest(int limit, int page) async {
-    final period =
-        (await SharedPreferences.getInstance()).getString('period') ?? '7day';
-
-    final rawResponse = await _doRequest('user.getTopAlbums',
-        {'user': username, 'limit': limit, 'page': page, 'period': period});
+    final rawResponse = await _doRequest('user.getTopAlbums', {
+      'user': username,
+      'limit': limit,
+      'page': page,
+      'period': Preferences().period.value
+    });
     return LTopAlbumsResponseTopAlbums.fromJson(rawResponse['topalbums'])
         .albums;
   }
@@ -115,11 +117,12 @@ class GetTopTracksRequest extends PagedRequest<LTopTracksResponseTrack> {
 
   @override
   doRequest(int limit, int page) async {
-    final period =
-        (await SharedPreferences.getInstance()).getString('period') ?? '7day';
-
-    final rawResponse = await _doRequest('user.getTopTracks',
-        {'user': username, 'limit': limit, 'page': page, 'period': period});
+    final rawResponse = await _doRequest('user.getTopTracks', {
+      'user': username,
+      'limit': limit,
+      'page': page,
+      'period': Preferences().period.value
+    });
     return LTopTracksResponseTopTracks.fromJson(rawResponse['toptracks'])
         .tracks;
   }
@@ -225,32 +228,28 @@ class Lastfm {
   }
 
   static Future<LTrack> getTrack(Track track) async {
-    final username = (await SharedPreferences.getInstance()).getString('name');
-
     final rawResponse = await _doRequest('track.getInfo', {
       'track': track.name,
       'artist': track.artistName,
-      'username': username
+      'username': Preferences().name,
     });
     return LTrack.fromJson(rawResponse['track']);
   }
 
   static Future<LAlbum> getAlbum(BasicAlbum album) async {
-    final username = (await SharedPreferences.getInstance()).getString('name');
-
     final rawResponse = await _doRequest('album.getInfo', {
       'album': album.name,
       'artist': album.artist.name,
-      'username': username
+      'username': Preferences().name,
     });
     return LAlbum.fromJson(rawResponse['album']);
   }
 
   static Future<LArtist> getArtist(BasicArtist artist) async {
-    final username = (await SharedPreferences.getInstance()).getString('name');
-
-    final rawResponse = await _doRequest(
-        'artist.getInfo', {'artist': artist.name, 'username': username});
+    final rawResponse = await _doRequest('artist.getInfo', {
+      'artist': artist.name,
+      'username': Preferences().name,
+    });
     return LArtist.fromJson(rawResponse['artist']);
   }
 
@@ -323,8 +322,8 @@ class Lastfm {
 
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
       List<Track> tracks, List<DateTime> timestamps) async {
-    final Map<String, dynamic> data = {};
-    data['sk'] = (await SharedPreferences.getInstance()).getString('key');
+    final data = <String, dynamic>{};
+    data['sk'] = Preferences().key;
 
     tracks.asMap().forEach((i, track) {
       if (track.albumName?.isNotEmpty ?? false) {
@@ -353,7 +352,7 @@ class Lastfm {
         {
           'track': track.name,
           'artist': track.artistName,
-          'sk': (await SharedPreferences.getInstance()).getString('key')
+          'sk': Preferences().key,
         },
         post: true);
     return true;
