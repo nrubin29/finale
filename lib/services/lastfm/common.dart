@@ -9,6 +9,8 @@ bool convertStringToBoolean(String? text) => text == '1';
 
 int? intParseSafe(String? text) => text != null ? int.tryParse(text) : null;
 
+int parseInt(String? text) => intParseSafe(text) ?? 0;
+
 DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
     DateTime.fromMillisecondsSinceEpoch(
         (timestamp is int ? timestamp : int.parse(timestamp)) * 1000);
@@ -90,13 +92,26 @@ class LTag {
 
 @JsonSerializable()
 class LTopTags {
-  @JsonKey(name: 'tag')
+  @JsonKey(name: 'tag', fromJson: parseTags)
   final List<LTag> tags;
 
   const LTopTags(this.tags);
 
   factory LTopTags.fromJson(Map<String, dynamic> json) =>
       _$LTopTagsFromJson(json);
+
+  // If there are no tags, the Last.fm API in its infinite wisdom will return
+  // an empty string instead of an empty array.
+  static LTopTags fromJsonSafe(json) =>
+      json == '' ? LTopTags(const []) : LTopTags.fromJson(json);
+
+  // If there's only one tag, the Last.fm API in its infinite wisdom doesn't
+  // wrap it in an array literal.
+  static List<LTag> parseTags(json) => json == null
+      ? const []
+      : json is List<dynamic>
+          ? json.map((json) => LTag.fromJson(json)).toList(growable: false)
+          : [LTag.fromJson(json)];
 }
 
 @JsonSerializable()

@@ -66,13 +66,12 @@ class LArtistSearchResponse {
 
 @JsonSerializable()
 class LArtistStats {
-  @JsonKey(name: 'playcount', fromJson: int.parse)
+  @JsonKey(name: 'playcount')
   final int playCount;
 
-  @JsonKey(fromJson: int.parse)
   final int listeners;
 
-  @JsonKey(name: 'userplaycount', fromJson: int.parse)
+  @JsonKey(name: 'userplaycount')
   final int userPlayCount;
 
   const LArtistStats(this.playCount, this.userPlayCount, this.listeners);
@@ -91,7 +90,7 @@ class LArtist extends FullArtist {
 
   final LArtistStats stats;
 
-  @JsonKey(name: 'tags')
+  @JsonKey(name: 'tags', fromJson: LTopTags.fromJsonSafe)
   final LTopTags topTags;
 
   final LWiki? bio;

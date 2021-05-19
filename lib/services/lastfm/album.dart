@@ -102,7 +102,6 @@ class LAlbumTrack extends ScrobbleableTrack {
   @override
   final String url;
 
-  @JsonKey(fromJson: intParseSafe)
   @override
   final int? duration;
 
@@ -130,13 +129,19 @@ class LAlbumTrack extends ScrobbleableTrack {
 
 @JsonSerializable()
 class LAlbumTracks {
-  @JsonKey(name: 'track')
+  @JsonKey(name: 'track', fromJson: parseTracks)
   final List<LAlbumTrack> tracks;
 
   const LAlbumTracks(this.tracks);
 
   factory LAlbumTracks.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTracksFromJson(json);
+
+  static List<LAlbumTrack> parseTracks(json) => json == null
+      ? const []
+      : json is List<dynamic>
+          ? json.map((e) => LAlbumTrack.fromJson(e)).toList(growable: false)
+          : List.unmodifiable([LAlbumTrack.fromJson(json)]);
 }
 
 @JsonSerializable()
@@ -160,13 +165,13 @@ class LAlbum extends FullAlbum {
   @JsonKey(fromJson: int.parse)
   final int listeners;
 
-  @JsonKey(name: 'userplaycount', fromJson: int.parse)
+  @JsonKey(name: 'userplaycount')
   final int userPlayCount;
 
   @JsonKey(name: 'tracks')
-  final LAlbumTracks tracksObject;
+  final LAlbumTracks? tracksObject;
 
-  @JsonKey(name: 'tags')
+  @JsonKey(name: 'tags', fromJson: LTopTags.fromJsonSafe)
   final LTopTags topTags;
 
   final LWiki? wiki;
@@ -176,7 +181,7 @@ class LAlbum extends FullAlbum {
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
   @override
-  List<LAlbumTrack> get tracks => tracksObject.tracks
+  List<LAlbumTrack> get tracks => (tracksObject?.tracks ?? const [])
     ..forEach((element) {
       element.album = name;
     });

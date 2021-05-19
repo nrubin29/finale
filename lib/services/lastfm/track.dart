@@ -178,13 +178,10 @@ class LTrack extends Track {
   @JsonKey(fromJson: int.parse)
   final int listeners;
 
-  @JsonKey(fromJson: int.parse)
-  final int duration;
-
   @JsonKey(name: 'playcount', fromJson: int.parse)
   final int playCount;
 
-  @JsonKey(name: 'userplaycount', fromJson: int.parse)
+  @JsonKey(name: 'userplaycount', fromJson: parseInt)
   final int userPlayCount;
 
   @JsonKey(name: 'userloved', fromJson: convertStringToBoolean)
@@ -193,7 +190,7 @@ class LTrack extends Track {
   final LTrackArtist? artist;
   final LTrackAlbum? album;
 
-  @JsonKey(name: 'toptags')
+  @JsonKey(name: 'toptags', fromJson: LTopTags.fromJsonSafe)
   final LTopTags topTags;
 
   final LWiki? wiki;
@@ -208,7 +205,6 @@ class LTrack extends Track {
       this.name,
       this.url,
       this.listeners,
-      this.duration,
       this.playCount,
       this.userPlayCount,
       this.userLoved,
