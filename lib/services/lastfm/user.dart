@@ -54,6 +54,10 @@ class LUser extends Entity {
   String? get displaySubtitle => realName;
 
   factory LUser.fromJson(Map<String, dynamic> json) => _$LUserFromJson(json);
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(Object other) => other is LUser && other.name == name;
 }
 
 @JsonSerializable()
@@ -94,6 +98,11 @@ class LUserWeeklyChart {
 
   String get title =>
       '${dateFormat.format(fromDate)} - ${dateFormatWithYear.format(toDate)}';
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(Object other) =>
+      other is LUserWeeklyChart && other.from == from && other.to == to;
 }
 
 @JsonSerializable()

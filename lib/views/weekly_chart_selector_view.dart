@@ -13,7 +13,8 @@ class WeeklyChartSelectorView extends StatefulWidget {
   State<StatefulWidget> createState() => _WeeklyChartSelectorViewState();
 }
 
-class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView> {
+class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
+    with AutomaticKeepAliveClientMixin<WeeklyChartSelectorView> {
   var _loaded = false;
   late List<LUserWeeklyChart> _charts;
   late int _index;
@@ -32,53 +33,57 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView> {
   }
 
   @override
-  Widget build(BuildContext context) => !_loaded
-      ? LoadingComponent()
-      : Column(
-          children: [
-            ColoredBox(
-              color: Theme.of(context).primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.chevron_left),
-                    color: Colors.white,
-                    onPressed: _index > 0
-                        ? () {
-                            setState(() {
-                              _index--;
-                            });
-                          }
-                        : null,
-                  ),
-                  Text(
-                    _charts[_index].title,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.chevron_right),
-                    color: Colors.white,
-                    onPressed: _index < _charts.length - 1
-                        ? () {
-                            setState(() {
-                              _index++;
-                            });
-                          }
-                        : null,
-                  ),
-                ],
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return !_loaded
+        ? LoadingComponent()
+        : Column(
+            children: [
+              ColoredBox(
+                color: Theme.of(context).primaryColor,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.chevron_left),
+                      color: Colors.white,
+                      onPressed: _index > 0
+                          ? () {
+                              setState(() {
+                                _index--;
+                              });
+                            }
+                          : null,
+                    ),
+                    Text(
+                      _charts[_index].title,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.chevron_right),
+                      color: Colors.white,
+                      onPressed: _index < _charts.length - 1
+                          ? () {
+                              setState(() {
+                                _index++;
+                              });
+                            }
+                          : null,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: WeeklyChartComponent(
-                // ObjectKey forces the component to be built from scratch when
-                // the chart changes.
-                key: ObjectKey(_charts[_index]),
-                user: widget.user,
-                chart: _charts[_index],
+              Expanded(
+                child: WeeklyChartComponent(
+                  user: widget.user,
+                  chart: _charts[_index],
+                ),
               ),
-            ),
-          ],
-        );
+            ],
+          );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

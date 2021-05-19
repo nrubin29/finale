@@ -13,14 +13,14 @@ class WeeklyChartComponent extends StatefulWidget {
   final LUser user;
   final LUserWeeklyChart chart;
 
-  WeeklyChartComponent({Key? key, required this.user, required this.chart})
-      : super(key: key);
+  WeeklyChartComponent({required this.user, required this.chart});
 
   @override
   State<StatefulWidget> createState() => _WeeklyChartComponentState();
 }
 
-class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
+class _WeeklyChartComponentState extends State<WeeklyChartComponent>
+    with AutomaticKeepAliveClientMixin<WeeklyChartComponent> {
   var _loaded = false;
 
   late int _numScrobbles;
@@ -34,7 +34,20 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
     _initData();
   }
 
+  @override
+  void didUpdateWidget(WeeklyChartComponent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.user != oldWidget.user || widget.chart != oldWidget.chart) {
+      _initData();
+    }
+  }
+
   void _initData() async {
+    setState(() {
+      _loaded = false;
+    });
+
     final data = await Future.wait([
       Lastfm.getWeeklyTrackChart(widget.user, widget.chart),
       Lastfm.getWeeklyAlbumChart(widget.user, widget.chart),
@@ -61,146 +74,153 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent> {
   }
 
   @override
-  Widget build(BuildContext context) => !_loaded
-      ? LoadingComponent()
-      : ListView(
-          children: [
-            SizedBox(height: 10),
-            CountsComponent(
-              scrobbles: _numScrobbles,
-              artists: Future.value(_artists.length),
-              albums: Future.value(_albums.length),
-              tracks: Future.value(_tracks.length),
-            ),
-            SizedBox(height: 10),
-            if (_tracks.isNotEmpty)
-              Container(
-                margin: EdgeInsets.only(left: 8),
-                child: Text('Top Tracks'),
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return !_loaded
+        ? LoadingComponent()
+        : ListView(
+            children: [
+              SizedBox(height: 10),
+              CountsComponent(
+                scrobbles: _numScrobbles,
+                artists: Future.value(_artists.length),
+                albums: Future.value(_albums.length),
+                tracks: Future.value(_tracks.length),
               ),
-            for (final track in _tracks.take(3))
-              ListTile(
-                title: Text(track.name),
-                subtitle: Text(track.artistName),
-                trailing: Text('${track.playCount} scrobbles'),
-                leading: ImageComponent(entity: track),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TrackView(track: track),
-                    ),
-                  );
-                },
-              ),
-            if (_tracks.length > 3)
-              ListTile(
-                title: Text('See more'),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Scaffold(
-                        appBar: AppBar(title: Text('Top Tracks')),
-                        body:
-                            EntityDisplayComponent<LUserWeeklyTrackChartTrack>(
-                          items: _tracks,
-                          detailWidgetBuilder: (track) =>
-                              TrackView(track: track),
+              SizedBox(height: 10),
+              if (_tracks.isNotEmpty)
+                Container(
+                  margin: EdgeInsets.only(left: 8),
+                  child: Text('Top Tracks'),
+                ),
+              for (final track in _tracks.take(3))
+                ListTile(
+                  title: Text(track.name),
+                  subtitle: Text(track.artistName),
+                  trailing: Text('${track.playCount} scrobbles'),
+                  leading: ImageComponent(entity: track),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TrackView(track: track),
+                      ),
+                    );
+                  },
+                ),
+              if (_tracks.length > 3)
+                ListTile(
+                  title: Text('See more'),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          appBar: AppBar(title: Text('Top Tracks')),
+                          body: EntityDisplayComponent<
+                              LUserWeeklyTrackChartTrack>(
+                            items: _tracks,
+                            detailWidgetBuilder: (track) =>
+                                TrackView(track: track),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            if (_tracks.isNotEmpty) Divider(),
-            if (_albums.isNotEmpty)
-              Container(
-                margin: EdgeInsets.only(left: 8),
-                child: Text('Top Albums'),
-              ),
-            for (final album in _albums.take(3))
-              ListTile(
-                title: Text(album.name),
-                subtitle: Text(album.artist.name),
-                trailing: Text('${album.playCount} scrobbles'),
-                leading: ImageComponent(entity: album),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AlbumView(album: album),
-                    ),
-                  );
-                },
-              ),
-            if (_albums.length > 3)
-              ListTile(
-                title: Text('See more'),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Scaffold(
-                        appBar: AppBar(title: Text('Top Albums')),
-                        body:
-                            EntityDisplayComponent<LUserWeeklyAlbumChartAlbum>(
-                          items: _albums,
-                          displayType: DisplayType.grid,
-                          detailWidgetBuilder: (album) =>
-                              AlbumView(album: album),
+                    );
+                  },
+                ),
+              if (_tracks.isNotEmpty) Divider(),
+              if (_albums.isNotEmpty)
+                Container(
+                  margin: EdgeInsets.only(left: 8),
+                  child: Text('Top Albums'),
+                ),
+              for (final album in _albums.take(3))
+                ListTile(
+                  title: Text(album.name),
+                  subtitle: Text(album.artist.name),
+                  trailing: Text('${album.playCount} scrobbles'),
+                  leading: ImageComponent(entity: album),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AlbumView(album: album),
+                      ),
+                    );
+                  },
+                ),
+              if (_albums.length > 3)
+                ListTile(
+                  title: Text('See more'),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          appBar: AppBar(title: Text('Top Albums')),
+                          body: EntityDisplayComponent<
+                              LUserWeeklyAlbumChartAlbum>(
+                            items: _albums,
+                            displayType: DisplayType.grid,
+                            detailWidgetBuilder: (album) =>
+                                AlbumView(album: album),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            if (_albums.isNotEmpty) Divider(),
-            if (_artists.isNotEmpty)
-              Container(
-                margin: EdgeInsets.only(left: 8),
-                child: Text('Top Artists'),
-              ),
-            for (final artist in _artists.take(3))
-              ListTile(
-                title: Text(artist.name),
-                trailing: Text('${artist.playCount} scrobbles'),
-                leading: ImageComponent(entity: artist),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ArtistView(artist: artist),
-                    ),
-                  );
-                },
-              ),
-            if (_artists.length > 3)
-              ListTile(
-                title: Text('See more'),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Scaffold(
-                        appBar: AppBar(title: Text('Top Artists')),
-                        body: EntityDisplayComponent<
-                            LUserWeeklyArtistChartArtist>(
-                          items: _artists,
-                          displayType: DisplayType.grid,
-                          detailWidgetBuilder: (artist) =>
-                              ArtistView(artist: artist),
+                    );
+                  },
+                ),
+              if (_albums.isNotEmpty) Divider(),
+              if (_artists.isNotEmpty)
+                Container(
+                  margin: EdgeInsets.only(left: 8),
+                  child: Text('Top Artists'),
+                ),
+              for (final artist in _artists.take(3))
+                ListTile(
+                  title: Text(artist.name),
+                  trailing: Text('${artist.playCount} scrobbles'),
+                  leading: ImageComponent(entity: artist),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ArtistView(artist: artist),
+                      ),
+                    );
+                  },
+                ),
+              if (_artists.length > 3)
+                ListTile(
+                  title: Text('See more'),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          appBar: AppBar(title: Text('Top Artists')),
+                          body: EntityDisplayComponent<
+                              LUserWeeklyArtistChartArtist>(
+                            items: _artists,
+                            displayType: DisplayType.grid,
+                            detailWidgetBuilder: (artist) =>
+                                ArtistView(artist: artist),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-          ],
-        );
+                    );
+                  },
+                ),
+            ],
+          );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
