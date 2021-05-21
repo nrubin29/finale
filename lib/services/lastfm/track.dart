@@ -175,10 +175,10 @@ class LTrack extends Track {
   @override
   final String url;
 
-  @JsonKey(fromJson: int.parse)
+  @JsonKey(fromJson: parseInt)
   final int listeners;
 
-  @JsonKey(name: 'playcount', fromJson: int.parse)
+  @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
 
   @JsonKey(name: 'userplaycount', fromJson: parseInt)
@@ -226,7 +226,7 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
 
   final LTrackArtist artist;
 
-  @JsonKey(name: 'playcount', fromJson: int.parse)
+  @JsonKey(name: 'playcount', fromJson: parseInt)
   @override
   final int playCount;
 

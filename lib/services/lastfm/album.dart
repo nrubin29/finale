@@ -27,7 +27,7 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
   @override
   final String url;
 
-  @JsonKey(name: 'playcount', fromJson: int.parse)
+  @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
 
   @override
@@ -102,6 +102,7 @@ class LAlbumTrack extends ScrobbleableTrack {
   @override
   final String url;
 
+  @JsonKey(fromJson: intParseSafe)
   @override
   final int? duration;
 
@@ -159,13 +160,13 @@ class LAlbum extends FullAlbum {
   @override
   final ImageId? imageId;
 
-  @JsonKey(name: 'playcount', fromJson: int.parse)
+  @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
 
-  @JsonKey(fromJson: int.parse)
+  @JsonKey(fromJson: parseInt)
   final int listeners;
 
-  @JsonKey(name: 'userplaycount')
+  @JsonKey(name: 'userplaycount', fromJson: parseInt)
   final int userPlayCount;
 
   @JsonKey(name: 'tracks')

@@ -15,7 +15,7 @@ class LTopArtistsResponseArtist extends BasicScrobbledArtist with HasPlayCount {
   @override
   final String url;
 
-  @JsonKey(name: 'playcount', fromJson: int.parse)
+  @JsonKey(name: 'playcount', fromJson: parseInt)
   @override
   final int playCount;
 
@@ -66,12 +66,13 @@ class LArtistSearchResponse {
 
 @JsonSerializable()
 class LArtistStats {
-  @JsonKey(name: 'playcount')
+  @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
 
+  @JsonKey(fromJson: parseInt)
   final int listeners;
 
-  @JsonKey(name: 'userplaycount')
+  @JsonKey(name: 'userplaycount', fromJson: parseInt)
   final int userPlayCount;
 
   const LArtistStats(this.playCount, this.userPlayCount, this.listeners);
@@ -109,7 +110,7 @@ class LArtistTopAlbum extends BasicAlbum {
   @override
   final String url;
 
-  @JsonKey(name: 'playcount')
+  @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
 
   @override

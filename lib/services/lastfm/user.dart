@@ -36,7 +36,7 @@ class LUser extends Entity {
   @override
   final ImageId? imageId;
 
-  @JsonKey(name: 'playcount', fromJson: int.parse)
+  @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
 
   final LUserRegistered registered;

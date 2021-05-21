@@ -7,9 +7,13 @@ part 'common.g.dart';
 
 bool convertStringToBoolean(String? text) => text == '1';
 
-int? intParseSafe(String? text) => text != null ? int.tryParse(text) : null;
+int? intParseSafe(value) => value == null
+    ? null
+    : value is int
+        ? value
+        : int.tryParse(value);
 
-int parseInt(String? text) => intParseSafe(text) ?? 0;
+int parseInt(value) => intParseSafe(value) ?? 0;
 
 DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
     DateTime.fromMillisecondsSinceEpoch(
@@ -72,7 +76,10 @@ abstract class BasicScrobbledArtist extends BasicArtist {
 
 @JsonSerializable()
 class LScrobbleResponseScrobblesAttr {
+  @JsonKey(fromJson: parseInt)
   final int accepted;
+
+  @JsonKey(fromJson: parseInt)
   final int ignored;
 
   const LScrobbleResponseScrobblesAttr(this.accepted, this.ignored);
@@ -116,18 +123,18 @@ class LTopTags {
 
 @JsonSerializable()
 class LAttr {
-  @JsonKey(fromJson: int.parse)
+  @JsonKey(fromJson: parseInt)
   final int page;
 
-  @JsonKey(fromJson: int.parse)
+  @JsonKey(fromJson: parseInt)
   final int total;
 
   final String user;
 
-  @JsonKey(fromJson: int.parse)
+  @JsonKey(fromJson: parseInt)
   final int perPage;
 
-  @JsonKey(fromJson: int.parse)
+  @JsonKey(fromJson: parseInt)
   final int totalPages;
 
   const LAttr(this.page, this.total, this.user, this.perPage, this.totalPages);
@@ -164,7 +171,7 @@ class LWiki {
 
 @JsonSerializable()
 class LError {
-  @JsonKey(name: 'error')
+  @JsonKey(name: 'error', fromJson: parseInt)
   final int code;
 
   final String message;
