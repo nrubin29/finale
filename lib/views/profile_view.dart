@@ -16,7 +16,7 @@ import 'package:finale/views/settings_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:finale/views/weekly_chart_selector_view.dart';
 import 'package:flutter/material.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfileView extends StatefulWidget {
   final String username;

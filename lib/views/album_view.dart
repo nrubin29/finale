@@ -16,7 +16,7 @@ import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AlbumView extends StatelessWidget {
   final BasicAlbum album;

@@ -14,7 +14,7 @@ import 'package:finale/views/error_view.dart';
 import 'package:finale/views/loading_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ArtistView extends StatefulWidget {
   final BasicArtist artist;

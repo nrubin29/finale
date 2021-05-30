@@ -9,11 +9,11 @@ PODS:
   - FMDB/standard (2.7.5)
   - in_app_review (0.2.0):
     - Flutter
-  - package_info (0.0.1):
+  - package_info_plus (0.4.5):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - share (0.0.1):
+  - share_plus (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
@@ -30,9 +30,9 @@ DEPENDENCIES:
   - flutter_acrcloud (from `.symlinks/plugins/flutter_acrcloud/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
-  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - share (from `.symlinks/plugins/share/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -51,12 +51,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_web_auth/ios"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
-  package_info:
-    :path: ".symlinks/plugins/package_info/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  share:
-    :path: ".symlinks/plugins/share/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   sqflite:
@@ -72,9 +72,9 @@ SPEC CHECKSUMS:
   flutter_web_auth: ede89bf8107b021cf16e769756d267d84d24e88b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   in_app_review: 4a97249f7a2f539a0f294c2d9196b7fe35e49541
-  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
