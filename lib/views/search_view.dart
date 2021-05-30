@@ -237,20 +237,13 @@ class _SearchViewState extends State<SearchView> {
                             track = await Lastfm.getTrack(item);
                           }
 
-                          final result = await showBarModalBottomSheet<bool>(
+                          await showBarModalBottomSheet(
                               context: context,
                               duration: Duration(milliseconds: 200),
                               builder: (context) => ScrobbleView(
                                     track: track,
                                     isModal: true,
                                   ));
-
-                          if (result != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(result
-                                    ? 'Scrobbled successfully!'
-                                    : 'An error occurred while scrobbling')));
-                          }
                         },
                         requestStream: _query
                             .debounceWhere(_shouldDebounce, debounceDuration)
@@ -293,18 +286,11 @@ class _SearchViewState extends State<SearchView> {
                             return;
                           }
 
-                          final result = await showBarModalBottomSheet<bool>(
+                          await showBarModalBottomSheet(
                               context: context,
                               duration: Duration(milliseconds: 200),
                               builder: (context) =>
                                   ScrobbleAlbumView(album: album));
-
-                          if (result != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(result
-                                    ? 'Scrobbled successfully!'
-                                    : 'An error occurred while scrobbling')));
-                          }
                         },
                         displayType: DisplayType.grid,
                         requestStream: _query

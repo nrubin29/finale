@@ -61,15 +61,20 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
     }
 
     final response = await Lastfm.scrobble(tracks, timestamps);
-    final success = response.ignored == 0;
-    Navigator.pop(context, success);
+    Navigator.pop(context);
 
-    // Ask for a review
-    if (success) {
+    if (response.ignored == 0) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Scrobbled successfully!')));
+
+      // Ask for a review
       final InAppReview inAppReview = InAppReview.instance;
       if (await inAppReview.isAvailable()) {
         inAppReview.requestReview();
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('An error occurred while scrobbling')));
     }
   }
 

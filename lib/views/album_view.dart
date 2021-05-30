@@ -55,18 +55,11 @@ class AlbumView extends StatelessWidget {
                     builder: (context) => IconButton(
                       icon: Icon(Icons.add),
                       onPressed: () async {
-                        final result = await showBarModalBottomSheet<bool>(
+                        await showBarModalBottomSheet(
                             context: context,
                             duration: Duration(milliseconds: 200),
                             builder: (context) =>
                                 ScrobbleAlbumView(album: album));
-
-                        if (result != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(result
-                                  ? 'Scrobbled successfully!'
-                                  : 'An error occurred while scrobbling')));
-                        }
                       },
                     ),
                   )

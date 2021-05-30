@@ -58,8 +58,10 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     ]);
 
     if (widget.isModal) {
-      Navigator.pop(context, response.ignored == 0);
-    } else if (response.ignored == 0) {
+      Navigator.pop(context);
+    }
+
+    if (response.ignored == 0) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Scrobbled successfully!')));
       _trackController.text = '';
