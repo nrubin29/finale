@@ -11,7 +11,8 @@ SvgPicture getLastfmIcon(Color color) => SvgPicture.asset(
     );
 
 String formatScrobbles(int playCount) => Intl.plural(playCount,
-    one: '$playCount scrobble', other: '$playCount scrobbles');
+    one: '$playCount scrobble',
+    other: '${numberFormat.format(playCount)} scrobbles');
 
 final numberFormat = NumberFormat();
 final dateFormat = DateFormat('d MMM');
