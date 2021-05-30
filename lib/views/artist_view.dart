@@ -43,7 +43,10 @@ class _ArtistViewState extends State<ArtistView>
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorView(
-              error: snapshot.error!, stackTrace: snapshot.stackTrace!);
+            error: snapshot.error!,
+            stackTrace: snapshot.stackTrace!,
+            entity: widget.artist,
+          );
         } else if (!snapshot.hasData) {
           return LoadingView();
         }

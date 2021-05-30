@@ -31,6 +31,9 @@ class SAlbumSimple extends BasicAlbum {
 
   factory SAlbumSimple.fromJson(Map<String, dynamic> json) =>
       _$SAlbumSimpleFromJson(json);
+
+  @override
+  String toString() => 'SAlbumSimple(name=$name, artist=${artist.name})';
 }
 
 @JsonSerializable()

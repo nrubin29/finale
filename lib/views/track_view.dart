@@ -36,7 +36,10 @@ class _TrackViewState extends State<TrackView> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorView(
-              error: snapshot.error!, stackTrace: snapshot.stackTrace!);
+            error: snapshot.error!,
+            stackTrace: snapshot.stackTrace!,
+            entity: widget.track,
+          );
         } else if (!snapshot.hasData) {
           return LoadingView();
         }

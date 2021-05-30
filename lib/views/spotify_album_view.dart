@@ -26,7 +26,10 @@ class SpotifyAlbumView extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorView(
-              error: snapshot.error!, stackTrace: snapshot.stackTrace!);
+            error: snapshot.error!,
+            stackTrace: snapshot.stackTrace!,
+            entity: this.album,
+          );
         } else if (!snapshot.hasData) {
           return LoadingView();
         }

@@ -47,7 +47,10 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorView(
-              error: snapshot.error!, stackTrace: snapshot.stackTrace!);
+            error: snapshot.error!,
+            stackTrace: snapshot.stackTrace!,
+            entity: widget.artist,
+          );
         } else if (!snapshot.hasData) {
           return LoadingView();
         }
@@ -100,8 +103,10 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
                             return ErrorComponent(
-                                error: snapshot.error!,
-                                stackTrace: snapshot.stackTrace!);
+                              error: snapshot.error!,
+                              stackTrace: snapshot.stackTrace!,
+                              entity: artist,
+                            );
                           } else if (!snapshot.hasData) {
                             return LoadingComponent();
                           }

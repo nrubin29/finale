@@ -25,6 +25,9 @@ class SArtistSimple extends BasicArtist {
 
   factory SArtistSimple.fromJson(Map<String, dynamic> json) =>
       _$SArtistSimpleFromJson(json);
+
+  @override
+  String toString() => 'SArtistSimple(name=$name)';
 }
 
 @JsonSerializable()
@@ -46,4 +49,7 @@ class SArtist extends FullArtist {
 
   factory SArtist.fromJson(Map<String, dynamic> json) =>
       _$SArtistFromJson(json);
+
+  @override
+  String toString() => 'SArtist(name=$name)';
 }

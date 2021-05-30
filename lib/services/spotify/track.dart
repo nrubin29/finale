@@ -66,4 +66,8 @@ class STrack extends ScrobbleableTrack {
   STrack(this.album, this.artists, this.durationMs, this.url, this.name);
 
   factory STrack.fromJson(Map<String, dynamic> json) => _$STrackFromJson(json);
+
+  @override
+  String toString() =>
+      'STrack(name=$name, artist=$artistName, album=$albumName)';
 }

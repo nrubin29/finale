@@ -74,6 +74,11 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
 
   factory LRecentTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackFromJson(json);
+
+  @override
+  String toString() =>
+      'LRecentTracksResponseTrack(name=$name, artist=$artistName, '
+      'album=$albumName)';
 }
 
 @JsonSerializable()

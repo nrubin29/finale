@@ -51,6 +51,10 @@ abstract class Track extends Entity {
 
   @override
   String? get displaySubtitle => artistName;
+
+  @override
+  String toString() =>
+      'Track(name=$name, artist=$artistName, album=$albumName)';
 }
 
 class BasicConcreteTrack extends Track {
@@ -91,6 +95,9 @@ abstract class BasicAlbum extends Entity {
 
   @override
   String get displaySubtitle => artist.name;
+
+  @override
+  String toString() => 'BasicAlbum(name=$name, artist=${artist.name})';
 }
 
 abstract class FullAlbum extends BasicAlbum {
@@ -132,6 +139,9 @@ abstract class BasicArtist extends Entity {
 
   @override
   String get displayTitle => name;
+
+  @override
+  String toString() => 'BasicArtist(name=$name)';
 }
 
 class ConcreteBasicArtist extends BasicArtist {
