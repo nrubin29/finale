@@ -1,7 +1,7 @@
-import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
+import 'package:finale/components/scoreboard_component.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/views/album_view.dart';
@@ -82,12 +82,12 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
         : ListView(
             children: [
               SizedBox(height: 10),
-              CountsComponent(
-                scrobbles: _numScrobbles,
-                artists: Future.value(_artists.length),
-                albums: Future.value(_albums.length),
-                tracks: Future.value(_tracks.length),
-              ),
+              ScoreboardComponent(statistics: {
+                'Scrobbles': _numScrobbles,
+                'Artists': _artists.length,
+                'Albums': _albums.length,
+                'Tracks': _tracks.length,
+              }),
               SizedBox(height: 10),
               if (_tracks.isNotEmpty)
                 Container(

@@ -1,8 +1,8 @@
-import 'package:finale/components/counts_component.dart';
 import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/period_selector_component.dart';
 import 'package:finale/components/play_count_bar_component.dart';
+import 'package:finale/components/scoreboard_component.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -100,12 +100,12 @@ class _ProfileViewState extends State<ProfileView>
                   maintainState: true,
                   child: Column(children: [
                     SizedBox(height: 10),
-                    CountsComponent(
-                      scrobbles: user.playCount,
-                      artists: Lastfm.getNumArtists(widget.username),
-                      albums: Lastfm.getNumAlbums(widget.username),
-                      tracks: Lastfm.getNumTracks(widget.username),
-                    ),
+                    ScoreboardComponent(statistics: {
+                      'Scrobbles': user.playCount,
+                      'Artists': Lastfm.getNumArtists(widget.username),
+                      'Albums': Lastfm.getNumAlbums(widget.username),
+                      'Tracks': Lastfm.getNumTracks(widget.username),
+                    }),
                     SizedBox(height: 10),
                   ])),
               Expanded(

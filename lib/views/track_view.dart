@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/image_component.dart';
+import 'package:finale/components/scoreboard_component.dart';
 import 'package:finale/components/tags_component.dart';
 import 'package:finale/components/wiki_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:finale/util.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/error_view.dart';
@@ -91,34 +91,13 @@ class _TrackViewState extends State<TrackView> {
                           width: min(MediaQuery.of(context).size.width,
                               MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
-                IntrinsicHeight(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Scrobbles'),
-                        Text(numberFormat.format(track.playCount))
-                      ],
-                    ),
-                    VerticalDivider(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Listeners'),
-                        Text(numberFormat.format(track.listeners))
-                      ],
-                    ),
-                    VerticalDivider(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Your scrobbles'),
-                        Text(numberFormat.format(track.userPlayCount))
-                      ],
-                    ),
-                    VerticalDivider(),
+                ScoreboardComponent(
+                  statistics: {
+                    'Scrobbles': track.playCount,
+                    'Listeners': track.listeners,
+                    'Your scrobbles': track.userPlayCount,
+                  },
+                  actions: [
                     IconButton(
                       icon:
                           Icon(loved ? Icons.favorite : Icons.favorite_border),
@@ -131,7 +110,7 @@ class _TrackViewState extends State<TrackView> {
                       },
                     ),
                   ],
-                )),
+                ),
                 if (track.topTags.tags.isNotEmpty) Divider(),
                 if (track.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: track.topTags),

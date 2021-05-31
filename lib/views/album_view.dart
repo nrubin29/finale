@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/image_component.dart';
+import 'package:finale/components/scoreboard_component.dart';
 import 'package:finale/components/tags_component.dart';
 import 'package:finale/components/wiki_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/util.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/error_view.dart';
 import 'package:finale/views/loading_view.dart';
@@ -75,35 +75,11 @@ class AlbumView extends StatelessWidget {
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
-                IntrinsicHeight(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Scrobbles'),
-                        Text(numberFormat.format(album.playCount))
-                      ],
-                    ),
-                    VerticalDivider(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Listeners'),
-                        Text(numberFormat.format(album.listeners))
-                      ],
-                    ),
-                    VerticalDivider(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Your scrobbles'),
-                        Text(numberFormat.format(album.userPlayCount))
-                      ],
-                    ),
-                  ],
-                )),
+                ScoreboardComponent(statistics: {
+                  'Scrobbles': album.playCount,
+                  'Listeners': album.listeners,
+                  'Your scrobbles': album.userPlayCount,
+                }),
                 if (album.topTags.tags.isNotEmpty) Divider(),
                 if (album.topTags.tags.isNotEmpty)
                   TagsComponent(topTags: album.topTags),
