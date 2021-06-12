@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:finale/components/acrcloud_dialog_component.dart';
+import 'package:finale/quick_actions_manager.dart';
 import 'package:finale/views/listen_continuously_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
@@ -7,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 class MusicRecognitionComponent extends StatefulWidget {
   final ValueChanged<ACRCloudResponseMusicItem> onTrackRecognized;
 
-  MusicRecognitionComponent({required this.onTrackRecognized});
+  const MusicRecognitionComponent({required this.onTrackRecognized});
 
   @override
   _MusicRecognitionComponentState createState() =>
@@ -15,6 +18,48 @@ class MusicRecognitionComponent extends StatefulWidget {
 }
 
 class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
+  late StreamSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _subscription =
+        QuickActionsManager.quickActionStream.listen((action) async {
+      await Future.delayed(Duration(milliseconds: 250));
+      if (action == QuickAction.scrobbleOnce) {
+        _scrobbleOnce();
+      } else {
+        _scrobbleContinuously();
+      }
+    });
+  }
+
+  Future<void> _scrobbleOnce() async {
+    final result = await showDialog<ACRCloudDialogResult>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => ACRCloudDialogComponent());
+
+    if (result?.wasCancelled ?? true) return;
+
+    if (result!.track != null) {
+      widget.onTrackRecognized(result.track!);
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Could not recognize song')));
+    }
+  }
+
+  void _scrobbleContinuously() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ListenContinuouslyView(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
@@ -43,35 +88,20 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
             children: [
               OutlinedButton(
                 child: Text('Listen once'),
-                onPressed: () async {
-                  final result = await showDialog<ACRCloudDialogResult>(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) => ACRCloudDialogComponent());
-
-                  if (result?.wasCancelled ?? true) return;
-
-                  if (result!.track != null) {
-                    widget.onTrackRecognized(result.track!);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Could not recognize song')));
-                  }
-                },
+                onPressed: _scrobbleOnce,
               ),
               OutlinedButton(
                 child: Text('Listen continuously'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ListenContinuouslyView(),
-                    ),
-                  );
-                },
+                onPressed: _scrobbleContinuously,
               ),
             ],
           ),
         ]),
       );
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
 }

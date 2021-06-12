@@ -24,6 +24,7 @@ dependencies:
   modal_bottom_sheet: ^2.0.0
   package_info_plus: ^1.0.1
   pkce: ^1.0.0+1
+  quick_actions: ^0.6.0+2
   rxdart: ^0.27.1
   share_plus: ^2.1.2
   shared_preferences: ^2.0.6

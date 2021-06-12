@@ -40,7 +40,7 @@ class SettingsView extends StatelessWidget {
                     ),
                     ListTile(
                       title: Text('Listen Continuously'),
-                      leading: Icon(Icons.mic),
+                      leading: Icon(Icons.all_inclusive),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.push(
