@@ -31,9 +31,8 @@ Future<Map<String, dynamic>> _doRequest(String method,
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
   } else if (response.statusCode == 400) {
-    final error =
-        SError.fromJson(json.decode(utf8.decode(response.bodyBytes))['error']);
-    throw SException(error.message, error.status);
+    throw SException.fromJson(
+        json.decode(utf8.decode(response.bodyBytes))['error']);
   } else {
     throw Exception('Could not do request $method');
   }
@@ -162,14 +161,4 @@ class Spotify {
         'grant_type': 'refresh_token',
         'refresh_token': refreshToken,
       });
-}
-
-class SException implements Exception {
-  final String message;
-  final int status;
-
-  const SException(this.message, this.status);
-
-  @override
-  String toString() => 'Error $status: $message';
 }

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
-import 'package:finale/services/spotify/spotify.dart';
+import 'package:finale/services/spotify/common.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';

@@ -181,7 +181,5 @@ class LException implements Exception {
       _$LExceptionFromJson(json);
 
   @override
-  String toString() {
-    return 'Error $code: $message';
-  }
+  String toString() => 'Error $code: $message';
 }

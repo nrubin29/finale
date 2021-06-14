@@ -50,11 +50,15 @@ class SPage<T extends Entity> {
 }
 
 @JsonSerializable()
-class SError {
+class SException implements Exception {
   final String message;
   final int status;
 
-  const SError(this.message, this.status);
+  const SException(this.message, this.status);
 
-  factory SError.fromJson(Map<String, dynamic> json) => _$SErrorFromJson(json);
+  factory SException.fromJson(Map<String, dynamic> json) =>
+      _$SExceptionFromJson(json);
+
+  @override
+  String toString() => 'Error $status: $message';
 }
