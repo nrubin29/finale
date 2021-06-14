@@ -6,8 +6,13 @@ class ErrorView extends StatelessWidget {
   final Object error;
   final StackTrace stackTrace;
   final Entity? entity;
+  final bool showSendFeedbackButton;
 
-  const ErrorView({required this.error, required this.stackTrace, this.entity});
+  const ErrorView(
+      {required this.error,
+      required this.stackTrace,
+      this.entity,
+      this.showSendFeedbackButton = true});
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -18,6 +23,7 @@ class ErrorView extends StatelessWidget {
             error: error,
             stackTrace: stackTrace,
             entity: entity,
+            showSendFeedbackButton: showSendFeedbackButton,
           ),
         ),
       );

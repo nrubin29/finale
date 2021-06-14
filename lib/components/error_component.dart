@@ -13,8 +13,13 @@ class ErrorComponent extends StatelessWidget {
   final Object error;
   final StackTrace stackTrace;
   final Entity? entity;
+  final bool showSendFeedbackButton;
 
-  ErrorComponent({required this.error, required this.stackTrace, this.entity})
+  ErrorComponent(
+      {required this.error,
+      required this.stackTrace,
+      this.entity,
+      this.showSendFeedbackButton = true})
       // In debug mode, print the error.
       : assert(() {
           print('$error\n$stackTrace');
@@ -70,13 +75,15 @@ class ErrorComponent extends StatelessWidget {
           Text('$error',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.caption),
-          SizedBox(height: 10),
-          OutlinedButton(
-            onPressed: () async {
-              launch(await _uri);
-            },
-            child: Text('Send feedback'),
-          )
+          if (showSendFeedbackButton) ...[
+            SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: () async {
+                launch(await _uri);
+              },
+              child: Text('Send feedback'),
+            ),
+          ],
         ],
       ));
 }

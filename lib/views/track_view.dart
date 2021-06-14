@@ -6,6 +6,7 @@ import 'package:finale/components/scoreboard_component.dart';
 import 'package:finale/components/tags_component.dart';
 import 'package:finale/components/wiki_component.dart';
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/views/album_view.dart';
@@ -35,10 +36,14 @@ class _TrackViewState extends State<TrackView> {
       future: Lastfm.getTrack(widget.track),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+          final isTrackNotFoundError = snapshot.error is LException &&
+              (snapshot.error as LException).code == 6;
+
           return ErrorView(
-            error: snapshot.error!,
+            error: isTrackNotFoundError ? 'Track not found' : snapshot.error!,
             stackTrace: snapshot.stackTrace!,
             entity: widget.track,
+            showSendFeedbackButton: !isTrackNotFoundError,
           );
         } else if (!snapshot.hasData) {
           return LoadingView();
