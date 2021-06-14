@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/spotify.dart';
-import 'package:finale/util.dart';
+import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';

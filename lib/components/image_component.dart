@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:finale/cache.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
+import 'package:finale/util/image_id_cache.dart';
 import 'package:flutter/material.dart';
 
 class ImageComponent extends StatelessWidget {

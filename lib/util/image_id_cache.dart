@@ -1,7 +1,7 @@
 import 'package:finale/services/image_id.dart';
 import 'package:sqflite/sqflite.dart';
 
-/// Stores image IDs in an SQLite database.
+/// Stores [ImageId]s in an SQLite database.
 class ImageIdCache {
   late Database db;
 

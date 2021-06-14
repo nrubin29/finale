@@ -2,7 +2,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/util.dart';
+import 'package:finale/util/util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'track.g.dart';

@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:finale/env.dart';
-import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:pkce/pkce.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(

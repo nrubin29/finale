@@ -1,5 +1,5 @@
 import 'package:finale/components/app_bar_component.dart';
-import 'package:finale/preferences.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:flutter/material.dart';
 
 class ListenContinuouslySettingsView extends StatefulWidget {

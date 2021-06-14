@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finale/util.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 
 /// A component that displays multiple [statistics] with labels.

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finale/components/acrcloud_dialog_component.dart';
-import 'package:finale/quick_actions_manager.dart';
+import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/views/listen_continuously_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';

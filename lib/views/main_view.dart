@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finale/quick_actions_manager.dart';
+import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/views/profile_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:finale/views/search_view.dart';

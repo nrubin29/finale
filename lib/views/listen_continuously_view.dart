@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/entity_display_component.dart';
-import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/util.dart';
+import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/listen_continuously_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';

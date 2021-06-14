@@ -9,7 +9,7 @@ import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
-import 'package:finale/util.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/error_view.dart';
 import 'package:finale/views/loading_view.dart';
 import 'package:finale/views/scrobble_view.dart';

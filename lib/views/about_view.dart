@@ -1,4 +1,4 @@
-import 'package:finale/util.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:social_media_buttons/social_media_icons.dart';

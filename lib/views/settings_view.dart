@@ -1,5 +1,5 @@
-import 'package:finale/cache.dart';
-import 'package:finale/preferences.dart';
+import 'package:finale/util/image_id_cache.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/views/about_view.dart';
 import 'package:finale/views/listen_continuously_settings_view.dart';
 import 'package:finale/views/login_view.dart';

@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
-import 'package:finale/preferences.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:http/http.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data) {
