@@ -170,13 +170,18 @@ class LWiki {
 }
 
 @JsonSerializable()
-class LError {
+class LException implements Exception {
   @JsonKey(name: 'error', fromJson: parseInt)
   final int code;
-
   final String message;
 
-  const LError(this.code, this.message);
+  const LException(this.code, this.message);
 
-  factory LError.fromJson(Map<String, dynamic> json) => _$LErrorFromJson(json);
+  factory LException.fromJson(Map<String, dynamic> json) =>
+      _$LExceptionFromJson(json);
+
+  @override
+  String toString() {
+    return 'Error $code: $message';
+  }
 }

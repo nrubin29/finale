@@ -37,18 +37,22 @@ Future<Map<String, dynamic>> _doRequest(
     String method, Map<String, dynamic> data,
     {bool post = false}) async {
   final uri = _buildUri(method, data);
-
   final response =
       post ? await httpClient.post(uri) : await httpClient.get(uri);
 
-  if (response.statusCode == 200) {
-    return json.decode(utf8.decode(response.bodyBytes));
-  } else if (response.statusCode == 400) {
-    final error = LError.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-    throw LException(error.code, error.message);
-  } else {
-    throw Exception('Could not do request $method');
+  if (response.statusCode != 200) {
+    throw Exception('Could not do request $method($data)');
   }
+
+  final jsonObject = json.decode(utf8.decode(response.bodyBytes));
+
+  if (!(jsonObject is Map<String, dynamic>)) {
+    throw Exception('Invalid response type for $method($data): $jsonObject');
+  } else if (jsonObject.containsKey('error')) {
+    throw LException.fromJson(jsonObject);
+  }
+
+  return jsonObject;
 }
 
 class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
@@ -356,17 +360,5 @@ class Lastfm {
         },
         post: true);
     return true;
-  }
-}
-
-class LException implements Exception {
-  final int code;
-  final String message;
-
-  const LException(this.code, this.message);
-
-  @override
-  String toString() {
-    return 'Error $code: $message';
   }
 }
