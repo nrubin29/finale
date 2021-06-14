@@ -37,28 +37,22 @@ class ErrorComponent extends StatelessWidget {
       errorString = 'SException | ${sException.status} | ${sException.message}';
     }
 
-    var errorParts = [
+    final errorParts = [
       errorString,
       'Platform: ${Platform.operatingSystem}',
       'Version number: ${(await PackageInfo.fromPlatform()).fullVersion}',
       'Username: ${Preferences().name}',
+      if (entity != null) 'Entity: $entity',
+      'Stack trace:\n$stackTrace',
     ];
 
-    if (entity != null) {
-      errorParts.add('Entity: $entity');
-    }
-
-    errorParts.add('Stack trace:\n$stackTrace');
-
     return Uri(
-            scheme: 'mailto',
-            path: 'nrubin29@gmail.com',
-            query: 'subject=Finale error&body=Please describe what you were '
-                'doing when the error occurred. If you were looking at a '
-                'particular track/artist/album/etc., please include as much '
-                'information as possible.\n\n\n\n-----\n\nError details:\n'
-                '${errorParts.join('\n')}')
-        .toString();
+      scheme: 'mailto',
+      path: 'nrubin29@gmail.com',
+      query: 'subject=Finale error&body=Please include any additional details '
+          'that may be relevant. Thank you for helping to improve Finale!\n\n> '
+          '\n\n-----\n\nError details:\n${errorParts.join('\n')}',
+    ).toString();
   }
 
   @override
