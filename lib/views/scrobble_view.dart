@@ -85,7 +85,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   // ignore: unused_element
   Widget _buildAudioIndicator(BuildContext context, ACRCloudSession session) {
     return StreamBuilder<double>(
-      stream: session.volume,
+      stream: session.volumeStream,
       initialData: 0.0,
       builder: (context, snapshot) => Container(
           height: 50,
