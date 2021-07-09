@@ -13,6 +13,19 @@ abstract class PagedRequest<T extends Entity> {
   const PagedRequest();
 
   Future<List<T>> doRequest(int limit, int page);
+
+  Future<List<T>> getAllData() async {
+    final result = <T>[];
+    List<T> lastResult;
+    var page = 1;
+
+    do {
+      lastResult = await doRequest(200, page++);
+      result.addAll(lastResult);
+    } while (lastResult.length == 200);
+
+    return result;
+  }
 }
 
 enum EntityType { track, album, artist, user }

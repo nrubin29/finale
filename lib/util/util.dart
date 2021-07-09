@@ -22,6 +22,16 @@ final timeFormat = DateFormat.jms();
 final dateTimeFormat = DateFormat('d MMM').add_jm();
 final dateTimeFormatWithYear = DateFormat('d MMM yyyy').add_jm();
 
+extension DateTimeUtil on DateTime {
+  /// Returns a [DateTime] with the same date and time 0:00:00.
+  DateTime get beginningOfDay => DateTime(year, month, day);
+
+  /// Returns a [DateTime] with the same date and time 11:59:59 pm.
+  DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999, 999);
+
+  int get secondsSinceEpoch => millisecondsSinceEpoch ~/ 1000;
+}
+
 extension PackageInfoFullVersion on PackageInfo {
   String get fullVersion => '$version+$buildNumber';
 }

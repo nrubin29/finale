@@ -41,7 +41,8 @@ Future<Map<String, dynamic>> _doRequest(
       post ? await httpClient.post(uri) : await httpClient.get(uri);
 
   if (response.statusCode != 200) {
-    throw Exception('Could not do request $method($data)');
+    throw Exception(
+        'Could not do request $method($data). Got response ${response.body}');
   }
 
   final jsonObject = json.decode(utf8.decode(response.bodyBytes));
@@ -57,13 +58,20 @@ Future<Map<String, dynamic>> _doRequest(
 
 class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   final String username;
+  final String? from;
+  final String? to;
 
-  const GetRecentTracksRequest(this.username);
+  const GetRecentTracksRequest(this.username, [this.from, this.to]);
 
   @override
   doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest('user.getRecentTracks',
-        {'user': username, 'limit': limit, 'page': page});
+    final rawResponse = await _doRequest('user.getRecentTracks', {
+      'user': username,
+      'limit': limit,
+      'page': page,
+      if (from != null) 'from': from,
+      if (to != null) 'to': to,
+    });
     final tracks =
         LRecentTracksResponseRecentTracks.fromJson(rawResponse['recenttracks'])
             .tracks;

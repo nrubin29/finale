@@ -92,9 +92,11 @@ class LUserWeeklyChart {
   factory LUserWeeklyChart.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyChartFromJson(json);
 
-  DateTime get fromDate => fromSecondsSinceEpoch(from);
+  // We have to add a day to get the proper from date.
+  DateTime get fromDate =>
+      fromSecondsSinceEpoch(from).add(const Duration(days: 1)).beginningOfDay;
 
-  DateTime get toDate => fromSecondsSinceEpoch(to);
+  DateTime get toDate => fromSecondsSinceEpoch(to).endOfDay;
 
   String get title =>
       '${dateFormat.format(fromDate)} - ${dateFormatWithYear.format(toDate)}';

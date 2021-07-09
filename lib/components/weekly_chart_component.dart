@@ -1,9 +1,12 @@
+import 'package:charts_flutter/flutter.dart';
 import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/components/scoreboard_component.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/track_view.dart';
@@ -13,7 +16,7 @@ class WeeklyChartComponent extends StatefulWidget {
   final LUser user;
   final LUserWeeklyChart chart;
 
-  WeeklyChartComponent({required this.user, required this.chart});
+  const WeeklyChartComponent({required this.user, required this.chart});
 
   @override
   State<StatefulWidget> createState() => _WeeklyChartComponentState();
@@ -21,12 +24,15 @@ class WeeklyChartComponent extends StatefulWidget {
 
 class _WeeklyChartComponentState extends State<WeeklyChartComponent>
     with AutomaticKeepAliveClientMixin<WeeklyChartComponent> {
+  static const _weekdays = ['Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
+
   var _loaded = false;
 
   late int _numScrobbles;
   late List<LUserWeeklyTrackChartTrack> _tracks;
   late List<LUserWeeklyAlbumChartAlbum> _albums;
   late List<LUserWeeklyArtistChartArtist> _artists;
+  late List<Series<MapEntry<int, int>, String>> _series;
 
   @override
   void initState() {
@@ -52,13 +58,29 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
       Lastfm.getWeeklyTrackChart(widget.user, widget.chart),
       Lastfm.getWeeklyAlbumChart(widget.user, widget.chart),
       Lastfm.getWeeklyArtistChart(widget.user, widget.chart),
+      GetRecentTracksRequest(
+        widget.user.name,
+        widget.chart.fromDate.secondsSinceEpoch.toString(),
+        widget.chart.toDate.secondsSinceEpoch.toString(),
+      ).getAllData(),
     ]);
 
     final tracks = (data[0] as LUserWeeklyTrackChart).tracks;
     final albums = (data[1] as LUserWeeklyAlbumChart).albums;
     final artists = (data[2] as LUserWeeklyArtistChart).artists;
+    final recentTracks = data[3] as List<LRecentTracksResponseTrack>;
     final numScrobbles =
         tracks.fold<int>(0, (sum, track) => sum + (track.playCount ?? 0));
+    final groupedTracks = Map<int, int>.fromIterable(
+        Iterable.generate(7, (i) => i + 1),
+        value: (_) => 0);
+
+    for (final track in recentTracks) {
+      if (track.date != null) {
+        groupedTracks[track.date!.weekday] =
+            groupedTracks[track.date!.weekday]! + 1;
+      }
+    }
 
     // The user can change charts before the Future resolves, so we should only
     // update the state if this component is still in the tree.
@@ -68,6 +90,16 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
         _albums = albums;
         _artists = artists;
         _numScrobbles = numScrobbles;
+        _series = [
+          Series<MapEntry<int, int>, String>(
+            id: 'Recent Tracks',
+            colorFn: (_, __) => MaterialPalette.red.shadeDefault,
+            domainFn: (day, _) => _weekdays[day.key - 1],
+            measureFn: (day, _) => day.value,
+            labelAccessorFn: (day, _) => '${day.value}',
+            data: groupedTracks.entries.toList(growable: false),
+          ),
+        ];
         _loaded = true;
       });
     }
@@ -88,6 +120,22 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                 'Albums': _albums.length,
                 'Tracks': _tracks.length,
               }),
+              SizedBox(height: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Container(
+                  height: 200,
+                  child: Row(children: [
+                    RotatedBox(quarterTurns: 3, child: Text('Scrobbles')),
+                    SizedBox(width: 5),
+                    Expanded(
+                        child: BarChart(
+                      _series,
+                      barRendererDecorator: BarLabelDecorator<String>(),
+                    )),
+                  ]),
+                ),
+              ),
               SizedBox(height: 10),
               if (_tracks.isNotEmpty)
                 Container(
