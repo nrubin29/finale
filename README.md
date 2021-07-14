@@ -2,6 +2,8 @@
 
 A fully-featured Last.fm client and scrobbler with Shazam-like scrobbling written in Flutter.
 
+Check out [finale.app](https://finale.app) for screenshots and download links.
+
 ## Running the app
 
 To run Finale, you'll need:
