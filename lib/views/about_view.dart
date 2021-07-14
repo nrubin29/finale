@@ -92,6 +92,14 @@ class AboutView extends StatelessWidget {
                             '?subject=Finale%20feedback');
                       },
                     ),
+                    ListTile(
+                      title: Text('Privacy policy'),
+                      leading: Icon(Icons.privacy_tip),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        launch('https://finale.app/privacy');
+                      },
+                    ),
                     Spacer(),
                     Text('\u00a9 2021 Noah Rubin Technologies LLC'),
                     Text('All rights reserved'),
