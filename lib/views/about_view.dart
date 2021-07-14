@@ -88,8 +88,8 @@ class AboutView extends StatelessWidget {
                       leading: Icon(Icons.email),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
-                        launch(
-                            'mailto:nrubin29@gmail.com?subject=Finale%20feedback');
+                        launch('mailto:feedback@finale.app'
+                            '?subject=Finale%20feedback');
                       },
                     ),
                     Spacer(),

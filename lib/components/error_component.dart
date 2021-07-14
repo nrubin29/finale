@@ -48,7 +48,7 @@ class ErrorComponent extends StatelessWidget {
 
     return Uri(
       scheme: 'mailto',
-      path: 'nrubin29@gmail.com',
+      path: 'feedback@finale.app',
       query: 'subject=Finale error&body=Please include any additional details '
           'that may be relevant. Thank you for helping to improve Finale!\n\n> '
           '\n\n-----\n\nError details:\n${errorParts.join('\n')}',
