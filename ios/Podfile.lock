@@ -9,6 +9,8 @@ PODS:
   - FMDB/standard (2.7.5)
   - in_app_review (0.2.0):
     - Flutter
+  - integration_test (0.0.1):
+    - Flutter
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider (0.0.1):
@@ -32,6 +34,7 @@ DEPENDENCIES:
   - flutter_acrcloud (from `.symlinks/plugins/flutter_acrcloud/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - quick_actions (from `.symlinks/plugins/quick_actions/ios`)
@@ -54,6 +57,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_web_auth/ios"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
@@ -77,6 +82,7 @@ SPEC CHECKSUMS:
   flutter_web_auth: ede89bf8107b021cf16e769756d267d84d24e88b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   in_app_review: 4a97249f7a2f539a0f294c2d9196b7fe35e49541
+  integration_test: 6eb66a19f7104200dcfdd62bc0077e1b09686e4f
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   quick_actions: 6cb2390c4dab0e737c94573c27e18d9666710720

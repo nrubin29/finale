@@ -4,19 +4,25 @@ import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/views/login_view.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
+import 'package:screenshot/screenshot.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await QuickActionsManager.setup();
   await Preferences().setup();
   await ImageIdCache().setup();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  final ScreenshotController? screenshotController;
+
+  const MyApp([this.screenshotController]);
+
   @override
   Widget build(BuildContext context) {
     final name = Preferences().name;
+    final home = name == null ? LoginView() : MainView(username: name);
 
     return MaterialApp(
       title: 'Finale',
@@ -41,7 +47,9 @@ class MyApp extends StatelessWidget {
             trackColor:
                 MaterialStateColor.resolveWith((_) => Colors.red.shade200)),
       ),
-      home: name == null ? LoginView() : MainView(username: name),
+      home: screenshotController != null
+          ? Screenshot(child: home, controller: screenshotController!)
+          : home,
     );
   }
 }
