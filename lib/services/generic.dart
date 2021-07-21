@@ -120,6 +120,27 @@ abstract class FullAlbum extends BasicAlbum {
       tracks.every((track) => track.duration != null && track.duration! > 0);
 }
 
+class FullConcreteAlbum extends FullAlbum {
+  @override
+  final String name;
+
+  @override
+  final BasicArtist artist;
+
+  @override
+  final String? url;
+
+  @override
+  List<ScrobbleableTrack> tracks;
+
+  FullConcreteAlbum(this.name, String artistName,
+      [this.tracks = const <ScrobbleableTrack>[], this.url])
+      : artist = ConcreteBasicArtist(artistName);
+
+  @override
+  String toString() => 'FullConcreteAlbum(name=$name, artist=$artist)';
+}
+
 abstract class BasicArtist extends Entity {
   String get name;
 
