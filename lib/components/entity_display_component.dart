@@ -103,7 +103,7 @@ class EntityDisplayComponentState<T extends Entity>
           page = 2;
         }
       });
-    } catch (_) {
+    } on Exception {
       setState(() {
         hasMorePages = false;
       });
@@ -113,7 +113,9 @@ class EntityDisplayComponentState<T extends Entity>
   Future<void> _getMoreItems() async {
     if (isDoingRequest || !hasMorePages) return;
 
-    isDoingRequest = true;
+    setState(() {
+      isDoingRequest = true;
+    });
 
     try {
       final moreItems = await _request!.doRequest(20, page);
@@ -125,13 +127,15 @@ class EntityDisplayComponentState<T extends Entity>
           page += 1;
         }
       });
-    } catch (_) {
+    } on Exception {
       setState(() {
         hasMorePages = false;
       });
+    } finally {
+      setState(() {
+        isDoingRequest = false;
+      });
     }
-
-    isDoingRequest = false;
   }
 
   void _onTap(T item) {
@@ -288,14 +292,22 @@ class EntityDisplayComponentState<T extends Entity>
               key: UniqueKey(),
               sliver: SliverToBoxAdapter(
                 child: SafeArea(
-                  child: ListTile(
-                    leading: CircularProgressIndicator(),
-                    title: Text('Loading...'),
-                  ),
+                  child: isDoingRequest
+                      ? const ListTile(
+                          leading: CircularProgressIndicator(),
+                          title: Text('Loading...'),
+                        )
+                      : const ListTile(
+                          leading: Padding(
+                            padding: EdgeInsets.only(left: 6),
+                            child: Icon(Icons.arrow_upward, size: 36),
+                          ),
+                          title: Text('Scroll to load more items'),
+                        ),
                 ),
               ),
               onVisibilityChanged: (visibilityInfo) {
-                if (visibilityInfo.visibleFraction > 0.5) {
+                if (visibilityInfo.visibleFraction > 0.95) {
                   _getMoreItems();
                 }
               },
