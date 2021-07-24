@@ -9,7 +9,6 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:http/http.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data) {
   final allData = {
@@ -225,8 +224,6 @@ class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
 }
 
 class Lastfm {
-  static Future<Response> get(String url) => httpClient.get(Uri.parse(url));
-
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {
     final rawResponse =

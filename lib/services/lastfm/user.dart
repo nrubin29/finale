@@ -3,7 +3,6 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/util.dart';
-import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -158,25 +157,9 @@ class LUserWeeklyTrackChartTrack extends Track {
   String get displayTrailing => formatScrobbles(playCount ?? 0);
 
   @override
-  Future<ImageId?> get imageId async {
-    final lastfmResponse = await Lastfm.get(url);
-
-    try {
-      final doc = parse(lastfmResponse.body);
-      final rawUrl =
-          doc.querySelector('.cover-art')?.children.first.attributes['src'];
-
-      if (rawUrl == null) {
-        return null;
-      }
-
-      final imageId = rawUrl.substring(
-          rawUrl.lastIndexOf('/') + 1, rawUrl.lastIndexOf('.'));
-      return ImageId.lastfm(imageId);
-    } catch (e) {
-      return null;
-    }
-  }
+  Future<ImageId?> get imageId =>
+      ImageId.scrape(url, '.cover-art > :first-child',
+          attribute: 'src', endUrlAtPeriod: true);
 }
 
 @JsonSerializable()
@@ -230,24 +213,7 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
-  Future<ImageId?> get imageId async {
-    final lastfmResponse = await Lastfm.get(url);
-
-    try {
-      final doc = parse(lastfmResponse.body);
-      final rawUrl =
-          doc.querySelector('.link-block-cover-link')?.attributes['href'];
-
-      if (rawUrl == null) {
-        return null;
-      }
-
-      final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1);
-      return ImageId.lastfm(imageId);
-    } catch (e) {
-      return null;
-    }
-  }
+  Future<ImageId?> get imageId => ImageId.scrape(url, '.link-block-cover-link');
 }
 
 @JsonSerializable()

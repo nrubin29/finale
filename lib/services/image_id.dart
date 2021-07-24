@@ -1,3 +1,6 @@
+import 'package:finale/services/generic.dart';
+import 'package:html/parser.dart' show parse;
+
 enum ImageQuality { low, high }
 
 /// An image identifier that can be used to build an image URL for a given
@@ -27,6 +30,30 @@ class ImageId {
     }
 
     return ImageId.lastfm(serializedValue);
+  }
+
+  static Future<ImageId?> scrape(String? url, String selector,
+      {String attribute = 'href', bool endUrlAtPeriod = false}) async {
+    if (url == null) {
+      return null;
+    }
+
+    final lastfmResponse = await httpClient.get(Uri.parse(url));
+
+    try {
+      final doc = parse(lastfmResponse.body);
+      final rawUrl = doc.querySelector(selector)?.attributes[attribute];
+
+      if (rawUrl == null) {
+        return null;
+      }
+
+      final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1,
+          endUrlAtPeriod ? rawUrl.lastIndexOf('.') : null);
+      return ImageId.lastfm(imageId);
+    } on Exception {
+      return null;
+    }
   }
 
   String getUrl(ImageQuality quality) {

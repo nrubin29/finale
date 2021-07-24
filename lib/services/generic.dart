@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:finale/services/image_id.dart';
-import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/http_throttle.dart';
 import 'package:flutter/foundation.dart';
-import 'package:html/parser.dart' show parse;
 import 'package:json_annotation/json_annotation.dart';
 
 final httpClient = ThrottleClient(15);
@@ -145,28 +143,8 @@ abstract class BasicArtist extends Entity {
   String get name;
 
   @override
-  FutureOr<ImageId?> get imageId async {
-    if (url == null) {
-      return null;
-    }
-
-    final lastfmResponse = await Lastfm.get(url!);
-
-    try {
-      final doc = parse(lastfmResponse.body);
-      final rawUrl =
-          doc.querySelector('.header-new-gallery--link')?.attributes['href'];
-
-      if (rawUrl == null) {
-        return null;
-      }
-
-      final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1);
-      return ImageId.lastfm(imageId);
-    } catch (e) {
-      return null;
-    }
-  }
+  FutureOr<ImageId?> get imageId =>
+      ImageId.scrape(url, '.header-new-gallery--link');
 
   @override
   EntityType get type => EntityType.artist;
