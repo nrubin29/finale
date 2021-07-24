@@ -8,5 +8,6 @@ for device in "iPhone 12 Pro Max" "iPhone 8 Plus" "iPad Pro (12.9-inch) (4th gen
   flutter test \
     --device-id="$device" \
     --dart-define=device="$device" \
+    --update-goldens \
     integration_test/screenshot_test.dart
 done

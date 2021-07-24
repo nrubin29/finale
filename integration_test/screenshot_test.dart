@@ -13,64 +13,66 @@ import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OffsetLayer;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const device = String.fromEnvironment('device');
+final isIpad = device.contains('iPad');
 const directory =
     '/Users/nrubin29/Documents/FlutterProjects/finale/screenshots/$device';
 
 Future<void> main() async {
   await Directory(directory).create();
 
-  late ScreenshotController screenshotController;
-
   setUp(() async {
-    screenshotController = ScreenshotController();
     SharedPreferences.setMockInitialValues(
         const {'name': testName, 'key': testKey});
     await Preferences().setup();
     await ImageIdCache().setup();
   });
 
-  Future<void> settle(WidgetTester tester, {int times = 1}) async {
-    await tester.runAsync(() => Future.delayed(Duration(seconds: 5 * times)));
-    try {
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.sendSemanticsUpdate, Duration(seconds: 5 * times));
-    } on FlutterError {
-      // [pumpAndSettle] might time out, but that's fine.
-    }
-  }
-
   /// Pumps [widget] inside of a [FinaleTheme]d [MaterialApp] and [Screenshot].
   ///
   /// If [asPage] is true, [widget] will be pushed as a route so that the back
   /// button will be displayed in the top left corner.
   Future<void> pumpWidget(WidgetTester tester, Widget widget,
-      {bool asPage = false,
-      bool asModal = false,
-      bool settleLong = false}) async {
+      {bool asPage = false, Widget? widgetBehindModal}) async {
     await tester.pumpWidget(MaterialApp(
       title: 'Finale',
       theme: FinaleTheme.light,
       darkTheme: FinaleTheme.dark,
-      home: asPage || asModal
-          ? _AsPage(
-              widget: widget,
-              screenshotController: screenshotController,
-              asModal: asModal)
-          : Screenshot(controller: screenshotController, child: widget),
+      debugShowCheckedModeBanner: false,
+      home: asPage || widgetBehindModal != null
+          ? _AsPage(widget: widget, widgetBehindModal: widgetBehindModal)
+          : widget,
     ));
-    await settle(tester, times: settleLong ? 6 : 1);
+
+    if (asPage || widgetBehindModal != null) {
+      await tester.settleLong();
+    }
+
+    await tester.pumpAndSettle();
   }
 
-  Future<void> saveScreenshot(String name) async {
-    final image = await screenshotController.capture();
-    expect(image, isNotNull);
-    await File('$directory/$name.png').writeAsBytes(image!);
+  Future<void> saveScreenshot(String name) {
+    final element = find.byType(MaterialApp).evaluate().single;
+
+    // BEGIN: Copied from flutter_test/lib/src/_matchers_io.dart:23 because I
+    // need to set [pixelRatio].
+    assert(element.renderObject != null);
+    var renderObject = element.renderObject!;
+    while (!renderObject.isRepaintBoundary) {
+      renderObject = renderObject.parent! as RenderObject;
+    }
+    assert(!renderObject.debugNeedsPaint);
+    final layer = renderObject.debugLayer! as OffsetLayer;
+    final image =
+        layer.toImage(renderObject.paintBounds, pixelRatio: isIpad ? 2 : 3);
+    // END: Copied code.
+
+    return expectLater(image, matchesGoldenFile('$directory/$name.png'));
   }
 
   testWidgets('Profile screen', (tester) async {
@@ -88,7 +90,7 @@ Future<void> main() async {
     await tester.enterText(formFields.at(1), 'Death Cab for Cutie');
     await tester.enterText(formFields.at(2), 'Transatlanticism');
     await tester.testTextInput.receiveAction(TextInputAction.done);
-    await settle(tester);
+    await tester.pumpAndSettle();
 
     await saveScreenshot('2_scrobble');
   });
@@ -96,7 +98,7 @@ Future<void> main() async {
   testWidgets('Weekly track screen', (tester) async {
     await pumpWidget(tester, MainView(username: testName));
     await tester.tap(find.byIcon(Icons.access_time));
-    await settle(tester, times: 6);
+    await tester.pumpAndSettle();
     await saveScreenshot('3_weekly_track');
   });
 
@@ -107,7 +109,6 @@ Future<void> main() async {
           track: BasicConcreteTrack(
               'A Lack of Color', 'Death Cab for Cutie', 'Transatlanticism')),
       asPage: true,
-      settleLong: true,
     );
     await saveScreenshot('4_track');
   });
@@ -117,7 +118,6 @@ Future<void> main() async {
       tester,
       ArtistView(artist: ConcreteBasicArtist('Mae')),
       asPage: true,
-      settleLong: true,
     );
     await saveScreenshot('5_artist');
   });
@@ -125,10 +125,8 @@ Future<void> main() async {
   testWidgets('Album screen', (tester) async {
     await pumpWidget(
       tester,
-      // TODO: Use an actual LAlbum here so that the imageId works.
       AlbumView(album: FullConcreteAlbum('Deas Vail', 'Deas Vail')),
       asPage: true,
-      settleLong: true,
     );
     await saveScreenshot('6_album');
   });
@@ -137,23 +135,18 @@ Future<void> main() async {
     await pumpWidget(
       tester,
       ScrobbleAlbumView(album: FullConcreteAlbum('Deas Vail', 'Deas Vail')),
-      asPage: true,
-      settleLong: true,
+      widgetBehindModal:
+          AlbumView(album: FullConcreteAlbum('Deas Vail', 'Deas Vail')),
     );
-    await tester.tap(find.byIcon(Icons.add));
     await saveScreenshot('7_album_scrobble');
   });
 }
 
 class _AsPage extends StatefulWidget {
   final Widget widget;
-  final ScreenshotController screenshotController;
-  final bool asModal;
+  final Widget? widgetBehindModal;
 
-  const _AsPage(
-      {required this.widget,
-      required this.screenshotController,
-      this.asModal = false});
+  const _AsPage({required this.widget, this.widgetBehindModal});
 
   @override
   State<StatefulWidget> createState() => _AsPageState();
@@ -165,18 +158,30 @@ class _AsPageState extends State<_AsPage> {
     super.initState();
 
     Future.delayed(const Duration(milliseconds: 500), () async {
-      final child = Screenshot(
-          controller: widget.screenshotController, child: widget.widget);
-
-      if (widget.asModal) {
+      if (widget.widgetBehindModal != null) {
         await showBarModalBottomSheet(
-            context: context, duration: Duration.zero, builder: (_) => child);
+            context: context,
+            duration: Duration.zero,
+            builder: (_) => widget.widget);
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => child));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => widget.widget));
       }
     });
   }
 
   @override
-  Widget build(BuildContext context) => SizedBox();
+  Widget build(BuildContext context) => widget.widgetBehindModal ?? SizedBox();
+}
+
+extension on WidgetTester {
+  Future<void> settleLong() async {
+    await runAsync(() => Future.delayed(const Duration(seconds: 30)));
+    try {
+      await pumpAndSettle(const Duration(milliseconds: 100),
+          EnginePhase.sendSemanticsUpdate, const Duration(seconds: 30));
+    } on FlutterError {
+      // [pumpAndSettle] might time out, but that's fine.
+    }
+  }
 }
