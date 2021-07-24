@@ -287,10 +287,13 @@ class EntityDisplayComponentState<T extends Entity>
             SliverVisibilityDetector(
               key: UniqueKey(),
               sliver: SliverToBoxAdapter(
+                child: SafeArea(
                   child: ListTile(
-                leading: CircularProgressIndicator(),
-                title: Text('Loading...'),
-              )),
+                    leading: CircularProgressIndicator(),
+                    title: Text('Loading...'),
+                  ),
+                ),
+              ),
               onVisibilityChanged: (visibilityInfo) {
                 if (visibilityInfo.visibleFraction > 0.5) {
                   _getMoreItems();
