@@ -2,15 +2,18 @@ import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/util/theme.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/login_view.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await QuickActionsManager.setup();
   await Preferences().setup();
-  await ImageIdCache().setup();
+  if (isMobile) {
+    await QuickActionsManager.setup();
+    await ImageIdCache().setup();
+  }
   runApp(const MyApp());
 }
 

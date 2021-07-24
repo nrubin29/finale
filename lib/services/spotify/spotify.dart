@@ -8,6 +8,7 @@ import 'package:finale/services/spotify/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:pkce/pkce.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
@@ -103,8 +104,6 @@ class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
 }
 
 class Spotify {
-  static const _redirectUri = 'finale://spotify';
-
   static Future<SAlbumFull> getFullAlbum(SAlbumSimple simpleAlbum) async {
     final rawResponse = await _doRequest('albums/${simpleAlbum.id}');
     return SAlbumFull.fromJson(rawResponse);
@@ -127,7 +126,7 @@ class Spotify {
       Uri.https('accounts.spotify.com', 'authorize', {
         'client_id': spotifyClientId,
         'response_type': 'code',
-        'redirect_uri': _redirectUri,
+        'redirect_uri': authCallbackUrl,
         'code_challenge_method': 'S256',
         'code_challenge': pkcePair.codeChallenge,
       });
@@ -151,7 +150,7 @@ class Spotify {
         'client_id': spotifyClientId,
         'grant_type': 'authorization_code',
         'code': code,
-        'redirect_uri': _redirectUri,
+        'redirect_uri': authCallbackUrl,
         'code_verifier': pkcePair.codeVerifier,
       });
 

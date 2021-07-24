@@ -1,0 +1,23 @@
+{
+    "name": "Finale for Last.fm",
+    "short_name": "Finale",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#F44336",
+    "theme_color": "#F44336",
+    "description": "A fully-featured Last.fm client",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

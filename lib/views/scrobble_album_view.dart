@@ -68,9 +68,8 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
           .showSnackBar(SnackBar(content: Text('Scrobbled successfully!')));
 
       // Ask for a review
-      final InAppReview inAppReview = InAppReview.instance;
-      if (await inAppReview.isAvailable()) {
-        inAppReview.requestReview();
+      if (isMobile && await InAppReview.instance.isAvailable()) {
+        InAppReview.instance.requestReview();
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

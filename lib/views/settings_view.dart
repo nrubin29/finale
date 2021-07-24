@@ -1,5 +1,6 @@
 import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/about_view.dart';
 import 'package:finale/views/listen_continuously_settings_view.dart';
 import 'package:finale/views/login_view.dart';
@@ -38,18 +39,19 @@ class SettingsView extends StatelessWidget {
                                     SearchEngineSettingsView()));
                       },
                     ),
-                    ListTile(
-                      title: Text('Listen Continuously'),
-                      leading: Icon(Icons.all_inclusive),
-                      trailing: Icon(Icons.chevron_right),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ListenContinuouslySettingsView()));
-                      },
-                    ),
+                    if (isMobile)
+                      ListTile(
+                        title: Text('Listen Continuously'),
+                        leading: Icon(Icons.all_inclusive),
+                        trailing: Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ListenContinuouslySettingsView()));
+                        },
+                      ),
                     ListTile(
                       title: Text('Empty image cache'),
                       leading: Icon(Icons.delete),

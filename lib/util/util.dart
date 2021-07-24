@@ -1,7 +1,25 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+const isWeb = kIsWeb;
+const isMobile = !isWeb;
+
+String get authCallbackUrl {
+  var callbackUrl =
+      isMobile ? 'finale://auth' : 'https://web.finale.app/auth.html';
+
+  assert(() {
+    if (isWeb) {
+      callbackUrl = 'http://localhost:52486/auth.html';
+    }
+    return true;
+  }());
+
+  return callbackUrl;
+}
 
 const spotifyGreen = Color.fromRGBO(30, 215, 96, 1);
 

@@ -35,7 +35,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _artistController.text = widget.track?.artistName ?? '';
     _albumController.text = widget.track?.albumName ?? '';
 
-    if (!widget.isModal) {
+    if (!widget.isModal && isMobile) {
       ACRCloud.setUp(ACRCloudConfig(
           acrCloudAccessKey, acrCloudAccessSecret, acrCloudHost));
     }
@@ -69,9 +69,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       _albumController.text = '';
 
       // Ask for a review
-      final InAppReview inAppReview = InAppReview.instance;
-      if (await inAppReview.isAvailable()) {
-        inAppReview.requestReview();
+      if (isMobile && await InAppReview.instance.isAvailable()) {
+        InAppReview.instance.requestReview();
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -120,7 +119,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 margin: EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    if (!widget.isModal)
+                    if (!widget.isModal && isMobile)
                       MusicRecognitionComponent(onTrackRecognized: (track) {
                         setState(() {
                           _trackController.text = track.title;

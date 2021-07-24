@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 /// Stores [ImageId]s in an SQLite database.
 class ImageIdCache {
-  late Database db;
+  Database? db;
 
   static ImageIdCache? _instance;
 
@@ -24,12 +24,13 @@ class ImageIdCache {
             db.execute('CREATE TABLE ImageId (url TEXT, imageId TEXT)'));
   }
 
-  Future<int> insert(String url, ImageId imageId) =>
-      db.insert('ImageId', {'url': url, 'imageId': imageId.serializedValue});
+  Future<void> insert(String url, ImageId imageId) async => await db
+      ?.insert('ImageId', {'url': url, 'imageId': imageId.serializedValue});
 
   Future<ImageId?> get(String url) async {
-    final results = await db.query('ImageId',
-        columns: ['imageId'], where: 'url = ?', whereArgs: [url]);
+    final results = await db?.query('ImageId',
+            columns: ['imageId'], where: 'url = ?', whereArgs: [url]) ??
+        const [];
 
     if (results.isNotEmpty) {
       return ImageId.fromSerializedValue(results.first['imageId']!.toString());
@@ -38,5 +39,5 @@ class ImageIdCache {
     return null;
   }
 
-  Future<int> drop() => db.delete('ImageId');
+  Future<void> drop() async => await db?.delete('ImageId');
 }
