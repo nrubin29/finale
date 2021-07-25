@@ -33,6 +33,8 @@ class EntityDisplayComponent<T extends Entity> extends StatefulWidget {
   final bool showNoResultsMessage;
   final bool showGridTileGradient;
   final double gridTileSize;
+  final double gridTileTextPadding;
+  final double fontSize;
 
   EntityDisplayComponent(
       {Key? key,
@@ -50,7 +52,9 @@ class EntityDisplayComponent<T extends Entity> extends StatefulWidget {
       this.displayCircularImages = false,
       this.showNoResultsMessage = true,
       this.showGridTileGradient = true,
-      this.gridTileSize = 250})
+      this.gridTileSize = 250,
+      this.gridTileTextPadding = 16,
+      this.fontSize = 14})
       : assert(items != null || request != null || requestStream != null),
         super(key: key);
 
@@ -217,19 +221,35 @@ class EntityDisplayComponentState<T extends Entity>
             )
           : null,
       footer: Container(
-          margin: EdgeInsets.all(16),
+          margin: EdgeInsets.all(widget.gridTileTextPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(item.displayTitle,
+              if (widget.fontSize > 0)
+                Text(
+                  item.displayTitle,
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white)),
+                    fontSize: widget.fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               if (item.displaySubtitle != null)
-                Text(item.displaySubtitle!,
-                    style: TextStyle(fontSize: 13, color: Colors.white)),
+                Text(
+                  item.displaySubtitle!,
+                  style: TextStyle(
+                    fontSize: widget.fontSize - 1,
+                    color: Colors.white,
+                  ),
+                ),
               if (item.displayTrailing != null)
-                Text(item.displayTrailing!,
-                    style: TextStyle(fontSize: 13, color: Colors.white))
+                Text(
+                  item.displayTrailing!,
+                  style: TextStyle(
+                    fontSize: widget.fontSize - 1,
+                    color: Colors.white,
+                  ),
+                ),
             ],
           )),
       child: Stack(

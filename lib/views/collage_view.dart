@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:finale/components/app_bar_component.dart';
 import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
@@ -23,8 +22,9 @@ class _CollageViewState extends State<CollageView> {
   var _isSettingsExpanded = true;
   final _usernameTextController =
       TextEditingController(text: Preferences().name ?? 'Enter username');
-  var _gridSize = 5;
   var _period = Period.overall;
+  var _gridSize = 5;
+  var _includeText = true;
   var _includeBranding = true;
 
   var _isDoingRequest = false;
@@ -38,13 +38,11 @@ class _CollageViewState extends State<CollageView> {
       _image = null;
     });
 
-    final items = [
-      for (var item
-          in await GetTopAlbumsRequest(_usernameTextController.text, _period)
-              .doRequest(_gridSize * _gridSize, 1))
-        _LAlbumForCollage(item),
-    ];
+    final items =
+        await GetTopAlbumsRequest(_usernameTextController.text, _period)
+            .doRequest(_gridSize * _gridSize, 1);
 
+    final gridTileSize = MediaQuery.of(context).size.width / _gridSize;
     final image = await _screenshotController.captureFromWidget(
       Container(
         color: Colors.white,
@@ -55,8 +53,10 @@ class _CollageViewState extends State<CollageView> {
             EntityDisplayComponent(
               items: items,
               displayType: DisplayType.grid,
-              showGridTileGradient: false,
-              gridTileSize: MediaQuery.of(context).size.width / _gridSize,
+              showGridTileGradient: _includeText,
+              gridTileSize: gridTileSize,
+              fontSize: _includeText ? gridTileSize / 15 : 0,
+              gridTileTextPadding: gridTileSize / 15,
             ),
             if (_includeBranding) ...[
               const SizedBox(height: 5),
@@ -161,6 +161,19 @@ class _CollageViewState extends State<CollageView> {
                       ),
                     ),
                     ListTile(
+                      title: const Text('Include text'),
+                      trailing: Switch(
+                        value: _includeText,
+                        onChanged: (value) {
+                          if (value != _includeText) {
+                            setState(() {
+                              _includeText = value;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    ListTile(
                       title: const Text('Include Finale branding'),
                       trailing: Switch(
                         value: _includeBranding,
@@ -227,22 +240,4 @@ class _CollageViewState extends State<CollageView> {
     _usernameTextController.dispose();
     super.dispose();
   }
-}
-
-class _LAlbumForCollage extends BasicAlbum {
-  final BasicAlbum _album;
-
-  _LAlbumForCollage(this._album);
-
-  @override
-  BasicArtist get artist => ConcreteBasicArtist('');
-
-  @override
-  String get name => '';
-
-  @override
-  String? get url => _album.url;
-
-  @override
-  FutureOr<ImageId?> get imageId => _album.imageId;
 }
