@@ -30,6 +30,8 @@ class EntityDisplayComponent<T extends Entity> extends StatefulWidget {
   final bool displayImages;
   final bool displayCircularImages;
   final bool showNoResultsMessage;
+  final bool showGridTileGradient;
+  final double gridTileSize;
 
   EntityDisplayComponent(
       {Key? key,
@@ -45,7 +47,9 @@ class EntityDisplayComponent<T extends Entity> extends StatefulWidget {
       this.displayNumbers = false,
       this.displayImages = true,
       this.displayCircularImages = false,
-      this.showNoResultsMessage = true})
+      this.showNoResultsMessage = true,
+      this.showGridTileGradient = true,
+      this.gridTileSize = 250})
       : assert(items != null || request != null || requestStream != null),
         super(key: key);
 
@@ -232,17 +236,19 @@ class EntityDisplayComponentState<T extends Entity>
         children: [
           if (widget.displayImages)
             ImageComponent(entity: item, fit: BoxFit.cover),
-          Container(
-            decoration: BoxDecoration(
+          if (widget.showGridTileGradient)
+            Container(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-              begin: FractionalOffset.topCenter,
-              end: FractionalOffset.bottomCenter,
-              colors: [
-                Colors.grey.withOpacity(0),
-                Colors.black.withOpacity(0.75)
-              ],
-            )),
-          )
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter,
+                  colors: [
+                    Colors.grey.withOpacity(0),
+                    Colors.black.withOpacity(0.75),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -284,7 +290,7 @@ class EntityDisplayComponentState<T extends Entity>
           if (widget.displayType == DisplayType.grid)
             SliverGrid(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 250),
+                    maxCrossAxisExtent: widget.gridTileSize),
                 delegate: SliverChildBuilderDelegate(_gridItemBuilder,
                     childCount: items.length)),
           if (_request != null && hasMorePages)

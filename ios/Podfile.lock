@@ -7,6 +7,8 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - gallery_saver (0.0.1):
+    - Flutter
   - in_app_review (0.2.0):
     - Flutter
   - integration_test (0.0.1):
@@ -33,6 +35,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_acrcloud (from `.symlinks/plugins/flutter_acrcloud/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
+  - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -55,6 +58,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_acrcloud/ios"
   flutter_web_auth:
     :path: ".symlinks/plugins/flutter_web_auth/ios"
+  gallery_saver:
+    :path: ".symlinks/plugins/gallery_saver/ios"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
   integration_test:
@@ -81,6 +86,7 @@ SPEC CHECKSUMS:
   flutter_acrcloud: 85096e0649217498fccd1cbe4a30d6bda7734b74
   flutter_web_auth: ede89bf8107b021cf16e769756d267d84d24e88b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   in_app_review: 4a97249f7a2f539a0f294c2d9196b7fe35e49541
   integration_test: 6eb66a19f7104200dcfdd62bc0077e1b09686e4f
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e

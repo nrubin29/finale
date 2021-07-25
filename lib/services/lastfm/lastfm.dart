@@ -105,8 +105,9 @@ class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
 
 class GetTopAlbumsRequest extends PagedRequest<LTopAlbumsResponseAlbum> {
   final String username;
+  final Period? period;
 
-  const GetTopAlbumsRequest(this.username);
+  const GetTopAlbumsRequest(this.username, [this.period]);
 
   @override
   doRequest(int limit, int page) async {
@@ -114,7 +115,7 @@ class GetTopAlbumsRequest extends PagedRequest<LTopAlbumsResponseAlbum> {
       'user': username,
       'limit': limit,
       'page': page,
-      'period': Preferences().period.value
+      'period': (period ?? Preferences().period).value,
     });
     return LTopAlbumsResponseTopAlbums.fromJson(rawResponse['topalbums'])
         .albums;

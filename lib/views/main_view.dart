@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finale/util/quick_actions_manager.dart';
+import 'package:finale/views/collage_view.dart';
 import 'package:finale/views/profile_view.dart';
 import 'package:finale/views/scrobble_view.dart';
 import 'package:finale/views/search_view.dart';
@@ -44,6 +45,8 @@ class _MainViewState extends State<MainView> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Scrobble'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.grid_view), label: 'Collage'),
         ],
       ),
       body: IndexedStack(
@@ -52,6 +55,7 @@ class _MainViewState extends State<MainView> {
           ProfileView(username: widget.username, isTab: true),
           SearchView(),
           ScrobbleView(),
+          CollageView(),
         ],
       ),
     );

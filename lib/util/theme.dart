@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class FinaleTheme {
   static final light = ThemeData.from(colorScheme: _lightColorScheme).copyWith(
-      timePickerTheme:
-          TimePickerThemeData(backgroundColor: _lightColorScheme.background));
+    timePickerTheme:
+        TimePickerThemeData(backgroundColor: _lightColorScheme.background),
+    cardColor: _lightColorScheme.background,
+  );
 
   static final dark = ThemeData.from(colorScheme: _darkColorScheme).copyWith(
     timePickerTheme:
@@ -12,6 +14,7 @@ class FinaleTheme {
       thumbColor: MaterialStateColor.resolveWith((_) => Colors.red),
       trackColor: MaterialStateColor.resolveWith((_) => Colors.red.shade200),
     ),
+    cardColor: _darkColorScheme.background,
   );
 
   static const _lightColorScheme = ColorScheme.light(
