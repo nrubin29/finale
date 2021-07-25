@@ -45,7 +45,7 @@ class SpotifyAlbumView extends StatelessWidget {
                 if (album.canScrobble)
                   Builder(
                     builder: (context) => IconButton(
-                      icon: Icon(Icons.add),
+                      icon: Icon(scrobbleIcon),
                       onPressed: () async {
                         await showBarModalBottomSheet(
                             context: context,

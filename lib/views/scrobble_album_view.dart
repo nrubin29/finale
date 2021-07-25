@@ -85,7 +85,8 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
           actions: [
             Builder(
                 builder: (context) => IconButton(
-                    icon: Icon(Icons.add), onPressed: () => _scrobble(context)))
+                    icon: Icon(scrobbleIcon),
+                    onPressed: () => _scrobble(context)))
           ],
         ),
         body: Form(

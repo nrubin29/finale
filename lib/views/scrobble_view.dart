@@ -105,7 +105,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
           actions: [
             Builder(
                 builder: (context) => IconButton(
-                    icon: Icon(Icons.add),
+                    icon: Icon(scrobbleIcon),
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
                         _scrobble(context);

@@ -4,6 +4,7 @@ import 'package:finale/components/image_component.dart';
 import 'package:finale/components/loading_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -190,7 +191,7 @@ class EntityDisplayComponentState<T extends Entity>
                 style: TextStyle(color: Colors.grey, fontSize: 12)),
           if (widget.secondaryAction != null)
             IconButton(
-                icon: Icon(Icons.add),
+                icon: Icon(scrobbleIcon),
                 onPressed: () {
                   widget.secondaryAction!(item);
                 })
@@ -207,7 +208,7 @@ class EntityDisplayComponentState<T extends Entity>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 IconButton(
-                    icon: Icon(Icons.add),
+                    icon: Icon(scrobbleIcon),
                     color: Colors.white,
                     onPressed: () {
                       widget.secondaryAction!(item);

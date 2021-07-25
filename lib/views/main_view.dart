@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finale/util/quick_actions_manager.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/collage_view.dart';
 import 'package:finale/views/profile_view.dart';
 import 'package:finale/views/scrobble_view.dart';
@@ -44,7 +45,7 @@ class _MainViewState extends State<MainView> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Scrobble'),
+          BottomNavigationBarItem(icon: Icon(scrobbleIcon), label: 'Scrobble'),
           BottomNavigationBarItem(
               icon: Icon(Icons.grid_view), label: 'Collage'),
         ],

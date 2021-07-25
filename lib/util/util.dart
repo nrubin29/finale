@@ -22,6 +22,7 @@ String get authCallbackUrl {
 }
 
 const spotifyGreen = Color.fromRGBO(30, 215, 96, 1);
+const scrobbleIcon = Icons.playlist_add;
 
 SvgPicture getLastfmIcon(Color color) => SvgPicture.asset(
       'assets/images/lastfm.svg',

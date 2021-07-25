@@ -6,6 +6,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/main_view.dart';
@@ -82,7 +83,7 @@ Future<void> main() async {
 
   testWidgets('Scrobble screen', (tester) async {
     await pumpWidget(tester, MainView(username: testName));
-    await tester.tap(find.byIcon(Icons.add).at(1));
+    await tester.tap(find.byIcon(scrobbleIcon).at(1));
 
     final formFields =
         find.byWidgetPredicate((widget) => widget is TextFormField);

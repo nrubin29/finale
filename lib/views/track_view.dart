@@ -9,6 +9,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/album_view.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/error_view.dart';
@@ -65,7 +66,7 @@ class _TrackViewState extends State<TrackView> {
                 ),
                 Builder(
                     builder: (context) => IconButton(
-                          icon: Icon(Icons.add),
+                          icon: Icon(scrobbleIcon),
                           onPressed: () async {
                             final result = await showBarModalBottomSheet<bool>(
                                 context: context,

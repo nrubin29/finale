@@ -9,6 +9,7 @@ import 'package:finale/components/wiki_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/error_view.dart';
 import 'package:finale/views/loading_view.dart';
@@ -54,7 +55,7 @@ class AlbumView extends StatelessWidget {
                 if (album.canScrobble)
                   Builder(
                     builder: (context) => IconButton(
-                      icon: Icon(Icons.add),
+                      icon: Icon(scrobbleIcon),
                       onPressed: () async {
                         await showBarModalBottomSheet(
                             context: context,
