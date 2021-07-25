@@ -87,8 +87,9 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
 
 class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
   final String username;
+  final Period? period;
 
-  const GetTopArtistsRequest(this.username);
+  const GetTopArtistsRequest(this.username, [this.period]);
 
   @override
   doRequest(int limit, int page) async {
@@ -96,7 +97,7 @@ class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
       'user': username,
       'limit': limit,
       'page': page,
-      'period': Preferences().period.value
+      'period': (period ?? Preferences().period).value,
     });
     return LTopArtistsResponseTopArtists.fromJson(rawResponse['topartists'])
         .artists;

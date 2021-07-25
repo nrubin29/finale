@@ -22,6 +22,7 @@ class _CollageViewState extends State<CollageView> {
   var _isSettingsExpanded = true;
   final _usernameTextController =
       TextEditingController(text: Preferences().name ?? 'Enter username');
+  var _type = EntityType.album;
   var _period = Period.overall;
   var _gridSize = 5;
   var _includeText = true;
@@ -38,9 +39,17 @@ class _CollageViewState extends State<CollageView> {
       _image = null;
     });
 
-    final items =
-        await GetTopAlbumsRequest(_usernameTextController.text, _period)
-            .doRequest(_gridSize * _gridSize, 1);
+    PagedRequest<Entity> request;
+
+    if (_type == EntityType.album) {
+      request = GetTopAlbumsRequest(_usernameTextController.text, _period);
+    } else if (_type == EntityType.artist) {
+      request = GetTopArtistsRequest(_usernameTextController.text, _period);
+    } else {
+      throw Exception('$_type is not supported for collages.');
+    }
+
+    final items = await request.doRequest(_gridSize * _gridSize, 1);
 
     final gridTileSize = MediaQuery.of(context).size.width / _gridSize;
     final image = await _screenshotController.captureFromWidget(
@@ -77,6 +86,7 @@ class _CollageViewState extends State<CollageView> {
           ],
         ),
       ),
+      delay: const Duration(seconds: 5),
       pixelRatio: 3,
       context: context,
     );
@@ -111,13 +121,24 @@ class _CollageViewState extends State<CollageView> {
                     ListTile(
                       title: const Text('Type'),
                       trailing: DropdownButton<EntityType>(
-                        value: EntityType.album,
+                        value: _type,
                         items: [
                           DropdownMenuItem(
                             value: EntityType.album,
                             child: Text('Top Albums'),
                           ),
+                          DropdownMenuItem(
+                            value: EntityType.artist,
+                            child: Text('Top Artists'),
+                          ),
                         ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _type = value;
+                            });
+                          }
+                        },
                       ),
                     ),
                     ListTile(
@@ -208,9 +229,10 @@ class _CollageViewState extends State<CollageView> {
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
-                          'If any images failed to load, try generating the '
-                          "collage again. If images still don't load, Last.fm "
-                          "most likely doesn't have an image for that album."),
+                          'If any images failed to load, wait a few seconds '
+                          'and try generating the collage again. If an image '
+                          "still doesn't load, Last.fm most likely doesn't "
+                          'have an image for that item.'),
                     ),
                     if (isMobile)
                       TextButton(
