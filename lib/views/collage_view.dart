@@ -8,6 +8,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
@@ -77,6 +78,7 @@ class _CollageViewState extends State<CollageView> {
         ),
       ),
       pixelRatio: 3,
+      context: context,
     );
 
     setState(() {
@@ -197,16 +199,24 @@ class _CollageViewState extends State<CollageView> {
                           "collage again. If images still don't load, Last.fm "
                           "most likely doesn't have an image for that album."),
                     ),
-                    TextButton(
-                      onPressed: () async {
-                        final tempDir = (await getTemporaryDirectory()).path;
-                        final tempFile = File('$tempDir/collage.png');
-                        await tempFile.writeAsBytes(_image!);
-                        await GallerySaver.saveImage(tempFile.path);
-                        await tempFile.delete();
-                      },
-                      child: const Text('Save to camera roll'),
-                    ),
+                    if (isMobile)
+                      TextButton(
+                        onPressed: () async {
+                          final tempDir = (await getTemporaryDirectory()).path;
+                          final tempFile = File('$tempDir/collage.png');
+                          await tempFile.writeAsBytes(_image!);
+                          await GallerySaver.saveImage(tempFile.path);
+                          await tempFile.delete();
+                        },
+                        child: const Text('Save to camera roll'),
+                      )
+                    else
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                            'Saving collages is currently not supported on '
+                            'web.'),
+                      ),
                   ],
                 ]),
         ),
