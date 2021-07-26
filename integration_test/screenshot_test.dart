@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
@@ -12,9 +15,9 @@ import 'package:finale/views/artist_view.dart';
 import 'package:finale/views/main_view.dart';
 import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/track_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show OffsetLayer;
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,48 +100,98 @@ Future<void> main() async {
   });
 
   testWidgets('Weekly track screen', (tester) async {
+    // Cache the images that will be displayed on this screen.
+    // TODO: This may or may not be helpful. The real issue is that the weekly
+    //  chart entities use [ImageId.scrape].
+    final user =
+        LUser(testName, null, '', null, 0, LUserRegistered(DateTime.now()));
+    final chart = LUserWeeklyChart('1618747200', '1619352000');
+
+    final data = await Future.wait([
+      Lastfm.getWeeklyTrackChart(user, chart),
+      Lastfm.getWeeklyAlbumChart(user, chart),
+      Lastfm.getWeeklyArtistChart(user, chart),
+    ]);
+
+    final imageIds = [
+      ...await Future.wait(
+          (data[0] as LUserWeeklyTrackChart).tracks.map((e) => e.imageId)),
+      ...await Future.wait(
+          (data[1] as LUserWeeklyAlbumChart).albums.map((e) => e.imageId)),
+      ...await Future.wait(
+          (data[2] as LUserWeeklyArtistChart).artists.map((e) => e.imageId))
+    ];
+
+    await Future.wait(imageIds.map((imageId) => DefaultCacheManager()
+        .downloadFile(imageId!.getUrl(ImageQuality.high))));
+
     await pumpWidget(tester, MainView(username: testName));
     await tester.tap(find.byIcon(Icons.access_time));
     await tester.pumpAndSettle();
+
+    var foundWeek = false;
+
+    do {
+      foundWeek = find.text('19 Apr - 25 Apr 2021').evaluate().isNotEmpty;
+
+      if (!foundWeek) {
+        await tester.tap(find.byIcon(Icons.chevron_left));
+        await tester.pumpAndSettle();
+      }
+    } while (!foundWeek);
+
+    await tester.settleLong();
     await saveScreenshot('3_weekly_track');
   });
 
   testWidgets('Track screen', (tester) async {
-    await pumpWidget(
-      tester,
-      TrackView(
-          track: BasicConcreteTrack(
-              'A Lack of Color', 'Death Cab for Cutie', 'Transatlanticism')),
-      asPage: true,
-    );
+    final track = await Lastfm.getTrack(BasicConcreteTrack(
+        'A Lack of Color', 'Death Cab for Cutie', 'Transatlanticism'));
+
+    // Cache the album image as well.
+    final album = await Lastfm.getAlbum(track.album!);
+    await DefaultCacheManager()
+        .downloadFile(album.imageId!.getUrl(ImageQuality.high));
+
+    // Cache the artist image as well.
+    final artist = await Lastfm.getArtist(track.artist!);
+    await artist.tryCacheImageId();
+    track.artist!.cachedImageId = artist.cachedImageId;
+    await DefaultCacheManager()
+        .downloadFile(artist.cachedImageId!.getUrl(ImageQuality.high));
+
+    await pumpWidget(tester, TrackView(track: track), asPage: true);
     await saveScreenshot('4_track');
   });
 
   testWidgets('Artist screen', (tester) async {
-    await pumpWidget(
-      tester,
-      ArtistView(artist: ConcreteBasicArtist('Mae')),
-      asPage: true,
-    );
+    final artist = await Lastfm.getArtist(ConcreteBasicArtist('Mae'));
+    await artist.tryCacheImageId();
+
+    await pumpWidget(tester, ArtistView(artist: artist), asPage: true);
     await saveScreenshot('5_artist');
   });
 
   testWidgets('Album screen', (tester) async {
-    await pumpWidget(
-      tester,
-      AlbumView(album: FullConcreteAlbum('Deas Vail', 'Deas Vail')),
-      asPage: true,
-    );
+    final album =
+        await Lastfm.getAlbum(FullConcreteAlbum('Deas Vail', 'Deas Vail'));
+
+    // Cache the artist image as well.
+    final artist = await Lastfm.getArtist(album.artist);
+    await artist.tryCacheImageId();
+    album.artist.cachedImageId = artist.cachedImageId;
+
+    await pumpWidget(tester, AlbumView(album: album), asPage: true);
     await saveScreenshot('6_album');
   });
 
   testWidgets('Album scrobble screen', (tester) async {
-    await pumpWidget(
-      tester,
-      ScrobbleAlbumView(album: FullConcreteAlbum('Deas Vail', 'Deas Vail')),
-      widgetBehindModal:
-          AlbumView(album: FullConcreteAlbum('Deas Vail', 'Deas Vail')),
-    );
+    final album =
+        await Lastfm.getAlbum(FullConcreteAlbum('Deas Vail', 'Deas Vail'));
+    await album.tryCacheImageId();
+
+    await pumpWidget(tester, ScrobbleAlbumView(album: album),
+        widgetBehindModal: AlbumView(album: album));
     await saveScreenshot('7_album_scrobble');
   });
 }
@@ -158,7 +211,7 @@ class _AsPageState extends State<_AsPage> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 500), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       if (widget.widgetBehindModal != null) {
         await showBarModalBottomSheet(
             context: context,
@@ -177,10 +230,10 @@ class _AsPageState extends State<_AsPage> {
 
 extension on WidgetTester {
   Future<void> settleLong() async {
-    await runAsync(() => Future.delayed(const Duration(seconds: 30)));
+    await runAsync(() => Future.delayed(const Duration(seconds: 5)));
     try {
       await pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.sendSemanticsUpdate, const Duration(seconds: 30));
+          EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
     } on FlutterError {
       // [pumpAndSettle] might time out, but that's fine.
     }

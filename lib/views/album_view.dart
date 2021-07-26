@@ -27,7 +27,9 @@ class AlbumView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LAlbum>(
-      future: Lastfm.getAlbum(album),
+      future: album is LAlbum
+          ? Future.value(album as LAlbum)
+          : Lastfm.getAlbum(album),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorView(

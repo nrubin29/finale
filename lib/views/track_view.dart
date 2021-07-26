@@ -34,7 +34,9 @@ class _TrackViewState extends State<TrackView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LTrack>(
-      future: Lastfm.getTrack(widget.track),
+      future: widget.track is LTrack
+          ? Future.value(widget.track as LTrack)
+          : Lastfm.getTrack(widget.track),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           final isTrackNotFoundError = snapshot.error is LException &&

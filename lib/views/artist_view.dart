@@ -39,7 +39,9 @@ class _ArtistViewState extends State<ArtistView>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LArtist>(
-      future: Lastfm.getArtist(widget.artist),
+      future: widget.artist is LArtist
+          ? Future.value(widget.artist as LArtist)
+          : Lastfm.getArtist(widget.artist),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorView(
