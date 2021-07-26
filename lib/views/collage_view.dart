@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CollageView extends StatefulWidget {
   @override
@@ -95,6 +96,13 @@ class _CollageViewState extends State<CollageView> {
       _image = image;
       _isDoingRequest = false;
     });
+  }
+
+  Future<File> get _imageFile async {
+    final tempDir = (await getTemporaryDirectory()).path;
+    final tempFile = File('$tempDir/collage.png');
+    await tempFile.writeAsBytes(_image!);
+    return tempFile;
   }
 
   Widget get _form => ExpansionPanelList(
@@ -207,7 +215,7 @@ class _CollageViewState extends State<CollageView> {
                         },
                       ),
                     ),
-                    TextButton(
+                    OutlinedButton(
                       onPressed: _doRequest,
                       child: const Text('Generate'),
                     ),
@@ -235,22 +243,33 @@ class _CollageViewState extends State<CollageView> {
                           'have an image for that item.'),
                     ),
                     if (isMobile)
-                      TextButton(
-                        onPressed: () async {
-                          final tempDir = (await getTemporaryDirectory()).path;
-                          final tempFile = File('$tempDir/collage.png');
-                          await tempFile.writeAsBytes(_image!);
-                          await GallerySaver.saveImage(tempFile.path);
-                          await tempFile.delete();
-                        },
-                        child: const Text('Save to camera roll'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () async {
+                              final tempFile = await _imageFile;
+                              await Share.shareFiles([tempFile.path]);
+                            },
+                            child: const Text('Share'),
+                          ),
+                          SizedBox(width: 10),
+                          OutlinedButton(
+                            onPressed: () async {
+                              final tempFile = await _imageFile;
+                              await GallerySaver.saveImage(tempFile.path);
+                              await tempFile.delete();
+                            },
+                            child: const Text('Save to camera roll'),
+                          ),
+                        ],
                       )
                     else
                       const Padding(
                         padding: EdgeInsets.all(8),
-                        child: Text(
-                            'Saving collages is currently not supported on '
-                            'web.'),
+                        child:
+                            Text('Saving and sharing collages is currently not '
+                                'supported on web.'),
                       ),
                   ],
                 ]),
