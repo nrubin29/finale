@@ -39,12 +39,14 @@ Future<Map<String, dynamic>> _doRequest(
   final response =
       post ? await httpClient.post(uri) : await httpClient.get(uri);
 
-  if (response.statusCode != 200) {
+  dynamic jsonObject;
+
+  try {
+    jsonObject = json.decode(utf8.decode(response.bodyBytes));
+  } on FormatException {
     throw Exception(
         'Could not do request $method($data). Got response ${response.body}');
   }
-
-  final jsonObject = json.decode(utf8.decode(response.bodyBytes));
 
   if (!(jsonObject is Map<String, dynamic>)) {
     throw Exception('Invalid response type for $method($data): $jsonObject');
