@@ -68,22 +68,26 @@ class _CollageViewState extends State<CollageView> {
               fontSize: _includeText ? gridTileSize / 15 : 0,
               gridTileTextPadding: gridTileSize / 15,
             ),
-            if (_includeBranding) ...[
-              const SizedBox(height: 5),
-              Row(children: [
-                const SizedBox(width: 5),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.asset('assets/images/icon.png', width: 30),
-                ),
-                const SizedBox(width: 5),
-                const Text(
-                  'finale.app',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ]),
-              const SizedBox(height: 5),
-            ],
+            if (_includeBranding)
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: Row(children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.asset('assets/images/icon.png', width: 30),
+                  ),
+                  const SizedBox(width: 5),
+                  const Text(
+                    'Created with Finale for Last.fm',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  const Spacer(),
+                  const Text(
+                    'https://finale.app',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ]),
+              ),
           ],
         ),
       ),
