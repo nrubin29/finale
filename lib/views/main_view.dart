@@ -43,7 +43,8 @@ class _MainViewState extends State<MainView> {
           });
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline), label: 'Profile'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(icon: Icon(scrobbleIcon), label: 'Scrobble'),
           BottomNavigationBarItem(
