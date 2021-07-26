@@ -30,6 +30,11 @@ SvgPicture getLastfmIcon(Color color) => SvgPicture.asset(
       width: 24,
     );
 
+Widget appIcon({required double size}) => ClipRRect(
+      borderRadius: BorderRadius.circular(size * .22),
+      child: Image.asset('assets/images/icon.png', width: size),
+    );
+
 String formatScrobbles(int playCount) => Intl.plural(playCount,
     one: '$playCount scrobble',
     other: '${numberFormat.format(playCount)} scrobbles');

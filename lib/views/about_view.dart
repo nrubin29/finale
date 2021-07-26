@@ -18,10 +18,7 @@ class AboutView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset('assets/images/icon.png',
-                                width: 84)),
+                        appIcon(size: 84),
                         SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

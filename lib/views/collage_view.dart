@@ -72,10 +72,7 @@ class _CollageViewState extends State<CollageView> {
               Padding(
                 padding: const EdgeInsets.all(5),
                 child: Row(children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.asset('assets/images/icon.png', width: 30),
-                  ),
+                  appIcon(size: 30),
                   const SizedBox(width: 5),
                   const Text(
                     'Created with Finale for Last.fm',
