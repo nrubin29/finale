@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/image_id.dart';
 import 'package:finale/util/http_throttle.dart';
+import 'package:finale/util/image_id_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -45,6 +46,31 @@ abstract class Entity {
   @JsonKey(ignore: true)
   @nonVirtual
   ImageId? cachedImageId;
+
+  /// Attempts to populate [cachedImageId].
+  Future<void> tryCacheImageId() async {
+    if (cachedImageId != null || url == null || imageId is! Future<ImageId?>) {
+      return;
+    }
+
+    try {
+      final cachedResult = await ImageIdCache().get(url!);
+
+      if (cachedResult != null) {
+        cachedImageId = cachedResult;
+        return;
+      }
+
+      final result = await imageId;
+
+      if (result != null) {
+        ImageIdCache().insert(url!, result);
+        cachedImageId = result;
+      }
+    } on Exception {
+      // Do nothing.
+    }
+  }
 }
 
 abstract class Track extends Entity {

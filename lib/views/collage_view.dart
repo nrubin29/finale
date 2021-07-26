@@ -30,11 +30,15 @@ class _CollageViewState extends State<CollageView> {
   var _includeBranding = true;
 
   var _isDoingRequest = false;
+  var _loadingProgress = 0;
   Uint8List? _image;
   final _screenshotController = ScreenshotController();
 
+  int get _numGridItems => _gridSize * _gridSize;
+
   Future<void> _doRequest() async {
     setState(() {
+      _loadingProgress = 0;
       _isDoingRequest = true;
       _isSettingsExpanded = false;
       _image = null;
@@ -50,7 +54,13 @@ class _CollageViewState extends State<CollageView> {
       throw Exception('$_type is not supported for collages.');
     }
 
-    final items = await request.doRequest(_gridSize * _gridSize, 1);
+    final items = await request.doRequest(_numGridItems, 1);
+    await Future.wait(items.map((item) async {
+      await item.tryCacheImageId();
+      setState(() {
+        _loadingProgress++;
+      });
+    }));
 
     final gridTileSize = MediaQuery.of(context).size.width / _gridSize;
     final image = await _screenshotController.captureFromWidget(
@@ -94,7 +104,6 @@ class _CollageViewState extends State<CollageView> {
           ],
         ),
       ),
-      delay: const Duration(seconds: 5),
       pixelRatio: 3,
       context: context,
     );
@@ -230,25 +239,36 @@ class _CollageViewState extends State<CollageView> {
                 )),
           ]);
 
+  Widget get _loadingWidget => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LinearProgressIndicator(
+              value: _loadingProgress / _numGridItems,
+              backgroundColor: Colors.grey.shade300,
+            ),
+            SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text('$_loadingProgress / $_numGridItems images loaded'),
+              ],
+            ),
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar('Collage Generator'),
         body: Center(
           child: _isDoingRequest
-              ? const CircularProgressIndicator()
+              ? _loadingWidget
               : ListView(children: [
                   _form,
                   if (_image != null) ...[
                     Image.memory(_image!),
-                    SizedBox(height: 10),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                          'If any images failed to load, wait a few seconds '
-                          'and try generating the collage again. If an image '
-                          "still doesn't load, Last.fm most likely doesn't "
-                          'have an image for that item.'),
-                    ),
                     if (isMobile)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
