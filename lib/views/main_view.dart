@@ -36,6 +36,7 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _index,
         onTap: (index) {
           setState(() {
@@ -44,11 +45,17 @@ class _MainViewState extends State<MainView> {
         },
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(scrobbleIcon), label: 'Scrobble'),
+            label: 'Profile',
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+          ),
+          BottomNavigationBarItem(label: 'Search', icon: Icon(Icons.search)),
+          BottomNavigationBarItem(label: 'Scrobble', icon: Icon(scrobbleIcon)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.grid_view), label: 'Collage'),
+            label: 'Collage',
+            icon: Icon(Icons.grid_view),
+            activeIcon: Icon(Icons.grid_view_sharp),
+          ),
         ],
       ),
       body: IndexedStack(
