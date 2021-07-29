@@ -17,7 +17,6 @@ import 'package:finale/views/scrobble_album_view.dart';
 import 'package:finale/views/track_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show OffsetLayer;
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,10 +36,13 @@ Future<void> main() async {
     await ImageIdCache().setup();
   });
 
-  /// Pumps [widget] inside of a [FinaleTheme]d [MaterialApp] and [Screenshot].
+  /// Pumps [widget] inside of a [FinaleTheme]d [MaterialApp].
   ///
   /// If [asPage] is true, [widget] will be pushed as a route so that the back
   /// button will be displayed in the top left corner.
+  ///
+  /// If [widgetBehindModal] is not null, [widget] will be displayed as a bar
+  /// bottom modal on top of [widgetBehindModal].
   Future<void> pumpWidget(WidgetTester tester, Widget widget,
       {bool asPage = false, Widget? widgetBehindModal}) async {
     await tester.pumpWidget(MaterialApp(
@@ -54,7 +56,7 @@ Future<void> main() async {
     ));
 
     if (asPage || widgetBehindModal != null) {
-      await tester.settleLong();
+      await tester.pumpMany();
     }
 
     await tester.pumpAndSettle();
@@ -113,17 +115,14 @@ Future<void> main() async {
       Lastfm.getWeeklyArtistChart(user, chart),
     ]);
 
-    final imageIds = [
-      ...await Future.wait(
-          (data[0] as LUserWeeklyTrackChart).tracks.map((e) => e.imageId)),
-      ...await Future.wait(
-          (data[1] as LUserWeeklyAlbumChart).albums.map((e) => e.imageId)),
-      ...await Future.wait(
-          (data[2] as LUserWeeklyArtistChart).artists.map((e) => e.imageId))
+    final entities = [
+      ...(data[0] as LUserWeeklyTrackChart).tracks,
+      ...(data[1] as LUserWeeklyAlbumChart).albums,
+      ...(data[2] as LUserWeeklyArtistChart).artists,
     ];
 
-    await Future.wait(imageIds.map((imageId) => DefaultCacheManager()
-        .downloadFile(imageId!.getUrl(ImageQuality.high))));
+    await Future.wait(
+        entities.map((entity) => entity.tryCacheImageId(ImageQuality.low)));
 
     await pumpWidget(tester, MainView(username: testName));
     await tester.tap(find.byIcon(Icons.access_time));
@@ -140,7 +139,7 @@ Future<void> main() async {
       }
     } while (!foundWeek);
 
-    await tester.settleLong();
+    await tester.pumpMany();
     await saveScreenshot('3_weekly_track');
   });
 
@@ -150,15 +149,12 @@ Future<void> main() async {
 
     // Cache the album image as well.
     final album = await Lastfm.getAlbum(track.album!);
-    await DefaultCacheManager()
-        .downloadFile(album.imageId!.getUrl(ImageQuality.high));
+    await album.tryCacheImageId(ImageQuality.low);
 
     // Cache the artist image as well.
     final artist = await Lastfm.getArtist(track.artist!);
-    await artist.tryCacheImageId();
+    await artist.tryCacheImageId(ImageQuality.low);
     track.artist!.cachedImageId = artist.cachedImageId;
-    await DefaultCacheManager()
-        .downloadFile(artist.cachedImageId!.getUrl(ImageQuality.high));
 
     await pumpWidget(tester, TrackView(track: track), asPage: true);
     await saveScreenshot('4_track');
@@ -229,13 +225,11 @@ class _AsPageState extends State<_AsPage> {
 }
 
 extension on WidgetTester {
-  Future<void> settleLong() async {
-    await runAsync(() => Future.delayed(const Duration(seconds: 5)));
-    try {
-      await pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
-    } on FlutterError {
-      // [pumpAndSettle] might time out, but that's fine.
-    }
+  /// Pumps for 10 seconds, 100 milliseconds at a time.
+  Future<void> pumpMany() async {
+    final endTime = binding.clock.fromNowBy(const Duration(seconds: 10));
+    do {
+      await binding.pump(const Duration(milliseconds: 100));
+    } while (binding.clock.now().isBefore(endTime));
   }
 }
