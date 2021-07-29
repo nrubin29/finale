@@ -13,6 +13,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:universal_html/html.dart' show AnchorElement;
 
 class CollageView extends StatefulWidget {
   @override
@@ -259,6 +260,21 @@ class _CollageViewState extends State<CollageView> {
         ),
       );
 
+  Future<void> _saveImage() async {
+    if (isMobile) {
+      final tempFile = await _imageFile;
+      await GallerySaver.saveImage(tempFile.path);
+      await tempFile.delete();
+    } else {
+      AnchorElement()
+        ..href = Uri.dataFromBytes(_image!).toString()
+        ..download = 'collage.png'
+        ..style.display = 'none'
+        ..click()
+        ..remove();
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar('Collage Generator'),
@@ -269,10 +285,10 @@ class _CollageViewState extends State<CollageView> {
                   _form,
                   if (_image != null) ...[
                     Image.memory(_image!),
-                    if (isMobile)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (isMobile) ...[
                           OutlinedButton(
                             onPressed: () async {
                               final tempFile = await _imageFile;
@@ -281,23 +297,14 @@ class _CollageViewState extends State<CollageView> {
                             child: const Text('Share'),
                           ),
                           SizedBox(width: 10),
-                          OutlinedButton(
-                            onPressed: () async {
-                              final tempFile = await _imageFile;
-                              await GallerySaver.saveImage(tempFile.path);
-                              await tempFile.delete();
-                            },
-                            child: const Text('Save to camera roll'),
-                          ),
                         ],
-                      )
-                    else
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        child:
-                            Text('Saving and sharing collages is currently not '
-                                'supported on web.'),
-                      ),
+                        OutlinedButton(
+                          onPressed: _saveImage,
+                          child: const Text(
+                              isMobile ? 'Save to camera roll' : 'Download'),
+                        ),
+                      ],
+                    ),
                   ],
                 ]),
         ),

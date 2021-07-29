@@ -38,6 +38,7 @@ dependencies:
       url: https://github.com/nrubin29/social_media_buttons
       ref: null-safety
   sqflite: ^2.0.0+3
+  universal_html: ^2.0.8
   url_launcher: ^6.0.3
   visibility_detector: ^0.2.0
   wakelock: ^0.5.2

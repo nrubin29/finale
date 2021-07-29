@@ -867,7 +867,7 @@ packages:
     source: hosted
     version: "1.3.0"
   universal_html:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: universal_html
       url: "https://pub.dartlang.org"
