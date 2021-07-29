@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:finale/components/app_bar_component.dart';
@@ -63,21 +64,35 @@ class _CollageViewState extends State<CollageView> {
       });
     }));
 
-    final gridTileSize = MediaQuery.of(context).size.width / _gridSize;
+    // On tall screens, the size of the grid tile will be constrained by the
+    // width of the screen. On wide screens, the size of the grid will be
+    // constrained by the height of the screen. We want to calculate both sizes
+    // and take the smaller of the two to ensure that we don't overflow
+    // regardless of the screen dimensions.
+    final size = MediaQuery.of(context).size;
+    final widthGridTileSize = size.width / _gridSize;
+    final heightGridTileSize =
+        (size.height - (_includeBranding ? 26 : 0)) / _gridSize;
+    final gridTileSize = min(widthGridTileSize, heightGridTileSize);
+
     final image = await _screenshotController.captureFromWidget(
       Container(
         color: Colors.white,
+        width: gridTileSize * _gridSize,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            EntityDisplayComponent(
-              items: items,
-              displayType: DisplayType.grid,
-              showGridTileGradient: _includeText,
-              gridTileSize: gridTileSize,
-              fontSize: _includeText ? gridTileSize / 15 : 0,
-              gridTileTextPadding: gridTileSize / 15,
+            Flexible(
+              child: EntityDisplayComponent(
+                items: items,
+                displayType: DisplayType.grid,
+                scrollable: false,
+                showGridTileGradient: _includeText,
+                gridTileSize: gridTileSize,
+                fontSize: _includeText ? gridTileSize / 15 : 0,
+                gridTileTextPadding: gridTileSize / 15,
+              ),
             ),
             if (_includeBranding)
               Padding(
