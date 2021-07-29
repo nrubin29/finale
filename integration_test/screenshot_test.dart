@@ -143,6 +143,19 @@ Future<void> main() async {
     await saveScreenshot('3_weekly_track');
   });
 
+  testWidgets('Collage screen', (tester) async {
+    await pumpWidget(tester, MainView(username: testName));
+    await tester.tap(find.byIcon(Icons.grid_view));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Generate'));
+    await tester.pumpMany();
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+
+    await saveScreenshot('4_collage');
+  });
+
   testWidgets('Track screen', (tester) async {
     final track = await Lastfm.getTrack(BasicConcreteTrack(
         'A Lack of Color', 'Death Cab for Cutie', 'Transatlanticism'));
@@ -157,7 +170,7 @@ Future<void> main() async {
     track.artist!.cachedImageId = artist.cachedImageId;
 
     await pumpWidget(tester, TrackView(track: track), asPage: true);
-    await saveScreenshot('4_track');
+    await saveScreenshot('5_track');
   });
 
   testWidgets('Artist screen', (tester) async {
@@ -165,7 +178,7 @@ Future<void> main() async {
     await artist.tryCacheImageId();
 
     await pumpWidget(tester, ArtistView(artist: artist), asPage: true);
-    await saveScreenshot('5_artist');
+    await saveScreenshot('6_artist');
   });
 
   testWidgets('Album screen', (tester) async {
@@ -178,7 +191,7 @@ Future<void> main() async {
     album.artist.cachedImageId = artist.cachedImageId;
 
     await pumpWidget(tester, AlbumView(album: album), asPage: true);
-    await saveScreenshot('6_album');
+    await saveScreenshot('7_album');
   });
 
   testWidgets('Album scrobble screen', (tester) async {
@@ -188,7 +201,7 @@ Future<void> main() async {
 
     await pumpWidget(tester, ScrobbleAlbumView(album: album),
         widgetBehindModal: AlbumView(album: album));
-    await saveScreenshot('7_album_scrobble');
+    await saveScreenshot('8_album_scrobble');
   });
 }
 
