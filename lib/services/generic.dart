@@ -4,6 +4,8 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/util/http_throttle.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart'
+    show DefaultCacheManager;
 import 'package:json_annotation/json_annotation.dart';
 
 final httpClient = ThrottleClient(15);
@@ -47,28 +49,42 @@ abstract class Entity {
   @nonVirtual
   ImageId? cachedImageId;
 
-  /// Attempts to populate [cachedImageId].
-  Future<void> tryCacheImageId() async {
-    if (cachedImageId != null || url == null || imageId is! Future<ImageId?>) {
+  /// Attempts to populate [cachedImageId] and download the image.
+  Future<void> tryCacheImageId(
+      [ImageQuality quality = ImageQuality.high]) async {
+    if (cachedImageId != null || url == null) {
       return;
     }
 
-    try {
-      final cachedResult = await ImageIdCache().get(url!);
+    ImageId? result;
+    var insertIntoCache = false;
 
-      if (cachedResult != null) {
-        cachedImageId = cachedResult;
-        return;
+    if (imageId is ImageId?) {
+      result = imageId as ImageId?;
+    } else {
+      // We have to fetch the ImageId.
+      try {
+        // We'll try the cache first.
+        result = await ImageIdCache().get(url!);
+
+        // If it's not in the cache, we'll await the future and insert the
+        // result into the cache if it's not null.
+        if (result == null) {
+          result = await imageId;
+          insertIntoCache = true;
+        }
+      } on Exception {
+        // Do nothing.
+      }
+    }
+
+    if (result != null) {
+      if (insertIntoCache) {
+        await ImageIdCache().insert(url!, result);
       }
 
-      final result = await imageId;
-
-      if (result != null) {
-        ImageIdCache().insert(url!, result);
-        cachedImageId = result;
-      }
-    } on Exception {
-      // Do nothing.
+      await DefaultCacheManager().downloadFile(result.getUrl(quality));
+      cachedImageId = result;
     }
   }
 }
