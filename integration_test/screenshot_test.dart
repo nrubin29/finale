@@ -3,9 +3,7 @@ import 'dart:io';
 
 import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
@@ -102,28 +100,6 @@ Future<void> main() async {
   });
 
   testWidgets('Weekly track screen', (tester) async {
-    // Cache the images that will be displayed on this screen.
-    // TODO: This may or may not be helpful. The real issue is that the weekly
-    //  chart entities use [ImageId.scrape].
-    final user =
-        LUser(testName, null, '', null, 0, LUserRegistered(DateTime.now()));
-    final chart = LUserWeeklyChart('1618747200', '1619352000');
-
-    final data = await Future.wait([
-      Lastfm.getWeeklyTrackChart(user, chart),
-      Lastfm.getWeeklyAlbumChart(user, chart),
-      Lastfm.getWeeklyArtistChart(user, chart),
-    ]);
-
-    final entities = [
-      ...(data[0] as LUserWeeklyTrackChart).tracks,
-      ...(data[1] as LUserWeeklyAlbumChart).albums,
-      ...(data[2] as LUserWeeklyArtistChart).artists,
-    ];
-
-    await Future.wait(
-        entities.map((entity) => entity.tryCacheImageId(ImageQuality.low)));
-
     await pumpWidget(tester, MainView(username: testName));
     await tester.tap(find.byIcon(Icons.access_time));
     await tester.pumpAndSettle();
@@ -160,22 +136,12 @@ Future<void> main() async {
     final track = await Lastfm.getTrack(BasicConcreteTrack(
         'A Lack of Color', 'Death Cab for Cutie', 'Transatlanticism'));
 
-    // Cache the album image as well.
-    final album = await Lastfm.getAlbum(track.album!);
-    await album.tryCacheImageId(ImageQuality.low);
-
-    // Cache the artist image as well.
-    final artist = await Lastfm.getArtist(track.artist!);
-    await artist.tryCacheImageId(ImageQuality.low);
-    track.artist!.cachedImageId = artist.cachedImageId;
-
     await pumpWidget(tester, TrackView(track: track), asPage: true);
     await saveScreenshot('5_track');
   });
 
   testWidgets('Artist screen', (tester) async {
     final artist = await Lastfm.getArtist(ConcreteBasicArtist('Mae'));
-    await artist.tryCacheImageId();
 
     await pumpWidget(tester, ArtistView(artist: artist), asPage: true);
     await saveScreenshot('6_artist');
@@ -185,11 +151,6 @@ Future<void> main() async {
     final album =
         await Lastfm.getAlbum(FullConcreteAlbum('Deas Vail', 'Deas Vail'));
 
-    // Cache the artist image as well.
-    final artist = await Lastfm.getArtist(album.artist);
-    await artist.tryCacheImageId();
-    album.artist.cachedImageId = artist.cachedImageId;
-
     await pumpWidget(tester, AlbumView(album: album), asPage: true);
     await saveScreenshot('7_album');
   });
@@ -197,7 +158,6 @@ Future<void> main() async {
   testWidgets('Album scrobble screen', (tester) async {
     final album =
         await Lastfm.getAlbum(FullConcreteAlbum('Deas Vail', 'Deas Vail'));
-    await album.tryCacheImageId();
 
     await pumpWidget(tester, ScrobbleAlbumView(album: album),
         widgetBehindModal: AlbumView(album: album));
