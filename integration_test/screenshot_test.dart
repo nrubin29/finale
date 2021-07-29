@@ -103,18 +103,11 @@ Future<void> main() async {
     await pumpWidget(tester, MainView(username: testName));
     await tester.tap(find.byIcon(Icons.access_time));
     await tester.pumpAndSettle();
-
-    var foundWeek = false;
-
-    do {
-      foundWeek = find.text('19 Apr - 25 Apr 2021').evaluate().isNotEmpty;
-
-      if (!foundWeek) {
-        await tester.tap(find.byIcon(Icons.chevron_left));
-        await tester.pumpAndSettle();
-      }
-    } while (!foundWeek);
-
+    await tester.tap(find.byIcon(Icons.chevron_left));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.chevron_left));
+    await tester.pumpAndSettle();
+    await tester.pumpMany();
     await tester.pumpMany();
     await saveScreenshot('3_weekly_track');
   });
