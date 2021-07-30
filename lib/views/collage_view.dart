@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:finale/components/app_bar_component.dart';
+import 'package:finale/components/collage_web_warning_dialog_component.dart';
 import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -172,11 +173,25 @@ class _CollageViewState extends State<CollageView> {
                             child: Text('Top Artists'),
                           ),
                         ],
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           if (value != null) {
-                            setState(() {
-                              _type = value;
-                            });
+                            var shouldSet = true;
+
+                            if (isWeb &&
+                                value == EntityType.artist &&
+                                !Preferences().isSpotifyLoggedIn) {
+                              shouldSet = (await showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                          CollageWebWarningDialogComponent())) ??
+                                  false;
+                            }
+
+                            if (shouldSet) {
+                              setState(() {
+                                _type = value;
+                              });
+                            }
                           }
                         },
                       ),

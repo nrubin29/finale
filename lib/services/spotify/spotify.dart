@@ -9,6 +9,7 @@ import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:pkce/pkce.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
@@ -122,7 +123,22 @@ class Spotify {
         .toList(growable: false);
   }
 
-  static Uri createAuthorizationUri(PkcePair pkcePair) =>
+  static Future<bool> authenticate() async {
+    final pkcePair = PkcePair.generate(stripTrailingPadding: true);
+    final result = await FlutterWebAuth.authenticate(
+        url: _createAuthorizationUri(pkcePair).toString(),
+        callbackUrlScheme: 'finale');
+    final code = Uri.parse(result).queryParameters['code'];
+
+    if (code != null) {
+      await _getAccessToken(code, pkcePair);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Uri _createAuthorizationUri(PkcePair pkcePair) =>
       Uri.https('accounts.spotify.com', 'authorize', {
         'client_id': spotifyClientId,
         'response_type': 'code',
@@ -145,7 +161,7 @@ class Spotify {
           DateTime.now().add(Duration(seconds: response.expiresIn));
   }
 
-  static Future<void> getAccessToken(String code, PkcePair pkcePair) =>
+  static Future<void> _getAccessToken(String code, PkcePair pkcePair) =>
       _callTokenEndpoint({
         'client_id': spotifyClientId,
         'grant_type': 'authorization_code',
