@@ -10,10 +10,7 @@ class FinaleTheme {
   static final dark = ThemeData.from(colorScheme: _darkColorScheme).copyWith(
     timePickerTheme:
         TimePickerThemeData(backgroundColor: _darkColorScheme.background),
-    switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateColor.resolveWith((_) => Colors.red),
-      trackColor: MaterialStateColor.resolveWith((_) => Colors.red.shade200),
-    ),
+    toggleableActiveColor: Colors.red,
     cardColor: _darkColorScheme.background,
   );
 
