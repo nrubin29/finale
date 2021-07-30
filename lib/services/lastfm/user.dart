@@ -2,6 +2,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/util.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -159,7 +160,9 @@ class LUserWeeklyTrackChartTrack extends Track {
   @override
   Future<ImageId?> get imageId =>
       ImageId.scrape(url, '.cover-art > :first-child',
-          attribute: 'src', endUrlAtPeriod: true);
+          attribute: 'src',
+          endUrlAtPeriod: true,
+          spotifyFallback: SSearchTracksRequest('$name $artistName'));
 }
 
 @JsonSerializable()
@@ -213,7 +216,8 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
-  Future<ImageId?> get imageId => ImageId.scrape(url, '.link-block-cover-link');
+  Future<ImageId?> get imageId => ImageId.scrape(url, '.link-block-cover-link',
+      spotifyFallback: SSearchAlbumsRequest('$name ${artist.name}'));
 }
 
 @JsonSerializable()

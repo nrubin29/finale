@@ -1,4 +1,6 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:html/parser.dart' show parse;
 
 enum ImageQuality { low, high }
@@ -32,8 +34,29 @@ class ImageId {
     return ImageId.lastfm(serializedValue);
   }
 
+  /// Scrapes an ImageId from the web.
+  ///
+  /// First, it loads [url], then it finds the element matching [selector], then
+  /// it access attribute [attribute] which should contain the image url.
+  /// Finally, it extracts the image id from the image url.
+  ///
+  /// The web app can't scrape images due to CORS, so if [spotifyFallback] is
+  /// specified and the user is logged in with Spotify, the web app will execute
+  /// the request and return the image id if a result is found.
   static Future<ImageId?> scrape(String? url, String selector,
-      {String attribute = 'href', bool endUrlAtPeriod = false}) async {
+      {String attribute = 'href',
+      bool endUrlAtPeriod = false,
+      PagedRequest<Entity>? spotifyFallback}) async {
+    if (isWeb) {
+      if (spotifyFallback != null && Preferences().isSpotifyLoggedIn) {
+        final fallbackEntity = await spotifyFallback.doRequest(1, 1);
+        if (fallbackEntity.isNotEmpty) {
+          return await fallbackEntity.single.imageId;
+        }
+      }
+      return null;
+    }
+
     if (url == null) {
       return null;
     }

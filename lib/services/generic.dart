@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finale/services/image_id.dart';
+import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/http_throttle.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:flutter/foundation.dart';
@@ -186,7 +187,8 @@ abstract class BasicArtist extends Entity {
 
   @override
   FutureOr<ImageId?> get imageId =>
-      ImageId.scrape(url, '.header-new-gallery--link');
+      ImageId.scrape(url, '.header-new-gallery--link',
+          spotifyFallback: SSearchArtistsRequest(name));
 
   @override
   EntityType get type => EntityType.artist;
