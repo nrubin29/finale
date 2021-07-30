@@ -20,12 +20,15 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const device = String.fromEnvironment('device');
+final isIos = device.contains('iPhone') || device.contains('iPad');
 final isIpad = device.contains('iPad');
 const directory =
     '/Users/nrubin29/Documents/FlutterProjects/finale/screenshots/$device';
 
 Future<void> main() async {
-  await Directory(directory).create();
+  if (isIos) {
+    await Directory(directory).create();
+  }
 
   setUp(() async {
     SharedPreferences.setMockInitialValues(
@@ -60,28 +63,9 @@ Future<void> main() async {
     await tester.pumpAndSettle();
   }
 
-  Future<void> saveScreenshot(String name) {
-    final element = find.byType(MaterialApp).evaluate().single;
-
-    // BEGIN: Copied from flutter_test/lib/src/_matchers_io.dart:23 because I
-    // need to set [pixelRatio].
-    assert(element.renderObject != null);
-    var renderObject = element.renderObject!;
-    while (!renderObject.isRepaintBoundary) {
-      renderObject = renderObject.parent! as RenderObject;
-    }
-    assert(!renderObject.debugNeedsPaint);
-    final layer = renderObject.debugLayer! as OffsetLayer;
-    final image =
-        layer.toImage(renderObject.paintBounds, pixelRatio: isIpad ? 2 : 3);
-    // END: Copied code.
-
-    return expectLater(image, matchesGoldenFile('$directory/$name.png'));
-  }
-
   testWidgets('Profile screen', (tester) async {
     await pumpWidget(tester, MainView(username: testName));
-    await saveScreenshot('1_profile');
+    await tester.saveScreenshot('1_profile');
   });
 
   testWidgets('Scrobble screen', (tester) async {
@@ -96,7 +80,7 @@ Future<void> main() async {
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
-    await saveScreenshot('2_scrobble');
+    await tester.saveScreenshot('2_scrobble');
   });
 
   testWidgets('Weekly track screen', (tester) async {
@@ -109,7 +93,7 @@ Future<void> main() async {
     await tester.pumpAndSettle();
     await tester.pumpMany();
     await tester.pumpMany();
-    await saveScreenshot('3_weekly_track');
+    await tester.saveScreenshot('3_weekly_track');
   });
 
   testWidgets('Collage screen', (tester) async {
@@ -122,7 +106,7 @@ Future<void> main() async {
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
 
-    await saveScreenshot('4_collage');
+    await tester.saveScreenshot('4_collage');
   });
 
   testWidgets('Track screen', (tester) async {
@@ -130,14 +114,14 @@ Future<void> main() async {
         'A Lack of Color', 'Death Cab for Cutie', 'Transatlanticism'));
 
     await pumpWidget(tester, TrackView(track: track), asPage: true);
-    await saveScreenshot('5_track');
+    await tester.saveScreenshot('5_track');
   });
 
   testWidgets('Artist screen', (tester) async {
     final artist = await Lastfm.getArtist(ConcreteBasicArtist('Mae'));
 
     await pumpWidget(tester, ArtistView(artist: artist), asPage: true);
-    await saveScreenshot('6_artist');
+    await tester.saveScreenshot('6_artist');
   });
 
   testWidgets('Album screen', (tester) async {
@@ -145,7 +129,7 @@ Future<void> main() async {
         await Lastfm.getAlbum(FullConcreteAlbum('Deas Vail', 'Deas Vail'));
 
     await pumpWidget(tester, AlbumView(album: album), asPage: true);
-    await saveScreenshot('7_album');
+    await tester.saveScreenshot('7_album');
   });
 
   testWidgets('Album scrobble screen', (tester) async {
@@ -154,7 +138,7 @@ Future<void> main() async {
 
     await pumpWidget(tester, ScrobbleAlbumView(album: album),
         widgetBehindModal: AlbumView(album: album));
-    await saveScreenshot('8_album_scrobble');
+    await tester.saveScreenshot('8_album_scrobble');
   });
 }
 
@@ -191,6 +175,32 @@ class _AsPageState extends State<_AsPage> {
 }
 
 extension on WidgetTester {
+  Future<void> saveScreenshot(String name) async {
+    if (isIos) {
+      final element = find.byType(MaterialApp).evaluate().single;
+
+      // BEGIN: Copied from flutter_test/lib/src/_matchers_io.dart:23 because I
+      // need to set [pixelRatio].
+      assert(element.renderObject != null);
+      var renderObject = element.renderObject!;
+      while (!renderObject.isRepaintBoundary) {
+        renderObject = renderObject.parent! as RenderObject;
+      }
+      assert(!renderObject.debugNeedsPaint);
+      final layer = renderObject.debugLayer! as OffsetLayer;
+      final image =
+          layer.toImage(renderObject.paintBounds, pixelRatio: isIpad ? 2 : 3);
+      // END: Copied code.
+
+      await expectLater(image, matchesGoldenFile('$directory/$name.png'));
+    } else {
+      // On Android, we can't save screenshots for some reason, so we have to
+      // take them ourselves.
+      await pumpMany();
+      await pumpMany();
+    }
+  }
+
   /// Pumps for 10 seconds, 100 milliseconds at a time.
   Future<void> pumpMany() async {
     final endTime = binding.clock.fromNowBy(const Duration(seconds: 10));
