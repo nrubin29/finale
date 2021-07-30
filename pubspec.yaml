@@ -62,3 +62,5 @@ flutter_icons:
   image_path: 'assets/images/icon.png'
   android: true
   ios: true
+  adaptive_icon_background: "#ff0000"
+  adaptive_icon_foreground: 'assets/images/music_note.png'
