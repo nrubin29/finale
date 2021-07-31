@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 const isWeb = kIsWeb;
 const isMobile = !isWeb;
+var censorImages = false;
 
 String get authCallbackUrl {
   var callbackUrl =

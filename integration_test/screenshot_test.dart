@@ -26,6 +26,8 @@ const directory =
     '/Users/nrubin29/Documents/FlutterProjects/finale/screenshots/$device';
 
 Future<void> main() async {
+  censorImages = true;
+
   if (isIos) {
     await Directory(directory).create();
   }

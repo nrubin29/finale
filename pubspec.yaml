@@ -7,6 +7,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  auto_size_text: ^3.0.0-nullsafety.0
   cached_network_image: ^3.1.0
   charts_flutter: ^0.11.0
   collection: ^1.15.0

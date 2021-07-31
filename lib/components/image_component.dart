@@ -1,7 +1,11 @@
+import 'dart:ui';
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/util/image_id_cache.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 
 class ImageComponent extends StatelessWidget {
@@ -64,7 +68,46 @@ class ImageComponent extends StatelessWidget {
         fit: fit,
         width: width);
 
-    return isCircular ? _buildCircularImage(context, image) : image;
+    Widget imageWidget =
+        isCircular ? _buildCircularImage(context, image) : image;
+
+    assert(() {
+      if (censorImages && entity.type != EntityType.user) {
+        imageWidget = ClipRect(
+          child: Stack(children: [
+            imageWidget,
+            Positioned.fill(
+              child: LayoutBuilder(
+                builder: (_, constraints) => BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: constraints.maxWidth / 30,
+                    sigmaY: constraints.maxWidth / 30,
+                  ),
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: AutoSizeText(
+                        'Image hidden due to copyright',
+                        textAlign: TextAlign.center,
+                        minFontSize: 8,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ]),
+        );
+      }
+
+      return true;
+    }());
+
+    return imageWidget;
   }
 
   @override
