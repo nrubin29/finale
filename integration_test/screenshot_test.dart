@@ -20,13 +20,17 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const device = String.fromEnvironment('device');
+const _censorImages = bool.fromEnvironment('censorImages', defaultValue: true);
+
 final isIos = device.contains('iPhone') || device.contains('iPad');
 final isIpad = device.contains('iPad');
 const directory =
     '/Users/nrubin29/Documents/FlutterProjects/finale/screenshots/$device';
 
 Future<void> main() async {
-  censorImages = true;
+  if (_censorImages) {
+    censorImages = true;
+  }
 
   if (isIos) {
     await Directory(directory).create();
