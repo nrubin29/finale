@@ -34,6 +34,7 @@ class _CollageViewState extends State<CollageView> {
 
   var _isDoingRequest = false;
   var _loadingProgress = 0;
+  var _numItemsToLoad = 0;
   Uint8List? _image;
   final _screenshotController = ScreenshotController();
 
@@ -42,6 +43,7 @@ class _CollageViewState extends State<CollageView> {
   Future<void> _doRequest() async {
     setState(() {
       _loadingProgress = 0;
+      _numItemsToLoad = _numGridItems;
       _isDoingRequest = true;
       _isSettingsExpanded = false;
       _image = null;
@@ -58,6 +60,11 @@ class _CollageViewState extends State<CollageView> {
     }
 
     final items = await request.doRequest(_numGridItems, 1);
+
+    setState(() {
+      _numItemsToLoad = items.length;
+    });
+
     await Future.wait(items.map((item) async {
       await item.tryCacheImageId();
       setState(() {
@@ -276,14 +283,14 @@ class _CollageViewState extends State<CollageView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             LinearProgressIndicator(
-              value: _loadingProgress / _numGridItems,
+              value: _loadingProgress / _numItemsToLoad,
               backgroundColor: Colors.grey.shade300,
             ),
             SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text('$_loadingProgress / $_numGridItems images loaded'),
+                Text('$_loadingProgress / $_numItemsToLoad images loaded'),
               ],
             ),
           ],
