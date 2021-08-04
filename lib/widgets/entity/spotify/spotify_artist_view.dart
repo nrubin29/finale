@@ -1,19 +1,19 @@
 import 'dart:math';
 
-import 'package:finale/components/app_bar_component.dart';
-import 'package:finale/components/entity_display_component.dart';
-import 'package:finale/components/error_component.dart';
-import 'package:finale/components/image_component.dart';
-import 'package:finale/components/loading_component.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/views/error_view.dart';
-import 'package:finale/views/loading_view.dart';
-import 'package:finale/views/scrobble_view.dart';
-import 'package:finale/views/spotify_album_view.dart';
+import 'package:finale/widgets/base/app_bar_component.dart';
+import 'package:finale/widgets/base/error_component.dart';
+import 'package:finale/widgets/base/error_view.dart';
+import 'package:finale/widgets/base/loading_component.dart';
+import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/entity/entity_display_component.dart';
+import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
+import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 

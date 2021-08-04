@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:finale/components/image_component.dart';
-import 'package:finale/components/loading_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/util/util.dart';
+import 'package:finale/widgets/base/loading_component.dart';
+import 'package:finale/widgets/entity/image_component.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 

@@ -1,18 +1,18 @@
 import 'dart:math';
 
-import 'package:finale/components/app_bar_component.dart';
-import 'package:finale/components/entity_display_component.dart';
-import 'package:finale/components/image_component.dart';
-import 'package:finale/components/scoreboard_component.dart';
-import 'package:finale/components/tags_component.dart';
-import 'package:finale/components/wiki_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/views/album_view.dart';
-import 'package:finale/views/error_view.dart';
-import 'package:finale/views/loading_view.dart';
-import 'package:finale/views/track_view.dart';
+import 'package:finale/widgets/base/app_bar_component.dart';
+import 'package:finale/widgets/base/error_view.dart';
+import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/entity/entity_display_component.dart';
+import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/lastfm/album_view.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard_component.dart';
+import 'package:finale/widgets/entity/lastfm/tags_component.dart';
+import 'package:finale/widgets/entity/lastfm/track_view.dart';
+import 'package:finale/widgets/entity/lastfm/wiki_component.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 

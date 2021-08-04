@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/views/collage_view.dart';
-import 'package:finale/views/profile_view.dart';
-import 'package:finale/views/scrobble_view.dart';
-import 'package:finale/views/search_view.dart';
+import 'package:finale/widgets/main/collage_view.dart';
+import 'package:finale/widgets/main/search_view.dart';
+import 'package:finale/widgets/profile/profile_view.dart';
+import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {

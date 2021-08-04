@@ -1,4 +1,4 @@
-import 'package:finale/components/loading_component.dart';
+import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
 
 class LoadingView extends StatelessWidget {

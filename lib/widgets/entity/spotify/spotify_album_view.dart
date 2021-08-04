@@ -1,35 +1,28 @@
 import 'dart:math';
 
-import 'package:finale/components/app_bar_component.dart';
-import 'package:finale/components/entity_display_component.dart';
-import 'package:finale/components/image_component.dart';
-import 'package:finale/components/scoreboard_component.dart';
-import 'package:finale/components/tags_component.dart';
-import 'package:finale/components/wiki_component.dart';
-import 'package:finale/services/generic.dart';
-import 'package:finale/services/lastfm/album.dart';
-import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/spotify/album.dart';
+import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/views/artist_view.dart';
-import 'package:finale/views/error_view.dart';
-import 'package:finale/views/loading_view.dart';
-import 'package:finale/views/scrobble_album_view.dart';
-import 'package:finale/views/track_view.dart';
+import 'package:finale/widgets/base/app_bar_component.dart';
+import 'package:finale/widgets/base/error_view.dart';
+import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/entity/entity_display_component.dart';
+import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
+import 'package:finale/widgets/scrobble/scrobble_album_view.dart';
+import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:share_plus/share_plus.dart';
 
-class AlbumView extends StatelessWidget {
-  final BasicAlbum album;
+class SpotifyAlbumView extends StatelessWidget {
+  final SAlbumSimple album;
 
-  AlbumView({required this.album});
+  SpotifyAlbumView({required this.album});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<LAlbum>(
-      future: album is LAlbum
-          ? Future.value(album as LAlbum)
-          : Lastfm.getAlbum(album),
+    return FutureBuilder<SAlbumFull>(
+      future: Spotify.getFullAlbum(album),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorView(
@@ -47,13 +40,8 @@ class AlbumView extends StatelessWidget {
             appBar: createAppBar(
               album.name,
               subtitle: album.artist.name,
+              backgroundColor: spotifyGreen,
               actions: [
-                IconButton(
-                  icon: Icon(Icons.share),
-                  onPressed: () {
-                    Share.share(album.url);
-                  },
-                ),
                 if (album.canScrobble)
                   Builder(
                     builder: (context) => IconButton(
@@ -78,19 +66,6 @@ class AlbumView extends StatelessWidget {
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
-                ScoreboardComponent(statistics: {
-                  'Scrobbles': album.playCount,
-                  'Listeners': album.listeners,
-                  'Your scrobbles': album.userPlayCount,
-                }),
-                if (album.topTags.tags.isNotEmpty) Divider(),
-                if (album.topTags.tags.isNotEmpty)
-                  TagsComponent(topTags: album.topTags),
-                if (album.wiki != null && album.wiki!.isNotEmpty) ...[
-                  Divider(),
-                  WikiComponent(wiki: album.wiki!)
-                ],
-                Divider(),
                 ListTile(
                     leading: ImageComponent(entity: album.artist),
                     title: Text(album.artist.name),
@@ -100,16 +75,22 @@ class AlbumView extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  ArtistView(artist: album.artist)));
+                                  SpotifyArtistView(artist: album.artist)));
                     }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
-                  EntityDisplayComponent<LAlbumTrack>(
+                  EntityDisplayComponent<SAlbumTrack>(
                     items: album.tracks,
                     scrollable: false,
                     displayNumbers: true,
                     displayImages: false,
-                    detailWidgetBuilder: (track) => TrackView(track: track),
+                    secondaryAction: (track) async {
+                      await showBarModalBottomSheet(
+                          context: context,
+                          duration: Duration(milliseconds: 200),
+                          builder: (context) =>
+                              ScrobbleView(track: track, isModal: true));
+                    },
                   ),
               ],
             ));

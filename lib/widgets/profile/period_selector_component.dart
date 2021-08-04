@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:finale/components/entity_display_component.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/widgets/entity/entity_display_component.dart';
 import 'package:flutter/material.dart';
 
 class PeriodSelectorComponent<T extends Entity> extends StatefulWidget {

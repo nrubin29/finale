@@ -1,5 +1,5 @@
-import 'package:finale/components/error_component.dart';
 import 'package:finale/services/generic.dart';
+import 'package:finale/widgets/base/error_component.dart';
 import 'package:flutter/material.dart';
 
 class ErrorView extends StatelessWidget {

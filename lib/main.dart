@@ -3,8 +3,8 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/views/login_view.dart';
-import 'package:finale/views/main_view.dart';
+import 'package:finale/widgets/main/login_view.dart';
+import 'package:finale/widgets/main/main_view.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
