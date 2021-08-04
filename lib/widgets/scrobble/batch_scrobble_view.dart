@@ -13,16 +13,16 @@ enum ScrobbleTimestampBehavior {
   endingCustom
 }
 
-class ScrobbleAlbumView extends StatefulWidget {
-  final FullAlbum album;
+class BatchScrobbleView extends StatefulWidget {
+  final HasTracks entity;
 
-  ScrobbleAlbumView({required this.album}) : assert(album.canScrobble);
+  BatchScrobbleView({required this.entity}) : assert(entity.canScrobble);
 
   @override
-  State<StatefulWidget> createState() => _ScrobbleAlbumViewState();
+  State<StatefulWidget> createState() => _BatchScrobbleViewState();
 }
 
-class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
+class _BatchScrobbleViewState extends State<BatchScrobbleView> {
   var _behavior = ScrobbleTimestampBehavior.startingNow;
   DateTime? _customTimestamp;
 
@@ -32,7 +32,7 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
   }
 
   Future<void> _scrobble(BuildContext context) async {
-    List<ScrobbleableTrack> tracks = widget.album.tracks;
+    var tracks = widget.entity.tracks;
     List<DateTime> timestamps;
 
     if (_behavior == ScrobbleTimestampBehavior.startingNow ||
@@ -95,9 +95,11 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
                 child: Column(
                   children: [
                     ListTile(
-                        leading: EntityImage(entity: widget.album),
-                        title: Text(widget.album.name),
-                        subtitle: Text(widget.album.artist.name)),
+                        leading: EntityImage(entity: widget.entity),
+                        title: Text(widget.entity.displayTitle),
+                        subtitle: widget.entity.displaySubtitle != null
+                            ? Text(widget.entity.displaySubtitle!)
+                            : null),
                     SizedBox(height: 10),
                     Align(
                         alignment: Alignment.centerLeft,

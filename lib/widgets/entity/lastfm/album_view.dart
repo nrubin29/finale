@@ -14,7 +14,7 @@ import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
-import 'package:finale/widgets/scrobble/scrobble_album_view.dart';
+import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
@@ -63,7 +63,7 @@ class AlbumView extends StatelessWidget {
                             context: context,
                             duration: Duration(milliseconds: 200),
                             builder: (context) =>
-                                ScrobbleAlbumView(album: album));
+                                BatchScrobbleView(entity: album));
                       },
                     ),
                   )

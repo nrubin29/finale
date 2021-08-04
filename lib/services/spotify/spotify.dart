@@ -6,6 +6,7 @@ import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/auth.dart';
 import 'package:finale/services/spotify/common.dart';
+import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
@@ -91,6 +92,23 @@ class SSearchAlbumsRequest extends PagedRequest<SAlbumSimple> {
   }
 }
 
+class SSearchPlaylistsRequest extends PagedRequest<SPlaylistSimple> {
+  final String query;
+
+  const SSearchPlaylistsRequest(this.query);
+
+  @override
+  Future<List<SPlaylistSimple>> doRequest(int limit, int page) async {
+    final rawResponse = await _doRequest('search', {
+      'q': query,
+      'type': 'playlist',
+      'limit': limit,
+      'offset': (page - 1) * limit,
+    });
+    return SPage<SPlaylistSimple>.fromJson(rawResponse['playlists']).items;
+  }
+}
+
 class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
   final SArtist artist;
 
@@ -113,6 +131,12 @@ class Spotify {
   static Future<SArtist> getFullArtist(SArtistSimple simpleArtist) async {
     final rawResponse = await _doRequest('artists/${simpleArtist.id}');
     return SArtist.fromJson(rawResponse);
+  }
+
+  static Future<SPlaylistFull> getFullPlaylist(
+      SPlaylistSimple simplePlaylist) async {
+    final rawResponse = await _doRequest('playlists/${simplePlaylist.id}');
+    return SPlaylistFull.fromJson(rawResponse);
   }
 
   static Future<List<STrack>> getTopTracksForArtist(SArtist artist) async {

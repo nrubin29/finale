@@ -30,7 +30,7 @@ abstract class PagedRequest<T extends Entity> {
   }
 }
 
-enum EntityType { track, album, artist, user }
+enum EntityType { track, album, artist, user, playlist }
 
 abstract class Entity {
   EntityType get type;
@@ -154,12 +154,14 @@ abstract class BasicAlbum extends Entity {
   String toString() => 'BasicAlbum(name=$name, artist=${artist.name})';
 }
 
-abstract class FullAlbum extends BasicAlbum {
+mixin HasTracks on Entity {
   List<ScrobbleableTrack> get tracks;
 
   bool get canScrobble =>
       tracks.every((track) => track.duration != null && track.duration! > 0);
 }
+
+abstract class FullAlbum extends BasicAlbum with HasTracks {}
 
 class FullConcreteAlbum extends FullAlbum {
   @override
@@ -211,3 +213,10 @@ class ConcreteBasicArtist extends BasicArtist {
 }
 
 abstract class FullArtist extends BasicArtist {}
+
+abstract class BasicPlaylist extends Entity {
+  @override
+  EntityType get type => EntityType.playlist;
+}
+
+abstract class FullPlaylist extends BasicPlaylist with HasTracks {}

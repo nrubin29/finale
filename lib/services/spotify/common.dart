@@ -2,6 +2,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
+import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -41,6 +42,8 @@ class SPage<T extends Entity> {
         return SAlbumSimple.fromJson(json) as T;
       } else if (json['type'] == 'track') {
         return STrack.fromJson(json) as T;
+      } else if (json['type'] == 'playlist') {
+        return SPlaylistSimple.fromJson(json) as T;
       }
     }
 

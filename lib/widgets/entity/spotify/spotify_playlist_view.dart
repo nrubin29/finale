@@ -1,48 +1,47 @@
 import 'dart:math';
 
-import 'package:finale/services/spotify/album.dart';
+import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/spotify.dart';
+import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
 import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class SpotifyAlbumView extends StatelessWidget {
-  final SAlbumSimple album;
+class SpotifyPlaylistView extends StatelessWidget {
+  final SPlaylistSimple playlist;
 
-  SpotifyAlbumView({required this.album});
+  SpotifyPlaylistView({required this.playlist});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SAlbumFull>(
-      future: Spotify.getFullAlbum(album),
+    return FutureBuilder<SPlaylistFull>(
+      future: Spotify.getFullPlaylist(playlist),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ErrorView(
             error: snapshot.error!,
             stackTrace: snapshot.stackTrace!,
-            entity: this.album,
+            entity: this.playlist,
           );
         } else if (!snapshot.hasData) {
           return LoadingView();
         }
 
-        final album = snapshot.data!;
+        final playlist = snapshot.data!;
 
         return Scaffold(
             appBar: createAppBar(
-              album.name,
-              subtitle: album.artist.name,
+              playlist.name,
               backgroundColor: spotifyGreen,
               actions: [
-                if (album.canScrobble)
+                if (playlist.canScrobble)
                   Builder(
                     builder: (context) => IconButton(
                       icon: Icon(scrobbleIcon),
@@ -51,7 +50,7 @@ class SpotifyAlbumView extends StatelessWidget {
                             context: context,
                             duration: Duration(milliseconds: 200),
                             builder: (context) =>
-                                BatchScrobbleView(entity: album));
+                                BatchScrobbleView(entity: playlist));
                       },
                     ),
                   )
@@ -61,29 +60,15 @@ class SpotifyAlbumView extends StatelessWidget {
               children: [
                 Center(
                     child: EntityImage(
-                        entity: album,
+                        entity: playlist,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
-                SizedBox(height: 10),
-                ListTile(
-                    leading: EntityImage(entity: album.artist),
-                    title: Text(album.artist.name),
-                    trailing: Icon(Icons.chevron_right),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SpotifyArtistView(artist: album.artist)));
-                    }),
-                if (album.tracks.isNotEmpty) Divider(),
-                if (album.tracks.isNotEmpty)
-                  EntityDisplay<SAlbumTrack>(
-                    items: album.tracks,
+                if (playlist.tracks.isNotEmpty) ...[
+                  SizedBox(height: 10),
+                  EntityDisplay<STrack>(
+                    items: playlist.tracks,
                     scrollable: false,
-                    displayNumbers: true,
-                    displayImages: false,
                     secondaryAction: (track) async {
                       await showBarModalBottomSheet(
                           context: context,
@@ -92,6 +77,7 @@ class SpotifyAlbumView extends StatelessWidget {
                               ScrobbleView(track: track, isModal: true));
                     },
                   ),
+                ],
               ],
             ));
       },

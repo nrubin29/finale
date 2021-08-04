@@ -33,6 +33,10 @@ class EntityImage extends StatelessWidget {
       ImageQuality.low: AssetImage('assets/images/default_user_low.jpg'),
       ImageQuality.high: AssetImage('assets/images/default_user.jpg'),
     },
+    EntityType.playlist: {
+      ImageQuality.low: AssetImage('assets/images/default_playlist_low.jpg'),
+      ImageQuality.high: AssetImage('assets/images/default_playlist.jpg'),
+    },
   };
 
   const EntityImage({

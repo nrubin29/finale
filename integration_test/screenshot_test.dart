@@ -12,7 +12,7 @@ import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/main/main_view.dart';
-import 'package:finale/widgets/scrobble/scrobble_album_view.dart';
+import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show OffsetLayer;
 import 'package:flutter_test/flutter_test.dart';
@@ -142,7 +142,7 @@ Future<void> main() async {
     final album =
         await Lastfm.getAlbum(FullConcreteAlbum('Deas Vail', 'Deas Vail'));
 
-    await pumpWidget(tester, ScrobbleAlbumView(album: album),
+    await pumpWidget(tester, BatchScrobbleView(entity: album),
         widgetBehindModal: AlbumView(album: album));
     await tester.saveScreenshot('8_album_scrobble');
   });
