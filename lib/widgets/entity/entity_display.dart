@@ -111,7 +111,12 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           page = 2;
         }
       });
-    } on Exception {
+    } on Exception catch (error, stackTrace) {
+      assert(() {
+        print('$error\n$stackTrace');
+        return true;
+      }());
+
       setState(() {
         hasMorePages = false;
       });
@@ -135,7 +140,12 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           page += 1;
         }
       });
-    } on Exception {
+    } on Exception catch (error, stackTrace) {
+      assert(() {
+        print('$error\n$stackTrace');
+        return true;
+      }());
+
       setState(() {
         hasMorePages = false;
       });
