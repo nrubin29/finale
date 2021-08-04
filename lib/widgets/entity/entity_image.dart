@@ -8,7 +8,7 @@ import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 
-class ImageComponent extends StatelessWidget {
+class EntityImage extends StatelessWidget {
   final Entity entity;
   final ImageQuality quality;
   final BoxFit? fit;
@@ -35,7 +35,7 @@ class ImageComponent extends StatelessWidget {
     },
   };
 
-  ImageComponent({
+  const EntityImage({
     required this.entity,
     this.quality = ImageQuality.high,
     this.fit,

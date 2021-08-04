@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finale/util/quick_actions_manager.dart';
-import 'package:finale/widgets/scrobble/acrcloud_dialog_component.dart';
+import 'package:finale/widgets/scrobble/acrcloud_dialog.dart';
 import 'package:finale/widgets/scrobble/listen_continuously_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
@@ -39,7 +39,7 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
     final result = await showDialog<ACRCloudDialogResult>(
         context: context,
         barrierDismissible: false,
-        builder: (context) => ACRCloudDialogComponent());
+        builder: (context) => ACRCloudDialog());
 
     if (result?.wasCancelled ?? true) return;
 

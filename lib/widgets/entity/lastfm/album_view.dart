@@ -4,16 +4,16 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/base/app_bar_component.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
-import 'package:finale/widgets/entity/lastfm/scoreboard_component.dart';
-import 'package:finale/widgets/entity/lastfm/tags_component.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
+import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:finale/widgets/entity/lastfm/wiki_component.dart';
+import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
 import 'package:finale/widgets/scrobble/scrobble_album_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -72,27 +72,27 @@ class AlbumView extends StatelessWidget {
             body: ListView(
               children: [
                 Center(
-                    child: ImageComponent(
+                    child: EntityImage(
                         entity: album,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
-                ScoreboardComponent(statistics: {
+                Scoreboard(statistics: {
                   'Scrobbles': album.playCount,
                   'Listeners': album.listeners,
                   'Your scrobbles': album.userPlayCount,
                 }),
                 if (album.topTags.tags.isNotEmpty) Divider(),
                 if (album.topTags.tags.isNotEmpty)
-                  TagsComponent(topTags: album.topTags),
+                  TagChips(topTags: album.topTags),
                 if (album.wiki != null && album.wiki!.isNotEmpty) ...[
                   Divider(),
-                  WikiComponent(wiki: album.wiki!)
+                  WikiTile(wiki: album.wiki!)
                 ],
                 Divider(),
                 ListTile(
-                    leading: ImageComponent(entity: album.artist),
+                    leading: EntityImage(entity: album.artist),
                     title: Text(album.artist.name),
                     trailing: Icon(Icons.chevron_right),
                     onTap: () {
@@ -104,7 +104,7 @@ class AlbumView extends StatelessWidget {
                     }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
-                  EntityDisplayComponent<LAlbumTrack>(
+                  EntityDisplay<LAlbumTrack>(
                     items: album.tracks,
                     scrollable: false,
                     displayNumbers: true,

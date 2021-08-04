@@ -5,13 +5,13 @@ import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
 import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
-import 'package:finale/widgets/entity/spotify/spotify_dialog_component.dart';
+import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/scrobble/scrobble_album_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +64,7 @@ class SearchQuery {
   final String text;
 
   const SearchQuery._(this.searchEngine, this.text);
+
   const SearchQuery.empty(SearchEngine searchEngine) : this._(searchEngine, '');
 
   SearchQuery copyWith({SearchEngine? searchEngine, String? text}) =>
@@ -163,8 +164,7 @@ class _SearchViewState extends State<SearchView> {
                                     !Preferences().hasSpotifyAuthData) {
                                   final loggedIn = await showDialog<bool>(
                                       context: context,
-                                      builder: (context) =>
-                                          SpotifyDialogComponent());
+                                      builder: (context) => SpotifyDialog());
 
                                   if (loggedIn ?? false) {
                                     setState(() {
@@ -227,7 +227,7 @@ class _SearchViewState extends State<SearchView> {
           body: TabBarView(
             children: _currentQuery.text != ''
                 ? [
-                    EntityDisplayComponent<Track>(
+                    EntityDisplay<Track>(
                         secondaryAction: (item) async {
                           Track track;
 
@@ -253,7 +253,7 @@ class _SearchViewState extends State<SearchView> {
                             _searchEngine == SearchEngine.spotify
                                 ? null
                                 : (track) => TrackView(track: track)),
-                    EntityDisplayComponent<BasicArtist>(
+                    EntityDisplay<BasicArtist>(
                         displayType: DisplayType.grid,
                         requestStream: _query
                             .debounceWhere(_shouldDebounce, debounceDuration)
@@ -263,7 +263,7 @@ class _SearchViewState extends State<SearchView> {
                             _searchEngine == SearchEngine.spotify
                                 ? SpotifyArtistView(artist: artist)
                                 : ArtistView(artist: artist)),
-                    EntityDisplayComponent<BasicAlbum>(
+                    EntityDisplay<BasicAlbum>(
                         secondaryAction: (item) async {
                           FullAlbum album;
 

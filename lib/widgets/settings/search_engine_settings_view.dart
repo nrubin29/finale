@@ -1,6 +1,6 @@
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/entity/spotify/spotify_dialog_component.dart';
+import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
 
@@ -55,7 +55,7 @@ class _SearchEngineSettingsViewState extends State<SearchEngineSettingsView> {
                       onPressed: () async {
                         await showDialog(
                             context: context,
-                            builder: (context) => SpotifyDialogComponent());
+                            builder: (context) => SpotifyDialog());
                         setState(() {});
                       },
                     ),

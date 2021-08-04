@@ -3,8 +3,8 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/base/app_bar_component.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
+import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/settings/listen_continuously_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
@@ -139,7 +139,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
             ),
           ),
           Expanded(
-              child: EntityDisplayComponent<ListenContinuouslyTrack>(
+              child: EntityDisplay<ListenContinuouslyTrack>(
             items: _tracks,
             leadingWidgetBuilder: (track) =>
                 Icon(_iconForTrackStatus[track.status]),

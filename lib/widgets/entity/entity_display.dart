@@ -4,7 +4,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/loading_component.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -15,7 +15,7 @@ typedef EntityWidgetBuilder<T extends Entity> = Widget Function(T item);
 typedef EntityAndItemsWidgetBuilder<T extends Entity> = Widget Function(
     T item, List<T> items);
 
-class EntityDisplayComponent<T extends Entity> extends StatefulWidget {
+class EntityDisplay<T extends Entity> extends StatefulWidget {
   final List<T>? items;
   final PagedRequest<T>? request;
   final Stream<PagedRequest<T>>? requestStream;
@@ -36,7 +36,7 @@ class EntityDisplayComponent<T extends Entity> extends StatefulWidget {
   final double gridTileTextPadding;
   final double fontSize;
 
-  EntityDisplayComponent(
+  const EntityDisplay(
       {Key? key,
       this.items,
       this.request,
@@ -59,11 +59,10 @@ class EntityDisplayComponent<T extends Entity> extends StatefulWidget {
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() => EntityDisplayComponentState<T>();
+  State<StatefulWidget> createState() => EntityDisplayState<T>();
 }
 
-class EntityDisplayComponentState<T extends Entity>
-    extends State<EntityDisplayComponent<T>>
+class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     with AutomaticKeepAliveClientMixin {
   var items = <T>[];
   var page = 1;
@@ -181,7 +180,7 @@ class EntityDisplayComponentState<T extends Entity>
       leading: widget.leadingWidgetBuilder != null
           ? widget.leadingWidgetBuilder!(item)
           : widget.displayImages
-              ? ImageComponent(
+              ? EntityImage(
                   entity: item,
                   quality: ImageQuality.low,
                   isCircular: widget.displayCircularImages,
@@ -256,7 +255,7 @@ class EntityDisplayComponentState<T extends Entity>
         fit: StackFit.expand,
         children: [
           if (widget.displayImages)
-            ImageComponent(entity: item, fit: BoxFit.cover),
+            EntityImage(entity: item, fit: BoxFit.cover),
           if (widget.showGridTileGradient)
             Container(
               decoration: BoxDecoration(

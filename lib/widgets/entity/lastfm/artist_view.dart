@@ -3,16 +3,16 @@ import 'dart:math';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/widgets/base/app_bar_component.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
-import 'package:finale/widgets/entity/lastfm/scoreboard_component.dart';
-import 'package:finale/widgets/entity/lastfm/tags_component.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
+import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:finale/widgets/entity/lastfm/wiki_component.dart';
+import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -70,23 +70,23 @@ class _ArtistViewState extends State<ArtistView>
             body: ListView(
               children: [
                 Center(
-                    child: ImageComponent(
+                    child: EntityImage(
                         entity: artist,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
-                ScoreboardComponent(statistics: {
+                Scoreboard(statistics: {
                   'Scrobbles': artist.stats.playCount,
                   'Listeners': artist.stats.listeners,
                   'Your scrobbles': artist.stats.userPlayCount,
                 }),
                 if (artist.topTags.tags.isNotEmpty) Divider(),
                 if (artist.topTags.tags.isNotEmpty)
-                  TagsComponent(topTags: artist.topTags),
+                  TagChips(topTags: artist.topTags),
                 if (artist.bio != null && artist.bio!.isNotEmpty) ...[
                   Divider(),
-                  WikiComponent(wiki: artist.bio!),
+                  WikiTile(wiki: artist.bio!),
                 ],
                 Divider(),
                 TabBar(
@@ -108,7 +108,7 @@ class _ArtistViewState extends State<ArtistView>
                   Visibility(
                     visible: selectedIndex == 0,
                     maintainState: true,
-                    child: EntityDisplayComponent<LArtistTopAlbum>(
+                    child: EntityDisplay<LArtistTopAlbum>(
                         scrollable: false,
                         request: ArtistGetTopAlbumsRequest(artist.name),
                         detailWidgetBuilder: (album) =>
@@ -117,7 +117,7 @@ class _ArtistViewState extends State<ArtistView>
                   Visibility(
                     visible: selectedIndex == 1,
                     maintainState: true,
-                    child: EntityDisplayComponent<LArtistTopTrack>(
+                    child: EntityDisplay<LArtistTopTrack>(
                         scrollable: false,
                         request: ArtistGetTopTracksRequest(artist.name),
                         detailWidgetBuilder: (track) =>

@@ -2,7 +2,7 @@ import 'package:finale/services/spotify/spotify.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
 
-class SpotifyDialogComponent extends StatelessWidget {
+class SpotifyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

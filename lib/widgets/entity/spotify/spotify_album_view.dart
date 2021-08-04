@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/base/app_bar_component.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_album_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
@@ -60,14 +60,14 @@ class SpotifyAlbumView extends StatelessWidget {
             body: ListView(
               children: [
                 Center(
-                    child: ImageComponent(
+                    child: EntityImage(
                         entity: album,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
                 ListTile(
-                    leading: ImageComponent(entity: album.artist),
+                    leading: EntityImage(entity: album.artist),
                     title: Text(album.artist.name),
                     trailing: Icon(Icons.chevron_right),
                     onTap: () {
@@ -79,7 +79,7 @@ class SpotifyAlbumView extends StatelessWidget {
                     }),
                 if (album.tracks.isNotEmpty) Divider(),
                 if (album.tracks.isNotEmpty)
-                  EntityDisplayComponent<SAlbumTrack>(
+                  EntityDisplay<SAlbumTrack>(
                     items: album.tracks,
                     scrollable: false,
                     displayNumbers: true,

@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 
-/// A component that displays multiple [statistics] with labels.
-class ScoreboardComponent extends StatelessWidget {
+/// A widget that displays multiple [statistics] with labels.
+class Scoreboard extends StatelessWidget {
   final Map<String, FutureOr<int>> statistics;
   final List<Widget> actions;
 
-  const ScoreboardComponent(
-      {this.statistics = const {}, this.actions = const []});
+  const Scoreboard({this.statistics = const {}, this.actions = const []});
 
   Widget _scoreTile(String title, FutureOr<int> value) => Column(
         mainAxisAlignment: MainAxisAlignment.center,

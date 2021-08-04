@@ -1,11 +1,11 @@
 import 'package:finale/services/lastfm/common.dart';
 import 'package:flutter/material.dart';
 
-class PlayCountBarComponent<T extends HasPlayCount> extends StatelessWidget {
+class PlayCountBar<T extends HasPlayCount> extends StatelessWidget {
   final T item;
   final List<T> items;
 
-  PlayCountBarComponent(this.item, this.items);
+  const PlayCountBar(this.item, this.items);
 
   double get percent => item.playCount / items.first.playCount;
 

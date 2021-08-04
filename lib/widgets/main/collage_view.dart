@@ -7,9 +7,9 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/base/app_bar_component.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
-import 'package:finale/widgets/main/collage_web_warning_dialog_component.dart';
+import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/main/collage_web_warning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
@@ -92,7 +92,7 @@ class _CollageViewState extends State<CollageView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Flexible(
-              child: EntityDisplayComponent(
+              child: EntityDisplay(
                 items: items,
                 displayType: DisplayType.grid,
                 scrollable: false,
@@ -190,7 +190,7 @@ class _CollageViewState extends State<CollageView> {
                               shouldSet = (await showDialog(
                                       context: context,
                                       builder: (_) =>
-                                          CollageWebWarningDialogComponent())) ??
+                                          CollageWebWarningDialog())) ??
                                   false;
                             }
 

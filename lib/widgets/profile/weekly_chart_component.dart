@@ -4,11 +4,11 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/loading_component.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
-import 'package:finale/widgets/entity/lastfm/scoreboard_component.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:flutter/material.dart';
 
@@ -114,7 +114,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
         : ListView(
             children: [
               SizedBox(height: 10),
-              ScoreboardComponent(statistics: {
+              Scoreboard(statistics: {
                 'Scrobbles': _numScrobbles,
                 'Artists': _artists.length,
                 'Albums': _albums.length,
@@ -147,7 +147,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                   title: Text(track.name),
                   subtitle: Text(track.artistName),
                   trailing: Text('${track.playCount} scrobbles'),
-                  leading: ImageComponent(entity: track),
+                  leading: EntityImage(entity: track),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -167,8 +167,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       MaterialPageRoute(
                         builder: (context) => Scaffold(
                           appBar: AppBar(title: Text('Top Tracks')),
-                          body: EntityDisplayComponent<
-                              LUserWeeklyTrackChartTrack>(
+                          body: EntityDisplay<LUserWeeklyTrackChartTrack>(
                             items: _tracks,
                             detailWidgetBuilder: (track) =>
                                 TrackView(track: track),
@@ -189,7 +188,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                   title: Text(album.name),
                   subtitle: Text(album.artist.name),
                   trailing: Text('${album.playCount} scrobbles'),
-                  leading: ImageComponent(entity: album),
+                  leading: EntityImage(entity: album),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -209,8 +208,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       MaterialPageRoute(
                         builder: (context) => Scaffold(
                           appBar: AppBar(title: Text('Top Albums')),
-                          body: EntityDisplayComponent<
-                              LUserWeeklyAlbumChartAlbum>(
+                          body: EntityDisplay<LUserWeeklyAlbumChartAlbum>(
                             items: _albums,
                             displayType: DisplayType.grid,
                             detailWidgetBuilder: (album) =>
@@ -231,7 +229,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                 ListTile(
                   title: Text(artist.name),
                   trailing: Text('${artist.playCount} scrobbles'),
-                  leading: ImageComponent(entity: artist),
+                  leading: EntityImage(entity: artist),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   onTap: () {
@@ -253,8 +251,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       MaterialPageRoute(
                         builder: (context) => Scaffold(
                           appBar: AppBar(title: Text('Top Artists')),
-                          body: EntityDisplayComponent<
-                              LUserWeeklyArtistChartArtist>(
+                          body: EntityDisplay<LUserWeeklyArtistChartArtist>(
                             items: _artists,
                             displayType: DisplayType.grid,
                             detailWidgetBuilder: (artist) =>

@@ -5,13 +5,13 @@ import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/base/app_bar_component.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/base/loading_view.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +65,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
             body: ListView(
               children: [
                 Center(
-                    child: ImageComponent(
+                    child: EntityImage(
                         entity: artist,
                         fit: BoxFit.cover,
                         width: min(MediaQuery.of(context).size.width,
@@ -89,7 +89,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                   Visibility(
                     visible: selectedIndex == 0,
                     maintainState: true,
-                    child: EntityDisplayComponent<SAlbumSimple>(
+                    child: EntityDisplay<SAlbumSimple>(
                         scrollable: false,
                         request: SArtistAlbumsRequest(artist),
                         detailWidgetBuilder: (album) =>
@@ -111,7 +111,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                             return LoadingComponent();
                           }
 
-                          return EntityDisplayComponent<STrack>(
+                          return EntityDisplay<STrack>(
                             scrollable: false,
                             items: snapshot.data,
                             secondaryAction: (track) async {

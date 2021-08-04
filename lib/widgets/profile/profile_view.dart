@@ -5,14 +5,14 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
-import 'package:finale/widgets/entity/entity_display_component.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
-import 'package:finale/widgets/entity/lastfm/scoreboard_component.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:finale/widgets/profile/period_selector_component.dart';
-import 'package:finale/widgets/profile/play_count_bar_component.dart';
+import 'package:finale/widgets/profile/period_selector.dart';
+import 'package:finale/widgets/profile/play_count_bar.dart';
 import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
 import 'package:finale/widgets/settings/settings_view.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class _ProfileViewState extends State<ProfileView>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ImageComponent(entity: user, isCircular: true, width: 40),
+                  EntityImage(entity: user, isCircular: true, width: 40),
                   SizedBox(width: 8),
                   Text(user.name),
                 ],
@@ -100,7 +100,7 @@ class _ProfileViewState extends State<ProfileView>
                   maintainState: true,
                   child: Column(children: [
                     SizedBox(height: 10),
-                    ScoreboardComponent(statistics: {
+                    Scoreboard(statistics: {
                       'Scrobbles': user.playCount,
                       'Artists': Lastfm.getNumArtists(widget.username),
                       'Albums': Lastfm.getNumAlbums(widget.username),
@@ -129,35 +129,35 @@ class _ProfileViewState extends State<ProfileView>
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          EntityDisplayComponent<LRecentTracksResponseTrack>(
+                          EntityDisplay<LRecentTracksResponseTrack>(
                             request: GetRecentTracksRequest(widget.username),
                             detailWidgetBuilder: (track) =>
                                 TrackView(track: track),
                           ),
-                          PeriodSelectorComponent<LTopArtistsResponseArtist>(
+                          PeriodSelector<LTopArtistsResponseArtist>(
                             displayType: DisplayType.grid,
                             request: GetTopArtistsRequest(widget.username),
                             detailWidgetBuilder: (artist) =>
                                 ArtistView(artist: artist),
                             subtitleWidgetBuilder: (item, items) =>
-                                PlayCountBarComponent(item, items),
+                                PlayCountBar(item, items),
                           ),
-                          PeriodSelectorComponent<LTopAlbumsResponseAlbum>(
+                          PeriodSelector<LTopAlbumsResponseAlbum>(
                             displayType: DisplayType.grid,
                             request: GetTopAlbumsRequest(widget.username),
                             detailWidgetBuilder: (album) =>
                                 AlbumView(album: album),
                             subtitleWidgetBuilder: (item, items) =>
-                                PlayCountBarComponent(item, items),
+                                PlayCountBar(item, items),
                           ),
-                          PeriodSelectorComponent<LTopTracksResponseTrack>(
+                          PeriodSelector<LTopTracksResponseTrack>(
                             request: GetTopTracksRequest(widget.username),
                             detailWidgetBuilder: (track) =>
                                 TrackView(track: track),
                             subtitleWidgetBuilder: (item, items) =>
-                                PlayCountBarComponent(item, items),
+                                PlayCountBar(item, items),
                           ),
-                          EntityDisplayComponent<LUser>(
+                          EntityDisplay<LUser>(
                             displayCircularImages: true,
                             request: GetFriendsRequest(widget.username),
                             detailWidgetBuilder: (user) =>

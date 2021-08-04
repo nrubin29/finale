@@ -5,15 +5,15 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/base/app_bar_component.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
-import 'package:finale/widgets/entity/lastfm/scoreboard_component.dart';
-import 'package:finale/widgets/entity/lastfm/tags_component.dart';
-import 'package:finale/widgets/entity/lastfm/wiki_component.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
+import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
+import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -93,13 +93,13 @@ class _TrackViewState extends State<TrackView> {
               children: [
                 if (track.album != null)
                   Center(
-                      child: ImageComponent(
+                      child: EntityImage(
                           entity: track.album!,
                           fit: BoxFit.cover,
                           width: min(MediaQuery.of(context).size.width,
                               MediaQuery.of(context).size.height / 2))),
                 SizedBox(height: 10),
-                ScoreboardComponent(
+                Scoreboard(
                   statistics: {
                     'Scrobbles': track.playCount,
                     'Listeners': track.listeners,
@@ -121,15 +121,15 @@ class _TrackViewState extends State<TrackView> {
                 ),
                 if (track.topTags.tags.isNotEmpty) Divider(),
                 if (track.topTags.tags.isNotEmpty)
-                  TagsComponent(topTags: track.topTags),
+                  TagChips(topTags: track.topTags),
                 if (track.wiki != null && track.wiki!.isNotEmpty) ...[
                   Divider(),
-                  WikiComponent(wiki: track.wiki!),
+                  WikiTile(wiki: track.wiki!),
                 ],
                 if (track.artist != null || track.album != null) Divider(),
                 if (track.artist != null)
                   ListTile(
-                      leading: ImageComponent(entity: track.artist!),
+                      leading: EntityImage(entity: track.artist!),
                       title: Text(track.artist!.name),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
@@ -141,7 +141,7 @@ class _TrackViewState extends State<TrackView> {
                       }),
                 if (track.album != null)
                   ListTile(
-                    leading: ImageComponent(entity: track.album!),
+                    leading: EntityImage(entity: track.album!),
                     title: Text(track.album!.name),
                     subtitle:
                         track.artist != null ? Text(track.artist!.name) : null,

@@ -5,7 +5,7 @@ import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/main/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
@@ -53,7 +53,7 @@ class LoginView extends StatelessWidget {
                           future: ArtistGetTopAlbumsRequest(artist.name)
                               .doRequest(1, 1),
                           builder: (context, snapshot) => snapshot.hasData
-                              ? ImageComponent(
+                              ? EntityImage(
                                   entity: snapshot.data!.first,
                                   showPlaceholder: false)
                               : Container()))

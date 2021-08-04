@@ -7,15 +7,16 @@ class ACRCloudDialogResult {
   ACRCloudResponseMusicItem? track;
 
   ACRCloudDialogResult([this.track]) : wasCancelled = false;
+
   ACRCloudDialogResult.cancelled() : wasCancelled = true;
 }
 
-class ACRCloudDialogComponent extends StatefulWidget {
+class ACRCloudDialog extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ACRCloudDialogComponentState();
+  State<StatefulWidget> createState() => _ACRCloudDialogState();
 }
 
-class _ACRCloudDialogComponentState extends State<ACRCloudDialogComponent> {
+class _ACRCloudDialogState extends State<ACRCloudDialog> {
   late ACRCloudSession session;
   List<ACRCloudResponseMusicItem>? results;
 

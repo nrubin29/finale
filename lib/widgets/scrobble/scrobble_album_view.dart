@@ -2,7 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/util.dart';
-import 'package:finale/widgets/entity/image_component.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 
@@ -95,7 +95,7 @@ class _ScrobbleAlbumViewState extends State<ScrobbleAlbumView> {
                 child: Column(
                   children: [
                     ListTile(
-                        leading: ImageComponent(entity: widget.album),
+                        leading: EntityImage(entity: widget.album),
                         title: Text(widget.album.name),
                         subtitle: Text(widget.album.artist.name)),
                     SizedBox(height: 10),
