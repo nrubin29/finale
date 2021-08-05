@@ -13,9 +13,7 @@ import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
-import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SpotifyArtistView extends StatefulWidget {
   final dynamic /* SArtist|SArtistSimple */ artist;
@@ -114,13 +112,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                           return EntityDisplay<STrack>(
                             scrollable: false,
                             items: snapshot.data,
-                            secondaryAction: (track) async {
-                              await showBarModalBottomSheet(
-                                  context: context,
-                                  duration: Duration(milliseconds: 200),
-                                  builder: (context) => ScrobbleView(
-                                      track: track, isModal: true));
-                            },
+                            scrobbleableEntity: (track) => track,
                           );
                         }),
                   ),

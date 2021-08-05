@@ -16,10 +16,7 @@ import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
 import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
 import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/entity/spotify/spotify_playlist_view.dart';
-import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
-import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
 
@@ -258,23 +255,8 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           children: _currentQuery.text != ''
               ? [
                   EntityDisplay<Track>(
-                      secondaryAction: (item) async {
-                        Track track;
-
-                        if (item is STrack) {
-                          track = item;
-                        } else {
-                          track = await Lastfm.getTrack(item);
-                        }
-
-                        await showBarModalBottomSheet(
-                            context: context,
-                            duration: Duration(milliseconds: 200),
-                            builder: (context) => ScrobbleView(
-                                  track: track,
-                                  isModal: true,
-                                ));
-                      },
+                      scrobbleableEntity: (item) async =>
+                          item is STrack ? item : await Lastfm.getTrack(item),
                       requestStream: _query
                           .debounceWhere(_shouldDebounce, debounceDuration)
                           .map((query) =>
@@ -293,34 +275,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                               ? SpotifyArtistView(artist: artist)
                               : ArtistView(artist: artist)),
                   EntityDisplay<BasicAlbum>(
-                      secondaryAction: (item) async {
-                        FullAlbum album;
-
-                        if (item is SAlbumSimple) {
-                          album = await Spotify.getFullAlbum(item);
-                        } else {
-                          album = await Lastfm.getAlbum(item);
-                        }
-
-                        if (album.tracks.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text('This album doesn\'t have any tracks')));
-                          return;
-                        } else if (!album.canScrobble) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text('Can\'t scrobble album because track '
-                                      'duration data is missing')));
-                          return;
-                        }
-
-                        await showBarModalBottomSheet(
-                            context: context,
-                            duration: Duration(milliseconds: 200),
-                            builder: (context) =>
-                                BatchScrobbleView(entity: album));
-                      },
+                      scrobbleableEntity: (item) => item is SAlbumSimple
+                          ? Spotify.getFullAlbum(item)
+                          : Lastfm.getAlbum(item),
                       displayType: DisplayType.grid,
                       requestStream: _query
                           .debounceWhere(_shouldDebounce, debounceDuration)
@@ -332,29 +289,8 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                               : AlbumView(album: album)),
                   if (_searchEngine == SearchEngine.spotify)
                     EntityDisplay<BasicPlaylist>(
-                        secondaryAction: (item) async {
-                          var playlist = await Spotify.getFullPlaylist(
-                              item as SPlaylistSimple);
-
-                          if (playlist.tracks.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text('This playlist doesn\'t have any '
-                                    'tracks')));
-                            return;
-                          } else if (!playlist.canScrobble) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text('Can\'t scrobble playlist because '
-                                        'track duration data is missing')));
-                            return;
-                          }
-
-                          await showBarModalBottomSheet(
-                              context: context,
-                              duration: Duration(milliseconds: 200),
-                              builder: (context) =>
-                                  BatchScrobbleView(entity: playlist));
-                        },
+                        scrobbleableEntity: (item) =>
+                            Spotify.getFullPlaylist(item as SPlaylistSimple),
                         displayType: DisplayType.grid,
                         requestStream: _query
                             .debounceWhere(_shouldDebounce, debounceDuration)

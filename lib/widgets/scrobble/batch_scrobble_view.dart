@@ -4,7 +4,6 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_review/in_app_review.dart';
 
 enum ScrobbleTimestampBehavior {
   startingNow,
@@ -61,20 +60,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
     }
 
     final response = await Lastfm.scrobble(tracks, timestamps);
-    Navigator.pop(context);
-
-    if (response.ignored == 0) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Scrobbled successfully!')));
-
-      // Ask for a review
-      if (isMobile && await InAppReview.instance.isAvailable()) {
-        InAppReview.instance.requestReview();
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred while scrobbling')));
-    }
+    Navigator.pop(context, response.ignored == 0);
   }
 
   @override

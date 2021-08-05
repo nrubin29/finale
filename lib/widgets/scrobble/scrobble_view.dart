@@ -58,7 +58,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     ]);
 
     if (widget.isModal) {
-      Navigator.pop(context);
+      Navigator.pop(context, response.ignored == 0);
+      return;
     }
 
     if (response.ignored == 0) {

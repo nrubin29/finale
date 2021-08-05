@@ -32,6 +32,10 @@ abstract class PagedRequest<T extends Entity> {
 
 enum EntityType { track, album, artist, user, playlist }
 
+extension EntityTypeName on EntityType {
+  String get name => toString().split('.').last;
+}
+
 abstract class Entity {
   EntityType get type;
 

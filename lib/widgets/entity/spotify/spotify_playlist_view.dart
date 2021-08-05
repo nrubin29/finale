@@ -9,10 +9,8 @@ import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
-import 'package:finale/widgets/scrobble/scrobble_view.dart';
+import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SpotifyPlaylistView extends StatelessWidget {
   final SPlaylistSimple playlist;
@@ -41,19 +39,7 @@ class SpotifyPlaylistView extends StatelessWidget {
               playlist.name,
               backgroundColor: spotifyGreen,
               actions: [
-                if (playlist.canScrobble)
-                  Builder(
-                    builder: (context) => IconButton(
-                      icon: Icon(scrobbleIcon),
-                      onPressed: () async {
-                        await showBarModalBottomSheet(
-                            context: context,
-                            duration: Duration(milliseconds: 200),
-                            builder: (context) =>
-                                BatchScrobbleView(entity: playlist));
-                      },
-                    ),
-                  )
+                if (playlist.canScrobble) ScrobbleButton(entity: playlist),
               ],
             ),
             body: ListView(
@@ -69,13 +55,7 @@ class SpotifyPlaylistView extends StatelessWidget {
                   EntityDisplay<STrack>(
                     items: playlist.tracks,
                     scrollable: false,
-                    secondaryAction: (track) async {
-                      await showBarModalBottomSheet(
-                          context: context,
-                          duration: Duration(milliseconds: 200),
-                          builder: (context) =>
-                              ScrobbleView(track: track, isModal: true));
-                    },
+                    scrobbleableEntity: (track) => track,
                   ),
                 ],
               ],

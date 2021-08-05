@@ -4,7 +4,6 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
@@ -14,9 +13,8 @@ import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
-import 'package:finale/widgets/scrobble/scrobble_view.dart';
+import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
 class TrackView extends StatefulWidget {
@@ -66,26 +64,7 @@ class _TrackViewState extends State<TrackView> {
                     Share.share(track.url);
                   },
                 ),
-                Builder(
-                    builder: (context) => IconButton(
-                          icon: Icon(scrobbleIcon),
-                          onPressed: () async {
-                            final result = await showBarModalBottomSheet<bool>(
-                                context: context,
-                                duration: Duration(milliseconds: 200),
-                                builder: (context) => ScrobbleView(
-                                      track: track,
-                                      isModal: true,
-                                    ));
-
-                            if (result != null) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text(result
-                                      ? 'Scrobbled successfully!'
-                                      : 'An error occurred while scrobbling')));
-                            }
-                          },
-                        ))
+                ScrobbleButton(entity: track),
               ],
             ),
             body: ListView(

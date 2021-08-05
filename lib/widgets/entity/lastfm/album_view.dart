@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
@@ -14,9 +13,8 @@ import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
-import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
+import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
 class AlbumView extends StatelessWidget {
@@ -54,19 +52,7 @@ class AlbumView extends StatelessWidget {
                     Share.share(album.url);
                   },
                 ),
-                if (album.canScrobble)
-                  Builder(
-                    builder: (context) => IconButton(
-                      icon: Icon(scrobbleIcon),
-                      onPressed: () async {
-                        await showBarModalBottomSheet(
-                            context: context,
-                            duration: Duration(milliseconds: 200),
-                            builder: (context) =>
-                                BatchScrobbleView(entity: album));
-                      },
-                    ),
-                  )
+                if (album.canScrobble) ScrobbleButton(entity: album),
               ],
             ),
             body: ListView(

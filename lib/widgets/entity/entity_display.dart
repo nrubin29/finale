@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
+import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -23,7 +23,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
-  final void Function(T item)? secondaryAction;
+  final FutureOr<Entity> Function(T item)? scrobbleableEntity;
 
   final DisplayType displayType;
   final bool scrollable;
@@ -44,7 +44,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.detailWidgetBuilder,
       this.subtitleWidgetBuilder,
       this.leadingWidgetBuilder,
-      this.secondaryAction,
+      this.scrobbleableEntity,
       this.displayType = DisplayType.list,
       this.scrollable = true,
       this.displayNumbers = false,
@@ -202,12 +202,8 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (item.displayTrailing != null)
             Text(item.displayTrailing!,
                 style: TextStyle(color: Colors.grey, fontSize: 12)),
-          if (widget.secondaryAction != null)
-            IconButton(
-                icon: Icon(scrobbleIcon),
-                onPressed: () {
-                  widget.secondaryAction!(item);
-                })
+          if (widget.scrobbleableEntity != null)
+            ScrobbleButton(entity: widget.scrobbleableEntity!(item)),
         ],
       )),
     );
@@ -216,16 +212,13 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   Widget _gridTileBuilder(BuildContext context, int index) {
     final item = items[index];
     return GridTile(
-      header: widget.secondaryAction != null
+      header: widget.scrobbleableEntity != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                IconButton(
-                    icon: Icon(scrobbleIcon),
-                    color: Colors.white,
-                    onPressed: () {
-                      widget.secondaryAction!(item);
-                    })
+                ScrobbleButton(
+                    entity: widget.scrobbleableEntity!(item),
+                    color: Colors.white),
               ],
             )
           : null,
