@@ -81,11 +81,14 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 child: Column(
                   children: [
                     ListTile(
-                        leading: EntityImage(entity: widget.entity),
-                        title: Text(widget.entity.displayTitle),
-                        subtitle: widget.entity.displaySubtitle != null
-                            ? Text(widget.entity.displaySubtitle!)
-                            : null),
+                      leading: EntityImage(entity: widget.entity),
+                      title: Text(widget.entity.displayTitle),
+                      subtitle: widget.entity.displaySubtitle != null
+                          ? Text(widget.entity.displaySubtitle!)
+                          : null,
+                      trailing: Text(formatScrobbles(
+                          widget.entity.tracks.length, 'track')),
+                    ),
                     SizedBox(height: 10),
                     Align(
                         alignment: Alignment.centerLeft,
