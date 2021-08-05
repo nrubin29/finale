@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/common.dart';
@@ -21,7 +20,10 @@ class SPlaylistSimple extends BasicPlaylist {
   @override
   final ImageId? imageId;
 
-  SPlaylistSimple(this.url, this.name, this.id, this.imageId);
+  @JsonKey(name: 'tracks', fromJson: extractIsNotEmpty)
+  final bool isNotEmpty;
+
+  SPlaylistSimple(this.url, this.name, this.id, this.imageId, this.isNotEmpty);
 
   factory SPlaylistSimple.fromJson(Map<String, dynamic> json) =>
       _$SPlaylistSimpleFromJson(json);
@@ -31,42 +33,47 @@ class SPlaylistSimple extends BasicPlaylist {
 
   @override
   String toString() => 'SPlaylistSimple(name=$name)';
+
+  static bool extractIsNotEmpty(Map<String, dynamic> object) =>
+      (object['total'] as int) > 0;
 }
 
-@JsonSerializable()
 class SPlaylistFull extends FullPlaylist {
-  @JsonKey(name: 'href')
-  @override
-  final String url;
+  final SPlaylistSimple _playlist;
 
-  final String name;
-
-  final String id;
-
-  @JsonKey(name: 'images', fromJson: extractImageId)
-  @override
-  final ImageId? imageId;
-
-  @JsonKey(fromJson: extractItems)
   @override
   final List<STrack> tracks;
 
-  SPlaylistFull(this.url, this.name, this.id, this.imageId, this.tracks);
-
-  factory SPlaylistFull.fromJson(Map<String, dynamic> json) =>
-      _$SPlaylistFullFromJson(json);
+  SPlaylistFull(this._playlist, this.tracks);
 
   @override
-  String get displayTitle => name;
+  ImageId? get imageId => _playlist.imageId;
 
   @override
-  String toString() => 'SPlaylistFull(name=$name)';
+  String get displayTitle => _playlist.displayTitle;
 
-  static List<STrack> extractItems(Map<String, dynamic> object) =>
-      (object['items'] as List<dynamic>)
-          .map((item) => item['track'])
-          .whereNotNull()
-          .map(
-              (trackJson) => STrack.fromJson(trackJson as Map<String, dynamic>))
-          .toList(growable: false);
+  @override
+  String get url => _playlist.url;
+}
+
+@JsonSerializable()
+class SPlaylistItem extends Track {
+  final STrack track;
+
+  SPlaylistItem(this.track);
+
+  factory SPlaylistItem.fromJson(Map<String, dynamic> json) =>
+      _$SPlaylistItemFromJson(json);
+
+  @override
+  String? get albumName => track.albumName;
+
+  @override
+  String? get artistName => track.artistName;
+
+  @override
+  String get name => track.name;
+
+  @override
+  String? get url => track.url;
 }

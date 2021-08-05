@@ -122,6 +122,22 @@ class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
   }
 }
 
+class SPlaylistTracksRequest extends PagedRequest<STrack> {
+  final SPlaylistSimple playlist;
+
+  const SPlaylistTracksRequest(this.playlist);
+
+  @override
+  Future<List<STrack>> doRequest(int limit, int page) async {
+    final rawResponse = await _doRequest('playlists/${playlist.id}/tracks',
+        {'limit': limit, 'offset': (page - 1) * limit});
+    return SPage<SPlaylistItem>.fromJson(rawResponse)
+        .items
+        .map((e) => e.track)
+        .toList();
+  }
+}
+
 class Spotify {
   static Future<SAlbumFull> getFullAlbum(SAlbumSimple simpleAlbum) async {
     final rawResponse = await _doRequest('albums/${simpleAlbum.id}');
@@ -135,8 +151,8 @@ class Spotify {
 
   static Future<SPlaylistFull> getFullPlaylist(
       SPlaylistSimple simplePlaylist) async {
-    final rawResponse = await _doRequest('playlists/${simplePlaylist.id}');
-    return SPlaylistFull.fromJson(rawResponse);
+    final tracks = await SPlaylistTracksRequest(simplePlaylist).getAllData();
+    return SPlaylistFull(simplePlaylist, tracks);
   }
 
   static Future<List<STrack>> getTopTracksForArtist(SArtist artist) async {

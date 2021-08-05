@@ -22,9 +22,9 @@ abstract class PagedRequest<T extends Entity> {
     var page = 1;
 
     do {
-      lastResult = await doRequest(200, page++);
+      lastResult = await doRequest(50, page++);
       result.addAll(lastResult);
-    } while (lastResult.length == 200);
+    } while (lastResult.length == 50);
 
     return result;
   }
