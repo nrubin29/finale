@@ -266,3 +266,65 @@ class LUserWeeklyArtistChart {
   factory LUserWeeklyArtistChart.fromJson(Map<String, dynamic> json) =>
       _$LUserWeeklyArtistChartFromJson(json);
 }
+
+@JsonSerializable()
+class LUserTrackScrobblesResponse {
+  @JsonKey(name: 'track')
+  final List<LUserTrackScrobble> tracks;
+
+  const LUserTrackScrobblesResponse(this.tracks);
+
+  factory LUserTrackScrobblesResponse.fromJson(Map<String, dynamic> json) =>
+      _$LUserTrackScrobblesResponseFromJson(json);
+}
+
+@JsonSerializable()
+class LUserTrackScrobble extends BasicScrobbledTrack {
+  @override
+  String name;
+
+  @JsonKey(fromJson: extractDateTimeFromObject)
+  @override
+  DateTime date;
+
+  @override
+  String url;
+
+  LUserWeeklyTrackChartTrackArtist artist;
+  LUserTrackScrobbleAlbum album;
+
+  @override
+  Future<ImageId?> get imageId =>
+      ImageId.scrape(url, '.cover-art > :first-child',
+          attribute: 'src',
+          endUrlAtPeriod: true,
+          spotifyFallback: SSearchTracksRequest('$name $artistName'));
+
+  LUserTrackScrobble(this.name, this.date, this.url, this.artist, this.album);
+
+  factory LUserTrackScrobble.fromJson(Map<String, dynamic> json) =>
+      _$LUserTrackScrobbleFromJson(json);
+
+  @override
+  String? get albumName => album.name;
+
+  @override
+  String? get artistName => artist.name;
+
+  @override
+  String get displayTrailing => formatDateTimeDelta(date, withYear: true);
+
+  static DateTime extractDateTimeFromObject(Map<String, dynamic> object) =>
+      fromSecondsSinceEpoch(object['uts']);
+}
+
+@JsonSerializable()
+class LUserTrackScrobbleAlbum {
+  @JsonKey(name: '#text')
+  final String name;
+
+  const LUserTrackScrobbleAlbum(this.name);
+
+  factory LUserTrackScrobbleAlbum.fromJson(Map<String, dynamic> json) =>
+      _$LUserTrackScrobbleAlbumFromJson(json);
+}

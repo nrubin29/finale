@@ -4,9 +4,11 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
@@ -83,6 +85,22 @@ class _TrackViewState extends State<TrackView> {
                     'Scrobbles': track.playCount,
                     'Listeners': track.listeners,
                     'Your scrobbles': track.userPlayCount,
+                  },
+                  statisticActions: {
+                    if (track.userPlayCount > 0)
+                      'Your scrobbles': () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Scaffold(
+                              appBar: AppBar(title: Text('Your scrobbles')),
+                              body: EntityDisplay<LUserTrackScrobble>(
+                                request: UserGetTrackScrobblesRequest(track),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                   },
                   actions: [
                     IconButton(

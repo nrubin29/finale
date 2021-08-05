@@ -48,6 +48,24 @@ final timeFormat = DateFormat.jms();
 final dateTimeFormat = DateFormat('d MMM').add_jm();
 final dateTimeFormatWithYear = DateFormat('d MMM yyyy').add_jm();
 
+String formatDateTimeDelta(DateTime? date, {bool withYear = false}) {
+  if (date == null) {
+    return 'scrobbling now';
+  }
+
+  final delta = DateTime.now().difference(date);
+
+  if (delta.inDays == 0) {
+    if (delta.inHours == 0) {
+      return '${delta.inMinutes} min${delta.inMinutes == 1 ? '' : 's'} ago';
+    }
+
+    return '${delta.inHours} hour${delta.inHours == 1 ? '' : 's'} ago';
+  }
+
+  return (withYear ? dateTimeFormatWithYear : dateTimeFormat).format(date);
+}
+
 extension DateTimeUtil on DateTime {
   /// Returns a [DateTime] with the same date and time 0:00:00.
   DateTime get beginningOfDay => DateTime(year, month, day);

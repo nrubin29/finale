@@ -41,23 +41,7 @@ abstract class BasicScrobbledTrack extends Track {
   DateTime? get date;
 
   @override
-  String get displayTrailing {
-    if (date == null) {
-      return 'scrobbling now';
-    }
-
-    final delta = DateTime.now().difference(date!);
-
-    if (delta.inDays == 0) {
-      if (delta.inHours == 0) {
-        return '${delta.inMinutes} min${delta.inMinutes == 1 ? '' : 's'} ago';
-      }
-
-      return '${delta.inHours} hour${delta.inHours == 1 ? '' : 's'} ago';
-    }
-
-    return dateTimeFormat.format(date!);
-  }
+  String get displayTrailing => formatDateTimeDelta(date);
 }
 
 abstract class BasicScrobbledAlbum extends BasicAlbum {

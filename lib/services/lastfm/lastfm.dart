@@ -227,6 +227,25 @@ class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
   }
 }
 
+class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
+  final LTrack track;
+
+  const UserGetTrackScrobblesRequest(this.track);
+
+  @override
+  Future<List<LUserTrackScrobble>> doRequest(int limit, int page) async {
+    final rawResponse = await _doRequest('user.getTrackScrobbles', {
+      'track': track.name,
+      'artist': track.artistName,
+      'user': Preferences().name,
+      'limit': limit,
+      'page': page,
+    });
+    return LUserTrackScrobblesResponse.fromJson(rawResponse['trackscrobbles'])
+        .tracks;
+  }
+}
+
 class Lastfm {
   static Future<LAuthenticationResponseSession> authenticate(
       String token) async {

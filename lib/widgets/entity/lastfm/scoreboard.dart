@@ -6,9 +6,13 @@ import 'package:flutter/material.dart';
 /// A widget that displays multiple [statistics] with labels.
 class Scoreboard extends StatelessWidget {
   final Map<String, FutureOr<int>> statistics;
+  final Map<String, VoidCallback> statisticActions;
   final List<Widget> actions;
 
-  const Scoreboard({this.statistics = const {}, this.actions = const []});
+  const Scoreboard(
+      {this.statistics = const {},
+      this.statisticActions = const {},
+      this.actions = const []});
 
   Widget _scoreTile(String title, FutureOr<int> value) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -26,14 +30,24 @@ class Scoreboard extends StatelessWidget {
         ],
       );
 
-  List<Widget> get _widgets => statistics.entries
-      .map((e) => _scoreTile(e.key, e.value))
+  List<Widget> _widgets(BuildContext context) => statistics.entries
+      .map((e) => statisticActions.containsKey(e.key)
+          ? OutlinedButton(
+              style: ButtonStyle(
+                textStyle: MaterialStateProperty.all(
+                    TextStyle(fontWeight: FontWeight.normal)),
+                visualDensity: VisualDensity.compact,
+              ),
+              onPressed: statisticActions[e.key],
+              child: _scoreTile(e.key, e.value),
+            )
+          : _scoreTile(e.key, e.value))
       .followedBy(actions)
       .toList(growable: false);
 
   @override
   Widget build(BuildContext context) {
-    final widgets = _widgets;
+    final widgets = _widgets(context);
 
     return IntrinsicHeight(
       child: Row(
