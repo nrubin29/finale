@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/common.dart';
@@ -63,6 +64,9 @@ class SPlaylistFull extends FullPlaylist {
 
   static List<STrack> extractItems(Map<String, dynamic> object) =>
       (object['items'] as List<dynamic>)
-          .map((item) => STrack.fromJson(item['track']))
+          .map((item) => item['track'])
+          .whereNotNull()
+          .map(
+              (trackJson) => STrack.fromJson(trackJson as Map<String, dynamic>))
           .toList(growable: false);
 }
