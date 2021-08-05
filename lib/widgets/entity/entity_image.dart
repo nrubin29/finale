@@ -16,29 +16,6 @@ class EntityImage extends StatelessWidget {
   final bool isCircular;
   final bool showPlaceholder;
 
-  static const placeholders = {
-    EntityType.track: {
-      ImageQuality.low: AssetImage('assets/images/default_track_low.jpg'),
-      ImageQuality.high: AssetImage('assets/images/default_track.jpg'),
-    },
-    EntityType.album: {
-      ImageQuality.low: AssetImage('assets/images/default_album_low.jpg'),
-      ImageQuality.high: AssetImage('assets/images/default_album.jpg'),
-    },
-    EntityType.artist: {
-      ImageQuality.low: AssetImage('assets/images/default_artist_low.jpg'),
-      ImageQuality.high: AssetImage('assets/images/default_artist.jpg'),
-    },
-    EntityType.user: {
-      ImageQuality.low: AssetImage('assets/images/default_user_low.jpg'),
-      ImageQuality.high: AssetImage('assets/images/default_user.jpg'),
-    },
-    EntityType.playlist: {
-      ImageQuality.low: AssetImage('assets/images/default_playlist_low.jpg'),
-      ImageQuality.high: AssetImage('assets/images/default_playlist.jpg'),
-    },
-  };
-
   const EntityImage({
     required this.entity,
     this.quality = ImageQuality.high,
@@ -54,10 +31,8 @@ class EntityImage extends StatelessWidget {
           shape: CircleBorder(), clipBehavior: Clip.hardEdge, child: image));
 
   Widget _buildImage(BuildContext context, ImageId? imageId) {
-    final placeholder = showPlaceholder
-        ? Image(
-            image: placeholders[entity.type]![quality]!, width: width, fit: fit)
-        : Container();
+    final placeholder =
+        showPlaceholder ? _Placeholder(entity, quality, width) : Container();
 
     if (imageId == null) {
       return isCircular
@@ -153,4 +128,44 @@ class EntityImage extends StatelessWidget {
           );
         });
   }
+}
+
+class _Placeholder extends StatelessWidget {
+  static const _iconMap = {
+    EntityType.track: Icons.music_note,
+    EntityType.album: Icons.album,
+    EntityType.artist: Icons.people,
+    EntityType.user: Icons.person,
+    EntityType.playlist: Icons.queue_music,
+  };
+
+  final Entity entity;
+  final ImageQuality quality;
+  final double? width;
+
+  const _Placeholder(this.entity, this.quality, this.width);
+
+  @override
+  Widget build(BuildContext context) => FittedBox(
+        fit: BoxFit.cover,
+        child: Container(
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.grey
+              : Colors.grey.shade800,
+          width: width ?? (quality == ImageQuality.high ? 470 : 64),
+          height: width ?? (quality == ImageQuality.high ? 470 : 64),
+          child: Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.7,
+              heightFactor: 0.7,
+              child: FittedBox(
+                child: Icon(
+                  _iconMap[entity.type],
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
 }
