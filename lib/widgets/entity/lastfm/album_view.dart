@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
@@ -42,63 +41,58 @@ class AlbumView extends StatelessWidget {
         final album = snapshot.data!;
 
         return Scaffold(
-            appBar: createAppBar(
-              album.name,
-              subtitle: album.artist.name,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.share),
-                  onPressed: () {
-                    Share.share(album.url);
-                  },
-                ),
-                if (album.canScrobble) ScrobbleButton(entity: album),
-              ],
-            ),
-            body: ListView(
-              children: [
-                Center(
-                    child: EntityImage(
-                        entity: album,
-                        fit: BoxFit.cover,
-                        width: min(MediaQuery.of(context).size.width,
-                            MediaQuery.of(context).size.height / 2))),
-                SizedBox(height: 10),
-                Scoreboard(statistics: {
-                  'Scrobbles': album.playCount,
-                  'Listeners': album.listeners,
-                  'Your scrobbles': album.userPlayCount,
-                }),
-                if (album.topTags.tags.isNotEmpty) Divider(),
-                if (album.topTags.tags.isNotEmpty)
-                  TagChips(topTags: album.topTags),
-                if (album.wiki != null && album.wiki!.isNotEmpty) ...[
-                  Divider(),
-                  WikiTile(wiki: album.wiki!)
-                ],
+          appBar: createAppBar(
+            album.name,
+            subtitle: album.artist.name,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.share),
+                onPressed: () {
+                  Share.share(album.url);
+                },
+              ),
+              if (album.canScrobble) ScrobbleButton(entity: album),
+            ],
+          ),
+          body: TwoUp(
+            image: EntityImage(entity: album),
+            listItems: [
+              Scoreboard(statistics: {
+                'Scrobbles': album.playCount,
+                'Listeners': album.listeners,
+                'Your scrobbles': album.userPlayCount,
+              }),
+              if (album.topTags.tags.isNotEmpty) Divider(),
+              if (album.topTags.tags.isNotEmpty)
+                TagChips(topTags: album.topTags),
+              if (album.wiki != null && album.wiki!.isNotEmpty) ...[
                 Divider(),
-                ListTile(
-                    leading: EntityImage(entity: album.artist),
-                    title: Text(album.artist.name),
-                    trailing: Icon(Icons.chevron_right),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ArtistView(artist: album.artist)));
-                    }),
-                if (album.tracks.isNotEmpty) Divider(),
-                if (album.tracks.isNotEmpty)
-                  EntityDisplay<LAlbumTrack>(
-                    items: album.tracks,
-                    scrollable: false,
-                    displayNumbers: true,
-                    displayImages: false,
-                    detailWidgetBuilder: (track) => TrackView(track: track),
-                  ),
+                WikiTile(wiki: album.wiki!)
               ],
-            ));
+              Divider(),
+              ListTile(
+                  leading: EntityImage(entity: album.artist),
+                  title: Text(album.artist.name),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ArtistView(artist: album.artist)));
+                  }),
+              if (album.tracks.isNotEmpty) Divider(),
+              if (album.tracks.isNotEmpty)
+                EntityDisplay<LAlbumTrack>(
+                  items: album.tracks,
+                  scrollable: false,
+                  displayNumbers: true,
+                  displayImages: false,
+                  detailWidgetBuilder: (track) => TrackView(track: track),
+                ),
+            ],
+          ),
+        );
       },
     );
   }

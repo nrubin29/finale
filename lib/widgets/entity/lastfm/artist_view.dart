@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
@@ -67,15 +66,9 @@ class _ArtistViewState extends State<ArtistView>
                 ),
               ],
             ),
-            body: ListView(
-              children: [
-                Center(
-                    child: EntityImage(
-                        entity: artist,
-                        fit: BoxFit.cover,
-                        width: min(MediaQuery.of(context).size.width,
-                            MediaQuery.of(context).size.height / 2))),
-                SizedBox(height: 10),
+            body: TwoUp(
+              image: EntityImage(entity: artist),
+              listItems: [
                 Scoreboard(statistics: {
                   'Scrobbles': artist.stats.playCount,
                   'Listeners': artist.stats.listeners,

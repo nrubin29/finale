@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class EntityImage extends StatelessWidget {
   final Entity entity;
   final ImageQuality quality;
-  final BoxFit? fit;
+  final BoxFit fit;
   final double? width;
   final bool isCircular;
   final bool showPlaceholder;
@@ -19,16 +19,20 @@ class EntityImage extends StatelessWidget {
   const EntityImage({
     required this.entity,
     this.quality = ImageQuality.high,
-    this.fit,
+    this.fit = BoxFit.contain,
     this.width,
     this.isCircular = false,
     this.showPlaceholder = true,
   });
 
   Widget _buildCircularImage(BuildContext context, Widget image) => Container(
-      width: width,
-      child: Material(
-          shape: CircleBorder(), clipBehavior: Clip.hardEdge, child: image));
+        width: width,
+        child: Material(
+          shape: const CircleBorder(),
+          clipBehavior: Clip.hardEdge,
+          child: image,
+        ),
+      );
 
   Widget _buildImage(BuildContext context, ImageId? imageId) {
     final placeholder =
@@ -41,11 +45,12 @@ class EntityImage extends StatelessWidget {
     }
 
     final image = CachedNetworkImage(
-        imageUrl: imageId.getUrl(quality),
-        placeholder: (context, url) => placeholder,
-        errorWidget: (context, url, error) => placeholder,
-        fit: fit,
-        width: width);
+      imageUrl: imageId.getUrl(quality),
+      placeholder: (_, __) => placeholder,
+      errorWidget: (_, __, ___) => placeholder,
+      fit: fit,
+      width: width,
+    );
 
     Widget imageWidget =
         isCircular ? _buildCircularImage(context, image) : image;
@@ -147,7 +152,7 @@ class _Placeholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FittedBox(
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
         child: Container(
           color: Theme.of(context).brightness == Brightness.light
               ? Colors.grey

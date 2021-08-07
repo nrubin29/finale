@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/spotify.dart';
@@ -10,6 +8,7 @@ import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
@@ -60,14 +59,9 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
               artist.name,
               backgroundColor: spotifyGreen,
             ),
-            body: ListView(
-              children: [
-                Center(
-                    child: EntityImage(
-                        entity: artist,
-                        fit: BoxFit.cover,
-                        width: min(MediaQuery.of(context).size.width,
-                            MediaQuery.of(context).size.height / 2))),
+            body: TwoUp(
+              image: EntityImage(entity: artist),
+              listItems: [
                 TabBar(
                     labelColor: Colors.red,
                     unselectedLabelColor: Colors.grey,

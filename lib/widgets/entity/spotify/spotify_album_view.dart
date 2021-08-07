@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
@@ -43,15 +42,9 @@ class SpotifyAlbumView extends StatelessWidget {
                 if (album.canScrobble) ScrobbleButton(entity: album),
               ],
             ),
-            body: ListView(
-              children: [
-                Center(
-                    child: EntityImage(
-                        entity: album,
-                        fit: BoxFit.cover,
-                        width: min(MediaQuery.of(context).size.width,
-                            MediaQuery.of(context).size.height / 2))),
-                SizedBox(height: 10),
+            body: TwoUp(
+              image: EntityImage(entity: album),
+              listItems: [
                 ListTile(
                     leading: EntityImage(entity: album.artist),
                     title: Text(album.artist.name),
