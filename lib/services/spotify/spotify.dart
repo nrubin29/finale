@@ -33,7 +33,7 @@ Future<Map<String, dynamic>> _doRequest(String method,
 
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
-  } else if (response.statusCode == 400) {
+  } else if (response.statusCode ~/ 100 == 4) {
     throw SException.fromJson(
         json.decode(utf8.decode(response.bodyBytes))['error']);
   } else {
