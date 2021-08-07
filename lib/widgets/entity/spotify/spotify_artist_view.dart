@@ -106,7 +106,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                           return EntityDisplay<STrack>(
                             scrollable: false,
                             items: snapshot.data,
-                            scrobbleableEntity: (track) => track,
+                            scrobbleableEntity: (track) => Future.value(track),
                           );
                         }),
                   ),

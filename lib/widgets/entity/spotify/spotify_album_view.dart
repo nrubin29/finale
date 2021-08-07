@@ -63,7 +63,7 @@ class SpotifyAlbumView extends StatelessWidget {
                     scrollable: false,
                     displayNumbers: true,
                     displayImages: false,
-                    scrobbleableEntity: (track) => track,
+                    scrobbleableEntity: (track) => Future.value(track),
                   ),
               ],
             ));

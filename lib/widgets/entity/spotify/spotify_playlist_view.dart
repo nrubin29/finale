@@ -21,7 +21,8 @@ class SpotifyPlaylistView extends StatelessWidget {
           backgroundColor: spotifyGreen,
           actions: [
             if (playlist.isNotEmpty)
-              ScrobbleButton(entity: Spotify.getFullPlaylist(playlist)),
+              ScrobbleButton(
+                  entityProvider: () => Spotify.getFullPlaylist(playlist)),
           ],
         ),
         body: TwoUp(
@@ -30,7 +31,7 @@ class SpotifyPlaylistView extends StatelessWidget {
             EntityDisplay<STrack>(
               request: SPlaylistTracksRequest(playlist),
               scrollable: false,
-              scrobbleableEntity: (track) => track,
+              scrobbleableEntity: (track) => Future.value(track),
             ),
           ],
         ),

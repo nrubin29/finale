@@ -23,7 +23,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
-  final FutureOr<Entity> Function(T item)? scrobbleableEntity;
+  final Future<Entity> Function(T item)? scrobbleableEntity;
 
   final DisplayType displayType;
   final bool scrollable;
@@ -203,7 +203,8 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             Text(item.displayTrailing!,
                 style: TextStyle(color: Colors.grey, fontSize: 12)),
           if (widget.scrobbleableEntity != null)
-            ScrobbleButton(entity: widget.scrobbleableEntity!(item)),
+            ScrobbleButton(
+                entityProvider: () => widget.scrobbleableEntity!(item)),
         ],
       )),
     );
@@ -217,7 +218,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 ScrobbleButton(
-                    entity: widget.scrobbleableEntity!(item),
+                    entityProvider: () => widget.scrobbleableEntity!(item),
                     color: Colors.white),
               ],
             )
@@ -347,6 +348,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    print('EntityDisplay build $_request');
 
     if (!didInitialRequest) {
       return LoadingComponent();

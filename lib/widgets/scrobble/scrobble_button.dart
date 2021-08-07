@@ -8,13 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-/// A button that, when tapped, opens the appropriate scrobble view for
-/// [entity].
+/// A button that, when tapped, opens the appropriate scrobble view.
+///
+/// Either [entity] or [entityProvider] must be specified depending on if the
+/// [Entity] is available immediately or if it must be fetched.
 class ScrobbleButton<T extends Entity> extends StatefulWidget {
-  final FutureOr<T> entity;
+  final T? entity;
+  final Future<T> Function()? entityProvider;
   final Color? color;
 
-  const ScrobbleButton({required this.entity, this.color});
+  const ScrobbleButton({this.entity, this.entityProvider, this.color})
+      : assert(entity != null || entityProvider != null);
 
   @override
   State<StatefulWidget> createState() => _ScrobbleButtonState<T>();
@@ -25,7 +29,11 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
 
   void _onPressed() async {
     if (_cachedEntity == null) {
-      _cachedEntity = await widget.entity;
+      if (widget.entity != null) {
+        _cachedEntity = widget.entity;
+      } else {
+        _cachedEntity = await widget.entityProvider!();
+      }
     }
 
     Widget scrobbleView;
