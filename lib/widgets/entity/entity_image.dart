@@ -25,7 +25,7 @@ class EntityImage extends StatelessWidget {
     this.showPlaceholder = true,
   });
 
-  Widget _buildCircularImage(BuildContext context, Widget image) => Container(
+  Widget _buildCircularImage(Widget image) => Container(
         width: width,
         child: Material(
           shape: const CircleBorder(),
@@ -34,14 +34,12 @@ class EntityImage extends StatelessWidget {
         ),
       );
 
-  Widget _buildImage(BuildContext context, ImageId? imageId) {
+  Widget _buildImage(ImageId? imageId) {
     final placeholder =
         showPlaceholder ? _Placeholder(entity, quality, width) : Container();
 
     if (imageId == null) {
-      return isCircular
-          ? _buildCircularImage(context, placeholder)
-          : placeholder;
+      return isCircular ? _buildCircularImage(placeholder) : placeholder;
     }
 
     final image = CachedNetworkImage(
@@ -52,8 +50,7 @@ class EntityImage extends StatelessWidget {
       width: width,
     );
 
-    Widget imageWidget =
-        isCircular ? _buildCircularImage(context, image) : image;
+    Widget imageWidget = isCircular ? _buildCircularImage(image) : image;
 
     assert(() {
       if (censorImages && entity.type != EntityType.user) {
@@ -97,38 +94,38 @@ class EntityImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entity.cachedImageId != null) {
-      return _buildImage(context, entity.cachedImageId);
+      return _buildImage(entity.cachedImageId);
     } else if (entity.imageId == null) {
-      return _buildImage(context, null);
+      return _buildImage(null);
     } else if (entity.imageId is ImageId) {
-      return _buildImage(context, entity.imageId as ImageId);
+      return _buildImage(entity.imageId as ImageId);
     } else if (entity.url == null) {
-      return _buildImage(context, null);
+      return _buildImage(null);
     }
 
     return FutureBuilder<ImageId?>(
         future: ImageIdCache().get(entity.url!),
-        builder: (context, snapshot) {
+        builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return _buildImage(context, null);
+            return _buildImage(null);
           }
 
           final cachedImageId = snapshot.data;
 
           if (cachedImageId != null) {
             entity.cachedImageId = cachedImageId;
-            return _buildImage(context, cachedImageId);
+            return _buildImage(cachedImageId);
           }
 
           return FutureBuilder<ImageId?>(
             future: entity.imageId as Future<ImageId?>,
-            builder: (context, snapshot) {
+            builder: (_, snapshot) {
               if (snapshot.hasData) {
                 ImageIdCache().insert(entity.url!, snapshot.data!);
                 entity.cachedImageId = snapshot.data;
               }
 
-              return _buildImage(context, snapshot.data);
+              return _buildImage(snapshot.data);
             },
           );
         });
