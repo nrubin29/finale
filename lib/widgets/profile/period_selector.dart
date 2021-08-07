@@ -51,40 +51,45 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
   Widget build(BuildContext context) => Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IntrinsicWidth(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SafeArea(
+              top: false,
+              bottom: false,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IntrinsicWidth(
                     child: DefaultTabController(
-                  length: 2,
-                  initialIndex: _displayType.index,
-                  child: TabBar(
-                      labelColor: Colors.red,
-                      unselectedLabelColor: Colors.grey,
-                      indicatorColor: Colors.transparent,
-                      tabs: [Icon(Icons.list), Icon(Icons.grid_view)],
-                      onTap: (index) {
-                        setState(() {
-                          _displayType = DisplayType.values[index];
-                        });
-                      }),
-                )),
-                DropdownButton<Period>(
-                  value: _period,
-                  items: Period.values
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e.display),
-                          ))
-                      .toList(growable: false),
-                  onChanged: (value) {
-                    if (value != null && value != _period) {
-                      Preferences().period = value;
-                    }
-                  },
-                ),
-              ],
+                      length: 2,
+                      initialIndex: _displayType.index,
+                      child: TabBar(
+                          labelColor: Colors.red,
+                          unselectedLabelColor: Colors.grey,
+                          indicatorColor: Colors.transparent,
+                          tabs: const [Icon(Icons.list), Icon(Icons.grid_view)],
+                          onTap: (index) {
+                            setState(() {
+                              _displayType = DisplayType.values[index];
+                            });
+                          }),
+                    ),
+                  ),
+                  DropdownButton<Period>(
+                    value: _period,
+                    items: Period.values
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.display),
+                            ))
+                        .toList(growable: false),
+                    onChanged: (value) {
+                      if (value != null && value != _period) {
+                        Preferences().period = value;
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -101,7 +106,7 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
 
   @override
   void dispose() {
-    super.dispose();
     _periodChangeSubscription.cancel();
+    super.dispose();
   }
 }
