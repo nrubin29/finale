@@ -36,7 +36,7 @@ class SPage<T extends Entity> {
 
   static T _fromJson<T extends Entity>(Object? json) {
     if (json is Map<String, dynamic>) {
-      if (json.containsKey('is_local')) {
+      if (json.containsKey('track')) {
         return SPlaylistItem.fromJson(json) as T;
       } else if (json['type'] == 'artist') {
         return SArtist.fromJson(json) as T;

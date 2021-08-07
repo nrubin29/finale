@@ -46,7 +46,7 @@ class STrack extends ScrobbleableTrack {
 
   @JsonKey(name: 'href')
   @override
-  final String url;
+  final String? url;
 
   @override
   final String name;

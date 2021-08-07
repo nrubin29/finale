@@ -8,14 +8,14 @@ part 'artist.g.dart';
 
 @JsonSerializable()
 class SArtistSimple extends BasicArtist {
-  final String id;
+  final String? id;
 
   @override
   final String name;
 
   @JsonKey(name: 'href')
   @override
-  final String url;
+  final String? url;
 
   @override
   Future<ImageId?> get imageId async =>

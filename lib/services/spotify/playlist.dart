@@ -58,7 +58,7 @@ class SPlaylistFull extends FullPlaylist {
 
 @JsonSerializable()
 class SPlaylistItem extends Track {
-  final STrack track;
+  final STrack? track;
 
   SPlaylistItem(this.track);
 
@@ -66,14 +66,14 @@ class SPlaylistItem extends Track {
       _$SPlaylistItemFromJson(json);
 
   @override
-  String? get albumName => track.albumName;
+  String? get albumName => track?.albumName;
 
   @override
-  String? get artistName => track.artistName;
+  String? get artistName => track?.artistName;
 
   @override
-  String get name => track.name;
+  String get name => track?.name ?? 'Error';
 
   @override
-  String? get url => track.url;
+  String? get url => track?.url;
 }

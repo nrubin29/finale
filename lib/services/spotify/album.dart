@@ -13,12 +13,12 @@ class SAlbumSimple extends BasicAlbum {
 
   @JsonKey(name: 'href')
   @override
-  final String url;
+  final String? url;
 
   @override
   final String name;
 
-  final String id;
+  final String? id;
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
