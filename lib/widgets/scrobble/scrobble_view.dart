@@ -3,6 +3,7 @@ import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/util.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/scrobble/music_recognition_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
@@ -101,102 +102,111 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Scrobble'),
-          actions: [
-            Builder(
-                builder: (context) => IconButton(
-                    icon: Icon(scrobbleIcon),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _scrobble(context);
+      appBar: createAppBar(
+        'Scrobble',
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(scrobbleIcon),
+              onPressed: () {
+                if (_formKey.currentState?.validate() ?? false) {
+                  _scrobble(context);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(10),
+            physics: const ScrollPhysics(),
+            children: [
+              if (!widget.isModal && isMobile)
+                MusicRecognitionComponent(
+                  onTrackRecognized: (track) {
+                    setState(() {
+                      _trackController.text = track.title;
+                      _albumController.text = track.album.name;
+                      _artistController.text = track.artists.first.name;
+                    });
+                  },
+                ),
+              TextFormField(
+                controller: _trackController,
+                decoration: InputDecoration(labelText: 'Song *'),
+                validator: _required,
+              ),
+              TextFormField(
+                controller: _artistController,
+                decoration: InputDecoration(labelText: 'Artist *'),
+                validator: _required,
+              ),
+              TextFormField(
+                controller: _albumController,
+                decoration: InputDecoration(labelText: 'Album'),
+              ),
+              SwitchListTile(
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: EdgeInsets.zero,
+                activeColor: Colors.red,
+                title: Text('Custom timestamp'),
+                value: _useCustomTimestamp,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _useCustomTimestamp = value;
+
+                      if (_useCustomTimestamp) {
+                        _customTimestamp = DateTime.now();
                       }
-                    }))
-          ],
+                    },
+                  );
+                },
+              ),
+              Visibility(
+                visible: _useCustomTimestamp,
+                child: DateTimeField(
+                  decoration: InputDecoration(labelText: 'Timestamp'),
+                  resetIcon: null,
+                  format: dateTimeFormatWithYear,
+                  initialValue: _customTimestamp,
+                  onShowPicker: (context, currentValue) async {
+                    final date = await showDatePicker(
+                        context: context,
+                        initialDate: currentValue ?? DateTime.now(),
+                        firstDate: DateTime.now().subtract(Duration(days: 14)),
+                        lastDate: DateTime.now().add(Duration(days: 1)));
+
+                    if (date != null) {
+                      final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              currentValue ?? DateTime.now()));
+
+                      if (time != null) {
+                        return DateTimeField.combine(date, time);
+                      }
+                    }
+
+                    return currentValue;
+                  },
+                  onChanged: (dateTime) {
+                    if (dateTime != null) {
+                      setState(() {
+                        _customTimestamp = dateTime;
+                      });
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
-        body: Form(
-            key: _formKey,
-            child: Container(
-                margin: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    if (!widget.isModal && isMobile)
-                      MusicRecognitionComponent(onTrackRecognized: (track) {
-                        setState(() {
-                          _trackController.text = track.title;
-                          _albumController.text = track.album.name;
-                          _artistController.text = track.artists.first.name;
-                        });
-                      }),
-                    TextFormField(
-                      controller: _trackController,
-                      decoration: InputDecoration(labelText: 'Song *'),
-                      validator: _required,
-                    ),
-                    TextFormField(
-                      controller: _artistController,
-                      decoration: InputDecoration(labelText: 'Artist *'),
-                      validator: _required,
-                    ),
-                    TextFormField(
-                      controller: _albumController,
-                      decoration: InputDecoration(labelText: 'Album'),
-                    ),
-                    SwitchListTile(
-                      controlAffinity: ListTileControlAffinity.leading,
-                      contentPadding: EdgeInsets.zero,
-                      activeColor: Colors.red,
-                      title: Text('Custom timestamp'),
-                      value: _useCustomTimestamp,
-                      onChanged: (value) {
-                        setState(() {
-                          _useCustomTimestamp = value;
-
-                          if (_useCustomTimestamp) {
-                            _customTimestamp = DateTime.now();
-                          }
-                        });
-                      },
-                    ),
-                    Visibility(
-                      visible: _useCustomTimestamp,
-                      child: DateTimeField(
-                          decoration: InputDecoration(labelText: 'Timestamp'),
-                          resetIcon: null,
-                          format: dateTimeFormatWithYear,
-                          initialValue: _customTimestamp,
-                          onShowPicker: (context, currentValue) async {
-                            final date = await showDatePicker(
-                                context: context,
-                                initialDate: currentValue ?? DateTime.now(),
-                                firstDate:
-                                    DateTime.now().subtract(Duration(days: 14)),
-                                lastDate:
-                                    DateTime.now().add(Duration(days: 1)));
-
-                            if (date != null) {
-                              final time = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.fromDateTime(
-                                      currentValue ?? DateTime.now()));
-
-                              if (time != null) {
-                                return DateTimeField.combine(date, time);
-                              }
-                            }
-
-                            return currentValue;
-                          },
-                          onChanged: (dateTime) {
-                            if (dateTime != null) {
-                              setState(() {
-                                _customTimestamp = dateTime;
-                              });
-                            }
-                          }),
-                    ),
-                  ],
-                ))));
+      ),
+    );
   }
 
   @override
