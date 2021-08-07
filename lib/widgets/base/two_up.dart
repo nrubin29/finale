@@ -43,14 +43,13 @@ class TwoUp extends StatelessWidget {
             shrinkWrap: true,
             physics: const ScrollPhysics(),
             children: [
-              if (image != null) ...[
+              if (image != null)
                 ConstrainedBox(
                   constraints:
                       BoxConstraints(maxHeight: mediaQuery.size.height / 2),
                   child: image!,
                 ),
-                SizedBox(height: 10)
-              ],
+              SizedBox(height: 10),
               ...listItems,
             ],
           );
