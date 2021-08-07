@@ -91,13 +91,20 @@ class _ProfileViewState extends State<ProfileView>
                 )
             ],
           ),
-          body: Column(
-            children: [
-              SizedBox(height: 10),
-              Text('Scrobbling since ${user.registered.dateFormatted}'),
-              Visibility(
-                  visible: _tab != 5,
-                  maintainState: true,
+          body: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (_, __) => [
+              SliverToBoxAdapter(child: SizedBox(height: 10)),
+              SliverToBoxAdapter(
+                child: Text(
+                  'Scrobbling since ${user.registered.dateFormatted}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SliverVisibility(
+                visible: _tab != 5,
+                maintainState: true,
+                sliver: SliverToBoxAdapter(
                   child: Column(children: [
                     SizedBox(height: 10),
                     Scoreboard(statistics: {
@@ -107,70 +114,62 @@ class _ProfileViewState extends State<ProfileView>
                       'Tracks': Lastfm.getNumTracks(widget.username),
                     }),
                     SizedBox(height: 10),
-                  ])),
-              Expanded(
-                child: Column(
-                  children: [
-                    TabBar(
-                      controller: _tabController,
-                      labelColor: Colors.red,
-                      unselectedLabelColor: Colors.grey,
-                      indicatorColor: Colors.red,
-                      tabs: [
-                        Tab(icon: Icon(Icons.queue_music)),
-                        Tab(icon: Icon(Icons.people)),
-                        Tab(icon: Icon(Icons.album)),
-                        Tab(icon: Icon(Icons.audiotrack)),
-                        Tab(icon: Icon(Icons.person)),
-                        Tab(icon: Icon(Icons.access_time)),
-                      ],
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          EntityDisplay<LRecentTracksResponseTrack>(
-                            request: GetRecentTracksRequest(widget.username),
-                            detailWidgetBuilder: (track) =>
-                                TrackView(track: track),
-                          ),
-                          PeriodSelector<LTopArtistsResponseArtist>(
-                            displayType: DisplayType.grid,
-                            request: GetTopArtistsRequest(widget.username),
-                            detailWidgetBuilder: (artist) =>
-                                ArtistView(artist: artist),
-                            subtitleWidgetBuilder: (item, items) =>
-                                PlayCountBar(item, items),
-                          ),
-                          PeriodSelector<LTopAlbumsResponseAlbum>(
-                            displayType: DisplayType.grid,
-                            request: GetTopAlbumsRequest(widget.username),
-                            detailWidgetBuilder: (album) =>
-                                AlbumView(album: album),
-                            subtitleWidgetBuilder: (item, items) =>
-                                PlayCountBar(item, items),
-                          ),
-                          PeriodSelector<LTopTracksResponseTrack>(
-                            request: GetTopTracksRequest(widget.username),
-                            detailWidgetBuilder: (track) =>
-                                TrackView(track: track),
-                            subtitleWidgetBuilder: (item, items) =>
-                                PlayCountBar(item, items),
-                          ),
-                          EntityDisplay<LUser>(
-                            displayCircularImages: true,
-                            request: GetFriendsRequest(widget.username),
-                            detailWidgetBuilder: (user) =>
-                                ProfileView(username: user.name),
-                          ),
-                          WeeklyChartSelectorView(user: user),
-                        ],
-                      ),
-                    )
+                  ]),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: TabBar(
+                  controller: _tabController,
+                  labelColor: Colors.red,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorColor: Colors.red,
+                  tabs: [
+                    Tab(icon: Icon(Icons.queue_music)),
+                    Tab(icon: Icon(Icons.people)),
+                    Tab(icon: Icon(Icons.album)),
+                    Tab(icon: Icon(Icons.audiotrack)),
+                    Tab(icon: Icon(Icons.person)),
+                    Tab(icon: Icon(Icons.access_time)),
                   ],
                 ),
-              )
+              ),
             ],
+            body: TabBarView(
+              controller: _tabController,
+              children: [
+                EntityDisplay<LRecentTracksResponseTrack>(
+                  request: GetRecentTracksRequest(widget.username),
+                  detailWidgetBuilder: (track) => TrackView(track: track),
+                ),
+                PeriodSelector<LTopArtistsResponseArtist>(
+                  displayType: DisplayType.grid,
+                  request: GetTopArtistsRequest(widget.username),
+                  detailWidgetBuilder: (artist) => ArtistView(artist: artist),
+                  subtitleWidgetBuilder: (item, items) =>
+                      PlayCountBar(item, items),
+                ),
+                PeriodSelector<LTopAlbumsResponseAlbum>(
+                  displayType: DisplayType.grid,
+                  request: GetTopAlbumsRequest(widget.username),
+                  detailWidgetBuilder: (album) => AlbumView(album: album),
+                  subtitleWidgetBuilder: (item, items) =>
+                      PlayCountBar(item, items),
+                ),
+                PeriodSelector<LTopTracksResponseTrack>(
+                  request: GetTopTracksRequest(widget.username),
+                  detailWidgetBuilder: (track) => TrackView(track: track),
+                  subtitleWidgetBuilder: (item, items) =>
+                      PlayCountBar(item, items),
+                ),
+                EntityDisplay<LUser>(
+                  displayCircularImages: true,
+                  request: GetFriendsRequest(widget.username),
+                  detailWidgetBuilder: (user) =>
+                      ProfileView(username: user.name),
+                ),
+                WeeklyChartSelectorView(user: user),
+              ],
+            ),
           ),
         );
       },
