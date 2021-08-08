@@ -99,7 +99,7 @@ Future<void> main() async {
     await tester.pumpAndSettle();
     await tester.pumpMany();
     await tester.pumpMany();
-    await tester.saveScreenshot('3_weekly_track');
+    await tester.saveScreenshot('3_weekly_chart');
   });
 
   testWidgets('Collage screen', (tester) async {
