@@ -59,9 +59,11 @@ class _EntityImageState extends State<EntityImage> {
 
     if (cachedImageId != null) {
       widget.entity.cachedImageId = cachedImageId;
-      setState(() {
-        _imageId = cachedImageId;
-      });
+      if (mounted) {
+        setState(() {
+          _imageId = cachedImageId;
+        });
+      }
       return;
     }
 
@@ -70,9 +72,21 @@ class _EntityImageState extends State<EntityImage> {
     if (futureImageId != null) {
       ImageIdCache().insert(widget.entity.url!, futureImageId);
       widget.entity.cachedImageId = futureImageId;
-      setState(() {
-        _imageId = futureImageId;
-      });
+      if (mounted) {
+        setState(() {
+          _imageId = futureImageId;
+        });
+      }
+    }
+  }
+
+  @override
+  void didUpdateWidget(EntityImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.entity != oldWidget.entity) {
+      _imageId = null;
+      _fetchImageId();
     }
   }
 
@@ -108,33 +122,52 @@ class _EntityImageState extends State<EntityImage> {
     assert(() {
       if (censorImages && widget.entity.type != EntityType.user) {
         imageWidget = ClipRect(
-          child: Stack(children: [
-            imageWidget,
-            Positioned.fill(
-              child: LayoutBuilder(
-                builder: (_, constraints) => BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: constraints.maxWidth / 30,
-                    sigmaY: constraints.maxWidth / 30,
-                  ),
-                  child: const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(4),
-                      child: AutoSizeText(
-                        'Image hidden due to copyright',
-                        textAlign: TextAlign.center,
-                        minFontSize: 8,
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+          child: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              imageWidget,
+              Positioned.fill(
+                child: LayoutBuilder(
+                  builder: (_, constraints) => BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: constraints.maxWidth / 30,
+                      sigmaY: constraints.maxWidth / 30,
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Stack(children: [
+                          AutoSizeText(
+                            'Image hidden due to copyright',
+                            textAlign: TextAlign.center,
+                            minFontSize: 8,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 2
+                                ..color = Colors.black,
+                            ),
+                          ),
+                          const AutoSizeText(
+                            'Image hidden due to copyright',
+                            textAlign: TextAlign.center,
+                            minFontSize: 8,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ]),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ]),
+            ],
+          ),
         );
       }
 
