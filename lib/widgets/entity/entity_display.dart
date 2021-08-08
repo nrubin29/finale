@@ -348,7 +348,6 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print('EntityDisplay build $_request');
 
     if (!didInitialRequest) {
       return LoadingComponent();
