@@ -51,7 +51,8 @@ class ImageId {
       if (spotifyFallback != null && Preferences().isSpotifyLoggedIn) {
         final fallbackEntity = await spotifyFallback.doRequest(1, 1);
         if (fallbackEntity.isNotEmpty) {
-          return await fallbackEntity.single.imageId;
+          return fallbackEntity.single.imageId ??
+              await fallbackEntity.single.imageIdFuture;
         }
       }
       return null;

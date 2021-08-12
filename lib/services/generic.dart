@@ -47,7 +47,9 @@ abstract class Entity {
 
   String? get displayTrailing => null;
 
-  FutureOr<ImageId?> get imageId => null;
+  ImageId? get imageId => null;
+
+  Future<ImageId?>? get imageIdFuture => null;
 
   /// Used by ImageComponent. Should not be overridden.
   @JsonKey(ignore: true)
@@ -64,9 +66,9 @@ abstract class Entity {
     ImageId? result;
     var insertIntoCache = false;
 
-    if (imageId is ImageId?) {
-      result = imageId as ImageId?;
-    } else {
+    if (imageId != null) {
+      result = imageId;
+    } else if (imageIdFuture != null) {
       // We have to fetch the ImageId.
       try {
         // We'll try the cache first.
@@ -75,7 +77,7 @@ abstract class Entity {
         // If it's not in the cache, we'll await the future and insert the
         // result into the cache if it's not null.
         if (result == null) {
-          result = await imageId;
+          result = await imageIdFuture;
           insertIntoCache = true;
         }
       } on Exception {
@@ -192,7 +194,7 @@ abstract class BasicArtist extends Entity {
   String get name;
 
   @override
-  FutureOr<ImageId?> get imageId =>
+  Future<ImageId?> get imageIdFuture =>
       ImageId.scrape(url, '.header-new-gallery--link',
           spotifyFallback: SSearchArtistsRequest(name));
 

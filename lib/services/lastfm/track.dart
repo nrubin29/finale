@@ -111,7 +111,7 @@ class LTrackMatch extends Track {
   String get artistName => artist;
 
   @override
-  Future<ImageId?> get imageId async {
+  Future<ImageId?> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }
@@ -242,7 +242,7 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
   String? get albumName => null;
 
   @override
-  Future<ImageId?> get imageId async {
+  Future<ImageId?> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }

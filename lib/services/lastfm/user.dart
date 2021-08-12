@@ -158,7 +158,7 @@ class LUserWeeklyTrackChartTrack extends Track {
   String get displayTrailing => formatScrobbles(playCount ?? 0);
 
   @override
-  Future<ImageId?> get imageId =>
+  Future<ImageId?> get imageIdFuture =>
       ImageId.scrape(url, '.cover-art > :first-child',
           attribute: 'src',
           endUrlAtPeriod: true,
@@ -216,8 +216,9 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
       one: '$playCount scrobble', other: '$playCount scrobbles');
 
   @override
-  Future<ImageId?> get imageId => ImageId.scrape(url, '.link-block-cover-link',
-      spotifyFallback: SSearchAlbumsRequest('$name ${artist.name}'));
+  Future<ImageId?> get imageIdFuture =>
+      ImageId.scrape(url, '.link-block-cover-link',
+          spotifyFallback: SSearchAlbumsRequest('$name ${artist.name}'));
 }
 
 @JsonSerializable()
@@ -238,7 +239,8 @@ class LUserWeeklyArtistChartArtist extends BasicArtist {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  Future<ImageId?> get imageId async => (await Lastfm.getArtist(this)).imageId;
+  Future<ImageId?> get imageIdFuture async =>
+      (await Lastfm.getArtist(this)).imageId;
 
   @override
   final String name;
@@ -294,7 +296,7 @@ class LUserTrackScrobble extends BasicScrobbledTrack {
   LUserTrackScrobbleAlbum album;
 
   @override
-  Future<ImageId?> get imageId =>
+  Future<ImageId?> get imageIdFuture =>
       ImageId.scrape(url, '.cover-art > :first-child',
           attribute: 'src',
           endUrlAtPeriod: true,

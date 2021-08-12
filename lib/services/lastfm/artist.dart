@@ -155,7 +155,7 @@ class LArtistTopTrack extends Track {
   String? get albumName => null;
 
   @override
-  Future<ImageId?> get imageId async {
+  Future<ImageId?> get imageIdFuture async {
     final fullTrack = await Lastfm.getTrack(this);
     return fullTrack.album?.imageId;
   }

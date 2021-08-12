@@ -44,12 +44,12 @@ class _EntityImageState extends State<EntityImage> {
         _imageId = widget.entity.cachedImageId;
       });
       return;
-    } else if (widget.entity.imageId == null) {
-      return;
-    } else if (widget.entity.imageId is ImageId) {
+    } else if (widget.entity.imageId != null) {
       setState(() {
-        _imageId = widget.entity.imageId as ImageId;
+        _imageId = widget.entity.imageId;
       });
+      return;
+    } else if (widget.entity.imageIdFuture == null) {
       return;
     } else if (widget.entity.url == null) {
       return;
@@ -67,7 +67,7 @@ class _EntityImageState extends State<EntityImage> {
       return;
     }
 
-    final futureImageId = await (widget.entity.imageId as Future<ImageId?>);
+    final futureImageId = await widget.entity.imageIdFuture;
 
     if (futureImageId != null) {
       ImageIdCache().insert(widget.entity.url!, futureImageId);
