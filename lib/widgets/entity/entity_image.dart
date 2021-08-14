@@ -49,7 +49,7 @@ class _EntityImageState extends State<EntityImage> {
         _imageId = widget.entity.imageId;
       });
       return;
-    } else if (widget.entity.imageIdFuture == null) {
+    } else if (widget.entity.imageIdProvider == null) {
       return;
     } else if (widget.entity.url == null) {
       return;
@@ -67,7 +67,7 @@ class _EntityImageState extends State<EntityImage> {
       return;
     }
 
-    final futureImageId = await widget.entity.imageIdFuture;
+    final futureImageId = await widget.entity.imageIdProvider!();
 
     if (futureImageId != null) {
       ImageIdCache().insert(widget.entity.url!, futureImageId);

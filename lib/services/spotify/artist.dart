@@ -18,8 +18,8 @@ class SArtistSimple extends BasicArtist {
   final String? url;
 
   @override
-  Future<ImageId?> get imageIdFuture async =>
-      (await Spotify.getFullArtist(this)).imageId;
+  ImageIdProvider get imageIdProvider =>
+      () async => (await Spotify.getFullArtist(this)).imageId;
 
   SArtistSimple(this.id, this.name, this.url);
 

@@ -36,6 +36,8 @@ extension EntityTypeName on EntityType {
   String get name => toString().split('.').last;
 }
 
+typedef ImageIdProvider = Future<ImageId?> Function();
+
 abstract class Entity {
   EntityType get type;
 
@@ -49,7 +51,7 @@ abstract class Entity {
 
   ImageId? get imageId => null;
 
-  Future<ImageId?>? get imageIdFuture => null;
+  ImageIdProvider? get imageIdProvider => null;
 
   /// Used by ImageComponent. Should not be overridden.
   @JsonKey(ignore: true)
@@ -68,7 +70,7 @@ abstract class Entity {
 
     if (imageId != null) {
       result = imageId;
-    } else if (imageIdFuture != null) {
+    } else if (imageIdProvider != null) {
       // We have to fetch the ImageId.
       try {
         // We'll try the cache first.
@@ -77,7 +79,7 @@ abstract class Entity {
         // If it's not in the cache, we'll await the future and insert the
         // result into the cache if it's not null.
         if (result == null) {
-          result = await imageIdFuture;
+          result = await imageIdProvider!();
           insertIntoCache = true;
         }
       } on Exception {
@@ -194,7 +196,7 @@ abstract class BasicArtist extends Entity {
   String get name;
 
   @override
-  Future<ImageId?> get imageIdFuture =>
+  ImageIdProvider get imageIdProvider =>
       ImageId.scrape(url, '.header-new-gallery--link',
           spotifyFallback: SSearchArtistsRequest(name));
 
