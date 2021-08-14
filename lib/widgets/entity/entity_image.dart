@@ -4,7 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
-import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 
@@ -39,44 +38,12 @@ class _EntityImageState extends State<EntityImage> {
   }
 
   Future<void> _fetchImageId() async {
-    if (widget.entity.cachedImageId != null) {
+    await widget.entity.tryCacheImageId(widget.quality);
+
+    if (mounted) {
       setState(() {
         _imageId = widget.entity.cachedImageId;
       });
-      return;
-    } else if (widget.entity.imageId != null) {
-      setState(() {
-        _imageId = widget.entity.imageId;
-      });
-      return;
-    } else if (widget.entity.imageIdProvider == null) {
-      return;
-    } else if (widget.entity.url == null) {
-      return;
-    }
-
-    final cachedImageId = await ImageIdCache().get(widget.entity.url!);
-
-    if (cachedImageId != null) {
-      widget.entity.cachedImageId = cachedImageId;
-      if (mounted) {
-        setState(() {
-          _imageId = cachedImageId;
-        });
-      }
-      return;
-    }
-
-    final futureImageId = await widget.entity.imageIdProvider!();
-
-    if (futureImageId != null) {
-      ImageIdCache().insert(widget.entity.url!, futureImageId);
-      widget.entity.cachedImageId = futureImageId;
-      if (mounted) {
-        setState(() {
-          _imageId = futureImageId;
-        });
-      }
     }
   }
 

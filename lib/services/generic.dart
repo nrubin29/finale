@@ -117,6 +117,14 @@ abstract class Track extends Entity {
   @override
   String toString() =>
       'Track(name=$name, artist=$artistName, album=$albumName)';
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(Object other) =>
+      other is Track &&
+      other.name == name &&
+      other.artistName == artistName &&
+      other.albumName == albumName;
 }
 
 class BasicConcreteTrack extends Track {
@@ -160,6 +168,11 @@ abstract class BasicAlbum extends Entity {
 
   @override
   String toString() => 'BasicAlbum(name=$name, artist=${artist.name})';
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(Object other) =>
+      other is BasicAlbum && other.name == name && other.artist == artist;
 }
 
 mixin HasTracks on Entity {
@@ -208,6 +221,10 @@ abstract class BasicArtist extends Entity {
 
   @override
   String toString() => 'BasicArtist(name=$name)';
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(Object other) => other is BasicArtist && other.name == name;
 }
 
 class ConcreteBasicArtist extends BasicArtist {
