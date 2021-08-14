@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
 import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
@@ -355,6 +356,30 @@ class Lastfm {
 
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
       List<Track> tracks, List<DateTime> timestamps) async {
+    assert(tracks.length == timestamps.length - 1);
+
+    var accepted = 0;
+    var ignored = 0;
+
+    final zip = IterableZip([
+      tracks.splitBeforeIndexed((i, _) => i % 50 == 0),
+      timestamps.splitBeforeIndexed((i, _) => i % 50 == 0)
+    ]);
+
+    for (var entry in zip) {
+      final response =
+          await _scrobble(entry[0] as List<Track>, entry[1] as List<DateTime>);
+      accepted += response.accepted;
+      ignored += response.ignored;
+    }
+
+    return LScrobbleResponseScrobblesAttr(accepted, ignored);
+  }
+
+  static Future<LScrobbleResponseScrobblesAttr> _scrobble(
+      List<Track> tracks, List<DateTime> timestamps) async {
+    assert(tracks.length <= 50);
+    assert(timestamps.length <= 50);
     final data = <String, dynamic>{};
 
     tracks.asMap().forEach((i, track) {
