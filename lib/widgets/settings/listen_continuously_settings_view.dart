@@ -21,8 +21,9 @@ class _ListenContinuouslySettingsViewState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar('Listen Continuously Settings'),
-      body: SafeArea(
-        child: Column(children: [
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           ListTile(
             title: Text('Strip tags'),
             leading: Icon(Icons.label_off),
@@ -35,14 +36,17 @@ class _ListenContinuouslySettingsViewState
               },
             ),
           ),
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                  'Removes tags like (Live) or [Demo] from track titles. This '
-                  'can help with double scrobbles when the continuous scrobbler '
-                  'finds multiple names for the same track.',
-                  style: Theme.of(context).textTheme.caption)),
-        ]),
+          SafeArea(
+            top: false,
+            bottom: false,
+            minimum: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+                'Removes tags like (Live) or [Demo] from track titles. This '
+                'can help with double scrobbles when the continuous scrobbler '
+                'finds multiple names for the same track.',
+                style: Theme.of(context).textTheme.caption),
+          ),
+        ],
       ),
     );
   }
