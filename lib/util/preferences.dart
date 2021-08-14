@@ -182,6 +182,25 @@ class Preferences {
     _spotifyEnabledChange.add(null);
   }
 
+  String? get libreKey => _preferences.getString('libreKey');
+
+  set libreKey(String? value) {
+    if (value != null) {
+      _preferences.setString('libreKey', value);
+    } else {
+      _preferences.remove('libreKey');
+    }
+  }
+
+  bool get libreEnabled => _preferences.getBool('libreEnabled') ?? false;
+
+  set libreEnabled(bool value) => _preferences.setBool('libreEnabled', value);
+
+  void clearLibre() {
+    libreEnabled = false;
+    libreKey = null;
+  }
+
   SearchEngine get searchEngine {
     if (!_preferences.containsKey('searchEngine')) {
       _preferences.setInt('searchEngine', SearchEngine.lastfm.index);

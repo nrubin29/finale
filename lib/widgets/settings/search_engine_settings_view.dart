@@ -1,7 +1,11 @@
+import 'package:finale/env.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:social_media_buttons/social_media_icons.dart';
 
 class SearchEngineSettingsView extends StatefulWidget {
@@ -11,11 +15,13 @@ class SearchEngineSettingsView extends StatefulWidget {
 
 class _SearchEngineSettingsViewState extends State<SearchEngineSettingsView> {
   late bool _spotifyEnabled;
+  late bool _libreEnabled;
 
   @override
   void initState() {
     super.initState();
     _spotifyEnabled = Preferences().spotifyEnabled;
+    _libreEnabled = Preferences().libreEnabled;
   }
 
   void _logOutSpotify() {
@@ -73,6 +79,41 @@ class _SearchEngineSettingsViewState extends State<SearchEngineSettingsView> {
               } else {
                 setState(() {});
               }
+            },
+          ),
+        ),
+        ListTile(
+          title: Row(children: const [Text('Libre.fm')]),
+          leading: const Icon(Icons.rss_feed),
+          trailing: Switch(
+            value: _libreEnabled,
+            onChanged: (value) async {
+              if (value && Preferences().libreKey == null) {
+                try {
+                  final result = await FlutterWebAuth.authenticate(
+                      url: Uri.https('libre.fm', 'api/auth', {
+                        'api_key': apiKey,
+                        'cb': authCallbackUrl
+                      }).toString(),
+                      callbackUrlScheme: 'finale');
+                  final token = Uri.parse(result).queryParameters['token']!;
+                  final session = await Lastfm.authenticate(token, libre: true);
+                  Preferences().libreKey = session.key;
+                } on PlatformException catch (e) {
+                  assert(() {
+                    throw e;
+                  }());
+                  return;
+                }
+              }
+
+              _libreEnabled = (Preferences().libreEnabled = value);
+
+              setState(() {
+                if (!_libreEnabled) {
+                  Preferences().clearLibre();
+                }
+              });
             },
           ),
         ),

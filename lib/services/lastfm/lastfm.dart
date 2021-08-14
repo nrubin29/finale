@@ -10,7 +10,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/preferences.dart';
 
-Uri _buildUri(String method, Map<String, dynamic> data) {
+Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
   final allData = {
     ...data.map((key, value) => MapEntry(key, value.toString())),
     'api_key': apiKey,
@@ -27,17 +27,18 @@ Uri _buildUri(String method, Map<String, dynamic> data) {
 
   return Uri(
       scheme: 'https',
-      host: 'ws.audioscrobbler.com',
-      path: '2.0',
+      host: libre ? 'libre.fm' : 'ws.audioscrobbler.com',
+      path: '2.0/',
       queryParameters: allData);
 }
 
 Future<Map<String, dynamic>> _doRequest(
     String method, Map<String, dynamic> data,
-    {bool post = false}) async {
-  final uri = _buildUri(method, data);
-  final response =
-      post ? await httpClient.post(uri) : await httpClient.get(uri);
+    {bool post = false, bool libre = false}) async {
+  final uri = _buildUri(method, data, libre: libre);
+  final response = post
+      ? await httpClient.post(uri, body: libre ? uri.queryParameters : null)
+      : await httpClient.get(uri);
 
   dynamic jsonObject;
 
@@ -247,10 +248,10 @@ class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
 }
 
 class Lastfm {
-  static Future<LAuthenticationResponseSession> authenticate(
-      String token) async {
-    final rawResponse =
-        await _doRequest('auth.getSession', {'token': token}, post: true);
+  static Future<LAuthenticationResponseSession> authenticate(String token,
+      {bool libre = false}) async {
+    final rawResponse = await _doRequest('auth.getSession', {'token': token},
+        post: true, libre: libre);
     return LAuthenticationResponseSession.fromJson(rawResponse['session']);
   }
 
@@ -355,7 +356,6 @@ class Lastfm {
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
       List<Track> tracks, List<DateTime> timestamps) async {
     final data = <String, dynamic>{};
-    data['sk'] = Preferences().key;
 
     tracks.asMap().forEach((i, track) {
       if (track.albumName?.isNotEmpty ?? false) {
@@ -367,7 +367,15 @@ class Lastfm {
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
     });
 
-    final rawResponse = await _doRequest('track.scrobble', data, post: true);
+    if (Preferences().libreEnabled) {
+      await _doRequest(
+          'track.scrobble', {...data, 'sk': Preferences().libreKey},
+          post: true, libre: true);
+    }
+
+    final rawResponse = await _doRequest(
+        'track.scrobble', {...data, 'sk': Preferences().key},
+        post: true);
     return LScrobbleResponseScrobblesAttr.fromJson(
         rawResponse['scrobbles']['@attr']);
   }
