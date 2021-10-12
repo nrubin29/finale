@@ -19,7 +19,7 @@ To run Finale, you'll need:
     * An [Apple Developer account](https://developer.apple.com) (personal account will work)
 
 1. `$ git clone https://github.com/nrubin29/finale.git`
-2. Rename `env-sample.dart` in `lib/` to `env.dart` and fill in your keys
+2. Rename `env_sample.dart` in `lib/` to `env.dart` and fill in your keys
 3. `$ flutter pub get`
 4. `$ flutter pub run build_runner build`
 

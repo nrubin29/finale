@@ -43,7 +43,7 @@ class _MainViewState extends State<MainView> {
             _index = index;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             label: 'Profile',
             icon: Icon(Icons.person_outline),
@@ -63,7 +63,7 @@ class _MainViewState extends State<MainView> {
         children: [
           ProfileView(username: widget.username, isTab: true),
           SearchView(),
-          ScrobbleView(),
+          const ScrobbleView(),
           CollageView(),
         ],
       ),

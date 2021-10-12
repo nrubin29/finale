@@ -40,11 +40,11 @@ class LoginView extends StatelessWidget {
               future: Lastfm.getGlobalTopArtists(50),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return SizedBox();
+                  return const SizedBox();
                 }
 
                 return GridView.count(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.zero,
                   crossAxisCount:
                       max(MediaQuery.of(context).size.width ~/ 200, 3),
@@ -69,9 +69,10 @@ class LoginView extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey.shade800.withOpacity(0.9),
                         border: Border.all(),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.all(10),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10))),
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     child: IntrinsicHeight(
                         child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -82,14 +83,14 @@ class LoginView extends StatelessWidget {
                                 .textTheme
                                 .headline2!
                                 .copyWith(color: Colors.white)),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text('A fully-featured Last.fm client and scrobbler',
                             textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1!
                                 .copyWith(color: Colors.white)),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         OutlinedButton(
                           onPressed: () => _logIn(context),
                           style: ButtonStyle(
@@ -99,7 +100,7 @@ class LoginView extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               getLastfmIcon(Colors.white),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text('Log in with Last.fm',
                                   style: Theme.of(context)
                                       .textTheme

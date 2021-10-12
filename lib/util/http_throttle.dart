@@ -23,8 +23,9 @@ class ThrottleClient extends BaseClient {
   /// requests. It defaults to `http.Client()`.
   ThrottleClient(int maxActiveRequests, [Client? inner])
       : _pool = Pool(maxActiveRequests),
-        _inner = inner == null ? Client() : inner;
+        _inner = inner ?? Client();
 
+  @override
   Future<StreamedResponse> send(BaseRequest request) async {
     var resource = await _pool.request();
 
@@ -51,5 +52,6 @@ class ThrottleClient extends BaseClient {
         reasonPhrase: response.reasonPhrase);
   }
 
+  @override
   void close() => _inner.close();
 }

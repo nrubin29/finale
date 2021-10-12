@@ -83,7 +83,7 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
 
   @override
   Widget build(BuildContext context) => IconButton(
-        icon: Icon(scrobbleIcon),
+        icon: const Icon(scrobbleIcon),
         color: widget.color,
         onPressed: _onPressed,
       );

@@ -22,7 +22,7 @@ import 'package:share_plus/share_plus.dart';
 class TrackView extends StatefulWidget {
   final Track track;
 
-  TrackView({required this.track});
+  const TrackView({required this.track});
 
   @override
   State<StatefulWidget> createState() => _TrackViewState();
@@ -61,7 +61,7 @@ class _TrackViewState extends State<TrackView> {
             subtitle: track.artist?.name,
             actions: [
               IconButton(
-                icon: Icon(Icons.share),
+                icon: const Icon(Icons.share),
                 onPressed: () {
                   Share.share(track.url);
                 },
@@ -111,19 +111,20 @@ class _TrackViewState extends State<TrackView> {
                   ),
                 ],
               ),
-              if (track.topTags.tags.isNotEmpty) Divider(),
-              if (track.topTags.tags.isNotEmpty)
+              if (track.topTags.tags.isNotEmpty) ...[
+                const Divider(),
                 TagChips(topTags: track.topTags),
+              ],
               if (track.wiki != null && track.wiki!.isNotEmpty) ...[
-                Divider(),
+                const Divider(),
                 WikiTile(wiki: track.wiki!),
               ],
-              if (track.artist != null || track.album != null) Divider(),
+              if (track.artist != null || track.album != null) const Divider(),
               if (track.artist != null)
                 ListTile(
                     leading: EntityImage(entity: track.artist!),
                     title: Text(track.artist!.name),
-                    trailing: Icon(Icons.chevron_right),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.push(
                           context,
@@ -137,7 +138,7 @@ class _TrackViewState extends State<TrackView> {
                   title: Text(track.album!.name),
                   subtitle:
                       track.artist != null ? Text(track.artist!.name) : null,
-                  trailing: Icon(Icons.chevron_right),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     Navigator.push(
                         context,

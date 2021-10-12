@@ -25,8 +25,8 @@ class _ListenContinuouslySettingsViewState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            title: Text('Strip tags'),
-            leading: Icon(Icons.label_off),
+            title: const Text('Strip tags'),
+            leading: const Icon(Icons.label_off),
             trailing: Switch(
               value: _stripTags,
               onChanged: (_) {

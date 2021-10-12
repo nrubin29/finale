@@ -95,6 +95,7 @@ class LRecentTracksResponseRecentTracks {
 
 @JsonSerializable()
 class LTrackMatch extends Track {
+  @override
   final String name;
 
   @override

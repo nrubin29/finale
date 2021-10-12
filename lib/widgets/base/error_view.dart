@@ -16,9 +16,9 @@ class ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(centerTitle: true, title: Text('Error')),
+        appBar: AppBar(centerTitle: true, title: const Text('Error')),
         body: Container(
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           child: ErrorComponent(
             error: error,
             stackTrace: stackTrace,

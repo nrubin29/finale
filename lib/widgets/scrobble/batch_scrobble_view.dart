@@ -43,9 +43,9 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
             : _customTimestamp!
       ];
 
-      tracks.forEach((track) {
+      for (var track in tracks) {
         timestamps.add(timestamps.last.add(Duration(seconds: track.duration!)));
-      });
+      }
     } else {
       timestamps = [
         _behavior == ScrobbleTimestampBehavior.endingNow
@@ -54,10 +54,10 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
       ];
 
       tracks = tracks.reversed.toList(growable: false);
-      tracks.forEach((track) {
+      for (var track in tracks) {
         timestamps
             .add(timestamps.last.subtract(Duration(seconds: track.duration!)));
-      });
+      }
     }
 
     final response = await Lastfm.scrobble(tracks, timestamps);
@@ -72,7 +72,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
         actions: [
           Builder(
               builder: (context) => IconButton(
-                  icon: Icon(scrobbleIcon),
+                  icon: const Icon(scrobbleIcon),
                   onPressed: () => _scrobble(context)))
         ],
       ),
@@ -91,7 +91,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 trailing:
                     Text(formatScrobbles(widget.entity.tracks.length, 'track')),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -111,7 +111,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     });
                   }
                 },
-                title: Text('Starting now'),
+                title: const Text('Starting now'),
               ),
               RadioListTile<ScrobbleTimestampBehavior>(
                 activeColor: Colors.red,
@@ -125,7 +125,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     });
                   }
                 },
-                title: Text('Starting at a custom timestamp'),
+                title: const Text('Starting at a custom timestamp'),
               ),
               RadioListTile<ScrobbleTimestampBehavior>(
                 activeColor: Colors.red,
@@ -138,7 +138,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     });
                   }
                 },
-                title: Text('Ending now'),
+                title: const Text('Ending now'),
               ),
               RadioListTile<ScrobbleTimestampBehavior>(
                 activeColor: Colors.red,
@@ -152,14 +152,14 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     });
                   }
                 },
-                title: Text('Ending at a custom timestamp'),
+                title: const Text('Ending at a custom timestamp'),
               ),
               Visibility(
                 visible:
                     _behavior == ScrobbleTimestampBehavior.startingCustom ||
                         _behavior == ScrobbleTimestampBehavior.endingCustom,
                 child: DateTimeField(
-                  decoration: InputDecoration(labelText: 'Timestamp'),
+                  decoration: const InputDecoration(labelText: 'Timestamp'),
                   resetIcon: null,
                   format: dateTimeFormatWithYear,
                   initialValue: _customTimestamp,
@@ -167,8 +167,9 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     final date = await showDatePicker(
                         context: context,
                         initialDate: currentValue ?? DateTime.now(),
-                        firstDate: DateTime.now().subtract(Duration(days: 14)),
-                        lastDate: DateTime.now().add(Duration(days: 1)));
+                        firstDate:
+                            DateTime.now().subtract(const Duration(days: 14)),
+                        lastDate: DateTime.now().add(const Duration(days: 1)));
 
                     if (date != null) {
                       final time = await showTimePicker(

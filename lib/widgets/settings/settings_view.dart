@@ -12,14 +12,14 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Settings')),
+        appBar: AppBar(title: const Text('Settings')),
         body: Builder(
             builder: (context) => Column(
                   children: [
                     ListTile(
-                      title: Text('About'),
-                      leading: Icon(Icons.info),
-                      trailing: Icon(Icons.chevron_right),
+                      title: const Text('About'),
+                      leading: const Icon(Icons.info),
+                      trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.push(
                             context,
@@ -40,9 +40,9 @@ class SettingsView extends StatelessWidget {
                     ),
                     if (isMobile)
                       ListTile(
-                        title: Text('Listen Continuously'),
-                        leading: Icon(Icons.all_inclusive),
-                        trailing: Icon(Icons.chevron_right),
+                        title: const Text('Listen Continuously'),
+                        leading: const Icon(Icons.all_inclusive),
+                        trailing: const Icon(Icons.chevron_right),
                         onTap: () {
                           Navigator.push(
                               context,
@@ -52,8 +52,8 @@ class SettingsView extends StatelessWidget {
                         },
                       ),
                     ListTile(
-                      title: Text('Empty image cache'),
-                      leading: Icon(Icons.delete),
+                      title: const Text('Empty image cache'),
+                      leading: const Icon(Icons.delete),
                       onTap: () async {
                         await DefaultCacheManager().emptyCache();
                         await ImageIdCache().drop();
@@ -61,19 +61,19 @@ class SettingsView extends StatelessWidget {
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                                  title: Text('Success'),
-                                  content: Text('Image cache emptied.'),
+                                  title: const Text('Success'),
+                                  content: const Text('Image cache emptied.'),
                                   actions: [
                                     TextButton(
-                                        child: Text('Dismiss'),
+                                        child: const Text('Dismiss'),
                                         onPressed: () => Navigator.pop(context))
                                   ],
                                 ));
                       },
                     ),
                     ListTile(
-                        title: Text('Log out'),
-                        leading: Icon(Icons.logout),
+                        title: const Text('Log out'),
+                        leading: const Icon(Icons.logout),
                         onTap: () {
                           Preferences().clear();
                           Navigator.popUntil(context, (route) => false);

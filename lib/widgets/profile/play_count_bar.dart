@@ -11,13 +11,13 @@ class PlayCountBar<T extends HasPlayCount> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: SizedBox(
           height: 4,
           child: FractionallySizedBox(
             widthFactor: percent,
             alignment: Alignment.centerRight,
-            child: Material(color: Colors.red),
+            child: const Material(color: Colors.red),
           ),
         ),
       );

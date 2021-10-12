@@ -19,7 +19,7 @@ import 'package:share_plus/share_plus.dart';
 class AlbumView extends StatelessWidget {
   final BasicAlbum album;
 
-  AlbumView({required this.album});
+  const AlbumView({required this.album});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class AlbumView extends StatelessWidget {
             subtitle: album.artist.name,
             actions: [
               IconButton(
-                icon: Icon(Icons.share),
+                icon: const Icon(Icons.share),
                 onPressed: () {
                   Share.share(album.url);
                 },
@@ -62,18 +62,19 @@ class AlbumView extends StatelessWidget {
                 'Listeners': album.listeners,
                 'Your scrobbles': album.userPlayCount,
               }),
-              if (album.topTags.tags.isNotEmpty) Divider(),
-              if (album.topTags.tags.isNotEmpty)
+              if (album.topTags.tags.isNotEmpty) ...[
+                const Divider(),
                 TagChips(topTags: album.topTags),
+              ],
               if (album.wiki != null && album.wiki!.isNotEmpty) ...[
-                Divider(),
+                const Divider(),
                 WikiTile(wiki: album.wiki!)
               ],
-              Divider(),
+              const Divider(),
               ListTile(
                   leading: EntityImage(entity: album.artist),
                   title: Text(album.artist.name),
-                  trailing: Icon(Icons.chevron_right),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -81,8 +82,8 @@ class AlbumView extends StatelessWidget {
                             builder: (context) =>
                                 ArtistView(artist: album.artist)));
                   }),
-              if (album.tracks.isNotEmpty) Divider(),
-              if (album.tracks.isNotEmpty)
+              if (album.tracks.isNotEmpty) ...[
+                const Divider(),
                 EntityDisplay<LAlbumTrack>(
                   items: album.tracks,
                   scrollable: false,
@@ -90,6 +91,7 @@ class AlbumView extends StatelessWidget {
                   displayImages: false,
                   detailWidgetBuilder: (track) => TrackView(track: track),
                 ),
+              ],
             ],
           ),
         );

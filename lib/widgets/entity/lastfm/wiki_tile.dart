@@ -31,7 +31,7 @@ class WikiTile extends StatelessWidget {
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
         ),
-        trailing: Icon(Icons.chevron_right),
+        trailing: const Icon(Icons.chevron_right),
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: _buildPage));
         },

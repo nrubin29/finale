@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 class LoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(centerTitle: true, title: Text('Loading')),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Loading'),
+        ),
         body: LoadingComponent(),
       );
 }

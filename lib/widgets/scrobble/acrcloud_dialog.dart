@@ -43,7 +43,7 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
     });
   }
 
-  Widget _buildResultsList(BuildContext context) => Container(
+  Widget _buildResultsList(BuildContext context) => SizedBox(
       width: double.maxFinite,
       child: ListView.builder(
           shrinkWrap: true,
@@ -58,7 +58,7 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
                     Text('${track.artists.first.name}\n${track.album.name}'),
                 isThreeLine: true,
                 trailing: IconButton(
-                    icon: Icon(Icons.info),
+                    icon: const Icon(Icons.info),
                     onPressed: () => launch(
                         'https://aha-music.com/${track.acrId}?utm_source=finale&utm_medium=app')),
                 onTap: () =>
@@ -72,7 +72,7 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
       content: results != null ? _buildResultsList(context) : null,
       actions: [
         TextButton(
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
             onPressed: results != null
                 ? () => Navigator.pop(context, ACRCloudDialogResult.cancelled())
                 : session.cancel)

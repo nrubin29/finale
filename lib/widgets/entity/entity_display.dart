@@ -113,6 +113,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       });
     } on Exception catch (error, stackTrace) {
       assert(() {
+        // ignore: avoid_print
         print('$error\n$stackTrace');
         return true;
       }());
@@ -142,6 +143,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       });
     } on Exception catch (error, stackTrace) {
       assert(() {
+        // ignore: avoid_print
         print('$error\n$stackTrace');
         return true;
       }());
@@ -200,8 +202,10 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           child: Row(
         children: [
           if (item.displayTrailing != null)
-            Text(item.displayTrailing!,
-                style: TextStyle(color: Colors.grey, fontSize: 12)),
+            Text(
+              item.displayTrailing!,
+              style: const TextStyle(color: Colors.grey, fontSize: 12),
+            ),
           if (widget.scrobbleableEntity != null)
             ScrobbleButton(
                 entityProvider: () => widget.scrobbleableEntity!(item)),
@@ -296,15 +300,15 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       return Stack(children: [
         ListView(),
         widget.showNoResultsMessage
-            ? Center(child: Text("No results."))
-            : SizedBox()
+            ? const Center(child: Text("No results."))
+            : const SizedBox()
       ]);
     }
 
     return CustomScrollView(
         physics: widget.scrollable
-            ? AlwaysScrollableScrollPhysics()
-            : NeverScrollableScrollPhysics(),
+            ? const AlwaysScrollableScrollPhysics()
+            : const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         slivers: [
           if (widget.displayType == DisplayType.list)

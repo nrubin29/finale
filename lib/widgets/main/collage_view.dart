@@ -170,7 +170,7 @@ class _CollageViewState extends State<CollageView> {
                       title: const Text('Type'),
                       trailing: DropdownButton<EntityType>(
                         value: _type,
-                        items: [
+                        items: const [
                           DropdownMenuItem(
                             value: EntityType.album,
                             child: Text('Top Albums'),
@@ -286,7 +286,7 @@ class _CollageViewState extends State<CollageView> {
               value: _loadingProgress / _numItemsToLoad,
               backgroundColor: Colors.grey.shade300,
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -333,7 +333,7 @@ class _CollageViewState extends State<CollageView> {
                             },
                             child: const Text('Share'),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                         ],
                         OutlinedButton(
                           onPressed: _saveImage,

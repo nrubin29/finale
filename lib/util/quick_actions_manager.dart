@@ -9,7 +9,7 @@ class QuickActionsManager {
   static final quickActionStream = BehaviorSubject<QuickAction>();
 
   static Future<void> setup() async {
-    final quickActions = QuickActions();
+    const quickActions = QuickActions();
     await quickActions.initialize((type) {
       quickActionStream.add(type == 'scrobble_once'
           ? QuickAction.scrobbleOnce

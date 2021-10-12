@@ -61,7 +61,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   static final _tagRegex = RegExp(r'[[(].*?[\])]');
   static final _spaceRegex = RegExp(r' {2,}');
 
-  var _tracks = <ListenContinuouslyTrack>[];
+  final _tracks = <ListenContinuouslyTrack>[];
 
   @override
   void initState() {
@@ -113,7 +113,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
         });
       }
 
-      await Future.delayed(Duration(minutes: 1));
+      await Future.delayed(const Duration(minutes: 1));
     }
   }
 
@@ -121,7 +121,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar('Listening Continuously', actions: [
           IconButton(
-              icon: Icon(Icons.settings),
+              icon: const Icon(Icons.settings),
               onPressed: () {
                 showBarModalBottomSheet(
                     context: context,
@@ -129,7 +129,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
               })
         ]),
         body: Column(children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(10),
             child: Text(
               'Keep your device on this page with the screen on. Your device '

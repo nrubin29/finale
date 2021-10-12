@@ -18,7 +18,7 @@ import 'package:share_plus/share_plus.dart';
 class ArtistView extends StatefulWidget {
   final BasicArtist artist;
 
-  ArtistView({required this.artist});
+  const ArtistView({required this.artist});
 
   @override
   State<StatefulWidget> createState() => _ArtistViewState();
@@ -59,7 +59,7 @@ class _ArtistViewState extends State<ArtistView>
               artist.name,
               actions: [
                 IconButton(
-                  icon: Icon(Icons.share),
+                  icon: const Icon(Icons.share),
                   onPressed: () {
                     Share.share(artist.url);
                   },
@@ -74,20 +74,21 @@ class _ArtistViewState extends State<ArtistView>
                   'Listeners': artist.stats.listeners,
                   'Your scrobbles': artist.stats.userPlayCount,
                 }),
-                if (artist.topTags.tags.isNotEmpty) Divider(),
-                if (artist.topTags.tags.isNotEmpty)
+                if (artist.topTags.tags.isNotEmpty) ...[
+                  const Divider(),
                   TagChips(topTags: artist.topTags),
+                ],
                 if (artist.bio != null && artist.bio!.isNotEmpty) ...[
-                  Divider(),
+                  const Divider(),
                   WikiTile(wiki: artist.bio!),
                 ],
-                Divider(),
+                const Divider(),
                 TabBar(
                     labelColor: Colors.red,
                     unselectedLabelColor: Colors.grey,
                     indicatorColor: Colors.red,
                     controller: _tabController,
-                    tabs: [
+                    tabs: const [
                       Tab(icon: Icon(Icons.album)),
                       Tab(icon: Icon(Icons.audiotrack)),
                     ],

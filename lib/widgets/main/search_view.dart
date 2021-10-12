@@ -162,7 +162,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                         child: DropdownButton<SearchEngine>(
                           iconEnabledColor: Colors.white,
                           isDense: true,
-                          underline: SizedBox(),
+                          underline: const SizedBox(),
                           items: SearchEngine.values
                               .map((searchEngine) => DropdownMenuItem(
                                   value: searchEngine,
@@ -201,14 +201,14 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                           },
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                     ])
                   : Container(),
               Expanded(
                   child: TextField(
                 controller: _textController,
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
                   hintText: 'Search',
                   hintStyle: TextStyle(color: Colors.white),
                   focusedBorder: UnderlineInputBorder(
@@ -230,7 +230,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                 maintainAnimation: true,
                 maintainSize: true,
                 child: IconButton(
-                  icon: Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                   onPressed: () {
                     setState(() {
                       _textController.value = TextEditingValue.empty;
@@ -242,11 +242,11 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           bottom: TabBar(
             controller: _tabController,
             tabs: [
-              Tab(icon: Icon(Icons.audiotrack)),
-              Tab(icon: Icon(Icons.people)),
-              Tab(icon: Icon(Icons.album)),
+              const Tab(icon: Icon(Icons.audiotrack)),
+              const Tab(icon: Icon(Icons.people)),
+              const Tab(icon: Icon(Icons.album)),
               if (_searchEngine == SearchEngine.spotify)
-                Tab(icon: Icon(Icons.queue_music)),
+                const Tab(icon: Icon(Icons.queue_music)),
             ],
           ),
         ),

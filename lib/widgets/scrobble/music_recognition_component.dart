@@ -26,7 +26,7 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
 
     _subscription =
         QuickActionsManager.quickActionStream.listen((action) async {
-      await Future.delayed(Duration(milliseconds: 250));
+      await Future.delayed(const Duration(milliseconds: 250));
       if (action == QuickAction.scrobbleOnce) {
         _scrobbleOnce();
       } else {
@@ -46,8 +46,8 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
     if (result!.track != null) {
       widget.onTrackRecognized(result.track!);
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Could not recognize song')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not recognize song')));
     }
   }
 
@@ -65,7 +65,7 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
         decoration: BoxDecoration(
             border: Border.all(color: Colors.red),
             borderRadius: BorderRadius.circular(5)),
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,11 +87,11 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               OutlinedButton(
-                child: Text('Listen once'),
+                child: const Text('Listen once'),
                 onPressed: _scrobbleOnce,
               ),
               OutlinedButton(
-                child: Text('Listen continuously'),
+                child: const Text('Listen continuously'),
                 onPressed: _scrobbleContinuously,
               ),
             ],

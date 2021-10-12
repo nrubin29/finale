@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 class SpotifyAlbumView extends StatelessWidget {
   final SAlbumSimple album;
 
-  SpotifyAlbumView({required this.album});
+  const SpotifyAlbumView({required this.album});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class SpotifyAlbumView extends StatelessWidget {
                 ListTile(
                     leading: EntityImage(entity: album.artist),
                     title: Text(album.artist.name),
-                    trailing: Icon(Icons.chevron_right),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.push(
                           context,
@@ -56,8 +56,8 @@ class SpotifyAlbumView extends StatelessWidget {
                               builder: (context) =>
                                   SpotifyArtistView(artist: album.artist)));
                     }),
-                if (album.tracks.isNotEmpty) Divider(),
-                if (album.tracks.isNotEmpty)
+                if (album.tracks.isNotEmpty) ...[
+                  const Divider(),
                   EntityDisplay<SAlbumTrack>(
                     items: album.tracks,
                     scrollable: false,
@@ -65,6 +65,7 @@ class SpotifyAlbumView extends StatelessWidget {
                     displayImages: false,
                     scrobbleableEntity: (track) => Future.value(track),
                   ),
+                ],
               ],
             ));
       },

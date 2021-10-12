@@ -50,7 +50,7 @@ Future<Map<String, dynamic>> _doRequest(
         'Could not do request $method($data). Got response ${response.body}');
   }
 
-  if (!(jsonObject is Map<String, dynamic>)) {
+  if (jsonObject is! Map<String, dynamic>) {
     throw Exception('Invalid response type for $method($data): $jsonObject');
   } else if (jsonObject.containsKey('error')) {
     throw LException.fromJson(jsonObject);
@@ -356,7 +356,7 @@ class Lastfm {
 
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
       List<Track> tracks, List<DateTime> timestamps) async {
-    assert(tracks.length == timestamps.length - 1);
+    assert(tracks.length == timestamps.length);
 
     var accepted = 0;
     var ignored = 0;

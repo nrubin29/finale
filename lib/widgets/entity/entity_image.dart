@@ -57,7 +57,7 @@ class _EntityImageState extends State<EntityImage> {
     }
   }
 
-  Widget _buildCircularImage(Widget image) => Container(
+  Widget _buildCircularImage(Widget image) => SizedBox(
         width: widget.width,
         child: Material(
           shape: const CircleBorder(),

@@ -12,11 +12,11 @@ class TagChips extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             ...topTags.tags.map((tag) => Container(
-                margin: EdgeInsets.symmetric(horizontal: 2),
+                margin: const EdgeInsets.symmetric(horizontal: 2),
                 child: Chip(label: Text(tag.name)))),
-            SizedBox(width: 10)
+            const SizedBox(width: 10)
           ],
         ));
   }

@@ -8,10 +8,7 @@ class ImageIdCache {
   static ImageIdCache? _instance;
 
   factory ImageIdCache() {
-    if (_instance == null) {
-      _instance = ImageIdCache._();
-    }
-
+    _instance ??= ImageIdCache._();
     return _instance!;
   }
 

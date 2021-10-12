@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class WeeklyChartSelectorView extends StatefulWidget {
   final LUser user;
 
-  WeeklyChartSelectorView({required this.user});
+  const WeeklyChartSelectorView({required this.user});
 
   @override
   State<StatefulWidget> createState() => _WeeklyChartSelectorViewState();
@@ -46,7 +46,7 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.chevron_left),
+                      icon: const Icon(Icons.chevron_left),
                       color: Colors.white,
                       onPressed: _index > 0
                           ? () {
@@ -58,10 +58,10 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
                     ),
                     Text(
                       _charts[_index].title,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     IconButton(
-                      icon: Icon(Icons.chevron_right),
+                      icon: const Icon(Icons.chevron_right),
                       color: Colors.white,
                       onPressed: _index < _charts.length - 1
                           ? () {

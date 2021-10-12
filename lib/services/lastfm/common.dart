@@ -94,7 +94,7 @@ class LTopTags {
   // If there are no tags, the Last.fm API in its infinite wisdom will return
   // an empty string instead of an empty array.
   static LTopTags fromJsonSafe(json) =>
-      json == '' ? LTopTags(const []) : LTopTags.fromJson(json);
+      json == '' ? const LTopTags([]) : LTopTags.fromJson(json);
 
   // If there's only one tag, the Last.fm API in its infinite wisdom doesn't
   // wrap it in an array literal.
@@ -145,7 +145,7 @@ class LWiki {
   static String trim(String content) {
     var result = content.trim();
 
-    if (result.indexOf('<a') != -1) {
+    if (result.contains('<a')) {
       result = result.substring(0, result.indexOf('<a')).trim();
     }
 

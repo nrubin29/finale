@@ -114,21 +114,22 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
         : SafeArea(
             child: ListView(
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Scoreboard(statistics: {
                   'Scrobbles': _numScrobbles,
                   'Artists': _artists.length,
                   'Albums': _albums.length,
                   'Tracks': _tracks.length,
                 }),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(
                     height: 200,
                     child: Row(children: [
-                      RotatedBox(quarterTurns: 3, child: Text('Scrobbles')),
-                      SizedBox(width: 5),
+                      const RotatedBox(
+                          quarterTurns: 3, child: Text('Scrobbles')),
+                      const SizedBox(width: 5),
                       Expanded(
                           child: BarChart(
                         _series,
@@ -137,11 +138,11 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                     ]),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 if (_tracks.isNotEmpty)
                   Container(
-                    margin: EdgeInsets.only(left: 8),
-                    child: Text('Top Tracks'),
+                    margin: const EdgeInsets.only(left: 8),
+                    child: const Text('Top Tracks'),
                   ),
                 for (final track in _tracks.take(3))
                   ListTile(
@@ -160,14 +161,14 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                   ),
                 if (_tracks.length > 3)
                   ListTile(
-                    title: Text('See more'),
-                    trailing: Icon(Icons.chevron_right),
+                    title: const Text('See more'),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: AppBar(title: Text('Top Tracks')),
+                            appBar: AppBar(title: const Text('Top Tracks')),
                             body: EntityDisplay<LUserWeeklyTrackChartTrack>(
                               items: _tracks,
                               detailWidgetBuilder: (track) =>
@@ -178,11 +179,11 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       );
                     },
                   ),
-                if (_tracks.isNotEmpty) Divider(),
+                if (_tracks.isNotEmpty) const Divider(),
                 if (_albums.isNotEmpty)
                   Container(
-                    margin: EdgeInsets.only(left: 8),
-                    child: Text('Top Albums'),
+                    margin: const EdgeInsets.only(left: 8),
+                    child: const Text('Top Albums'),
                   ),
                 for (final album in _albums.take(3))
                   ListTile(
@@ -201,14 +202,14 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                   ),
                 if (_albums.length > 3)
                   ListTile(
-                    title: Text('See more'),
-                    trailing: Icon(Icons.chevron_right),
+                    title: const Text('See more'),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: AppBar(title: Text('Top Albums')),
+                            appBar: AppBar(title: const Text('Top Albums')),
                             body: EntityDisplay<LUserWeeklyAlbumChartAlbum>(
                               items: _albums,
                               displayType: DisplayType.grid,
@@ -220,11 +221,11 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       );
                     },
                   ),
-                if (_albums.isNotEmpty) Divider(),
+                if (_albums.isNotEmpty) const Divider(),
                 if (_artists.isNotEmpty)
                   Container(
-                    margin: EdgeInsets.only(left: 8),
-                    child: Text('Top Artists'),
+                    margin: const EdgeInsets.only(left: 8),
+                    child: const Text('Top Artists'),
                   ),
                 for (final artist in _artists.take(3))
                   ListTile(
@@ -232,7 +233,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                     trailing: Text('${artist.playCount} scrobbles'),
                     leading: EntityImage(entity: artist),
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -244,14 +245,14 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                   ),
                 if (_artists.length > 3)
                   ListTile(
-                    title: Text('See more'),
-                    trailing: Icon(Icons.chevron_right),
+                    title: const Text('See more'),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: AppBar(title: Text('Top Artists')),
+                            appBar: AppBar(title: const Text('Top Artists')),
                             body: EntityDisplay<LUserWeeklyArtistChartArtist>(
                               items: _artists,
                               displayType: DisplayType.grid,

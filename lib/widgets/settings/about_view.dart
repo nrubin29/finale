@@ -13,35 +13,35 @@ class AboutView extends StatelessWidget {
       body: CustomScrollView(
         physics: const ScrollPhysics(),
         slivers: [
-          SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
           SliverToBoxAdapter(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 appIcon(size: 84),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Finale', style: TextStyle(fontSize: 24)),
+                    const Text('Finale', style: TextStyle(fontSize: 24)),
                     FutureBuilder<PackageInfo>(
                       future: PackageInfo.fromPlatform(),
                       builder: (_, snapshot) => snapshot.hasData
                           ? Text('Version ${snapshot.data!.fullVersion}')
-                          : SizedBox(),
+                          : const SizedBox(),
                     )
                   ],
                 )
               ],
             ),
           ),
-          SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
           SliverToBoxAdapter(
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
                 style: Theme.of(context).textTheme.bodyText2,
-                children: [
+                children: const [
                   TextSpan(text: 'Made with '),
                   WidgetSpan(
                     child: Icon(
@@ -61,12 +61,12 @@ class AboutView extends StatelessWidget {
               ),
             ),
           ),
-          SliverToBoxAdapter(child: SizedBox(height: 10)),
+          const SliverToBoxAdapter(child: SizedBox(height: 10)),
           SliverToBoxAdapter(
             child: ListTile(
-              title: Text('Follow me on Twitter'),
-              leading: Icon(SocialMediaIcons.twitter),
-              trailing: Icon(Icons.chevron_right),
+              title: const Text('Follow me on Twitter'),
+              leading: const Icon(SocialMediaIcons.twitter),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 launch('https://twitter.com/nrubin29');
               },
@@ -74,9 +74,9 @@ class AboutView extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: ListTile(
-              title: Text('My website'),
-              leading: Icon(Icons.web),
-              trailing: Icon(Icons.chevron_right),
+              title: const Text('My website'),
+              leading: const Icon(Icons.web),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 launch('https://nrubintech.com');
               },
@@ -84,9 +84,9 @@ class AboutView extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: ListTile(
-              title: Text('Source code'),
-              leading: Icon(SocialMediaIcons.github_circled),
-              trailing: Icon(Icons.chevron_right),
+              title: const Text('Source code'),
+              leading: const Icon(SocialMediaIcons.github_circled),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 launch('https://github.com/nrubin29/finale');
               },
@@ -94,9 +94,9 @@ class AboutView extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: ListTile(
-              title: Text('Send feedback'),
-              leading: Icon(Icons.email),
-              trailing: Icon(Icons.chevron_right),
+              title: const Text('Send feedback'),
+              leading: const Icon(Icons.email),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 launch('mailto:feedback@finale.app'
                     '?subject=Finale%20feedback');
@@ -105,9 +105,9 @@ class AboutView extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: ListTile(
-              title: Text('Privacy policy'),
-              leading: Icon(Icons.privacy_tip),
-              trailing: Icon(Icons.chevron_right),
+              title: const Text('Privacy policy'),
+              leading: const Icon(Icons.privacy_tip),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 launch('https://finale.app/privacy');
               },
@@ -119,7 +119,7 @@ class AboutView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+                children: const [
                   Text('\u00a9 2021 Noah Rubin Technologies LLC'),
                   Text('All rights reserved'),
                 ],

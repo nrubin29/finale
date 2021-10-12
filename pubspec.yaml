@@ -9,7 +9,10 @@ environment:
 dependencies:
   auto_size_text: ^3.0.0-nullsafety.0
   cached_network_image: ^3.1.0
-  charts_flutter: ^0.11.0
+  charts_flutter:
+    git:
+      url: https://github.com/google/charts
+      path: charts_flutter
   collection: ^1.15.0
   crypto: ^3.0.1
   datetime_picker_formfield: ^2.0.0
@@ -47,6 +50,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.0.6
   flutter_launcher_icons: ^0.9.1
+  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
   integration_test:

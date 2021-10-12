@@ -41,7 +41,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            title: Text('Last.fm'),
+            title: const Text('Last.fm'),
             leading: getLastfmIcon(
                 Theme.of(context).brightness == Brightness.light
                     ? Colors.black45
@@ -53,16 +53,16 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
           ),
           ListTile(
             title: Row(children: [
-              Text('Spotify'),
+              const Text('Spotify'),
               if (_spotifyEnabled) ...[
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Preferences().hasSpotifyAuthData
                     ? TextButton(
-                        child: Text('Log Out'),
+                        child: const Text('Log Out'),
                         onPressed: _logOutSpotify,
                       )
                     : TextButton(
-                        child: Text('Log In'),
+                        child: const Text('Log In'),
                         onPressed: () async {
                           await showDialog(
                               context: context,
@@ -72,7 +72,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                       ),
               ],
             ]),
-            leading: Icon(SocialMediaIcons.spotify),
+            leading: const Icon(SocialMediaIcons.spotify),
             trailing: Switch(
               value: _spotifyEnabled,
               onChanged: (_) async {
@@ -140,6 +140,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                     Preferences().libreKey = session.key;
                   } on PlatformException catch (e) {
                     assert(() {
+                      // ignore: use_rethrow_when_possible
                       throw e;
                     }());
                     return;

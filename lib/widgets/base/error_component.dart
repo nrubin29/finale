@@ -22,6 +22,7 @@ class ErrorComponent extends StatelessWidget {
       this.showSendFeedbackButton = true})
       // In debug mode, print the error.
       : assert(() {
+          // ignore: avoid_print
           print('$error\n$stackTrace');
           return true;
         }());
@@ -60,22 +61,22 @@ class ErrorComponent extends StatelessWidget {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error, size: 48),
-          SizedBox(height: 10),
+          const Icon(Icons.error, size: 48),
+          const SizedBox(height: 10),
           Text('An error occurred',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline6),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text('$error',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.caption),
           if (showSendFeedbackButton) ...[
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             OutlinedButton(
               onPressed: () async {
                 launch(await _uri);
               },
-              child: Text('Send feedback'),
+              child: const Text('Send feedback'),
             ),
           ],
         ],

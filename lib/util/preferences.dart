@@ -54,10 +54,7 @@ class Preferences {
   static Preferences? _instance;
 
   factory Preferences() {
-    if (_instance == null) {
-      _instance = Preferences._();
-    }
-
+    _instance ??= Preferences._();
     return _instance!;
   }
 

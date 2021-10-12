@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 class SpotifyArtistView extends StatefulWidget {
   final dynamic /* SArtist|SArtistSimple */ artist;
 
-  SpotifyArtistView({required this.artist})
+  const SpotifyArtistView({required this.artist})
       : assert(artist is SArtist || artist is SArtistSimple);
 
   @override
@@ -67,7 +67,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                     unselectedLabelColor: Colors.grey,
                     indicatorColor: Colors.red,
                     controller: _tabController,
-                    tabs: [
+                    tabs: const [
                       Tab(icon: Icon(Icons.album)),
                       Tab(icon: Icon(Icons.audiotrack)),
                     ],

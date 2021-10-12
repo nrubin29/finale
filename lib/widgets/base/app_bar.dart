@@ -17,7 +17,7 @@ AppBar createAppBar(String title,
               fit: BoxFit.fitWidth,
               child: Text(
                 subtitle,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             )
         ],

@@ -35,7 +35,7 @@ class Scoreboard extends StatelessWidget {
           ? OutlinedButton(
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
-                    TextStyle(fontWeight: FontWeight.normal)),
+                    const TextStyle(fontWeight: FontWeight.normal)),
                 visualDensity: VisualDensity.compact,
               ),
               onPressed: statisticActions[e.key],
@@ -55,7 +55,7 @@ class Scoreboard extends StatelessWidget {
         children: [
           for (var i = 0; i < widgets.length; i++) ...[
             widgets[i],
-            if (i < widgets.length - 1) VerticalDivider(),
+            if (i < widgets.length - 1) const VerticalDivider(),
           ]
         ],
       ),

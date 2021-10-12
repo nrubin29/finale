@@ -14,16 +14,16 @@ class ImageId {
 
   // small=34s, medium=64s, large=174s, extralarge=300x300
   const ImageId.lastfm(String imageId)
-      : this._lowQualityUrl =
+      : _lowQualityUrl =
             'https://lastfm.freetls.fastly.net/i/u/64s/$imageId.jpg',
-        this._highQualityUrl =
+        _highQualityUrl =
             'https://lastfm.freetls.fastly.net/i/u/300x300/$imageId.jpg',
-        this.serializedValue = imageId;
+        serializedValue = imageId;
 
   const ImageId.spotify(String lowQualityImageId, String highQualityImageId)
-      : this._lowQualityUrl = 'https://i.scdn.co/image/$lowQualityImageId',
-        this._highQualityUrl = 'https://i.scdn.co/image/$highQualityImageId',
-        this.serializedValue = '$lowQualityImageId|$highQualityImageId';
+      : _lowQualityUrl = 'https://i.scdn.co/image/$lowQualityImageId',
+        _highQualityUrl = 'https://i.scdn.co/image/$highQualityImageId',
+        serializedValue = '$lowQualityImageId|$highQualityImageId';
 
   factory ImageId.fromSerializedValue(String serializedValue) {
     if (serializedValue.contains('|')) {

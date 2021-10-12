@@ -70,12 +70,12 @@ Future<void> main() async {
   }
 
   testWidgets('Profile screen', (tester) async {
-    await pumpWidget(tester, MainView(username: testName));
+    await pumpWidget(tester, const MainView(username: testName));
     await tester.saveScreenshot('1_profile');
   });
 
   testWidgets('Scrobble screen', (tester) async {
-    await pumpWidget(tester, MainView(username: testName));
+    await pumpWidget(tester, const MainView(username: testName));
     await tester.tap(find.byIcon(scrobbleIcon).at(1));
 
     final formFields =
@@ -90,7 +90,7 @@ Future<void> main() async {
   });
 
   testWidgets('Weekly track screen', (tester) async {
-    await pumpWidget(tester, MainView(username: testName));
+    await pumpWidget(tester, const MainView(username: testName));
     await tester.tap(find.byIcon(Icons.access_time));
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(Icons.chevron_left));
@@ -103,7 +103,7 @@ Future<void> main() async {
   });
 
   testWidgets('Collage screen', (tester) async {
-    await pumpWidget(tester, MainView(username: testName));
+    await pumpWidget(tester, const MainView(username: testName));
     await tester.tap(find.byIcon(Icons.grid_view));
     await tester.pumpAndSettle();
 
@@ -177,7 +177,8 @@ class _AsPageState extends State<_AsPage> {
   }
 
   @override
-  Widget build(BuildContext context) => widget.widgetBehindModal ?? SizedBox();
+  Widget build(BuildContext context) =>
+      widget.widgetBehindModal ?? const SizedBox();
 }
 
 extension on WidgetTester {

@@ -13,7 +13,7 @@ class ScrobbleView extends StatefulWidget {
   final Track? track;
   final bool isModal;
 
-  ScrobbleView({this.track, this.isModal = false});
+  const ScrobbleView({this.track, this.isModal = false});
 
   @override
   State<StatefulWidget> createState() => _ScrobbleViewState();
@@ -37,7 +37,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _albumController.text = widget.track?.albumName ?? '';
 
     if (!widget.isModal && isMobile) {
-      ACRCloud.setUp(ACRCloudConfig(
+      ACRCloud.setUp(const ACRCloudConfig(
           acrCloudAccessKey, acrCloudAccessSecret, acrCloudHost));
     }
   }
@@ -64,8 +64,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     }
 
     if (response.ignored == 0) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Scrobbled successfully!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Scrobbled successfully!')));
       _trackController.text = '';
       _artistController.text = '';
       _albumController.text = '';
@@ -76,7 +76,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred while scrobbling')));
+          const SnackBar(content: Text('An error occurred while scrobbling')));
     }
   }
 
@@ -88,7 +88,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     return StreamBuilder<double>(
       stream: session.volumeStream,
       initialData: 0.0,
-      builder: (context, snapshot) => Container(
+      builder: (context, snapshot) => SizedBox(
           height: 50,
           child: Center(
               child: ClipOval(
@@ -107,7 +107,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
         actions: [
           Builder(
             builder: (context) => IconButton(
-              icon: Icon(scrobbleIcon),
+              icon: const Icon(scrobbleIcon),
               onPressed: () {
                 if (_formKey.currentState?.validate() ?? false) {
                   _scrobble(context);
@@ -136,23 +136,23 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 ),
               TextFormField(
                 controller: _trackController,
-                decoration: InputDecoration(labelText: 'Song *'),
+                decoration: const InputDecoration(labelText: 'Song *'),
                 validator: _required,
               ),
               TextFormField(
                 controller: _artistController,
-                decoration: InputDecoration(labelText: 'Artist *'),
+                decoration: const InputDecoration(labelText: 'Artist *'),
                 validator: _required,
               ),
               TextFormField(
                 controller: _albumController,
-                decoration: InputDecoration(labelText: 'Album'),
+                decoration: const InputDecoration(labelText: 'Album'),
               ),
               SwitchListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 contentPadding: EdgeInsets.zero,
                 activeColor: Colors.red,
-                title: Text('Custom timestamp'),
+                title: const Text('Custom timestamp'),
                 value: _useCustomTimestamp,
                 onChanged: (value) {
                   setState(
@@ -169,7 +169,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
               Visibility(
                 visible: _useCustomTimestamp,
                 child: DateTimeField(
-                  decoration: InputDecoration(labelText: 'Timestamp'),
+                  decoration: const InputDecoration(labelText: 'Timestamp'),
                   resetIcon: null,
                   format: dateTimeFormatWithYear,
                   initialValue: _customTimestamp,
@@ -177,8 +177,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                     final date = await showDatePicker(
                         context: context,
                         initialDate: currentValue ?? DateTime.now(),
-                        firstDate: DateTime.now().subtract(Duration(days: 14)),
-                        lastDate: DateTime.now().add(Duration(days: 1)));
+                        firstDate:
+                            DateTime.now().subtract(const Duration(days: 14)),
+                        lastDate: DateTime.now().add(const Duration(days: 1)));
 
                     if (date != null) {
                       final time = await showTimePicker(

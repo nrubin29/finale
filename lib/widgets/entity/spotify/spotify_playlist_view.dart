@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 class SpotifyPlaylistView extends StatelessWidget {
   final SPlaylistSimple playlist;
 
-  SpotifyPlaylistView({required this.playlist});
+  const SpotifyPlaylistView({required this.playlist});
 
   @override
   Widget build(BuildContext context) => Scaffold(

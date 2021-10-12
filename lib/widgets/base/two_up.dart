@@ -33,7 +33,7 @@ class TwoUp extends StatelessWidget {
                   child: ListView(
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
-                    children: [SizedBox(height: 16), ...listItems],
+                    children: [const SizedBox(height: 16), ...listItems],
                   ),
                 ),
               ),
@@ -49,7 +49,7 @@ class TwoUp extends StatelessWidget {
                       BoxConstraints(maxHeight: mediaQuery.size.height / 2),
                   child: image!,
                 ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ...listItems,
             ],
           );

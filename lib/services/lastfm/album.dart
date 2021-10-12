@@ -28,6 +28,7 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
   final String url;
 
   @JsonKey(name: 'playcount', fromJson: parseInt)
+  @override
   final int playCount;
 
   @override

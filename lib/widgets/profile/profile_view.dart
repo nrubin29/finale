@@ -22,7 +22,7 @@ class ProfileView extends StatefulWidget {
   final String username;
   final bool isTab;
 
-  ProfileView({required this.username, this.isTab = false});
+  const ProfileView({required this.username, this.isTab = false});
 
   @override
   State<StatefulWidget> createState() => _ProfileViewState();
@@ -67,21 +67,21 @@ class _ProfileViewState extends State<ProfileView>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   EntityImage(entity: user, isCircular: true, width: 40),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(user.name),
                 ],
               ),
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.share),
+                icon: const Icon(Icons.share),
                 onPressed: () {
                   Share.share(user.url);
                 },
               ),
               if (widget.isTab)
                 IconButton(
-                  icon: Icon(Icons.settings),
+                  icon: const Icon(Icons.settings),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -94,7 +94,7 @@ class _ProfileViewState extends State<ProfileView>
           body: NestedScrollView(
             floatHeaderSlivers: true,
             headerSliverBuilder: (_, __) => [
-              SliverToBoxAdapter(child: SizedBox(height: 10)),
+              const SliverToBoxAdapter(child: SizedBox(height: 10)),
               SliverToBoxAdapter(
                 child: Text(
                   'Scrobbling since ${user.registered.dateFormatted}',
@@ -106,14 +106,14 @@ class _ProfileViewState extends State<ProfileView>
                 maintainState: true,
                 sliver: SliverToBoxAdapter(
                   child: Column(children: [
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Scoreboard(statistics: {
                       'Scrobbles': user.playCount,
                       'Artists': Lastfm.getNumArtists(widget.username),
                       'Albums': Lastfm.getNumAlbums(widget.username),
                       'Tracks': Lastfm.getNumTracks(widget.username),
                     }),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                   ]),
                 ),
               ),
@@ -123,7 +123,7 @@ class _ProfileViewState extends State<ProfileView>
                   labelColor: Colors.red,
                   unselectedLabelColor: Colors.grey,
                   indicatorColor: Colors.red,
-                  tabs: [
+                  tabs: const [
                     Tab(icon: Icon(Icons.queue_music)),
                     Tab(icon: Icon(Icons.people)),
                     Tab(icon: Icon(Icons.album)),
