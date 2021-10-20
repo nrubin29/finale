@@ -71,7 +71,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       _albumController.text = '';
 
       // Ask for a review
-      if (isMobile && await InAppReview.instance.isAvailable()) {
+      if (!isWeb && await InAppReview.instance.isAvailable()) {
         InAppReview.instance.requestReview();
       }
     } else {

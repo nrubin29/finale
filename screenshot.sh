@@ -20,6 +20,9 @@ done
 xcrun simctl boot "iPhone 12 Pro"
 flutter_test "iPhone 12 Pro" "iPhone 12 Pro" "false"
 
+# macOS
+flutter_test "macOS" "macOS"
+
 # Android
 for device in "Pixel_3_API_29" "7_inch_tablet_API_29" "10_inch_tablet_API_29"; do
   ~/Library/Android/sdk/emulator/emulator -avd "$device" &

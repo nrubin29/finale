@@ -10,10 +10,15 @@ import 'package:flutter/material.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Preferences().setup();
+
   if (isMobile) {
     await QuickActionsManager.setup();
+  }
+
+  if (!isWeb) {
     await ImageIdCache().setup();
   }
+
   runApp(const MyApp());
 }
 

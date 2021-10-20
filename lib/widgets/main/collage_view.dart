@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -16,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
+import 'package:universal_io/io.dart';
 
 class CollageView extends StatefulWidget {
   @override
@@ -269,9 +269,12 @@ class _CollageViewState extends State<CollageView> {
                         },
                       ),
                     ),
-                    OutlinedButton(
-                      onPressed: _doRequest,
-                      child: const Text('Generate'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: OutlinedButton(
+                        onPressed: _doRequest,
+                        child: const Text('Generate'),
+                      ),
                     ),
                   ],
                 )),
@@ -297,6 +300,11 @@ class _CollageViewState extends State<CollageView> {
         ),
       );
 
+  /// Saves the image.
+  ///
+  /// On mobile, the image will be saved to the camera roll. On web, the image
+  /// will be downloaded as a png file. Image saving is not supported on
+  /// desktop.
   Future<void> _saveImage() async {
     if (isMobile) {
       final tempFile = await _imageFile;
@@ -322,10 +330,11 @@ class _CollageViewState extends State<CollageView> {
                   _form,
                   if (_image != null) ...[
                     Image.memory(_image!),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (isMobile) ...[
+                        if (!isWeb)
                           OutlinedButton(
                             onPressed: () async {
                               final tempFile = await _imageFile;
@@ -333,13 +342,14 @@ class _CollageViewState extends State<CollageView> {
                             },
                             child: const Text('Share'),
                           ),
-                          const SizedBox(width: 10),
-                        ],
-                        OutlinedButton(
-                          onPressed: _saveImage,
-                          child: const Text(
-                              isMobile ? 'Save to camera roll' : 'Download'),
-                        ),
+                        // Both buttons are visible only on mobile.
+                        if (isMobile) const SizedBox(width: 10),
+                        if (!isDesktop)
+                          OutlinedButton(
+                            onPressed: _saveImage,
+                            child: const Text(
+                                isWeb ? 'Download' : 'Save to camera roll'),
+                          ),
                       ],
                     ),
                   ],

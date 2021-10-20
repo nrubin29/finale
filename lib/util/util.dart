@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:universal_io/io.dart';
 
 const isWeb = kIsWeb;
-const isMobile = !isWeb;
+final isDesktop = !isWeb && Platform.isMacOS;
+final isMobile = !isWeb && !isDesktop;
 var censorImages = false;
 
 String get authCallbackUrl {
   var callbackUrl =
-      isMobile ? 'finale://auth' : 'https://web.finale.app/auth.html';
+      isWeb ? 'https://web.finale.app/auth.html' : 'finale://auth';
 
   assert(() {
     if (isWeb) {
