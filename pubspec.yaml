@@ -50,7 +50,8 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.1.4
-  flutter_launcher_icons: ^0.9.2
+  flutter_launcher_icons:
+    git: https://github.com/dirkbo/flutter_launcher_icons
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
@@ -66,7 +67,10 @@ flutter:
 
 flutter_icons:
   image_path: 'assets/images/icon.png'
+  image_path_macos: 'assets/images/icon_rounded.png'
   android: true
   ios: true
+  macos: true
+  web: true
   adaptive_icon_background: "#ff0000"
   adaptive_icon_foreground: 'assets/images/music_note.png'
