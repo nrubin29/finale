@@ -51,26 +51,28 @@ class SettingsView extends StatelessWidget {
                                       ListenContinuouslySettingsView()));
                         },
                       ),
-                    ListTile(
-                      title: const Text('Empty image cache'),
-                      leading: const Icon(Icons.delete),
-                      onTap: () async {
-                        await DefaultCacheManager().emptyCache();
-                        await ImageIdCache().drop();
+                    if (!isWeb)
+                      ListTile(
+                        title: const Text('Empty image cache'),
+                        leading: const Icon(Icons.delete),
+                        onTap: () async {
+                          await DefaultCacheManager().emptyCache();
+                          await ImageIdCache().drop();
 
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  title: const Text('Success'),
-                                  content: const Text('Image cache emptied.'),
-                                  actions: [
-                                    TextButton(
-                                        child: const Text('Dismiss'),
-                                        onPressed: () => Navigator.pop(context))
-                                  ],
-                                ));
-                      },
-                    ),
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text('Success'),
+                                    content: const Text('Image cache emptied.'),
+                                    actions: [
+                                      TextButton(
+                                          child: const Text('Dismiss'),
+                                          onPressed: () =>
+                                              Navigator.pop(context))
+                                    ],
+                                  ));
+                        },
+                      ),
                     ListTile(
                         title: const Text('Log out'),
                         leading: const Icon(Icons.logout),
