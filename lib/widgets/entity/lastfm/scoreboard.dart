@@ -5,7 +5,12 @@ import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
 
 /// A widget that displays multiple [statistics] with labels.
-class Scoreboard extends StatelessWidget {
+///
+/// If a statistic has a corresponding entry in [statisticActions], it will be
+/// rendered as a button that will call a callback when tapped.
+///
+/// [actions] are arbitrary widgets that are appended to the scoreboard.
+class Scoreboard extends StatefulWidget {
   final Map<String, FutureOr<int?>> statistics;
   final Map<String, VoidCallback> statisticActions;
   final List<Widget> actions;
@@ -15,37 +20,62 @@ class Scoreboard extends StatelessWidget {
       this.statisticActions = const {},
       this.actions = const []});
 
-  Widget _scoreTile(String title, FutureOr<int?> value) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(title),
-          if (value is Future<int?>)
-            FutureBuilder<int?>(
-              future: value,
-              builder: (context, snapshot) => snapshot.hasData
-                  ? Text(numberFormat.format(snapshot.data!))
-                  : snapshot.connectionState == ConnectionState.done
-                      ? const Text('---')
-                      : const LoadingComponent.small(),
-            )
-          else
-            Text(numberFormat.format(value))
-        ],
-      );
+  @override
+  State<Scoreboard> createState() => _ScoreboardState();
+}
 
-  List<Widget> _widgets(BuildContext context) => statistics.entries
-      .map((e) => statisticActions.containsKey(e.key)
+class _ScoreboardState extends State<Scoreboard> {
+  final _data = <String, int?>{};
+
+  @override
+  void initState() {
+    super.initState();
+
+    for (var entry in widget.statistics.entries) {
+      unawaited(_resolveFuture(entry.key, entry.value));
+    }
+  }
+
+  Future<void> _resolveFuture(String key, FutureOr<int?> futureOr) async {
+    try {
+      final result = await futureOr;
+      _data[key] = result;
+    } on Exception {
+      _data[key] = null;
+    } finally {
+      setState(() {});
+    }
+  }
+
+  Widget _scoreTile(String title) {
+    final value = _data[title];
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(title),
+        _data.containsKey(title)
+            ? value != null
+                ? Text(numberFormat.format(value))
+                : const Text('---')
+            : const LoadingComponent.small()
+      ],
+    );
+  }
+
+  List<Widget> _widgets(BuildContext context) => widget.statistics.keys
+      .map((key) => widget.statisticActions.containsKey(key)
           ? OutlinedButton(
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
                     const TextStyle(fontWeight: FontWeight.normal)),
                 visualDensity: VisualDensity.compact,
               ),
-              onPressed: statisticActions[e.key],
-              child: _scoreTile(e.key, e.value),
+              onPressed: widget.statisticActions[key],
+              child: _scoreTile(key),
             )
-          : _scoreTile(e.key, e.value))
-      .followedBy(actions)
+          : _scoreTile(key))
+      .followedBy(widget.actions)
       .toList(growable: false);
 
   @override
