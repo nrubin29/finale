@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:finale/util/util.dart';
+import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
 
 /// A widget that displays multiple [statistics] with labels.
 class Scoreboard extends StatelessWidget {
-  final Map<String, FutureOr<int>> statistics;
+  final Map<String, FutureOr<int?>> statistics;
   final Map<String, VoidCallback> statisticActions;
   final List<Widget> actions;
 
@@ -14,16 +15,18 @@ class Scoreboard extends StatelessWidget {
       this.statisticActions = const {},
       this.actions = const []});
 
-  Widget _scoreTile(String title, FutureOr<int> value) => Column(
+  Widget _scoreTile(String title, FutureOr<int?> value) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(title),
-          if (value is Future<int>)
-            FutureBuilder<int>(
+          if (value is Future<int?>)
+            FutureBuilder<int?>(
               future: value,
-              builder: (context, snapshot) => Text(snapshot.hasData
-                  ? numberFormat.format(snapshot.data!)
-                  : '---'),
+              builder: (context, snapshot) => snapshot.hasData
+                  ? Text(numberFormat.format(snapshot.data!))
+                  : snapshot.connectionState == ConnectionState.done
+                      ? const Text('---')
+                      : const LoadingComponent.small(),
             )
           else
             Text(numberFormat.format(value))

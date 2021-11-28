@@ -354,7 +354,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     super.build(context);
 
     if (!didInitialRequest) {
-      return LoadingComponent();
+      return const LoadingComponent();
     }
 
     if (widget.items != null) {

@@ -110,7 +110,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
     super.build(context);
 
     return !_loaded
-        ? LoadingComponent()
+        ? const LoadingComponent()
         : SafeArea(
             child: ListView(
               children: [

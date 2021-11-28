@@ -8,6 +8,6 @@ class LoadingView extends StatelessWidget {
           centerTitle: true,
           title: const Text('Loading'),
         ),
-        body: LoadingComponent(),
+        body: const LoadingComponent(),
       );
 }

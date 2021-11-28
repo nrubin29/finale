@@ -100,7 +100,7 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
                               entity: artist,
                             );
                           } else if (!snapshot.hasData) {
-                            return LoadingComponent();
+                            return const LoadingComponent();
                           }
 
                           return EntityDisplay<STrack>(

@@ -37,7 +37,7 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
     super.build(context);
 
     return !_loaded
-        ? LoadingComponent()
+        ? const LoadingComponent()
         : Column(
             children: [
               ColoredBox(
