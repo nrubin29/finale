@@ -1,7 +1,7 @@
 name: finale
 description: A fully-featured Last.fm client
 publish_to: 'none'
-version: 1.5.1+23
+version: 1.6.0+24
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -15,7 +15,7 @@ dependencies:
   datetime_picker_formfield: ^2.0.0
   flutter:
     sdk: flutter
-  flutter_acrcloud: ^0.1.4
+  flutter_acrcloud: ^0.1.5
   flutter_svg: ^0.23.0+1
   flutter_web_auth:
     git: https://github.com/czepiec/flutter_web_auth
