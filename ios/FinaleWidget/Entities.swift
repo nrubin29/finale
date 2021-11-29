@@ -24,15 +24,17 @@ extension Period {
     }
     
     var displayName: String {
-        switch self {
-        case .overall: return "All Time"
-        case .sevenDay: return "7 Days"
-        case .oneMonth: return "1 Month"
-        case .threeMonth: return "3 Months"
-        case .sixMonth: return "6 Months"
-        case .twelveMonth: return "12 Months"
-        case .unknown: fallthrough
-        @unknown default: return "All Time"
+        get {
+            switch self {
+            case .overall: return "All Time"
+            case .sevenDay: return "7 Days"
+            case .oneMonth: return "1 Month"
+            case .threeMonth: return "3 Months"
+            case .sixMonth: return "6 Months"
+            case .twelveMonth: return "12 Months"
+            case .unknown: fallthrough
+            @unknown default: return "All Time"
+            }
         }
     }
 }
