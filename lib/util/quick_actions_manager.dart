@@ -74,6 +74,10 @@ class QuickActionsManager {
   static void _handleLink(Uri? uri) {
     if (uri == null) {
       return;
+    } else if (uri.path == '/scrobbleOnce') {
+      _quickActions.add(QuickAction.scrobbleOnce());
+    } else if (uri.path == '/scrobbleContinuously') {
+      _quickActions.add(QuickAction.scrobbleContinuously());
     } else if (uri.path == '/album') {
       final name = uri.queryParameters['name']!;
       final artist = uri.queryParameters['artist']!;

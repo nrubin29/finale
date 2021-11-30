@@ -63,10 +63,14 @@ func getImageForAlbum(_ album: LTopAlbumsResponseAlbum?) -> UIImage? {
 }
 
 func getLinkUrl(_ album: LTopAlbumsResponseAlbum) -> URL {
+    return getLinkUrl("album", queryItems: [URLQueryItem(name: "name", value: album.name), URLQueryItem(name: "artist", value: album.artist.name)])
+}
+
+func getLinkUrl(_ path: String, queryItems: [URLQueryItem]? = nil) -> URL {
     var components = URLComponents()
     components.scheme = "finale"
-    components.path = "/album"
-    components.queryItems = [URLQueryItem(name: "name", value: album.name), URLQueryItem(name: "artist", value: album.artist.name)]
+    components.path = "/\(path)"
+    components.queryItems = queryItems
     return components.url!
 }
 
@@ -139,10 +143,24 @@ struct FinaleWidgetEntryViewLarge : View {
                         .font(.caption)
                         .foregroundColor(Color("AccentColor"))
                     Spacer()
-                    Image(uiImage: UIImage(named: "FinaleIconWhite")!)
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                        .colorMultiply(Color("AccentColor"))
+                    HStack(alignment: .center) {
+                        Link(destination: getLinkUrl("scrobbleOnce")) {
+                            Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                            .foregroundColor(Color("AccentColor"))
+                        }
+                        Link(destination: getLinkUrl("scrobbleContinuously")) {
+                            Image(systemName: "infinity")
+                            .resizable()
+                            .frame(width: 20, height: 10)
+                            .foregroundColor(Color("AccentColor"))
+                        }
+                        Image(uiImage: UIImage(named: "FinaleIconWhite")!)
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                            .colorMultiply(Color("AccentColor"))
+                    }
                 }
                 if entry.configuration.username == nil {
                     Text("Please enter your username in the widget settings.")
