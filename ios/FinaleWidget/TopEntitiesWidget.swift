@@ -2,27 +2,27 @@ import WidgetKit
 import SwiftUI
 import Intents
 
-struct Provider: IntentTimelineProvider {
-    private func createEntry(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> Void) {
+struct TopEntitiesProvider: IntentTimelineProvider {
+    private func createEntry(for configuration: TopEntitiesConfigurationIntent, in context: Context, completion: @escaping (TopEntitiesEntry) -> Void) {
         if configuration.username == nil || configuration.username!.isEmpty {
-            completion(SimpleEntry(date: Date(), albums: [], configuration: configuration))
+            completion(TopEntitiesEntry(date: Date(), albums: [], configuration: configuration))
             return
         }
         
         GetTopAlbumsRequest(username: configuration.username!, period: configuration.period).doRequest(limit: context.family.numItemsToDisplay, page: 1) { albums in
-            completion(SimpleEntry(date: Date(), albums: albums ?? [], configuration: configuration))
+            completion(TopEntitiesEntry(date: Date(), albums: albums ?? [], configuration: configuration))
         }
     }
     
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), albums: (0..<context.family.numItemsToDisplay).map({ _ in LTopAlbumsResponseAlbum.fake }), configuration: ConfigurationIntent())
+    func placeholder(in context: Context) -> TopEntitiesEntry {
+        TopEntitiesEntry(date: Date(), albums: (0..<context.family.numItemsToDisplay).map({ _ in LTopAlbumsResponseAlbum.fake }), configuration: TopEntitiesConfigurationIntent())
     }
     
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    func getSnapshot(for configuration: TopEntitiesConfigurationIntent, in context: Context, completion: @escaping (TopEntitiesEntry) -> ()) {
         createEntry(for: configuration, in: context, completion: completion)
     }
     
-    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+    func getTimeline(for configuration: TopEntitiesConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
         createEntry(for: configuration, in: context) { entry in
             let timeline = Timeline(entries: [entry], policy: .atEnd)
             completion(timeline)
@@ -30,21 +30,21 @@ struct Provider: IntentTimelineProvider {
     }
 }
 
-struct SimpleEntry: TimelineEntry {
+struct TopEntitiesEntry: TimelineEntry {
     let date: Date
     let albums: [LTopAlbumsResponseAlbum]
-    let configuration: ConfigurationIntent
+    let configuration: TopEntitiesConfigurationIntent
 }
 
-struct FinaleWidgetEntryView : View {
+struct TopEntitiesEntryView : View {
     @Environment(\.widgetFamily) var family: WidgetFamily
-    var entry: Provider.Entry
+    var entry: TopEntitiesProvider.Entry
     
     @ViewBuilder
     var body: some View {
         switch family {
-        case .systemSmall: FinaleWidgetEntryViewSmall(entry: entry)
-        default: FinaleWidgetEntryViewLarge(entry: entry)
+        case .systemSmall: TopEntitiesWidgetEntryViewSmall(entry: entry)
+        default: TopEntitiesWidgetEntryViewLarge(entry: entry)
         }
     }
 }
@@ -74,8 +74,8 @@ func getLinkUrl(_ path: String, queryItems: [URLQueryItem]? = nil) -> URL {
     return components.url!
 }
 
-struct FinaleWidgetEntryViewSmall : View {
-    var entry: Provider.Entry
+struct TopEntitiesWidgetEntryViewSmall : View {
+    var entry: TopEntitiesProvider.Entry
     
     var album: LTopAlbumsResponseAlbum? {
         get {
@@ -126,9 +126,9 @@ struct FinaleWidgetEntryViewSmall : View {
     }
 }
 
-struct FinaleWidgetEntryViewLarge : View {
+struct TopEntitiesWidgetEntryViewLarge : View {
     @Environment(\.widgetFamily) var family: WidgetFamily
-    var entry: Provider.Entry
+    var entry: TopEntitiesProvider.Entry
     
     var body: some View {
         ZStack {
@@ -194,22 +194,21 @@ struct FinaleWidgetEntryViewLarge : View {
     }
 }
 
-@main
-struct FinaleWidget: Widget {
-    let kind: String = "FinaleWidget"
+struct TopEntitiesWidget: Widget {
+    let kind: String = "TopEntitiesWidget"
     
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
-            FinaleWidgetEntryView(entry: entry)
+        IntentConfiguration(kind: kind, intent: TopEntitiesConfigurationIntent.self, provider: TopEntitiesProvider()) { entry in
+            TopEntitiesEntryView(entry: entry)
         }
         .configurationDisplayName("Top Albums")
         .description("Your top albums for a given period.")
     }
 }
 
-struct FinaleWidget_Previews: PreviewProvider {
+struct TopEntitiesWidget_Previews: PreviewProvider {
     static var previews: some View {
-        FinaleWidgetEntryView(entry: SimpleEntry(date: Date(), albums: [LTopAlbumsResponseAlbum.fake], configuration: ConfigurationIntent()))
+        TopEntitiesEntryView(entry: TopEntitiesEntry(date: Date(), albums: [LTopAlbumsResponseAlbum.fake], configuration: TopEntitiesConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

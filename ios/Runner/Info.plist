@@ -43,7 +43,8 @@
 	<string>Save collages to the camera roll</string>
 	<key>NSUserActivityTypes</key>
 	<array>
-		<string>ConfigurationIntent</string>
+		<string>StatisticsConfigurationIntent</string>
+		<string>TopEntitiesConfigurationIntent</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

@@ -11,15 +11,21 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		7B03B3AE2754867B001624D9 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B03B3AD2754867B001624D9 /* Environment.swift */; };
-		7B03B3B4275493B5001624D9 /* FinaleWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C3D27544A2A003078F7 /* FinaleWidget.intentdefinition */; };
+		7B03B3B4275493B5001624D9 /* FinaleWidgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C3D27544A2A003078F7 /* FinaleWidgets.intentdefinition */; };
 		7B066C3727544A2A003078F7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B066C3627544A2A003078F7 /* WidgetKit.framework */; };
 		7B066C3927544A2A003078F7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B066C3827544A2A003078F7 /* SwiftUI.framework */; };
-		7B066C3C27544A2A003078F7 /* FinaleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C3B27544A2A003078F7 /* FinaleWidget.swift */; };
+		7B066C3C27544A2A003078F7 /* TopEntitiesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C3B27544A2A003078F7 /* TopEntitiesWidget.swift */; };
 		7B066C3F27544A2B003078F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B066C3E27544A2B003078F7 /* Assets.xcassets */; };
-		7B066C4127544A2B003078F7 /* FinaleWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C3D27544A2A003078F7 /* FinaleWidget.intentdefinition */; };
+		7B066C4127544A2B003078F7 /* FinaleWidgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C3D27544A2A003078F7 /* FinaleWidgets.intentdefinition */; };
 		7B066C4527544A2B003078F7 /* FinaleWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7B066C3527544A2A003078F7 /* FinaleWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7B066C4F275459FB003078F7 /* Lastfm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C4B27544B26003078F7 /* Lastfm.swift */; };
-		7B066C50275459FD003078F7 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C4D2754562C003078F7 /* Entities.swift */; };
+		7B066C50275459FD003078F7 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B066C4D2754562C003078F7 /* Common.swift */; };
+		7B2D94222756058200CF9472 /* TopAlbums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2D94212756058200CF9472 /* TopAlbums.swift */; };
+		7B2D94242756059F00CF9472 /* TopTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2D94232756059F00CF9472 /* TopTracks.swift */; };
+		7B2D94262756060800CF9472 /* TopArtists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2D94252756060800CF9472 /* TopArtists.swift */; };
+		7B2D94282756063A00CF9472 /* RecentTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2D94272756063A00CF9472 /* RecentTracks.swift */; };
+		7B56AA0E2755F95000D0F545 /* FinaleWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B56AA0C2755F8A700D0F545 /* FinaleWidgets.swift */; };
+		7B72D80E2755FBAB006E591D /* StatisticsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72D80D2755FBAB006E591D /* StatisticsWidget.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -76,12 +82,18 @@
 		7B066C3527544A2A003078F7 /* FinaleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinaleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B066C3627544A2A003078F7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		7B066C3827544A2A003078F7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		7B066C3B27544A2A003078F7 /* FinaleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinaleWidget.swift; sourceTree = "<group>"; };
-		7B066C3D27544A2A003078F7 /* FinaleWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = FinaleWidget.intentdefinition; sourceTree = "<group>"; };
+		7B066C3B27544A2A003078F7 /* TopEntitiesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopEntitiesWidget.swift; sourceTree = "<group>"; };
+		7B066C3D27544A2A003078F7 /* FinaleWidgets.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = FinaleWidgets.intentdefinition; sourceTree = "<group>"; };
 		7B066C3E27544A2B003078F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7B066C4027544A2B003078F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B066C4B27544B26003078F7 /* Lastfm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lastfm.swift; sourceTree = "<group>"; };
-		7B066C4D2754562C003078F7 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
+		7B066C4D2754562C003078F7 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		7B2D94212756058200CF9472 /* TopAlbums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopAlbums.swift; sourceTree = "<group>"; };
+		7B2D94232756059F00CF9472 /* TopTracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTracks.swift; sourceTree = "<group>"; };
+		7B2D94252756060800CF9472 /* TopArtists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopArtists.swift; sourceTree = "<group>"; };
+		7B2D94272756063A00CF9472 /* RecentTracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTracks.swift; sourceTree = "<group>"; };
+		7B56AA0C2755F8A700D0F545 /* FinaleWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinaleWidgets.swift; sourceTree = "<group>"; };
+		7B72D80D2755FBAB006E591D /* StatisticsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWidget.swift; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,16 +137,30 @@
 		7B066C3A27544A2A003078F7 /* FinaleWidget */ = {
 			isa = PBXGroup;
 			children = (
-				7B066C3B27544A2A003078F7 /* FinaleWidget.swift */,
-				7B066C3D27544A2A003078F7 /* FinaleWidget.intentdefinition */,
+				7B56AA0C2755F8A700D0F545 /* FinaleWidgets.swift */,
+				7B066C3D27544A2A003078F7 /* FinaleWidgets.intentdefinition */,
+				7B066C3B27544A2A003078F7 /* TopEntitiesWidget.swift */,
+				7B72D80D2755FBAB006E591D /* StatisticsWidget.swift */,
 				7B066C3E27544A2B003078F7 /* Assets.xcassets */,
 				7B066C4027544A2B003078F7 /* Info.plist */,
 				7B066C4B27544B26003078F7 /* Lastfm.swift */,
-				7B066C4D2754562C003078F7 /* Entities.swift */,
+				7B2D94202756056800CF9472 /* Entities */,
 				7B03B3AD2754867B001624D9 /* Environment.swift */,
 				7B03B3AF27548691001624D9 /* EnvironmentSample.swift */,
 			);
 			path = FinaleWidget;
+			sourceTree = "<group>";
+		};
+		7B2D94202756056800CF9472 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				7B066C4D2754562C003078F7 /* Common.swift */,
+				7B2D94212756058200CF9472 /* TopAlbums.swift */,
+				7B2D94232756059F00CF9472 /* TopTracks.swift */,
+				7B2D94252756060800CF9472 /* TopArtists.swift */,
+				7B2D94272756063A00CF9472 /* RecentTracks.swift */,
+			);
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		8870DCCC57BB4B9E63FACD32 /* Frameworks */ = {
@@ -373,10 +399,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B066C3C27544A2A003078F7 /* FinaleWidget.swift in Sources */,
-				7B066C4127544A2B003078F7 /* FinaleWidget.intentdefinition in Sources */,
+				7B56AA0E2755F95000D0F545 /* FinaleWidgets.swift in Sources */,
+				7B2D94222756058200CF9472 /* TopAlbums.swift in Sources */,
+				7B2D94242756059F00CF9472 /* TopTracks.swift in Sources */,
+				7B066C3C27544A2A003078F7 /* TopEntitiesWidget.swift in Sources */,
+				7B2D94262756060800CF9472 /* TopArtists.swift in Sources */,
+				7B066C4127544A2B003078F7 /* FinaleWidgets.intentdefinition in Sources */,
+				7B2D94282756063A00CF9472 /* RecentTracks.swift in Sources */,
 				7B066C4F275459FB003078F7 /* Lastfm.swift in Sources */,
-				7B066C50275459FD003078F7 /* Entities.swift in Sources */,
+				7B066C50275459FD003078F7 /* Common.swift in Sources */,
+				7B72D80E2755FBAB006E591D /* StatisticsWidget.swift in Sources */,
 				7B03B3AE2754867B001624D9 /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,7 +419,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
-				7B03B3B4275493B5001624D9 /* FinaleWidget.intentdefinition in Sources */,
+				7B03B3B4275493B5001624D9 /* FinaleWidgets.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
