@@ -27,9 +27,9 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
     _subscription =
         QuickActionsManager.quickActionStream.listen((action) async {
       await Future.delayed(const Duration(milliseconds: 250));
-      if (action == QuickAction.scrobbleOnce) {
+      if (action.type == QuickActionType.scrobbleOnce) {
         _scrobbleOnce();
-      } else {
+      } else if (action.type == QuickActionType.scrobbleContinuously) {
         _scrobbleContinuously();
       }
     });

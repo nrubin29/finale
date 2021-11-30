@@ -175,6 +175,19 @@ abstract class BasicAlbum extends Entity {
       other is BasicAlbum && other.name == name && other.artist == artist;
 }
 
+class ConcreteBasicAlbum extends BasicAlbum {
+  @override
+  final String name;
+
+  @override
+  final BasicArtist artist;
+
+  @override
+  final String? url;
+
+  ConcreteBasicAlbum(this.name, this.artist, [this.url]);
+}
+
 mixin HasTracks on Entity {
   List<ScrobbleableTrack> get tracks;
 

@@ -62,6 +62,14 @@ func getImageForAlbum(_ album: LTopAlbumsResponseAlbum?) -> UIImage? {
     return nil
 }
 
+func getLinkUrl(_ album: LTopAlbumsResponseAlbum) -> URL {
+    var components = URLComponents()
+    components.scheme = "finale"
+    components.path = "/album"
+    components.queryItems = [URLQueryItem(name: "name", value: album.name), URLQueryItem(name: "artist", value: album.artist.name)]
+    return components.url!
+}
+
 struct FinaleWidgetEntryViewSmall : View {
     var entry: Provider.Entry
     
@@ -110,6 +118,7 @@ struct FinaleWidgetEntryViewSmall : View {
                 .padding()
             }
         }
+        .widgetURL(album != nil ? getLinkUrl(album!) : nil)
     }
 }
 
@@ -141,17 +150,19 @@ struct FinaleWidgetEntryViewLarge : View {
                 } else if !entry.albums.isEmpty {
                     LazyVGrid(columns: (0..<family.numColumns).map({_ in GridItem(.flexible())})) {
                         ForEach(entry.albums.prefix(family.numItemsToDisplay)) { album in
-                            VStack {
-                                if let uiImage = getImageForAlbum(album) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .mask(RoundedRectangle(cornerRadius: 5))
+                            Link(destination: getLinkUrl(album)) {
+                                VStack {
+                                    if let uiImage = getImageForAlbum(album) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .mask(RoundedRectangle(cornerRadius: 5))
+                                    }
+                                    Text(album.playCountFormatted)
+                                        .font(Font.system(size: 8))
+                                        .foregroundColor(Color("AccentColor"))
+                                        .bold()
                                 }
-                                Text(album.playCountFormatted)
-                                    .font(Font.system(size: 8))
-                                    .foregroundColor(Color("AccentColor"))
-                                    .bold()
                             }
                         }
                     }

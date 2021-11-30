@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:finale/services/generic.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/util/util.dart';
+import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/main/collage_view.dart';
 import 'package:finale/widgets/main/search_view.dart';
 import 'package:finale/widgets/profile/profile_view.dart';
@@ -24,11 +26,20 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
-    _subscription = QuickActionsManager.quickActionStream.listen((_) {
-      setState(() {
-        Navigator.popUntil(context, (route) => route.isFirst);
-        _index = 2;
-      });
+    _subscription = QuickActionsManager.quickActionStream.listen((action) {
+      if (action.type == QuickActionType.scrobbleOnce ||
+          action.type == QuickActionType.scrobbleContinuously) {
+        setState(() {
+          Navigator.popUntil(context, (route) => route.isFirst);
+          _index = 2;
+        });
+      } else if (action.type == QuickActionType.viewAlbum) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => AlbumView(album: action.entity as BasicAlbum)),
+        );
+      }
     });
   }
 
