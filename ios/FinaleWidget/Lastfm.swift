@@ -4,8 +4,8 @@ import Foundation
 @available(iOS 13.0, *)
 class Lastfm {
     private static func buildUrl(_ method: String, _ data: [String: Any]) -> URL {
-        var allData = data.merging(["api_key": Environment.apiKey, "method": method]) { (a, _) in return a }
-        let hash = allData.keys.sorted().map({"\($0)\(allData[$0]!)"}).joined() + Environment.apiSecret
+        var allData = data.merging(["api_key": Env.apiKey, "method": method]) { (a, _) in return a }
+        let hash = allData.keys.sorted().map({"\($0)\(allData[$0]!)"}).joined() + Env.apiSecret
         let signature = Insecure.MD5.hash(data: hash.data(using: .utf8)!).map { String(format: "%02hhx", $0) }.joined()
         allData["api_sig"] = signature
         allData["format"] = "json"

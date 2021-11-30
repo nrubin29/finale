@@ -4,13 +4,18 @@ import Intents
 
 struct Provider: IntentTimelineProvider {
     private func createEntry(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> Void) {
-        GetTopAlbumsRequest(username: configuration.username ?? "", period: configuration.period).doRequest(limit: context.family.numItemsToDisplay, page: 1) { albums in
-            completion(SimpleEntry(date: Date(), albums: albums ?? [], configuration: configuration, family: context.family))
+        if configuration.username == nil || configuration.username!.isEmpty {
+            completion(SimpleEntry(date: Date(), albums: [], configuration: configuration))
+            return
+        }
+        
+        GetTopAlbumsRequest(username: configuration.username!, period: configuration.period).doRequest(limit: context.family.numItemsToDisplay, page: 1) { albums in
+            completion(SimpleEntry(date: Date(), albums: albums ?? [], configuration: configuration))
         }
     }
     
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), albums: (0..<context.family.numItemsToDisplay).map({ _ in LTopAlbumsResponseAlbum.fake }), configuration: ConfigurationIntent(), family: context.family)
+        SimpleEntry(date: Date(), albums: (0..<context.family.numItemsToDisplay).map({ _ in LTopAlbumsResponseAlbum.fake }), configuration: ConfigurationIntent())
     }
     
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
@@ -29,17 +34,17 @@ struct SimpleEntry: TimelineEntry {
     let date: Date
     let albums: [LTopAlbumsResponseAlbum]
     let configuration: ConfigurationIntent
-    let family: WidgetFamily
 }
 
 struct FinaleWidgetEntryView : View {
+    @Environment(\.widgetFamily) var family: WidgetFamily
     var entry: Provider.Entry
     
+    @ViewBuilder
     var body: some View {
-        if entry.family == .systemSmall {
-            FinaleWidgetEntryViewSmall(entry: entry)
-        } else {
-            FinaleWidgetEntryViewLarge(entry: entry)
+        switch family {
+        case .systemSmall: FinaleWidgetEntryViewSmall(entry: entry)
+        default: FinaleWidgetEntryViewLarge(entry: entry)
         }
     }
 }
@@ -109,6 +114,7 @@ struct FinaleWidgetEntryViewSmall : View {
 }
 
 struct FinaleWidgetEntryViewLarge : View {
+    @Environment(\.widgetFamily) var family: WidgetFamily
     var entry: Provider.Entry
     
     var body: some View {
@@ -132,8 +138,8 @@ struct FinaleWidgetEntryViewLarge : View {
                     Text("Please enter your username in the widget settings.")
                         .foregroundColor(.white)
                 } else if !entry.albums.isEmpty {
-                    LazyVGrid(columns: (0..<entry.family.numColumns).map({_ in GridItem(.flexible())})) {
-                        ForEach(entry.albums.prefix(entry.family.numItemsToDisplay)) { album in
+                    LazyVGrid(columns: (0..<family.numColumns).map({_ in GridItem(.flexible())})) {
+                        ForEach(entry.albums.prefix(family.numItemsToDisplay)) { album in
                             VStack {
                                 if let uiImage = getImageForAlbum(album) {
                                     Image(uiImage: uiImage)
@@ -172,7 +178,7 @@ struct FinaleWidget: Widget {
 
 struct FinaleWidget_Previews: PreviewProvider {
     static var previews: some View {
-        FinaleWidgetEntryView(entry: SimpleEntry(date: Date(), albums: [LTopAlbumsResponseAlbum.fake], configuration: ConfigurationIntent(), family: .systemSmall))
+        FinaleWidgetEntryView(entry: SimpleEntry(date: Date(), albums: [LTopAlbumsResponseAlbum.fake], configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
