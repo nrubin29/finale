@@ -119,24 +119,25 @@ struct FinaleWidgetEntryViewLarge : View {
     
     var body: some View {
         ZStack {
-            Color.red
+            LinearGradient(gradient: Gradient(colors: [Color("WidgetBackgroundStart"), Color("WidgetBackgroundEnd")]), startPoint: .top, endPoint: .bottom)
             VStack(alignment: .leading) {
                 HStack(alignment: .firstTextBaseline) {
                     Text("Top Albums")
                         .bold()
-                        .foregroundColor(.white)
+                        .foregroundColor(Color("AccentColor"))
                     Text(entry.configuration.period.displayName)
                         .bold()
                         .font(.caption)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color("AccentColor"))
                     Spacer()
                     Image(uiImage: UIImage(named: "FinaleIconWhite")!)
                         .resizable()
                         .frame(width: 15, height: 15)
+                        .colorMultiply(Color("AccentColor"))
                 }
                 if entry.configuration.username == nil {
                     Text("Please enter your username in the widget settings.")
-                        .foregroundColor(.white)
+                        .foregroundColor(Color("AccentColor"))
                 } else if !entry.albums.isEmpty {
                     LazyVGrid(columns: (0..<family.numColumns).map({_ in GridItem(.flexible())})) {
                         ForEach(entry.albums.prefix(family.numItemsToDisplay)) { album in
@@ -149,13 +150,14 @@ struct FinaleWidgetEntryViewLarge : View {
                                 }
                                 Text(album.playCountFormatted)
                                     .font(Font.system(size: 8))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color("AccentColor"))
+                                    .bold()
                             }
                         }
                     }
                 } else {
                     Text("You haven't scrobbled any albums in this period.")
-                        .foregroundColor(.white)
+                        .foregroundColor(Color("AccentColor"))
                 }
             }
             .padding(.horizontal)
