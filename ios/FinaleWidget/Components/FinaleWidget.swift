@@ -1,5 +1,7 @@
 import SwiftUI
 
+let widgetBackgroundGradient = LinearGradient(gradient: Gradient(colors: [Color("WidgetBackgroundStart"), Color("WidgetBackgroundEnd")]), startPoint: .top, endPoint: .bottom)
+
 struct FinaleWidgetLarge<Content> : View where Content : View {
     let title: String
     let period: Period
@@ -8,10 +10,10 @@ struct FinaleWidgetLarge<Content> : View where Content : View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color("WidgetBackgroundStart"), Color("WidgetBackgroundEnd")]), startPoint: .top, endPoint: .bottom)
+            widgetBackgroundGradient
             VStack {
                 TitleBar(title: title, period: period)
-                if username == nil {
+                if username?.isEmpty ?? true {
                     Text("Please enter your username in the widget settings.")
                         .foregroundColor(Color("AccentColor"))
                         .frame(maxHeight: .infinity)

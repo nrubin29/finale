@@ -76,7 +76,38 @@ struct StatisticsEntryView : View {
     @ViewBuilder
     var body: some View {
         switch family {
+        case .systemSmall: StatisticsWidgetEntryViewSmall(entry: entry)
         default: StatisticsWidgetEntryViewLarge(entry: entry)
+        }
+    }
+}
+
+struct StatisticsWidgetEntryViewSmall : View {
+    var entry: StatisticsProvider.Entry
+    
+    var body: some View {
+        ZStack {
+            widgetBackgroundGradient
+            if entry.configuration.username?.isEmpty ?? true {
+                VStack {
+                    Image("FinaleIconWhite")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                        .colorMultiply(Color("AccentColor"))
+                    Text("Please enter your username in the widget settings.")
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color("AccentColor"))
+                }
+                .padding()
+            } else {
+                Scoreboard(alignment: .vertical, tiles: [
+                    ScoreTileModel(title: "Scrobbles", value: entry.numScrobbles, icon: "Playlist"),
+                    ScoreTileModel(title: "Artists", value: entry.numArtists, icon: "Artist"),
+                    ScoreTileModel(title: "Albums", value: entry.numAlbums, icon: "Album"),
+                    ScoreTileModel(title: "Tracks", value: entry.numTracks, icon: "MusicNote"),
+                ])
+                    .padding()
+            }
         }
     }
 }
@@ -86,7 +117,7 @@ struct StatisticsWidgetEntryViewLarge : View {
     
     var body: some View {
         FinaleWidgetLarge(title: "Last.fm Stats", period: entry.configuration.period, username: entry.configuration.username) {
-            Scoreboard(tiles: [
+            Scoreboard(alignment: .horizontal, tiles: [
                 ScoreTileModel(title: "Scrobbles", value: entry.numScrobbles, icon: "Playlist"),
                 ScoreTileModel(title: "Artists", value: entry.numArtists, icon: "Artist"),
                 ScoreTileModel(title: "Albums", value: entry.numAlbums, icon: "Album"),
@@ -105,7 +136,7 @@ struct StatisticsWidget: Widget {
         }
         .configurationDisplayName("Statistics")
         .description("Your statistics for a given period.")
-        .supportedFamilies([.systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
