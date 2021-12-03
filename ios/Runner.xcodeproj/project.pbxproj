@@ -26,6 +26,8 @@
 		7B2D94282756063A00CF9472 /* RecentTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2D94272756063A00CF9472 /* RecentTracks.swift */; };
 		7B56AA0E2755F95000D0F545 /* FinaleWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B56AA0C2755F8A700D0F545 /* FinaleWidgets.swift */; };
 		7B72D80E2755FBAB006E591D /* StatisticsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72D80D2755FBAB006E591D /* StatisticsWidget.swift */; };
+		7BB5470F2759D667009FEAC8 /* Scoreboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB5470E2759D667009FEAC8 /* Scoreboard.swift */; };
+		7BB547112759DDB9009FEAC8 /* TitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB547102759DDB9009FEAC8 /* TitleBar.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -94,6 +96,8 @@
 		7B2D94272756063A00CF9472 /* RecentTracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTracks.swift; sourceTree = "<group>"; };
 		7B56AA0C2755F8A700D0F545 /* FinaleWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinaleWidgets.swift; sourceTree = "<group>"; };
 		7B72D80D2755FBAB006E591D /* StatisticsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWidget.swift; sourceTree = "<group>"; };
+		7BB5470E2759D667009FEAC8 /* Scoreboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoreboard.swift; sourceTree = "<group>"; };
+		7BB547102759DDB9009FEAC8 /* TitleBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBar.swift; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +148,7 @@
 				7B066C3E27544A2B003078F7 /* Assets.xcassets */,
 				7B066C4027544A2B003078F7 /* Info.plist */,
 				7B066C4B27544B26003078F7 /* Lastfm.swift */,
+				7BB5470D2759D657009FEAC8 /* Components */,
 				7B2D94202756056800CF9472 /* Entities */,
 				7B03B3AD2754867B001624D9 /* Environment.swift */,
 				7B03B3AF27548691001624D9 /* EnvironmentSample.swift */,
@@ -161,6 +166,15 @@
 				7B2D94272756063A00CF9472 /* RecentTracks.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		7BB5470D2759D657009FEAC8 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				7BB5470E2759D667009FEAC8 /* Scoreboard.swift */,
+				7BB547102759DDB9009FEAC8 /* TitleBar.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		8870DCCC57BB4B9E63FACD32 /* Frameworks */ = {
@@ -404,9 +418,11 @@
 				7B2D94242756059F00CF9472 /* TopTracks.swift in Sources */,
 				7B066C3C27544A2A003078F7 /* TopEntitiesWidget.swift in Sources */,
 				7B2D94262756060800CF9472 /* TopArtists.swift in Sources */,
+				7BB547112759DDB9009FEAC8 /* TitleBar.swift in Sources */,
 				7B066C4127544A2B003078F7 /* FinaleWidgets.intentdefinition in Sources */,
 				7B2D94282756063A00CF9472 /* RecentTracks.swift in Sources */,
 				7B066C4F275459FB003078F7 /* Lastfm.swift in Sources */,
+				7BB5470F2759D667009FEAC8 /* Scoreboard.swift in Sources */,
 				7B066C50275459FD003078F7 /* Common.swift in Sources */,
 				7B72D80E2755FBAB006E591D /* StatisticsWidget.swift in Sources */,
 				7B03B3AE2754867B001624D9 /* Environment.swift in Sources */,

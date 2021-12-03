@@ -49,7 +49,7 @@ struct TopEntitiesEntryView : View {
     }
 }
 
-func getImageForAlbum(_ album: LTopAlbumsResponseAlbum?) -> UIImage? {
+private func getImageForAlbum(_ album: LTopAlbumsResponseAlbum?) -> UIImage? {
     var albumImageUrl = album?.images.last?.url
     if albumImageUrl == nil || albumImageUrl!.isEmpty {
         albumImageUrl = LTopAlbumsResponseAlbum.fake.images.last!.url
@@ -62,16 +62,8 @@ func getImageForAlbum(_ album: LTopAlbumsResponseAlbum?) -> UIImage? {
     return nil
 }
 
-func getLinkUrl(_ album: LTopAlbumsResponseAlbum) -> URL {
+private func getLinkUrl(_ album: LTopAlbumsResponseAlbum) -> URL {
     return getLinkUrl("album", queryItems: [URLQueryItem(name: "name", value: album.name), URLQueryItem(name: "artist", value: album.artist.name)])
-}
-
-func getLinkUrl(_ path: String, queryItems: [URLQueryItem]? = nil) -> URL {
-    var components = URLComponents()
-    components.scheme = "finale"
-    components.path = "/\(path)"
-    components.queryItems = queryItems
-    return components.url!
 }
 
 struct TopEntitiesWidgetEntryViewSmall : View {
@@ -131,65 +123,30 @@ struct TopEntitiesWidgetEntryViewLarge : View {
     var entry: TopEntitiesProvider.Entry
     
     var body: some View {
-        ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color("WidgetBackgroundStart"), Color("WidgetBackgroundEnd")]), startPoint: .top, endPoint: .bottom)
-            VStack(alignment: .leading) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text("Top Albums")
-                        .bold()
-                        .foregroundColor(Color("AccentColor"))
-                    Text(entry.configuration.period.displayName)
-                        .bold()
-                        .font(.caption)
-                        .foregroundColor(Color("AccentColor"))
-                    Spacer()
-                    HStack(alignment: .center) {
-                        Link(destination: getLinkUrl("scrobbleOnce")) {
-                            Image(systemName: "plus")
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                            .foregroundColor(Color("AccentColor"))
-                        }
-                        Link(destination: getLinkUrl("scrobbleContinuously")) {
-                            Image(systemName: "infinity")
-                            .resizable()
-                            .frame(width: 20, height: 10)
-                            .foregroundColor(Color("AccentColor"))
-                        }
-                        Image(uiImage: UIImage(named: "FinaleIconWhite")!)
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                            .colorMultiply(Color("AccentColor"))
-                    }
-                }
-                if entry.configuration.username == nil {
-                    Text("Please enter your username in the widget settings.")
-                        .foregroundColor(Color("AccentColor"))
-                } else if !entry.albums.isEmpty {
-                    LazyVGrid(columns: (0..<family.numColumns).map({_ in GridItem(.flexible())})) {
-                        ForEach(entry.albums.prefix(family.numItemsToDisplay)) { album in
-                            Link(destination: getLinkUrl(album)) {
-                                VStack {
-                                    if let uiImage = getImageForAlbum(album) {
-                                        Image(uiImage: uiImage)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .mask(RoundedRectangle(cornerRadius: 5))
-                                    }
-                                    Text(album.playCountFormatted)
-                                        .font(Font.system(size: 8))
-                                        .foregroundColor(Color("AccentColor"))
-                                        .bold()
+        FinaleWidgetLarge(title: "Top Albums", period: entry.configuration.period, username: entry.configuration.username) {
+            if !entry.albums.isEmpty {
+                LazyVGrid(columns: (0..<family.numColumns).map({_ in GridItem(.flexible())})) {
+                    ForEach(entry.albums.prefix(family.numItemsToDisplay)) { album in
+                        Link(destination: getLinkUrl(album)) {
+                            VStack {
+                                if let uiImage = getImageForAlbum(album) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .mask(RoundedRectangle(cornerRadius: 5))
                                 }
+                                Text(album.playCountFormatted)
+                                    .font(Font.system(size: 8))
+                                    .foregroundColor(Color("AccentColor"))
+                                    .bold()
                             }
                         }
                     }
-                } else {
-                    Text("You haven't scrobbled any albums in this period.")
-                        .foregroundColor(Color("AccentColor"))
                 }
+            } else {
+                Text("You haven't scrobbled any albums in this period.")
+                    .foregroundColor(Color("AccentColor"))
             }
-            .padding(.horizontal)
         }
     }
 }
@@ -213,7 +170,7 @@ struct TopEntitiesWidget_Previews: PreviewProvider {
     }
 }
 
-extension WidgetFamily {
+private extension WidgetFamily {
     var numItemsToDisplay: Int {
         get {
             switch self {

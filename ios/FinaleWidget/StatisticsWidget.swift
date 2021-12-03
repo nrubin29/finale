@@ -82,66 +82,16 @@ struct StatisticsEntryView : View {
 }
 
 struct StatisticsWidgetEntryViewLarge : View {
-    @Environment(\.widgetFamily) var family: WidgetFamily
     var entry: StatisticsProvider.Entry
     
     var body: some View {
-        ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color("WidgetBackgroundStart"), Color("WidgetBackgroundEnd")]), startPoint: .top, endPoint: .bottom)
-            VStack(alignment: .leading) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text("Last.fm Statistics")
-                        .bold()
-                        .foregroundColor(Color("AccentColor"))
-                    Text(entry.configuration.period.displayName)
-                        .bold()
-                        .font(.caption)
-                        .foregroundColor(Color("AccentColor"))
-                    Spacer()
-                    HStack(alignment: .center) {
-                        Link(destination: getLinkUrl("scrobbleOnce")) {
-                            Image(systemName: "plus")
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                            .foregroundColor(Color("AccentColor"))
-                        }
-                        Link(destination: getLinkUrl("scrobbleContinuously")) {
-                            Image(systemName: "infinity")
-                            .resizable()
-                            .frame(width: 20, height: 10)
-                            .foregroundColor(Color("AccentColor"))
-                        }
-                        Image(uiImage: UIImage(named: "FinaleIconWhite")!)
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                            .colorMultiply(Color("AccentColor"))
-                    }
-                }
-                if entry.configuration.username == nil {
-                    Text("Please enter your username in the widget settings.")
-                        .foregroundColor(Color("AccentColor"))
-                } else {
-                    HStack {
-                        VStack {
-                            Text(entry.numScrobbles != nil ? numberFormatter.string(from: NSNumber(value: entry.numScrobbles!))! : "---")
-                                .foregroundColor(Color("AccentColor"))
-                                .bold()
-                            Text("Scrobbles")
-                                .foregroundColor(Color("AccentColor"))
-                                .bold()
-                        }
-                        VStack {
-                            Text(entry.numAlbums != nil ? numberFormatter.string(from: NSNumber(value: entry.numAlbums!))! : "---")
-                                .foregroundColor(Color("AccentColor"))
-                                .bold()
-                            Text("Albums")
-                                .foregroundColor(Color("AccentColor"))
-                                .bold()
-                        }
-                    }
-                }
-            }
-            .padding(.horizontal)
+        FinaleWidgetLarge(title: "Last.fm Stats", period: entry.configuration.period, username: entry.configuration.username) {
+            Scoreboard(tiles: [
+                ScoreTileModel(title: "Scrobbles", value: entry.numScrobbles, icon: "Playlist"),
+                ScoreTileModel(title: "Artists", value: entry.numArtists, icon: "Artist"),
+                ScoreTileModel(title: "Albums", value: entry.numAlbums, icon: "Album"),
+                ScoreTileModel(title: "Tracks", value: entry.numTracks, icon: "MusicNote"),
+            ])
         }
     }
 }
