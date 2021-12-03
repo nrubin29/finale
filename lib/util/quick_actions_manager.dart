@@ -5,23 +5,27 @@ import 'package:uni_links/uni_links.dart';
 
 class QuickAction {
   final QuickActionType type;
-  final Entity? entity;
+  final dynamic value;
   final timestamp = DateTime.now();
 
   QuickAction.scrobbleOnce()
       : type = QuickActionType.scrobbleOnce,
-        entity = null;
+        value = null;
 
   QuickAction.scrobbleContinuously()
       : type = QuickActionType.scrobbleContinuously,
-        entity = null;
+        value = null;
 
   QuickAction.viewAlbum(BasicAlbum album)
       : type = QuickActionType.viewAlbum,
-        entity = album;
+        value = album;
+
+  QuickAction.viewTab(EntityType tab)
+      : type = QuickActionType.viewTab,
+        value = tab;
 }
 
-enum QuickActionType { scrobbleOnce, scrobbleContinuously, viewAlbum }
+enum QuickActionType { scrobbleOnce, scrobbleContinuously, viewAlbum, viewTab }
 
 class QuickActionsManager {
   // This stream needs to be open for the entire lifetime of the app.
@@ -34,8 +38,8 @@ class QuickActionsManager {
   /// deals with the issue where a [QuickAction] may be emitted before the
   /// subscriber is ready to handle it as well as the issue where a subscriber
   /// may receive [QuickAction]s that have already been handled.
-  static Stream<QuickAction> get quickActionStream => _quickActions
-      .where((action) =>
+  static Stream<QuickAction> get quickActionStream =>
+      _quickActions.where((action) =>
           DateTime.now().difference(action.timestamp) <
           const Duration(seconds: 1));
 
@@ -83,6 +87,28 @@ class QuickActionsManager {
       final artist = uri.queryParameters['artist']!;
       _quickActions.add(QuickAction.viewAlbum(
           ConcreteBasicAlbum(name, ConcreteBasicArtist(artist))));
+    } else if (uri.path == '/profileTab') {
+      final tabString = uri.queryParameters['tab'];
+      EntityType tab;
+
+      switch (tabString) {
+        case 'scrobble':
+          tab = EntityType.playlist;
+          break;
+        case 'artist':
+          tab = EntityType.artist;
+          break;
+        case 'album':
+          tab = EntityType.album;
+          break;
+        case 'track':
+          tab = EntityType.track;
+          break;
+        default:
+          throw ArgumentError.value(tabString, 'tab', 'Unknown tab');
+      }
+
+      _quickActions.add(QuickAction.viewTab(tab));
     }
   }
 }

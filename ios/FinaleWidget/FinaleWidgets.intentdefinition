@@ -103,6 +103,8 @@
 		<dict>
 			<key>INIntentCategory</key>
 			<string>information</string>
+			<key>INIntentDescription</key>
+			<string>Configuration for the top entities widget</string>
 			<key>INIntentDescriptionID</key>
 			<string>tVvJ9c</string>
 			<key>INIntentEligibleForWidgets</key>
@@ -258,6 +260,8 @@
 		<dict>
 			<key>INIntentCategory</key>
 			<string>information</string>
+			<key>INIntentDescription</key>
+			<string>Configuration for the statistics widget</string>
 			<key>INIntentDescriptionID</key>
 			<string>iMAccd</string>
 			<key>INIntentEligibleForWidgets</key>

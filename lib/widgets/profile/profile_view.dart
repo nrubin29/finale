@@ -1,8 +1,12 @@
+import 'dart:async';
+
+import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
+import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -31,6 +35,7 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late StreamSubscription _subscription;
   var _tab = 0;
 
   @override
@@ -42,6 +47,37 @@ class _ProfileViewState extends State<ProfileView>
       setState(() {
         _tab = _tabController.index;
       });
+    });
+
+    _subscription =
+        QuickActionsManager.quickActionStream.listen((action) async {
+      await Future.delayed(const Duration(milliseconds: 250));
+      if (action.type == QuickActionType.viewTab) {
+        final tab = action.value as EntityType;
+        int index;
+
+        switch (tab) {
+          case EntityType.playlist:
+            index = 0;
+            break;
+          case EntityType.artist:
+            index = 1;
+            break;
+          case EntityType.album:
+            index = 2;
+            break;
+          case EntityType.track:
+            index = 3;
+            break;
+          default:
+            assert(false);
+            return;
+        }
+
+        setState(() {
+          _tabController.index = index;
+        });
+      }
     });
   }
 
@@ -178,7 +214,8 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
+    _subscription.cancel();
+    super.dispose();
   }
 }

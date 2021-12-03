@@ -69,6 +69,15 @@ struct StatisticsEntry: TimelineEntry {
     let configuration: StatisticsConfigurationIntent
 }
 
+private func getScoreTiles(_ entry: StatisticsProvider.Entry) -> [ScoreTileModel] {
+    return [
+        ScoreTileModel(title: "Scrobbles", value: entry.numScrobbles, icon: "Playlist", link: "scrobble"),
+        ScoreTileModel(title: "Artists", value: entry.numArtists, icon: "Artist", link: "artist"),
+        ScoreTileModel(title: "Albums", value: entry.numAlbums, icon: "Album", link: "album"),
+        ScoreTileModel(title: "Tracks", value: entry.numTracks, icon: "MusicNote", link: "track"),
+    ]
+}
+
 struct StatisticsEntryView : View {
     @Environment(\.widgetFamily) var family: WidgetFamily
     var entry: StatisticsProvider.Entry
@@ -100,12 +109,7 @@ struct StatisticsWidgetEntryViewSmall : View {
                 }
                 .padding()
             } else {
-                Scoreboard(alignment: .vertical, tiles: [
-                    ScoreTileModel(title: "Scrobbles", value: entry.numScrobbles, icon: "Playlist"),
-                    ScoreTileModel(title: "Artists", value: entry.numArtists, icon: "Artist"),
-                    ScoreTileModel(title: "Albums", value: entry.numAlbums, icon: "Album"),
-                    ScoreTileModel(title: "Tracks", value: entry.numTracks, icon: "MusicNote"),
-                ])
+                Scoreboard(alignment: .vertical, tiles: getScoreTiles(entry))
                     .padding()
             }
         }
@@ -117,12 +121,7 @@ struct StatisticsWidgetEntryViewLarge : View {
     
     var body: some View {
         FinaleWidgetLarge(title: "Last.fm Stats", period: entry.configuration.period, username: entry.configuration.username) {
-            Scoreboard(alignment: .horizontal, tiles: [
-                ScoreTileModel(title: "Scrobbles", value: entry.numScrobbles, icon: "Playlist"),
-                ScoreTileModel(title: "Artists", value: entry.numArtists, icon: "Artist"),
-                ScoreTileModel(title: "Albums", value: entry.numAlbums, icon: "Album"),
-                ScoreTileModel(title: "Tracks", value: entry.numTracks, icon: "MusicNote"),
-            ])
+            Scoreboard(alignment: .horizontal, tiles: getScoreTiles(entry))
         }
     }
 }

@@ -37,8 +37,13 @@ class _MainViewState extends State<MainView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => AlbumView(album: action.entity as BasicAlbum)),
+              builder: (_) => AlbumView(album: action.value as BasicAlbum)),
         );
+      } else if (action.type == QuickActionType.viewTab) {
+        setState(() {
+          Navigator.popUntil(context, (route) => route.isFirst);
+          _index = 0;
+        });
       }
     });
   }

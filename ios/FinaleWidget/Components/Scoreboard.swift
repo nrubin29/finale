@@ -4,6 +4,7 @@ struct ScoreTileModel {
     let title: String
     let value: Int?
     let icon: String
+    let link: String
 }
 
 enum ScoreboardAlignment {
@@ -39,17 +40,19 @@ private struct ScoreTileVertical: View {
     let model: ScoreTileModel
     
     var body: some View {
-        VStack {
-            Image(model.icon)
-                .resizable()
-                .frame(width: 30, height: 30)
-                .colorMultiply(Color("AccentColor"))
-            Text(model.title)
-                .foregroundColor(Color("AccentColor"))
-                .bold()
-            Text(model.value != nil ? numberFormatter.string(from: NSNumber(value: model.value!))! : "---")
-                .foregroundColor(Color("AccentColor"))
-                .bold()
+        Link(destination: getLinkUrl("profileTab", queryItems: [URLQueryItem(name: "tab", value: model.link)])) {
+            VStack {
+                Image(model.icon)
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .colorMultiply(Color("AccentColor"))
+                Text(model.title)
+                    .foregroundColor(Color("AccentColor"))
+                    .bold()
+                Text(model.value != nil ? numberFormatter.string(from: NSNumber(value: model.value!))! : "---")
+                    .foregroundColor(Color("AccentColor"))
+                    .bold()
+            }
         }
     }
 }
@@ -58,14 +61,16 @@ private struct ScoreTileHorizontal: View {
     let model: ScoreTileModel
     
     var body: some View {
-        HStack {
-            Text(model.value != nil ? numberFormatter.string(from: NSNumber(value: model.value!))! : "---")
-                .foregroundColor(Color("AccentColor"))
-                .bold()
-            Image(model.icon)
-                .resizable()
-                .frame(width: 20, height: 20)
-                .colorMultiply(Color("AccentColor"))
+        Link(destination: getLinkUrl("profileTab", queryItems: [URLQueryItem(name: "tab", value: model.link)])) {
+            HStack {
+                Text(model.value != nil ? numberFormatter.string(from: NSNumber(value: model.value!))! : "---")
+                    .foregroundColor(Color("AccentColor"))
+                    .bold()
+                Image(model.icon)
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .colorMultiply(Color("AccentColor"))
+            }
         }
     }
 }

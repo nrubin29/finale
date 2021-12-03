@@ -9,11 +9,3 @@ struct FinaleWidgets: WidgetBundle {
         StatisticsWidget()
     }
 }
-
-func getLinkUrl(_ path: String, queryItems: [URLQueryItem]? = nil) -> URL {
-    var components = URLComponents()
-    components.scheme = "finale"
-    components.path = "/\(path)"
-    components.queryItems = queryItems
-    return components.url!
-}

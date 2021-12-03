@@ -2,6 +2,14 @@ import SwiftUI
 
 let widgetBackgroundGradient = LinearGradient(gradient: Gradient(colors: [Color("WidgetBackgroundStart"), Color("WidgetBackgroundEnd")]), startPoint: .top, endPoint: .bottom)
 
+func getLinkUrl(_ path: String, queryItems: [URLQueryItem]? = nil) -> URL {
+    var components = URLComponents()
+    components.scheme = "finale"
+    components.path = "/\(path)"
+    components.queryItems = queryItems
+    return components.url!
+}
+
 struct FinaleWidgetLarge<Content> : View where Content : View {
     let title: String
     let period: Period
