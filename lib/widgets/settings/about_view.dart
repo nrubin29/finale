@@ -113,6 +113,16 @@ class AboutView extends StatelessWidget {
               },
             ),
           ),
+          SliverToBoxAdapter(
+            child: ListTile(
+              title: const Text('Licenses'),
+              leading: const Icon(Icons.integration_instructions),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                showLicensePage(context: context);
+              },
+            ),
+          ),
           SliverFillRemaining(
             hasScrollBody: false,
             child: SafeArea(
