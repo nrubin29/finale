@@ -71,10 +71,10 @@ struct StatisticsEntry: TimelineEntry {
 
 private func getScoreTiles(_ entry: StatisticsProvider.Entry) -> [ScoreTileModel] {
     return [
-        ScoreTileModel(title: "Scrobbles", value: entry.numScrobbles, icon: "Playlist", link: "scrobble"),
-        ScoreTileModel(title: "Artists", value: entry.numArtists, icon: "Artist", link: "artist"),
-        ScoreTileModel(title: "Albums", value: entry.numAlbums, icon: "Album", link: "album"),
-        ScoreTileModel(title: "Tracks", value: entry.numTracks, icon: "MusicNote", link: "track"),
+        ScoreTileModel(title: "Scrobbles", value: entry.numScrobbles, icon: "PlaylistIcon", link: "scrobble"),
+        ScoreTileModel(title: "Artists", value: entry.numArtists, icon: "ArtistIcon", link: "artist"),
+        ScoreTileModel(title: "Albums", value: entry.numAlbums, icon: "AlbumIcon", link: "album"),
+        ScoreTileModel(title: "Tracks", value: entry.numTracks, icon: "MusicNoteIcon", link: "track"),
     ]
 }
 

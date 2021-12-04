@@ -49,19 +49,6 @@ struct TopEntitiesEntryView : View {
     }
 }
 
-private func getImageForAlbum(_ album: LTopAlbumsResponseAlbum?) -> UIImage? {
-    var albumImageUrl = album?.images.last?.url
-    if albumImageUrl == nil || albumImageUrl!.isEmpty {
-        albumImageUrl = LTopAlbumsResponseAlbum.fake.images.last!.url
-    }
-    
-    if let url = URL(string: albumImageUrl!), let imageData = try? Data(contentsOf: url), let uiImage = UIImage(data: imageData) {
-        return uiImage
-    }
-    
-    return nil
-}
-
 private func getLinkUrl(_ album: LTopAlbumsResponseAlbum) -> URL {
     return getLinkUrl("album", queryItems: [URLQueryItem(name: "name", value: album.name), URLQueryItem(name: "artist", value: album.artist.name)])
 }
@@ -77,13 +64,10 @@ struct TopEntitiesWidgetEntryViewSmall : View {
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            if let uiImage = getImageForAlbum(album) {
-                ZStack {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                    LinearGradient(gradient: Gradient(colors: [.clear, Color(.sRGBLinear, white: 0, opacity: 0.75)]), startPoint: .top, endPoint: .bottom)
-                }
+            ZStack {
+                EntityImage(image: album?.images.last, size: .large)
+                    .aspectRatio(contentMode: .fit)
+                LinearGradient(gradient: Gradient(colors: [.clear, Color(.sRGBLinear, white: 0, opacity: 0.75)]), startPoint: .top, endPoint: .bottom)
             }
             VStack {
                 Spacer()
@@ -129,12 +113,9 @@ struct TopEntitiesWidgetEntryViewLarge : View {
                     ForEach(entry.albums.prefix(family.numItemsToDisplay)) { album in
                         Link(destination: getLinkUrl(album)) {
                             VStack {
-                                if let uiImage = getImageForAlbum(album) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .mask(RoundedRectangle(cornerRadius: 5))
-                                }
+                                EntityImage(image: album.images.last, size: .small)
+                                    .aspectRatio(contentMode: .fill)
+                                    .mask(RoundedRectangle(cornerRadius: 5))
                                 Text(album.playCountFormatted)
                                     .font(Font.system(size: 8))
                                     .foregroundColor(Color("AccentColor"))
