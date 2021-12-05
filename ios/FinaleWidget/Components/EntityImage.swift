@@ -10,14 +10,14 @@ enum EntityImageSize {
 }
 
 struct EntityImage : View {
-    let image: LImage?
+    let imageUrl: String?
     let size: EntityImageSize
     
     private var imageView: some View {
         get {
-            var imageUrl = image?.url
-            if imageUrl == nil || imageUrl!.isEmpty {
-                imageUrl = LTopAlbumsResponseAlbum.fake.images.last!.url
+            var imageUrl = self.imageUrl
+            if imageUrl?.isEmpty ?? true {
+                imageUrl = LTopAlbumsResponseAlbum.fake.imageUrl
             }
             
             if let url = URL(string: imageUrl!), let imageData = try? Data(contentsOf: url), let uiImage = UIImage(data: imageData) {

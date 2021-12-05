@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,6 +29,7 @@
 		7B861659275AFF9E00014F95 /* EntityImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B861658275AFF9E00014F95 /* EntityImage.swift */; };
 		7BB5470F2759D667009FEAC8 /* Scoreboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB5470E2759D667009FEAC8 /* Scoreboard.swift */; };
 		7BB547112759DDB9009FEAC8 /* FinaleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB547102759DDB9009FEAC8 /* FinaleWidget.swift */; };
+		7BEC398B275CB5310008A832 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 7BEC398A275CB5310008A832 /* SwiftSoup */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -116,6 +117,7 @@
 			files = (
 				7B066C3927544A2A003078F7 /* SwiftUI.framework in Frameworks */,
 				7B066C3727544A2A003078F7 /* WidgetKit.framework in Frameworks */,
+				7BEC398B275CB5310008A832 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +255,9 @@
 			dependencies = (
 			);
 			name = FinaleWidgetExtension;
+			packageProductDependencies = (
+				7BEC398A275CB5310008A832 /* SwiftSoup */,
+			);
 			productName = FinaleWidgetExtension;
 			productReference = 7B066C3527544A2A003078F7 /* FinaleWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -277,6 +282,8 @@
 				7B066C4427544A2B003078F7 /* PBXTargetDependency */,
 			);
 			name = Runner;
+			packageProductDependencies = (
+			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
@@ -309,6 +316,9 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			packageReferences = (
+				7BEC3987275CB5220008A832 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -887,6 +897,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7BEC3987275CB5220008A832 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7BEC398A275CB5310008A832 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BEC3987275CB5220008A832 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }

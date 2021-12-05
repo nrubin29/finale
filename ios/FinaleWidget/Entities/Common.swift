@@ -17,7 +17,8 @@ protocol Entity : Codable {
     var subtitle: String? { get }
     var value: String { get }
     var url: String { get }
-    var images: [LImage] { get }
+    var imageUrl: String? { get }
+    func fetchImageUrl(callback: @escaping (String?) -> Void)
 }
 
 extension Entity {
@@ -25,6 +26,16 @@ extension Entity {
         get {
             return nil
         }
+    }
+    
+    var imageUrl: String? {
+        get {
+            return nil
+        }
+    }
+    
+    func fetchImageUrl(callback: @escaping (String?) -> Void) {
+        callback(imageUrl)
     }
 }
 

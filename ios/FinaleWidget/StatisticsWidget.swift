@@ -4,7 +4,7 @@ import Intents
 
 struct StatisticsProvider: IntentTimelineProvider {
     private func createEntry(for configuration: StatisticsConfigurationIntent, in context: Context, completion: @escaping (StatisticsEntry) -> Void) {
-        if configuration.username == nil || configuration.username!.isEmpty {
+        guard let username = configuration.username, !username.isEmpty else {
             completion(StatisticsEntry(date: Date(), numScrobbles: nil, numTracks: nil, numArtists: nil, numAlbums: nil, configuration: configuration))
             return
         }
@@ -16,25 +16,25 @@ struct StatisticsProvider: IntentTimelineProvider {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
-        GetRecentTracksRequest(username: configuration.username!, period: configuration.period).getTotalCount { count in
+        GetRecentTracksRequest(username: username, period: configuration.period).getTotalCount { count in
             numScrobbles = count
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        GetTopTracksRequest(username: configuration.username!, period: configuration.period).getTotalCount { count in
+        GetTopTracksRequest(username: username, period: configuration.period).getTotalCount { count in
             numTracks = count
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        GetTopArtistsRequest(username: configuration.username!, period: configuration.period).getTotalCount { count in
+        GetTopArtistsRequest(username: username, period: configuration.period).getTotalCount { count in
             numArtists = count
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        GetTopAlbumsRequest(username: configuration.username!, period: configuration.period).getTotalCount { count in
+        GetTopAlbumsRequest(username: username, period: configuration.period).getTotalCount { count in
             numAlbums = count
             dispatchGroup.leave()
         }

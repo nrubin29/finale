@@ -37,9 +37,9 @@ struct LTopAlbumsResponseAlbum : Entity {
         }
     }
     
-    var images: [LImage] {
+    var imageUrl: String? {
         get {
-            return image ?? []
+            return image?.last?.url
         }
     }
     

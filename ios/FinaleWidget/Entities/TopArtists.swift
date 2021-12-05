@@ -1,3 +1,6 @@
+import Foundation
+import SwiftSoup
+
 struct LTopArtistsResponse : LastfmApiResponseWrapper {
     let response: LTopArtistsResponseTopArtists
     
@@ -20,7 +23,8 @@ struct LTopArtistsResponseArtist : Entity {
     let name: String
     let playcount: String
     let url: String
-    let image: [LImage]?
+    private let image: [LImage]?
+    var imageUrl: String?
     
     var value: String {
         get {
@@ -28,9 +32,16 @@ struct LTopArtistsResponseArtist : Entity {
         }
     }
     
-    var images: [LImage] {
-        get {
-            return image ?? []
+    func fetchImageUrl(callback: @escaping (String?) -> Void) {
+        let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, urlResponse, err in
+            if let data = data, let html = String(data: data, encoding: .utf8), let doc = try? SwiftSoup.parse(html), let href = try? doc.select(".header-new-gallery--link").attr("href"), let slashIndex = href.lastIndex(of: "/") {
+                let imageId = href[href.index(slashIndex, offsetBy: 1)...]
+                callback("https://lastfm.freetls.fastly.net/i/u/300x300/\(imageId).jpg")
+            } else {
+                callback(nil)
+            }
         }
+        
+        task.resume()
     }
 }
