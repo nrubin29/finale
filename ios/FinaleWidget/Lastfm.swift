@@ -18,7 +18,7 @@ class Lastfm {
         return components.url!
     }
     
-    fileprivate static func doRequest<T : LastfmApiResponseWrapper>(method: String, data: [String: Any], post: Bool = false, callback: @escaping (T?) -> Void) {
+    fileprivate static func doRequest<T : Codable>(method: String, data: [String: Any], post: Bool = false, callback: @escaping (T?) -> Void) {
         let url = buildUrl(method, data)
         var request = URLRequest(url: url)
         
@@ -44,6 +44,12 @@ class Lastfm {
         }
         
         task.resume()
+    }
+    
+    static func getFullTrack(from simpleTrack: LTopTracksResponseTrack, callback: @escaping (LTrack?) -> Void) {
+        doRequest(method: "track.getInfo", data: ["track": simpleTrack.name, "artist": simpleTrack.artist.name]) { (trackResponse: LTrackInfoResponse?) in
+            callback(trackResponse?.track)
+        }
     }
 }
 

@@ -11,7 +11,20 @@ struct TopEntitiesProvider: IntentTimelineProvider {
         
         switch configuration.type {
         case .track: GetTopTracksRequest(username: username, period: configuration.period).getEntities(limit: context.family.numItemsToDisplay, page: 1) { entities in
-            completion(TopEntitiesEntry(date: Date(), entities: entities ?? [], configuration: configuration))
+            var imageUrls: [String : String?] = [:]
+            let dispatchGroup = DispatchGroup()
+            
+            for entity in entities ?? [] {
+                dispatchGroup.enter()
+                entity.fetchImageUrl { result in
+                    imageUrls[entity.url] = result
+                    dispatchGroup.leave()
+                }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                completion(TopEntitiesEntry(date: Date(), entities: entities ?? [], imageUrlMap: imageUrls, configuration: configuration))
+            }
         }
         case .artist: GetTopArtistsRequest(username: username, period: configuration.period).getEntities(limit: context.family.numItemsToDisplay, page: 1) { entities in
             var imageUrls: [String : String?] = [:]

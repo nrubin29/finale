@@ -21,7 +21,6 @@ struct LTopTracksResponseTrack : Entity {
     let playcount: String
     let url: String
     let artist: LTopTracksResponseTrackArtist
-    let image: [LImage]?
     
     var subtitle: String? {
         get {
@@ -35,9 +34,9 @@ struct LTopTracksResponseTrack : Entity {
         }
     }
     
-    var images: [LImage] {
-        get {
-            return image ?? []
+    func fetchImageUrl(callback: @escaping (String?) -> Void) {
+        Lastfm.getFullTrack(from: self) { track in
+            callback(track?.album?.image.last?.url)
         }
     }
 }

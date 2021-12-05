@@ -19,7 +19,6 @@ struct LRecentTracksResponseRecentTracks : LastfmApiResponse {
 struct LRecentTracksResponseTrack : Entity {
     let name: String
     let url: String
-    let image: [LImage]?
     let artist: LRecentTracksResponseTrackArtist
     let album: LRecentTracksResponseTrackAlbum
     let date: LRecentTracksResponseTrackDate?
@@ -27,12 +26,6 @@ struct LRecentTracksResponseTrack : Entity {
     var value: String {
         get {
             return date?.text ?? "Scrobbling now"
-        }
-    }
-    
-    var images: [LImage] {
-        get {
-            return image ?? []
         }
     }
 }
