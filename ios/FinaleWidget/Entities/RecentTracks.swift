@@ -1,18 +1,22 @@
-struct LRecentTracksResponse : Codable {
-    let recenttracks: LRecentTracksResponseRecentTracks
+struct LRecentTracksResponse : LastfmApiResponseWrapper {
+    let response: LRecentTracksResponseRecentTracks
+    
+    enum CodingKeys : String, CodingKey {
+        case response = "recenttracks"
+    }
 }
 
-struct LRecentTracksResponseRecentTracks : Codable {
-    let track: [LRecentTracksResponseTrack]
+struct LRecentTracksResponseRecentTracks : LastfmApiResponse {
+    let entities: [LRecentTracksResponseTrack]
     let attr: LAttr
     
     enum CodingKeys : String, CodingKey {
-        case track
+        case entities = "track"
         case attr = "@attr"
     }
 }
 
-struct LRecentTracksResponseTrack : Codable, Identifiable {
+struct LRecentTracksResponseTrack : Entity {
     let name: String
     let url: String
     let image: [LImage]?

@@ -1,18 +1,22 @@
-struct LTopTracksResponse: Codable {
-    let toptracks: LTopTracksResponseTopTracks
+struct LTopTracksResponse : LastfmApiResponseWrapper {
+    let response: LTopTracksResponseTopTracks
+    
+    enum CodingKeys : String, CodingKey {
+        case response = "toptracks"
+    }
 }
 
-struct LTopTracksResponseTopTracks: Codable {
-    let track: [LTopTracksResponseTrack]
+struct LTopTracksResponseTopTracks : LastfmApiResponse {
+    let entities: [LTopTracksResponseTrack]
     let attr: LAttr
     
     enum CodingKeys : String, CodingKey {
-        case track
+        case entities = "track"
         case attr = "@attr"
     }
 }
 
-struct LTopTracksResponseTrack: Codable, Identifiable {
+struct LTopTracksResponseTrack : Entity {
     let name: String
     let playcount: String
     let url: String
@@ -32,7 +36,7 @@ struct LTopTracksResponseTrack: Codable, Identifiable {
     }
 }
 
-struct LTopTracksResponseTrackArtist: Codable {
-    var name: String
-    var url: String
+struct LTopTracksResponseTrackArtist : Codable {
+    let name: String
+    let url: String
 }

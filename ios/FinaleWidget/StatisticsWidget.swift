@@ -16,26 +16,26 @@ struct StatisticsProvider: IntentTimelineProvider {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
-        GetRecentTracksRequest(username: configuration.username!, period: configuration.period).getTotalCount { response in
-            numScrobbles = response
+        GetRecentTracksRequest(username: configuration.username!, period: configuration.period).getTotalCount { count in
+            numScrobbles = count
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        GetTopTracksRequest(username: configuration.username!, period: configuration.period).getTotalCount { response in
-            numTracks = response
+        GetTopTracksRequest(username: configuration.username!, period: configuration.period).getTotalCount { count in
+            numTracks = count
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        GetTopArtistsRequest(username: configuration.username!, period: configuration.period).getTotalCount { response in
-            numArtists = response
+        GetTopArtistsRequest(username: configuration.username!, period: configuration.period).getTotalCount { count in
+            numArtists = count
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        GetTopAlbumsRequest(username: configuration.username!, period: configuration.period).getTotalCount { response in
-            numAlbums = response
+        GetTopAlbumsRequest(username: configuration.username!, period: configuration.period).getTotalCount { count in
+            numAlbums = count
             dispatchGroup.leave()
         }
         

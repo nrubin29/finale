@@ -6,6 +6,8 @@ let numberFormatter: NumberFormatter = {
     return numberFormatter
 }()
 
+protocol Entity : Codable, Identifiable { }
+
 @available(iOS 12.0, *)
 extension Period {
     var apiValue: String {
@@ -49,10 +51,10 @@ struct LImage : Codable {
     }
 }
 
-struct LAttr: Codable {
-    var page: String
-    var total: String
-    var user: String
-    var perPage: String
-    var totalPages: String
+struct LAttr : Codable {
+    let page: String
+    let total: String
+    let user: String
+    let perPage: String
+    let totalPages: String
 }

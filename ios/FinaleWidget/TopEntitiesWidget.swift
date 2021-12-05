@@ -9,7 +9,7 @@ struct TopEntitiesProvider: IntentTimelineProvider {
             return
         }
         
-        GetTopAlbumsRequest(username: configuration.username!, period: configuration.period).doRequest(limit: context.family.numItemsToDisplay, page: 1) { albums in
+        GetTopAlbumsRequest(username: configuration.username!, period: configuration.period).getEntities(limit: context.family.numItemsToDisplay, page: 1) { albums in
             completion(TopEntitiesEntry(date: Date(), albums: albums ?? [], configuration: configuration))
         }
     }

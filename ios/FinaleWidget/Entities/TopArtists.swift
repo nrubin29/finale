@@ -1,18 +1,22 @@
-struct LTopArtistsResponse: Codable {
-    let topartists: LTopArtistsResponseTopArtists
+struct LTopArtistsResponse : LastfmApiResponseWrapper {
+    let response: LTopArtistsResponseTopArtists
+    
+    enum CodingKeys : String, CodingKey {
+        case response = "topartists"
+    }
 }
 
-struct LTopArtistsResponseTopArtists: Codable {
-    let artist: [LTopArtistsResponseArtist]
+struct LTopArtistsResponseTopArtists : LastfmApiResponse {
+    let entities: [LTopArtistsResponseArtist]
     let attr: LAttr
     
     enum CodingKeys : String, CodingKey {
-        case artist
+        case entities = "artist"
         case attr = "@attr"
     }
 }
 
-struct LTopArtistsResponseArtist: Codable, Identifiable {
+struct LTopArtistsResponseArtist : Entity {
     let name: String
     let playcount: String
     let url: String

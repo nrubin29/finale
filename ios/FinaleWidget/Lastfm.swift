@@ -18,7 +18,7 @@ class Lastfm {
         return components.url!
     }
     
-    fileprivate static func doRequest<T : Codable>(method: String, data: [String: Any], post: Bool = false, callback: @escaping (T?) -> Void) {
+    fileprivate static func doRequest<T : LastfmApiResponseWrapper>(method: String, data: [String: Any], post: Bool = false, callback: @escaping (T?) -> Void) {
         let url = buildUrl(method, data)
         var request = URLRequest(url: url)
         
@@ -48,7 +48,7 @@ class Lastfm {
 }
 
 @available(iOS 13.0, *)
-class GetRecentTracksRequest: LastfmAPIRequest {
+class GetRecentTracksRequest: LastfmApiRequest {
     var username: String
     var period: Period
     
@@ -57,23 +57,13 @@ class GetRecentTracksRequest: LastfmAPIRequest {
         self.period = period
     }
     
-    func doRequest(limit: Int, page: Int, callback: @escaping ([LRecentTracksResponseTrack]?) -> Void) {
-        Lastfm.doRequest(method: "user.getRecentTracks", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page]) { (recentTracksResponse: LRecentTracksResponse?) in callback(recentTracksResponse?.recenttracks.track) }
-    }
-    
-    func getTotalCount(callback: @escaping (Int?) -> Void) {
-        Lastfm.doRequest(method: "user.getRecentTracks", data: ["user": username, "period": period.apiValue, "limit": 1, "page": 1]) { (recentTracksResponse: LRecentTracksResponse?) in
-            if let recentTracksResponse = recentTracksResponse {
-                callback(Int(recentTracksResponse.recenttracks.attr.total))
-            } else {
-                callback(nil)
-            }
-        }
+    func doRequest(limit: Int, page: Int, callback: @escaping (LRecentTracksResponse?) -> Void) {
+        Lastfm.doRequest(method: "user.getRecentTracks", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page], callback: callback)
     }
 }
 
 @available(iOS 13.0, *)
-class GetTopTracksRequest: LastfmAPIRequest {
+class GetTopTracksRequest: LastfmApiRequest {
     var username: String
     var period: Period
     
@@ -82,23 +72,13 @@ class GetTopTracksRequest: LastfmAPIRequest {
         self.period = period
     }
     
-    func doRequest(limit: Int, page: Int, callback: @escaping ([LTopTracksResponseTrack]?) -> Void) {
-        Lastfm.doRequest(method: "user.getTopTracks", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page]) { (topTracksResponse: LTopTracksResponse?) in callback(topTracksResponse?.toptracks.track) }
-    }
-    
-    func getTotalCount(callback: @escaping (Int?) -> Void) {
-        Lastfm.doRequest(method: "user.getTopTracks", data: ["user": username, "period": period.apiValue, "limit": 1, "page": 1]) { (topTracksResponse: LTopTracksResponse?) in
-            if let topTracksResponse = topTracksResponse {
-                callback(Int(topTracksResponse.toptracks.attr.total))
-            } else {
-                callback(nil)
-            }
-        }
+    func doRequest(limit: Int, page: Int, callback: @escaping (LTopTracksResponse?) -> Void) {
+        Lastfm.doRequest(method: "user.getTopTracks", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page], callback: callback)
     }
 }
 
 @available(iOS 13.0, *)
-class GetTopArtistsRequest: LastfmAPIRequest {
+class GetTopArtistsRequest: LastfmApiRequest {
     var username: String
     var period: Period
     
@@ -107,23 +87,13 @@ class GetTopArtistsRequest: LastfmAPIRequest {
         self.period = period
     }
     
-    func doRequest(limit: Int, page: Int, callback: @escaping ([LTopArtistsResponseArtist]?) -> Void) {
-        Lastfm.doRequest(method: "user.getTopArtists", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page]) { (topArtistsResponse: LTopArtistsResponse?) in callback(topArtistsResponse?.topartists.artist) }
-    }
-    
-    func getTotalCount(callback: @escaping (Int?) -> Void) {
-        Lastfm.doRequest(method: "user.getTopArtists", data: ["user": username, "period": period.apiValue, "limit": 1, "page": 1]) { (topArtistsResponse: LTopArtistsResponse?) in
-            if let topArtistsResponse = topArtistsResponse {
-                callback(Int(topArtistsResponse.topartists.attr.total))
-            } else {
-                callback(nil)
-            }
-        }
+    func doRequest(limit: Int, page: Int, callback: @escaping (LTopArtistsResponse?) -> Void) {
+        Lastfm.doRequest(method: "user.getTopArtists", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page], callback: callback)
     }
 }
 
 @available(iOS 13.0, *)
-class GetTopAlbumsRequest: LastfmAPIRequest {
+class GetTopAlbumsRequest: LastfmApiRequest {
     var username: String
     var period: Period
     
@@ -132,14 +102,28 @@ class GetTopAlbumsRequest: LastfmAPIRequest {
         self.period = period
     }
     
-    func doRequest(limit: Int, page: Int, callback: @escaping ([LTopAlbumsResponseAlbum]?) -> Void) {
-        Lastfm.doRequest(method: "user.getTopAlbums", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page]) { (topAlbumsResponse: LTopAlbumsResponse?) in callback(topAlbumsResponse?.topalbums.album) }
+    func doRequest(limit: Int, page: Int, callback: @escaping (LTopAlbumsResponse?) -> Void) {
+        Lastfm.doRequest(method: "user.getTopAlbums", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page], callback: callback)
+    }
+}
+
+protocol LastfmApiRequest {
+    associatedtype ResponseWrapper: LastfmApiResponseWrapper
+    
+    func doRequest(limit: Int, page: Int, callback: @escaping (ResponseWrapper?) -> Void) -> Void
+}
+
+extension LastfmApiRequest {
+    func getEntities(limit: Int, page: Int, callback: @escaping ([ResponseWrapper.Response.E]?) -> Void) -> Void {
+        doRequest(limit: limit, page: page) { wrapper in
+            callback(wrapper?.response.entities)
+        }
     }
     
-    func getTotalCount(callback: @escaping (Int?) -> Void) {
-        Lastfm.doRequest(method: "user.getTopAlbums", data: ["user": username, "period": period.apiValue, "limit": 1, "page": 1]) { (topAlbumsResponse: LTopAlbumsResponse?) in
-            if let topAlbumsResponse = topAlbumsResponse {
-                callback(Int(topAlbumsResponse.topalbums.attr.total))
+    func getTotalCount(callback: @escaping (Int?) -> Void) -> Void {
+        doRequest(limit: 1, page: 1) { wrapper in
+            if let wrapper = wrapper {
+                callback(Int(wrapper.response.attr.total))
             } else {
                 callback(nil)
             }
@@ -147,10 +131,15 @@ class GetTopAlbumsRequest: LastfmAPIRequest {
     }
 }
 
-protocol LastfmAPIRequest {
-    associatedtype T
+protocol LastfmApiResponseWrapper : Codable {
+    associatedtype Response : LastfmApiResponse
     
-    func doRequest(limit: Int, page: Int, callback: @escaping ([T]?) -> Void) -> Void
+    var response: Response { get }
+}
+
+protocol LastfmApiResponse : Codable {
+    associatedtype E : Entity
     
-    func getTotalCount(callback: @escaping (Int?) -> Void) -> Void
+    var entities: [E] { get }
+    var attr: LAttr { get }
 }

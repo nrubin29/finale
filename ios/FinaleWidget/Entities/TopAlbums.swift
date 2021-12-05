@@ -1,20 +1,24 @@
 import Foundation
 
-struct LTopAlbumsResponse: Codable {
-    let topalbums: LTopAlbumsResponseTopAlbums
+struct LTopAlbumsResponse : LastfmApiResponseWrapper {
+    let response: LTopAlbumsResponseTopAlbums
+    
+    enum CodingKeys: String, CodingKey {
+        case response = "topalbums"
+    }
 }
 
-struct LTopAlbumsResponseTopAlbums: Codable {
-    let album: [LTopAlbumsResponseAlbum]
+struct LTopAlbumsResponseTopAlbums : LastfmApiResponse {
+    let entities: [LTopAlbumsResponseAlbum]
     let attr: LAttr
     
     enum CodingKeys: String, CodingKey {
-        case album
+        case entities = "album"
         case attr = "@attr"
     }
 }
 
-struct LTopAlbumsResponseAlbum: Codable, Identifiable {
+struct LTopAlbumsResponseAlbum : Entity {
     let name: String
     let playcount: String
     let url: String
@@ -44,7 +48,7 @@ struct LTopAlbumsResponseAlbum: Codable, Identifiable {
     static let fake = LTopAlbumsResponseAlbum(name: "Album", playcount: "0", url: "", artist: LTopAlbumsResponseAlbumArtist(name: "Artist", url: ""), image: [LImage(url: "https://lastfm.freetls.fastly.net/i/u/avatar300s/c6f59c1e5e7240a4c0d427abd71f3dbb.jpg", size: "")])
 }
 
-struct LTopAlbumsResponseAlbumArtist: Codable {
-    var name: String
-    var url: String
+struct LTopAlbumsResponseAlbumArtist : Codable {
+    let name: String
+    let url: String
 }
