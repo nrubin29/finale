@@ -6,7 +6,41 @@ let numberFormatter: NumberFormatter = {
     return numberFormatter
 }()
 
-protocol Entity : Codable, Identifiable { }
+func formatScrobbles(_ value: String) -> String {
+    let playCount = Int(value)!
+    let scrobbles = playCount == 1 ? "scrobble" : "scrobbles"
+    return "\(numberFormatter.string(from: NSNumber(value: playCount))!) \(scrobbles)"
+}
+
+protocol Entity : Codable {
+    var name: String { get }
+    var subtitle: String? { get }
+    var value: String { get }
+    var url: String { get }
+    var images: [LImage] { get }
+}
+
+extension Entity {
+    var subtitle: String? {
+        get {
+            return nil
+        }
+    }
+}
+
+extension EntityType {
+    var displayName: String {
+        get {
+            switch self {
+            case .track: return "Tracks"
+            case .artist: return "Artists"
+            case .album: return "Albums"
+            case .unknown: fallthrough
+            @unknown default: return "Charts"
+            }
+        }
+    }
+}
 
 @available(iOS 12.0, *)
 extension Period {

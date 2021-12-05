@@ -22,15 +22,15 @@ struct LTopArtistsResponseArtist : Entity {
     let url: String
     let image: [LImage]?
     
-    var images: [LImage] {
+    var value: String {
         get {
-            return image ?? []
+            formatScrobbles(playcount)
         }
     }
     
-    var id: String {
+    var images: [LImage] {
         get {
-            return url
+            return image ?? []
         }
     }
 }

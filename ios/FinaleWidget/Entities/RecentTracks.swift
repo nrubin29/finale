@@ -24,15 +24,15 @@ struct LRecentTracksResponseTrack : Entity {
     let album: LRecentTracksResponseTrackAlbum
     let date: LRecentTracksResponseTrackDate?
     
-    var images: [LImage] {
+    var value: String {
         get {
-            return image ?? []
+            return date?.text ?? "Scrobbling now"
         }
     }
     
-    var id: String {
+    var images: [LImage] {
         get {
-            return url
+            return image ?? []
         }
     }
 }

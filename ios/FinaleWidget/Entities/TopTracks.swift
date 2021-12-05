@@ -23,15 +23,21 @@ struct LTopTracksResponseTrack : Entity {
     let artist: LTopTracksResponseTrackArtist
     let image: [LImage]?
     
-    var images: [LImage] {
+    var subtitle: String? {
         get {
-            return image ?? []
+            return artist.name
         }
     }
     
-    var id: String {
+    var value: String {
         get {
-            return url
+            return formatScrobbles(playcount)
+        }
+    }
+    
+    var images: [LImage] {
+        get {
+            return image ?? []
         }
     }
 }

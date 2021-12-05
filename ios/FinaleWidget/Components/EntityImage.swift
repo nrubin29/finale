@@ -2,6 +2,8 @@ import SwiftUI
 
 let censorImages = false
 
+let imageForegroundGradient = LinearGradient(gradient: Gradient(colors: [.clear, Color(.sRGBLinear, white: 0, opacity: 0.75)]), startPoint: .top, endPoint: .bottom)
+
 enum EntityImageSize {
     case small
     case large

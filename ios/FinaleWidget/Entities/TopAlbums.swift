@@ -25,23 +25,21 @@ struct LTopAlbumsResponseAlbum : Entity {
     let artist: LTopAlbumsResponseAlbumArtist
     let image: [LImage]?
     
+    var subtitle: String? {
+        get {
+            return artist.name
+        }
+    }
+    
+    var value: String {
+        get {
+            return formatScrobbles(playcount)
+        }
+    }
+    
     var images: [LImage] {
         get {
             return image ?? []
-        }
-    }
-    
-    var playCountFormatted: String {
-        get {
-            let playCount = Int(playcount)!
-            let scrobbles = playCount == 1 ? "scrobble" : "scrobbles"
-            return "\(numberFormatter.string(from: NSNumber(value: playCount))!) \(scrobbles)"
-        }
-    }
-    
-    var id: String {
-        get {
-            return url
         }
     }
     
