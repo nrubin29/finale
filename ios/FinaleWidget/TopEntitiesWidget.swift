@@ -140,7 +140,7 @@ struct TopEntitiesWidgetEntryViewSmall : View {
             VStack {
                 Spacer()
                 VStack(alignment: .leading) {
-                    if entry.configuration.username == nil {
+                    if !entry.isPreview && entry.configuration.username == nil {
                         Text("Please enter your username in the widget settings.")
                             .bold()
                             .foregroundColor(.white)
