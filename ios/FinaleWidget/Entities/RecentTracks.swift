@@ -23,6 +23,12 @@ struct LRecentTracksResponseTrack : Entity {
     let album: LRecentTracksResponseTrackAlbum
     let date: LRecentTracksResponseTrackDate?
     
+    var type: EntityType {
+        get {
+            return .track
+        }
+    }
+    
     var value: String {
         get {
             return date?.text ?? "Scrobbling now"

@@ -22,6 +22,12 @@ struct LTopTracksResponseTrack : Entity {
     let url: String
     let artist: LTopTracksResponseTrackArtist
     
+    var type: EntityType {
+        get {
+            return .track
+        }
+    }
+    
     var subtitle: String? {
         get {
             return artist.name

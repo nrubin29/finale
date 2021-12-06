@@ -25,6 +25,12 @@ struct LTopAlbumsResponseAlbum : Entity {
     let artist: LTopAlbumsResponseAlbumArtist
     let image: [LImage]?
     
+    var type: EntityType {
+        get {
+            return .album
+        }
+    }
+    
     var subtitle: String? {
         get {
             return artist.name
@@ -43,7 +49,7 @@ struct LTopAlbumsResponseAlbum : Entity {
         }
     }
     
-    static let fake = LTopAlbumsResponseAlbum(name: "Album", playcount: "0", url: "", artist: LTopAlbumsResponseAlbumArtist(name: "Artist", url: ""), image: [LImage(url: "https://lastfm.freetls.fastly.net/i/u/avatar300s/c6f59c1e5e7240a4c0d427abd71f3dbb.jpg", size: "")])
+    static let fake = LTopAlbumsResponseAlbum(name: "Album", playcount: "0", url: "", artist: LTopAlbumsResponseAlbumArtist(name: "Artist", url: ""), image: nil)
 }
 
 struct LTopAlbumsResponseAlbumArtist : Codable {

@@ -26,6 +26,12 @@ struct LTopArtistsResponseArtist : Entity {
     private let image: [LImage]?
     var imageUrl: String?
     
+    var type: EntityType {
+        get {
+            return .artist
+        }
+    }
+    
     var value: String {
         get {
             formatScrobbles(playcount)

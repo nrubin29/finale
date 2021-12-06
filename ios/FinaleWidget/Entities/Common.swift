@@ -13,6 +13,7 @@ func formatScrobbles(_ value: String) -> String {
 }
 
 protocol Entity : Codable {
+    var type: EntityType { get }
     var name: String { get }
     var subtitle: String? { get }
     var value: String { get }

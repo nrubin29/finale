@@ -117,7 +117,7 @@ struct TopEntitiesWidgetEntryViewSmall : View {
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            EntityImage(imageUrl: entity != nil ? entry.imageUrls[entity!.url]! : nil, size: .large)
+            EntityImage(imageUrl: entity != nil ? entry.imageUrls[entity!.url]! : nil, entityType: entity?.type, size: .large)
                 .aspectRatio(contentMode: .fit)
             if (entry.configuration.showTitles ?? 1) == 1 {
                 imageForegroundGradient
@@ -171,7 +171,7 @@ struct TopEntitiesWidgetEntryViewLarge : View {
                         Link(destination: getLinkUrl(entity)) {
                             VStack {
                                 ZStack(alignment: .bottom) {
-                                    EntityImage(imageUrl: entry.imageUrls[entity.url]!, size: .small)
+                                    EntityImage(imageUrl: entry.imageUrls[entity.url]!, entityType: entity.type, size: .small)
                                         .aspectRatio(contentMode: .fill)
                                         .mask(RoundedRectangle(cornerRadius: 5))
                                     if (entry.configuration.showTitles ?? 1) == 1 {
