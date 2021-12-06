@@ -4,6 +4,8 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
+import 'package:finale/widgets/entity/lastfm/artist_view.dart';
+import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/main/collage_view.dart';
 import 'package:finale/widgets/main/search_view.dart';
 import 'package:finale/widgets/profile/profile_view.dart';
@@ -38,6 +40,18 @@ class _MainViewState extends State<MainView> {
           context,
           MaterialPageRoute(
               builder: (_) => AlbumView(album: action.value as BasicAlbum)),
+        );
+      } else if (action.type == QuickActionType.viewArtist) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => ArtistView(artist: action.value as BasicArtist)),
+        );
+      } else if (action.type == QuickActionType.viewTrack) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => TrackView(track: action.value as Track)),
         );
       } else if (action.type == QuickActionType.viewTab) {
         setState(() {

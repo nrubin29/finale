@@ -20,12 +20,27 @@ class QuickAction {
       : type = QuickActionType.viewAlbum,
         value = album;
 
+  QuickAction.viewArtist(BasicArtist artist)
+      : type = QuickActionType.viewArtist,
+        value = artist;
+
+  QuickAction.viewTrack(Track track)
+      : type = QuickActionType.viewTrack,
+        value = track;
+
   QuickAction.viewTab(EntityType tab)
       : type = QuickActionType.viewTab,
         value = tab;
 }
 
-enum QuickActionType { scrobbleOnce, scrobbleContinuously, viewAlbum, viewTab }
+enum QuickActionType {
+  scrobbleOnce,
+  scrobbleContinuously,
+  viewAlbum,
+  viewArtist,
+  viewTrack,
+  viewTab,
+}
 
 class QuickActionsManager {
   // This stream needs to be open for the entire lifetime of the app.
@@ -87,6 +102,14 @@ class QuickActionsManager {
       final artist = uri.queryParameters['artist']!;
       _quickActions.add(QuickAction.viewAlbum(
           ConcreteBasicAlbum(name, ConcreteBasicArtist(artist))));
+    } else if (uri.path == '/artist') {
+      final name = uri.queryParameters['name']!;
+      _quickActions.add(QuickAction.viewArtist(ConcreteBasicArtist(name)));
+    } else if (uri.path == '/track') {
+      final name = uri.queryParameters['name']!;
+      final artist = uri.queryParameters['artist']!;
+      _quickActions
+          .add(QuickAction.viewTrack(BasicConcreteTrack(name, artist, null)));
     } else if (uri.path == '/profileTab') {
       final tabString = uri.queryParameters['tab'];
       EntityType tab;
