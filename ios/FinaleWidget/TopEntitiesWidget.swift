@@ -207,8 +207,8 @@ struct TopEntitiesWidget: Widget {
         IntentConfiguration(kind: kind, intent: TopEntitiesConfigurationIntent.self, provider: TopEntitiesProvider()) { entry in
             TopEntitiesEntryView(entry: entry)
         }
-        .configurationDisplayName("Top Albums")
-        .description("Your top albums for a given period.")
+        .configurationDisplayName("Top Charts")
+        .description("Your top albums, artists, or tracks for a given period.")
     }
 }
 
