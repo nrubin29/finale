@@ -5,7 +5,7 @@ import Intents
 struct TopEntitiesProvider: IntentTimelineProvider {
     private func createEntry(for configuration: TopEntitiesConfigurationIntent, in context: Context, completion: @escaping (TopEntitiesEntry) -> Void) {
         guard let username = configuration.username, !username.isEmpty else {
-            completion(TopEntitiesEntry(date: Date(), entities: [], configuration: configuration))
+            completion(TopEntitiesEntry(date: Date(), entities: [], configuration: configuration, isPreview: context.isPreview))
             return
         }
         
@@ -23,7 +23,7 @@ struct TopEntitiesProvider: IntentTimelineProvider {
             }
             
             dispatchGroup.notify(queue: .main) {
-                completion(TopEntitiesEntry(date: Date(), entities: entities ?? [], imageUrlMap: imageUrls, configuration: configuration))
+                completion(TopEntitiesEntry(date: Date(), entities: entities ?? [], imageUrlMap: imageUrls, configuration: configuration, isPreview: context.isPreview))
             }
         }
         case .artist: GetTopArtistsRequest(username: username, period: configuration.period).getEntities(limit: context.family.numItemsToDisplay, page: 1) { entities in
@@ -39,20 +39,20 @@ struct TopEntitiesProvider: IntentTimelineProvider {
             }
             
             dispatchGroup.notify(queue: .main) {
-                completion(TopEntitiesEntry(date: Date(), entities: entities ?? [], imageUrlMap: imageUrls, configuration: configuration))
+                completion(TopEntitiesEntry(date: Date(), entities: entities ?? [], imageUrlMap: imageUrls, configuration: configuration, isPreview: context.isPreview))
             }
         }
         case .unknown: fallthrough
         case .album: GetTopAlbumsRequest(username: username, period: configuration.period).getEntities(limit: context.family.numItemsToDisplay, page: 1) { entities in
-            completion(TopEntitiesEntry(date: Date(), entities: entities ?? [], configuration: configuration))
+            completion(TopEntitiesEntry(date: Date(), entities: entities ?? [], configuration: configuration, isPreview: context.isPreview))
         }
         default: fatalError("Unknown entity type \(configuration.type)")
         }
     }
     
     func placeholder(in context: Context) -> TopEntitiesEntry {
-        let entities = (0..<context.family.numItemsToDisplay).map({ _ in LTopAlbumsResponseAlbum.fake })
-        return TopEntitiesEntry(date: Date(), entities: entities, configuration: TopEntitiesConfigurationIntent())
+        let entities = (0..<context.family.numItemsToDisplay).map({ i in LTopAlbumsResponseAlbum.fake(id: i) })
+        return TopEntitiesEntry(date: Date(), entities: entities, configuration: TopEntitiesConfigurationIntent(), isPreview: context.isPreview)
     }
     
     func getSnapshot(for configuration: TopEntitiesConfigurationIntent, in context: Context, completion: @escaping (TopEntitiesEntry) -> ()) {
@@ -73,6 +73,7 @@ struct TopEntitiesEntry : TimelineEntry {
     // Map from entity URL (unique value) to entity image URL
     var imageUrlMap: [String : String?]? = nil
     let configuration: TopEntitiesConfigurationIntent
+    let isPreview: Bool
     
     var imageUrls: [String : String?] {
         get {
@@ -111,13 +112,27 @@ struct TopEntitiesWidgetEntryViewSmall : View {
     
     var entity: Entity? {
         get {
-            return entry.entities.first
+            if entry.isPreview {
+                return LTopAlbumsResponseAlbum.fake()
+            } else {
+                return entry.entities.first
+            }
+        }
+    }
+    
+    var imageUrl: String? {
+        get {
+            if let entity = entity, let imageUrl = entry.imageUrls[entity.url] {
+                return imageUrl
+            } else {
+                return nil
+            }
         }
     }
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            EntityImage(imageUrl: entity != nil ? entry.imageUrls[entity!.url]! : nil, entityType: entity?.type, size: .large)
+            EntityImage(imageUrl: imageUrl, entityType: entity?.type, size: .large)
                 .aspectRatio(contentMode: .fit)
             if (entry.configuration.showTitles ?? 1) == 1 {
                 imageForegroundGradient
@@ -163,15 +178,33 @@ struct TopEntitiesWidgetEntryViewLarge : View {
     @Environment(\.widgetFamily) var family: WidgetFamily
     var entry: TopEntitiesProvider.Entry
     
+    var entities: [Entity] {
+        get {
+            if entry.isPreview {
+                return (0..<family.numItemsToDisplay).map({ i in LTopAlbumsResponseAlbum.fake(id: i) })
+            } else {
+                return entry.entities
+            }
+        }
+    }
+    
+    private func unnest<T>(_ optional: T??) -> T? {
+        if let inner = optional {
+            return inner
+        } else {
+            return nil
+        }
+    }
+    
     var body: some View {
-        FinaleWidgetLarge(title: "Top \(entry.configuration.type.displayName)", period: entry.configuration.period, username: entry.configuration.username) {
-            if !entry.entities.isEmpty {
+        FinaleWidgetLarge(title: "Top \(entry.configuration.type.displayName)", period: entry.configuration.period, username: entry.configuration.username, isPreview: entry.isPreview) {
+            if !entities.isEmpty {
                 LazyVGrid(columns: (0..<family.numColumns).map({_ in GridItem(.flexible())})) {
-                    ForEach(entry.entities, id: \.url) { entity in
+                    ForEach(entities, id: \.url) { entity in
                         Link(destination: getLinkUrl(entity)) {
                             VStack {
                                 ZStack(alignment: .bottom) {
-                                    EntityImage(imageUrl: entry.imageUrls[entity.url]!, entityType: entity.type, size: .small)
+                                    EntityImage(imageUrl: unnest(entry.imageUrls[entity.url]), entityType: entity.type, size: .small)
                                         .aspectRatio(contentMode: .fill)
                                     if (entry.configuration.showTitles ?? 1) == 1 {
                                         imageForegroundGradient
@@ -214,7 +247,7 @@ struct TopEntitiesWidget: Widget {
 
 struct TopEntitiesWidget_Previews: PreviewProvider {
     static var previews: some View {
-        TopEntitiesEntryView(entry: TopEntitiesEntry(date: Date(), entities: [LTopAlbumsResponseAlbum.fake], configuration: TopEntitiesConfigurationIntent()))
+        TopEntitiesEntryView(entry: TopEntitiesEntry(date: Date(), entities: [LTopAlbumsResponseAlbum.fake()], configuration: TopEntitiesConfigurationIntent(), isPreview: true))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

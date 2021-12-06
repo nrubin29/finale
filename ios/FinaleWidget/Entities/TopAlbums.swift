@@ -49,7 +49,9 @@ struct LTopAlbumsResponseAlbum : Entity {
         }
     }
     
-    static let fake = LTopAlbumsResponseAlbum(name: "Album", playcount: "0", url: "", artist: LTopAlbumsResponseAlbumArtist(name: "Artist", url: ""), image: nil)
+    static func fake(id: Int? = nil) -> LTopAlbumsResponseAlbum {
+        return LTopAlbumsResponseAlbum(name: "Album", playcount: "0", url: id != nil ? "\(id!)" : "", artist: LTopAlbumsResponseAlbumArtist(name: "Artist", url: ""), image: nil)
+    }
 }
 
 struct LTopAlbumsResponseAlbumArtist : Codable {

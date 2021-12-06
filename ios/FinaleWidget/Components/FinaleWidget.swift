@@ -14,6 +14,7 @@ struct FinaleWidgetLarge<Content> : View where Content : View {
     let title: String
     let period: Period
     let username: String?
+    let isPreview: Bool
     @ViewBuilder let content: () -> Content
     
     var body: some View {
@@ -21,7 +22,7 @@ struct FinaleWidgetLarge<Content> : View where Content : View {
             widgetBackgroundGradient
             VStack {
                 TitleBar(title: title, period: period)
-                if username?.isEmpty ?? true {
+                if !isPreview && username?.isEmpty ?? true {
                     Text("Please enter your username in the widget settings.")
                         .foregroundColor(Color("AccentColor"))
                         .frame(maxHeight: .infinity)

@@ -5,7 +5,7 @@ import Intents
 struct StatisticsProvider: IntentTimelineProvider {
     private func createEntry(for configuration: StatisticsConfigurationIntent, in context: Context, completion: @escaping (StatisticsEntry) -> Void) {
         guard let username = configuration.username, !username.isEmpty else {
-            completion(StatisticsEntry(date: Date(), numScrobbles: nil, numTracks: nil, numArtists: nil, numAlbums: nil, configuration: configuration))
+            completion(StatisticsEntry(date: Date(), numScrobbles: nil, numTracks: nil, numArtists: nil, numAlbums: nil, configuration: configuration, isPreview: context.isPreview))
             return
         }
         
@@ -40,12 +40,12 @@ struct StatisticsProvider: IntentTimelineProvider {
         }
         
         dispatchGroup.notify(queue: .main) {
-            completion(StatisticsEntry(date: Date(), numScrobbles: numScrobbles, numTracks: numTracks, numArtists: numArtists, numAlbums: numAlbums, configuration: configuration))
+            completion(StatisticsEntry(date: Date(), numScrobbles: numScrobbles, numTracks: numTracks, numArtists: numArtists, numAlbums: numAlbums, configuration: configuration, isPreview: context.isPreview))
         }
     }
     
     func placeholder(in context: Context) -> StatisticsEntry {
-        StatisticsEntry(date: Date(), numScrobbles: 0, numTracks: 0, numArtists: 0, numAlbums: 0, configuration: StatisticsConfigurationIntent())
+        StatisticsEntry(date: Date(), numScrobbles: 0, numTracks: 0, numArtists: 0, numAlbums: 0, configuration: StatisticsConfigurationIntent(), isPreview: context.isPreview)
     }
     
     func getSnapshot(for configuration: StatisticsConfigurationIntent, in context: Context, completion: @escaping (StatisticsEntry) -> ()) {
@@ -67,6 +67,7 @@ struct StatisticsEntry: TimelineEntry {
     let numArtists: Int?
     let numAlbums: Int?
     let configuration: StatisticsConfigurationIntent
+    let isPreview: Bool
 }
 
 private func getScoreTiles(_ entry: StatisticsProvider.Entry) -> [ScoreTileModel] {
@@ -97,7 +98,7 @@ struct StatisticsWidgetEntryViewSmall : View {
     var body: some View {
         ZStack {
             widgetBackgroundGradient
-            if entry.configuration.username?.isEmpty ?? true {
+            if !entry.isPreview && entry.configuration.username?.isEmpty ?? true {
                 VStack {
                     Image("FinaleIconWhite")
                         .resizable()
@@ -120,7 +121,7 @@ struct StatisticsWidgetEntryViewLarge : View {
     var entry: StatisticsProvider.Entry
     
     var body: some View {
-        FinaleWidgetLarge(title: "Last.fm Stats", period: entry.configuration.period, username: entry.configuration.username) {
+        FinaleWidgetLarge(title: "Last.fm Stats", period: entry.configuration.period, username: entry.configuration.username, isPreview: entry.isPreview) {
             Scoreboard(alignment: .horizontal, tiles: getScoreTiles(entry))
         }
     }
@@ -141,7 +142,7 @@ struct StatisticsWidget: Widget {
 
 struct StatisticsWidget_Previews: PreviewProvider {
     static var previews: some View {
-        StatisticsEntryView(entry: StatisticsEntry(date: Date(), numScrobbles: 0, numTracks: 0, numArtists: 0, numAlbums: 0, configuration: StatisticsConfigurationIntent()))
+        StatisticsEntryView(entry: StatisticsEntry(date: Date(), numScrobbles: 0, numTracks: 0, numArtists: 0, numAlbums: 0, configuration: StatisticsConfigurationIntent(), isPreview: true))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
