@@ -100,7 +100,7 @@ struct StatisticsWidgetEntryViewSmall : View {
             widgetBackgroundGradient
             if !entry.isPreview && entry.configuration.username?.isEmpty ?? true {
                 VStack {
-                    Image("FinaleIconWhite")
+                    Image("FinaleIcon")
                         .resizable()
                         .frame(width: 20, height: 20)
                         .colorMultiply(Color("AccentColor"))

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "baseline_group_white_24dp-1.png",
+      "filename" : "group_white_24dp.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "baseline_group_white_24dp.png",
+      "filename" : "group_white_36dp.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "baseline_group_white_24dp-2.png",
+      "filename" : "group_white_48dp.svg",
       "idiom" : "universal",
       "scale" : "3x"
     }
