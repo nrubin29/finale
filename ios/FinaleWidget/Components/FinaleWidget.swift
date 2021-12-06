@@ -66,6 +66,7 @@ private struct TitleBar: View {
                 }
                 Image("FinaleIcon")
                     .resizable()
+                    .scaledToFit()
                     .frame(width: 15, height: 15)
                     .colorMultiply(Color("AccentColor"))
             }

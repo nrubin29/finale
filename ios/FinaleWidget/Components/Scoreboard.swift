@@ -29,6 +29,7 @@ struct Scoreboard: View {
                 ScoreTile(model: model, alignment: alignment)
                 if (alignment == .horizontal && index < tiles.count - 1) {
                     Divider()
+                        .padding(.horizontal, 2)
                 }
             }
         }

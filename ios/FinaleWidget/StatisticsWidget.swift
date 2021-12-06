@@ -102,6 +102,7 @@ struct StatisticsWidgetEntryViewSmall : View {
                 VStack {
                     Image("FinaleIcon")
                         .resizable()
+                        .scaledToFit()
                         .frame(width: 20, height: 20)
                         .colorMultiply(Color("AccentColor"))
                     Text("Please enter your username in the widget settings.")

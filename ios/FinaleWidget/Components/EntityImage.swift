@@ -33,6 +33,8 @@ struct EntityImage : View {
                     .blur(radius: 10)
                 Text("Image hidden due to copyright")
                     .font(.system(size: size == .small ? 10 : 16))
+                    .foregroundColor(.white)
+                    .shadow(color: .black, radius: 1)
                     .multilineTextAlignment(.center)
                     .padding(size == .small ? [] : .top)
             }
