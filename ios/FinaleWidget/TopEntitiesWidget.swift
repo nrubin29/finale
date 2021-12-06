@@ -173,7 +173,6 @@ struct TopEntitiesWidgetEntryViewLarge : View {
                                 ZStack(alignment: .bottom) {
                                     EntityImage(imageUrl: entry.imageUrls[entity.url]!, entityType: entity.type, size: .small)
                                         .aspectRatio(contentMode: .fill)
-                                        .mask(RoundedRectangle(cornerRadius: 5))
                                     if (entry.configuration.showTitles ?? 1) == 1 {
                                         imageForegroundGradient
                                         Text(entity.name)
@@ -184,6 +183,7 @@ struct TopEntitiesWidgetEntryViewLarge : View {
                                             .padding(2)
                                     }
                                 }
+                                .mask(RoundedRectangle(cornerRadius: 5))
                                 Text(entity.value)
                                     .font(Font.system(size: 8))
                                     .foregroundColor(Color("AccentColor"))
