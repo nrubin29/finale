@@ -1,6 +1,7 @@
 import 'package:finale/env.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:social_media_buttons/social_media_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountsSettingsView extends StatefulWidget {
@@ -42,10 +42,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
         children: [
           ListTile(
             title: const Text('Last.fm'),
-            leading: getLastfmIcon(
-                Theme.of(context).brightness == Brightness.light
-                    ? Colors.black45
-                    : Colors.white),
+            leading: const Icon(SocialMediaIcons.lastfm),
             trailing: Switch(
               value: true,
               onChanged: (_) {},

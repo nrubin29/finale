@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_io/io.dart';
@@ -26,12 +25,6 @@ String get authCallbackUrl {
 
 const spotifyGreen = Color.fromRGBO(30, 215, 96, 1);
 const scrobbleIcon = Icons.playlist_add;
-
-SvgPicture getLastfmIcon(Color color) => SvgPicture.asset(
-      'assets/images/lastfm.svg',
-      color: color,
-      width: 24,
-    );
 
 Widget appIcon({required double size}) => ClipRRect(
       borderRadius: BorderRadius.circular(size * .22),

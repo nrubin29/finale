@@ -7,6 +7,7 @@ import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
@@ -18,13 +19,12 @@ import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/entity/spotify/spotify_playlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:social_media_buttons/social_media_icons.dart';
 
 extension SearchEngineIcon on SearchEngine {
   Widget getIcon(Color color) {
     switch (this) {
       case SearchEngine.lastfm:
-        return getLastfmIcon(color);
+        return Icon(SocialMediaIcons.lastfm, color: color);
       case SearchEngine.spotify:
         return Icon(SocialMediaIcons.spotify, color: color);
     }

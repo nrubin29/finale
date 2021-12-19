@@ -4,6 +4,7 @@ import 'package:finale/env.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/main/main_view.dart';
@@ -99,7 +100,8 @@ class LoginView extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              getLastfmIcon(Colors.white),
+                              const Icon(SocialMediaIcons.lastfm,
+                                  color: Colors.white),
                               const SizedBox(width: 8),
                               Text('Log in with Last.fm',
                                   style: Theme.of(context)

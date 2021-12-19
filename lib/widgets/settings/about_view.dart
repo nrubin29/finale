@@ -1,8 +1,8 @@
+import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:social_media_buttons/social_media_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutView extends StatelessWidget {
@@ -85,7 +85,7 @@ class AboutView extends StatelessWidget {
           SliverToBoxAdapter(
             child: ListTile(
               title: const Text('Source code'),
-              leading: const Icon(SocialMediaIcons.github_circled),
+              leading: const Icon(SocialMediaIcons.github),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 launch('https://github.com/nrubin29/finale');
