@@ -308,12 +308,10 @@ packages:
   flutter_web_auth:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "7449441dd0c85cc7eb92994212110e89686af1b9"
-      url: "https://github.com/czepiec/flutter_web_auth"
-    source: git
-    version: "0.3.1"
+      name: flutter_web_auth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
