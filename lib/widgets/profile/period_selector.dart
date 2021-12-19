@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,6 @@ class PeriodSelector<T extends Entity> extends StatefulWidget {
 
 class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
   late DisplayType _displayType;
-  late Period _period;
 
   final _entityDisplayComponentKey = GlobalKey<EntityDisplayState>();
   late StreamSubscription _periodChangeSubscription;
@@ -38,13 +38,10 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
     _periodChangeSubscription = Preferences().periodChange.listen((value) {
       if (mounted) {
         setState(() {
-          _period = value;
           _entityDisplayComponentKey.currentState?.getInitialItems();
         });
       }
     });
-
-    _period = Preferences().period;
   }
 
   @override
@@ -74,20 +71,7 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
                           }),
                     ),
                   ),
-                  DropdownButton<Period>(
-                    value: _period,
-                    items: Period.values
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e.display),
-                            ))
-                        .toList(growable: false),
-                    onChanged: (value) {
-                      if (value != null && value != _period) {
-                        Preferences().period = value;
-                      }
-                    },
-                  ),
+                  const PeriodDropdownButton(),
                 ],
               ),
             ),

@@ -8,11 +8,24 @@ import 'package:json_annotation/json_annotation.dart';
 part 'track.g.dart';
 
 @JsonSerializable()
-class LRecentTracksResponseTrackArtist {
+class LRecentTracksResponseTrackArtist extends BasicArtist {
+  // extended = false
   @JsonKey(name: '#text')
-  final String name;
+  final String? text;
 
-  const LRecentTracksResponseTrackArtist(this.name);
+  // extended = true
+  @JsonKey(name: 'name')
+  final String? nameString;
+
+  // extended = true
+  @JsonKey(name: 'url')
+  @override
+  final String? url;
+
+  @override
+  String get name => text ?? nameString!;
+
+  LRecentTracksResponseTrackArtist(this.text, this.nameString, this.url);
 
   factory LRecentTracksResponseTrackArtist.fromJson(
           Map<String, dynamic> json) =>

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
@@ -9,7 +10,9 @@ import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
+import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
   final allData = {
@@ -63,8 +66,10 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   final String username;
   final String? from;
   final String? to;
+  final bool extended;
 
-  const GetRecentTracksRequest(this.username, [this.from, this.to]);
+  const GetRecentTracksRequest(this.username,
+      {this.from, this.to, this.extended = false});
 
   @override
   doRequest(int limit, int page) async {
@@ -74,6 +79,7 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
       'page': page,
       if (from != null) 'from': from,
       if (to != null) 'to': to,
+      'extended': extended ? '1' : '0',
     });
     final tracks =
         LRecentTracksResponseRecentTracks.fromJson(rawResponse['recenttracks'])
@@ -93,15 +99,41 @@ class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
   final String username;
   final Period? period;
 
-  const GetTopArtistsRequest(this.username, [this.period]);
+  Period? _lastPeriod;
+  List<LTopArtistsResponseArtist>? _data;
+
+  GetTopArtistsRequest(this.username, [this.period]) : _data = null;
 
   @override
   doRequest(int limit, int page) async {
+    final period = this.period ?? Preferences().period;
+
+    if (period.isCustom) {
+      if (_data == null || (_lastPeriod != null && _lastPeriod != period)) {
+        final request = GetRecentTracksRequest(
+          username,
+          from: period.start!.secondsSinceEpoch.toString(),
+          to: period.end!.secondsSinceEpoch.toString(),
+          extended: true,
+        );
+
+        final response = await request.getAllData();
+        final groupedData = response.groupListsBy((e) => e.artistName);
+        _data = groupedData.entries
+            .map((e) => LTopArtistsResponseArtist(
+                e.key, e.value.first.artist.url!, e.value.length))
+            .sorted((a, b) => b.playCount.compareTo(a.playCount));
+        _lastPeriod = period;
+      }
+
+      return _data!.slice(limit * (page - 1), min(limit * page, _data!.length));
+    }
+
     final rawResponse = await _doRequest('user.getTopArtists', {
       'user': username,
       'limit': limit,
       'page': page,
-      'period': (period ?? Preferences().period).value,
+      'period': period.value,
     });
     return LTopArtistsResponseTopArtists.fromJson(rawResponse['topartists'])
         .artists;

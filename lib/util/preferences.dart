@@ -1,54 +1,8 @@
+import 'package:finale/util/period.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum SearchEngine { lastfm, spotify }
-
-enum Period {
-  sevenDays,
-  oneMonth,
-  threeMonths,
-  sixMonths,
-  twelveMonths,
-  overall
-}
-
-extension PeriodValue on Period {
-  String get value {
-    switch (this) {
-      case Period.sevenDays:
-        return '7day';
-      case Period.oneMonth:
-        return '1month';
-      case Period.threeMonths:
-        return '3month';
-      case Period.sixMonths:
-        return '6month';
-      case Period.twelveMonths:
-        return '12month';
-      case Period.overall:
-        return 'overall';
-    }
-  }
-}
-
-extension PeriodDisplay on Period {
-  String get display {
-    switch (this) {
-      case Period.sevenDays:
-        return '7 days';
-      case Period.oneMonth:
-        return '1 month';
-      case Period.threeMonths:
-        return '3 months';
-      case Period.sixMonths:
-        return '6 months';
-      case Period.twelveMonths:
-        return '12 months';
-      case Period.overall:
-        return 'Overall';
-    }
-  }
-}
 
 class Preferences {
   static Preferences? _instance;
@@ -67,16 +21,16 @@ class Preferences {
   }
 
   Period get period {
-    if (!_preferences.containsKey('periodIndex')) {
-      _preferences.setInt('periodIndex', Period.sevenDays.index);
+    if (!_preferences.containsKey('periodValue')) {
+      _preferences.setString('periodValue', Period.sevenDays.serializedValue);
       _periodChange.add(Period.sevenDays);
     }
 
-    return Period.values[_preferences.getInt('periodIndex')!];
+    return Period.deserialized(_preferences.getString('periodValue')!);
   }
 
   set period(Period value) {
-    _preferences.setInt('periodIndex', value.index);
+    _preferences.setString('periodValue', value.serializedValue);
     _periodChange.add(value);
   }
 

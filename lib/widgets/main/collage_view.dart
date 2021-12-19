@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
@@ -208,7 +209,7 @@ class _CollageViewState extends State<CollageView> {
                       trailing: DropdownButton<Period>(
                         value: _period,
                         items: [
-                          for (final period in Period.values)
+                          for (final period in Period.apiValues)
                             DropdownMenuItem(
                               value: period,
                               child: Text(period.display),

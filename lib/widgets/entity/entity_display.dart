@@ -103,7 +103,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     try {
       final initialItems = await _request!.doRequest(20, 1);
       setState(() {
-        items = initialItems;
+        items = [...initialItems];
         hasMorePages = initialItems.length >= 20;
         didInitialRequest = true;
 
