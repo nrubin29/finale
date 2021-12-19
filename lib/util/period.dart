@@ -18,18 +18,17 @@ class Period {
   ];
 
   final String? value;
-  final String? _display;
+  final String display;
   final DateTime? start;
   final DateTime? end;
 
-  const Period._({required this.value, required String display})
-      : _display = display,
-        start = null,
+  const Period._({required this.value, required this.display})
+      : start = null,
         end = null;
 
-  const Period({required this.start, required this.end})
+  Period({required this.start, required this.end})
       : value = null,
-        _display = null;
+        display = formatDateRange(start!, end!);
 
   factory Period.deserialized(String value) {
     final apiPeriod =
@@ -45,11 +44,6 @@ class Period {
   }
 
   bool get isCustom => start != null;
-
-  String get display => isCustom
-      ? '${dateFormatWithYear.format(start!)} - '
-          '${dateFormatWithYear.format(end!)}'
-      : _display!;
 
   String get serializedValue => isCustom
       ? '${start!.millisecondsSinceEpoch}:${end!.millisecondsSinceEpoch}'

@@ -61,6 +61,14 @@ String formatDateTimeDelta(DateTime? date, {bool withYear = false}) {
   return (withYear ? dateTimeFormatWithYear : dateTimeFormat).format(date);
 }
 
+String formatDateRange(DateTime start, DateTime end) {
+  final startFormatted = start.year == end.year
+      ? dateFormat.format(start)
+      : dateFormatWithYear.format(start);
+  final endFormatted = dateFormatWithYear.format(end);
+  return '$startFormatted - $endFormatted';
+}
+
 extension DateTimeUtil on DateTime {
   /// Returns a [DateTime] with the same date and time 0:00:00.
   DateTime get beginningOfDay => DateTime(year, month, day);
