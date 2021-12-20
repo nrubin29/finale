@@ -32,10 +32,6 @@ abstract class PagedRequest<T extends Entity> {
 
 enum EntityType { track, album, artist, user, playlist }
 
-extension EntityTypeName on EntityType {
-  String get name => toString().split('.').last;
-}
-
 typedef ImageIdProvider = Future<ImageId?> Function();
 
 abstract class Entity {
