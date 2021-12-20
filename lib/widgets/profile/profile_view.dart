@@ -7,6 +7,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/quick_actions_manager.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -18,6 +19,7 @@ import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/profile/period_selector.dart';
 import 'package:finale/widgets/profile/play_count_bar.dart';
 import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
+import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -125,6 +127,17 @@ class _ProfileViewState extends State<ProfileView>
                     );
                   },
                 )
+              else
+                IconButton(
+                  icon: const Icon(scrobbleIcon),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => FriendScrobbleView(user: user)),
+                    );
+                  },
+                ),
             ],
           ),
           body: NestedScrollView(
