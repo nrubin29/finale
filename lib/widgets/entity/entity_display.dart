@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
+import 'package:finale/services/lastfm/period_paged_request.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
@@ -77,7 +79,6 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   var requestId = 0;
 
   PagedRequest<T>? _request;
-  String? loadingMessage;
   StreamSubscription? _subscription;
 
   @override
@@ -103,11 +104,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     }
   }
 
-  Future<void> getInitialItems({String? loadingMessage = ''}) async {
-    if (loadingMessage?.isNotEmpty ?? true) {
-      this.loadingMessage = loadingMessage;
-    }
-
+  Future<void> getInitialItems() async {
     didInitialRequest = false;
     items = [];
     final id = ++requestId;
@@ -372,7 +369,16 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     super.build(context);
 
     if (!didInitialRequest) {
-      return LoadingComponent(message: loadingMessage);
+      String? message;
+
+      if (_request is PeriodPagedRequest) {
+        final request = _request as PeriodPagedRequest;
+        if ((request.period ?? Preferences().period).isCustom) {
+          message = 'Custom date ranges can take a long time to load.';
+        }
+      }
+
+      return LoadingComponent(message: message);
     }
 
     if (widget.items != null) {

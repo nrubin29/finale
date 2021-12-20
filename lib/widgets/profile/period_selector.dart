@@ -38,10 +38,7 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
     _periodChangeSubscription = Preferences().periodChange.listen((value) {
       if (mounted) {
         setState(() {
-          _entityDisplayComponentKey.currentState?.getInitialItems(
-              loadingMessage: value.isCustom
-                  ? 'Custom date ranges can take a long time to load.'
-                  : null);
+          _entityDisplayComponentKey.currentState?.getInitialItems();
         });
       }
     });
