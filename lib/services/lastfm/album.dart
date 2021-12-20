@@ -11,7 +11,7 @@ class LTopAlbumsResponseAlbumArtist extends BasicArtist {
   final String name;
 
   @override
-  final String url;
+  final String? url;
 
   LTopAlbumsResponseAlbumArtist(this.name, this.url);
 

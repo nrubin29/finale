@@ -13,6 +13,7 @@ import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
+import 'package:flutter/foundation.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
   final allData = {
@@ -62,6 +63,50 @@ Future<Map<String, dynamic>> _doRequest(
   return jsonObject;
 }
 
+abstract class PeriodPagedRequest<T extends HasPlayCount>
+    extends PagedRequest<T> {
+  final String username;
+  final Period? period;
+
+  Period? _lastPeriod;
+  List<T>? _data;
+
+  PeriodPagedRequest(this.username, this.period);
+
+  Future<List<T>> doPeriodRequest(Period period, int limit, int page);
+
+  String groupBy(LRecentTracksResponseTrack track);
+
+  Future<T> map(MapEntry<String, List<LRecentTracksResponseTrack>> entry);
+
+  @override
+  @nonVirtual
+  doRequest(int limit, int page) async {
+    final period = this.period ?? Preferences().period;
+
+    if (period.isCustom) {
+      if (_data == null || (_lastPeriod != null && _lastPeriod != period)) {
+        final request = GetRecentTracksRequest(
+          username,
+          from: period.start!.secondsSinceEpoch.toString(),
+          to: period.end!.secondsSinceEpoch.toString(),
+          extended: true,
+        );
+
+        final response = await request.getAllData();
+        final groupedData = response.groupListsBy(groupBy);
+        _data = (await Future.wait(groupedData.entries.map(map)))
+            .sorted((a, b) => b.playCount.compareTo(a.playCount));
+        _lastPeriod = period;
+      }
+
+      return _data!.slice(limit * (page - 1), min(limit * page, _data!.length));
+    }
+
+    return doPeriodRequest(period, limit, page);
+  }
+}
+
 class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   final String username;
   final String? from;
@@ -95,40 +140,13 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   }
 }
 
-class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
-  final String username;
-  final Period? period;
-
-  Period? _lastPeriod;
-  List<LTopArtistsResponseArtist>? _data;
-
-  GetTopArtistsRequest(this.username, [this.period]) : _data = null;
+class GetTopArtistsRequest
+    extends PeriodPagedRequest<LTopArtistsResponseArtist> {
+  GetTopArtistsRequest(String username, [Period? period])
+      : super(username, period);
 
   @override
-  doRequest(int limit, int page) async {
-    final period = this.period ?? Preferences().period;
-
-    if (period.isCustom) {
-      if (_data == null || (_lastPeriod != null && _lastPeriod != period)) {
-        final request = GetRecentTracksRequest(
-          username,
-          from: period.start!.secondsSinceEpoch.toString(),
-          to: period.end!.secondsSinceEpoch.toString(),
-          extended: true,
-        );
-
-        final response = await request.getAllData();
-        final groupedData = response.groupListsBy((e) => e.artistName);
-        _data = groupedData.entries
-            .map((e) => LTopArtistsResponseArtist(
-                e.key, e.value.first.artist.url!, e.value.length))
-            .sorted((a, b) => b.playCount.compareTo(a.playCount));
-        _lastPeriod = period;
-      }
-
-      return _data!.slice(limit * (page - 1), min(limit * page, _data!.length));
-    }
-
+  doPeriodRequest(Period period, int limit, int page) async {
     final rawResponse = await _doRequest('user.getTopArtists', {
       'user': username,
       'limit': limit,
@@ -138,43 +156,81 @@ class GetTopArtistsRequest extends PagedRequest<LTopArtistsResponseArtist> {
     return LTopArtistsResponseTopArtists.fromJson(rawResponse['topartists'])
         .artists;
   }
-}
-
-class GetTopAlbumsRequest extends PagedRequest<LTopAlbumsResponseAlbum> {
-  final String username;
-  final Period? period;
-
-  const GetTopAlbumsRequest(this.username, [this.period]);
 
   @override
-  doRequest(int limit, int page) async {
+  String groupBy(LRecentTracksResponseTrack track) => track.artistName;
+
+  @override
+  Future<LTopArtistsResponseArtist> map(
+          MapEntry<String, List<LRecentTracksResponseTrack>> entry) =>
+      Future.value(LTopArtistsResponseArtist(
+          entry.key, entry.value.first.artist.url!, entry.value.length));
+}
+
+class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
+  GetTopAlbumsRequest(String username, [Period? period])
+      : super(username, period);
+
+  @override
+  doPeriodRequest(Period period, int limit, int page) async {
     final rawResponse = await _doRequest('user.getTopAlbums', {
       'user': username,
       'limit': limit,
       'page': page,
-      'period': (period ?? Preferences().period).value,
+      'period': period.value,
     });
     return LTopAlbumsResponseTopAlbums.fromJson(rawResponse['topalbums'])
         .albums;
   }
-}
-
-class GetTopTracksRequest extends PagedRequest<LTopTracksResponseTrack> {
-  final String username;
-
-  const GetTopTracksRequest(this.username);
 
   @override
-  doRequest(int limit, int page) async {
+  String groupBy(LRecentTracksResponseTrack track) => track.albumName;
+
+  @override
+  Future<LTopAlbumsResponseAlbum> map(
+      MapEntry<String, List<LRecentTracksResponseTrack>> entry) async {
+    final basicAlbum = ConcreteBasicAlbum(
+        entry.key, ConcreteBasicArtist(entry.value.first.artist.name));
+    final fullAlbum = await Lastfm.getAlbum(basicAlbum);
+
+    return LTopAlbumsResponseAlbum(
+        fullAlbum.name,
+        fullAlbum.url,
+        entry.value.length,
+        LTopAlbumsResponseAlbumArtist(
+            fullAlbum.artist.name, fullAlbum.artist.url),
+        fullAlbum.imageId);
+  }
+}
+
+class GetTopTracksRequest extends PeriodPagedRequest<LTopTracksResponseTrack> {
+  GetTopTracksRequest(String username, [Period? period])
+      : super(username, period);
+
+  @override
+  doPeriodRequest(Period period, int limit, int page) async {
     final rawResponse = await _doRequest('user.getTopTracks', {
       'user': username,
       'limit': limit,
       'page': page,
-      'period': Preferences().period.value
+      'period': period.value,
     });
     return LTopTracksResponseTopTracks.fromJson(rawResponse['toptracks'])
         .tracks;
   }
+
+  @override
+  String groupBy(LRecentTracksResponseTrack track) => track.name;
+
+  @override
+  Future<LTopTracksResponseTrack> map(
+          MapEntry<String, List<LRecentTracksResponseTrack>> entry) =>
+      Future.value(LTopTracksResponseTrack(
+          entry.key,
+          entry.value.first.url,
+          LTrackArtist(entry.value.first.artist.nameString!,
+              entry.value.first.artist.url!),
+          entry.value.length));
 }
 
 class GetFriendsRequest extends PagedRequest<LUser> {
