@@ -62,8 +62,10 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
 
           if (dateRange != null) {
             setState(() {
-              _period = Preferences().period =
-                  Period(start: dateRange.start, end: dateRange.end);
+              _period = Preferences().period = Period(
+                  start: dateRange.start,
+                  end: dateRange.end
+                      .add(const Duration(hours: 23, minutes: 59, seconds: 59)));
               widget.periodChanged?.call(_period!);
             });
           }
