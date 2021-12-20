@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +13,20 @@ class PeriodDropdownButton extends StatefulWidget {
 
 class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
   Period? _period;
+  late StreamSubscription _periodChangeSubscription;
 
   @override
   void initState() {
     super.initState();
     _period = Preferences().period;
+
+    _periodChangeSubscription = Preferences().periodChange.listen((value) {
+      if (mounted) {
+        setState(() {
+          _period = value;
+        });
+      }
+    });
   }
 
   @override
@@ -60,5 +71,11 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
         }
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _periodChangeSubscription.cancel();
+    super.dispose();
   }
 }
