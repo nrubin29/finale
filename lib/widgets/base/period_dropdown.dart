@@ -5,7 +5,9 @@ import 'package:finale/util/preferences.dart';
 import 'package:flutter/material.dart';
 
 class PeriodDropdownButton extends StatefulWidget {
-  const PeriodDropdownButton();
+  final ValueChanged<Period>? periodChanged;
+
+  const PeriodDropdownButton({this.periodChanged});
 
   @override
   _PeriodDropdownButtonState createState() => _PeriodDropdownButtonState();
@@ -62,11 +64,13 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
             setState(() {
               _period = Preferences().period =
                   Period(start: dateRange.start, end: dateRange.end);
+              widget.periodChanged?.call(_period!);
             });
           }
         } else if (value != null && value != _period) {
           setState(() {
             _period = Preferences().period = value;
+            widget.periodChanged?.call(value);
           });
         }
       },

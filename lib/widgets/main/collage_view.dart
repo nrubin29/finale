@@ -8,6 +8,7 @@ import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/main/collage_web_warning_dialog.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,22 @@ class _CollageViewState extends State<CollageView> {
   Uint8List? _image;
   final _screenshotController = ScreenshotController();
 
+  late StreamSubscription _periodChangeSubscription;
+
   int get _numGridItems => _gridSize * _gridSize;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _periodChangeSubscription = Preferences().periodChange.listen((value) {
+      if (mounted) {
+        setState(() {
+          _period = value;
+        });
+      }
+    });
+  }
 
   Future<void> _doRequest() async {
     setState(() {
@@ -206,21 +222,11 @@ class _CollageViewState extends State<CollageView> {
                     ),
                     ListTile(
                       title: const Text('Period'),
-                      trailing: DropdownButton<Period>(
-                        value: _period,
-                        items: [
-                          for (final period in Period.apiValues)
-                            DropdownMenuItem(
-                              value: period,
-                              child: Text(period.display),
-                            ),
-                        ],
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() {
-                              _period = value;
-                            });
-                          }
+                      trailing: PeriodDropdownButton(
+                        periodChanged: (period) {
+                          setState(() {
+                            _period = period;
+                          });
                         },
                       ),
                     ),
@@ -361,6 +367,7 @@ class _CollageViewState extends State<CollageView> {
   @override
   void dispose() {
     _usernameTextController.dispose();
+    _periodChangeSubscription.cancel();
     super.dispose();
   }
 }
