@@ -70,6 +70,12 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   var isDoingRequest = false;
   var hasMorePages = true;
 
+  /// Keeps track of the latest request.
+  ///
+  /// When a new request starts, this value is incremented. When a request ends,
+  /// we make sure it's still the latest request before using the data.
+  var requestId = 0;
+
   PagedRequest<T>? _request;
   String? loadingMessage;
   StreamSubscription? _subscription;
@@ -104,18 +110,21 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
 
     didInitialRequest = false;
     items = [];
+    final id = ++requestId;
 
     try {
       final initialItems = await _request!.doRequest(20, 1);
-      setState(() {
-        items = [...initialItems];
-        hasMorePages = initialItems.length >= 20;
-        didInitialRequest = true;
+      if (id == requestId) {
+        setState(() {
+          items = [...initialItems];
+          hasMorePages = initialItems.length >= 20;
+          didInitialRequest = true;
 
-        if (hasMorePages) {
-          page = 2;
-        }
-      });
+          if (hasMorePages) {
+            page = 2;
+          }
+        });
+      }
     } on Exception catch (error, stackTrace) {
       assert(() {
         // ignore: avoid_print
@@ -136,16 +145,20 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       isDoingRequest = true;
     });
 
+    final id = ++requestId;
+
     try {
       final moreItems = await _request!.doRequest(20, page);
-      setState(() {
-        items.addAll(moreItems);
-        hasMorePages = moreItems.length >= 20;
+      if (id == requestId) {
+        setState(() {
+          items.addAll(moreItems);
+          hasMorePages = moreItems.length >= 20;
 
-        if (hasMorePages) {
-          page += 1;
-        }
-      });
+          if (hasMorePages) {
+            page += 1;
+          }
+        });
+      }
     } on Exception catch (error, stackTrace) {
       assert(() {
         // ignore: avoid_print
