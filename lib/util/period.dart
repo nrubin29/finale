@@ -50,7 +50,6 @@ class Period {
       : value!;
 
   @override
-  // ignore: hash_and_equals
   bool operator ==(Object other) =>
       other is Period &&
       ((isCustom &&
@@ -58,6 +57,9 @@ class Period {
               other.start == start &&
               other.end == end) ||
           (!isCustom && !other.isCustom && other.value == value));
+
+  @override
+  int get hashCode => display.hashCode;
 
   @override
   String toString() => display;

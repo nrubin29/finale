@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
@@ -8,12 +7,11 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
-import 'package:flutter/foundation.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
   final allData = {
@@ -61,52 +59,6 @@ Future<Map<String, dynamic>> _doRequest(
   }
 
   return jsonObject;
-}
-
-abstract class PeriodPagedRequest<T extends HasPlayCount>
-    extends PagedRequest<T> {
-  final String username;
-  final Period? period;
-
-  Period? _lastPeriod;
-  List<T>? _data;
-
-  PeriodPagedRequest(this.username, this.period);
-
-  Future<List<T>> doPeriodRequest(Period period, int limit, int page);
-
-  String groupBy(LRecentTracksResponseTrack track);
-
-  Future<T> map(MapEntry<String, List<LRecentTracksResponseTrack>> entry);
-
-  @override
-  @nonVirtual
-  doRequest(int limit, int page) async {
-    final period = this.period ?? Preferences().period;
-
-    if (period.isCustom) {
-      if (_data == null ||
-          (_lastPeriod != null && _lastPeriod != period) ||
-          page == 1) {
-        final request = GetRecentTracksRequest(
-          username,
-          from: period.start!.secondsSinceEpoch.toString(),
-          to: period.end!.secondsSinceEpoch.toString(),
-          extended: true,
-        );
-
-        final response = await request.getAllData();
-        final groupedData = response.groupListsBy(groupBy);
-        _data = (await Future.wait(groupedData.entries.map(map)))
-            .sorted((a, b) => b.playCount.compareTo(a.playCount));
-        _lastPeriod = period;
-      }
-
-      return _data!.slice(limit * (page - 1), min(limit * page, _data!.length));
-    }
-
-    return doPeriodRequest(period, limit, page);
-  }
 }
 
 class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
