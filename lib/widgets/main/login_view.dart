@@ -33,87 +33,87 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
-        body: Stack(
-          children: [
-            FutureBuilder<List<LTopArtistsResponseArtist>>(
-              future: Lastfm.getGlobalTopArtists(50),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const SizedBox();
-                }
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          FutureBuilder<List<LTopArtistsResponseArtist>>(
+            future: Lastfm.getGlobalTopArtists(50),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const SizedBox();
+              }
 
-                return GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  crossAxisCount:
-                      max(MediaQuery.of(context).size.width ~/ 200, 3),
-                  children: snapshot.data!
-                      .map((artist) => FutureBuilder<List<LArtistTopAlbum>>(
-                          future: ArtistGetTopAlbumsRequest(artist.name)
-                              .doRequest(1, 1),
-                          builder: (context, snapshot) => snapshot.hasData
-                              ? EntityImage(
-                                  entity: snapshot.data!.first,
-                                  showPlaceholder: false)
-                              : Container()))
-                      .toList(),
-                );
-              },
-            ),
-            Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade800.withOpacity(2 / 3))),
-            Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade800.withOpacity(0.9),
-                        border: Border.all(),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10))),
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.all(10),
-                    child: IntrinsicHeight(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+              return GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                crossAxisCount:
+                    max(MediaQuery.of(context).size.width ~/ 200, 3),
+                children: snapshot.data!
+                    .map((artist) => FutureBuilder<List<LArtistTopAlbum>>(
+                        future: ArtistGetTopAlbumsRequest(artist.name)
+                            .doRequest(1, 1),
+                        builder: (context, snapshot) => snapshot.hasData
+                            ? EntityImage(
+                                entity: snapshot.data!.first,
+                                showPlaceholder: false)
+                            : Container()))
+                    .toList(),
+              );
+            },
+          ),
+          Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade800.withOpacity(2 / 3))),
+          Center(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade800.withOpacity(0.9),
+                  border: Border.all(),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Finale',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2!
+                          .copyWith(color: Colors.white)),
+                  const SizedBox(height: 10),
+                  Text('A fully-featured Last.fm client and scrobbler',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1!
+                          .copyWith(color: Colors.white)),
+                  const SizedBox(height: 10),
+                  OutlinedButton(
+                    onPressed: () => _logIn(context),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('Finale',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline2!
-                                .copyWith(color: Colors.white)),
-                        const SizedBox(height: 10),
-                        Text('A fully-featured Last.fm client and scrobbler',
-                            textAlign: TextAlign.center,
+                        const Icon(SocialMediaIcons.lastfm,
+                            color: Colors.white),
+                        const SizedBox(width: 8),
+                        Text('Log in with Last.fm',
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1!
-                                .copyWith(color: Colors.white)),
-                        const SizedBox(height: 10),
-                        OutlinedButton(
-                          onPressed: () => _logIn(context),
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(SocialMediaIcons.lastfm,
-                                  color: Colors.white),
-                              const SizedBox(width: 8),
-                              Text('Log in with Last.fm',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(color: Colors.white))
-                            ],
-                          ),
-                        )
+                                .copyWith(color: Colors.white))
                       ],
-                    )))),
-          ],
-        ));
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -100,15 +100,14 @@ class _ProfileViewState extends State<ProfileView>
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: IntrinsicWidth(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  EntityImage(entity: user, isCircular: true, width: 40),
-                  const SizedBox(width: 8),
-                  Text(user.name),
-                ],
-              ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                EntityImage(entity: user, isCircular: true, width: 40),
+                const SizedBox(width: 8),
+                Text(user.name),
+              ],
             ),
             actions: [
               IconButton(

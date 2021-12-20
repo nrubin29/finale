@@ -223,8 +223,8 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                   ],
                 )
               : null,
-      trailing: IntrinsicWidth(
-          child: Row(
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (item.displayTrailing != null)
             Text(
@@ -235,7 +235,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             ScrobbleButton(
                 entityProvider: () => widget.scrobbleableEntity!(item)),
         ],
-      )),
+      ),
     );
   }
 
