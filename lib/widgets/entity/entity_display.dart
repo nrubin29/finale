@@ -392,6 +392,16 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   }
 
   @override
+  void didUpdateWidget(covariant EntityDisplay<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.items != null && widget.items != oldWidget.items) {
+      items = widget.items!;
+      didInitialRequest = true;
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _subscription?.cancel();

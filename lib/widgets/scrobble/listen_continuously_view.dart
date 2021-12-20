@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -11,7 +13,13 @@ import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wakelock/wakelock.dart';
 
-enum ListenContinuouslyTrackStatus { scrobbled, skipped, noResults, error }
+enum ListenContinuouslyTrackStatus {
+  listening,
+  scrobbled,
+  skipped,
+  noResults,
+  error,
+}
 
 class ListenContinuouslyTrack extends BasicConcreteTrack {
   final DateTime timestamp;
@@ -25,6 +33,10 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
   ListenContinuouslyTrack.noResults()
       : this('No music detected', null, null,
             ListenContinuouslyTrackStatus.noResults);
+
+  ListenContinuouslyTrack.listening()
+      : this('Listening...', null, null,
+            ListenContinuouslyTrackStatus.listening);
 
   bool get hasResult =>
       status == ListenContinuouslyTrackStatus.scrobbled ||
@@ -52,6 +64,7 @@ class ListenContinuouslyView extends StatefulWidget {
 
 class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   static const _iconForTrackStatus = {
+    ListenContinuouslyTrackStatus.listening: Icons.mic,
     ListenContinuouslyTrackStatus.scrobbled: Icons.check_circle,
     ListenContinuouslyTrackStatus.skipped: Icons.skip_next,
     ListenContinuouslyTrackStatus.error: Icons.error,
@@ -61,7 +74,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   static final _tagRegex = RegExp(r'[[(].*?[\])]');
   static final _spaceRegex = RegExp(r' {2,}');
 
-  final _tracks = <ListenContinuouslyTrack>[];
+  final _tracks = Queue<ListenContinuouslyTrack>();
 
   @override
   void initState() {
@@ -72,6 +85,10 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
 
   void _listen() async {
     while (mounted) {
+      setState(() {
+        _tracks.addFirst(ListenContinuouslyTrack.listening());
+      });
+
       final session = ACRCloud.startSession();
       final result = await session.result;
       session.dispose();
@@ -80,6 +97,10 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
       if (!mounted) {
         break;
       }
+
+      setState(() {
+        _tracks.removeFirst();
+      });
 
       if (result?.metadata?.music.isNotEmpty ?? false) {
         final resultMusicItem = result!.metadata!.music.first;
@@ -105,11 +126,11 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
         }
 
         setState(() {
-          _tracks.insert(0, track);
+          _tracks.addFirst(track);
         });
       } else {
         setState(() {
-          _tracks.insert(0, ListenContinuouslyTrack.noResults());
+          _tracks.addFirst(ListenContinuouslyTrack.noResults());
         });
       }
 
@@ -140,7 +161,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
           ),
           Expanded(
               child: EntityDisplay<ListenContinuouslyTrack>(
-            items: _tracks,
+            items: _tracks.toList(growable: false),
             leadingWidgetBuilder: (track) =>
                 Icon(_iconForTrackStatus[track.status]),
             showNoResultsMessage: false,
