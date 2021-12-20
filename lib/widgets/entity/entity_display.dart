@@ -71,6 +71,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   var hasMorePages = true;
 
   PagedRequest<T>? _request;
+  String? loadingMessage;
   StreamSubscription? _subscription;
 
   @override
@@ -96,7 +97,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     }
   }
 
-  Future<void> getInitialItems() async {
+  Future<void> getInitialItems({String? loadingMessage = ''}) async {
+    if (loadingMessage?.isNotEmpty ?? true) {
+      this.loadingMessage = loadingMessage;
+    }
+
     didInitialRequest = false;
     items = [];
 
@@ -354,7 +359,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     super.build(context);
 
     if (!didInitialRequest) {
-      return const LoadingComponent();
+      return LoadingComponent(message: loadingMessage);
     }
 
     if (widget.items != null) {

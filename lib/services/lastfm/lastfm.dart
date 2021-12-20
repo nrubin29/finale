@@ -85,7 +85,9 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
     final period = this.period ?? Preferences().period;
 
     if (period.isCustom) {
-      if (_data == null || (_lastPeriod != null && _lastPeriod != period)) {
+      if (_data == null ||
+          (_lastPeriod != null && _lastPeriod != period) ||
+          page == 1) {
         final request = GetRecentTracksRequest(
           username,
           from: period.start!.secondsSinceEpoch.toString(),

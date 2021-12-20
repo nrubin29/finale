@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 class LoadingComponent extends StatelessWidget {
   final bool small;
+  final String? message;
 
-  const LoadingComponent() : small = false;
+  const LoadingComponent({this.message}) : small = false;
 
-  const LoadingComponent.small() : small = true;
+  const LoadingComponent.small()
+      : small = true,
+        message = null;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -15,10 +18,19 @@ class LoadingComponent extends StatelessWidget {
                 dimension: 16,
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
-            : const Center(
+            : Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: CircularProgressIndicator(),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CircularProgressIndicator(),
+                      if (message != null) ...[
+                        const SizedBox(height: 10),
+                        Text(message!),
+                      ],
+                    ],
+                  ),
                 ),
               ),
       );
