@@ -12,6 +12,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
   final allData = {
@@ -63,8 +64,8 @@ Future<Map<String, dynamic>> _doRequest(
 
 class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   final String username;
-  final String? from;
-  final String? to;
+  final DateTime? from;
+  final DateTime? to;
   final bool extended;
 
   const GetRecentTracksRequest(this.username,
@@ -76,8 +77,8 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
       'user': username,
       'limit': limit,
       'page': page,
-      if (from != null) 'from': from,
-      if (to != null) 'to': to,
+      if (from != null) 'from': from!.secondsSinceEpoch.toString(),
+      if (to != null) 'to': to!.secondsSinceEpoch.toString(),
       'extended': extended ? '1' : '0',
     });
     final tracks =

@@ -58,11 +58,9 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
       Lastfm.getWeeklyTrackChart(widget.user, widget.chart),
       Lastfm.getWeeklyAlbumChart(widget.user, widget.chart),
       Lastfm.getWeeklyArtistChart(widget.user, widget.chart),
-      GetRecentTracksRequest(
-        widget.user.name,
-        from: widget.chart.fromDate.secondsSinceEpoch.toString(),
-        to: widget.chart.toDate.secondsSinceEpoch.toString(),
-      ).getAllData(),
+      GetRecentTracksRequest(widget.user.name,
+              from: widget.chart.fromDate, to: widget.chart.toDate)
+          .getAllData(),
     ]);
 
     final tracks = (data[0] as LUserWeeklyTrackChart).tracks;
