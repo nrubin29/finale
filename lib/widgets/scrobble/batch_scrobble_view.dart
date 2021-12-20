@@ -1,8 +1,8 @@
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
@@ -159,37 +159,11 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     _behavior == ScrobbleTimestampBehavior.startingCustom ||
                         _behavior == ScrobbleTimestampBehavior.endingCustom,
                 child: DateTimeField(
-                  decoration: const InputDecoration(labelText: 'Timestamp'),
-                  resetIcon: null,
-                  format: dateTimeFormatWithYear,
                   initialValue: _customTimestamp,
-                  onShowPicker: (context, currentValue) async {
-                    final date = await showDatePicker(
-                        context: context,
-                        initialDate: currentValue ?? DateTime.now(),
-                        firstDate:
-                            DateTime.now().subtract(const Duration(days: 14)),
-                        lastDate: DateTime.now().add(const Duration(days: 1)));
-
-                    if (date != null) {
-                      final time = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.fromDateTime(
-                              currentValue ?? DateTime.now()));
-
-                      if (time != null) {
-                        return DateTimeField.combine(date, time);
-                      }
-                    }
-
-                    return currentValue;
-                  },
                   onChanged: (dateTime) {
-                    if (dateTime != null) {
-                      setState(() {
-                        _customTimestamp = dateTime;
-                      });
-                    }
+                    setState(() {
+                      _customTimestamp = dateTime;
+                    });
                   },
                 ),
               ),
