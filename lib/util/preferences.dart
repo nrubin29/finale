@@ -170,6 +170,13 @@ class Preferences {
     _preferences.setBool('stripTags', value);
   }
 
+  bool get listenMoreFrequently =>
+      _preferences.getBool('listenMoreFrequently') ?? false;
+
+  set listenMoreFrequently(bool value) {
+    _preferences.setBool('listenMoreFrequently', value);
+  }
+
   void clear() {
     _preferences.clear();
   }

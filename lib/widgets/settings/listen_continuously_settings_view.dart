@@ -10,12 +10,40 @@ class ListenContinuouslySettingsView extends StatefulWidget {
 class _ListenContinuouslySettingsViewState
     extends State<ListenContinuouslySettingsView> {
   late bool _stripTags;
+  late bool _listenMoreFrequently;
 
   @override
   void initState() {
     super.initState();
     _stripTags = Preferences().stripTags;
+    _listenMoreFrequently = Preferences().listenMoreFrequently;
   }
+
+  List<Widget> _listTile(String title, String description, IconData icon,
+          bool value, ValueChanged<bool> onChanged) =>
+      [
+        ListTile(
+          title: Text(title),
+          leading: Icon(icon),
+          trailing: Switch(
+            value: value,
+            onChanged: (value) {
+              setState(() {
+                onChanged(value);
+              });
+            },
+          ),
+        ),
+        SafeArea(
+          top: false,
+          bottom: false,
+          minimum: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            description,
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,27 +52,28 @@ class _ListenContinuouslySettingsViewState
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListTile(
-            title: const Text('Strip tags'),
-            leading: const Icon(Icons.label_off),
-            trailing: Switch(
-              value: _stripTags,
-              onChanged: (_) {
-                setState(() {
-                  _stripTags = (Preferences().stripTags = !_stripTags);
-                });
-              },
-            ),
-          ),
-          SafeArea(
-            top: false,
-            bottom: false,
-            minimum: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-                'Removes tags like (Live) or [Demo] from track titles. This '
-                'can help with double scrobbles when the continuous scrobbler '
+          ..._listTile(
+            'Strip tags',
+            'Removes tags like (Live) or [Demo] from track titles. This can '
+                'help with double scrobbles when the continuous scrobbler '
                 'finds multiple names for the same track.',
-                style: Theme.of(context).textTheme.caption),
+            Icons.label_off,
+            _stripTags,
+            (value) {
+              _stripTags = (Preferences().stripTags = value);
+            },
+          ),
+          ..._listTile(
+            'Listen more frequently',
+            'Listens every 30 seconds instead of every minute. This will '
+                'ensure that shorter songs are not missed, but it will use '
+                'slightly more battery and data.',
+            Icons.more_time,
+            _listenMoreFrequently,
+            (value) {
+              _listenMoreFrequently =
+                  (Preferences().listenMoreFrequently = value);
+            },
           ),
         ],
       ),

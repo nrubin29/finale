@@ -134,7 +134,9 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
         });
       }
 
-      await Future.delayed(const Duration(minutes: 1));
+      await Future.delayed(Preferences().listenMoreFrequently
+          ? const Duration(seconds: 30)
+          : const Duration(minutes: 1));
     }
   }
 
@@ -143,19 +145,22 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
         appBar: createAppBar('Listening Continuously', actions: [
           IconButton(
               icon: const Icon(Icons.settings),
-              onPressed: () {
-                showBarModalBottomSheet(
+              onPressed: () async {
+                await showBarModalBottomSheet(
                     context: context,
                     builder: (context) => ListenContinuouslySettingsView());
+                setState(() {});
               })
         ]),
         body: Column(children: [
-          const Padding(
-            padding: EdgeInsets.all(10),
+          Padding(
+            padding: const EdgeInsets.all(10),
             child: Text(
               'Keep your device on this page with the screen on. Your device '
-              'will listen for music every minute or so and automatically '
-              'scrobble the songs it detects. Duplicate songs will be skipped.',
+              'will listen for music every '
+              '${Preferences().listenMoreFrequently ? '30 seconds' : 'minute'} '
+              'or so and automatically scrobble the songs it detects. '
+              'Duplicate songs will be skipped.',
               textAlign: TextAlign.center,
             ),
           ),
