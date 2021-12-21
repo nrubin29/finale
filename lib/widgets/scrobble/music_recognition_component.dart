@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finale/util/quick_actions_manager.dart';
+import 'package:finale/widgets/base/titled_box.dart';
 import 'package:finale/widgets/scrobble/acrcloud_dialog.dart';
 import 'package:finale/widgets/scrobble/listen_continuously_view.dart';
 import 'package:flutter/material.dart';
@@ -61,42 +62,24 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
   }
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.red),
-            borderRadius: BorderRadius.circular(5)),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget build(BuildContext context) => TitledBox(
+        title: 'Music Recognition',
+        trailing: TextButton(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Music Recognition",
-                  style: Theme.of(context).textTheme.bodyText1),
-              TextButton(
-                  child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Text('Powered by ',
-                        style: Theme.of(context).textTheme.caption),
-                    Image.asset('assets/images/acrcloud.png', height: 20)
-                  ]),
-                  onPressed: () {
-                    launch('https://acrcloud.com');
-                  })
+              Text('Powered by ', style: Theme.of(context).textTheme.caption),
+              Image.asset('assets/images/acrcloud.png', height: 20)
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              OutlinedButton(
-                child: const Text('Listen once'),
-                onPressed: _scrobbleOnce,
-              ),
-              OutlinedButton(
-                child: const Text('Listen continuously'),
-                onPressed: _scrobbleContinuously,
-              ),
-            ],
-          ),
-        ]),
+          onPressed: () {
+            launch('https://acrcloud.com');
+          },
+        ),
+        actions: {
+          'Listen once': _scrobbleOnce,
+          'Listen continuously': _scrobbleContinuously,
+        },
       );
 
   @override

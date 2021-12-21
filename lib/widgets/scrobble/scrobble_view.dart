@@ -4,6 +4,8 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
+import 'package:finale/widgets/base/titled_box.dart';
+import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/music_recognition_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
@@ -124,16 +126,31 @@ class _ScrobbleViewState extends State<ScrobbleView> {
             padding: const EdgeInsets.all(10),
             physics: const ScrollPhysics(),
             children: [
-              if (!widget.isModal && isMobile)
-                MusicRecognitionComponent(
-                  onTrackRecognized: (track) {
-                    setState(() {
-                      _trackController.text = track.title;
-                      _albumController.text = track.album.name;
-                      _artistController.text = track.artists.first.name;
-                    });
+              if (!widget.isModal) ...[
+                if (isMobile) ...[
+                  MusicRecognitionComponent(
+                    onTrackRecognized: (track) {
+                      setState(() {
+                        _trackController.text = track.title;
+                        _albumController.text = track.album.name;
+                        _artistController.text = track.artists.first.name;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                ],
+                TitledBox(
+                  title: 'Other Sources',
+                  actions: {
+                    'Friend': () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const FriendScrobbleView()));
+                    },
                   },
                 ),
+              ],
               TextFormField(
                 controller: _trackController,
                 decoration: const InputDecoration(labelText: 'Song *'),
