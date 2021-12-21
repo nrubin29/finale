@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
@@ -67,16 +68,48 @@ class _CollageViewState extends State<CollageView> {
     });
 
     PagedRequest<Entity> request;
+    final username = _usernameTextController.text;
 
     if (_type == EntityType.album) {
-      request = GetTopAlbumsRequest(_usernameTextController.text, _period);
+      request = GetTopAlbumsRequest(username, _period);
     } else if (_type == EntityType.artist) {
-      request = GetTopArtistsRequest(_usernameTextController.text, _period);
+      request = GetTopArtistsRequest(username, _period);
     } else {
       throw Exception('$_type is not supported for collages.');
     }
 
-    final items = await request.doRequest(_numGridItems, 1);
+    List<Entity> items;
+
+    try {
+      items = await request.doRequest(_numGridItems, 1);
+    } on LException catch (e) {
+      if (e.code == 6) {
+        setState(() {
+          _isSettingsExpanded = true;
+          _isDoingRequest = false;
+        });
+
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('User not found'),
+            content: Text('User $username does not exist.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        );
+
+        return;
+      } else {
+        rethrow;
+      }
+    }
 
     setState(() {
       _numItemsToLoad = items.length;
