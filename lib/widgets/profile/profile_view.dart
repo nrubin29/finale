@@ -133,7 +133,8 @@ class _ProfileViewState extends State<ProfileView>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => FriendScrobbleView(user: user)),
+                          builder: (_) =>
+                              FriendScrobbleView(username: user.name)),
                     );
                   },
                 ),

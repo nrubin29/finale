@@ -1,6 +1,6 @@
+import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
@@ -10,22 +10,28 @@ import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 
 class FriendScrobbleView extends StatefulWidget {
-  final LUser user;
+  final String? username;
 
-  const FriendScrobbleView({required this.user});
+  const FriendScrobbleView({this.username});
 
   @override
-  _FriendScrobbleViewState createState() =>
-      _FriendScrobbleViewState();
+  _FriendScrobbleViewState createState() => _FriendScrobbleViewState();
 }
 
 class _FriendScrobbleViewState extends State<FriendScrobbleView> {
   var _isSettingsExpanded = true;
+  late TextEditingController _usernameTextController;
   DateTime? _start;
   DateTime? _end;
 
   var _isLoading = false;
   Map<LRecentTracksResponseTrack, bool>? _items;
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameTextController = TextEditingController(text: widget.username);
+  }
 
   Future<void> _loadData() async {
     setState(() {
@@ -33,12 +39,25 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
       _isSettingsExpanded = false;
     });
 
-    final response =
-        await GetRecentTracksRequest(widget.user.name, from: _start, to: _end)
-            .getAllData();
+    List<LRecentTracksResponseTrack>? response;
+
+    try {
+      response = await GetRecentTracksRequest(_usernameTextController.text,
+              from: _start, to: _end)
+          .getAllData();
+    } on LException catch (e) {
+      if (e.code == 6) {
+        response = <LRecentTracksResponseTrack>[];
+      } else {
+        rethrow;
+      }
+    }
 
     setState(() {
-      _items = Map.fromIterable(response, value: (_) => true);
+      if (response != null) {
+        _items = Map.fromIterable(response, value: (_) => true);
+      }
+
       _isLoading = false;
     });
   }
@@ -73,7 +92,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(
-          'Scrobble from ${widget.user.name}',
+          'Scrobble from a friend',
           actions: [
             if (_items?.isNotEmpty ?? false)
               IconButton(
@@ -94,14 +113,20 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
               children: [
                 ExpansionPanel(
                   headerBuilder: (_, __) =>
-                      const ListTile(title: Text('Time Range')),
+                      const ListTile(title: Text('Settings')),
                   canTapOnHeader: true,
                   isExpanded: _isSettingsExpanded,
-                  body: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      children: [
-                        DateTimeField(
+                  body: Column(
+                    children: [
+                      ListTile(
+                        title: const Text('Username'),
+                        trailing: IntrinsicWidth(
+                            child:
+                                TextField(controller: _usernameTextController)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: DateTimeField(
                           label: 'Start',
                           initialValue: _start,
                           onChanged: (dateTime) {
@@ -110,7 +135,10 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                             });
                           },
                         ),
-                        DateTimeField(
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: DateTimeField(
                           label: 'End',
                           initialValue: _end,
                           onChanged: (dateTime) {
@@ -119,15 +147,19 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                             });
                           },
                         ),
-                        if (_start != null &&
-                            _end != null &&
-                            _start!.isBefore(_end!))
-                          TextButton(
-                            onPressed: _loadData,
-                            child: const Text('Load Scrobbles'),
-                          ),
-                      ],
-                    ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: OutlinedButton(
+                          onPressed: _start != null &&
+                                  _end != null &&
+                                  _start!.isBefore(_end!)
+                              ? _loadData
+                              : null,
+                          child: const Text('Load Scrobbles'),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -153,4 +185,10 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
           ],
         ),
       );
+
+  @override
+  void dispose() {
+    _usernameTextController.dispose();
+    super.dispose();
+  }
 }
