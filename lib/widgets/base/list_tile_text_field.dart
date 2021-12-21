@@ -16,7 +16,6 @@ class ListTileTextField extends StatelessWidget {
             Expanded(
               child: TextField(
                 controller: controller,
-                decoration: const InputDecoration(border: InputBorder.none),
                 textAlign: TextAlign.end,
               ),
             ),

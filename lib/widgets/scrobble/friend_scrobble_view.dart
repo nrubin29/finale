@@ -150,7 +150,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: OutlinedButton(
-                          onPressed: _start != null &&
+                          onPressed: _usernameTextController.text.isNotEmpty &&
+                                  _start != null &&
                                   _end != null &&
                                   _start!.isBefore(_end!)
                               ? _loadData
