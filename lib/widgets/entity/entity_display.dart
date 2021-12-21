@@ -25,7 +25,6 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
-  final EntityWidgetBuilder<T>? leadingWidgetReplacementBuilder;
   final Future<Entity> Function(T item)? scrobbleableEntity;
 
   final DisplayType displayType;
@@ -47,7 +46,6 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.detailWidgetBuilder,
       this.subtitleWidgetBuilder,
       this.leadingWidgetBuilder,
-      this.leadingWidgetReplacementBuilder,
       this.scrobbleableEntity,
       this.displayType = DisplayType.list,
       this.scrollable = true,
@@ -206,9 +204,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               ],
             )
           : null,
-      leading: widget.leadingWidgetReplacementBuilder != null
-          ? widget.leadingWidgetReplacementBuilder!(item)
-          : widget.leadingWidgetBuilder != null || widget.displayImages
+      leading: widget.leadingWidgetBuilder != null || widget.displayImages
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

@@ -167,7 +167,8 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
           Expanded(
               child: EntityDisplay<ListenContinuouslyTrack>(
             items: _tracks.toList(growable: false),
-            leadingWidgetReplacementBuilder: (track) =>
+            displayImages: false,
+            leadingWidgetBuilder: (track) =>
                 Icon(_iconForTrackStatus[track.status]),
             showNoResultsMessage: false,
           ))
