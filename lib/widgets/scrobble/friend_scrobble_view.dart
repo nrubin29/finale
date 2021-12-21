@@ -4,6 +4,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
+import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:flutter/material.dart';
@@ -118,11 +119,9 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                   isExpanded: _isSettingsExpanded,
                   body: Column(
                     children: [
-                      ListTile(
-                        title: const Text('Username'),
-                        trailing: IntrinsicWidth(
-                            child:
-                                TextField(controller: _usernameTextController)),
+                      ListTileTextField(
+                        title: 'Username',
+                        controller: _usernameTextController,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),

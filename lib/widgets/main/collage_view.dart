@@ -9,6 +9,7 @@ import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/main/collage_web_warning_dialog.dart';
@@ -210,11 +211,9 @@ class _CollageViewState extends State<CollageView> {
                 isExpanded: _isSettingsExpanded,
                 body: Column(
                   children: [
-                    ListTile(
-                      title: const Text('Username'),
-                      trailing: IntrinsicWidth(
-                          child:
-                              TextField(controller: _usernameTextController)),
+                    ListTileTextField(
+                      title: 'Username',
+                      controller: _usernameTextController,
                     ),
                     ListTile(
                       title: const Text('Type'),
