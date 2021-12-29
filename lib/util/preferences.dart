@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:finale/util/period.dart';
+import 'package:finale/util/theme.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -175,6 +178,20 @@ class Preferences {
 
   set listenMoreFrequently(bool value) {
     _preferences.setBool('listenMoreFrequently', value);
+  }
+
+  // This stream needs to be open for the entire lifetime of the app.
+  // ignore: close_sinks
+  final _themeColorChange = StreamController<ThemeColor>.broadcast();
+
+  Stream<ThemeColor> get themeColorChange => _themeColorChange.stream;
+
+  ThemeColor get themeColor =>
+      ThemeColor.values[_preferences.getInt('themeColorIndex') ?? 0];
+
+  set themeColor(ThemeColor value) {
+    _preferences.setInt('themeColorIndex', value.index);
+    _themeColorChange.add(value);
   }
 
   void clear() {

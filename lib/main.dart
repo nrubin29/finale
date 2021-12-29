@@ -22,8 +22,28 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp();
+
+  @override
+  State<StatefulWidget> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late ThemeColor _themeColor;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Preferences().themeColorChange.listen((value) {
+      setState(() {
+        _themeColor = value;
+      });
+    });
+
+    _themeColor = Preferences().themeColor;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +51,8 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Finale',
-      theme: FinaleTheme.light,
-      darkTheme: FinaleTheme.dark,
+      theme: FinaleTheme.lightFor(_themeColor),
+      darkTheme: FinaleTheme.darkFor(_themeColor),
       home: name == null ? LoginView() : MainView(username: name),
     );
   }

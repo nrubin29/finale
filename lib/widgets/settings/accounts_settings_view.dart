@@ -35,6 +35,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: createAppBar('Accounts'),
       body: Column(
@@ -96,14 +97,14 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                         "scrobble from Spotify's database. Finale does not "
                         'automatically scrobble from Finale, but you can '
                         'connect your Spotify account to Last.fm ',
-                    style: Theme.of(context).textTheme.caption,
+                    style: theme.textTheme.caption,
                   ),
                   TextSpan(
                     text: 'on the web',
-                    style: Theme.of(context)
+                    style: theme
                         .textTheme
                         .caption
-                        ?.copyWith(color: Colors.red),
+                        ?.copyWith(color: theme.primaryColor),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         launch('https://last.fm/settings/applications');
@@ -111,7 +112,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                   ),
                   TextSpan(
                     text: '.',
-                    style: Theme.of(context).textTheme.caption,
+                    style: theme.textTheme.caption,
                   ),
                 ],
               ),
@@ -161,7 +162,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
             child: Text(
               'Sign in with your Libre.fm account to send all scrobbles to '
               'Libre.fm in addition to Last.fm.',
-              style: Theme.of(context).textTheme.caption,
+              style: theme.textTheme.caption,
             ),
           ),
         ],

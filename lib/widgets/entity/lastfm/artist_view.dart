@@ -84,9 +84,9 @@ class _ArtistViewState extends State<ArtistView>
                 ],
                 const Divider(),
                 TabBar(
-                    labelColor: Colors.red,
+                    labelColor: Theme.of(context).primaryColor,
                     unselectedLabelColor: Colors.grey,
-                    indicatorColor: Colors.red,
+                    indicatorColor: Theme.of(context).primaryColor,
                     controller: _tabController,
                     tabs: const [
                       Tab(icon: Icon(Icons.album)),

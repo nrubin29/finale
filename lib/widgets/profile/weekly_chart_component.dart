@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:charts_flutter/flutter.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/preferences.dart';
+import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
@@ -10,7 +13,7 @@ import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Color;
 
 class WeeklyChartComponent extends StatefulWidget {
   final LUser user;
@@ -32,12 +35,18 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
   late List<LUserWeeklyTrackChartTrack> _tracks;
   late List<LUserWeeklyAlbumChartAlbum> _albums;
   late List<LUserWeeklyArtistChartArtist> _artists;
+  late Map<int, int> _groupedTracks;
   late List<Series<MapEntry<int, int>, String>> _series;
+
+  late StreamSubscription _themeStreamSubscription;
 
   @override
   void initState() {
     super.initState();
     _initData();
+
+    _themeStreamSubscription =
+        Preferences().themeColorChange.listen(_updateSeries);
   }
 
   @override
@@ -88,19 +97,25 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
         _albums = albums;
         _artists = artists;
         _numScrobbles = numScrobbles;
-        _series = [
-          Series<MapEntry<int, int>, String>(
-            id: 'Recent Tracks',
-            colorFn: (_, __) => MaterialPalette.red.shadeDefault,
-            domainFn: (day, _) => _weekdays[day.key - 1],
-            measureFn: (day, _) => day.value,
-            labelAccessorFn: (day, _) => '${day.value}',
-            data: groupedTracks.entries.toList(growable: false),
-          ),
-        ];
+        _groupedTracks = groupedTracks;
+        _updateSeries();
         _loaded = true;
       });
     }
+  }
+
+  void _updateSeries([ThemeColor? themeColor]) {
+    final color = (themeColor ?? Preferences().themeColor).color;
+    _series = [
+      Series<MapEntry<int, int>, String>(
+        id: 'Recent Tracks',
+        colorFn: (_, __) => Color(r: color.red, g: color.green, b: color.blue),
+        domainFn: (day, _) => _weekdays[day.key - 1],
+        measureFn: (day, _) => day.value,
+        labelAccessorFn: (day, _) => '${day.value}',
+        data: _groupedTracks.entries.toList(growable: false),
+      ),
+    ];
   }
 
   @override
@@ -265,6 +280,12 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
               ],
             ),
           );
+  }
+
+  @override
+  void dispose() {
+    _themeStreamSubscription.cancel();
+    super.dispose();
   }
 
   @override

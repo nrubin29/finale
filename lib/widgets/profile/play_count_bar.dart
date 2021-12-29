@@ -17,7 +17,7 @@ class PlayCountBar<T extends HasPlayCount> extends StatelessWidget {
           child: FractionallySizedBox(
             widthFactor: percent,
             alignment: Alignment.centerRight,
-            child: const Material(color: Colors.red),
+            child: Material(color: Theme.of(context).primaryColor),
           ),
         ),
       );

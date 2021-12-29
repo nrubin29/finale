@@ -5,6 +5,7 @@ import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/settings/about_view.dart';
 import 'package:finale/widgets/settings/accounts_settings_view.dart';
 import 'package:finale/widgets/settings/listen_continuously_settings_view.dart';
+import 'package:finale/widgets/settings/theme_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -51,6 +52,18 @@ class SettingsView extends StatelessWidget {
                                       ListenContinuouslySettingsView()));
                         },
                       ),
+                    ListTile(
+                      title: const Text('Theme'),
+                      leading: const Icon(Icons.format_paint),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => ThemeSettingsView()),
+                        );
+                      },
+                    ),
                     if (!isWeb)
                       ListTile(
                         title: const Text('Empty image cache'),

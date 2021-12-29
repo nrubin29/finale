@@ -168,7 +168,6 @@ class _ScrobbleViewState extends State<ScrobbleView> {
               SwitchListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 contentPadding: EdgeInsets.zero,
-                activeColor: Colors.red,
                 title: const Text('Custom timestamp'),
                 value: _useCustomTimestamp,
                 onChanged: (value) {

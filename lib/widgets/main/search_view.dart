@@ -168,7 +168,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                                   value: searchEngine,
                                   child: searchEngine.getIcon(
                                       _searchEngine == SearchEngine.lastfm
-                                          ? Colors.red
+                                          ? Theme.of(context).primaryColor
                                           : spotifyGreen)))
                               .toList(growable: false),
                           selectedItemBuilder: (context) => SearchEngine.values
@@ -242,9 +242,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           bottom: TabBar(
             controller: _tabController,
             tabs: [
-              const Tab(icon: Icon(Icons.audiotrack)),
-              const Tab(icon: Icon(Icons.people)),
-              const Tab(icon: Icon(Icons.album)),
+              const Tab(icon: Icon(Icons.audiotrack, color: Colors.white)),
+              const Tab(icon: Icon(Icons.people, color: Colors.white)),
+              const Tab(icon: Icon(Icons.album, color: Colors.white)),
               if (_searchEngine == SearchEngine.spotify)
                 const Tab(icon: Icon(Icons.queue_music)),
             ],

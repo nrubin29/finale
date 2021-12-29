@@ -10,7 +10,7 @@ class TitledBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.red),
+          border: Border.all(color: Theme.of(context).primaryColor),
           borderRadius: BorderRadius.circular(5),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 8),

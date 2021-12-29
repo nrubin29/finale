@@ -60,7 +60,7 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
                       length: 2,
                       initialIndex: _displayType.index,
                       child: TabBar(
-                          labelColor: Colors.red,
+                          labelColor: Theme.of(context).primaryColor,
                           unselectedLabelColor: Colors.grey,
                           indicatorColor: Colors.transparent,
                           tabs: const [Icon(Icons.list), Icon(Icons.grid_view)],
