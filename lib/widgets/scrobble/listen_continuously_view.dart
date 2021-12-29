@@ -76,63 +76,20 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
 
   final _tracks = Queue<ListenContinuouslyTrack>();
 
+  bool get _isListening =>
+      _tracks.isNotEmpty &&
+      _tracks.first.status == ListenContinuouslyTrackStatus.listening;
+
   @override
   void initState() {
     super.initState();
     Wakelock.enable();
-    _listen();
+    _listenContinuously();
   }
 
-  void _listen() async {
+  void _listenContinuously() async {
     while (mounted) {
-      setState(() {
-        _tracks.addFirst(ListenContinuouslyTrack.listening());
-      });
-
-      final session = ACRCloud.startSession();
-      final result = await session.result;
-      session.dispose();
-
-      // If the user navigated away while we were listening, discard the result.
-      if (!mounted) {
-        break;
-      }
-
-      setState(() {
-        _tracks.removeFirst();
-      });
-
-      if (result?.metadata?.music.isNotEmpty ?? false) {
-        final resultMusicItem = result!.metadata!.music.first;
-        var title = resultMusicItem.title;
-
-        if (Preferences().stripTags) {
-          title = title
-              .replaceAll(_tagRegex, '')
-              .replaceAll(_spaceRegex, ' ')
-              .trim();
-        }
-
-        final track = ListenContinuouslyTrack(title,
-            resultMusicItem.artists.first.name, resultMusicItem.album.name);
-
-        if (_tracks.firstWhereOrNull((t) => t.hasResult) == track) {
-          track.status = ListenContinuouslyTrackStatus.skipped;
-        } else {
-          final response = await Lastfm.scrobble([track], [track.timestamp]);
-          track.status = response.accepted == 1
-              ? ListenContinuouslyTrackStatus.scrobbled
-              : ListenContinuouslyTrackStatus.error;
-        }
-
-        setState(() {
-          _tracks.addFirst(track);
-        });
-      } else {
-        setState(() {
-          _tracks.addFirst(ListenContinuouslyTrack.noResults());
-        });
-      }
+      await _listen();
 
       await Future.delayed(Preferences().listenMoreFrequently
           ? const Duration(seconds: 30)
@@ -140,9 +97,67 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
     }
   }
 
+  Future<void> _listen() async {
+    if (_isListening) {
+      return;
+    }
+
+    setState(() {
+      _tracks.addFirst(ListenContinuouslyTrack.listening());
+    });
+
+    final session = ACRCloud.startSession();
+    final result = await session.result;
+    session.dispose();
+
+    // If the user navigated away while we were listening, discard the result.
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _tracks.removeFirst();
+    });
+
+    if (result?.metadata?.music.isNotEmpty ?? false) {
+      final resultMusicItem = result!.metadata!.music.first;
+      var title = resultMusicItem.title;
+
+      if (Preferences().stripTags) {
+        title =
+            title.replaceAll(_tagRegex, '').replaceAll(_spaceRegex, ' ').trim();
+      }
+
+      final track = ListenContinuouslyTrack(title,
+          resultMusicItem.artists.first.name, resultMusicItem.album.name);
+
+      if (_tracks.firstWhereOrNull((t) => t.hasResult) == track) {
+        track.status = ListenContinuouslyTrackStatus.skipped;
+      } else {
+        final response = await Lastfm.scrobble([track], [track.timestamp]);
+        track.status = response.accepted == 1
+            ? ListenContinuouslyTrackStatus.scrobbled
+            : ListenContinuouslyTrackStatus.error;
+      }
+
+      setState(() {
+        _tracks.addFirst(track);
+      });
+    } else {
+      setState(() {
+        _tracks.addFirst(ListenContinuouslyTrack.noResults());
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar('Listening Continuously', actions: [
+          IconButton(
+            icon: const Icon(Icons.mic),
+            onPressed: _isListening ? null : _listen,
+            tooltip: 'Listen now',
+          ),
           IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () async {
