@@ -6,7 +6,7 @@ import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:finale/widgets/main/collage_view.dart';
+import 'package:finale/widgets/collage/collage_view.dart';
 import 'package:finale/widgets/main/search_view.dart';
 import 'package:finale/widgets/profile/profile_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';

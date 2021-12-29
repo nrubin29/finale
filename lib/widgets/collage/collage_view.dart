@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:finale/services/generic.dart';
@@ -11,8 +10,8 @@ import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
-import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:finale/widgets/main/collage_web_warning_dialog.dart';
+import 'package:finale/widgets/collage/src/grid_collage.dart';
+import 'package:finale/widgets/collage/collage_web_warning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,7 +29,7 @@ class _CollageViewState extends State<CollageView> {
   var _isSettingsExpanded = true;
   final _usernameTextController =
       TextEditingController(text: Preferences().name ?? 'Enter username');
-  var _type = EntityType.album;
+  var _chart = EntityType.album;
   var _period = Period.overall;
   var _gridSize = 5;
   var _includeText = true;
@@ -71,12 +70,12 @@ class _CollageViewState extends State<CollageView> {
     PagedRequest<Entity> request;
     final username = _usernameTextController.text;
 
-    if (_type == EntityType.album) {
+    if (_chart == EntityType.album) {
       request = GetTopAlbumsRequest(username, _period);
-    } else if (_type == EntityType.artist) {
+    } else if (_chart == EntityType.artist) {
       request = GetTopArtistsRequest(username, _period);
     } else {
-      throw Exception('$_type is not supported for collages.');
+      throw Exception('$_chart is not supported for collages.');
     }
 
     List<Entity> items;
@@ -123,62 +122,8 @@ class _CollageViewState extends State<CollageView> {
       });
     }));
 
-    // On tall screens, the size of the grid tile will be constrained by the
-    // width of the screen. On wide screens, the size of the grid will be
-    // constrained by the height of the screen. We want to calculate both sizes
-    // and take the smaller of the two to ensure that we don't overflow
-    // regardless of the screen dimensions.
-    final size = MediaQuery.of(context).size;
-    final widthGridTileSize = size.width / _gridSize;
-    final heightGridTileSize =
-        (size.height - (_includeBranding ? 26 : 0)) / _gridSize;
-    final gridTileSize = min(widthGridTileSize, heightGridTileSize);
-
     final image = await _screenshotController.captureFromWidget(
-      Container(
-        color: Colors.white,
-        width: gridTileSize * _gridSize,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: EntityDisplay(
-                items: items,
-                displayType: DisplayType.grid,
-                scrollable: false,
-                showGridTileGradient: _includeText,
-                gridTileSize: gridTileSize,
-                fontSize: _includeText ? gridTileSize / 15 : 0,
-                gridTileTextPadding: gridTileSize / 15,
-              ),
-            ),
-            if (_includeBranding)
-              Padding(
-                padding: const EdgeInsets.all(3),
-                child: Row(children: [
-                  appIcon(size: gridTileSize / 8),
-                  SizedBox(width: gridTileSize / 24),
-                  Text(
-                    'Created with Finale for Last.fm',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: gridTileSize / 12,
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    'https://finale.app',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: gridTileSize / 12,
-                    ),
-                  ),
-                ]),
-              ),
-          ],
-        ),
-      ),
+      GridCollage(_gridSize, _includeBranding, _includeText, items),
       pixelRatio: 3,
       context: context,
     );
@@ -216,9 +161,9 @@ class _CollageViewState extends State<CollageView> {
                       controller: _usernameTextController,
                     ),
                     ListTile(
-                      title: const Text('Type'),
+                      title: const Text('Chart'),
                       trailing: DropdownButton<EntityType>(
-                        value: _type,
+                        value: _chart,
                         items: const [
                           DropdownMenuItem(
                             value: EntityType.album,
@@ -245,7 +190,7 @@ class _CollageViewState extends State<CollageView> {
 
                             if (shouldSet) {
                               setState(() {
-                                _type = value;
+                                _chart = value;
                               });
                             }
                           }
