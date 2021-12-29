@@ -54,7 +54,7 @@ Future<void> main() async {
       {bool asPage = false, Widget? widgetBehindModal}) async {
     await tester.pumpWidget(MaterialApp(
       title: 'Finale',
-      theme: FinaleTheme.light,
+      theme: FinaleTheme.lightFor(ThemeColor.red),
       debugShowCheckedModeBanner: false,
       home: asPage || widgetBehindModal != null
           ? _AsPage(widget: widget, widgetBehindModal: widgetBehindModal)

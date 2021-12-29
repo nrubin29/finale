@@ -7,7 +7,6 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
 import 'package:flutter/foundation.dart';
 
 class _CacheKey {
