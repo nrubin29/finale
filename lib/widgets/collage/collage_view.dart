@@ -11,6 +11,8 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/collage/src/grid_collage.dart';
+import 'package:finale/widgets/collage/src/list_collage.dart';
+import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/collage/collage_web_warning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -30,6 +32,7 @@ class _CollageViewState extends State<CollageView> {
   final _usernameTextController =
       TextEditingController(text: Preferences().name ?? 'Enter username');
   var _chart = EntityType.album;
+  var _type = DisplayType.grid;
   var _period = Period.overall;
   var _gridSize = 5;
   var _includeText = true;
@@ -61,7 +64,7 @@ class _CollageViewState extends State<CollageView> {
   Future<void> _doRequest() async {
     setState(() {
       _loadingProgress = 0;
-      _numItemsToLoad = _numGridItems;
+      _numItemsToLoad = _type == DisplayType.grid ? _numGridItems : 5;
       _isDoingRequest = true;
       _isSettingsExpanded = false;
       _image = null;
@@ -81,7 +84,7 @@ class _CollageViewState extends State<CollageView> {
     List<Entity> items;
 
     try {
-      items = await request.doRequest(_numGridItems, 1);
+      items = await request.doRequest(_numItemsToLoad, 1);
     } on LException catch (e) {
       if (e.code == 6) {
         setState(() {
@@ -123,7 +126,9 @@ class _CollageViewState extends State<CollageView> {
     }));
 
     final image = await _screenshotController.captureFromWidget(
-      GridCollage(_gridSize, _includeBranding, _includeText, items),
+      _type == DisplayType.list
+          ? ListCollage(_includeBranding, items)
+          : GridCollage(_gridSize, _includeBranding, _includeText, items),
       pixelRatio: 3,
       context: context,
     );
@@ -198,6 +203,29 @@ class _CollageViewState extends State<CollageView> {
                       ),
                     ),
                     ListTile(
+                      title: const Text('Type'),
+                      trailing: DropdownButton<DisplayType>(
+                        value: _type,
+                        items: const [
+                          DropdownMenuItem(
+                            value: DisplayType.grid,
+                            child: Text('Grid'),
+                          ),
+                          DropdownMenuItem(
+                            value: DisplayType.list,
+                            child: Text('List'),
+                          ),
+                        ],
+                        onChanged: (value) async {
+                          if (value != null) {
+                            setState(() {
+                              _type = value;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    ListTile(
                       title: const Text('Period'),
                       trailing: PeriodDropdownButton(
                         periodChanged: (period) {
@@ -207,39 +235,41 @@ class _CollageViewState extends State<CollageView> {
                         },
                       ),
                     ),
-                    ListTile(
-                      title: const Text('Grid size'),
-                      trailing: DropdownButton<int>(
-                        value: _gridSize,
-                        items: [
-                          for (var i = 3; i <= 10; i++)
-                            DropdownMenuItem(
-                              value: i,
-                              child: Text('${i}x$i'),
-                            ),
-                        ],
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() {
-                              _gridSize = value;
-                            });
-                          }
-                        },
+                    if (_type == DisplayType.grid) ...[
+                      ListTile(
+                        title: const Text('Grid size'),
+                        trailing: DropdownButton<int>(
+                          value: _gridSize,
+                          items: [
+                            for (var i = 3; i <= 10; i++)
+                              DropdownMenuItem(
+                                value: i,
+                                child: Text('${i}x$i'),
+                              ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _gridSize = value;
+                              });
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                    ListTile(
-                      title: const Text('Include text'),
-                      trailing: Switch(
-                        value: _includeText,
-                        onChanged: (value) {
-                          if (value != _includeText) {
-                            setState(() {
-                              _includeText = value;
-                            });
-                          }
-                        },
+                      ListTile(
+                        title: const Text('Include text'),
+                        trailing: Switch(
+                          value: _includeText,
+                          onChanged: (value) {
+                            if (value != _includeText) {
+                              setState(() {
+                                _includeText = value;
+                              });
+                            }
+                          },
+                        ),
                       ),
-                    ),
+                    ],
                     ListTile(
                       title: const Text('Include Finale branding'),
                       trailing: Switch(
