@@ -91,6 +91,8 @@ class _CollageViewState extends State<CollageView> {
       request = GetTopAlbumsRequest(username, _period);
     } else if (_chart == EntityType.artist) {
       request = GetTopArtistsRequest(username, _period);
+    } else if (_chart == EntityType.track) {
+      request = GetTopTracksRequest(username, _period);
     } else {
       throw Exception('$_chart is not supported for collages.');
     }
@@ -191,6 +193,10 @@ class _CollageViewState extends State<CollageView> {
                           DropdownMenuItem(
                             value: EntityType.artist,
                             child: Text('Top Artists'),
+                          ),
+                          DropdownMenuItem(
+                            value: EntityType.track,
+                            child: Text('Top Tracks'),
                           ),
                         ],
                         onChanged: (value) async {
