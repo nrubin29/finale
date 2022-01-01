@@ -51,7 +51,7 @@ extension ThemeColorData on ThemeColor {
     }
   }
 
-  Color get color {
+  MaterialColor get color {
     switch (this) {
       case ThemeColor.red:
         return Colors.red;

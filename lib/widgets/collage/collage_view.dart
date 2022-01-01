@@ -6,6 +6,7 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/theme.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
@@ -30,12 +31,13 @@ class CollageView extends StatefulWidget {
 class _CollageViewState extends State<CollageView> {
   var _isSettingsExpanded = true;
   final _usernameTextController =
-      TextEditingController(text: Preferences().name ?? 'Enter username');
+      TextEditingController(text: Preferences().name);
   var _chart = EntityType.album;
   var _type = DisplayType.grid;
   var _period = Period.overall;
   var _gridSize = 5;
   var _includeText = true;
+  late ThemeColor _themeColor;
   var _includeBranding = true;
 
   var _isDoingRequest = false;
@@ -45,6 +47,7 @@ class _CollageViewState extends State<CollageView> {
   final _screenshotController = ScreenshotController();
 
   late StreamSubscription _periodChangeSubscription;
+  late StreamSubscription _themeColorChangeSubscription;
 
   int get _numGridItems => _gridSize * _gridSize;
 
@@ -59,6 +62,17 @@ class _CollageViewState extends State<CollageView> {
         });
       }
     });
+
+    _themeColorChangeSubscription =
+        Preferences().themeColorChange.listen((value) {
+      if (mounted) {
+        setState(() {
+          _themeColor = value;
+        });
+      }
+    });
+
+    _themeColor = Preferences().themeColor;
   }
 
   Future<void> _doRequest() async {
@@ -127,7 +141,7 @@ class _CollageViewState extends State<CollageView> {
 
     final image = await _screenshotController.captureFromWidget(
       _type == DisplayType.list
-          ? ListCollage(_includeBranding, items)
+          ? ListCollage(_themeColor, _includeBranding, items)
           : GridCollage(_gridSize, _includeBranding, _includeText, items),
       pixelRatio: 3,
       context: context,
@@ -269,7 +283,37 @@ class _CollageViewState extends State<CollageView> {
                           },
                         ),
                       ),
-                    ],
+                    ] else
+                      ListTile(
+                        title: const Text('Background color'),
+                        trailing: DropdownButton<ThemeColor>(
+                          value: _themeColor,
+                          items: [
+                            for (final themeColor in ThemeColor.values)
+                              DropdownMenuItem(
+                                value: themeColor,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.circle,
+                                      color: themeColor.color,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(themeColor.displayName),
+                                  ],
+                                ),
+                              ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _themeColor = value;
+                              });
+                            }
+                          },
+                        ),
+                      ),
                     ListTile(
                       title: const Text('Include Finale branding'),
                       trailing: Switch(
@@ -375,6 +419,7 @@ class _CollageViewState extends State<CollageView> {
   void dispose() {
     _usernameTextController.dispose();
     _periodChangeSubscription.cancel();
+    _themeColorChangeSubscription.cancel();
     super.dispose();
   }
 }

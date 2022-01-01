@@ -1,23 +1,25 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
 class ListCollage extends StatelessWidget {
+  final ThemeColor themeColor;
   final bool includeBranding;
   final List<Entity> items;
 
-  const ListCollage(this.includeBranding, this.items);
+  const ListCollage(this.themeColor, this.includeBranding, this.items);
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color.fromRGBO(243, 66, 53, 1),
-            Color.fromRGBO(187, 2, 2, 1),
+            themeColor.color.shade500,
+            themeColor.color.shade900,
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
