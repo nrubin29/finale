@@ -61,6 +61,16 @@ class ListCollage extends StatelessWidget {
                             ),
                           ),
                         ],
+                        if (item.displayTrailing != null) ...[
+                          SizedBox(height: width / 75),
+                          Text(
+                            item.displayTrailing!,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: width / 30,
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
