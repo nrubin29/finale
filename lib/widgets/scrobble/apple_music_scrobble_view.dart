@@ -1,5 +1,6 @@
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
@@ -53,17 +54,25 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
     _authorizationStatus = await FlutterMPMediaPlayer.authorize();
 
     if (_authorizationStatus == AuthorizationStatus.authorized) {
-      _items = Map.fromIterable(
-          (await FlutterMPMediaPlayer.getRecentTracks())
-              .map((e) => _PlayedSong(e)),
-          value: (_) => true);
-      setState(() {});
+      var after = DateTime.now().subtract(const Duration(days: 14));
+      final last = Preferences().lastAppleMusicScrobble;
+      if (last != null && last.isAfter(after)) {
+        after = last;
+      }
+
+      final tracks = await FlutterMPMediaPlayer.getRecentTracks(after: after);
+      setState(() {
+        _items = Map.fromIterable(tracks.map((e) => _PlayedSong(e)),
+            value: (_) => true);
+      });
     } else {
       setState(() {});
     }
   }
 
   Future<void> _scrobble() async {
+    final now = DateTime.now();
+
     final tracks = _items!.entries
         .where((e) => e.value)
         .map((e) => e.key)
@@ -73,6 +82,8 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
         tracks, tracks.map((track) => track.date).toList(growable: false));
 
     if (response.ignored == 0) {
+      Preferences().lastAppleMusicScrobble = now;
+
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Scrobbled successfully!')));

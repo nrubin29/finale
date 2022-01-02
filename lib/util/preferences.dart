@@ -194,6 +194,17 @@ class Preferences {
     _themeColorChange.add(value);
   }
 
+  DateTime? get lastAppleMusicScrobble {
+    final value = _preferences.getInt('lastAppleMusicScrobble');
+    return value == null ? null : DateTime.fromMillisecondsSinceEpoch(value);
+  }
+
+  set lastAppleMusicScrobble(DateTime? value) {
+    assert(value != null);
+    _preferences.setInt(
+        'lastAppleMusicScrobble', value!.millisecondsSinceEpoch);
+  }
+
   void clear() {
     _preferences.clear();
   }
