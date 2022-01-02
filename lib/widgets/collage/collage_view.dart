@@ -103,32 +103,29 @@ class _CollageViewState extends State<CollageView> {
     try {
       items = await request.doRequest(_numItemsToLoad, 1);
     } on LException catch (e) {
-      if (e.code == 6) {
-        setState(() {
-          _isSettingsExpanded = true;
-          _isDoingRequest = false;
-        });
+      setState(() {
+        _isSettingsExpanded = true;
+        _isDoingRequest = false;
+      });
 
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text('User not found'),
-            content: Text('User $username does not exist.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Close'),
-              ),
-            ],
-          ),
-        );
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(e.code == 6 ? 'User not found' : 'Error'),
+          content:
+              Text(e.code == 6 ? 'User $username does not exist.' : e.message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
 
-        return;
-      } else {
-        rethrow;
-      }
+      return;
     }
 
     setState(() {
