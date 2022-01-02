@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
@@ -12,9 +14,10 @@ class ListCollage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = min(MediaQuery.of(context).size.width, 400).toDouble();
 
     return Container(
+      width: width,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
