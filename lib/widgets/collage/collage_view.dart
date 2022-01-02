@@ -128,6 +128,32 @@ class _CollageViewState extends State<CollageView> {
       return;
     }
 
+    if (items.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('No ${_chart.name}s'),
+          content: Text(
+              "$username hasn't scrobbled any ${_chart.name}s in this period."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+
+      setState(() {
+        _isSettingsExpanded = true;
+        _isDoingRequest = false;
+      });
+
+      return;
+    }
+
     setState(() {
       _numItemsToLoad = items.length;
     });
