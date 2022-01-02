@@ -101,19 +101,35 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
         child: Text('No music to scrobble.'),
       );
     } else {
-      return EntityDisplay<_PlayedSong>(
-        items: _items!.keys.toList(growable: false),
-        displayImages: false,
-        leadingWidgetBuilder: (item) => Checkbox(
-          value: _items![item],
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                _items![item] = value;
-              });
-            }
-          },
-        ),
+      return Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              'Due to limitations imposed by Apple, Finale can only scrobble '
+              'music that has been downloaded to your device. Additionally, if '
+              'you listen to a song multiple times before scrobbling, Finale '
+              'will only scrobble your last listen.',
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: EntityDisplay<_PlayedSong>(
+              items: _items!.keys.toList(growable: false),
+              displayImages: false,
+              leadingWidgetBuilder: (item) => Checkbox(
+                value: _items![item],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _items![item] = value;
+                    });
+                  }
+                },
+              ),
+            ),
+          ),
+        ],
       );
     }
   }
