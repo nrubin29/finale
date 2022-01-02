@@ -417,7 +417,14 @@ class _CollageViewState extends State<CollageView> {
               : ListView(children: [
                   _form,
                   if (_image != null) ...[
-                    Image.memory(_image!),
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: _type == DisplayType.grid
+                            ? const BoxConstraints(maxWidth: 600)
+                            : const BoxConstraints(maxWidth: 400),
+                        child: Image.memory(_image!),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
