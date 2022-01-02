@@ -34,6 +34,9 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     _usernameTextController = TextEditingController(text: widget.username);
   }
 
+  bool get _hasItemsToScrobble =>
+      _items != null && _items!.isNotEmpty && _items!.values.any((e) => e);
+
   Future<void> _loadData() async {
     setState(() {
       _isLoading = true;
@@ -95,11 +98,10 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
         appBar: createAppBar(
           'Scrobble from a friend',
           actions: [
-            if (_items?.isNotEmpty ?? false)
-              IconButton(
-                icon: const Icon(scrobbleIcon),
-                onPressed: _scrobble,
-              ),
+            IconButton(
+              icon: const Icon(scrobbleIcon),
+              onPressed: _hasItemsToScrobble ? _scrobble : null,
+            ),
           ],
         ),
         body: Column(

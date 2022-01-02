@@ -22,6 +22,7 @@ import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/settings/settings_view.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ProfileView extends StatefulWidget {
@@ -130,11 +131,9 @@ class _ProfileViewState extends State<ProfileView>
                 IconButton(
                   icon: const Icon(scrobbleIcon),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                              FriendScrobbleView(username: user.name)),
+                    showBarModalBottomSheet(
+                      context: context,
+                      builder: (_) => FriendScrobbleView(username: user.name),
                     );
                   },
                 ),
