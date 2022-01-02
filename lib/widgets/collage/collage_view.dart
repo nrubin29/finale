@@ -36,6 +36,7 @@ class _CollageViewState extends State<CollageView> {
   var _type = DisplayType.grid;
   late Period _period;
   var _gridSize = 5;
+  var _includeTitle = true;
   var _includeText = true;
   late ThemeColor _themeColor;
   var _includeBranding = true;
@@ -79,7 +80,11 @@ class _CollageViewState extends State<CollageView> {
   Future<void> _doRequest() async {
     setState(() {
       _loadingProgress = 0;
-      _numItemsToLoad = _type == DisplayType.grid ? _numGridItems : 5;
+      _numItemsToLoad = _type == DisplayType.grid
+          ? _numGridItems
+          : _includeTitle
+              ? 4
+              : 5;
       _isDoingRequest = true;
       _isSettingsExpanded = false;
       _image = null;
@@ -167,8 +172,10 @@ class _CollageViewState extends State<CollageView> {
 
     final image = await _screenshotController.captureFromWidget(
       _type == DisplayType.list
-          ? ListCollage(_themeColor, _includeBranding, items)
-          : GridCollage(_gridSize, _includeBranding, _includeText, items),
+          ? ListCollage(_themeColor, _includeTitle, _includeBranding, _period,
+              _chart, items)
+          : GridCollage(_gridSize, _includeTitle, _includeText,
+              _includeBranding, _period, _chart, items),
       pixelRatio: 3,
       context: context,
     );
@@ -279,7 +286,7 @@ class _CollageViewState extends State<CollageView> {
                         },
                       ),
                     ),
-                    if (_type == DisplayType.grid) ...[
+                    if (_type == DisplayType.grid)
                       ListTile(
                         title: const Text('Grid size'),
                         trailing: DropdownButton<int>(
@@ -300,6 +307,20 @@ class _CollageViewState extends State<CollageView> {
                           },
                         ),
                       ),
+                    ListTile(
+                      title: const Text('Include title'),
+                      trailing: Switch(
+                        value: _includeTitle,
+                        onChanged: (value) {
+                          if (value != _includeTitle) {
+                            setState(() {
+                              _includeTitle = value;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    if (_type == DisplayType.grid)
                       ListTile(
                         title: const Text('Include text'),
                         trailing: Switch(
@@ -312,8 +333,8 @@ class _CollageViewState extends State<CollageView> {
                             }
                           },
                         ),
-                      ),
-                    ] else
+                      )
+                    else
                       ListTile(
                         title: const Text('Background color'),
                         trailing: DropdownButton<ThemeColor>(

@@ -82,3 +82,7 @@ extension DateTimeUtil on DateTime {
 extension PackageInfoFullVersion on PackageInfo {
   String get fullVersion => '$version+$buildNumber';
 }
+
+extension TitleCase on String {
+  String toTitleCase() => this[0].toUpperCase() + substring(1);
+}

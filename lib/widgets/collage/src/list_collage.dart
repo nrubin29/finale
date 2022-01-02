@@ -1,16 +1,22 @@
 import 'dart:math';
 
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/period.dart';
 import 'package:finale/util/theme.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
 class ListCollage extends StatelessWidget {
   final ThemeColor themeColor;
+  final bool includeTitle;
   final bool includeBranding;
+  final Period period;
+  final EntityType entityType;
   final List<Entity> items;
 
-  const ListCollage(this.themeColor, this.includeBranding, this.items);
+  const ListCollage(this.themeColor, this.includeTitle, this.includeBranding,
+      this.period, this.entityType, this.items);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +38,29 @@ class ListCollage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (includeTitle) ...[
+            Padding(
+              padding: EdgeInsets.all(width / 20).copyWith(bottom: 0),
+              child: Text(
+                'Top ${entityType.name.toTitleCase()}s',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: width / 12,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: EdgeInsets.all(width / 20).copyWith(top: 0),
+              child: Text(
+                period.display,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: width / 24,
+                ),
+              ),
+            ),
+          ],
           for (final item in items)
             Padding(
               padding: EdgeInsets.all(width / 20),

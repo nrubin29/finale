@@ -1,18 +1,22 @@
 import 'dart:math';
 
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/period.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:flutter/material.dart';
 
 class GridCollage extends StatelessWidget {
   final int gridSize;
-  final bool includeBranding;
+  final bool includeTitle;
   final bool includeText;
+  final bool includeBranding;
+  final Period period;
+  final EntityType entityType;
   final List<Entity> items;
 
-  const GridCollage(
-      this.gridSize, this.includeBranding, this.includeText, this.items);
+  const GridCollage(this.gridSize, this.includeTitle, this.includeText,
+      this.includeBranding, this.period, this.entityType, this.items);
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,31 @@ class GridCollage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (includeTitle)
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    'Top ${entityType.name.toTitleCase()}s',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: gridTileSize / 6,
+                    ),
+                  ),
+                  SizedBox(width: gridTileSize / 12),
+                  Text(
+                    period.display,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: gridTileSize / 8,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Flexible(
             child: EntityDisplay(
               items: items,
