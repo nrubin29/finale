@@ -34,7 +34,7 @@ class _CollageViewState extends State<CollageView> {
       TextEditingController(text: Preferences().name);
   var _chart = EntityType.album;
   var _type = DisplayType.grid;
-  var _period = Period.overall;
+  late Period _period;
   var _gridSize = 5;
   var _includeText = true;
   late ThemeColor _themeColor;
@@ -72,6 +72,7 @@ class _CollageViewState extends State<CollageView> {
       }
     });
 
+    _period = Preferences().period;
     _themeColor = Preferences().themeColor;
   }
 
