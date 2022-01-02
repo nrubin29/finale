@@ -303,9 +303,9 @@ packages:
   flutter_mpmediaplayer:
     dependency: "direct main"
     description:
-      path: "../flutter_mpmediaplayer"
-      relative: true
-    source: path
+      name: flutter_mpmediaplayer
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   flutter_test:
     dependency: "direct dev"
