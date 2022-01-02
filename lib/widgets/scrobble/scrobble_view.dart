@@ -5,11 +5,13 @@ import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:finale/widgets/base/titled_box.dart';
+import 'package:finale/widgets/scrobble/apple_music_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/music_recognition_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:universal_io/io.dart';
 
 class ScrobbleView extends StatefulWidget {
   final Track? track;
@@ -142,6 +144,14 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 TitledBox(
                   title: 'Other Sources',
                   actions: {
+                    if (Platform.isIOS)
+                      'Apple Music': () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const AppleMusicScrobbleView()),
+                        );
+                      },
                     'Friend': () {
                       Navigator.push(
                           context,

@@ -2,6 +2,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_acrcloud (0.0.1):
     - Flutter
+  - flutter_mpmediaplayer (0.0.1):
+    - Flutter
   - flutter_web_auth (0.4.0):
     - Flutter
   - FMDB (2.7.5):
@@ -36,6 +38,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_acrcloud (from `.symlinks/plugins/flutter_acrcloud/ios`)
+  - flutter_mpmediaplayer (from `.symlinks/plugins/flutter_mpmediaplayer/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
   - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
@@ -59,6 +62,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_acrcloud:
     :path: ".symlinks/plugins/flutter_acrcloud/ios"
+  flutter_mpmediaplayer:
+    :path: ".symlinks/plugins/flutter_mpmediaplayer/ios"
   flutter_web_auth:
     :path: ".symlinks/plugins/flutter_web_auth/ios"
   gallery_saver:
@@ -89,6 +94,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_acrcloud: 8dc6ee574321bc08390c1e79900aad5ef683248d
+  flutter_mpmediaplayer: d6fda8913387edcbc6a1fd798087c693ac6937cb
   flutter_web_auth: fd071763f61703882adbb2524f5cd5251883118c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
