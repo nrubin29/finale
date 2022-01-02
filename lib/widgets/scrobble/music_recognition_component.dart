@@ -76,10 +76,11 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
             launch('https://acrcloud.com');
           },
         ),
-        actions: {
-          'Listen once': _scrobbleOnce,
-          'Listen continuously': _scrobbleContinuously,
-        },
+        actions: [
+          ButtonAction('Once', Icons.mic, _scrobbleOnce),
+          ButtonAction('Continuously', Icons.all_inclusive,
+              _scrobbleContinuously),
+        ],
       );
 
   @override

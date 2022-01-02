@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 
+class ButtonAction {
+  final String name;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const ButtonAction(this.name, this.icon, this.onPressed);
+}
+
 class TitledBox extends StatelessWidget {
   final String title;
   final Widget? trailing;
-  final Map<String, VoidCallback> actions;
+  final List<ButtonAction> actions;
 
   const TitledBox({required this.title, this.trailing, required this.actions});
 
@@ -21,7 +29,8 @@ class TitledBox extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Text(title, style: Theme.of(context).textTheme.bodyText1),
+                  child:
+                      Text(title, style: Theme.of(context).textTheme.bodyText1),
                 ),
                 if (trailing != null) trailing!,
               ],
@@ -29,10 +38,17 @@ class TitledBox extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                for (final entry in actions.entries)
+                for (final action in actions)
                   OutlinedButton(
-                    child: Text(entry.key),
-                    onPressed: entry.value,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(action.icon),
+                        const SizedBox(width: 8),
+                        Text(action.name),
+                      ],
+                    ),
+                    onPressed: action.onPressed,
                   ),
               ],
             ),
