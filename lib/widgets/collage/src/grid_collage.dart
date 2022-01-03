@@ -29,7 +29,8 @@ class GridCollage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final widthGridTileSize = size.width / gridSize;
     final heightGridTileSize =
-        (size.height - (includeBranding ? 26 : 0)) / gridSize;
+        (size.height - (includeBranding ? 26 : 0) - (includeTitle ? 50 : 0)) /
+            gridSize;
     final gridTileSize = min(widthGridTileSize, heightGridTileSize);
 
     return Container(
