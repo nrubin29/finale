@@ -7,6 +7,7 @@ import 'package:universal_io/io.dart';
 const isWeb = kIsWeb;
 final isDesktop = !isWeb && Platform.isMacOS;
 final isMobile = !isWeb && !isDesktop;
+var isScreenshotTest = false;
 
 String get authCallbackUrl {
   var callbackUrl =

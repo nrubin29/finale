@@ -4,13 +4,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 
 enum PlaceholderBehavior { image, active, none }
 
 class EntityImage extends StatefulWidget {
   static var censorImages = false;
-  static PlaceholderBehavior? overridePlaceholderBehavior;
 
   final Entity entity;
   final ImageQuality quality;
@@ -42,8 +42,9 @@ class _EntityImageState extends State<EntityImage> {
     _fetchImageId();
   }
 
-  PlaceholderBehavior get _placeholderBehavior =>
-      EntityImage.overridePlaceholderBehavior ?? widget.placeholderBehavior;
+  PlaceholderBehavior get _placeholderBehavior => isScreenshotTest
+      ? PlaceholderBehavior.active
+      : widget.placeholderBehavior;
 
   Future<void> _fetchImageId() async {
     setState(() {

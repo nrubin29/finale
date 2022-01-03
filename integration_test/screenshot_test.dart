@@ -5,6 +5,7 @@ import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/image_id_cache.dart';
+import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/util/util.dart';
@@ -25,23 +26,32 @@ const _censorImages = bool.fromEnvironment('censorImages', defaultValue: true);
 
 final isIos = device.contains('iPhone') || device.contains('iPad');
 final isIpad = device.contains('iPad');
-const directory =
-    '/Users/nrubin29/Documents/FlutterProjects/finale/screenshots/$device';
+final isMacOS = device.contains('macOS');
+final directory = isIos
+    ? '/Users/noahrubin/Documents/DartProjects/finale/screenshots/$device'
+    : isMacOS
+        ? '/Users/noahrubin/Downloads/$device'
+        : '/sdcard/Documents/$device';
 
 Future<void> main() async {
+  isScreenshotTest = true;
+
   if (_censorImages) {
     EntityImage.censorImages = true;
   }
 
-  EntityImage.overridePlaceholderBehavior = PlaceholderBehavior.active;
-
-  if (isIos) {
-    await Directory(directory).create();
+  try {
+    await Directory(directory).delete(recursive: true);
+  } on Exception {
+    // Do nothing.
   }
 
   setUp(() async {
-    SharedPreferences.setMockInitialValues(
-        const {'name': testName, 'key': testKey});
+    SharedPreferences.setMockInitialValues({
+      'name': testName,
+      'key': testKey,
+      'periodValue': Period.overall.serializedValue,
+    });
     await Preferences().setup();
     await ImageIdCache().setup();
   });
@@ -64,10 +74,6 @@ Future<void> main() async {
           : widget,
     ));
 
-    if (asPage || widgetBehindModal != null) {
-      await tester.pumpMany();
-    }
-
     await tester.pumpAndSettle();
   }
 
@@ -79,6 +85,10 @@ Future<void> main() async {
   testWidgets('Scrobble screen', (tester) async {
     await pumpWidget(tester, const MainView(username: testName));
     await tester.tap(find.byIcon(scrobbleIcon).at(1));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Custom timestamp'));
+    await tester.pumpAndSettle();
 
     final formFields =
         find.byWidgetPredicate((widget) => widget is TextFormField);
@@ -95,12 +105,6 @@ Future<void> main() async {
     await pumpWidget(tester, const MainView(username: testName));
     await tester.tap(find.byIcon(Icons.access_time));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.chevron_left));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.chevron_left));
-    await tester.pumpAndSettle();
-    await tester.pumpMany();
-    await tester.pumpMany();
     await tester.saveScreenshot('3_weekly_chart');
   });
 
@@ -111,8 +115,11 @@ Future<void> main() async {
 
     await tester.tap(find.text('Generate'));
     await tester.pumpMany();
-    await tester.tap(find.text('Settings'));
-    await tester.pumpAndSettle();
+
+    if (isIpad) {
+      await tester.tap(find.text('Settings'));
+      await tester.pumpAndSettle();
+    }
 
     await tester.saveScreenshot('4_collage');
   });
@@ -185,29 +192,22 @@ class _AsPageState extends State<_AsPage> {
 
 extension on WidgetTester {
   Future<void> saveScreenshot(String name) async {
-    if (isIos) {
-      final element = find.byType(MaterialApp).evaluate().single;
+    final element = find.byType(MaterialApp).evaluate().single;
 
-      // BEGIN: Copied from flutter_test/lib/src/_matchers_io.dart:23 because I
-      // need to set [pixelRatio].
-      assert(element.renderObject != null);
-      var renderObject = element.renderObject!;
-      while (!renderObject.isRepaintBoundary) {
-        renderObject = renderObject.parent! as RenderObject;
-      }
-      assert(!renderObject.debugNeedsPaint);
-      final layer = renderObject.debugLayer! as OffsetLayer;
-      final image =
-          layer.toImage(renderObject.paintBounds, pixelRatio: isIpad ? 2 : 3);
-      // END: Copied code.
-
-      await expectLater(image, matchesGoldenFile('$directory/$name.png'));
-    } else {
-      // On Android, we can't save screenshots for some reason, so we have to
-      // take them ourselves.
-      await pumpMany();
-      await pumpMany();
+    // BEGIN: Copied from flutter_test/lib/src/_matchers_io.dart:23 because I
+    // need to set [pixelRatio].
+    assert(element.renderObject != null);
+    var renderObject = element.renderObject!;
+    while (!renderObject.isRepaintBoundary) {
+      renderObject = renderObject.parent! as RenderObject;
     }
+    assert(!renderObject.debugNeedsPaint);
+    final layer = renderObject.debugLayer! as OffsetLayer;
+    final image = layer.toImage(renderObject.paintBounds,
+        pixelRatio: isIpad || isMacOS ? 2 : 3);
+    // END: Copied code.
+
+    await expectLater(image, matchesGoldenFile('$directory/$name.png'));
   }
 
   /// Pumps for 10 seconds, 100 milliseconds at a time.
