@@ -4,6 +4,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
 class GridCollage extends StatelessWidget {
@@ -72,6 +73,7 @@ class GridCollage extends StatelessWidget {
               gridTileSize: gridTileSize,
               fontSize: includeText ? gridTileSize / 15 : 0,
               gridTileTextPadding: gridTileSize / 15,
+              placeholderBehavior: PlaceholderBehavior.active,
             ),
           ),
           if (includeBranding)

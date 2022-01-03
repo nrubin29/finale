@@ -68,7 +68,10 @@ class ListCollage extends StatelessWidget {
                 children: [
                   Flexible(
                     flex: 1,
-                    child: EntityImage(entity: item),
+                    child: EntityImage(
+                      entity: item,
+                      placeholderBehavior: PlaceholderBehavior.active,
+                    ),
                   ),
                   SizedBox(width: width / 20),
                   Flexible(

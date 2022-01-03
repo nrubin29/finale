@@ -56,7 +56,7 @@ class LoginView extends StatelessWidget {
                         builder: (context, snapshot) => snapshot.hasData
                             ? EntityImage(
                                 entity: snapshot.data!.first,
-                                showPlaceholder: false)
+                                placeholderBehavior: PlaceholderBehavior.none)
                             : Container()))
                     .toList(),
               );

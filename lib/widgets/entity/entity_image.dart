@@ -4,16 +4,20 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
-import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 
+enum PlaceholderBehavior { image, active, none }
+
 class EntityImage extends StatefulWidget {
+  static var censorImages = false;
+  static PlaceholderBehavior? overridePlaceholderBehavior;
+
   final Entity entity;
   final ImageQuality quality;
   final BoxFit fit;
   final double? width;
   final bool isCircular;
-  final bool showPlaceholder;
+  final PlaceholderBehavior placeholderBehavior;
 
   const EntityImage({
     required this.entity,
@@ -21,7 +25,7 @@ class EntityImage extends StatefulWidget {
     this.fit = BoxFit.contain,
     this.width,
     this.isCircular = false,
-    this.showPlaceholder = true,
+    this.placeholderBehavior = PlaceholderBehavior.image,
   });
 
   @override
@@ -30,6 +34,7 @@ class EntityImage extends StatefulWidget {
 
 class _EntityImageState extends State<EntityImage> {
   ImageId? _imageId;
+  var _loading = true;
 
   @override
   void initState() {
@@ -37,12 +42,20 @@ class _EntityImageState extends State<EntityImage> {
     _fetchImageId();
   }
 
+  PlaceholderBehavior get _placeholderBehavior =>
+      EntityImage.overridePlaceholderBehavior ?? widget.placeholderBehavior;
+
   Future<void> _fetchImageId() async {
+    setState(() {
+      _loading = true;
+    });
+
     await widget.entity.tryCacheImageId(widget.quality);
 
     if (mounted) {
       setState(() {
         _imageId = widget.entity.cachedImageId;
+        _loading = false;
       });
     }
   }
@@ -68,9 +81,13 @@ class _EntityImageState extends State<EntityImage> {
 
   @override
   Widget build(BuildContext context) {
-    final placeholder = widget.showPlaceholder
-        ? _Placeholder(widget.entity, widget.quality, widget.width)
-        : Container();
+    if (_loading && _placeholderBehavior == PlaceholderBehavior.active) {
+      return const CircularProgressIndicator();
+    }
+
+    final placeholder = _placeholderBehavior == PlaceholderBehavior.none
+        ? const SizedBox()
+        : _Placeholder(widget.entity, widget.quality, widget.width);
 
     if (_imageId == null) {
       return widget.isCircular ? _buildCircularImage(placeholder) : placeholder;
@@ -78,16 +95,18 @@ class _EntityImageState extends State<EntityImage> {
 
     final image = CachedNetworkImage(
       imageUrl: _imageId!.getUrl(widget.quality),
-      placeholder: (_, __) => placeholder,
+      placeholder: (_, __) => _placeholderBehavior == PlaceholderBehavior.active
+          ? const CircularProgressIndicator()
+          : placeholder,
       errorWidget: (_, __, ___) => placeholder,
       fit: widget.fit,
       width: widget.width,
     );
 
-    Widget imageWidget = widget.isCircular ? _buildCircularImage(image) : image;
+    var imageWidget = widget.isCircular ? _buildCircularImage(image) : image;
 
     assert(() {
-      if (censorImages && widget.entity.type != EntityType.user) {
+      if (EntityImage.censorImages && widget.entity.type != EntityType.user) {
         imageWidget = ClipRect(
           child: Stack(
             fit: StackFit.passthrough,

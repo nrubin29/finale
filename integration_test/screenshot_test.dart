@@ -8,6 +8,7 @@ import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/util/util.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
@@ -29,8 +30,10 @@ const directory =
 
 Future<void> main() async {
   if (_censorImages) {
-    censorImages = true;
+    EntityImage.censorImages = true;
   }
+
+  EntityImage.overridePlaceholderBehavior = PlaceholderBehavior.active;
 
   if (isIos) {
     await Directory(directory).create();

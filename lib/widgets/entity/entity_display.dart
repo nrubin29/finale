@@ -31,6 +31,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final bool scrollable;
   final bool displayNumbers;
   final bool displayImages;
+  final PlaceholderBehavior placeholderBehavior;
   final bool displayCircularImages;
   final bool showNoResultsMessage;
   final bool showGridTileGradient;
@@ -51,6 +52,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.scrollable = true,
       this.displayNumbers = false,
       this.displayImages = true,
+      this.placeholderBehavior = PlaceholderBehavior.image,
       this.displayCircularImages = false,
       this.showNoResultsMessage = true,
       this.showGridTileGradient = true,
@@ -205,20 +207,21 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             )
           : null,
       leading: widget.leadingWidgetBuilder != null || widget.displayImages
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (widget.leadingWidgetBuilder != null)
-                      widget.leadingWidgetBuilder!(item),
-                    if (widget.displayImages)
-                      EntityImage(
-                        entity: item,
-                        quality: ImageQuality.low,
-                        isCircular: widget.displayCircularImages,
-                      ),
-                  ],
-                )
-              : null,
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.leadingWidgetBuilder != null)
+                  widget.leadingWidgetBuilder!(item),
+                if (widget.displayImages)
+                  EntityImage(
+                    entity: item,
+                    quality: ImageQuality.low,
+                    isCircular: widget.displayCircularImages,
+                    placeholderBehavior: widget.placeholderBehavior,
+                  ),
+              ],
+            )
+          : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -284,7 +287,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
         fit: StackFit.expand,
         children: [
           if (widget.displayImages)
-            EntityImage(entity: item, fit: BoxFit.cover),
+            EntityImage(
+              entity: item,
+              fit: BoxFit.cover,
+              placeholderBehavior: widget.placeholderBehavior,
+            ),
           if (widget.showGridTileGradient)
             Container(
               decoration: BoxDecoration(
