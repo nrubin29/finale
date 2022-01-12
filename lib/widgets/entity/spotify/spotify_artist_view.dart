@@ -63,9 +63,9 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
               image: EntityImage(entity: artist),
               listItems: [
                 TabBar(
-                    labelColor: Colors.red,
+                    labelColor: spotifyGreen,
                     unselectedLabelColor: Colors.grey,
-                    indicatorColor: Colors.red,
+                    indicatorColor: spotifyGreen,
                     controller: _tabController,
                     tabs: const [
                       Tab(icon: Icon(Icons.album)),

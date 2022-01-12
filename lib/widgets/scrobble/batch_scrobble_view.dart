@@ -101,7 +101,6 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 ),
               ),
               RadioListTile<ScrobbleTimestampBehavior>(
-                activeColor: Colors.red,
                 value: ScrobbleTimestampBehavior.startingNow,
                 groupValue: _behavior,
                 onChanged: (value) {
@@ -114,7 +113,6 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 title: const Text('Starting now'),
               ),
               RadioListTile<ScrobbleTimestampBehavior>(
-                activeColor: Colors.red,
                 value: ScrobbleTimestampBehavior.startingCustom,
                 groupValue: _behavior,
                 onChanged: (value) {
@@ -128,7 +126,6 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 title: const Text('Starting at a custom timestamp'),
               ),
               RadioListTile<ScrobbleTimestampBehavior>(
-                activeColor: Colors.red,
                 value: ScrobbleTimestampBehavior.endingNow,
                 groupValue: _behavior,
                 onChanged: (value) {
@@ -141,7 +138,6 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 title: const Text('Ending now'),
               ),
               RadioListTile<ScrobbleTimestampBehavior>(
-                activeColor: Colors.red,
                 value: ScrobbleTimestampBehavior.endingCustom,
                 groupValue: _behavior,
                 onChanged: (value) {
