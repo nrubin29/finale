@@ -1,4 +1,3 @@
-import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
@@ -40,11 +39,6 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _trackController.text = widget.track?.name ?? '';
     _artistController.text = widget.track?.artistName ?? '';
     _albumController.text = widget.track?.albumName ?? '';
-
-    if (!widget.isModal && isMobile && !isScreenshotTest) {
-      ACRCloud.setUp(const ACRCloudConfig(
-          acrCloudAccessKey, acrCloudAccessSecret, acrCloudHost));
-    }
   }
 
   String? _required(String? value) {

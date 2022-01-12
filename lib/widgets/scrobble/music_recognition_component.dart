@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:finale/env.dart';
 import 'package:finale/util/quick_actions_manager.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/titled_box.dart';
 import 'package:finale/widgets/scrobble/acrcloud_dialog.dart';
 import 'package:finale/widgets/scrobble/listen_continuously_view.dart';
@@ -11,7 +13,8 @@ import 'package:url_launcher/url_launcher.dart';
 class MusicRecognitionComponent extends StatefulWidget {
   final ValueChanged<ACRCloudResponseMusicItem> onTrackRecognized;
 
-  const MusicRecognitionComponent({required this.onTrackRecognized});
+  MusicRecognitionComponent({required this.onTrackRecognized})
+      : assert(isMobile);
 
   @override
   _MusicRecognitionComponentState createState() =>
@@ -36,7 +39,15 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
     });
   }
 
+  Future<void> _setUp() async {
+    if (!ACRCloud.isSetUp) {
+      await ACRCloud.setUp(const ACRCloudConfig(
+          acrCloudAccessKey, acrCloudAccessSecret, acrCloudHost));
+    }
+  }
+
   Future<void> _scrobbleOnce() async {
+    await _setUp();
     final result = await showDialog<ACRCloudDialogResult>(
         context: context,
         barrierDismissible: false,
@@ -52,7 +63,8 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
     }
   }
 
-  void _scrobbleContinuously() {
+  Future<void> _scrobbleContinuously() async {
+    await _setUp();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -78,8 +90,8 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
         ),
         actions: [
           ButtonAction('Once', Icons.mic, _scrobbleOnce),
-          ButtonAction('Continuously', Icons.all_inclusive,
-              _scrobbleContinuously),
+          ButtonAction(
+              'Continuously', Icons.all_inclusive, _scrobbleContinuously),
         ],
       );
 
