@@ -166,7 +166,7 @@ class Spotify {
   }
 
   static Future<bool> authenticate() async {
-    final pkcePair = PkcePair.generate(stripTrailingPadding: true);
+    final pkcePair = PkcePair.generate();
     final result = await FlutterWebAuth.authenticate(
         url: _createAuthorizationUri(pkcePair).toString(),
         callbackUrlScheme: 'finale');
