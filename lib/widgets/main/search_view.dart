@@ -246,7 +246,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               const Tab(icon: Icon(Icons.people, color: Colors.white)),
               const Tab(icon: Icon(Icons.album, color: Colors.white)),
               if (_searchEngine == SearchEngine.spotify)
-                const Tab(icon: Icon(Icons.queue_music)),
+                const Tab(icon: Icon(Icons.queue_music, color: Colors.white)),
             ],
           ),
         ),
