@@ -130,7 +130,7 @@ class AboutView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: const [
-                  Text('\u00a9 2021 Noah Rubin Technologies LLC'),
+                  Text('\u00a9 2020-2022 Noah Rubin Technologies LLC'),
                   Text('All rights reserved'),
                 ],
               ),
