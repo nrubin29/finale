@@ -95,15 +95,13 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                   TextSpan(
                     text: 'Sign in with your Spotify account to search and '
                         "scrobble from Spotify's database. Finale does not "
-                        'automatically scrobble from Finale, but you can '
+                        'automatically scrobble from Spotify, but you can '
                         'connect your Spotify account to Last.fm ',
                     style: theme.textTheme.caption,
                   ),
                   TextSpan(
                     text: 'on the web',
-                    style: theme
-                        .textTheme
-                        .caption
+                    style: theme.textTheme.caption
                         ?.copyWith(color: theme.primaryColor),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
