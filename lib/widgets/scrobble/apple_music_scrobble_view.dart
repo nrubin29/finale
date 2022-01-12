@@ -107,10 +107,6 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
       );
     } else if (_items == null) {
       return const Center(child: LoadingComponent());
-    } else if (_items!.isEmpty) {
-      return const Center(
-        child: Text('No music to scrobble.'),
-      );
     } else {
       return Column(
         children: [
@@ -125,20 +121,22 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
             ),
           ),
           Expanded(
-            child: EntityDisplay<_PlayedSong>(
-              items: _items!.keys.toList(growable: false),
-              displayImages: false,
-              leadingWidgetBuilder: (item) => Checkbox(
-                value: _items![item],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _items![item] = value;
-                    });
-                  }
-                },
-              ),
-            ),
+            child: _items!.isEmpty
+                ? const Center(child: Text('No music to scrobble.'))
+                : EntityDisplay<_PlayedSong>(
+                    items: _items!.keys.toList(growable: false),
+                    displayImages: false,
+                    leadingWidgetBuilder: (item) => Checkbox(
+                      value: _items![item],
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _items![item] = value;
+                          });
+                        }
+                      },
+                    ),
+                  ),
           ),
         ],
       );
