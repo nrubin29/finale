@@ -7,8 +7,10 @@ class ListTileTextField extends StatelessWidget {
   const ListTileTextField({required this.title, required this.controller});
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+  Widget build(BuildContext context) => SafeArea(
+        top: false,
+        bottom: false,
+        minimum: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
             Text(title, style: Theme.of(context).textTheme.subtitle1),

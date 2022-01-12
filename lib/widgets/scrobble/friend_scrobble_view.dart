@@ -125,8 +125,10 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                         title: 'Username',
                         controller: _usernameTextController,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                      SafeArea(
+                        top: false,
+                        bottom: false,
+                        minimum: const EdgeInsets.symmetric(horizontal: 16),
                         child: DateTimeField(
                           label: 'Start',
                           initialValue: _start,
@@ -137,8 +139,10 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                      SafeArea(
+                        top: false,
+                        bottom: false,
+                        minimum: const EdgeInsets.symmetric(horizontal: 16),
                         child: DateTimeField(
                           label: 'End',
                           initialValue: _end,

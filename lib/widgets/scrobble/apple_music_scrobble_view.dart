@@ -110,8 +110,8 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
     } else {
       return Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8),
+          const SafeArea(
+            minimum: EdgeInsets.all(8),
             child: Text(
               'Due to limitations imposed by Apple, Finale can only scrobble '
               'music that has been downloaded to your device. Additionally, if '

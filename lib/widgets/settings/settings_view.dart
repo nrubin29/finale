@@ -15,7 +15,7 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: const Text('Settings')),
         body: Builder(
-            builder: (context) => Column(
+            builder: (context) => ListView(
                   children: [
                     ListTile(
                       title: const Text('About'),

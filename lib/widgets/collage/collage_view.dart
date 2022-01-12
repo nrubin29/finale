@@ -389,8 +389,8 @@ class _CollageViewState extends State<CollageView> {
                 )),
           ]);
 
-  Widget get _loadingWidget => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+  Widget get _loadingWidget => SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

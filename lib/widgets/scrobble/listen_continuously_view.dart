@@ -168,8 +168,8 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
               })
         ]),
         body: Column(children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
+          SafeArea(
+            minimum: const EdgeInsets.all(8),
             child: Text(
               'Keep your device on this page with the screen on. Your device '
               'will listen for music every '
