@@ -28,7 +28,7 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
-    _subscription = QuickActionsManager.quickActionStream.listen((action) {
+    _subscription = QuickActionsManager().quickActionStream.listen((action) {
       if (action.type == QuickActionType.scrobbleOnce ||
           action.type == QuickActionType.scrobbleContinuously) {
         setState(() {

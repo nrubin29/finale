@@ -2,10 +2,10 @@ import SwiftUI
 
 let widgetBackgroundGradient = LinearGradient(gradient: Gradient(colors: [Color("WidgetBackgroundStart"), Color("WidgetBackgroundEnd")]), startPoint: .top, endPoint: .bottom)
 
-func getLinkUrl(_ path: String, queryItems: [URLQueryItem]? = nil) -> URL {
+func getLinkUrl(_ method: String, queryItems: [URLQueryItem]? = nil) -> URL {
     var components = URLComponents()
     components.scheme = "finale"
-    components.path = "/\(path)"
+    components.host = method
     components.queryItems = queryItems
     return components.url!
 }
@@ -52,13 +52,13 @@ private struct TitleBar: View {
                 .foregroundColor(Color("AccentColor"))
             Spacer()
             HStack(alignment: .center) {
-                Link(destination: getLinkUrl("scrobbleOnce")) {
+                Link(destination: getLinkUrl("scrobbleonce")) {
                     Image(systemName: "plus")
                         .resizable()
                         .frame(width: 15, height: 15)
                         .foregroundColor(Color("AccentColor"))
                 }
-                Link(destination: getLinkUrl("scrobbleContinuously")) {
+                Link(destination: getLinkUrl("scrobblecontinuously")) {
                     Image(systemName: "infinity")
                         .resizable()
                         .frame(width: 20, height: 10)

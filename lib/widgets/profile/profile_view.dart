@@ -53,7 +53,7 @@ class _ProfileViewState extends State<ProfileView>
     });
 
     _subscription =
-        QuickActionsManager.quickActionStream.listen((action) async {
+        QuickActionsManager().quickActionStream.listen((action) async {
       await Future.delayed(const Duration(milliseconds: 250));
       if (action.type == QuickActionType.viewTab) {
         final tab = action.value as EntityType;

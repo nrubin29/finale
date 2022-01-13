@@ -12,7 +12,7 @@ Future<void> main() async {
   await Preferences().setup();
 
   if (isMobile) {
-    await QuickActionsManager.setup();
+    await QuickActionsManager().setup();
   }
 
   if (!isWeb) {

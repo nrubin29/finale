@@ -43,9 +43,15 @@ enum QuickActionType {
 }
 
 class QuickActionsManager {
+  static QuickActionsManager? _instance;
+
+  factory QuickActionsManager() => _instance ??= QuickActionsManager._();
+
+  QuickActionsManager._();
+
   // This stream needs to be open for the entire lifetime of the app.
   // ignore: close_sinks
-  static final _quickActions = ReplaySubject<QuickAction>();
+  final _quickActions = ReplaySubject<QuickAction>();
 
   /// A stream of [QuickAction]s.
   ///
@@ -53,26 +59,24 @@ class QuickActionsManager {
   /// deals with the issue where a [QuickAction] may be emitted before the
   /// subscriber is ready to handle it as well as the issue where a subscriber
   /// may receive [QuickAction]s that have already been handled.
-  static Stream<QuickAction> get quickActionStream =>
+  Stream<QuickAction> get quickActionStream =>
       _quickActions.where((action) =>
           DateTime.now().difference(action.timestamp) <
           const Duration(seconds: 1));
 
-  static Future<void> setup() async {
+  Future<void> setup() async {
     const quickActions = QuickActions();
     await quickActions.initialize((type) {
-      _quickActions.add(type == 'scrobble_once'
-          ? QuickAction.scrobbleOnce()
-          : QuickAction.scrobbleContinuously());
+      _handleLink(Uri(host: type));
     });
     await quickActions.setShortcutItems(const [
       ShortcutItem(
-        type: 'scrobble_once',
+        type: 'scrobbleonce',
         localizedTitle: 'Recognize song',
         icon: 'add',
       ),
       ShortcutItem(
-        type: 'scrobble_continuously',
+        type: 'scrobblecontinuously',
         localizedTitle: 'Recognize continuously',
         icon: 'all_inclusive',
       ),
@@ -90,27 +94,27 @@ class QuickActionsManager {
     });
   }
 
-  static void _handleLink(Uri? uri) {
+  void _handleLink(Uri? uri) {
     if (uri == null) {
       return;
-    } else if (uri.path == '/scrobbleOnce') {
+    } else if (uri.host == 'scrobbleonce') {
       _quickActions.add(QuickAction.scrobbleOnce());
-    } else if (uri.path == '/scrobbleContinuously') {
+    } else if (uri.host == 'scrobblecontinuously') {
       _quickActions.add(QuickAction.scrobbleContinuously());
-    } else if (uri.path == '/album') {
+    } else if (uri.host == 'album') {
       final name = uri.queryParameters['name']!;
       final artist = uri.queryParameters['artist']!;
       _quickActions.add(QuickAction.viewAlbum(
           ConcreteBasicAlbum(name, ConcreteBasicArtist(artist))));
-    } else if (uri.path == '/artist') {
+    } else if (uri.host == 'artist') {
       final name = uri.queryParameters['name']!;
       _quickActions.add(QuickAction.viewArtist(ConcreteBasicArtist(name)));
-    } else if (uri.path == '/track') {
+    } else if (uri.host == 'track') {
       final name = uri.queryParameters['name']!;
       final artist = uri.queryParameters['artist']!;
       _quickActions
           .add(QuickAction.viewTrack(BasicConcreteTrack(name, artist, null)));
-    } else if (uri.path == '/profileTab') {
+    } else if (uri.host == 'profileTab') {
       final tabString = uri.queryParameters['tab'];
       EntityType tab;
 
