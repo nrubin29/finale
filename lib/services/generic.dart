@@ -115,12 +115,14 @@ abstract class Track extends Entity {
       'Track(name=$name, artist=$artistName, album=$albumName)';
 
   @override
-  // ignore: hash_and_equals
   bool operator ==(Object other) =>
       other is Track &&
       other.name == name &&
       other.artistName == artistName &&
       other.albumName == albumName;
+
+  @override
+  int get hashCode => Object.hash(name, artistName, albumName);
 }
 
 class BasicConcreteTrack extends Track {
@@ -166,9 +168,11 @@ abstract class BasicAlbum extends Entity {
   String toString() => 'BasicAlbum(name=$name, artist=${artist.name})';
 
   @override
-  // ignore: hash_and_equals
   bool operator ==(Object other) =>
       other is BasicAlbum && other.name == name && other.artist == artist;
+
+  @override
+  int get hashCode => Object.hash(name, artist);
 }
 
 class ConcreteBasicAlbum extends BasicAlbum {
@@ -232,8 +236,10 @@ abstract class BasicArtist extends Entity {
   String toString() => 'BasicArtist(name=$name)';
 
   @override
-  // ignore: hash_and_equals
   bool operator ==(Object other) => other is BasicArtist && other.name == name;
+
+  @override
+  int get hashCode => name.hashCode;
 }
 
 class ConcreteBasicArtist extends BasicArtist {

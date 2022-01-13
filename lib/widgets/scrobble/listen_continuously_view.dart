@@ -46,7 +46,6 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
   String get displayTrailing => timeFormat.format(timestamp);
 
   @override
-  // ignore: hash_and_equals
   bool operator ==(Object other) {
     // Omit album on purpose as ACRCloud will sometimes return different albums
     // for the same song (e.g. I Will Possess Your Heart is on Narrow Stairs but
@@ -55,6 +54,9 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
         other.name == name &&
         other.artistName == artistName;
   }
+
+  @override
+  int get hashCode => Object.hash(name, artistName);
 }
 
 class ListenContinuouslyView extends StatefulWidget {

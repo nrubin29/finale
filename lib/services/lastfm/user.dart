@@ -56,8 +56,10 @@ class LUser extends Entity {
   factory LUser.fromJson(Map<String, dynamic> json) => _$LUserFromJson(json);
 
   @override
-  // ignore: hash_and_equals
   bool operator ==(Object other) => other is LUser && other.name == name;
+
+  @override
+  int get hashCode => name.hashCode;
 }
 
 @JsonSerializable()
@@ -102,9 +104,11 @@ class LUserWeeklyChart {
       '${dateFormat.format(fromDate)} - ${dateFormatWithYear.format(toDate)}';
 
   @override
-  // ignore: hash_and_equals
   bool operator ==(Object other) =>
       other is LUserWeeklyChart && other.from == from && other.to == to;
+
+  @override
+  int get hashCode => Object.hash(from, to);
 }
 
 @JsonSerializable()
