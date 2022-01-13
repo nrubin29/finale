@@ -3,12 +3,14 @@ import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ACRCloudDialogResult {
-  bool wasCancelled;
-  ACRCloudResponseMusicItem? track;
+  final bool wasCancelled;
+  final ACRCloudResponseMusicItem? track;
 
-  ACRCloudDialogResult([this.track]) : wasCancelled = false;
+  const ACRCloudDialogResult([this.track]) : wasCancelled = false;
 
-  ACRCloudDialogResult.cancelled() : wasCancelled = true;
+  const ACRCloudDialogResult.cancelled()
+      : wasCancelled = true,
+        track = null;
 }
 
 class ACRCloudDialog extends StatefulWidget {
@@ -17,7 +19,7 @@ class ACRCloudDialog extends StatefulWidget {
 }
 
 class _ACRCloudDialogState extends State<ACRCloudDialog> {
-  late ACRCloudSession session;
+  late final ACRCloudSession session;
   List<ACRCloudResponseMusicItem>? results;
 
   @override
@@ -29,7 +31,7 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
       session.dispose();
 
       if (result == null) {
-        Navigator.pop(context, ACRCloudDialogResult.cancelled());
+        Navigator.pop(context, const ACRCloudDialogResult.cancelled());
         return;
       }
 
@@ -38,45 +40,73 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
           results = result.metadata!.music;
         });
       } else {
-        Navigator.pop(context, ACRCloudDialogResult());
+        Navigator.pop(context, const ACRCloudDialogResult());
       }
     });
   }
 
-  Widget _buildResultsList(BuildContext context) => SizedBox(
-      width: double.maxFinite,
-      child: ListView.builder(
+  Widget _audioIndicator() => StreamBuilder<double>(
+        stream: session.volumeStream,
+        initialData: 0.0,
+        builder: (_, snapshot) => SizedBox(
+          width: 100,
+          height: 100,
+          child: Center(
+            child: ClipOval(
+              child: SizedBox(
+                width: 90 * snapshot.data! + 10,
+                height: 90 * snapshot.data! + 10,
+                child: Container(color: Theme.of(context).primaryColor),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Widget _resultsList() => SizedBox(
+        width: double.maxFinite,
+        child: ListView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           itemCount: results!.length,
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (context, index) {
             final track = results![index];
             return ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(track.title),
-                subtitle:
-                    Text('${track.artists.first.name}\n${track.album.name}'),
-                isThreeLine: true,
-                trailing: IconButton(
-                    icon: const Icon(Icons.info),
-                    onPressed: () => launch(
-                        'https://aha-music.com/${track.acrId}?utm_source=finale&utm_medium=app')),
-                onTap: () =>
-                    Navigator.pop(context, ACRCloudDialogResult(track)));
-          }));
+              contentPadding: EdgeInsets.zero,
+              title: Text(track.title),
+              subtitle:
+                  Text('${track.artists.first.name}\n${track.album.name}'),
+              isThreeLine: true,
+              trailing: IconButton(
+                icon: const Icon(Icons.info),
+                onPressed: () {
+                  launch(
+                      'https://aha-music.com/${track.acrId}?utm_source=finale'
+                      '&utm_medium=app');
+                },
+              ),
+              onTap: () {
+                Navigator.pop(context, ACRCloudDialogResult(track));
+              },
+            );
+          },
+        ),
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(results != null ? 'Results' : 'Listening...'),
-      content: results != null ? _buildResultsList(context) : null,
-      actions: [
-        TextButton(
+  Widget build(BuildContext context) => AlertDialog(
+        title: Text(results != null ? 'Results' : 'Listening...'),
+        content: results != null ? _resultsList() : _audioIndicator(),
+        actions: [
+          TextButton(
             child: const Text('Cancel'),
             onPressed: results != null
-                ? () => Navigator.pop(context, ACRCloudDialogResult.cancelled())
-                : session.cancel)
-      ],
-    );
-  }
+                ? () {
+                    Navigator.pop(
+                        context, const ACRCloudDialogResult.cancelled());
+                  }
+                : session.cancel,
+          )
+        ],
+      );
 }

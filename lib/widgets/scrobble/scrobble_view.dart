@@ -9,7 +9,6 @@ import 'package:finale/widgets/scrobble/apple_music_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/music_recognition_component.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:universal_io/io.dart';
 
@@ -77,25 +76,6 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('An error occurred while scrobbling')));
     }
-  }
-
-  /// This widget is a circle whose size depends on the volume that the
-  /// microphone picks up. Unfortunately, it's too laggy and the size doesn't
-  /// change that much unless you make a noise very close to the microphone.
-  // ignore: unused_element
-  Widget _buildAudioIndicator(BuildContext context, ACRCloudSession session) {
-    return StreamBuilder<double>(
-      stream: session.volumeStream,
-      initialData: 0.0,
-      builder: (context, snapshot) => SizedBox(
-          height: 50,
-          child: Center(
-              child: ClipOval(
-                  child: SizedBox(
-                      width: 100 * snapshot.data! + 10,
-                      height: 100 * snapshot.data! + 10,
-                      child: Container(color: Colors.red))))),
-    );
   }
 
   @override
