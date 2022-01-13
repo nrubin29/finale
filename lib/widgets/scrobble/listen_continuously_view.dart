@@ -185,7 +185,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
             displayImages: false,
             leadingWidgetBuilder: (track) =>
                 Icon(_iconForTrackStatus[track.status]),
-            showNoResultsMessage: false,
+            noResultsMessage: null,
           ))
         ]),
       );

@@ -26,6 +26,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
   final Future<Entity> Function(T item)? scrobbleableEntity;
+  final Future<void> Function()? onRefresh;
 
   final DisplayType displayType;
   final bool scrollable;
@@ -33,7 +34,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final bool displayImages;
   final PlaceholderBehavior placeholderBehavior;
   final bool displayCircularImages;
-  final bool showNoResultsMessage;
+  final String? noResultsMessage;
   final bool showGridTileGradient;
   final double gridTileSize;
   final double gridTileTextPadding;
@@ -48,13 +49,14 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.subtitleWidgetBuilder,
       this.leadingWidgetBuilder,
       this.scrobbleableEntity,
+      this.onRefresh,
       this.displayType = DisplayType.list,
       this.scrollable = true,
       this.displayNumbers = false,
       this.displayImages = true,
       this.placeholderBehavior = PlaceholderBehavior.image,
       this.displayCircularImages = false,
-      this.showNoResultsMessage = true,
+      this.noResultsMessage = 'No results.',
       this.showGridTileGradient = true,
       this.gridTileSize = 250,
       this.gridTileTextPadding = 16,
@@ -327,8 +329,8 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       // The Stack is a hack to make the RefreshIndicator work.
       return Stack(children: [
         ListView(),
-        widget.showNoResultsMessage
-            ? const Center(child: Text("No results."))
+        widget.noResultsMessage != null
+            ? Center(child: Text(widget.noResultsMessage!))
             : const SizedBox()
       ]);
     }
@@ -394,12 +396,12 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       return LoadingComponent(message: message);
     }
 
-    if (widget.items != null) {
+    if (widget.items != null && widget.onRefresh == null) {
       return _mainBuilder(context);
     }
 
     return RefreshIndicator(
-      onRefresh: getInitialItems,
+      onRefresh: widget.onRefresh != null ? widget.onRefresh! : getInitialItems,
       child: _mainBuilder(context),
     );
   }

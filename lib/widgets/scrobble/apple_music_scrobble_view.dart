@@ -125,6 +125,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
               items: _items!.keys.toList(growable: false),
               displayImages: false,
               noResultsMessage: 'No music to scrobble.',
+              onRefresh: _load,
               leadingWidgetBuilder: (item) => Checkbox(
                 value: _items![item],
                 onChanged: (value) {
