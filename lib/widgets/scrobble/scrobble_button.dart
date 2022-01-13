@@ -68,7 +68,7 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
         _showSnackbar('Scrobbled successfully!');
 
         // Ask for a review.
-        if (!isWeb && await InAppReview.instance.isAvailable()) {
+        if (await InAppReview.instance.isAvailable()) {
           InAppReview.instance.requestReview();
         }
       } else {

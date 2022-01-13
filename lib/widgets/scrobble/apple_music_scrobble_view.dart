@@ -89,7 +89,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
           const SnackBar(content: Text('Scrobbled successfully!')));
 
       // Ask for a review
-      if (!isWeb && await InAppReview.instance.isAvailable()) {
+      if (await InAppReview.instance.isAvailable()) {
         InAppReview.instance.requestReview();
       }
     } else {
