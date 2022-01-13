@@ -114,29 +114,28 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
             minimum: EdgeInsets.all(8),
             child: Text(
               'Due to limitations imposed by Apple, Finale can only scrobble '
-              'music that has been downloaded to your device. Additionally, if '
-              'you listen to a song multiple times before scrobbling, Finale '
-              'will only scrobble your last listen.',
+              'music that has been added to your library. Additionally, if you '
+              'listen to a song multiple times before scrobbling, Finale will '
+              'only scrobble your last listen.',
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
-            child: _items!.isEmpty
-                ? const Center(child: Text('No music to scrobble.'))
-                : EntityDisplay<_PlayedSong>(
-                    items: _items!.keys.toList(growable: false),
-                    displayImages: false,
-                    leadingWidgetBuilder: (item) => Checkbox(
-                      value: _items![item],
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            _items![item] = value;
-                          });
-                        }
-                      },
-                    ),
-                  ),
+            child: EntityDisplay<_PlayedSong>(
+              items: _items!.keys.toList(growable: false),
+              displayImages: false,
+              noResultsMessage: 'No music to scrobble.',
+              leadingWidgetBuilder: (item) => Checkbox(
+                value: _items![item],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _items![item] = value;
+                    });
+                  }
+                },
+              ),
+            ),
           ),
         ],
       );
