@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class EntityCheckboxList<T extends Entity> extends StatefulWidget {
 
 class _EntityCheckboxList<T extends Entity>
     extends State<EntityCheckboxList<T>> {
+  final _listEquality = ListEquality<T>();
   late Map<T, bool> _items;
 
   @override
@@ -38,7 +40,7 @@ class _EntityCheckboxList<T extends Entity>
   void didUpdateWidget(covariant EntityCheckboxList<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.items != oldWidget.items) {
+    if (!_listEquality.equals(widget.items, oldWidget.items)) {
       _itemsDidChange();
     }
   }
