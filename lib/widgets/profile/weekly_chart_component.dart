@@ -6,6 +6,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
+import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
@@ -153,10 +154,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                 ),
                 const SizedBox(height: 10),
                 if (_tracks.isNotEmpty)
-                  Container(
-                    margin: const EdgeInsets.only(left: 8),
-                    child: const Text('Top Tracks'),
-                  ),
+                  const HeaderListTile(title: 'Top Tracks'),
                 for (final track in _tracks.take(3))
                   ListTile(
                     title: Text(track.name),
@@ -192,12 +190,8 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       );
                     },
                   ),
-                if (_tracks.isNotEmpty) const Divider(),
                 if (_albums.isNotEmpty)
-                  Container(
-                    margin: const EdgeInsets.only(left: 8),
-                    child: const Text('Top Albums'),
-                  ),
+                  const HeaderListTile(title: 'Top Albums'),
                 for (final album in _albums.take(3))
                   ListTile(
                     title: Text(album.name),
@@ -234,12 +228,8 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       );
                     },
                   ),
-                if (_albums.isNotEmpty) const Divider(),
                 if (_artists.isNotEmpty)
-                  Container(
-                    margin: const EdgeInsets.only(left: 8),
-                    child: const Text('Top Artists'),
-                  ),
+                  const HeaderListTile(title: 'Top Artists'),
                 for (final artist in _artists.take(3))
                   ListTile(
                     title: Text(artist.name),
