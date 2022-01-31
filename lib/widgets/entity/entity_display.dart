@@ -62,6 +62,8 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.gridTileTextPadding = 16,
       this.fontSize = 14})
       : assert(items != null || request != null || requestStream != null),
+        assert(displayType == DisplayType.list ||
+            (!displayNumbers && leadingWidgetBuilder == null)),
         super(key: key);
 
   @override
@@ -190,8 +192,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     final item = items[index];
     return ListTile(
       visualDensity: VisualDensity.compact,
-      title: Text(
-          (widget.displayNumbers ? '${index + 1}. ' : '') + item.displayTitle),
+      title: Text(item.displayTitle),
       onTap: widget.detailWidgetBuilder != null
           ? () {
               _onTap(item);
@@ -208,7 +209,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               ],
             )
           : null,
-      leading: widget.leadingWidgetBuilder != null || widget.displayImages
+      leading: widget.leadingWidgetBuilder != null ||
+              widget.displayImages ||
+              widget.displayNumbers
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -221,6 +224,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                     isCircular: widget.displayCircularImages,
                     placeholderBehavior: widget.placeholderBehavior,
                   ),
+                if (widget.displayNumbers) Text('${index + 1}'),
               ],
             )
           : null,
