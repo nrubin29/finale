@@ -2,19 +2,17 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:finale/services/lastfm/user.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
-import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
+import 'package:finale/widgets/entity/lastfm/your_scrobbles_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -85,15 +83,7 @@ class _TrackViewState extends State<TrackView> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Scaffold(
-                            appBar: createAppBar(
-                              'Your scrobbles',
-                              subtitle: formatScrobbles(track.userPlayCount),
-                            ),
-                            body: EntityDisplay<LUserTrackScrobble>(
-                              request: UserGetTrackScrobblesRequest(track),
-                            ),
-                          ),
+                          builder: (context) => YourScrobblesView(track: track),
                         ),
                       );
                     },

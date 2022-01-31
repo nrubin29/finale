@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 /// Creates an [AppBar] whose [title] and [subtitle] will always fit.
 AppBar createAppBar(String title,
-        {String? subtitle, Color? backgroundColor, List<Widget>? actions}) =>
+        {String? subtitle,
+        Color? backgroundColor,
+        List<Widget>? actions,
+        PreferredSizeWidget? bottom}) =>
     AppBar(
       backgroundColor: backgroundColor,
       centerTitle: true,
@@ -23,4 +26,5 @@ AppBar createAppBar(String title,
         ],
       ),
       actions: actions,
+      bottom: bottom,
     );
