@@ -26,7 +26,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
   final Future<Entity> Function(T item)? scrobbleableEntity;
-  final Future<void> Function()? onRefresh;
+  final RefreshCallback? onRefresh;
 
   final DisplayType displayType;
   final bool scrollable;
@@ -339,7 +339,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
         physics: widget.scrollable
             ? const AlwaysScrollableScrollPhysics()
             : const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
+        shrinkWrap: !widget.scrollable,
         slivers: [
           if (widget.displayType == DisplayType.list)
             SliverList(
