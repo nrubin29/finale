@@ -6,7 +6,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/loading_component.dart';
-import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 
@@ -26,7 +26,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
   DateTime? _end;
 
   var _isLoading = false;
-  Map<LRecentTracksResponseTrack, bool>? _items;
+  List<LRecentTracksResponseTrack>? _items;
+  List<LRecentTracksResponseTrack>? _selection;
 
   @override
   void initState() {
@@ -34,8 +35,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     _usernameTextController = TextEditingController(text: widget.username);
   }
 
-  bool get _hasItemsToScrobble =>
-      _items != null && _items!.isNotEmpty && _items!.values.any((e) => e);
+  bool get _hasItemsToScrobble => _selection?.isNotEmpty ?? false;
 
   Future<void> _loadData() async {
     setState(() {
@@ -59,7 +59,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
 
     setState(() {
       if (response != null) {
-        _items = Map.fromIterable(response, value: (_) => true);
+        _items = response;
+        _selection = response;
       }
 
       _isLoading = false;
@@ -67,14 +68,9 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
   }
 
   Future<void> _scrobble() async {
-    final tracks = _items!.entries
-        .where((e) => e.value)
-        .map((e) => e.key)
-        .toList(growable: false);
-
     final response = await Lastfm.scrobble(
-        tracks,
-        tracks
+        _selection!,
+        _selection!
             .map((track) => track.timestamp?.date ?? DateTime.now())
             .toList(growable: false));
 
@@ -174,18 +170,11 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
               const Expanded(child: LoadingComponent())
             else if (_items != null)
               Expanded(
-                child: EntityDisplay<LRecentTracksResponseTrack>(
-                  items: _items!.keys.toList(growable: false),
-                  leadingWidgetBuilder: (item) => Checkbox(
-                    value: _items![item],
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          _items![item] = value;
-                        });
-                      }
-                    },
-                  ),
+                child: EntityCheckboxList<LRecentTracksResponseTrack>(
+                  items: _items!,
+                  onSelectionChanged: (selection) {
+                    _selection = selection;
+                  },
                 ),
               ),
           ],

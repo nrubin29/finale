@@ -4,7 +4,7 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
-import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -39,7 +39,8 @@ class AppleMusicScrobbleView extends StatefulWidget {
 
 class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   AuthorizationStatus? _authorizationStatus;
-  Map<_PlayedSong, bool>? _items;
+  List<_PlayedSong>? _items;
+  List<_PlayedSong>? _selection;
 
   @override
   void initState() {
@@ -47,8 +48,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
     _load();
   }
 
-  bool get _hasItemsToScrobble =>
-      _items != null && _items!.isNotEmpty && _items!.values.any((e) => e);
+  bool get _hasItemsToScrobble => _selection?.isNotEmpty ?? false;
 
   Future<void> _load() async {
     _authorizationStatus = await FlutterMPMediaPlayer.authorize();
@@ -62,8 +62,8 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
 
       final tracks = await FlutterMPMediaPlayer.getRecentTracks(after: after);
       setState(() {
-        _items = Map.fromIterable(tracks.map((e) => _PlayedSong(e)),
-            value: (_) => true);
+        _items = tracks.map((e) => _PlayedSong(e)).toList(growable: false);
+        _selection = _items;
       });
     } else {
       setState(() {});
@@ -73,13 +73,8 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   Future<void> _scrobble() async {
     final now = DateTime.now();
 
-    final tracks = _items!.entries
-        .where((e) => e.value)
-        .map((e) => e.key)
-        .toList(growable: false);
-
-    final response = await Lastfm.scrobble(
-        tracks, tracks.map((track) => track.date).toList(growable: false));
+    final response = await Lastfm.scrobble(_selection!,
+        _selection!.map((track) => track.date).toList(growable: false));
 
     if (response.ignored == 0) {
       Preferences().lastAppleMusicScrobble = now;
@@ -121,21 +116,14 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
             ),
           ),
           Expanded(
-            child: EntityDisplay<_PlayedSong>(
-              items: _items!.keys.toList(growable: false),
+            child: EntityCheckboxList<_PlayedSong>(
+              items: _items!,
               displayImages: false,
               noResultsMessage: 'No music to scrobble.',
               onRefresh: _load,
-              leadingWidgetBuilder: (item) => Checkbox(
-                value: _items![item],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _items![item] = value;
-                    });
-                  }
-                },
-              ),
+              onSelectionChanged: (selection) {
+                _selection = selection;
+              },
             ),
           ),
         ],
