@@ -49,6 +49,16 @@ class _EntityCheckboxList<T extends Entity>
     _items = Map.fromIterable(widget.items, value: (_) => true);
   }
 
+  void _updateItem(T item, bool selected) {
+    setState(() {
+      _items[item] = selected;
+    });
+
+    widget.onSelectionChanged(_items.keys
+        .where((item) => _items[item]!)
+        .toList(growable: false));
+  }
+
   @override
   Widget build(BuildContext context) => EntityDisplay<T>(
         items: _items.keys.toList(growable: false),
@@ -56,17 +66,14 @@ class _EntityCheckboxList<T extends Entity>
         displayImages: widget.displayImages,
         noResultsMessage: widget.noResultsMessage,
         onRefresh: widget.onRefresh,
+        onTap: (T item) {
+          _updateItem(item, !_items[item]!);
+        },
         leadingWidgetBuilder: (item) => Checkbox(
           value: _items[item],
           onChanged: (value) {
             if (value != null) {
-              setState(() {
-                _items[item] = value;
-              });
-
-              widget.onSelectionChanged(_items.keys
-                  .where((item) => _items[item]!)
-                  .toList(growable: false));
+              _updateItem(item, value);
             }
           },
         ),

@@ -12,6 +12,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 enum DisplayType { list, grid }
 
+typedef OnTap<T extends Entity> = void Function(T item);
+
 typedef EntityWidgetBuilder<T extends Entity> = Widget Function(T item);
 
 typedef EntityAndItemsWidgetBuilder<T extends Entity> = Widget Function(
@@ -22,6 +24,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final PagedRequest<T>? request;
   final Stream<PagedRequest<T>>? requestStream;
 
+  final OnTap<T>? onTap;
   final EntityWidgetBuilder<T>? detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
@@ -45,6 +48,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.items,
       this.request,
       this.requestStream,
+      this.onTap,
       this.detailWidgetBuilder,
       this.subtitleWidgetBuilder,
       this.leadingWidgetBuilder,
@@ -62,6 +66,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.gridTileTextPadding = 16,
       this.fontSize = 14})
       : assert(items != null || request != null || requestStream != null),
+        assert(onTap == null || detailWidgetBuilder == null),
         assert(displayType == DisplayType.list ||
             (!displayNumbers && leadingWidgetBuilder == null)),
         super(key: key);
@@ -180,12 +185,16 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   }
 
   void _onTap(T item) {
-    assert(widget.detailWidgetBuilder != null);
+    assert(widget.onTap != null || widget.detailWidgetBuilder != null);
 
-    Navigator.push(
+    if (widget.onTap != null) {
+      widget.onTap!(item);
+    } else {
+      Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => widget.detailWidgetBuilder!(item)));
+        MaterialPageRoute(builder: (_) => widget.detailWidgetBuilder!(item)),
+      );
+    }
   }
 
   Widget _listItemBuilder(BuildContext context, int index) {
@@ -193,7 +202,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     return ListTile(
       visualDensity: VisualDensity.compact,
       title: Text(item.displayTitle),
-      onTap: widget.detailWidgetBuilder != null
+      onTap: widget.onTap != null || widget.detailWidgetBuilder != null
           ? () {
               _onTap(item);
             }
@@ -317,7 +326,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   }
 
   Widget _gridItemBuilder(BuildContext context, int index) {
-    if (widget.detailWidgetBuilder != null) {
+    if (widget.onTap != null || widget.detailWidgetBuilder != null) {
       return InkWell(
           onTap: () {
             _onTap(items[index]);
