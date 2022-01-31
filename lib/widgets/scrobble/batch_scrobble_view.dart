@@ -4,6 +4,7 @@ import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
+import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
@@ -98,14 +99,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     Text(formatScrobbles(widget.entity.tracks.length, 'track')),
               ),
               const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Scrobble timing',
-                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                      color: Theme.of(context).textTheme.caption!.color),
-                ),
-              ),
+              const HeaderListTile('Scrobble timing'),
               RadioListTile<ScrobbleTimestampBehavior>(
                 value: ScrobbleTimestampBehavior.startingNow,
                 groupValue: _behavior,
