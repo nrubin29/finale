@@ -153,8 +153,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                   ),
                 ),
                 const SizedBox(height: 10),
-                if (_tracks.isNotEmpty)
-                  const HeaderListTile(title: 'Top Tracks'),
+                if (_tracks.isNotEmpty) const HeaderListTile('Top Tracks'),
                 for (final track in _tracks.take(3))
                   ListTile(
                     title: Text(track.name),
@@ -190,8 +189,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       );
                     },
                   ),
-                if (_albums.isNotEmpty)
-                  const HeaderListTile(title: 'Top Albums'),
+                if (_albums.isNotEmpty) const HeaderListTile('Top Albums'),
                 for (final album in _albums.take(3))
                   ListTile(
                     title: Text(album.name),
@@ -228,8 +226,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                       );
                     },
                   ),
-                if (_artists.isNotEmpty)
-                  const HeaderListTile(title: 'Top Artists'),
+                if (_artists.isNotEmpty) const HeaderListTile('Top Artists'),
                 for (final artist in _artists.take(3))
                   ListTile(
                     title: Text(artist.name),

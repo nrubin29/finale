@@ -63,8 +63,8 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
                 _scrobbles!, (scrobble) => scrobble.date.beginningOfMonth)
             .entries) ...[
           HeaderListTile(
-            title: monthFormat.format(entry.key),
-            trailing: formatScrobbles(entry.value.length),
+            monthFormat.format(entry.key),
+            trailing: Text(formatScrobbles(entry.value.length)),
           ),
           for (final scrobble in entry.value)
             ListTile(title: Text(dateTimeFormat.format(scrobble.date))),

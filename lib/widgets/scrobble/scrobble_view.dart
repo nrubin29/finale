@@ -4,6 +4,7 @@ import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
+import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/base/titled_box.dart';
 import 'package:finale/widgets/scrobble/apple_music_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
@@ -100,7 +101,6 @@ class _ScrobbleViewState extends State<ScrobbleView> {
         child: Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.all(10),
             physics: const ScrollPhysics(),
             children: [
               if (!widget.isModal) ...[
@@ -114,7 +114,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                       });
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                 ],
                 TitledBox(
                   title: 'Sources',
@@ -135,20 +135,31 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                     }),
                   ],
                 ),
+                const SizedBox(height: 8),
+                const HeaderListTile('Manual'),
               ],
-              TextFormField(
-                controller: _trackController,
-                decoration: const InputDecoration(labelText: 'Song *'),
-                validator: _required,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextFormField(
+                  controller: _trackController,
+                  decoration: const InputDecoration(labelText: 'Song *'),
+                  validator: _required,
+                ),
               ),
-              TextFormField(
-                controller: _artistController,
-                decoration: const InputDecoration(labelText: 'Artist *'),
-                validator: _required,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextFormField(
+                  controller: _artistController,
+                  decoration: const InputDecoration(labelText: 'Artist *'),
+                  validator: _required,
+                ),
               ),
-              TextFormField(
-                controller: _albumController,
-                decoration: const InputDecoration(labelText: 'Album'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextFormField(
+                  controller: _albumController,
+                  decoration: const InputDecoration(labelText: 'Album'),
+                ),
               ),
               SwitchListTile(
                 controlAffinity: ListTileControlAffinity.leading,
@@ -169,13 +180,16 @@ class _ScrobbleViewState extends State<ScrobbleView> {
               ),
               Visibility(
                 visible: _useCustomTimestamp,
-                child: DateTimeField(
-                  initialValue: _customTimestamp,
-                  onChanged: (dateTime) {
-                    setState(() {
-                      _customTimestamp = dateTime;
-                    });
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: DateTimeField(
+                    initialValue: _customTimestamp,
+                    onChanged: (dateTime) {
+                      setState(() {
+                        _customTimestamp = dateTime;
+                      });
+                    },
+                  ),
                 ),
               ),
             ],
