@@ -1,10 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/base/loading_component.dart';
-import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:flutter/material.dart';
 
 class YourScrobblesView extends StatefulWidget {
@@ -57,6 +58,19 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
           ),
       ];
 
+  List<Widget> get _listView => [
+        for (final entry in groupBy<LUserTrackScrobble, DateTime>(
+                _scrobbles!, (scrobble) => scrobble.date.beginningOfMonth)
+            .entries) ...[
+          HeaderListTile(
+            title: monthFormat.format(entry.key),
+            trailing: formatScrobbles(entry.value.length),
+          ),
+          for (final scrobble in entry.value)
+            ListTile(title: Text(dateTimeFormat.format(scrobble.date))),
+        ],
+      ];
+
   @override
   Widget build(BuildContext context) => DefaultTabController(
         length: 2,
@@ -76,7 +90,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
               : TabBarView(
                   children: [
                     ListView(children: _calendarView),
-                    EntityDisplay<LUserTrackScrobble>(items: _scrobbles!),
+                    ListView(children: _listView),
                   ],
                 ),
         ),

@@ -299,13 +299,6 @@ class LUserTrackScrobble extends BasicScrobbledTrack {
   LUserWeeklyTrackChartTrackArtist artist;
   LUserTrackScrobbleAlbum album;
 
-  @override
-  ImageIdProvider get imageIdProvider =>
-      ImageId.scrape(url, '.cover-art > :first-child',
-          attribute: 'src',
-          endUrlAtPeriod: true,
-          spotifyFallback: SSearchTracksRequest('$name $artistName'));
-
   LUserTrackScrobble(this.name, this.date, this.url, this.artist, this.album);
 
   factory LUserTrackScrobble.fromJson(Map<String, dynamic> json) =>

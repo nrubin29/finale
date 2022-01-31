@@ -39,6 +39,7 @@ String formatScrobbles(int playCount, [String noun = 'scrobble']) =>
 final numberFormat = NumberFormat();
 final dateFormat = DateFormat('d MMM');
 final dateFormatWithYear = DateFormat('d MMM yyyy');
+final monthFormat = DateFormat('MMMM yyyy');
 final timeFormat = DateFormat.jms();
 final dateTimeFormat = DateFormat('d MMM').add_jm();
 final dateTimeFormatWithYear = DateFormat('d MMM yyyy').add_jm();
@@ -75,6 +76,9 @@ extension DateTimeUtil on DateTime {
 
   /// Returns a [DateTime] with the same date and time 11:59:59 pm.
   DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999, 999);
+
+  /// Returns a [DateTime] at the beginning of the [month].
+  DateTime get beginningOfMonth => DateTime(year, month);
 
   int get secondsSinceEpoch => millisecondsSinceEpoch ~/ 1000;
 }
