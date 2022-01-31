@@ -6,6 +6,7 @@ class EntityCheckboxList<T extends Entity> extends StatefulWidget {
   final List<T> items;
   final void Function(List<T> selectedItems) onSelectionChanged;
 
+  final bool scrollable;
   final bool displayImages;
   final String noResultsMessage;
   final RefreshCallback? onRefresh;
@@ -13,6 +14,7 @@ class EntityCheckboxList<T extends Entity> extends StatefulWidget {
   const EntityCheckboxList({
     required this.items,
     required this.onSelectionChanged,
+    this.scrollable = true,
     this.displayImages = true,
     this.noResultsMessage = 'No results.',
     this.onRefresh,
@@ -48,6 +50,7 @@ class _EntityCheckboxList<T extends Entity>
   @override
   Widget build(BuildContext context) => EntityDisplay<T>(
         items: _items.keys.toList(growable: false),
+        scrollable: widget.scrollable,
         displayImages: widget.displayImages,
         noResultsMessage: widget.noResultsMessage,
         onRefresh: widget.onRefresh,

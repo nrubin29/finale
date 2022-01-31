@@ -3,6 +3,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
+import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
@@ -26,13 +27,17 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
   var _behavior = ScrobbleTimestampBehavior.startingNow;
   DateTime? _customTimestamp;
 
+  var _isTracksExpanded = false;
+  late List<ScrobbleableTrack> _selection;
+
   @override
   void initState() {
     super.initState();
+    _selection = widget.entity.tracks;
   }
 
   Future<void> _scrobble(BuildContext context) async {
-    var tracks = widget.entity.tracks;
+    var tracks = _selection;
     List<DateTime> timestamps;
 
     if (_behavior == ScrobbleTimestampBehavior.startingNow ||
@@ -79,9 +84,9 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
       body: SafeArea(
         child: Form(
           child: ListView(
-            padding: const EdgeInsets.all(10),
             physics: const ScrollPhysics(),
             children: [
+              const SizedBox(height: 16),
               ListTile(
                 leading: EntityImage(entity: widget.entity),
                 title: Text(widget.entity.displayTitle),
@@ -91,11 +96,11 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 trailing:
                     Text(formatScrobbles(widget.entity.tracks.length, 'track')),
               ),
-              const SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerLeft,
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'Scrobble behavior',
+                  'Scrobble timing',
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
                       color: Theme.of(context).textTheme.caption!.color),
                 ),
@@ -154,14 +159,41 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 visible:
                     _behavior == ScrobbleTimestampBehavior.startingCustom ||
                         _behavior == ScrobbleTimestampBehavior.endingCustom,
-                child: DateTimeField(
-                  initialValue: _customTimestamp,
-                  onChanged: (dateTime) {
-                    setState(() {
-                      _customTimestamp = dateTime;
-                    });
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: DateTimeField(
+                    initialValue: _customTimestamp,
+                    onChanged: (dateTime) {
+                      setState(() {
+                        _customTimestamp = dateTime;
+                      });
+                    },
+                  ),
                 ),
+              ),
+              ExpansionPanelList(
+                expandedHeaderPadding: EdgeInsets.zero,
+                expansionCallback: (_, isExpanded) {
+                  setState(() {
+                    _isTracksExpanded = !isExpanded;
+                  });
+                },
+                children: [
+                  ExpansionPanel(
+                    headerBuilder: (_, __) =>
+                        const ListTile(title: Text('Tracks')),
+                    canTapOnHeader: true,
+                    isExpanded: _isTracksExpanded,
+                    body: EntityCheckboxList<ScrobbleableTrack>(
+                      items: widget.entity.tracks,
+                      displayImages: false,
+                      scrollable: false,
+                      onSelectionChanged: (selection) {
+                        _selection = selection;
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

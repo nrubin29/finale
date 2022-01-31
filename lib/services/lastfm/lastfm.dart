@@ -399,7 +399,7 @@ class Lastfm {
 
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
       List<Track> tracks, List<DateTime> timestamps) async {
-    assert(tracks.length == timestamps.length);
+    assert(tracks.length + 1 == timestamps.length);
 
     var accepted = 0;
     var ignored = 0;
