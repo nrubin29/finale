@@ -110,7 +110,6 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
 
   Future<void> getInitialItems() async {
     didInitialRequest = false;
-    items = [];
     final id = ++requestId;
 
     try {
@@ -134,6 +133,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       }());
 
       setState(() {
+        items = <T>[];
         hasMorePages = false;
       });
     }
