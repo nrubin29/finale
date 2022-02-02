@@ -42,6 +42,7 @@ final dateFormatWithYear = DateFormat('d MMM yyyy');
 final monthFormat = DateFormat('MMMM yyyy');
 final timeFormat = DateFormat.jms();
 final dateTimeFormat = DateFormat('d MMM').add_jm();
+final dateTimeFormatWithSeconds = DateFormat('d MMM').add_jms();
 final dateTimeFormatWithYear = DateFormat('d MMM yyyy').add_jm();
 
 String formatDateTimeDelta(DateTime? date, {bool withYear = false}) {

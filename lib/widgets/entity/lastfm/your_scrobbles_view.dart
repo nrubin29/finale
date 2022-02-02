@@ -52,10 +52,12 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
             });
           },
         ),
+        const Divider(),
         for (final scrobble in _scrobbles!
             .where((scrobble) => scrobble.date.beginningOfDay == _selectedDate))
           ListTile(
             title: Text(timeFormat.format(scrobble.date)),
+            trailing: Text(scrobble.album.name),
           ),
       ];
 
@@ -68,7 +70,10 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
             trailing: Text(formatScrobbles(entry.value.length)),
           ),
           for (final scrobble in entry.value)
-            ListTile(title: Text(dateTimeFormat.format(scrobble.date))),
+            ListTile(
+              title: Text(dateTimeFormatWithSeconds.format(scrobble.date)),
+              trailing: Text(scrobble.album.name),
+            ),
         ],
       ];
 
