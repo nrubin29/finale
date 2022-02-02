@@ -8,6 +8,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/util/util.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -99,17 +100,9 @@ class _ProfileViewState extends State<ProfileView>
         final user = snapshot.data!;
 
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                EntityImage(entity: user, isCircular: true, width: 40),
-                const SizedBox(width: 8),
-                Text(user.name),
-              ],
-            ),
+          appBar: createAppBar(
+            user.name,
+            leading: EntityImage(entity: user, isCircular: true, width: 40),
             actions: [
               IconButton(
                 icon: const Icon(Icons.share),
