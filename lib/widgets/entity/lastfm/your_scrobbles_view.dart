@@ -6,6 +6,7 @@ import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/base/loading_component.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
 class YourScrobblesView extends StatefulWidget {
@@ -76,8 +77,12 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
         length: 2,
         child: Scaffold(
           appBar: createAppBar(
-            'Your scrobbles',
+            widget.track.name,
+            leading: widget.track.album != null
+                ? EntityImage(entity: widget.track.album!, width: 40)
+                : null,
             subtitle: formatScrobbles(widget.track.userPlayCount),
+            actions: [const SizedBox(width: 32)],
             bottom: const TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.calendar_today)),
