@@ -221,8 +221,7 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
 
   @override
   ImageIdProvider get imageIdProvider =>
-      ImageId.scrape(url, '.link-block-cover-link',
-          spotifyFallback: SSearchAlbumsRequest('$name ${artist.name}'));
+      () async => (await Lastfm.getAlbum(this)).imageId;
 }
 
 @JsonSerializable()
@@ -244,7 +243,7 @@ class LUserWeeklyArtistChartArtist extends BasicArtist {
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
   ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getArtist(this)).imageId;
+      () async => await (await Lastfm.getArtist(this)).imageIdProvider();
 
   @override
   final String name;
