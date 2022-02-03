@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 let numberFormatter: NumberFormatter = {
     let numberFormatter = NumberFormatter()
@@ -83,6 +84,48 @@ extension Period {
             case .unknown: fallthrough
             @unknown default: return "All Time"
             }
+        }
+    }
+}
+
+extension ThemeColor {
+    private var name: String {
+        get {
+            switch self {
+            case .unknown: fallthrough
+            case .red: return "Red"
+            case .pink: return "Pink"
+            case .purple: return "Purple"
+            case .deepPurple: return "DeepPurple"
+            case .indigo: return "Indigo"
+            case .blue: return "Blue"
+            case .lightBlue: return "LightBlue"
+            case .cyan: return "Cyan"
+            case .teal: return "Teal"
+            case .green: return "Green"
+            case .lightGreen: return "LightGreen"
+            case .orange: return "Orange"
+            case .brown: return "Brown"
+            case .blueGrey: return "BlueGrey"
+            }
+        }
+    }
+    
+    var accent: Color {
+        get {
+            return Color("AccentColor\(name)")
+        }
+    }
+    
+    var gradientStart: Color {
+        get {
+            return Color("WidgetBackgroundStart\(name)")
+        }
+    }
+    
+    var gradientEnd: Color {
+        get {
+            return Color("WidgetBackgroundEnd\(name)")
         }
     }
 }

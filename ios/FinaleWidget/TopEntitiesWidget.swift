@@ -197,7 +197,7 @@ struct TopEntitiesWidgetEntryViewLarge : View {
     }
     
     var body: some View {
-        FinaleWidgetLarge(title: "Top \(entry.configuration.type.displayName)", period: entry.configuration.period, username: entry.configuration.username, isPreview: entry.isPreview) {
+        FinaleWidgetLarge(title: "Top \(entry.configuration.type.displayName)", period: entry.configuration.period, username: entry.configuration.username, themeColor: entry.configuration.themeColor, isPreview: entry.isPreview) {
             if !entities.isEmpty {
                 LazyVGrid(columns: (0..<family.numColumns).map({_ in GridItem(.flexible())})) {
                     ForEach(entities, id: \.url) { entity in
@@ -219,7 +219,7 @@ struct TopEntitiesWidgetEntryViewLarge : View {
                                 .mask(RoundedRectangle(cornerRadius: 5))
                                 Text(entity.value)
                                     .font(Font.system(size: 8))
-                                    .foregroundColor(Color("AccentColor"))
+                                    .foregroundColor(entry.configuration.themeColor.accent)
                                     .bold()
                             }
                         }
@@ -227,7 +227,7 @@ struct TopEntitiesWidgetEntryViewLarge : View {
                 }
             } else {
                 Text("You haven't scrobbled any \(entry.configuration.type.displayName.lowercased()) in this period.")
-                    .foregroundColor(Color("AccentColor"))
+                    .foregroundColor(entry.configuration.themeColor.accent)
             }
         }
     }

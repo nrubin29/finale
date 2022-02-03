@@ -1,6 +1,8 @@
 import SwiftUI
 
-let widgetBackgroundGradient = LinearGradient(gradient: Gradient(colors: [Color("WidgetBackgroundStart"), Color("WidgetBackgroundEnd")]), startPoint: .top, endPoint: .bottom)
+func getWidgetBackgroundGradient(for themeColor: ThemeColor) -> LinearGradient {
+    return LinearGradient(gradient: Gradient(colors: [themeColor.gradientStart, themeColor.gradientEnd]), startPoint: .top, endPoint: .bottom)
+}
 
 func getLinkUrl(_ method: String, queryItems: [URLQueryItem]? = nil) -> URL {
     var components = URLComponents()
@@ -14,17 +16,18 @@ struct FinaleWidgetLarge<Content> : View where Content : View {
     let title: String
     let period: Period
     let username: String?
+    let themeColor: ThemeColor
     let isPreview: Bool
     @ViewBuilder let content: () -> Content
     
     var body: some View {
         ZStack {
-            widgetBackgroundGradient
+            getWidgetBackgroundGradient(for: themeColor)
             VStack {
-                TitleBar(title: title, period: period)
+                TitleBar(title: title, period: period, themeColor: themeColor)
                 if !isPreview && username?.isEmpty ?? true {
                     Text("Please enter your username in the widget settings.")
-                        .foregroundColor(Color("AccentColor"))
+                        .foregroundColor(themeColor.accent)
                         .frame(maxHeight: .infinity)
                 } else {
                     content()
@@ -40,35 +43,36 @@ struct FinaleWidgetLarge<Content> : View where Content : View {
 private struct TitleBar: View {
     let title: String
     let period: Period
+    let themeColor: ThemeColor
     
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
             Text(title)
                 .bold()
-                .foregroundColor(Color("AccentColor"))
+                .foregroundColor(themeColor.accent)
             Text(period.displayName)
                 .bold()
                 .font(.caption)
-                .foregroundColor(Color("AccentColor"))
+                .foregroundColor(themeColor.accent)
             Spacer()
             HStack(alignment: .center) {
                 Link(destination: getLinkUrl("scrobbleonce")) {
                     Image(systemName: "plus")
                         .resizable()
                         .frame(width: 15, height: 15)
-                        .foregroundColor(Color("AccentColor"))
+                        .foregroundColor(themeColor.accent)
                 }
                 Link(destination: getLinkUrl("scrobblecontinuously")) {
                     Image(systemName: "infinity")
                         .resizable()
                         .frame(width: 20, height: 10)
-                        .foregroundColor(Color("AccentColor"))
+                        .foregroundColor(themeColor.accent)
                 }
                 Image("FinaleIcon")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 15, height: 15)
-                    .colorMultiply(Color("AccentColor"))
+                    .colorMultiply(themeColor.accent)
             }
         }
         .padding(.top)

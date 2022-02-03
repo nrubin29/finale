@@ -140,17 +140,180 @@
 				</dict>
 			</array>
 		</dict>
+		<dict>
+			<key>INEnumDisplayName</key>
+			<string>Theme Color</string>
+			<key>INEnumDisplayNameID</key>
+			<string>u3JQSL</string>
+			<key>INEnumGeneratesHeader</key>
+			<true/>
+			<key>INEnumName</key>
+			<string>ThemeColor</string>
+			<key>INEnumType</key>
+			<string>Regular</string>
+			<key>INEnumValues</key>
+			<array>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>unknown</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>iFg5Zw</string>
+					<key>INEnumValueName</key>
+					<string>unknown</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Red</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>LYtuY6</string>
+					<key>INEnumValueIndex</key>
+					<integer>1</integer>
+					<key>INEnumValueName</key>
+					<string>red</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Pink</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>N8TrNJ</string>
+					<key>INEnumValueIndex</key>
+					<integer>2</integer>
+					<key>INEnumValueName</key>
+					<string>pink</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Purple</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>BY1XHE</string>
+					<key>INEnumValueIndex</key>
+					<integer>3</integer>
+					<key>INEnumValueName</key>
+					<string>purple</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Deep Purple</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>10qHE0</string>
+					<key>INEnumValueIndex</key>
+					<integer>4</integer>
+					<key>INEnumValueName</key>
+					<string>deepPurple</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Indigo</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>jWxH1z</string>
+					<key>INEnumValueIndex</key>
+					<integer>5</integer>
+					<key>INEnumValueName</key>
+					<string>indigo</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Blue</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>bdmb2f</string>
+					<key>INEnumValueIndex</key>
+					<integer>6</integer>
+					<key>INEnumValueName</key>
+					<string>blue</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Light Blue</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>g4gzS2</string>
+					<key>INEnumValueIndex</key>
+					<integer>7</integer>
+					<key>INEnumValueName</key>
+					<string>lightBlue</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Cyan</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>XF3nFx</string>
+					<key>INEnumValueIndex</key>
+					<integer>8</integer>
+					<key>INEnumValueName</key>
+					<string>cyan</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Teal</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>7PSEN1</string>
+					<key>INEnumValueIndex</key>
+					<integer>9</integer>
+					<key>INEnumValueName</key>
+					<string>teal</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Green</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>Jmzrbe</string>
+					<key>INEnumValueIndex</key>
+					<integer>10</integer>
+					<key>INEnumValueName</key>
+					<string>green</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Light Green</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>A8ygfK</string>
+					<key>INEnumValueIndex</key>
+					<integer>11</integer>
+					<key>INEnumValueName</key>
+					<string>lightGreen</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Orange</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>vyW87X</string>
+					<key>INEnumValueIndex</key>
+					<integer>12</integer>
+					<key>INEnumValueName</key>
+					<string>orange</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Brown</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>WYCfVQ</string>
+					<key>INEnumValueIndex</key>
+					<integer>13</integer>
+					<key>INEnumValueName</key>
+					<string>brown</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Blue-Grey</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>mPariM</string>
+					<key>INEnumValueIndex</key>
+					<integer>14</integer>
+					<key>INEnumValueName</key>
+					<string>blueGrey</string>
+				</dict>
+			</array>
+		</dict>
 	</array>
 	<key>INIntentDefinitionModelVersion</key>
 	<string>1.2</string>
 	<key>INIntentDefinitionNamespace</key>
 	<string>88xZPY</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>21A559</string>
+	<string>21C52</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>13A1030d</string>
+	<string>13C90</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>13.1</string>
+	<string>13.2</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -165,7 +328,7 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentLastParameterTag</key>
-			<integer>8</integer>
+			<integer>10</integer>
 			<key>INIntentName</key>
 			<string>TopEntitiesConfiguration</string>
 			<key>INIntentParameters</key>
@@ -398,6 +561,70 @@
 					<key>INIntentParameterType</key>
 					<string>Boolean</string>
 				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterCustomDisambiguation</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Theme Color</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>3EeWLq</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>5</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>ThemeColor</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>88xZPY</string>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<string>red</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>themeColor</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>There are ${count} options matching ‘${themeColor}’.</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>lD5wOB</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>DisambiguationIntroduction</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Just to confirm, you wanted ‘${themeColor}’?</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>P6scKt</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Confirmation</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>10</integer>
+					<key>INIntentParameterType</key>
+					<string>Integer</string>
+				</dict>
 			</array>
 			<key>INIntentResponse</key>
 			<dict>
@@ -436,7 +663,7 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentLastParameterTag</key>
-			<integer>4</integer>
+			<integer>6</integer>
 			<key>INIntentName</key>
 			<string>StatisticsConfiguration</string>
 			<key>INIntentParameters</key>
@@ -552,6 +779,70 @@
 					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>3</integer>
+					<key>INIntentParameterType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterCustomDisambiguation</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Theme Color</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>7HmS2t</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>3</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>ThemeColor</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>88xZPY</string>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<string>red</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>themeColor</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>There are ${count} options matching ‘${themeColor}’.</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>EZqIlr</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>DisambiguationIntroduction</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Just to confirm, you wanted ‘${themeColor}’?</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>a8ZD44</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Confirmation</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>6</integer>
 					<key>INIntentParameterType</key>
 					<string>Integer</string>
 				</dict>

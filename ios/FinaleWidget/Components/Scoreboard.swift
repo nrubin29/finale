@@ -20,13 +20,14 @@ prefix func !(alignment: ScoreboardAlignment) -> ScoreboardAlignment {
 }
 
 struct Scoreboard: View {
+    let themeColor: ThemeColor
     let alignment: ScoreboardAlignment
     let tiles: [ScoreTileModel]
     
     var body: some View {
         Stack(alignment: alignment) {
             ForEach(Array(tiles.enumerated()), id: \.element.title) { (index, model) in
-                ScoreTile(model: model, alignment: alignment)
+                ScoreTile(themeColor: themeColor, model: model, alignment: alignment)
                 if (alignment == .horizontal && index < tiles.count - 1) {
                     Divider()
                         .padding(.horizontal, 2)
@@ -38,6 +39,7 @@ struct Scoreboard: View {
 }
 
 private struct ScoreTileVertical: View {
+    let themeColor: ThemeColor
     let model: ScoreTileModel
     
     var body: some View {
@@ -46,12 +48,12 @@ private struct ScoreTileVertical: View {
                 Image(model.icon)
                     .resizable()
                     .frame(width: 30, height: 30)
-                    .colorMultiply(Color("AccentColor"))
+                    .colorMultiply(themeColor.accent)
                 Text(model.title)
-                    .foregroundColor(Color("AccentColor"))
+                    .foregroundColor(themeColor.accent)
                     .bold()
                 Text(model.value != nil ? numberFormatter.string(from: NSNumber(value: model.value!))! : "---")
-                    .foregroundColor(Color("AccentColor"))
+                    .foregroundColor(themeColor.accent)
                     .bold()
             }
         }
@@ -59,31 +61,33 @@ private struct ScoreTileVertical: View {
 }
 
 private struct ScoreTileHorizontal: View {
+    let themeColor: ThemeColor
     let model: ScoreTileModel
     
     var body: some View {
         Link(destination: getLinkUrl("profileTab", queryItems: [URLQueryItem(name: "tab", value: model.link)])) {
             HStack {
                 Text(model.value != nil ? numberFormatter.string(from: NSNumber(value: model.value!))! : "---")
-                    .foregroundColor(Color("AccentColor"))
+                    .foregroundColor(themeColor.accent)
                     .bold()
                 Image(model.icon)
                     .resizable()
                     .frame(width: 20, height: 20)
-                    .colorMultiply(Color("AccentColor"))
+                    .colorMultiply(themeColor.accent)
             }
         }
     }
 }
 
 private struct ScoreTile : View {
+    let themeColor: ThemeColor
     let model: ScoreTileModel
     let alignment: ScoreboardAlignment
     
     var body: some View {
         switch (alignment) {
-        case .vertical: ScoreTileHorizontal(model: model)
-        case .horizontal: ScoreTileVertical(model: model)
+        case .vertical: ScoreTileHorizontal(themeColor: themeColor, model: model)
+        case .horizontal: ScoreTileVertical(themeColor: themeColor, model: model)
         }
     }
 }

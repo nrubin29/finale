@@ -97,21 +97,21 @@ struct StatisticsWidgetEntryViewSmall : View {
     
     var body: some View {
         ZStack {
-            widgetBackgroundGradient
+            getWidgetBackgroundGradient(for: entry.configuration.themeColor)
             if !entry.isPreview && entry.configuration.username?.isEmpty ?? true {
                 VStack {
                     Image("FinaleIcon")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
-                        .colorMultiply(Color("AccentColor"))
+                        .colorMultiply(entry.configuration.themeColor.accent)
                     Text("Please enter your username in the widget settings.")
                         .multilineTextAlignment(.center)
-                        .foregroundColor(Color("AccentColor"))
+                        .foregroundColor(entry.configuration.themeColor.accent)
                 }
                 .padding()
             } else {
-                Scoreboard(alignment: .vertical, tiles: getScoreTiles(entry))
+                Scoreboard(themeColor: entry.configuration.themeColor, alignment: .vertical, tiles: getScoreTiles(entry))
                     .padding()
             }
         }
@@ -122,8 +122,8 @@ struct StatisticsWidgetEntryViewLarge : View {
     var entry: StatisticsProvider.Entry
     
     var body: some View {
-        FinaleWidgetLarge(title: "Last.fm Stats", period: entry.configuration.period, username: entry.configuration.username, isPreview: entry.isPreview) {
-            Scoreboard(alignment: .horizontal, tiles: getScoreTiles(entry))
+        FinaleWidgetLarge(title: "Last.fm Stats", period: entry.configuration.period, username: entry.configuration.username, themeColor: entry.configuration.themeColor, isPreview: entry.isPreview) {
+            Scoreboard(themeColor: entry.configuration.themeColor, alignment: .horizontal, tiles: getScoreTiles(entry))
         }
     }
 }
