@@ -161,22 +161,25 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                   decoration: const InputDecoration(labelText: 'Album'),
                 ),
               ),
-              SwitchListTile(
-                controlAffinity: ListTileControlAffinity.leading,
-                contentPadding: EdgeInsets.zero,
-                title: const Text('Custom timestamp'),
-                value: _useCustomTimestamp,
-                onChanged: (value) {
-                  setState(
-                    () {
-                      _useCustomTimestamp = value;
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: SwitchListTile(
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Custom timestamp'),
+                  value: _useCustomTimestamp,
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        _useCustomTimestamp = value;
 
-                      if (_useCustomTimestamp) {
-                        _customTimestamp = DateTime.now();
-                      }
-                    },
-                  );
-                },
+                        if (_useCustomTimestamp) {
+                          _customTimestamp = DateTime.now();
+                        }
+                      },
+                    );
+                  },
+                ),
               ),
               Visibility(
                 visible: _useCustomTimestamp,
