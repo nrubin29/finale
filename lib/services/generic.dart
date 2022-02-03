@@ -24,7 +24,11 @@ abstract class PagedRequest<T extends Entity> {
     do {
       lastResult = await doRequest(50, page++);
       result.addAll(lastResult);
-    } while (lastResult.length == 50);
+    } while (lastResult.length >= 50);
+
+    // [GetRecentTracksRequest] will return 51 items on the first page if the
+    // user is currently scrobbling. In all other cases, we'll always get 50
+    // items.
 
     return result;
   }
