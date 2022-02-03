@@ -106,7 +106,7 @@ class _EntityImageState extends State<EntityImage> {
 
     var imageWidget = widget.isCircular ? _buildCircularImage(image) : image;
 
-    assert(() {
+    if (isDebug) {
       if (EntityImage.censorImages && widget.entity.type != EntityType.user) {
         imageWidget = ClipRect(
           child: Stack(
@@ -157,9 +157,7 @@ class _EntityImageState extends State<EntityImage> {
           ),
         );
       }
-
-      return true;
-    }());
+    }
 
     return imageWidget;
   }

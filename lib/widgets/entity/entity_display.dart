@@ -4,6 +4,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
@@ -133,11 +134,10 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
         });
       }
     } on Exception catch (error, stackTrace) {
-      assert(() {
+      if (isDebug) {
         // ignore: avoid_print
         print('$error\n$stackTrace');
-        return true;
-      }());
+      }
 
       setState(() {
         items = <T>[];
@@ -168,11 +168,10 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
         });
       }
     } on Exception catch (error, stackTrace) {
-      assert(() {
+      if (isDebug) {
         // ignore: avoid_print
         print('$error\n$stackTrace');
-        return true;
-      }());
+      }
 
       setState(() {
         hasMorePages = false;

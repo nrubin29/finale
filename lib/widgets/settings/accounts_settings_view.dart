@@ -134,11 +134,10 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                     final session =
                         await Lastfm.authenticate(token, libre: true);
                     Preferences().libreKey = session.key;
-                  } on PlatformException catch (e) {
-                    assert(() {
-                      // ignore: use_rethrow_when_possible
-                      throw e;
-                    }());
+                  } on PlatformException {
+                    if (isDebug) {
+                      rethrow;
+                    }
                     return;
                   }
                 }

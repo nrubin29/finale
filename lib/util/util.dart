@@ -14,12 +14,9 @@ String get authCallbackUrl {
   var callbackUrl =
       isWeb ? 'https://web.finale.app/auth.html' : 'finale://auth';
 
-  assert(() {
-    if (isWeb) {
-      callbackUrl = 'http://localhost:52486/auth.html';
-    }
-    return true;
-  }());
+  if (isDebug && isWeb) {
+    callbackUrl = 'http://localhost:52486/auth.html';
+  }
 
   return callbackUrl;
 }
