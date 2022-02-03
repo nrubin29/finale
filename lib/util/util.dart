@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_io/io.dart';
 
+const isDebug = kDebugMode;
 const isWeb = kIsWeb;
 final isDesktop = !isWeb && Platform.isMacOS;
 final isMobile = !isWeb && !isDesktop;

@@ -27,6 +27,7 @@ const _censorImages = bool.fromEnvironment('censorImages', defaultValue: true);
 final isIos = device.contains('iPhone') || device.contains('iPad');
 final isIpad = device.contains('iPad');
 final isMacOS = device.contains('macOS');
+final isAndroid = !isIos && !isMacOS;
 final directory = isIos
     ? '/Users/noahrubin/Documents/DartProjects/finale/screenshots/$device'
     : isMacOS
@@ -40,10 +41,12 @@ Future<void> main() async {
     EntityImage.censorImages = true;
   }
 
-  try {
-    await Directory(directory).delete(recursive: true);
-  } on Exception {
-    // Do nothing.
+  if (!isIos) {
+    try {
+      await Directory(directory).delete(recursive: true);
+    } on Exception {
+      // Do nothing.
+    }
   }
 
   setUp(() async {
@@ -87,7 +90,8 @@ Future<void> main() async {
     await tester.tap(find.byIcon(scrobbleIcon).at(1));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Custom timestamp'));
+    await tester.tap(find.text('Custom timestamp', skipOffstage: !isAndroid),
+        warnIfMissed: !isAndroid);
     await tester.pumpAndSettle();
 
     final formFields =
@@ -113,7 +117,8 @@ Future<void> main() async {
     await tester.tap(find.byIcon(Icons.grid_view));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Generate'));
+    await tester.tap(find.text('Generate', skipOffstage: !isAndroid),
+        warnIfMissed: !isAndroid);
     await tester.pumpMany();
 
     if (isIpad) {
@@ -153,6 +158,10 @@ Future<void> main() async {
 
     await pumpWidget(tester, BatchScrobbleView(entity: album),
         widgetBehindModal: AlbumView(album: album));
+
+    await tester.tap(find.text('Tracks'), warnIfMissed: !isAndroid);
+    await tester.pumpAndSettle();
+
     await tester.saveScreenshot('8_album_scrobble');
   });
 }

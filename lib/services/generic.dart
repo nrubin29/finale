@@ -4,9 +4,10 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/http_throttle.dart';
 import 'package:finale/util/image_id_cache.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart'
-    show DefaultCacheManager;
+    show DefaultCacheManager, HttpExceptionWithStatus;
 import 'package:json_annotation/json_annotation.dart';
 
 final httpClient = ThrottleClient(15);
@@ -92,7 +93,13 @@ abstract class Entity {
         await ImageIdCache().insert(url!, result);
       }
 
-      await DefaultCacheManager().downloadFile(result.getUrl(quality));
+      try {
+        await DefaultCacheManager().downloadFile(result.getUrl(quality));
+      } on HttpExceptionWithStatus {
+        if (!isDebug || !isScreenshotTest) {
+          rethrow;
+        }
+      }
       cachedImageId = result;
     }
   }
