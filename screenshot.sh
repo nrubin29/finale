@@ -37,6 +37,10 @@ if [ $RUN_MACOS = true ]; then
   mkdir "$TARGET"
   mv $SOURCE/* $TARGET
   rm -r "$SOURCE"
+  (
+    cd "$TARGET" || exit
+    sips -c 1600 2560 ./*.png
+  )
 fi
 
 # Android
