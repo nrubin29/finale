@@ -126,6 +126,7 @@ class _ProfileViewState extends State<ProfileView>
                   onPressed: () {
                     showBarModalBottomSheet(
                       context: context,
+                      duration: const Duration(milliseconds: 200),
                       builder: (_) => FriendScrobbleView(username: user.name),
                     );
                   },
