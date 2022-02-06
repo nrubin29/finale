@@ -107,6 +107,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
         children: [
           const SafeArea(
             minimum: EdgeInsets.all(8),
+            bottom: false,
             child: Text(
               'Due to limitations imposed by Apple, Finale can only scrobble '
               'music that has been added to your library. Additionally, if you '
@@ -115,6 +116,17 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
               textAlign: TextAlign.center,
             ),
           ),
+          if (Preferences().lastAppleMusicScrobble != null)
+            SafeArea(
+              minimum: const EdgeInsets.all(8),
+              top: false,
+              child: Text(
+                'Last scrobbled: ' +
+                    dateTimeFormat
+                        .format(Preferences().lastAppleMusicScrobble!),
+                textAlign: TextAlign.center,
+              ),
+            ),
           Expanded(
             child: EntityCheckboxList<_PlayedSong>(
               items: _items!,
