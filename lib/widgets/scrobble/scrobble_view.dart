@@ -37,7 +37,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   var _useCustomTimestamp = false;
   DateTime? _customTimestamp;
 
+  late StreamSubscription _showAlbumArtistFieldSubscription;
   StreamSubscription? _appleMusicChangeSubscription;
+  late bool _showAlbumArtistField;
   late bool _isAppleMusicEnabled;
 
   @override
@@ -46,6 +48,15 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _trackController.text = widget.track?.name ?? '';
     _artistController.text = widget.track?.artistName ?? '';
     _albumController.text = widget.track?.albumName ?? '';
+
+    _showAlbumArtistFieldSubscription =
+        Preferences().showAlbumArtistFieldChanged.listen((value) {
+      setState(() {
+        _showAlbumArtistField = value;
+      });
+    });
+
+    _showAlbumArtistField = Preferences().showAlbumArtistField;
 
     if (!widget.isModal) {
       _appleMusicChangeSubscription =
@@ -179,13 +190,15 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                   decoration: const InputDecoration(labelText: 'Album'),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TextFormField(
-                  controller: _albumArtistController,
-                  decoration: const InputDecoration(labelText: 'Album Artist'),
+              if (_showAlbumArtistField)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: TextFormField(
+                    controller: _albumArtistController,
+                    decoration:
+                        const InputDecoration(labelText: 'Album Artist'),
+                  ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: SwitchListTile(
@@ -230,6 +243,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   @override
   void dispose() {
     super.dispose();
+    _showAlbumArtistFieldSubscription.cancel();
     _appleMusicChangeSubscription?.cancel();
     _trackController.dispose();
     _artistController.dispose();

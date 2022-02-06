@@ -4,6 +4,7 @@ import 'package:finale/util/util.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/settings/about_view.dart';
 import 'package:finale/widgets/settings/accounts_settings_view.dart';
+import 'package:finale/widgets/settings/general_settings_view.dart';
 import 'package:finale/widgets/settings/listen_continuously_settings_view.dart';
 import 'package:finale/widgets/settings/theme_settings_view.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,18 @@ class SettingsView extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AboutView()));
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('General'),
+                      leading: const Icon(Icons.settings),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => GeneralSettingsView()),
+                        );
                       },
                     ),
                     ListTile(

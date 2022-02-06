@@ -221,6 +221,21 @@ class Preferences {
         'lastAppleMusicScrobble', value!.millisecondsSinceEpoch);
   }
 
+  bool get showAlbumArtistField =>
+      _preferences.getBool('showAlbumArtistField') ?? true;
+
+  set showAlbumArtistField(bool value) {
+    _preferences.setBool('showAlbumArtistField', value);
+    _showAlbumArtistFieldChanged.add(value);
+  }
+
+  // This stream needs to be open for the entire lifetime of the app.
+  // ignore: close_sinks
+  final _showAlbumArtistFieldChanged = StreamController<bool>.broadcast();
+
+  Stream<bool> get showAlbumArtistFieldChanged =>
+      _showAlbumArtistFieldChanged.stream;
+
   void clear() {
     _preferences.clear();
   }
