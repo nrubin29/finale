@@ -46,7 +46,7 @@ class AlbumView extends StatelessWidget {
             subtitle: album.artist.name,
             actions: [
               IconButton(
-                icon: const Icon(Icons.share),
+                icon: Icon(Icons.adaptive.share),
                 onPressed: () {
                   Share.share(album.url);
                 },

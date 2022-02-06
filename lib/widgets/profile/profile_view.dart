@@ -105,7 +105,7 @@ class _ProfileViewState extends State<ProfileView>
             leading: EntityImage(entity: user, isCircular: true, width: 40),
             actions: [
               IconButton(
-                icon: const Icon(Icons.share),
+                icon: Icon(Icons.adaptive.share),
                 onPressed: () {
                   Share.share(user.url);
                 },

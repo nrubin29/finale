@@ -59,7 +59,7 @@ class _TrackViewState extends State<TrackView> {
             subtitle: track.artist?.name,
             actions: [
               IconButton(
-                icon: const Icon(Icons.share),
+                icon: Icon(Icons.adaptive.share),
                 onPressed: () {
                   Share.share(track.url);
                 },

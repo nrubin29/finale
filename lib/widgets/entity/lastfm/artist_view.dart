@@ -59,7 +59,7 @@ class _ArtistViewState extends State<ArtistView>
               artist.name,
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.share),
+                  icon: Icon(Icons.adaptive.share),
                   onPressed: () {
                     Share.share(artist.url);
                   },
