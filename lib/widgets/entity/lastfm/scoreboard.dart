@@ -95,7 +95,7 @@ class _ScoreboardState extends State<Scoreboard> {
             children: [
               for (var i = 0; i < widgets.length; i++) ...[
                 widgets[i],
-                if (i < widgets.length - 1) const VerticalDivider(),
+                if (i < widgets.length - 1) const VerticalDivider(width: 24),
               ]
             ],
           ),
