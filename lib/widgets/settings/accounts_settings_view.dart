@@ -18,12 +18,14 @@ class AccountsSettingsView extends StatefulWidget {
 
 class _AccountsSettingsViewState extends State<AccountsSettingsView> {
   late bool _spotifyEnabled;
+  late bool _appleMusicEnabled;
   late bool _libreEnabled;
 
   @override
   void initState() {
     super.initState();
     _spotifyEnabled = Preferences().spotifyEnabled;
+    _appleMusicEnabled = Preferences().appleMusicEnabled;
     _libreEnabled = Preferences().libreEnabled;
   }
 
@@ -114,6 +116,28 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                   ),
                 ],
               ),
+            ),
+          ),
+          ListTile(
+            title: const Text('Apple Music'),
+            leading: const Icon(SocialMediaIcons.apple),
+            trailing: Switch(
+              value: _appleMusicEnabled,
+              onChanged: (value) {
+                setState(() {
+                  _appleMusicEnabled =
+                      (Preferences().appleMusicEnabled = value);
+                });
+              },
+            ),
+          ),
+          SafeArea(
+            top: false,
+            bottom: false,
+            minimum: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              'Scrobble music that you listen to in the Music app.',
+              style: theme.textTheme.caption,
             ),
           ),
           ListTile(

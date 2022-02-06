@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
@@ -33,12 +36,26 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   var _useCustomTimestamp = false;
   DateTime? _customTimestamp;
 
+  StreamSubscription? _appleMusicChangeSubscription;
+  late bool _appleMusicEnabled;
+
   @override
   void initState() {
     super.initState();
     _trackController.text = widget.track?.name ?? '';
     _artistController.text = widget.track?.artistName ?? '';
     _albumController.text = widget.track?.albumName ?? '';
+
+    if (!widget.isModal) {
+      _appleMusicChangeSubscription =
+          Preferences().appleMusicChange.listen((value) {
+        setState(() {
+          _appleMusicEnabled = value;
+        });
+      });
+
+      _appleMusicEnabled = Preferences().appleMusicEnabled;
+    }
   }
 
   String? _required(String? value) {
@@ -119,7 +136,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 TitledBox(
                   title: 'Sources',
                   actions: [
-                    if (Platform.isIOS)
+                    if (Platform.isIOS && _appleMusicEnabled)
                       ButtonAction('Apple Music', SocialMediaIcons.apple, () {
                         Navigator.push(
                           context,
@@ -205,6 +222,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   @override
   void dispose() {
     super.dispose();
+    _appleMusicChangeSubscription?.cancel();
     _trackController.dispose();
     _artistController.dispose();
     _albumController.dispose();

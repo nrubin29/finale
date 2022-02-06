@@ -194,6 +194,20 @@ class Preferences {
     _themeColorChange.add(value);
   }
 
+  // This stream needs to be open for the entire lifetime of the app.
+  // ignore: close_sinks
+  final _appleMusicChange = StreamController<bool>.broadcast();
+
+  Stream<bool> get appleMusicChange => _appleMusicChange.stream;
+
+  bool get appleMusicEnabled =>
+      _preferences.getBool('appleMusicEnabled') ?? true;
+
+  set appleMusicEnabled(bool appleMusicEnabled) {
+    _preferences.setBool('appleMusicEnabled', appleMusicEnabled);
+    _appleMusicChange.add(appleMusicEnabled);
+  }
+
   DateTime? get lastAppleMusicScrobble {
     final value = _preferences.getInt('lastAppleMusicScrobble');
     return value == null ? null : DateTime.fromMillisecondsSinceEpoch(value);
