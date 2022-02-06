@@ -435,7 +435,7 @@ class Lastfm {
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
     });
 
-    if (Preferences().libreEnabled) {
+    if (Preferences().isLibreEnabled) {
       await _doRequest(
           'track.scrobble', {...data, 'sk': Preferences().libreKey},
           post: true, libre: true);

@@ -93,7 +93,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   late TabController _tabController;
   final _query = ReplaySubject<SearchQuery>(maxSize: 2)
     ..add(SearchQuery.empty(Preferences().searchEngine));
-  var _spotifyEnabled = true;
+  var _isSpotifyEnabled = true;
 
   @override
   void initState() {
@@ -125,10 +125,10 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   }
 
   void _setSpotifyEnabled() {
-    _spotifyEnabled = Preferences().spotifyEnabled;
+    _isSpotifyEnabled = Preferences().isSpotifyEnabled;
 
     if (_searchEngine == SearchEngine.spotify &&
-        (!_spotifyEnabled || !Preferences().isSpotifyLoggedIn)) {
+        (!_isSpotifyEnabled || !Preferences().isSpotifyLoggedIn)) {
       setState(() {
         _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
       });
@@ -151,11 +151,11 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         appBar: AppBar(
           backgroundColor:
               _searchEngine == SearchEngine.lastfm ? null : spotifyGreen,
-          titleSpacing: _spotifyEnabled ? 0 : null,
+          titleSpacing: _isSpotifyEnabled ? 0 : null,
           title: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _spotifyEnabled
+              _isSpotifyEnabled
                   ? Row(children: [
                       ButtonTheme(
                         alignedDropdown: true,

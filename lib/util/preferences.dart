@@ -99,10 +99,10 @@ class Preferences {
     }
   }
 
-  bool get spotifyEnabled => _preferences.getBool('spotifyEnabled') ?? true;
+  bool get isSpotifyEnabled => _preferences.getBool('spotifyEnabled') ?? true;
 
-  set spotifyEnabled(bool spotifyEnabled) {
-    _preferences.setBool('spotifyEnabled', spotifyEnabled);
+  set isSpotifyEnabled(bool value) {
+    _preferences.setBool('spotifyEnabled', value);
     _spotifyEnabledChange.add(null);
   }
 
@@ -146,12 +146,14 @@ class Preferences {
     }
   }
 
-  bool get libreEnabled => _preferences.getBool('libreEnabled') ?? false;
+  bool get isLibreEnabled => _preferences.getBool('libreEnabled') ?? false;
 
-  set libreEnabled(bool value) => _preferences.setBool('libreEnabled', value);
+  set isLibreEnabled(bool value) {
+    _preferences.setBool('libreEnabled', value);
+  }
 
   void clearLibre() {
-    libreEnabled = false;
+    isLibreEnabled = false;
     libreKey = null;
   }
 
@@ -200,12 +202,12 @@ class Preferences {
 
   Stream<bool> get appleMusicChange => _appleMusicChange.stream;
 
-  bool get appleMusicEnabled =>
-      _preferences.getBool('appleMusicEnabled') ?? true;
+  bool get isAppleMusicEnabled =>
+      _preferences.getBool('isAppleMusicEnabled') ?? true;
 
-  set appleMusicEnabled(bool appleMusicEnabled) {
-    _preferences.setBool('appleMusicEnabled', appleMusicEnabled);
-    _appleMusicChange.add(appleMusicEnabled);
+  set isAppleMusicEnabled(bool value) {
+    _preferences.setBool('isAppleMusicEnabled', value);
+    _appleMusicChange.add(value);
   }
 
   DateTime? get lastAppleMusicScrobble {

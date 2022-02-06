@@ -17,16 +17,16 @@ class AccountsSettingsView extends StatefulWidget {
 }
 
 class _AccountsSettingsViewState extends State<AccountsSettingsView> {
-  late bool _spotifyEnabled;
-  late bool _appleMusicEnabled;
-  late bool _libreEnabled;
+  late bool _isSpotifyEnabled;
+  late bool _isAppleMusicEnabled;
+  late bool _isLibreEnabled;
 
   @override
   void initState() {
     super.initState();
-    _spotifyEnabled = Preferences().spotifyEnabled;
-    _appleMusicEnabled = Preferences().appleMusicEnabled;
-    _libreEnabled = Preferences().libreEnabled;
+    _isSpotifyEnabled = Preferences().isSpotifyEnabled;
+    _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
+    _isLibreEnabled = Preferences().isLibreEnabled;
   }
 
   void _logOutSpotify() {
@@ -54,7 +54,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
           ListTile(
             title: Row(children: [
               const Text('Spotify'),
-              if (_spotifyEnabled) ...[
+              if (_isSpotifyEnabled) ...[
                 const SizedBox(width: 20),
                 Preferences().hasSpotifyAuthData
                     ? TextButton(
@@ -74,12 +74,12 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
             ]),
             leading: const Icon(SocialMediaIcons.spotify),
             trailing: Switch(
-              value: _spotifyEnabled,
+              value: _isSpotifyEnabled,
               onChanged: (_) async {
-                _spotifyEnabled =
-                    (Preferences().spotifyEnabled = !_spotifyEnabled);
+                _isSpotifyEnabled =
+                    (Preferences().isSpotifyEnabled = !_isSpotifyEnabled);
 
-                if (!_spotifyEnabled) {
+                if (!_isSpotifyEnabled) {
                   _logOutSpotify();
                 } else {
                   setState(() {});
@@ -122,11 +122,11 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
             title: const Text('Apple Music'),
             leading: const Icon(SocialMediaIcons.apple),
             trailing: Switch(
-              value: _appleMusicEnabled,
+              value: _isAppleMusicEnabled,
               onChanged: (value) {
                 setState(() {
-                  _appleMusicEnabled =
-                      (Preferences().appleMusicEnabled = value);
+                  _isAppleMusicEnabled =
+                      (Preferences().isAppleMusicEnabled = value);
                 });
               },
             ),
@@ -144,7 +144,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
             title: Row(children: const [Text('Libre.fm')]),
             leading: const Icon(Icons.rss_feed),
             trailing: Switch(
-              value: _libreEnabled,
+              value: _isLibreEnabled,
               onChanged: (value) async {
                 if (value && Preferences().libreKey == null) {
                   try {
@@ -166,10 +166,10 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                   }
                 }
 
-                _libreEnabled = (Preferences().libreEnabled = value);
+                _isLibreEnabled = (Preferences().isLibreEnabled = value);
 
                 setState(() {
-                  if (!_libreEnabled) {
+                  if (!_isLibreEnabled) {
                     Preferences().clearLibre();
                   }
                 });

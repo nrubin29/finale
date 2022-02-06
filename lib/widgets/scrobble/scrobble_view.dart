@@ -37,7 +37,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   DateTime? _customTimestamp;
 
   StreamSubscription? _appleMusicChangeSubscription;
-  late bool _appleMusicEnabled;
+  late bool _isAppleMusicEnabled;
 
   @override
   void initState() {
@@ -50,11 +50,11 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       _appleMusicChangeSubscription =
           Preferences().appleMusicChange.listen((value) {
         setState(() {
-          _appleMusicEnabled = value;
+          _isAppleMusicEnabled = value;
         });
       });
 
-      _appleMusicEnabled = Preferences().appleMusicEnabled;
+      _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
     }
   }
 
@@ -136,7 +136,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 TitledBox(
                   title: 'Sources',
                   actions: [
-                    if (Platform.isIOS && _appleMusicEnabled)
+                    if (Platform.isIOS && _isAppleMusicEnabled)
                       ButtonAction('Apple Music', SocialMediaIcons.apple, () {
                         Navigator.push(
                           context,
