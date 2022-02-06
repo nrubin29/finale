@@ -1,5 +1,6 @@
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/settings/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class ListenContinuouslySettingsView extends StatefulWidget {
@@ -19,32 +20,6 @@ class _ListenContinuouslySettingsViewState
     _listenMoreFrequently = Preferences().listenMoreFrequently;
   }
 
-  List<Widget> _listTile(String title, String description, IconData icon,
-          bool value, ValueChanged<bool> onChanged) =>
-      [
-        ListTile(
-          title: Text(title),
-          leading: Icon(icon),
-          trailing: Switch(
-            value: value,
-            onChanged: (value) {
-              setState(() {
-                onChanged(value);
-              });
-            },
-          ),
-        ),
-        SafeArea(
-          top: false,
-          bottom: false,
-          minimum: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            description,
-            style: Theme.of(context).textTheme.caption,
-          ),
-        ),
-      ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,27 +27,33 @@ class _ListenContinuouslySettingsViewState
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ..._listTile(
-            'Strip tags',
-            'Removes tags like (Live) or [Demo] from track titles. This can '
-                'help with double scrobbles when the continuous scrobbler '
+          SettingsListTile(
+            title: 'Strip tags',
+            description:
+                'Removes tags like (Live) or [Demo] from track titles. This '
+                'can help with double scrobbles when the continuous scrobbler '
                 'finds multiple names for the same track.',
-            Icons.label_off,
-            _stripTags,
-            (value) {
-              _stripTags = (Preferences().stripTags = value);
+            icon: Icons.label_off,
+            value: _stripTags,
+            onChanged: (value) {
+              setState(() {
+                _stripTags = (Preferences().stripTags = value);
+              });
             },
           ),
-          ..._listTile(
-            'Listen more frequently',
-            'Listens every 30 seconds instead of every minute. This will '
+          SettingsListTile(
+            title: 'Listen more frequently',
+            description:
+                'Listens every 30 seconds instead of every minute. This will '
                 'ensure that shorter songs are not missed, but it will use '
                 'slightly more battery and data.',
-            Icons.more_time,
-            _listenMoreFrequently,
-            (value) {
-              _listenMoreFrequently =
-                  (Preferences().listenMoreFrequently = value);
+            icon: Icons.more_time,
+            value: _listenMoreFrequently,
+            onChanged: (value) {
+              setState(() {
+                _listenMoreFrequently =
+                    (Preferences().listenMoreFrequently = value);
+              });
             },
           ),
         ],
