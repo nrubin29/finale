@@ -12,7 +12,7 @@ import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
-import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
+import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
 import 'package:finale/widgets/entity/lastfm/your_scrobbles_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +111,7 @@ class _TrackViewState extends State<TrackView> {
               ],
               if (track.wiki != null && track.wiki!.isNotEmpty) ...[
                 const Divider(),
-                WikiTile(wiki: track.wiki!),
+                WikiTile(entity: track, wiki: track.wiki!),
               ],
               if (track.artist != null || track.album != null) const Divider(),
               if (track.artist != null)

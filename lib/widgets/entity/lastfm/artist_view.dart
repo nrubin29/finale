@@ -11,7 +11,7 @@ import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
+import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -80,7 +80,7 @@ class _ArtistViewState extends State<ArtistView>
                 ],
                 if (artist.bio != null && artist.bio!.isNotEmpty) ...[
                   const Divider(),
-                  WikiTile(wiki: artist.bio!),
+                  WikiTile(entity: artist, wiki: artist.bio!),
                 ],
                 const Divider(),
                 TabBar(

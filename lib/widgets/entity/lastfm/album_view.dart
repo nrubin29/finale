@@ -12,7 +12,7 @@ import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:finale/widgets/entity/lastfm/wiki_tile.dart';
+import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -89,7 +89,7 @@ class AlbumView extends StatelessWidget {
               ],
               if (album.wiki != null && album.wiki!.isNotEmpty) ...[
                 const Divider(),
-                WikiTile(wiki: album.wiki!)
+                WikiTile(entity: album, wiki: album.wiki!),
               ],
               const Divider(),
               ListTile(
