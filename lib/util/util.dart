@@ -43,6 +43,26 @@ final dateTimeFormat = DateFormat('d MMM').add_jm();
 final dateTimeFormatWithSeconds = DateFormat('d MMM').add_jms();
 final dateTimeFormatWithYear = DateFormat('d MMM yyyy').add_jm();
 
+String formatDuration(Duration duration) {
+  final components = <String>[];
+
+  if (duration.inDays > 0) {
+    components.add(formatScrobbles(duration.inDays, 'day'));
+    duration -= Duration(days: duration.inDays);
+  }
+
+  if (duration.inHours > 0) {
+    components.add(formatScrobbles(duration.inHours, 'hour'));
+    duration -= Duration(hours: duration.inHours);
+  }
+
+  if (duration.inMinutes > 0) {
+    components.add(formatScrobbles(duration.inMinutes, 'minute'));
+  }
+
+  return components.join(', ');
+}
+
 String formatDateTimeDelta(DateTime? date, {bool withYear = false}) {
   if (date == null) {
     return 'scrobbling now';

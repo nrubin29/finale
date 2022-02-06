@@ -2,6 +2,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
@@ -76,6 +77,9 @@ class _TrackViewState extends State<TrackView> {
                   'Scrobbles': track.playCount,
                   'Listeners': track.listeners,
                   'Your scrobbles': track.userPlayCount,
+                  if (track.userPlayCount > 0 && track.duration > 0)
+                    'Total listen time': formatDuration(Duration(
+                        milliseconds: track.userPlayCount * track.duration)),
                 },
                 statisticActions: {
                   if (track.userPlayCount > 0)

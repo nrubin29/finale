@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 ///
 /// [actions] are arbitrary widgets that are appended to the scoreboard.
 class Scoreboard extends StatefulWidget {
-  final Map<String, FutureOr<int?>> statistics;
+  final Map<String, FutureOr<Object?>> statistics;
   final Map<String, VoidCallback> statisticActions;
   final List<Widget> actions;
 
@@ -25,7 +25,7 @@ class Scoreboard extends StatefulWidget {
 }
 
 class _ScoreboardState extends State<Scoreboard> {
-  final _data = <String, int?>{};
+  final _data = <String, Object?>{};
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _ScoreboardState extends State<Scoreboard> {
     }
   }
 
-  Future<void> _resolveFuture(String key, FutureOr<int?> futureOr) async {
+  Future<void> _resolveFuture(String key, FutureOr<Object?> futureOr) async {
     try {
       final result = await futureOr;
       _data[key] = result;
@@ -56,7 +56,9 @@ class _ScoreboardState extends State<Scoreboard> {
         Text(title),
         _data.containsKey(title)
             ? value != null
-                ? Text(numberFormat.format(value))
+                ? Text(value is num
+                    ? numberFormat.format(value)
+                    : value.toString())
                 : const Text('---')
             : const LoadingComponent.small()
       ],
@@ -82,15 +84,22 @@ class _ScoreboardState extends State<Scoreboard> {
   Widget build(BuildContext context) {
     final widgets = _widgets(context);
 
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (var i = 0; i < widgets.length; i++) ...[
-            widgets[i],
-            if (i < widgets.length - 1) const VerticalDivider(),
-          ]
-        ],
+    return Align(
+      alignment: Alignment.center,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var i = 0; i < widgets.length; i++) ...[
+                widgets[i],
+                if (i < widgets.length - 1) const VerticalDivider(),
+              ]
+            ],
+          ),
+        ),
       ),
     );
   }

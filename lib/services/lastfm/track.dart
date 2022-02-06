@@ -192,6 +192,10 @@ class LTrack extends Track {
   @override
   final String url;
 
+  /// Track duration in milliseconds, or 0 if not provided.
+  @JsonKey(fromJson: parseInt)
+  final int duration;
+
   @JsonKey(fromJson: parseInt)
   final int listeners;
 
@@ -221,6 +225,7 @@ class LTrack extends Track {
   LTrack(
       this.name,
       this.url,
+      this.duration,
       this.listeners,
       this.playCount,
       this.userPlayCount,
