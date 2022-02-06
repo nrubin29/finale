@@ -7,17 +7,17 @@ class TagChips extends StatelessWidget {
   const TagChips({required this.topTags});
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
+  Widget build(BuildContext context) => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            const SizedBox(width: 10),
-            ...topTags.tags.map((tag) => Container(
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                child: Chip(label: Text(tag.name)))),
-            const SizedBox(width: 10)
+            for (final tag in topTags.tags)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child: Chip(label: Text(tag.name)),
+              ),
           ],
-        ));
-  }
+        ),
+      );
 }
