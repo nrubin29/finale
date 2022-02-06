@@ -112,6 +112,8 @@ abstract class Track extends Entity {
 
   String? get albumName;
 
+  String? get albumArtist => null;
+
   @override
   EntityType get type => EntityType.track;
 
@@ -123,17 +125,19 @@ abstract class Track extends Entity {
 
   @override
   String toString() =>
-      'Track(name=$name, artist=$artistName, album=$albumName)';
+      'Track(name=$name, artist=$artistName, album=$albumName, '
+      'albumArtist=$albumArtist)';
 
   @override
   bool operator ==(Object other) =>
       other is Track &&
       other.name == name &&
       other.artistName == artistName &&
-      other.albumName == albumName;
+      other.albumName == albumName &&
+      other.albumArtist == albumArtist;
 
   @override
-  int get hashCode => Object.hash(name, artistName, albumName);
+  int get hashCode => Object.hash(name, artistName, albumName, albumArtist);
 }
 
 class BasicConcreteTrack extends Track {
@@ -147,13 +151,18 @@ class BasicConcreteTrack extends Track {
   final String? albumName;
 
   @override
+  final String? albumArtist;
+
+  @override
   final String? url;
 
-  BasicConcreteTrack(this.name, this.artistName, this.albumName, [this.url]);
+  BasicConcreteTrack(this.name, this.artistName, this.albumName,
+      [this.albumArtist, this.url]);
 
   @override
   String toString() =>
-      'BasicConcreteTrack(name=$name, artist=$artistName, album=$albumName)';
+      'BasicConcreteTrack(name=$name, artist=$artistName, album=$albumName, '
+      'albumArtist=$albumArtist)';
 }
 
 abstract class ScrobbleableTrack extends Track {

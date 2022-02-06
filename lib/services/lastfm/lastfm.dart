@@ -430,6 +430,10 @@ class Lastfm {
         data['album[$i]'] = track.albumName;
       }
 
+      if (track.albumArtist?.isNotEmpty ?? false) {
+        data['albumArtist[$i]'] = track.albumArtist;
+      }
+
       data['artist[$i]'] = track.artistName;
       data['track[$i]'] = track.name;
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;

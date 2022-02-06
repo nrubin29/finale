@@ -32,6 +32,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   final _trackController = TextEditingController();
   final _artistController = TextEditingController();
   final _albumController = TextEditingController();
+  final _albumArtistController = TextEditingController();
 
   var _useCustomTimestamp = false;
   DateTime? _customTimestamp;
@@ -68,8 +69,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
 
   Future<void> _scrobble(BuildContext context) async {
     final response = await Lastfm.scrobble([
-      BasicConcreteTrack(
-          _trackController.text, _artistController.text, _albumController.text)
+      BasicConcreteTrack(_trackController.text, _artistController.text,
+          _albumController.text, _albumArtistController.text),
     ], [
       _useCustomTimestamp ? _customTimestamp! : DateTime.now()
     ]);
@@ -179,6 +180,13 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 ),
               ),
               Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextFormField(
+                  controller: _albumArtistController,
+                  decoration: const InputDecoration(labelText: 'Album Artist'),
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: SwitchListTile(
                   controlAffinity: ListTileControlAffinity.leading,
@@ -226,5 +234,6 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _trackController.dispose();
     _artistController.dispose();
     _albumController.dispose();
+    _albumArtistController.dispose();
   }
 }
