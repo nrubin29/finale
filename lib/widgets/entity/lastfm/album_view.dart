@@ -1,6 +1,7 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
@@ -20,6 +21,24 @@ class AlbumView extends StatelessWidget {
   final BasicAlbum album;
 
   const AlbumView({required this.album});
+
+  Future<String?> _totalListenTime(LAlbum album) async {
+    try {
+      final tracks = await Future.wait(album.tracks.map(Lastfm.getTrack),
+          eagerError: true);
+
+      if (!tracks.every((track) => track.duration > 0)) {
+        return null;
+      }
+
+      final durationMillis = tracks.fold<int>(0,
+          (duration, track) => duration + track.duration * track.userPlayCount);
+
+      return formatDuration(Duration(milliseconds: durationMillis));
+    } on Exception {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +80,8 @@ class AlbumView extends StatelessWidget {
                 'Scrobbles': album.playCount,
                 'Listeners': album.listeners,
                 'Your scrobbles': album.userPlayCount,
+                if (album.userPlayCount > 0 && album.tracks.isNotEmpty)
+                  'Total listen time': _totalListenTime(album),
               }),
               if (album.topTags.tags.isNotEmpty) ...[
                 const Divider(),
