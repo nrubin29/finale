@@ -12,7 +12,6 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
@@ -102,7 +101,8 @@ class _ProfileViewState extends State<ProfileView>
         return Scaffold(
           appBar: createAppBar(
             user.name,
-            leading: EntityImage(entity: user, isCircular: true, width: 40),
+            leadingEntity: user,
+            circularLeadingImage: true,
             actions: [
               IconButton(
                 icon: Icon(Icons.adaptive.share),

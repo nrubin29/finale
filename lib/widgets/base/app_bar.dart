@@ -1,8 +1,15 @@
+import 'package:finale/services/generic.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
-/// Creates an [AppBar] whose [title] and [subtitle] will always fit.
+/// Creates an [AppBar] whose content will always fit.
+///
+/// If [leadingEntity] is specified, an [EntityImage] widget will be displayed
+/// to the left of the [title] and [subtitle]. The image will be circular if
+/// [circularLeadingImage] is `true`.
 AppBar createAppBar(String title,
-        {Widget? leading,
+        {Entity? leadingEntity,
+        bool circularLeadingImage = false,
         String? subtitle,
         Color? backgroundColor,
         List<Widget>? actions,
@@ -10,14 +17,18 @@ AppBar createAppBar(String title,
     AppBar(
       backgroundColor: backgroundColor,
       centerTitle: true,
-      title: leading != null
+      title: leadingEntity != null
           ? FittedBox(
               fit: BoxFit.fitWidth,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  leading,
+                  EntityImage(
+                    entity: leadingEntity,
+                    width: 40,
+                    isCircular: circularLeadingImage,
+                  ),
                   const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
