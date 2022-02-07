@@ -1,34 +1,12 @@
-import 'package:finale/services/lastfm/common.dart';
-import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/apple_music/apple_music.dart';
+import 'package:finale/services/apple_music/played_song.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart';
 import 'package:in_app_review/in_app_review.dart';
-
-class _PlayedSong extends BasicScrobbledTrack {
-  final PlayedSong _playedSong;
-
-  _PlayedSong(this._playedSong);
-
-  @override
-  DateTime get date => _playedSong.lastPlayedDate;
-
-  @override
-  String? get albumName => _playedSong.album;
-
-  @override
-  String? get artistName => _playedSong.artist;
-
-  @override
-  String get name => _playedSong.title;
-
-  @override
-  String? get url => null;
-}
 
 class AppleMusicScrobbleView extends StatefulWidget {
   const AppleMusicScrobbleView();
@@ -39,8 +17,8 @@ class AppleMusicScrobbleView extends StatefulWidget {
 
 class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   AuthorizationStatus? _authorizationStatus;
-  List<_PlayedSong>? _items;
-  List<_PlayedSong>? _selection;
+  List<AMPlayedSong>? _items;
+  List<AMPlayedSong>? _selection;
 
   @override
   void initState() {
@@ -51,18 +29,12 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   bool get _hasItemsToScrobble => _selection?.isNotEmpty ?? false;
 
   Future<void> _load() async {
-    _authorizationStatus = await FlutterMPMediaPlayer.authorize();
+    _authorizationStatus = await AppleMusic.authorize();
 
     if (_authorizationStatus == AuthorizationStatus.authorized) {
-      var after = DateTime.now().subtract(const Duration(days: 14));
-      final last = Preferences().lastAppleMusicScrobble;
-      if (last != null && last.isAfter(after)) {
-        after = last;
-      }
-
-      final tracks = await FlutterMPMediaPlayer.getRecentTracks(after: after);
+      final tracks = await AppleMusic.getRecentTracks();
       setState(() {
-        _items = tracks.map((e) => _PlayedSong(e)).toList(growable: false);
+        _items = tracks;
         _selection = _items;
       });
     } else {
@@ -71,14 +43,9 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   }
 
   Future<void> _scrobble() async {
-    final now = DateTime.now();
+    final success = await AppleMusic.scrobble(_selection!);
 
-    final response = await Lastfm.scrobble(_selection!,
-        _selection!.map((track) => track.date).toList(growable: false));
-
-    if (response.ignored == 0) {
-      Preferences().lastAppleMusicScrobble = now;
-
+    if (success) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Scrobbled successfully!')));
@@ -128,7 +95,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
               ),
             ),
           Expanded(
-            child: EntityCheckboxList<_PlayedSong>(
+            child: EntityCheckboxList<AMPlayedSong>(
               items: _items!,
               displayImages: false,
               noResultsMessage: 'No music to scrobble.',
