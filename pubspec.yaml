@@ -41,6 +41,7 @@ dependencies:
   url_launcher: ^6.0.18
   visibility_detector: ^0.2.2
   wakelock: ^0.6.1+1
+  workmanager: ^0.5.0-dev.8
 
 dev_dependencies:
   build_runner: ^2.1.7
