@@ -87,6 +87,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
             SafeArea(
               minimum: const EdgeInsets.all(8),
               top: false,
+              bottom: false,
               child: Text(
                 'Last scrobbled: ' +
                     dateTimeFormat
