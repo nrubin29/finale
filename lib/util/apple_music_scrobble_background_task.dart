@@ -1,34 +1,44 @@
 import 'package:finale/services/apple_music/apple_music.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
-class AppleMusicScrobbleBackgroundTask {
-  static const _taskName = 'AppleMusicScrobble';
+const _taskName = Workmanager.iOSBackgroundProcessingTask;
 
+class AppleMusicScrobbleBackgroundTask {
   static Future<void> setup() async {
-    await Workmanager().initialize(_runTask, isInDebugMode: true);
+    await Workmanager()
+        .initialize(runAppleMusicScrobbleBackgroundTask, isInDebugMode: true);
     await _registerTask();
   }
 
   static Future<void> _registerTask(
       {Duration initialDelay = Duration.zero}) async {
+    await Workmanager().cancelByUniqueName(_taskName);
     await Workmanager().registerOneOffTask(_taskName, _taskName,
         initialDelay: initialDelay,
-        constraints: Constraints(networkType: NetworkType.connected));
+        constraints: Constraints(
+            networkType: NetworkType.connected, requiresCharging: false));
   }
+}
 
-  static void _runTask() {
-    Workmanager().executeTask((task, inputData) async {
-      print("Running background task: $task");
+void runAppleMusicScrobbleBackgroundTask() {
+  Workmanager().executeTask((task, _) async {
+    if (task == _taskName) {
+      await Preferences().setup();
 
-      if (task == _taskName) {
-        final tracks = await AppleMusic.getRecentTracks();
-        final success = await AppleMusic.scrobble(tracks);
+      final tracks = await AppleMusic.getRecentTracks();
+      var success = true;
 
-        await _registerTask(initialDelay: const Duration(hours: 1));
-        return success;
+      if (tracks.isNotEmpty) {
+        success = await AppleMusic.scrobble(tracks);
       }
 
-      return false;
-    });
-  }
+      await AppleMusicScrobbleBackgroundTask._registerTask(
+          initialDelay: const Duration(hours: 1));
+
+      return success;
+    }
+
+    return false;
+  });
 }
