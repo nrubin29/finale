@@ -78,9 +78,12 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
         'Scrobble',
         actions: [
           Builder(
-              builder: (context) => IconButton(
-                  icon: const Icon(scrobbleIcon),
-                  onPressed: () => _scrobble(context)))
+            builder: (context) => IconButton(
+              icon: const Icon(scrobbleIcon),
+              onPressed:
+                  _selection.isNotEmpty ? () => _scrobble(context) : null,
+            ),
+          )
         ],
       ),
       body: SafeArea(
