@@ -64,7 +64,12 @@ class GetRecentTracksRequest: LastfmApiRequest {
     }
     
     func doRequest(limit: Int, page: Int, callback: @escaping (LRecentTracksResponse?) -> Void) {
-        Lastfm.doRequest(method: "user.getRecentTracks", data: ["user": username, "period": period.apiValue, "limit": limit, "page": page], callback: callback)
+        var data: [String: Any] = ["user": username, "limit": limit, "page": page]
+        if let from = period.from {
+            data["from"] = Int(from.timeIntervalSince1970)
+        }
+        
+        Lastfm.doRequest(method: "user.getRecentTracks", data: data, callback: callback)
     }
 }
 

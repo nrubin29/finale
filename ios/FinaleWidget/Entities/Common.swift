@@ -86,6 +86,21 @@ extension Period {
             }
         }
     }
+    
+    var from: Date? {
+        get {
+            switch self {
+            case .sevenDay: return Calendar.current.date(byAdding: .day, value: -7, to: Date())
+            case .oneMonth: return Calendar.current.date(byAdding: .month, value: -1, to: Date())
+            case .threeMonth: return Calendar.current.date(byAdding: .month, value: -3, to: Date())
+            case .sixMonth: return Calendar.current.date(byAdding: .month, value: -6, to: Date())
+            case .twelveMonth: return Calendar.current.date(byAdding: .month, value: -12, to: Date())
+            case .overall: fallthrough
+            case .unknown: fallthrough
+            @unknown default: return nil
+            }
+        }
+    }
 }
 
 extension ThemeColor {
