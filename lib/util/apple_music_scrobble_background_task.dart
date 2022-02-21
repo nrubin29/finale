@@ -1,5 +1,7 @@
 import 'package:finale/services/apple_music/apple_music.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:workmanager/workmanager.dart';
 
 const _taskName = Workmanager.iOSBackgroundProcessingTask;
@@ -14,10 +16,17 @@ class AppleMusicScrobbleBackgroundTask {
   static Future<void> _registerTask(
       {Duration initialDelay = Duration.zero}) async {
     await Workmanager().cancelByUniqueName(_taskName);
-    await Workmanager().registerOneOffTask(_taskName, _taskName,
-        initialDelay: initialDelay,
-        constraints: Constraints(
-            networkType: NetworkType.connected, requiresCharging: false));
+    try {
+      await Workmanager().registerOneOffTask(_taskName, _taskName,
+          initialDelay: initialDelay,
+          constraints: Constraints(
+              networkType: NetworkType.connected, requiresCharging: false));
+    } on PlatformException {
+      if (kDebugMode) {
+        print('Unable to register background task. This is expected in the '
+            'simulator.');
+      }
+    }
   }
 }
 
