@@ -5,8 +5,10 @@ import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
+import 'package:finale/widgets/settings/apple_music_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AppleMusicScrobbleView extends StatefulWidget {
   const AppleMusicScrobbleView();
@@ -116,6 +118,19 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
         appBar: createAppBar(
           'Scrobble from Apple Music',
           actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () async {
+                await showBarModalBottomSheet(
+                    context: context,
+                    duration: const Duration(milliseconds: 200),
+                    builder: (_) => const AppleMusicSettingsView());
+
+                if (!Preferences().isAppleMusicEnabled) {
+                  Navigator.pop(context);
+                }
+              },
+            ),
             IconButton(
               icon: const Icon(scrobbleIcon),
               onPressed: _hasItemsToScrobble ? _scrobble : null,
