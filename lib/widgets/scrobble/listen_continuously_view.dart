@@ -43,7 +43,7 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
       status == ListenContinuouslyTrackStatus.skipped;
 
   @override
-  String get displayTrailing => timeFormat.format(timestamp);
+  String get displayTrailing => timeFormatWithSeconds.format(timestamp);
 
   @override
   bool operator ==(Object other) {

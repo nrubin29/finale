@@ -6,10 +6,10 @@ import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:finale/widgets/collage/collage_view.dart';
 import 'package:finale/widgets/main/search_view.dart';
 import 'package:finale/widgets/profile/profile_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
+import 'package:finale/widgets/tools/tools_view.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
@@ -82,9 +82,8 @@ class _MainViewState extends State<MainView> {
           BottomNavigationBarItem(label: 'Search', icon: Icon(Icons.search)),
           BottomNavigationBarItem(label: 'Scrobble', icon: Icon(scrobbleIcon)),
           BottomNavigationBarItem(
-            label: 'Collage',
-            icon: Icon(Icons.grid_view),
-            activeIcon: Icon(Icons.grid_view_sharp),
+            label: 'Tools',
+            icon: Icon(Icons.construction),
           ),
         ],
       ),
@@ -94,7 +93,7 @@ class _MainViewState extends State<MainView> {
           ProfileView(username: widget.username, isTab: true),
           const SearchView(),
           const ScrobbleView(),
-          CollageView(),
+          const ToolsView(),
         ],
       ),
     );

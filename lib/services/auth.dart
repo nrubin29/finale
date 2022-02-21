@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'auth.g.dart';
 
 @JsonSerializable()
-class SpotifyTokenResponse {
+class TokenResponse {
   @JsonKey(name: 'access_token')
   final String accessToken;
 
@@ -13,9 +13,9 @@ class SpotifyTokenResponse {
   @JsonKey(name: 'refresh_token')
   final String refreshToken;
 
-  const SpotifyTokenResponse(
+  const TokenResponse(
       this.accessToken, this.expiresIn, this.refreshToken);
 
-  factory SpotifyTokenResponse.fromJson(Map<String, dynamic> json) =>
-      _$SpotifyTokenResponseFromJson(json);
+  factory TokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$TokenResponseFromJson(json);
 }

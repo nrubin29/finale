@@ -5,7 +5,7 @@ import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
-import 'package:finale/services/spotify/auth.dart';
+import 'package:finale/services/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/track.dart';
@@ -196,7 +196,7 @@ class Spotify {
       body: body,
     );
     final response =
-        SpotifyTokenResponse.fromJson(json.decode(rawResponse.body));
+        TokenResponse.fromJson(json.decode(rawResponse.body));
     Preferences()
       ..spotifyAccessToken = response.accessToken
       ..spotifyRefreshToken = response.refreshToken

@@ -13,7 +13,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 final httpClient = ThrottleClient(15);
 
-abstract class PagedRequest<T extends Entity> {
+abstract class PagedRequest<T> {
   const PagedRequest();
 
   Future<List<T>> doRequest(int limit, int page);

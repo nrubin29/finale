@@ -55,7 +55,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
         for (final scrobble in _scrobbles!
             .where((scrobble) => scrobble.date.beginningOfDay == _selectedDate))
           ListTile(
-            title: Text(timeFormat.format(scrobble.date)),
+            title: Text(timeFormatWithSeconds.format(scrobble.date)),
             trailing: Text(scrobble.album.name),
           ),
       ];

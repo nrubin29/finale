@@ -24,6 +24,8 @@ import 'package:universal_html/html.dart' show AnchorElement;
 import 'package:universal_io/io.dart';
 
 class CollageView extends StatefulWidget {
+  const CollageView();
+
   @override
   State<StatefulWidget> createState() => _CollageViewState();
 }
