@@ -1,5 +1,6 @@
 import 'package:finale/services/apple_music/apple_music.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:workmanager/workmanager.dart';
@@ -8,8 +9,8 @@ const _taskName = Workmanager.iOSBackgroundProcessingTask;
 
 class AppleMusicScrobbleBackgroundTask {
   static Future<void> setup() async {
-    await Workmanager()
-        .initialize(runAppleMusicScrobbleBackgroundTask, isInDebugMode: true);
+    await Workmanager().initialize(runAppleMusicScrobbleBackgroundTask,
+        isInDebugMode: isDebug);
 
     if (Preferences().isAppleMusicBackgroundScrobblingEnabled) {
       await _registerTask();
