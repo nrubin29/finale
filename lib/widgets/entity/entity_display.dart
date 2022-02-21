@@ -29,6 +29,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
+  final EntityWidgetBuilder<T>? trailingWidgetBuilder;
   final Future<Entity> Function(T item)? scrobbleableEntity;
   final RefreshCallback? onRefresh;
 
@@ -53,6 +54,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.detailWidgetBuilder,
       this.subtitleWidgetBuilder,
       this.leadingWidgetBuilder,
+      this.trailingWidgetBuilder,
       this.scrobbleableEntity,
       this.onRefresh,
       this.displayType = DisplayType.list,
@@ -244,6 +246,8 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               item.displayTrailing!,
               style: const TextStyle(color: Colors.grey, fontSize: 12),
             ),
+          if (widget.trailingWidgetBuilder != null)
+            widget.trailingWidgetBuilder!(item),
           if (widget.scrobbleableEntity != null)
             ScrobbleButton(
                 entityProvider: () => widget.scrobbleableEntity!(item)),

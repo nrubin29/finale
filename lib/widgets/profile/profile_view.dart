@@ -11,6 +11,7 @@ import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
@@ -181,6 +182,9 @@ class _ProfileViewState extends State<ProfileView>
               children: [
                 EntityDisplay<LRecentTracksResponseTrack>(
                   request: GetRecentTracksRequest(widget.username),
+                  trailingWidgetBuilder: (track) => track.timestamp != null
+                      ? const SizedBox()
+                      : const NowPlayingAnimation(),
                   detailWidgetBuilder: (track) => TrackView(track: track),
                 ),
                 PeriodSelector<LTopArtistsResponseArtist>(

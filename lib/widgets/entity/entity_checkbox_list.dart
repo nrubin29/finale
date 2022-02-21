@@ -11,6 +11,7 @@ class EntityCheckboxList<T extends Entity> extends StatefulWidget {
   final bool displayImages;
   final String noResultsMessage;
   final RefreshCallback? onRefresh;
+  final EntityWidgetBuilder<T>? trailingWidgetBuilder;
 
   const EntityCheckboxList({
     required this.items,
@@ -19,6 +20,7 @@ class EntityCheckboxList<T extends Entity> extends StatefulWidget {
     this.displayImages = true,
     this.noResultsMessage = 'No results.',
     this.onRefresh,
+    this.trailingWidgetBuilder,
   });
 
   @override
@@ -54,9 +56,8 @@ class _EntityCheckboxList<T extends Entity>
       _items[item] = selected;
     });
 
-    widget.onSelectionChanged(_items.keys
-        .where((item) => _items[item]!)
-        .toList(growable: false));
+    widget.onSelectionChanged(
+        _items.keys.where((item) => _items[item]!).toList(growable: false));
   }
 
   @override
@@ -77,5 +78,6 @@ class _EntityCheckboxList<T extends Entity>
             }
           },
         ),
+        trailingWidgetBuilder: widget.trailingWidgetBuilder,
       );
 }

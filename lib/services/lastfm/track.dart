@@ -85,6 +85,10 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   @override
   DateTime? get date => timestamp?.date;
 
+  @override
+  String? get displayTrailing =>
+      timestamp == null ? null : super.displayTrailing;
+
   factory LRecentTracksResponseTrack.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackFromJson(json);
 

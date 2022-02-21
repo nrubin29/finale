@@ -6,6 +6,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/loading_component.dart';
+import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -175,6 +176,9 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                   onSelectionChanged: (selection) {
                     _selection = selection;
                   },
+                  trailingWidgetBuilder: (track) => track.timestamp != null
+                      ? const SizedBox()
+                      : const NowPlayingAnimation(),
                 ),
               ),
           ],

@@ -41,7 +41,7 @@ abstract class BasicScrobbledTrack extends Track {
   DateTime? get date;
 
   @override
-  String get displayTrailing => formatDateTimeDelta(date);
+  String? get displayTrailing => formatDateTimeDelta(date);
 }
 
 abstract class BasicScrobbledAlbum extends BasicAlbum {
