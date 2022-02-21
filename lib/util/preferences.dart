@@ -119,16 +119,6 @@ class Preferences {
         _preferences.containsKey('spotifyExpiration');
   }
 
-  /// Returns true if Spotify auth data is saved and the access token hasn't
-  /// expired.
-  bool get isSpotifyLoggedIn {
-    if (!hasSpotifyAuthData) {
-      return false;
-    }
-
-    return DateTime.now().isBefore(spotifyExpiration!);
-  }
-
   void clearSpotify() {
     _preferences.remove('spotifyAccessToken');
     _preferences.remove('spotifyRefreshToken');

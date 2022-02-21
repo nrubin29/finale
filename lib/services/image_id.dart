@@ -49,7 +49,7 @@ class ImageId {
           PagedRequest<Entity>? spotifyFallback}) =>
       () async {
         if (isWeb) {
-          if (spotifyFallback != null && Preferences().isSpotifyLoggedIn) {
+          if (spotifyFallback != null && Preferences().hasSpotifyAuthData) {
             final fallbackEntity = await spotifyFallback.doRequest(1, 1);
             if (fallbackEntity.isNotEmpty) {
               return fallbackEntity.single.imageId ??

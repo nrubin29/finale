@@ -236,7 +236,7 @@ class _CollageViewState extends State<CollageView> {
 
                             if (isWeb &&
                                 value == EntityType.artist &&
-                                !Preferences().isSpotifyLoggedIn) {
+                                !Preferences().hasSpotifyAuthData) {
                               shouldSet = (await showDialog(
                                       context: context,
                                       builder: (_) =>

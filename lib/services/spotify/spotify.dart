@@ -21,7 +21,8 @@ Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
 
 Future<Map<String, dynamic>> _doRequest(String method,
     [Map<String, dynamic>? data]) async {
-  if (!Preferences().isSpotifyLoggedIn) {
+  assert(Preferences().hasSpotifyAuthData);
+  if (DateTime.now().compareTo(Preferences().spotifyExpiration!) >= 0) {
     await Spotify.refreshAccessToken(Preferences().spotifyRefreshToken!);
   }
 

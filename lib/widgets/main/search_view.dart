@@ -130,7 +130,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     _isSpotifyEnabled = Preferences().isSpotifyEnabled;
 
     if (_searchEngine == SearchEngine.spotify &&
-        (!_isSpotifyEnabled || !Preferences().isSpotifyLoggedIn)) {
+        (!_isSpotifyEnabled || !Preferences().hasSpotifyAuthData)) {
       setState(() {
         _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
       });
