@@ -92,7 +92,7 @@ class _MainViewState extends State<MainView> {
         index: _index,
         children: [
           ProfileView(username: widget.username, isTab: true),
-          SearchView(),
+          const SearchView(),
           const ScrobbleView(),
           CollageView(),
         ],
