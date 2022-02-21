@@ -198,16 +198,28 @@ class Preferences {
 
   // This stream needs to be open for the entire lifetime of the app.
   // ignore: close_sinks
-  final _appleMusicChange = StreamController<bool>.broadcast();
+  final _appleMusicChange = StreamController<void>.broadcast();
 
-  Stream<bool> get appleMusicChange => _appleMusicChange.stream;
+  /// Fires whenever [isAppleMusicEnabled] or
+  /// [isAppleMusicBackgroundScrobblingEnabled] change.
+  Stream<void> get appleMusicChange => _appleMusicChange.stream;
 
   bool get isAppleMusicEnabled =>
       _preferences.getBool('isAppleMusicEnabled') ?? true;
 
   set isAppleMusicEnabled(bool value) {
     _preferences.setBool('isAppleMusicEnabled', value);
-    _appleMusicChange.add(value);
+    _appleMusicChange.add(null);
+  }
+
+  bool get isAppleMusicBackgroundScrobblingEnabled =>
+      isAppleMusicEnabled &&
+      (_preferences.getBool('isAppleMusicBackgroundScrobblingEnabled') ??
+          false);
+
+  set isAppleMusicBackgroundScrobblingEnabled(bool value) {
+    _preferences.setBool('isAppleMusicBackgroundScrobblingEnabled', value);
+    _appleMusicChange.add(null);
   }
 
   DateTime? get lastAppleMusicScrobble {

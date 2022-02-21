@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class SettingsListTile extends StatelessWidget {
   final String title;
-  final String description;
+  final String? description;
   final IconData icon;
   final bool value;
   final ValueChanged<bool> onChanged;
 
   const SettingsListTile({
     required this.title,
-    required this.description,
+    this.description,
     required this.icon,
     required this.value,
     required this.onChanged,
@@ -17,7 +17,7 @@ class SettingsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
             title: Text(title),
@@ -27,15 +27,16 @@ class SettingsListTile extends StatelessWidget {
               onChanged: onChanged,
             ),
           ),
-          SafeArea(
-            top: false,
-            bottom: false,
-            minimum: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              description,
-              style: Theme.of(context).textTheme.caption,
+          if (description != null)
+            SafeArea(
+              top: false,
+              bottom: false,
+              minimum: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                description!,
+                style: Theme.of(context).textTheme.caption,
+              ),
             ),
-          ),
         ],
       );
 }

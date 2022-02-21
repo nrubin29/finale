@@ -5,6 +5,7 @@ import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
+import 'package:finale/widgets/settings/apple_music_settings_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,14 +19,12 @@ class AccountsSettingsView extends StatefulWidget {
 
 class _AccountsSettingsViewState extends State<AccountsSettingsView> {
   late bool _isSpotifyEnabled;
-  late bool _isAppleMusicEnabled;
   late bool _isLibreEnabled;
 
   @override
   void initState() {
     super.initState();
     _isSpotifyEnabled = Preferences().isSpotifyEnabled;
-    _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
     _isLibreEnabled = Preferences().isLibreEnabled;
   }
 
@@ -121,15 +120,14 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
           ListTile(
             title: const Text('Apple Music'),
             leading: const Icon(SocialMediaIcons.apple),
-            trailing: Switch(
-              value: _isAppleMusicEnabled,
-              onChanged: (value) {
-                setState(() {
-                  _isAppleMusicEnabled =
-                      (Preferences().isAppleMusicEnabled = value);
-                });
-              },
-            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const AppleMusicSettingsView()),
+              );
+            },
           ),
           SafeArea(
             top: false,

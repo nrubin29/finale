@@ -10,12 +10,27 @@ class AppleMusicScrobbleBackgroundTask {
   static Future<void> setup() async {
     await Workmanager()
         .initialize(runAppleMusicScrobbleBackgroundTask, isInDebugMode: true);
-    await _registerTask();
+
+    if (Preferences().isAppleMusicBackgroundScrobblingEnabled) {
+      await _registerTask();
+    }
+
+    Preferences().appleMusicChange.listen((_) async {
+      if (Preferences().isAppleMusicBackgroundScrobblingEnabled) {
+        await _registerTask();
+      } else {
+        await _cancelTask();
+      }
+    });
+  }
+
+  static Future<void> _cancelTask() async {
+    await Workmanager().cancelByUniqueName(_taskName);
   }
 
   static Future<void> _registerTask(
       {Duration initialDelay = Duration.zero}) async {
-    await Workmanager().cancelByUniqueName(_taskName);
+    await _cancelTask();
     try {
       await Workmanager().registerOneOffTask(_taskName, _taskName,
           initialDelay: initialDelay,

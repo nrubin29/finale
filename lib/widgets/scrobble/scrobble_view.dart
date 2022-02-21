@@ -60,9 +60,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
 
     if (!widget.isModal) {
       _appleMusicChangeSubscription =
-          Preferences().appleMusicChange.listen((value) {
+          Preferences().appleMusicChange.listen((_) {
         setState(() {
-          _isAppleMusicEnabled = value;
+          _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
         });
       });
 
