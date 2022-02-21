@@ -24,6 +24,11 @@ class AppleMusicScrobbleBackgroundTask {
 void runAppleMusicScrobbleBackgroundTask() {
   Workmanager().executeTask((task, _) async {
     if (task == _taskName) {
+      if (await AppleMusic.authorizationStatus !=
+          AuthorizationStatus.authorized) {
+        return false;
+      }
+
       await Preferences().setup();
 
       final tracks = await AppleMusic.getRecentTracks();

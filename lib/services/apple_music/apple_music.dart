@@ -12,6 +12,9 @@ class AppleMusic {
   static Future<AuthorizationStatus> authorize() =>
       FlutterMPMediaPlayer.authorize();
 
+  static Future<AuthorizationStatus> get authorizationStatus =>
+      FlutterMPMediaPlayer.authorizationStatus;
+
   static Future<List<AMPlayedSong>> getRecentTracks() async {
     var after = DateTime.now().subtract(const Duration(days: 14));
     final last = Preferences().lastAppleMusicScrobble;
