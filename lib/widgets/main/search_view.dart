@@ -50,11 +50,12 @@ extension SearchEngineColor on SearchEngine {
 extension SearchEngineQuery on SearchEngine {
   PagedRequest<Track> searchTracks(String query) {
     switch (this) {
-      case SearchEngine.appleMusic: // TODO
       case SearchEngine.lastfm:
         return LSearchTracksRequest(query);
       case SearchEngine.spotify:
         return SSearchTracksRequest(query);
+      case SearchEngine.appleMusic:
+        return AMSearchSongsRequest(query);
     }
   }
 
