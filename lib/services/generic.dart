@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/spotify.dart';
@@ -53,6 +54,8 @@ abstract class Entity {
   ImageId? get imageId => null;
 
   ImageIdProvider? get imageIdProvider => null;
+
+  Uint8List? get imageData => null;
 
   /// Used by ImageComponent. Should not be overridden.
   @JsonKey(ignore: true)

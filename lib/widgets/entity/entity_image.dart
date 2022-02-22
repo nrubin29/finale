@@ -47,6 +47,10 @@ class _EntityImageState extends State<EntityImage> {
       : widget.placeholderBehavior;
 
   Future<void> _fetchImageId() async {
+    if (widget.entity.imageData != null) {
+      return;
+    }
+
     setState(() {
       _loading = true;
     });
@@ -84,6 +88,16 @@ class _EntityImageState extends State<EntityImage> {
   Widget build(BuildContext context) {
     if (_loading && _placeholderBehavior == PlaceholderBehavior.active) {
       return const CircularProgressIndicator();
+    }
+
+    if (widget.entity.imageData != null) {
+      final image = Image.memory(
+        widget.entity.imageData!,
+        fit: widget.fit,
+        width: widget.width,
+      );
+
+      return widget.isCircular ? _buildCircularImage(image) : image;
     }
 
     final placeholder = _placeholderBehavior == PlaceholderBehavior.none
