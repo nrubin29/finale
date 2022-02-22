@@ -37,16 +37,18 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
   late StreamSubscription _subscription;
+  final _recentScrobblesKey = GlobalKey<EntityDisplayState>();
   var _tab = 0;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    WidgetsBinding.instance!.addObserver(this);
 
+    _tabController = TabController(length: 6, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _tab = _tabController.index;
@@ -181,6 +183,7 @@ class _ProfileViewState extends State<ProfileView>
               controller: _tabController,
               children: [
                 EntityDisplay<LRecentTracksResponseTrack>(
+                  key: _recentScrobblesKey,
                   request: GetRecentTracksRequest(widget.username),
                   trailingWidgetBuilder: (track) => track.timestamp != null
                       ? const SizedBox()
@@ -223,9 +226,17 @@ class _ProfileViewState extends State<ProfileView>
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _recentScrobblesKey.currentState?.getInitialItems();
+    }
+  }
+
+  @override
   void dispose() {
     _tabController.dispose();
     _subscription.cancel();
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 }
