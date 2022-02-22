@@ -294,9 +294,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                         .debounceWhere(_shouldDebounce, _debounceDuration)
                         .map((query) =>
                             query.searchEngine.searchTracks(query.text)),
-                    detailWidgetBuilder: _searchEngine == SearchEngine.spotify
-                        ? null
-                        : (track) => TrackView(track: track),
+                    detailWidgetBuilder: _searchEngine == SearchEngine.lastfm
+                        ? (track) => TrackView(track: track)
+                        : null,
                   ),
                   EntityDisplay<BasicArtist>(
                     displayType: DisplayType.grid,
