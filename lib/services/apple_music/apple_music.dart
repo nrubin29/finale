@@ -15,7 +15,7 @@ class AMSearchPlaylistsRequest extends PagedRequest<AMPlaylist> {
 
   @override
   Future<List<AMPlaylist>> doRequest(int limit, int page) async =>
-      (await FlutterMPMediaPlayer.searchPlaylists(query))
+      (await FlutterMPMediaPlayer.searchPlaylists(query, limit, page))
           .map(AMPlaylist.new)
           .toList(growable: false);
 }
