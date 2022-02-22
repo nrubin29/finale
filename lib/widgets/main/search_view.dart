@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:finale/services/apple_music/apple_music.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/album.dart';
@@ -27,6 +28,21 @@ extension SearchEngineIcon on SearchEngine {
         return SocialMediaIcons.lastfm;
       case SearchEngine.spotify:
         return SocialMediaIcons.spotify;
+      case SearchEngine.appleMusic:
+        return SocialMediaIcons.apple;
+    }
+  }
+}
+
+extension SearchEngineColor on SearchEngine {
+  Color? get color {
+    switch (this) {
+      case SearchEngine.lastfm:
+        return null;
+      case SearchEngine.spotify:
+        return spotifyGreen;
+      case SearchEngine.appleMusic:
+        return appleMusicPink;
     }
   }
 }
@@ -34,6 +50,7 @@ extension SearchEngineIcon on SearchEngine {
 extension SearchEngineQuery on SearchEngine {
   PagedRequest<Track> searchTracks(String query) {
     switch (this) {
+      case SearchEngine.appleMusic: // TODO
       case SearchEngine.lastfm:
         return LSearchTracksRequest(query);
       case SearchEngine.spotify:
@@ -43,6 +60,7 @@ extension SearchEngineQuery on SearchEngine {
 
   PagedRequest<BasicArtist> searchArtists(String query) {
     switch (this) {
+      case SearchEngine.appleMusic: // TODO
       case SearchEngine.lastfm:
         return LSearchArtistsRequest(query);
       case SearchEngine.spotify:
@@ -52,6 +70,7 @@ extension SearchEngineQuery on SearchEngine {
 
   PagedRequest<BasicAlbum> searchAlbums(String query) {
     switch (this) {
+      case SearchEngine.appleMusic: // TODO
       case SearchEngine.lastfm:
         return LSearchAlbumsRequest(query);
       case SearchEngine.spotify:
@@ -60,8 +79,14 @@ extension SearchEngineQuery on SearchEngine {
   }
 
   PagedRequest<BasicPlaylist> searchPlaylists(String query) {
-    assert(this == SearchEngine.spotify);
-    return SSearchPlaylistsRequest(query);
+    switch (this) {
+      case SearchEngine.lastfm:
+        throw Exception('Last.fm does not support searching for playlists.');
+      case SearchEngine.spotify:
+        return SSearchPlaylistsRequest(query);
+      case SearchEngine.appleMusic:
+        return AMSearchPlaylistsRequest(query);
+    }
   }
 }
 
@@ -102,7 +127,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     super.initState();
     _setSpotifyEnabled();
     _tabController = TabController(
-        length: _searchEngine == SearchEngine.spotify ? 4 : 3, vsync: this);
+        length: _searchEngine == SearchEngine.lastfm ? 3 : 4, vsync: this);
     Preferences().spotifyEnabledChange.listen((_) {
       _setSpotifyEnabled();
       _updateTabController();
@@ -117,7 +142,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     _tabController.dispose();
 
     var length =
-        (searchEngine ?? _searchEngine) == SearchEngine.spotify ? 4 : 3;
+        (searchEngine ?? _searchEngine) == SearchEngine.lastfm ? 3 : 4;
     setState(() {
       _tabController = TabController(
           initialIndex: min(_tabController.index, length - 1),
@@ -151,8 +176,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          backgroundColor:
-              _searchEngine == SearchEngine.lastfm ? null : spotifyGreen,
+          backgroundColor: _searchEngine.color,
           titleSpacing: _isSpotifyEnabled ? 0 : null,
           title: Row(
             mainAxisSize: MainAxisSize.min,
@@ -172,9 +196,8 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                               value: searchEngine,
                               child: Icon(
                                 searchEngine.icon,
-                                color: _searchEngine == SearchEngine.lastfm
-                                    ? Theme.of(context).primaryColor
-                                    : spotifyGreen,
+                                color: _searchEngine.color ??
+                                    Theme.of(context).primaryColor,
                               ),
                             ),
                         ],
@@ -254,7 +277,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               const Tab(icon: Icon(Icons.audiotrack, color: Colors.white)),
               const Tab(icon: Icon(Icons.people, color: Colors.white)),
               const Tab(icon: Icon(Icons.album, color: Colors.white)),
-              if (_searchEngine == SearchEngine.spotify)
+              if (_searchEngine != SearchEngine.lastfm)
                 const Tab(icon: Icon(Icons.queue_music, color: Colors.white)),
             ],
           ),
@@ -299,7 +322,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                             ? SpotifyAlbumView(album: album as SAlbumSimple)
                             : AlbumView(album: album),
                   ),
-                  if (_searchEngine == SearchEngine.spotify)
+                  if (_searchEngine != SearchEngine.lastfm)
                     EntityDisplay<BasicPlaylist>(
                       scrobbleableEntity: (item) =>
                           Spotify.getFullPlaylist(item as SPlaylistSimple),
@@ -316,7 +339,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                   const SizedBox(),
                   const SizedBox(),
                   const SizedBox(),
-                  if (_searchEngine == SearchEngine.spotify) const SizedBox(),
+                  if (_searchEngine != SearchEngine.lastfm) const SizedBox(),
                 ],
         ),
       );

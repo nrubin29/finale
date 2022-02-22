@@ -5,7 +5,7 @@ import 'package:finale/util/theme.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum SearchEngine { lastfm, spotify }
+enum SearchEngine { lastfm, spotify, appleMusic }
 
 class Preferences {
   static Preferences? _instance;

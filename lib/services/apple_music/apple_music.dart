@@ -1,10 +1,24 @@
 import 'package:finale/services/apple_music/played_song.dart';
+import 'package:finale/services/apple_music/playlist.dart';
+import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart';
 
 export 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart'
     show AuthorizationStatus;
+
+class AMSearchPlaylistsRequest extends PagedRequest<AMPlaylist> {
+  final String query;
+
+  const AMSearchPlaylistsRequest(this.query);
+
+  @override
+  Future<List<AMPlaylist>> doRequest(int limit, int page) async =>
+      (await FlutterMPMediaPlayer.searchPlaylists(query))
+          .map(AMPlaylist.new)
+          .toList(growable: false);
+}
 
 class AppleMusic {
   const AppleMusic._();
