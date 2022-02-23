@@ -59,6 +59,18 @@ class AMSearchPlaylistsRequest extends PagedRequest<AMPlaylist> {
           .toList(growable: false);
 }
 
+class AMPlaylistSongsRequest extends PagedRequest<AMSong> {
+  final String playlistId;
+
+  const AMPlaylistSongsRequest(this.playlistId);
+
+  @override
+  Future<List<AMSong>> doRequest(int limit, int page) async =>
+      (await FlutterMPMediaPlayer.getPlaylistSongs(playlistId, limit, page))
+          .map(AMSong.new)
+          .toList(growable: false);
+}
+
 class AppleMusic {
   const AppleMusic._();
 
