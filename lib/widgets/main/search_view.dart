@@ -71,11 +71,12 @@ extension SearchEngineQuery on SearchEngine {
 
   PagedRequest<BasicAlbum> searchAlbums(String query) {
     switch (this) {
-      case SearchEngine.appleMusic: // TODO
       case SearchEngine.lastfm:
         return LSearchAlbumsRequest(query);
       case SearchEngine.spotify:
         return SSearchAlbumsRequest(query);
+      case SearchEngine.appleMusic:
+        return AMSearchAlbumsRequest(query);
     }
   }
 
@@ -142,8 +143,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   void _updateTabController([SearchEngine? searchEngine]) {
     _tabController.dispose();
 
-    var length =
-        (searchEngine ?? _searchEngine) == SearchEngine.lastfm ? 3 : 4;
+    var length = (searchEngine ?? _searchEngine) == SearchEngine.lastfm ? 3 : 4;
     setState(() {
       _tabController = TabController(
           initialIndex: min(_tabController.index, length - 1),
