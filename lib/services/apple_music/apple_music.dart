@@ -1,4 +1,5 @@
 import 'package:finale/services/apple_music/album.dart';
+import 'package:finale/services/apple_music/artist.dart';
 import 'package:finale/services/apple_music/played_song.dart';
 import 'package:finale/services/apple_music/playlist.dart';
 import 'package:finale/services/apple_music/song.dart';
@@ -31,6 +32,18 @@ class AMSearchAlbumsRequest extends PagedRequest<AMAlbum> {
   Future<List<AMAlbum>> doRequest(int limit, int page) async =>
       (await FlutterMPMediaPlayer.searchAlbums(query, limit, page))
           .map(AMAlbum.new)
+          .toList(growable: false);
+}
+
+class AMSearchArtistsRequest extends PagedRequest<AMArtist> {
+  final String query;
+
+  const AMSearchArtistsRequest(this.query);
+
+  @override
+  Future<List<AMArtist>> doRequest(int limit, int page) async =>
+      (await FlutterMPMediaPlayer.searchArtists(query, limit, page))
+          .map(AMArtist.new)
           .toList(growable: false);
 }
 

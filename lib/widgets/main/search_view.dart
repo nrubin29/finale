@@ -61,11 +61,12 @@ extension SearchEngineQuery on SearchEngine {
 
   PagedRequest<BasicArtist> searchArtists(String query) {
     switch (this) {
-      case SearchEngine.appleMusic: // TODO
       case SearchEngine.lastfm:
         return LSearchArtistsRequest(query);
       case SearchEngine.spotify:
         return SSearchArtistsRequest(query);
+      case SearchEngine.appleMusic:
+        return AMSearchArtistsRequest(query);
     }
   }
 
