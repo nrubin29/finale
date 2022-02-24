@@ -12,7 +12,7 @@ int _metersToFeet(num meters) => (meters * 3.2808399).round();
 
 double _mpsToMph(num mps) => mps * 2.23693629;
 
-int _numToInt(num value) => value.toInt();
+int? _numToInt(num? value) => value?.toInt();
 
 @JsonSerializable()
 class StravaException implements Exception {
@@ -58,7 +58,7 @@ class AthleteActivity extends Entity {
 
   /// Average heart rate in bpm.
   @JsonKey(name: 'average_heartrate', fromJson: _numToInt)
-  final int averageHeartRate;
+  final int? averageHeartRate;
 
   AthleteActivity({
     required this.name,

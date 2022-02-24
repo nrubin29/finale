@@ -35,23 +35,28 @@ class WorkoutDetails extends StatelessWidget {
                     trailing: Text(formatDuration(
                         Duration(seconds: activity.elapsedTime))),
                   ),
-                  ListTile(
-                    title: const Text('Distance'),
-                    trailing: Text(formatScrobbles(activity.distance, 'mile')),
-                  ),
-                  ListTile(
-                    title: const Text('Elevation Gain'),
-                    trailing: Text('${activity.totalElevationGain} ft'),
-                  ),
-                  ListTile(
-                    title: const Text('Average Speed'),
-                    trailing:
-                        Text('${activity.averageSpeed.toStringAsFixed(1)} mph'),
-                  ),
-                  ListTile(
-                    title: const Text('Average Heart Rate'),
-                    trailing: Text('${activity.averageHeartRate} bpm'),
-                  ),
+                  if (activity.distance > 0)
+                    ListTile(
+                      title: const Text('Distance'),
+                      trailing:
+                          Text(formatScrobbles(activity.distance, 'mile')),
+                    ),
+                  if (activity.totalElevationGain > 0)
+                    ListTile(
+                      title: const Text('Elevation Gain'),
+                      trailing: Text('${activity.totalElevationGain} ft'),
+                    ),
+                  if (activity.averageSpeed > 0)
+                    ListTile(
+                      title: const Text('Average Speed'),
+                      trailing: Text(
+                          '${activity.averageSpeed.toStringAsFixed(1)} mph'),
+                    ),
+                  if (activity.averageHeartRate != null)
+                    ListTile(
+                      title: const Text('Average Heart Rate'),
+                      trailing: Text('${activity.averageHeartRate} bpm'),
+                    ),
                 ],
               ),
               EntityDisplay<LRecentTracksResponseTrack>(
