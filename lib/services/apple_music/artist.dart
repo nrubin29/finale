@@ -8,6 +8,8 @@ class AMArtist extends BasicArtist {
 
   AMArtist(this._artist);
 
+  String get id => _artist.id;
+
   @override
   String get name => _artist.name;
 

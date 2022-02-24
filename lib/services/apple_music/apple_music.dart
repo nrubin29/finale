@@ -12,25 +12,41 @@ export 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart'
     show AuthorizationStatus;
 
 class AMSearchSongsRequest extends PagedRequest<AMSong> {
-  final String query;
+  final String? query;
+  final AMArtist? artist;
 
-  const AMSearchSongsRequest(this.query);
+  const AMSearchSongsRequest(this.query)
+      : assert(query != null),
+        artist = null;
+
+  const AMSearchSongsRequest.forArtist(this.artist)
+      : assert(artist != null),
+        query = null;
 
   @override
   Future<List<AMSong>> doRequest(int limit, int page) async =>
-      (await FlutterMPMediaPlayer.searchSongs(query, limit, page))
+      (await FlutterMPMediaPlayer.searchSongs(
+              query: query, artistId: artist?.id, limit: limit, page: page))
           .map(AMSong.new)
           .toList(growable: false);
 }
 
 class AMSearchAlbumsRequest extends PagedRequest<AMAlbum> {
-  final String query;
+  final String? query;
+  final AMArtist? artist;
 
-  const AMSearchAlbumsRequest(this.query);
+  const AMSearchAlbumsRequest(this.query)
+      : assert(query != null),
+        artist = null;
+
+  const AMSearchAlbumsRequest.forArtist(this.artist)
+      : assert(artist != null),
+        query = null;
 
   @override
   Future<List<AMAlbum>> doRequest(int limit, int page) async =>
-      (await FlutterMPMediaPlayer.searchAlbums(query, limit, page))
+      (await FlutterMPMediaPlayer.searchAlbums(
+              query: query, artistId: artist?.id, limit: limit, page: page))
           .map(AMAlbum.new)
           .toList(growable: false);
 }

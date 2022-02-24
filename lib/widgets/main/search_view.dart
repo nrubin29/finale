@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:finale/services/apple_music/album.dart';
 import 'package:finale/services/apple_music/apple_music.dart';
+import 'package:finale/services/apple_music/artist.dart';
 import 'package:finale/services/apple_music/playlist.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -13,6 +14,7 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/entity/apple_music/apple_music_album_view.dart';
+import 'package:finale/widgets/entity/apple_music/apple_music_artist_view.dart';
 import 'package:finale/widgets/entity/apple_music/apple_music_playlist_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
@@ -309,10 +311,12 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                         .debounceWhere(_shouldDebounce, _debounceDuration)
                         .map((query) =>
                             query.searchEngine.searchArtists(query.text)),
-                    detailWidgetBuilder: (artist) =>
-                        _searchEngine == SearchEngine.spotify
-                            ? SpotifyArtistView(artist: artist)
-                            : ArtistView(artist: artist),
+                    detailWidgetBuilder: (artist) => _searchEngine ==
+                            SearchEngine.lastfm
+                        ? ArtistView(artist: artist)
+                        : _searchEngine == SearchEngine.appleMusic
+                            ? AppleMusicArtistView(artist: artist as AMArtist)
+                            : SpotifyArtistView(artist: artist),
                   ),
                   EntityDisplay<BasicAlbum>(
                     scrobbleableEntity: (item) => item is SAlbumSimple
