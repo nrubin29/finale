@@ -26,6 +26,7 @@ import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/entity/spotify/spotify_playlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:universal_io/io.dart';
 
 extension SearchEngineIcon on SearchEngine {
   IconData get icon {
@@ -130,15 +131,21 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   final _query = ReplaySubject<SearchQuery>(maxSize: 2)
     ..add(SearchQuery.empty(Preferences().searchEngine));
   var _isSpotifyEnabled = true;
+  var _isAppleMusicEnabled = false;
 
   @override
   void initState() {
     super.initState();
     _setSpotifyEnabled();
+    _setAppleMusicEnabled();
     _tabController = TabController(
         length: _searchEngine == SearchEngine.lastfm ? 3 : 4, vsync: this);
     Preferences().spotifyEnabledChange.listen((_) {
       _setSpotifyEnabled();
+      _updateTabController();
+    });
+    Preferences().appleMusicChange.listen((_) {
+      _setAppleMusicEnabled();
       _updateTabController();
     });
 
@@ -170,6 +177,26 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     }
   }
 
+  void _setAppleMusicEnabled() async {
+    if (!Platform.isIOS) {
+      return;
+    }
+
+    _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
+
+    if (_searchEngine == SearchEngine.appleMusic && !_isAppleMusicEnabled) {
+      setState(() {
+        _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
+      });
+    }
+  }
+
+  List<SearchEngine> get _enabledSearchEngines => [
+        SearchEngine.lastfm,
+        if (_isSpotifyEnabled) SearchEngine.spotify,
+        if (_isAppleMusicEnabled) SearchEngine.appleMusic,
+      ];
+
   SearchQuery get _currentQuery => _query.values.last;
 
   SearchEngine get _searchEngine => _currentQuery.searchEngine;
@@ -185,11 +212,11 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           backgroundColor: _searchEngine.color,
-          titleSpacing: _isSpotifyEnabled ? 0 : null,
+          titleSpacing: _enabledSearchEngines.length > 1 ? 0 : null,
           title: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (_isSpotifyEnabled)
+              if (_enabledSearchEngines.length > 1)
                 Row(
                   children: [
                     ButtonTheme(
@@ -199,7 +226,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                         isDense: true,
                         underline: const SizedBox(),
                         items: [
-                          for (final searchEngine in SearchEngine.values)
+                          for (final searchEngine in _enabledSearchEngines)
                             DropdownMenuItem(
                               value: searchEngine,
                               child: Icon(
@@ -210,7 +237,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                             ),
                         ],
                         selectedItemBuilder: (_) => [
-                          for (final searchEngine in SearchEngine.values)
+                          for (final searchEngine in _enabledSearchEngines)
                             Icon(searchEngine.icon, color: Colors.white),
                         ],
                         value: _searchEngine,
@@ -227,6 +254,10 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                                     context: context,
                                     builder: (context) => SpotifyDialog()) ??
                                 false;
+                          } else if (choice == SearchEngine.appleMusic) {
+                            updateSearchEngine =
+                                (await AppleMusic.authorize()) ==
+                                    AuthorizationStatus.authorized;
                           }
 
                           if (updateSearchEngine) {
