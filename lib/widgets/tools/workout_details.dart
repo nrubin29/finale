@@ -31,7 +31,9 @@ class WorkoutDetails extends StatelessWidget {
             children: [
               EntityDisplay<LRecentTracksResponseTrack>(
                 request: GetRecentTracksRequest(Preferences().name!,
-                    from: activity.startDate, to: activity.endDate),
+                    from:
+                        activity.startDate.subtract(const Duration(minutes: 1)),
+                    to: activity.endDate.add(const Duration(minutes: 1))),
                 detailWidgetBuilder: (track) => TrackView(track: track),
               ),
               ListView(
