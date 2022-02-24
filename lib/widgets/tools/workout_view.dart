@@ -21,7 +21,11 @@ class _WorkoutViewState extends State<WorkoutView> {
   }
 
   Future<void> _authenticate() async {
-    await Strava().authenticate();
+    final success = await Strava().authenticate();
+
+    if (success) {
+      setState(() {});
+    }
   }
 
   @override
