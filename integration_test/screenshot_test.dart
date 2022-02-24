@@ -35,8 +35,6 @@ final directory = isIos
         : '/sdcard/Documents/$device';
 
 Future<void> main() async {
-  isScreenshotTest = true;
-
   if (_censorImages) {
     EntityImage.censorImages = true;
   }

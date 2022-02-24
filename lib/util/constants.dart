@@ -6,7 +6,8 @@ const isDebug = kDebugMode;
 const isWeb = kIsWeb;
 final isDesktop = !isWeb && Platform.isMacOS;
 final isMobile = !isWeb && !isDesktop;
-var isScreenshotTest = false;
+const isScreenshotTest =
+    bool.fromEnvironment('isScreenshotTest', defaultValue: false);
 
 const authCallbackUrl = isWeb
     ? isDebug

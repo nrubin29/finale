@@ -10,6 +10,7 @@ flutter_test() { # $1 = device name, $2 = device id, $3 = censor images (true by
     --device-id="$2" \
     --dart-define=device="$1" \
     --dart-define=censorImages="$3" \
+    --dart-define=isScreenshotTest=true \
     --update-goldens \
     integration_test/screenshot_test.dart
 }
