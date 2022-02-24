@@ -1,3 +1,4 @@
+import 'package:finale/services/generic.dart';
 import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -27,9 +28,11 @@ class StravaException implements Exception {
 }
 
 @JsonSerializable()
-class AthleteActivity {
+class AthleteActivity extends Entity {
   final String name;
-  final String type;
+
+  @JsonKey(name: 'type')
+  final String workoutType;
 
   @JsonKey(name: 'start_date', fromJson: DateTime.parse)
   final DateTime startDate;
@@ -57,9 +60,9 @@ class AthleteActivity {
   @JsonKey(name: 'average_heartrate', fromJson: _numToInt)
   final int averageHeartRate;
 
-  const AthleteActivity({
+  AthleteActivity({
     required this.name,
-    required this.type,
+    required this.workoutType,
     required this.startDate,
     required this.startDateLocal,
     required this.elapsedTime,
@@ -82,8 +85,20 @@ class AthleteActivity {
       ' - ' +
       timeFormat.format(endDateLocal);
 
+  @override
+  EntityType get type => EntityType.other;
+
+  @override
+  String? get url => null;
+
+  @override
+  String get displayTitle => name;
+
+  @override
+  String? get displaySubtitle => localTimeRangeFormatted;
+
   IconData get icon {
-    switch (type) {
+    switch (workoutType) {
       case 'AlpineSki':
       case 'BackcountrySki':
       case 'NordicSki':
