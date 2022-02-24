@@ -4,8 +4,8 @@ import 'package:collection/collection.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:flutter/foundation.dart';
 

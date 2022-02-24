@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finale/services/auth.dart';
-import 'package:finale/util/period.dart';
+import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/theme.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';

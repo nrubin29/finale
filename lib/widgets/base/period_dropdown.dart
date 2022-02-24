@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finale/util/period.dart';
+import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:flutter/material.dart';
 
