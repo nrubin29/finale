@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:universal_io/io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountsSettingsView extends StatefulWidget {
@@ -117,18 +118,19 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
               ),
             ),
           ),
-          ListTile(
-            title: const Text('Apple Music'),
-            leading: const Icon(SocialMediaIcons.apple),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => const AppleMusicSettingsView()),
-              );
-            },
-          ),
+          if (Platform.isIOS)
+            ListTile(
+              title: const Text('Apple Music'),
+              leading: const Icon(SocialMediaIcons.apple),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const AppleMusicSettingsView()),
+                );
+              },
+            ),
           SafeArea(
             top: false,
             bottom: false,
