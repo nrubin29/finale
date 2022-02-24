@@ -3,6 +3,19 @@ import 'package:json_annotation/json_annotation.dart';
 part 'activity.g.dart';
 
 @JsonSerializable()
+class StravaException implements Exception {
+  final String message;
+
+  const StravaException(this.message);
+
+  factory StravaException.fromJson(Map<String, dynamic> json) =>
+      _$StravaExceptionFromJson(json);
+
+  @override
+  String toString() => message;
+}
+
+@JsonSerializable()
 class AthleteActivity {
   final String name;
   final String type;

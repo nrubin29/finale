@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:finale/env.dart';
 import 'package:finale/services/auth.dart';
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/strava/activity.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
@@ -28,8 +27,8 @@ Future<dynamic> _doRequest(String method, [Map<String, dynamic>? data]) async {
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
   } else if (response.statusCode ~/ 100 == 4) {
-    throw SException.fromJson(
-        json.decode(utf8.decode(response.bodyBytes))['error']);
+    throw StravaException.fromJson(
+        json.decode(utf8.decode(response.bodyBytes)));
   } else {
     throw Exception('Could not do request $method');
   }
