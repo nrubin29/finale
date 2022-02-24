@@ -1,6 +1,7 @@
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/strava/activity.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -29,11 +30,8 @@ class WorkoutDetails extends StatelessWidget {
           body: TabBarView(
             children: [
               EntityDisplay<LRecentTracksResponseTrack>(
-                request: GetRecentTracksRequest(
-                  /*Preferences().name!*/
-                    'nrubin29',
-                    from: activity.startDate,
-                    to: activity.endDate),
+                request: GetRecentTracksRequest(Preferences().name!,
+                    from: activity.startDate, to: activity.endDate),
                 detailWidgetBuilder: (track) => TrackView(track: track),
               ),
               ListView(
