@@ -25,10 +25,10 @@ Widget appIcon({required double size}) => ClipRRect(
       child: Image.asset('assets/images/icon.png', width: size),
     );
 
-String formatScrobbles(num playCount, [String noun = 'scrobble']) =>
-    Intl.plural(playCount,
-        one: '$playCount $noun',
-        other: '${numberFormat.format(playCount)} ${noun}s');
+String pluralize(num howMany, [String noun = 'scrobble']) =>
+    Intl.plural(howMany,
+        one: '$howMany $noun',
+        other: '${numberFormat.format(howMany)} ${noun}s');
 
 final numberFormat = NumberFormat();
 final dateFormat = DateFormat('d MMM');
@@ -44,17 +44,17 @@ String formatDuration(Duration duration) {
   final components = <String>[];
 
   if (duration.inDays > 0) {
-    components.add(formatScrobbles(duration.inDays, 'day'));
+    components.add(pluralize(duration.inDays, 'day'));
     duration -= Duration(days: duration.inDays);
   }
 
   if (duration.inHours > 0) {
-    components.add(formatScrobbles(duration.inHours, 'hour'));
+    components.add(pluralize(duration.inHours, 'hour'));
     duration -= Duration(hours: duration.inHours);
   }
 
   if (duration.inMinutes > 0) {
-    components.add(formatScrobbles(duration.inMinutes, 'minute'));
+    components.add(pluralize(duration.inMinutes, 'minute'));
   }
 
   return components.join(', ');

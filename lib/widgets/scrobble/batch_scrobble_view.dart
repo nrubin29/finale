@@ -98,7 +98,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 subtitle: widget.entity.displaySubtitle != null
                     ? Text(widget.entity.displaySubtitle!)
                     : null,
-                trailing: Text(formatScrobbles(_selection.length, 'track')),
+                trailing: Text(pluralize(_selection.length, 'track')),
               ),
               const SizedBox(height: 16),
               const HeaderListTile('Scrobble timing'),

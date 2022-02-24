@@ -159,7 +159,7 @@ class LUserWeeklyTrackChartTrack extends Track {
   String get artistName => artist.name;
 
   @override
-  String get displayTrailing => formatScrobbles(playCount ?? 0);
+  String get displayTrailing => pluralize(playCount ?? 0);
 
   @override
   ImageIdProvider get imageIdProvider =>

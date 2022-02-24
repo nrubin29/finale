@@ -267,7 +267,7 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
       () async => (await Lastfm.getTrack(this)).album?.imageId;
 
   @override
-  String get displayTrailing => formatScrobbles(playCount);
+  String get displayTrailing => pluralize(playCount);
 
   LTopTracksResponseTrack(this.name, this.url, this.artist, this.playCount);
 

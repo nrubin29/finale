@@ -55,7 +55,7 @@ class WorkoutDetails extends StatelessWidget {
                       title: const Text('Distance'),
                       leading: const Icon(Icons.map),
                       trailing:
-                          Text(formatScrobbles(activity.distance, 'mile')),
+                          Text(pluralize(activity.distance, 'mile')),
                     ),
                   if (activity.totalElevationGain > 0)
                     ListTile(

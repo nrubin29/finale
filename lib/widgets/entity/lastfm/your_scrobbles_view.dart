@@ -66,7 +66,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
             .entries) ...[
           HeaderListTile(
             monthFormat.format(entry.key),
-            trailing: Text(formatScrobbles(entry.value.length)),
+            trailing: Text(pluralize(entry.value.length)),
           ),
           for (final scrobble in entry.value)
             ListTile(
@@ -83,7 +83,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
           appBar: createAppBar(
             widget.track.name,
             leadingEntity: widget.track.album,
-            subtitle: formatScrobbles(widget.track.userPlayCount),
+            subtitle: pluralize(widget.track.userPlayCount),
             actions: [const SizedBox(width: 32)],
             bottom: const TabBar(
               tabs: [

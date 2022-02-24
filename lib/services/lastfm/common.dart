@@ -48,14 +48,14 @@ abstract class BasicScrobbledAlbum extends BasicAlbum {
   int get playCount;
 
   @override
-  String get displayTrailing => formatScrobbles(playCount);
+  String get displayTrailing => pluralize(playCount);
 }
 
 abstract class BasicScrobbledArtist extends BasicArtist {
   int get playCount;
 
   @override
-  String get displayTrailing => formatScrobbles(playCount);
+  String get displayTrailing => pluralize(playCount);
 }
 
 @JsonSerializable()
