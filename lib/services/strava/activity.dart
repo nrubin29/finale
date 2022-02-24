@@ -1,4 +1,5 @@
 import 'package:finale/util/util.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'activity.g.dart';
@@ -80,4 +81,42 @@ class AthleteActivity {
       dateTimeFormat.format(startDateLocal) +
       ' - ' +
       timeFormat.format(endDateLocal);
+
+  IconData get icon {
+    switch (type) {
+      case 'AlpineSki':
+      case 'BackcountrySki':
+      case 'NordicSki':
+        return Icons.downhill_skiing;
+      case 'EBikeRide':
+      case 'Elliptical':
+      case 'Handcycle':
+      case 'Ride':
+      case 'VirtualRide':
+        return Icons.directions_bike;
+      case 'Golf':
+        return Icons.golf_course;
+      case 'Hike':
+      case 'Walk':
+        return Icons.directions_walk;
+      case 'Kitesurf':
+        return Icons.kitesurfing;
+      case 'Rowing':
+        return Icons.rowing;
+      case 'Sailing':
+        return Icons.sailing;
+      case 'Skateboarding':
+        return Icons.skateboarding;
+      case 'Snowboard':
+        return Icons.snowboarding;
+      case 'Snowshoe':
+        return Icons.snowshoeing;
+      case 'Soccer':
+        return Icons.sports_soccer;
+      case 'Surfing':
+        return Icons.surfing;
+      default:
+        return Icons.directions_run;
+    }
+  }
 }

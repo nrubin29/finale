@@ -19,10 +19,10 @@ class WorkoutDetails extends StatelessWidget {
           appBar: createAppBar(
             activity.name,
             subtitle: activity.localTimeRangeFormatted,
-            bottom: const TabBar(
+            bottom: TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.run_circle)),
-                Tab(icon: Icon(Icons.queue_music)),
+                Tab(icon: Icon(activity.icon)),
+                const Tab(icon: Icon(Icons.queue_music)),
               ],
             ),
           ),

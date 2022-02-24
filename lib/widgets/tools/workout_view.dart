@@ -49,7 +49,7 @@ class _WorkoutViewState extends State<WorkoutView> {
                       ListTile(
                         title: Text(activity.name),
                         subtitle: Text(activity.localTimeRangeFormatted),
-                        leading: const Icon(Icons.run_circle),
+                        leading: Icon(activity.icon),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
                           Navigator.push(
