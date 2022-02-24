@@ -21,13 +21,21 @@ class WorkoutDetails extends StatelessWidget {
             subtitle: activity.localTimeRangeFormatted,
             bottom: TabBar(
               tabs: [
-                Tab(icon: Icon(activity.icon)),
                 const Tab(icon: Icon(Icons.queue_music)),
+                Tab(icon: Icon(activity.icon)),
               ],
             ),
           ),
           body: TabBarView(
             children: [
+              EntityDisplay<LRecentTracksResponseTrack>(
+                request: GetRecentTracksRequest(
+                  /*Preferences().name!*/
+                    'nrubin29',
+                    from: activity.startDate,
+                    to: activity.endDate),
+                detailWidgetBuilder: (track) => TrackView(track: track),
+              ),
               ListView(
                 children: [
                   ListTile(
@@ -69,14 +77,6 @@ class WorkoutDetails extends StatelessWidget {
                       trailing: Text('${activity.averageHeartRate} bpm'),
                     ),
                 ],
-              ),
-              EntityDisplay<LRecentTracksResponseTrack>(
-                request: GetRecentTracksRequest(
-                    /*Preferences().name!*/
-                    'nrubin29',
-                    from: activity.startDate,
-                    to: activity.endDate),
-                detailWidgetBuilder: (track) => TrackView(track: track),
               ),
             ],
           ),
