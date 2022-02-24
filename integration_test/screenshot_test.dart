@@ -9,7 +9,6 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
-import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
@@ -22,7 +21,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const device = String.fromEnvironment('device');
-const _censorImages = bool.fromEnvironment('censorImages', defaultValue: true);
 
 final isIos = device.contains('iPhone') || device.contains('iPad');
 final isIpad = device.contains('iPad');
@@ -35,10 +33,6 @@ final directory = isIos
         : '/sdcard/Documents/$device';
 
 Future<void> main() async {
-  if (_censorImages) {
-    EntityImage.censorImages = true;
-  }
-
   if (!isIos) {
     try {
       await Directory(directory).delete(recursive: true);

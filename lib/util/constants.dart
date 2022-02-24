@@ -6,8 +6,10 @@ const isDebug = kDebugMode;
 const isWeb = kIsWeb;
 final isDesktop = !isWeb && Platform.isMacOS;
 final isMobile = !isWeb && !isDesktop;
+
 const isScreenshotTest =
     bool.fromEnvironment('isScreenshotTest', defaultValue: false);
+const censorImages = bool.fromEnvironment('censorImages', defaultValue: false);
 
 const authCallbackUrl = isWeb
     ? isDebug

@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 enum PlaceholderBehavior { image, active, none }
 
 class EntityImage extends StatefulWidget {
-  static var censorImages = false;
-
   final Entity entity;
   final ImageQuality quality;
   final BoxFit fit;
@@ -121,7 +119,7 @@ class _EntityImageState extends State<EntityImage> {
     var imageWidget = widget.isCircular ? _buildCircularImage(image) : image;
 
     if (isDebug) {
-      if (EntityImage.censorImages && widget.entity.type != EntityType.user) {
+      if (censorImages && widget.entity.type != EntityType.user) {
         imageWidget = ClipRect(
           child: Stack(
             fit: StackFit.passthrough,
