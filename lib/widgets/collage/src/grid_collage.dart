@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/util.dart';
+import 'package:finale/widgets/base/app_icon.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +82,7 @@ class GridCollage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(3),
               child: Row(children: [
-                appIcon(size: gridTileSize / 8),
+                AppIcon(size: gridTileSize / 8),
                 SizedBox(width: gridTileSize / 24),
                 Text(
                   'Created with Finale for Last.fm',
