@@ -1,8 +1,8 @@
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/strava/activity.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';

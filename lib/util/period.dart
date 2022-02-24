@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/formatters.dart';
 
 class Period {
   static const sevenDays = Period._(value: '7day', display: '7 days');

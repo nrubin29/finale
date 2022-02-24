@@ -1,7 +1,7 @@
 import 'package:finale/services/apple_music/apple_music.dart';
 import 'package:finale/services/apple_music/playlist.dart';
 import 'package:finale/services/apple_music/song.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';

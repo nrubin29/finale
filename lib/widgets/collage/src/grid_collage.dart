@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/extensions.dart';
 import 'package:finale/util/period.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_icon.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';

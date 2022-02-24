@@ -1,7 +1,7 @@
 import 'package:finale/services/apple_music/apple_music.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/settings/settings_list_tile.dart';
 import 'package:flutter/material.dart';

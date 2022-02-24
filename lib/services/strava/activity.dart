@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 

@@ -4,7 +4,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';

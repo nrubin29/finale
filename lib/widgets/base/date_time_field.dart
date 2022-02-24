@@ -1,6 +1,6 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart'
     as impl;
-import 'package:finale/util/util.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:flutter/material.dart';
 
 class DateTimeField extends StatelessWidget {

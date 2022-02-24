@@ -3,7 +3,8 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/spotify.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/extensions.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 

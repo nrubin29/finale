@@ -1,8 +1,8 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/spotify/common.dart';
+import 'package:finale/util/extensions.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_io/io.dart';

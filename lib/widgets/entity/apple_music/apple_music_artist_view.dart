@@ -2,7 +2,7 @@ import 'package:finale/services/apple_music/album.dart';
 import 'package:finale/services/apple_music/apple_music.dart';
 import 'package:finale/services/apple_music/artist.dart';
 import 'package:finale/services/apple_music/song.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';

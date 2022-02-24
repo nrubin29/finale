@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finale/util/util.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
 

@@ -1,6 +1,6 @@
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/settings/about_view.dart';
 import 'package:finale/widgets/settings/accounts_settings_view.dart';

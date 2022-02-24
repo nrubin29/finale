@@ -1,6 +1,6 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';

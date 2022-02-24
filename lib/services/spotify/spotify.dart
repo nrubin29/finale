@@ -9,8 +9,8 @@ import 'package:finale/services/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/track.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:pkce/pkce.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finale/services/generic.dart';
-import 'package:finale/util/util.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:flutter/material.dart';

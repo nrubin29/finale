@@ -1,6 +1,6 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
 import 'package:html/parser.dart' show parse;
 
 enum ImageQuality { low, high }

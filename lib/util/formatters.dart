@@ -1,24 +1,4 @@
-import 'package:flutter/foundation.dart' show kIsWeb, kDebugMode;
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:universal_io/io.dart';
-
-const isDebug = kDebugMode;
-const isWeb = kIsWeb;
-final isDesktop = !isWeb && Platform.isMacOS;
-final isMobile = !isWeb && !isDesktop;
-var isScreenshotTest = false;
-
-const authCallbackUrl = isWeb
-    ? isDebug
-        ? 'http://localhost:52486/auth.html'
-        : 'https://web.finale.app/auth.html'
-    : 'finale://web.finale.app/auth';
-
-const spotifyGreen = Color.fromRGBO(30, 215, 96, 1);
-const appleMusicPink = Color.fromRGBO(252, 90, 113, 1);
-const scrobbleIcon = Icons.playlist_add;
 
 String pluralize(num howMany, [String noun = 'scrobble']) =>
     Intl.plural(howMany,
@@ -79,25 +59,4 @@ String formatDateRange(DateTime start, DateTime end) {
       : dateFormatWithYear.format(start);
   final endFormatted = dateFormatWithYear.format(end);
   return '$startFormatted - $endFormatted';
-}
-
-extension DateTimeUtil on DateTime {
-  /// Returns a [DateTime] with the same date and time 0:00:00.
-  DateTime get beginningOfDay => DateTime(year, month, day);
-
-  /// Returns a [DateTime] with the same date and time 11:59:59 pm.
-  DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999, 999);
-
-  /// Returns a [DateTime] at the beginning of the [month].
-  DateTime get beginningOfMonth => DateTime(year, month);
-
-  int get secondsSinceEpoch => millisecondsSinceEpoch ~/ 1000;
-}
-
-extension PackageInfoFullVersion on PackageInfo {
-  String get fullVersion => '$version+$buildNumber';
-}
-
-extension TitleCase on String {
-  String toTitleCase() => this[0].toUpperCase() + substring(1);
 }

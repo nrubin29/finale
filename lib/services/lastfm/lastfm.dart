@@ -10,9 +10,9 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
+import 'package:finale/util/extensions.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
   final allData = {

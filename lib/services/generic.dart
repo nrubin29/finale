@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/spotify/spotify.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/http_throttle.dart';
 import 'package:finale/util/image_id_cache.dart';
-import 'package:finale/util/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart'
     show DefaultCacheManager, HttpExceptionWithStatus;
