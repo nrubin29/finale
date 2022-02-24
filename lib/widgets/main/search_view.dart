@@ -6,10 +6,10 @@ import 'package:finale/services/apple_music/artist.dart';
 import 'package:finale/services/apple_music/playlist.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/spotify.dart';
-import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/util/util.dart';
@@ -295,8 +295,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           children: _currentQuery.text != ''
               ? [
                   EntityDisplay<Track>(
-                    scrobbleableEntity: (item) async =>
-                        item is STrack ? item : await Lastfm.getTrack(item),
+                    scrobbleableEntity: (item) async => item is LTrackMatch
+                        ? await Lastfm.getTrack(item)
+                        : item,
                     requestStream: _query
                         .debounceWhere(_shouldDebounce, _debounceDuration)
                         .map((query) =>
@@ -322,7 +323,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                   EntityDisplay<BasicAlbum>(
                     scrobbleableEntity: (item) => item is SAlbumSimple
                         ? Spotify.getFullAlbum(item)
-                        : Lastfm.getAlbum(item),
+                        : item is AMAlbum
+                            ? AppleMusic.getFullAlbum(item)
+                            : Lastfm.getAlbum(item),
                     displayType: DisplayType.grid,
                     requestStream: _query
                         .debounceWhere(_shouldDebounce, _debounceDuration)
@@ -337,8 +340,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                   ),
                   if (_searchEngine != SearchEngine.lastfm)
                     EntityDisplay<BasicPlaylist>(
-                      scrobbleableEntity: (item) =>
-                          Spotify.getFullPlaylist(item as SPlaylistSimple),
+                      scrobbleableEntity: (item) => item is SPlaylistSimple
+                          ? Spotify.getFullPlaylist(item)
+                          : AMFullPlaylist.get(item as AMPlaylist),
                       displayType: DisplayType.grid,
                       requestStream: _query
                           .debounceWhere(_shouldDebounce, _debounceDuration)
