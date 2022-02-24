@@ -31,30 +31,41 @@ class WorkoutDetails extends StatelessWidget {
               ListView(
                 children: [
                   ListTile(
-                    title: const Text('Time'),
+                    title: const Text('Elapsed Time'),
+                    leading: const Icon(Icons.schedule),
                     trailing: Text(formatDuration(
                         Duration(seconds: activity.elapsedTime))),
+                  ),
+                  ListTile(
+                    title: const Text('Moving Time'),
+                    leading: const Icon(Icons.timer),
+                    trailing: Text(
+                        formatDuration(Duration(seconds: activity.movingTime))),
                   ),
                   if (activity.distance > 0)
                     ListTile(
                       title: const Text('Distance'),
+                      leading: const Icon(Icons.map),
                       trailing:
                           Text(formatScrobbles(activity.distance, 'mile')),
                     ),
                   if (activity.totalElevationGain > 0)
                     ListTile(
                       title: const Text('Elevation Gain'),
+                      leading: const Icon(Icons.height),
                       trailing: Text('${activity.totalElevationGain} ft'),
                     ),
                   if (activity.averageSpeed > 0)
                     ListTile(
                       title: const Text('Average Speed'),
+                      leading: const Icon(Icons.speed),
                       trailing: Text(
                           '${activity.averageSpeed.toStringAsFixed(1)} mph'),
                     ),
                   if (activity.averageHeartRate != null)
                     ListTile(
                       title: const Text('Average Heart Rate'),
+                      leading: const Icon(Icons.favorite),
                       trailing: Text('${activity.averageHeartRate} bpm'),
                     ),
                 ],

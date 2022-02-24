@@ -44,6 +44,10 @@ class AthleteActivity extends Entity {
   @JsonKey(name: 'elapsed_time')
   final int elapsedTime;
 
+  /// Moving time in seconds.
+  @JsonKey(name: 'moving_time')
+  final int movingTime;
+
   /// Distance in miles, truncated to two decimal places.
   @JsonKey(fromJson: _metersToMiles)
   final double distance;
@@ -66,6 +70,7 @@ class AthleteActivity extends Entity {
     required this.startDate,
     required this.startDateLocal,
     required this.elapsedTime,
+    required this.movingTime,
     required this.distance,
     required this.totalElevationGain,
     required this.averageSpeed,
