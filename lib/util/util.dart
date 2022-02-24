@@ -10,16 +10,11 @@ final isDesktop = !isWeb && Platform.isMacOS;
 final isMobile = !isWeb && !isDesktop;
 var isScreenshotTest = false;
 
-String get authCallbackUrl {
-  var callbackUrl =
-      isWeb ? 'https://web.finale.app/auth.html' : 'finale://auth';
-
-  if (isDebug && isWeb) {
-    callbackUrl = 'http://localhost:52486/auth.html';
-  }
-
-  return callbackUrl;
-}
+const authCallbackUrl = isWeb
+    ? isDebug
+        ? 'http://localhost:52486/auth.html'
+        : 'https://web.finale.app/auth.html'
+    : 'finale://web.finale.app/auth';
 
 const spotifyGreen = Color.fromRGBO(30, 215, 96, 1);
 const appleMusicPink = Color.fromRGBO(252, 90, 113, 1);

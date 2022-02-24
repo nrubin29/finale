@@ -5,6 +5,7 @@ import 'package:finale/services/auth.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/strava/activity.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/util.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
@@ -64,7 +65,7 @@ class Strava {
         'authorize',
       ], queryParameters: {
         'client_id': stravaClientId,
-        'redirect_uri': 'finale://web.finale.app/auth', // TODO: Fix for web.
+        'redirect_uri': authCallbackUrl,
         'response_type': 'code',
         'approval_prompt': 'auto',
         'scope': 'activity:read',
