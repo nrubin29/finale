@@ -1,5 +1,6 @@
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/collage/collage_view.dart';
 import 'package:finale/widgets/tools/workout_view.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +13,13 @@ class ToolsView extends StatelessWidget {
         appBar: createAppBar('Tools'),
         body: ListView(
           children: [
-            ListTile(
-              title: const Text('Collage Generator'),
-              leading: const Icon(Icons.grid_view),
+            CaptionedListTile(
+              title: 'Collage Generator',
+              icon: Icons.grid_view,
               trailing: const Icon(Icons.chevron_right),
+              caption:
+                  'Generate grids and lists of your top albums, artists, and '
+                  'tracks over various time periods.',
               onTap: () {
                 Navigator.push(
                   context,
@@ -23,10 +27,13 @@ class ToolsView extends StatelessWidget {
                 );
               },
             ),
-            ListTile(
-              title: const Text('Strava Workouts'),
-              leading: const Icon(SocialMediaIcons.strava),
+            CaptionedListTile(
+              title: 'Strava Workouts',
+              icon: SocialMediaIcons.strava,
               trailing: const Icon(Icons.chevron_right),
+              caption:
+                  'Log in with Strava to see what tracks you listened to on '
+                  'your workouts',
               onTap: () {
                 Navigator.push(
                   context,
