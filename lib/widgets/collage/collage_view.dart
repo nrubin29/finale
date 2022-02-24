@@ -79,7 +79,7 @@ class _CollageViewState extends State<CollageView> {
     _themeColor = Preferences().themeColor;
   }
 
-  Future<void> _doRequest() async {
+  Future<void> _doRequest(BuildContext context) async {
     setState(() {
       _loadingProgress = 0;
       _numItemsToLoad = _type == DisplayType.grid
@@ -195,7 +195,7 @@ class _CollageViewState extends State<CollageView> {
     return tempFile;
   }
 
-  Widget get _form => ExpansionPanelList(
+  Widget _form(BuildContext context) => ExpansionPanelList(
           expandedHeaderPadding: EdgeInsets.zero,
           expansionCallback: (_, __) {
             setState(() {
@@ -383,7 +383,9 @@ class _CollageViewState extends State<CollageView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: OutlinedButton(
-                        onPressed: _doRequest,
+                        onPressed: () {
+                          _doRequest(context);
+                        },
                         child: const Text('Generate'),
                       ),
                     ),
@@ -434,46 +436,48 @@ class _CollageViewState extends State<CollageView> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar('Collage Generator'),
-        body: Center(
-          child: _isDoingRequest
-              ? _loadingWidget
-              : ListView(children: [
-                  _form,
-                  if (_image != null) ...[
-                    const SizedBox(height: 16),
-                    Center(
-                      child: ConstrainedBox(
-                        constraints: _type == DisplayType.grid
-                            ? const BoxConstraints(maxWidth: 600)
-                            : const BoxConstraints(maxWidth: 400),
-                        child: Image.memory(_image!),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (!isWeb)
-                          OutlinedButton(
-                            onPressed: () async {
-                              final tempFile = await _imageFile;
-                              await Share.shareFiles([tempFile.path]);
-                            },
-                            child: const Text('Share'),
-                          ),
-                        // Both buttons are visible only on mobile.
-                        if (isMobile) const SizedBox(width: 10),
-                        if (!isDesktop)
-                          OutlinedButton(
-                            onPressed: _saveImage,
-                            child: const Text(
-                                isWeb ? 'Download' : 'Save to camera roll'),
-                          ),
-                      ],
-                    ),
-                  ],
-                ]),
-        ),
+        body: Builder(
+            builder: (context) => Center(
+                  child: _isDoingRequest
+                      ? _loadingWidget
+                      : ListView(children: [
+                          _form(context),
+                          if (_image != null) ...[
+                            const SizedBox(height: 16),
+                            Center(
+                              child: ConstrainedBox(
+                                constraints: _type == DisplayType.grid
+                                    ? const BoxConstraints(maxWidth: 600)
+                                    : const BoxConstraints(maxWidth: 400),
+                                child: Image.memory(_image!),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (!isWeb)
+                                  OutlinedButton(
+                                    onPressed: () async {
+                                      final tempFile = await _imageFile;
+                                      await Share.shareFiles([tempFile.path]);
+                                    },
+                                    child: const Text('Share'),
+                                  ),
+                                // Both buttons are visible only on mobile.
+                                if (isMobile) const SizedBox(width: 10),
+                                if (!isDesktop)
+                                  OutlinedButton(
+                                    onPressed: _saveImage,
+                                    child: const Text(isWeb
+                                        ? 'Download'
+                                        : 'Save to camera roll'),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ]),
+                )),
       );
 
   @override
