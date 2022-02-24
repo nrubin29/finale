@@ -1,7 +1,6 @@
 import 'package:finale/services/strava/activity.dart';
 import 'package:finale/services/strava/strava.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/tools/workout_details.dart';
 import 'package:flutter/material.dart';
@@ -49,10 +48,7 @@ class _WorkoutViewState extends State<WorkoutView> {
                     for (final activity in _activities!)
                       ListTile(
                         title: Text(activity.name),
-                        subtitle: Text(
-                            dateTimeFormat.format(activity.startDateLocal) +
-                                ' - ' +
-                                timeFormat.format(activity.endDateLocal)),
+                        subtitle: Text(activity.localTimeRangeFormatted),
                         leading: const Icon(Icons.run_circle),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {

@@ -30,7 +30,7 @@ Widget appIcon({required double size}) => ClipRRect(
       child: Image.asset('assets/images/icon.png', width: size),
     );
 
-String formatScrobbles(int playCount, [String noun = 'scrobble']) =>
+String formatScrobbles(num playCount, [String noun = 'scrobble']) =>
     Intl.plural(playCount,
         one: '$playCount $noun',
         other: '${numberFormat.format(playCount)} ${noun}s');
