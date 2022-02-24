@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finale/services/auth.dart';
 import 'package:finale/util/period.dart';
 import 'package:finale/util/theme.dart';
 import 'package:rxdart/rxdart.dart';
@@ -124,6 +125,29 @@ class Preferences {
     _preferences.remove('spotifyRefreshToken');
     _preferences.remove('spotifyExpiration');
     _spotifyEnabledChange.add(null);
+  }
+
+  // Strava
+
+  bool get hasStravaAuthData =>
+      _preferences.containsKey('stravaAccessToken') &&
+      _preferences.containsKey('stravaRefreshToken') &&
+      _preferences.containsKey('stravaExpiresAt');
+
+  TokenResponse? get stravaAuthData => hasStravaAuthData
+      ? TokenResponse(
+          _preferences.getString('stravaAccessToken')!,
+          DateTime.fromMillisecondsSinceEpoch(
+              _preferences.getInt('stravaExpiresAt')!),
+          _preferences.getString('stravaRefreshToken')!)
+      : null;
+
+  set stravaAuthData(TokenResponse? tokenResponse) {
+    assert(tokenResponse != null);
+    _preferences.setString('stravaAccessToken', tokenResponse!.accessToken);
+    _preferences.setInt(
+        'stravaExpiresAt', tokenResponse.expiresAt.millisecondsSinceEpoch);
+    _preferences.setString('stravaRefreshToken', tokenResponse.refreshToken);
   }
 
   String? get libreKey => _preferences.getString('libreKey');

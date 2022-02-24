@@ -4,6 +4,7 @@ import 'package:finale/env.dart';
 import 'package:finale/services/auth.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/strava/activity.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
@@ -12,12 +13,12 @@ Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
     data?.map((key, value) => MapEntry(key, value.toString())));
 
 Future<dynamic> _doRequest(String method, [Map<String, dynamic>? data]) async {
-  // if (!Preferences().isSpotifyLoggedIn) {
-  //   await Strava().refreshAccessToken(Preferences().spotifyRefreshToken!);
-  // }
+  assert(Preferences().hasStravaAuthData);
+  if (!DateTime.now().isBefore(Preferences().stravaAuthData!.expiresAt)) {
+    await Strava().refreshAccessToken(Preferences().stravaAuthData!);
+  }
 
-  // final accessToken = Preferences().spotifyAccessToken;
-  final accessToken = Strava._accessToken;
+  final accessToken = Preferences().stravaAuthData?.accessToken;
 
   final uri = _buildUri(method, data);
 
@@ -50,9 +51,6 @@ class StravaListActivitiesRequest extends PagedRequest<AthleteActivity> {
 }
 
 class Strava {
-  // TODO: delete this.
-  static String? _accessToken;
-
   static Strava? _instance;
 
   factory Strava() => _instance ??= const Strava._();
@@ -94,7 +92,7 @@ class Strava {
         ),
         body: body);
     final response = TokenResponse.fromJson(json.decode(rawResponse.body));
-    _accessToken = response.accessToken;
+    Preferences().stravaAuthData = response;
   }
 
   Future<void> _getAccessToken(String code) => _callTokenEndpoint({
@@ -104,10 +102,11 @@ class Strava {
         'grant_type': 'authorization_code',
       });
 
-  Future<void> refreshAccessToken(String refreshToken) => _callTokenEndpoint({
+  Future<void> refreshAccessToken(TokenResponse stravaAuthData) =>
+      _callTokenEndpoint({
         'client_id': stravaClientId,
         'client_secret': stravaClientSecret,
         'grant_type': 'refresh_token',
-        'refresh_token': refreshToken,
+        'refresh_token': stravaAuthData.refreshToken,
       });
 }

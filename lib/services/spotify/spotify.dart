@@ -22,7 +22,7 @@ Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
 Future<Map<String, dynamic>> _doRequest(String method,
     [Map<String, dynamic>? data]) async {
   assert(Preferences().hasSpotifyAuthData);
-  if (DateTime.now().compareTo(Preferences().spotifyExpiration!) >= 0) {
+  if (!DateTime.now().isBefore(Preferences().spotifyExpiration!)) {
     await Spotify.refreshAccessToken(Preferences().spotifyRefreshToken!);
   }
 
@@ -200,8 +200,7 @@ class Spotify {
     Preferences()
       ..spotifyAccessToken = response.accessToken
       ..spotifyRefreshToken = response.refreshToken
-      ..spotifyExpiration =
-          DateTime.now().add(Duration(seconds: response.expiresIn));
+      ..spotifyExpiration = response.expiresAt;
   }
 
   static Future<void> _getAccessToken(String code, PkcePair pkcePair) =>
