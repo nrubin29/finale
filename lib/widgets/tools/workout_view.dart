@@ -1,6 +1,7 @@
 import 'package:finale/services/strava/activity.dart';
 import 'package:finale/services/strava/strava.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/tools/workout_details.dart';
@@ -73,9 +74,16 @@ class _WorkoutViewState extends State<WorkoutView> {
                     ],
                   )
             : Center(
-                child: TextButton(
+                child: OutlinedButton(
                   onPressed: _authenticate,
-                  child: const Text('Log in with Strava'),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(SocialMediaIcons.strava),
+                      SizedBox(width: 8),
+                      Text('Log in with Strava'),
+                    ],
+                  ),
                 ),
               ),
       );
