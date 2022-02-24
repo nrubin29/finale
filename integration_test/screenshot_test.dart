@@ -106,9 +106,14 @@ Future<void> main() async {
 
   testWidgets('Collage screen', (tester) async {
     await pumpWidget(tester, const MainView(username: testName));
+    await tester.tap(find.byIcon(Icons.construction));
+    await tester.pumpAndSettle();
+
+    // Tools page
     await tester.tap(find.byIcon(Icons.grid_view));
     await tester.pumpAndSettle();
 
+    // Collage Generator page
     await tester.tap(find.text('Generate', skipOffstage: !isAndroid),
         warnIfMissed: !isAndroid);
     await tester.pumpMany();

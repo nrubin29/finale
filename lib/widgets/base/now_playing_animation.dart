@@ -1,3 +1,4 @@
+import 'package:finale/util/constants.dart';
 import 'package:flutter/material.dart';
 
 class NowPlayingAnimation extends StatelessWidget {
@@ -43,7 +44,14 @@ class _AnimatedBarState extends State<_AnimatedBar>
     _controller.addListener(() {
       setState(() {});
     });
-    _controller.repeat(reverse: true);
+
+    if (isScreenshotTest) {
+      if (widget.start == 0) {
+        _controller.animateTo(.75);
+      }
+    } else {
+      _controller.repeat(reverse: true);
+    }
   }
 
   @override
