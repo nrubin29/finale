@@ -1,3 +1,4 @@
+import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/collage/collage_view.dart';
 import 'package:finale/widgets/tools/workout_view.dart';
@@ -24,7 +25,7 @@ class ToolsView extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Strava Workouts'),
-              leading: const Icon(Icons.run_circle),
+              leading: const Icon(SocialMediaIcons.strava),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.push(
