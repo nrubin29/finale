@@ -6,9 +6,9 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
+import 'package:finale/widgets/entity/apple_music/apple_music_artist_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 
@@ -47,17 +47,18 @@ class AppleMusicAlbumView extends StatelessWidget {
             image: EntityImage(entity: album),
             listItems: [
               ListTile(
-                  leading: EntityImage(entity: album.artist),
-                  title: Text(album.artist.name),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                              SpotifyArtistView(artist: album.artist)),
-                    );
-                  }),
+                leading: EntityImage(entity: album.artist),
+                title: Text(album.artist.name),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            AppleMusicArtistView(artistId: album.artistId)),
+                  );
+                },
+              ),
               if (album.tracks.isNotEmpty) ...[
                 const Divider(),
                 EntityDisplay<AMSong>(

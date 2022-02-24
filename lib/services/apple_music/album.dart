@@ -33,6 +33,8 @@ class AMFullAlbum extends FullAlbum {
   AMFullAlbum(this._album)
       : tracks = _album.tracks.map(AMSong.new).toList(growable: false);
 
+  String get artistId => _album.artistId;
+
   @override
   String get name => _album.title;
 

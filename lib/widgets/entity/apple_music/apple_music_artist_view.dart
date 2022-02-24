@@ -4,6 +4,8 @@ import 'package:finale/services/apple_music/artist.dart';
 import 'package:finale/services/apple_music/song.dart';
 import 'package:finale/util/util.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/error_view.dart';
+import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/apple_music/apple_music_album_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -11,9 +13,9 @@ import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
 class AppleMusicArtistView extends StatefulWidget {
-  final AMArtist artist;
+  final String artistId;
 
-  const AppleMusicArtistView({required this.artist});
+  const AppleMusicArtistView({required this.artistId});
 
   @override
   State<StatefulWidget> createState() => _AppleMusicArtistViewState();
@@ -31,56 +33,72 @@ class _AppleMusicArtistViewState extends State<AppleMusicArtistView>
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar(
-          widget.artist.name,
-          backgroundColor: appleMusicPink,
-        ),
-        body: TwoUp(
-          image: EntityImage(entity: widget.artist),
-          listItems: [
-            TabBar(
-              labelColor: appleMusicPink,
-              unselectedLabelColor: Colors.grey,
-              indicatorColor: appleMusicPink,
-              controller: _tabController,
-              tabs: const [
-                Tab(icon: Icon(Icons.album)),
-                Tab(icon: Icon(Icons.audiotrack)),
-              ],
-              onTap: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                  _tabController.animateTo(index);
-                });
-              },
+  Widget build(BuildContext context) => FutureBuilder<AMArtist>(
+        future: AppleMusic.getArtist(widget.artistId),
+        builder: (_, snapshot) {
+          if (snapshot.hasError) {
+            return ErrorView(
+              error: snapshot.error!,
+              stackTrace: snapshot.stackTrace!,
+            );
+          } else if (!snapshot.hasData) {
+            return LoadingView();
+          }
+
+          final artist = snapshot.data!;
+
+          return Scaffold(
+            appBar: createAppBar(
+              artist.name,
+              backgroundColor: appleMusicPink,
             ),
-            IndexedStack(
-              index: _selectedIndex,
-              children: [
-                Visibility(
-                  visible: _selectedIndex == 0,
-                  maintainState: true,
-                  child: EntityDisplay<AMAlbum>(
-                    scrollable: false,
-                    request: AMSearchAlbumsRequest.forArtist(widget.artist),
-                    detailWidgetBuilder: (album) =>
-                        AppleMusicAlbumView(album: album),
-                  ),
+            body: TwoUp(
+              image: EntityImage(entity: artist),
+              listItems: [
+                TabBar(
+                  labelColor: appleMusicPink,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorColor: appleMusicPink,
+                  controller: _tabController,
+                  tabs: const [
+                    Tab(icon: Icon(Icons.album)),
+                    Tab(icon: Icon(Icons.audiotrack)),
+                  ],
+                  onTap: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                      _tabController.animateTo(index);
+                    });
+                  },
                 ),
-                Visibility(
-                  visible: _selectedIndex == 1,
-                  maintainState: true,
-                  child: EntityDisplay<AMSong>(
-                    scrollable: false,
-                    request: AMSearchSongsRequest.forArtist(widget.artist),
-                    scrobbleableEntity: (track) async => track,
-                  ),
+                IndexedStack(
+                  index: _selectedIndex,
+                  children: [
+                    Visibility(
+                      visible: _selectedIndex == 0,
+                      maintainState: true,
+                      child: EntityDisplay<AMAlbum>(
+                        scrollable: false,
+                        request: AMSearchAlbumsRequest.forArtist(artist),
+                        detailWidgetBuilder: (album) =>
+                            AppleMusicAlbumView(album: album),
+                      ),
+                    ),
+                    Visibility(
+                      visible: _selectedIndex == 1,
+                      maintainState: true,
+                      child: EntityDisplay<AMSong>(
+                        scrollable: false,
+                        request: AMSearchSongsRequest.forArtist(artist),
+                        scrobbleableEntity: (track) async => track,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          );
+        },
       );
 
   @override

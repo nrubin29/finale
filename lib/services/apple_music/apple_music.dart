@@ -99,6 +99,9 @@ class AppleMusic {
   static Future<AMFullAlbum> getFullAlbum(AMAlbum album) async =>
       AMFullAlbum(await FlutterMPMediaPlayer.getAlbum(album.id));
 
+  static Future<AMArtist> getArtist(String artistId) async =>
+      AMArtist(await FlutterMPMediaPlayer.getArtist(artistId));
+
   static Future<List<AMPlayedSong>> getRecentTracks() async {
     var after = DateTime.now().subtract(const Duration(days: 14));
     final last = Preferences().lastAppleMusicScrobble;

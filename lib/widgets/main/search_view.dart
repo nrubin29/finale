@@ -311,12 +311,13 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                         .debounceWhere(_shouldDebounce, _debounceDuration)
                         .map((query) =>
                             query.searchEngine.searchArtists(query.text)),
-                    detailWidgetBuilder: (artist) => _searchEngine ==
-                            SearchEngine.lastfm
-                        ? ArtistView(artist: artist)
-                        : _searchEngine == SearchEngine.appleMusic
-                            ? AppleMusicArtistView(artist: artist as AMArtist)
-                            : SpotifyArtistView(artist: artist),
+                    detailWidgetBuilder: (artist) =>
+                        _searchEngine == SearchEngine.lastfm
+                            ? ArtistView(artist: artist)
+                            : _searchEngine == SearchEngine.appleMusic
+                                ? AppleMusicArtistView(
+                                    artistId: (artist as AMArtist).id)
+                                : SpotifyArtistView(artist: artist),
                   ),
                   EntityDisplay<BasicAlbum>(
                     scrobbleableEntity: (item) => item is SAlbumSimple
