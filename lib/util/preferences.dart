@@ -150,6 +150,12 @@ class Preferences {
     _preferences.setString('stravaRefreshToken', tokenResponse.refreshToken);
   }
 
+  void clearStravaAuthData() {
+    _preferences.remove('stravaAccessToken');
+    _preferences.remove('stravaExpiresAt');
+    _preferences.remove('stravaRefreshToken');
+  }
+
   String? get libreKey => _preferences.getString('libreKey');
 
   set libreKey(String? value) {

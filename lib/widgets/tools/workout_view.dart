@@ -28,9 +28,24 @@ class _WorkoutViewState extends State<WorkoutView> {
     }
   }
 
+  void _logout() {
+    Preferences().clearStravaAuthData();
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar('Strava Workouts'),
+        appBar: createAppBar(
+          'Strava Workouts',
+          actions: [
+            if (Preferences().hasStravaAuthData)
+              IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: _logout,
+              ),
+          ],
+        ),
         body: Preferences().hasStravaAuthData
             ? EntityDisplay<AthleteActivity>(
                 request: const StravaListActivitiesRequest(),
