@@ -5,6 +5,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
+import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
@@ -15,46 +16,30 @@ import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ArtistView extends StatefulWidget {
+class ArtistView extends StatelessWidget {
   final BasicArtist artist;
 
   const ArtistView({required this.artist});
 
   @override
-  State<StatefulWidget> createState() => _ArtistViewState();
-}
+  Widget build(BuildContext context) => FutureBuilder<LArtist>(
+        future: artist is LArtist
+            ? Future.value(artist as LArtist)
+            : Lastfm.getArtist(artist),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return ErrorView(
+              error: snapshot.error!,
+              stackTrace: snapshot.stackTrace!,
+              entity: this.artist,
+            );
+          } else if (!snapshot.hasData) {
+            return LoadingView();
+          }
 
-class _ArtistViewState extends State<ArtistView>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  var selectedIndex = 0;
+          final artist = snapshot.data!;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<LArtist>(
-      future: widget.artist is LArtist
-          ? Future.value(widget.artist as LArtist)
-          : Lastfm.getArtist(widget.artist),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return ErrorView(
-            error: snapshot.error!,
-            stackTrace: snapshot.stackTrace!,
-            entity: widget.artist,
-          );
-        } else if (!snapshot.hasData) {
-          return LoadingView();
-        }
-
-        final artist = snapshot.data!;
-
-        return Scaffold(
+          return Scaffold(
             appBar: createAppBar(
               artist.name,
               actions: [
@@ -83,50 +68,21 @@ class _ArtistViewState extends State<ArtistView>
                   WikiTile(entity: artist, wiki: artist.bio!),
                 ],
                 const Divider(),
-                TabBar(
-                    labelColor: Theme.of(context).primaryColor,
-                    unselectedLabelColor: Colors.grey,
-                    indicatorColor: Theme.of(context).primaryColor,
-                    controller: _tabController,
-                    tabs: const [
-                      Tab(icon: Icon(Icons.album)),
-                      Tab(icon: Icon(Icons.audiotrack)),
-                    ],
-                    onTap: (index) {
-                      setState(() {
-                        selectedIndex = index;
-                        _tabController.animateTo(index);
-                      });
-                    }),
-                IndexedStack(index: selectedIndex, children: [
-                  Visibility(
-                    visible: selectedIndex == 0,
-                    maintainState: true,
-                    child: EntityDisplay<LArtistTopAlbum>(
-                        scrollable: false,
-                        request: ArtistGetTopAlbumsRequest(artist.name),
-                        detailWidgetBuilder: (album) =>
-                            AlbumView(album: album)),
+                ArtistTabs(
+                  albumsWidget: EntityDisplay<LArtistTopAlbum>(
+                    scrollable: false,
+                    request: ArtistGetTopAlbumsRequest(artist.name),
+                    detailWidgetBuilder: (album) => AlbumView(album: album),
                   ),
-                  Visibility(
-                    visible: selectedIndex == 1,
-                    maintainState: true,
-                    child: EntityDisplay<LArtistTopTrack>(
-                        scrollable: false,
-                        request: ArtistGetTopTracksRequest(artist.name),
-                        detailWidgetBuilder: (track) =>
-                            TrackView(track: track)),
+                  tracksWidget: EntityDisplay<LArtistTopTrack>(
+                    scrollable: false,
+                    request: ArtistGetTopTracksRequest(artist.name),
+                    detailWidgetBuilder: (track) => TrackView(track: track),
                   ),
-                ])
+                ),
               ],
-            ));
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-  }
+            ),
+          );
+        },
+      );
 }

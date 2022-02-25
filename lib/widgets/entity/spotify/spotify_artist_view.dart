@@ -9,52 +9,37 @@ import 'package:finale/widgets/base/error_view.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/base/loading_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
+import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
 import 'package:flutter/material.dart';
 
-class SpotifyArtistView extends StatefulWidget {
+class SpotifyArtistView extends StatelessWidget {
   final dynamic /* SArtist|SArtistSimple */ artist;
 
   const SpotifyArtistView({required this.artist})
       : assert(artist is SArtist || artist is SArtistSimple);
 
   @override
-  State<StatefulWidget> createState() => _SpotifyArtistViewState();
-}
+  Widget build(BuildContext context) => FutureBuilder<SArtist>(
+        future: artist is SArtist
+            ? Future.value(artist)
+            : Spotify.getFullArtist(artist),
+        builder: (_, snapshot) {
+          if (snapshot.hasError) {
+            return ErrorView(
+              error: snapshot.error!,
+              stackTrace: snapshot.stackTrace!,
+              entity: this.artist,
+            );
+          } else if (!snapshot.hasData) {
+            return LoadingView();
+          }
 
-class _SpotifyArtistViewState extends State<SpotifyArtistView>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  var selectedIndex = 0;
+          final artist = snapshot.data!;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<SArtist>(
-      future: widget.artist is SArtist
-          ? Future.value(widget.artist)
-          : Spotify.getFullArtist(widget.artist),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return ErrorView(
-            error: snapshot.error!,
-            stackTrace: snapshot.stackTrace!,
-            entity: widget.artist,
-          );
-        } else if (!snapshot.hasData) {
-          return LoadingView();
-        }
-
-        final artist = snapshot.data!;
-
-        return Scaffold(
+          return Scaffold(
             appBar: createAppBar(
               artist.name,
               backgroundColor: spotifyGreen,
@@ -62,64 +47,38 @@ class _SpotifyArtistViewState extends State<SpotifyArtistView>
             body: TwoUp(
               image: EntityImage(entity: artist),
               listItems: [
-                TabBar(
-                    labelColor: spotifyGreen,
-                    unselectedLabelColor: Colors.grey,
-                    indicatorColor: spotifyGreen,
-                    controller: _tabController,
-                    tabs: const [
-                      Tab(icon: Icon(Icons.album)),
-                      Tab(icon: Icon(Icons.audiotrack)),
-                    ],
-                    onTap: (index) {
-                      setState(() {
-                        selectedIndex = index;
-                        _tabController.animateTo(index);
-                      });
-                    }),
-                IndexedStack(index: selectedIndex, children: [
-                  Visibility(
-                    visible: selectedIndex == 0,
-                    maintainState: true,
-                    child: EntityDisplay<SAlbumSimple>(
+                ArtistTabs(
+                  color: spotifyGreen,
+                  albumsWidget: EntityDisplay<SAlbumSimple>(
+                    scrollable: false,
+                    request: SArtistAlbumsRequest(artist),
+                    detailWidgetBuilder: (album) =>
+                        SpotifyAlbumView(album: album),
+                  ),
+                  tracksWidget: FutureBuilder<List<STrack>>(
+                    future: Spotify.getTopTracksForArtist(artist),
+                    builder: (_, snapshot) {
+                      if (snapshot.hasError) {
+                        return ErrorComponent(
+                          error: snapshot.error!,
+                          stackTrace: snapshot.stackTrace!,
+                          entity: artist,
+                        );
+                      } else if (!snapshot.hasData) {
+                        return const LoadingComponent();
+                      }
+
+                      return EntityDisplay<STrack>(
                         scrollable: false,
-                        request: SArtistAlbumsRequest(artist),
-                        detailWidgetBuilder: (album) =>
-                            SpotifyAlbumView(album: album)),
+                        items: snapshot.data,
+                        scrobbleableEntity: (track) => Future.value(track),
+                      );
+                    },
                   ),
-                  Visibility(
-                    visible: selectedIndex == 1,
-                    maintainState: true,
-                    child: FutureBuilder<List<STrack>>(
-                        future: Spotify.getTopTracksForArtist(artist),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return ErrorComponent(
-                              error: snapshot.error!,
-                              stackTrace: snapshot.stackTrace!,
-                              entity: artist,
-                            );
-                          } else if (!snapshot.hasData) {
-                            return const LoadingComponent();
-                          }
-
-                          return EntityDisplay<STrack>(
-                            scrollable: false,
-                            items: snapshot.data,
-                            scrobbleableEntity: (track) => Future.value(track),
-                          );
-                        }),
-                  ),
-                ])
+                ),
               ],
-            ));
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-  }
+            ),
+          );
+        },
+      );
 }
