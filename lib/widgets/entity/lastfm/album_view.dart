@@ -3,8 +3,7 @@ import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/app_bar.dart';
-import 'package:finale/widgets/base/error_view.dart';
-import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
@@ -41,25 +40,12 @@ class AlbumView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<LAlbum>(
-      future: album is LAlbum
-          ? Future.value(album as LAlbum)
-          : Lastfm.getAlbum(album),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return ErrorView(
-            error: snapshot.error!,
-            stackTrace: snapshot.stackTrace!,
-            entity: this.album,
-          );
-        } else if (!snapshot.hasData) {
-          return LoadingView();
-        }
-
-        final album = snapshot.data!;
-
-        return Scaffold(
+  Widget build(BuildContext context) => FutureBuilderView<LAlbum>(
+        future: album is LAlbum
+            ? Future.value(album as LAlbum)
+            : Lastfm.getAlbum(album),
+        baseEntity: album,
+        builder: (album) => Scaffold(
           appBar: createAppBar(
             album.name,
             subtitle: album.artist.name,
@@ -115,8 +101,6 @@ class AlbumView extends StatelessWidget {
               ],
             ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
 }

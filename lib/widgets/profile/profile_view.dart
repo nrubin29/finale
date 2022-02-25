@@ -9,8 +9,7 @@ import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/widgets/base/app_bar.dart';
-import 'package:finale/widgets/base/error_view.dart';
-import 'package:finale/widgets/base/loading_view.dart';
+import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
@@ -88,20 +87,10 @@ class _ProfileViewState extends State<ProfileView>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<LUser>(
-      future: Lastfm.getUser(widget.username),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return ErrorView(
-              error: snapshot.error!, stackTrace: snapshot.stackTrace!);
-        } else if (!snapshot.hasData) {
-          return LoadingView();
-        }
-
-        final user = snapshot.data!;
-
-        return Scaffold(
+  Widget build(BuildContext context) => FutureBuilderView<LUser>(
+        future: Lastfm.getUser(widget.username),
+        baseEntity: widget.username,
+        builder: (user) => Scaffold(
           appBar: createAppBar(
             user.name,
             leadingEntity: user,
@@ -220,10 +209,8 @@ class _ProfileViewState extends State<ProfileView>
               ],
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

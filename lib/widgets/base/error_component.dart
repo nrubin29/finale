@@ -1,4 +1,3 @@
-import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/util/extensions.dart';
@@ -11,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ErrorComponent extends StatelessWidget {
   final Object error;
   final StackTrace stackTrace;
-  final Entity? entity;
+  final Object? entity;
   final bool showSendFeedbackButton;
 
   ErrorComponent(
