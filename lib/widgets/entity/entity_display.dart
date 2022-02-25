@@ -110,10 +110,12 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       getInitialItems();
     } else {
       _subscription = widget.requestStream?.listen((newRequest) {
-        setState(() {
-          _request = newRequest;
-          getInitialItems();
-        });
+        if (mounted) {
+          setState(() {
+            _request = newRequest;
+            getInitialItems();
+          });
+        }
       });
     }
   }
