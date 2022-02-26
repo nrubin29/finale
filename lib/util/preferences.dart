@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:finale/services/auth.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/theme.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum SearchEngine { lastfm, spotify, appleMusic }
@@ -40,9 +39,9 @@ class Preferences {
 
   // This stream needs to be open for the entire lifetime of the app.
   // ignore: close_sinks
-  final _periodChange = PublishSubject<Period>();
+  final _periodChange = StreamController<Period>.broadcast();
 
-  Stream<Period> get periodChange => _periodChange;
+  Stream<Period> get periodChange => _periodChange.stream;
 
   String? get name => _preferences.getString('name');
 
@@ -109,9 +108,9 @@ class Preferences {
 
   // This stream needs to be open for the entire lifetime of the app.
   // ignore: close_sinks
-  final _spotifyEnabledChange = PublishSubject<void>();
+  final _spotifyEnabledChange = StreamController<void>.broadcast();
 
-  Stream<void> get spotifyEnabledChange => _spotifyEnabledChange;
+  Stream<void> get spotifyEnabledChange => _spotifyEnabledChange.stream;
 
   /// Returns true if Spotify auth data is saved.
   bool get hasSpotifyAuthData {
