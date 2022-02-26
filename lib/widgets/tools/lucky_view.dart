@@ -77,7 +77,7 @@ class _LuckyViewState extends State<LuckyView> {
     final randomIndex = _random.nextInt(_response!.length);
 
     setState(() {
-      _entity = _response![randomIndex];
+      _entity = _response!.removeAt(randomIndex);
     });
   }
 
@@ -132,7 +132,7 @@ class _LuckyViewState extends State<LuckyView> {
               ),
             ),
           ],
-          body: _entity != null
+          body: _response != null && _entity != null
               ? Column(
                   children: [
                     const SizedBox(height: 8),
@@ -183,10 +183,11 @@ class _LuckyViewState extends State<LuckyView> {
                             MaterialPageRoute(builder: (_) => detailWidget));
                       },
                     ),
-                    OutlinedButton(
-                      onPressed: _chooseEntity,
-                      child: const Text('Choose Another'),
-                    ),
+                    if (_response!.isNotEmpty)
+                      OutlinedButton(
+                        onPressed: _chooseEntity,
+                        child: const Text('Choose Another'),
+                      ),
                   ],
                 )
               : null,
