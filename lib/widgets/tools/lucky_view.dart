@@ -96,9 +96,13 @@ class _LuckyViewState extends State<LuckyView> {
               controller: _usernameTextController,
               validator: _validator,
             ),
-            const ListTile(
-              title: Text('Period'),
-              trailing: PeriodDropdownButton(),
+            ListTile(
+              title: const Text('Period'),
+              trailing: PeriodDropdownButton(
+                periodChanged: (period) {
+                  _period = period;
+                },
+              ),
             ),
             ListTile(
               title: const Text('Type'),
