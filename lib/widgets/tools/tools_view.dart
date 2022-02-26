@@ -2,6 +2,7 @@ import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/collage/collage_view.dart';
+import 'package:finale/widgets/tools/lucky_view.dart';
 import 'package:finale/widgets/tools/workout_view.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,19 @@ class ToolsView extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const CollageView()),
+                );
+              },
+            ),
+            CaptionedListTile(
+              title: "I'm Feeling Lucky",
+              icon: Icons.casino,
+              trailing: const Icon(Icons.chevron_right),
+              caption: "Pick a random artist, album, or track from your (or a "
+                  "friend's) library.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LuckyView()),
                 );
               },
             ),

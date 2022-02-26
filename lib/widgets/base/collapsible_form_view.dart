@@ -39,7 +39,7 @@ class _CollapsibleFormViewState extends State<CollapsibleFormView> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) => ListView(
         children: [
           ExpansionPanelList(
             expandedHeaderPadding: EdgeInsets.zero,

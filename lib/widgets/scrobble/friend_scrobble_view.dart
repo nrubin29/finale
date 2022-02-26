@@ -142,18 +142,17 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
             ),
           ],
           body: _items != null
-              ? Expanded(
-                  child: EntityCheckboxList<LRecentTracksResponseTrack>(
-                    items: _items!,
-                    onSelectionChanged: (selection) {
-                      setState(() {
-                        _selection = selection;
-                      });
-                    },
-                    trailingWidgetBuilder: (track) => track.timestamp != null
-                        ? const SizedBox()
-                        : const NowPlayingAnimation(),
-                  ),
+              ? EntityCheckboxList<LRecentTracksResponseTrack>(
+                  items: _items!,
+                  scrollable: false,
+                  onSelectionChanged: (selection) {
+                    setState(() {
+                      _selection = selection;
+                    });
+                  },
+                  trailingWidgetBuilder: (track) => track.timestamp != null
+                      ? const SizedBox()
+                      : const NowPlayingAnimation(),
                 )
               : null,
         ),
