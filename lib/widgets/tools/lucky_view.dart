@@ -15,6 +15,7 @@ import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
+import 'package:finale/widgets/entity/no_entity_type_period_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LuckyView extends StatefulWidget {
@@ -47,6 +48,13 @@ class _LuckyViewState extends State<LuckyView> {
         from: _period.relativeStart, to: _period.end);
 
     final numItems = await request.getNumItems();
+
+    if (numItems == 0) {
+      showNoEntityTypePeriodDialog(context,
+          entityType: _entityType, username: username);
+      return;
+    }
+
     final randomIndex = _random.nextInt(numItems) + 1;
 
     List<LRecentTracksResponseTrack> response;

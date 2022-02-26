@@ -15,6 +15,7 @@ import 'package:finale/widgets/collage/src/grid_collage.dart';
 import 'package:finale/widgets/collage/src/list_collage.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/collage/collage_web_warning_dialog.dart';
+import 'package:finale/widgets/entity/no_entity_type_period_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
@@ -136,22 +137,8 @@ class _CollageViewState extends State<CollageView> {
     }
 
     if (items.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('No ${_chart.name}s'),
-          content: Text(
-              "$username hasn't scrobbled any ${_chart.name}s in this period."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        ),
-      );
+      showNoEntityTypePeriodDialog(context,
+          entityType: _chart, username: username);
 
       setState(() {
         _isSettingsExpanded = true;
