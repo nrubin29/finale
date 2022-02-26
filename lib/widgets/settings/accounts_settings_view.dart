@@ -4,6 +4,7 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/settings/apple_music_settings_view.dart';
 import 'package:flutter/gestures.dart';
@@ -43,15 +44,15 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListTile(
-            title: const Text('Last.fm'),
-            leading: const Icon(SocialMediaIcons.lastfm),
+          CaptionedListTile(
+            title: 'Last.fm',
+            icon: SocialMediaIcons.lastfm,
             trailing: Switch(
               value: true,
               onChanged: (_) {},
             ),
           ),
-          ListTile(
+          CaptionedListTile.advanced(
             title: Row(children: [
               const Text('Spotify'),
               if (_isSpotifyEnabled) ...[
@@ -72,7 +73,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                       ),
               ],
             ]),
-            leading: const Icon(SocialMediaIcons.spotify),
+            icon: SocialMediaIcons.spotify,
             trailing: Switch(
               value: _isSpotifyEnabled,
               onChanged: (_) async {
@@ -86,43 +87,30 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 }
               },
             ),
-          ),
-          SafeArea(
-            top: false,
-            bottom: false,
-            minimum: const EdgeInsets.symmetric(horizontal: 10),
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Sign in with your Spotify account to search and '
-                        "scrobble from Spotify's database. Finale does not "
-                        'automatically scrobble from Spotify, but you can '
-                        'connect your Spotify account to Last.fm ',
-                    style: theme.textTheme.caption,
-                  ),
-                  TextSpan(
-                    text: 'on the web',
-                    style: theme.textTheme.caption
-                        ?.copyWith(color: theme.primaryColor),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        launch('https://last.fm/settings/applications');
-                      },
-                  ),
-                  TextSpan(
-                    text: '.',
-                    style: theme.textTheme.caption,
-                  ),
-                ],
+            caption: [
+              const TextSpan(
+                text: 'Sign in with your Spotify account to search and '
+                    "scrobble from Spotify's database. Finale does not "
+                    'automatically scrobble from Spotify, but you can connect '
+                    'your Spotify account to Last.fm ',
               ),
-            ),
+              TextSpan(
+                text: 'on the web',
+                style: TextStyle(color: theme.primaryColor),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    launch('https://last.fm/settings/applications');
+                  },
+              ),
+              const TextSpan(text: '.'),
+            ],
           ),
           if (Platform.isIOS)
-            ListTile(
-              title: const Text('Apple Music'),
-              leading: const Icon(SocialMediaIcons.apple),
+            CaptionedListTile(
+              title: 'Apple Music',
+              icon: SocialMediaIcons.apple,
               trailing: const Icon(Icons.chevron_right),
+              caption: 'Scrobble music that you listen to in the Music app.',
               onTap: () {
                 Navigator.push(
                   context,
@@ -131,18 +119,12 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 );
               },
             ),
-          SafeArea(
-            top: false,
-            bottom: false,
-            minimum: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'Scrobble music that you listen to in the Music app.',
-              style: theme.textTheme.caption,
-            ),
-          ),
-          ListTile(
-            title: Row(children: const [Text('Libre.fm')]),
-            leading: const Icon(Icons.rss_feed),
+          CaptionedListTile(
+            title: 'Libre.fm',
+            icon: Icons.rss_feed,
+            caption:
+                'Sign in with your Libre.fm account to send all scrobbles to '
+                'Libre.fm in addition to Last.fm.',
             trailing: Switch(
               value: _isLibreEnabled,
               onChanged: (value) async {
@@ -174,16 +156,6 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                   }
                 });
               },
-            ),
-          ),
-          SafeArea(
-            top: false,
-            bottom: false,
-            minimum: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'Sign in with your Libre.fm account to send all scrobbles to '
-              'Libre.fm in addition to Last.fm.',
-              style: theme.textTheme.caption,
             ),
           ),
         ],
