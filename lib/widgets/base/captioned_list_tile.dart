@@ -29,7 +29,7 @@ class CaptionedListTile extends StatelessWidget {
             SafeArea(
               top: false,
               bottom: false,
-              minimum: const EdgeInsets.symmetric(horizontal: 10),
+              minimum: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
               child: Text(
                 caption!,
                 style: Theme.of(context).textTheme.caption,
