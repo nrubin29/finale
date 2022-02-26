@@ -71,6 +71,10 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   const GetRecentTracksRequest(this.username,
       {this.from, this.to, this.extended = false});
 
+  /// Only include the current scrobble in the results if a period is not
+  /// specified.
+  bool get _includeCurrentScrobble => from == null && to == null;
+
   @override
   doRequest(int limit, int page) async {
     final rawResponse = await _doRequest('user.getRecentTracks', {
@@ -87,7 +91,9 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
 
     // For some reason, this endpoint always returns the currently-playing
     // song regardless of which page you request.
-    if (page != 1 && tracks.isNotEmpty && tracks.first.date == null) {
+    if ((page != 1 || !_includeCurrentScrobble) &&
+        tracks.isNotEmpty &&
+        tracks.first.date == null) {
       tracks.removeAt(0);
     }
 
