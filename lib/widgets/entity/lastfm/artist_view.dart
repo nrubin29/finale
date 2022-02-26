@@ -6,7 +6,6 @@ import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
@@ -39,7 +38,7 @@ class ArtistView extends StatelessWidget {
             ],
           ),
           body: TwoUp(
-            image: EntityImage(entity: artist),
+            entity: artist,
             listItems: [
               Scoreboard(statistics: {
                 'Scrobbles': artist.stats.playCount,

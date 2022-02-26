@@ -1,12 +1,15 @@
+import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
 /// Displays [image] and [listItems] side-by-side if there's enough room;
 /// otherwise, displays [image] above [listItems].
 class TwoUp extends StatelessWidget {
-  final Widget? image;
+  final Entity? entity;
   final List<Widget> listItems;
 
-  const TwoUp({required this.image, required this.listItems});
+  const TwoUp({required this.entity, required this.listItems});
 
   @override
   Widget build(BuildContext context) {
@@ -17,19 +20,22 @@ class TwoUp extends StatelessWidget {
         ? Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (image != null)
+              if (entity != null)
                 Flexible(
                   fit: FlexFit.tight,
                   child: FractionallySizedBox(
                     widthFactor: .8,
                     heightFactor: .8,
-                    child: image!,
+                    child: EntityImage(
+                      entity: entity!,
+                      quality: ImageQuality.high,
+                    ),
                   ),
                 ),
               Flexible(
                 fit: FlexFit.tight,
                 child: FractionallySizedBox(
-                  widthFactor: image == null ? .8 : 1,
+                  widthFactor: entity == null ? .8 : 1,
                   child: ListView(
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
@@ -43,11 +49,14 @@ class TwoUp extends StatelessWidget {
             shrinkWrap: true,
             physics: const ScrollPhysics(),
             children: [
-              if (image != null)
+              if (entity != null)
                 ConstrainedBox(
                   constraints:
                       BoxConstraints(maxHeight: mediaQuery.size.height / 2),
-                  child: image!,
+                  child: EntityImage(
+                    entity: entity!,
+                    quality: ImageQuality.high,
+                  ),
                 ),
               const SizedBox(height: 10),
               ...listItems,

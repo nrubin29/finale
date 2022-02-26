@@ -9,7 +9,6 @@ import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/apple_music/apple_music_album_view.dart';
 import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
 class AppleMusicArtistView extends StatelessWidget {
@@ -27,7 +26,7 @@ class AppleMusicArtistView extends StatelessWidget {
             backgroundColor: appleMusicPink,
           ),
           body: TwoUp(
-            image: EntityImage(entity: artist),
+            entity: artist,
             listItems: [
               ArtistTabs(
                 color: appleMusicPink,

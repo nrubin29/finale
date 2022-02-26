@@ -5,6 +5,15 @@ import 'package:html/parser.dart' show parse;
 
 enum ImageQuality { low, high }
 
+extension ImageQualityWidth on ImageQuality {
+  double get width {
+    switch (this) {
+      case ImageQuality.low: return 64;
+      case ImageQuality.high: return 470;
+    }
+  }
+}
+
 /// An image identifier that can be used to build an image URL for a given
 /// service.
 class ImageId {
@@ -15,9 +24,9 @@ class ImageId {
   // small=34s, medium=64s, large=174s, extralarge=300x300
   const ImageId.lastfm(String imageId)
       : _lowQualityUrl =
-            'https://lastfm.freetls.fastly.net/i/u/64s/$imageId.jpg',
+            'https://lastfm.freetls.fastly.net/i/u/174s/$imageId.jpg',
         _highQualityUrl =
-            'https://lastfm.freetls.fastly.net/i/u/300x300/$imageId.jpg',
+            'https://lastfm.freetls.fastly.net/i/u/470x470/$imageId.jpg',
         serializedValue = imageId;
 
   const ImageId.spotify(String lowQualityImageId, String highQualityImageId)

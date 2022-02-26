@@ -43,8 +43,7 @@ class TrackView extends StatelessWidget {
             ],
           ),
           body: TwoUp(
-            image:
-                track.album != null ? EntityImage(entity: track.album!) : null,
+            entity: track.album,
             listItems: [
               Scoreboard(
                 statistics: {

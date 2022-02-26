@@ -13,18 +13,18 @@ class EntityImage extends StatefulWidget {
   final Entity entity;
   final ImageQuality quality;
   final BoxFit fit;
-  final double? width;
+  final double width;
   final bool isCircular;
   final PlaceholderBehavior placeholderBehavior;
 
-  const EntityImage({
+  EntityImage({
     required this.entity,
-    this.quality = ImageQuality.high,
+    this.quality = ImageQuality.low,
     this.fit = BoxFit.contain,
-    this.width,
+    double? width,
     this.isCircular = false,
     this.placeholderBehavior = PlaceholderBehavior.image,
-  });
+  }) : width = width ?? quality.width;
 
   @override
   State<StatefulWidget> createState() => _EntityImageState();
@@ -106,14 +106,18 @@ class _EntityImageState extends State<EntityImage> {
       return widget.isCircular ? _buildCircularImage(placeholder) : placeholder;
     }
 
-    final image = CachedNetworkImage(
-      imageUrl: _imageId!.getUrl(widget.quality),
-      placeholder: (_, __) => _placeholderBehavior == PlaceholderBehavior.active
-          ? const CircularProgressIndicator()
-          : placeholder,
-      errorWidget: (_, __, ___) => placeholder,
-      fit: widget.fit,
-      width: widget.width,
+    final image = ConstrainedBox(
+      constraints:
+          BoxConstraints(maxWidth: widget.width, maxHeight: widget.width),
+      child: CachedNetworkImage(
+        imageUrl: _imageId!.getUrl(widget.quality),
+        placeholder: (_, __) =>
+            _placeholderBehavior == PlaceholderBehavior.active
+                ? const CircularProgressIndicator()
+                : placeholder,
+        errorWidget: (_, __, ___) => placeholder,
+        fit: widget.fit,
+      ),
     );
 
     var imageWidget = widget.isCircular ? _buildCircularImage(image) : image;
@@ -186,9 +190,10 @@ class _Placeholder extends StatelessWidget {
 
   final Entity entity;
   final ImageQuality quality;
-  final double? width;
+  final double width;
 
-  const _Placeholder(this.entity, this.quality, this.width);
+  _Placeholder(this.entity, this.quality, double? width)
+      : width = width ?? quality.width;
 
   @override
   Widget build(BuildContext context) => FittedBox(
@@ -197,8 +202,8 @@ class _Placeholder extends StatelessWidget {
           color: Theme.of(context).brightness == Brightness.light
               ? Colors.grey
               : Colors.grey.shade800,
-          width: width ?? (quality == ImageQuality.high ? 470 : 64),
-          height: width ?? (quality == ImageQuality.high ? 470 : 64),
+          width: width,
+          height: width,
           child: Center(
             child: FractionallySizedBox(
               widthFactor: 0.7,

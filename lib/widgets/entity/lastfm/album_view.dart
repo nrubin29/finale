@@ -60,7 +60,7 @@ class AlbumView extends StatelessWidget {
             ],
           ),
           body: TwoUp(
-            image: EntityImage(entity: album),
+            entity: album,
             listItems: [
               Scoreboard(statistics: {
                 'Scrobbles': album.playCount,

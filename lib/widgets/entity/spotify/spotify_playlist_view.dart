@@ -5,7 +5,6 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +25,7 @@ class SpotifyPlaylistView extends StatelessWidget {
           ],
         ),
         body: TwoUp(
-          image: EntityImage(entity: playlist),
+          entity: playlist,
           listItems: [
             EntityDisplay<STrack>(
               request: SPlaylistTracksRequest(playlist),

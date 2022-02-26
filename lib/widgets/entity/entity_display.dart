@@ -232,7 +232,6 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                 if (widget.displayImages)
                   EntityImage(
                     entity: item,
-                    quality: ImageQuality.low,
                     isCircular: widget.displayCircularImages,
                     placeholderBehavior: widget.placeholderBehavior,
                   ),
@@ -309,6 +308,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (widget.displayImages)
             EntityImage(
               entity: item,
+              quality: ImageQuality.high,
               fit: BoxFit.cover,
               placeholderBehavior: widget.placeholderBehavior,
             ),

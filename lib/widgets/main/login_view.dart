@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:finale/env.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/constants.dart';
@@ -56,7 +57,9 @@ class LoginView extends StatelessWidget {
                         builder: (context, snapshot) => snapshot.hasData
                             ? EntityImage(
                                 entity: snapshot.data!.first,
-                                placeholderBehavior: PlaceholderBehavior.none)
+                                quality: ImageQuality.high,
+                                placeholderBehavior: PlaceholderBehavior.none,
+                              )
                             : Container()))
                     .toList(),
               );

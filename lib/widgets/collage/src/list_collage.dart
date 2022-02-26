@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/theme.dart';
@@ -70,6 +71,7 @@ class ListCollage extends StatelessWidget {
                     flex: 1,
                     child: EntityImage(
                       entity: item,
+                      quality: ImageQuality.high,
                       placeholderBehavior: PlaceholderBehavior.active,
                     ),
                   ),

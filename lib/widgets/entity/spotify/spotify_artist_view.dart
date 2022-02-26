@@ -8,7 +8,6 @@ import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +29,7 @@ class SpotifyArtistView extends StatelessWidget {
             backgroundColor: spotifyGreen,
           ),
           body: TwoUp(
-            image: EntityImage(entity: artist),
+            entity: artist,
             listItems: [
               ArtistTabs(
                 color: spotifyGreen,

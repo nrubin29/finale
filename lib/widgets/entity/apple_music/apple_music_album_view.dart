@@ -31,7 +31,7 @@ class AppleMusicAlbumView extends StatelessWidget {
           ],
         ),
         body: TwoUp(
-          image: EntityImage(entity: album),
+          entity: album,
           listItems: [
             ListTile(
               leading: EntityImage(entity: album.artist),
