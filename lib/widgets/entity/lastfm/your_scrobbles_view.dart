@@ -83,7 +83,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
         child: Scaffold(
           appBar: createAppBar(
             widget.track.name,
-            leadingEntity: widget.track.album,
+            leadingEntity: widget.track,
             subtitle: pluralize(widget.track.userPlayCount),
             actions: [const SizedBox(width: 32)],
             bottom: const TabBar(

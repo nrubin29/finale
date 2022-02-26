@@ -133,7 +133,7 @@ class LTrackMatch extends Track {
 
   @override
   ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getTrack(this)).album?.imageId;
+      () async => (await Lastfm.getTrack(this)).imageId;
 
   LTrackMatch(this.name, this.url, this.artist);
 
@@ -224,6 +224,9 @@ class LTrack extends Track {
   final LWiki? wiki;
 
   @override
+  ImageId? get imageId => album?.imageId;
+
+  @override
   String? get artistName => artist?.name;
 
   @override
@@ -270,7 +273,7 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
 
   @override
   ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getTrack(this)).album?.imageId;
+      () async => (await Lastfm.getTrack(this)).imageId;
 
   @override
   String get displayTrailing => pluralize(playCount);

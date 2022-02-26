@@ -43,7 +43,7 @@ class TrackView extends StatelessWidget {
             ],
           ),
           body: TwoUp(
-            entity: track.album,
+            entity: track,
             listItems: [
               Scoreboard(
                 statistics: {
