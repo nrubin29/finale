@@ -32,6 +32,12 @@ class AppleMusicScrobbleBackgroundTask {
   static Future<void> _registerTask(
       {Duration initialDelay = Duration.zero}) async {
     await _cancelTask();
+
+    if (await AppleMusic.authorizationStatus !=
+        AuthorizationStatus.authorized) {
+      return;
+    }
+
     try {
       await Workmanager().registerOneOffTask(_taskName, _taskName,
           initialDelay: initialDelay,

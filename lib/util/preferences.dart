@@ -234,8 +234,7 @@ class Preferences {
 
   bool get isAppleMusicBackgroundScrobblingEnabled =>
       isAppleMusicEnabled &&
-      (_preferences.getBool('isAppleMusicBackgroundScrobblingEnabled') ??
-          false);
+      (_preferences.getBool('isAppleMusicBackgroundScrobblingEnabled') ?? true);
 
   set isAppleMusicBackgroundScrobblingEnabled(bool value) {
     _preferences.setBool('isAppleMusicBackgroundScrobblingEnabled', value);
