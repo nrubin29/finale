@@ -149,9 +149,12 @@ class _LuckyViewState extends State<LuckyView> {
                     ConstrainedBox(
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.height / 2),
-                      child: EntityImage(
-                        entity: _entity!,
-                        quality: ImageQuality.high,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: EntityImage(
+                          entity: _entity!,
+                          quality: ImageQuality.high,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
