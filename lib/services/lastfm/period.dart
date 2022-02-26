@@ -2,11 +2,15 @@ import 'package:collection/collection.dart';
 import 'package:finale/util/formatters.dart';
 
 class Period {
-  static const sevenDays = Period._(value: '7day', display: '7 days');
-  static const oneMonth = Period._(value: '1month', display: '1 month');
-  static const threeMonths = Period._(value: '3month', display: '3 months');
-  static const sixMonths = Period._(value: '6month', display: '6 months');
-  static const twelveMonths = Period._(value: '12month', display: '12 months');
+  static const sevenDays = Period._(value: '7day', days: 7, display: '7 days');
+  static const oneMonth =
+      Period._(value: '1month', days: 30, display: '1 month');
+  static const threeMonths =
+      Period._(value: '3month', days: 91, display: '3 months');
+  static const sixMonths =
+      Period._(value: '6month', days: 182, display: '6 months');
+  static const twelveMonths =
+      Period._(value: '12month', days: 365, display: '12 months');
   static const overall = Period._(value: 'overall', display: 'Overall');
   static const apiValues = [
     sevenDays,
@@ -18,16 +22,18 @@ class Period {
   ];
 
   final String? value;
+  final int? days;
   final String display;
   final DateTime? start;
   final DateTime? end;
 
-  const Period._({required this.value, required this.display})
+  const Period._({required this.value, this.days, required this.display})
       : start = null,
         end = null;
 
   Period({required this.start, required this.end})
       : value = null,
+        days = null,
         display = formatDateRange(start!, end!);
 
   factory Period.deserialized(String value) {
@@ -48,6 +54,15 @@ class Period {
   String get serializedValue => isCustom
       ? '${start!.millisecondsSinceEpoch}:${end!.millisecondsSinceEpoch}'
       : value!;
+
+  /// The start date of this period.
+  ///
+  /// If this is an API period, the date is relative to now.
+  DateTime? get relativeStart => isCustom
+      ? start!
+      : this == overall
+          ? null
+          : DateTime.now().subtract(Duration(days: days!));
 
   @override
   bool operator ==(Object other) =>

@@ -66,17 +66,19 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
   final String username;
   final DateTime? from;
   final DateTime? to;
+  final bool includeCurrentScrobble;
   final bool extended;
 
-  const GetRecentTracksRequest(this.username,
-      {this.from, this.to, this.extended = false});
+  const GetRecentTracksRequest(
+    this.username, {
+    this.from,
+    this.to,
+    this.includeCurrentScrobble = false,
+    this.extended = false,
+  });
 
-  /// Only include the current scrobble in the results if a period is not
-  /// specified.
-  bool get _includeCurrentScrobble => from == null && to == null;
-
-  @override
-  doRequest(int limit, int page) async {
+  Future<LRecentTracksResponseRecentTracks> _doRecentTracksRequest(
+      int limit, int page) async {
     final rawResponse = await _doRequest('user.getRecentTracks', {
       'user': username,
       'limit': limit,
@@ -85,13 +87,17 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
       if (to != null) 'to': to!.secondsSinceEpoch.toString(),
       'extended': extended ? '1' : '0',
     });
-    final tracks =
-        LRecentTracksResponseRecentTracks.fromJson(rawResponse['recenttracks'])
-            .tracks;
+    return LRecentTracksResponseRecentTracks.fromJson(
+        rawResponse['recenttracks']);
+  }
+
+  @override
+  doRequest(int limit, int page) async {
+    final tracks = (await _doRecentTracksRequest(limit, page)).tracks;
 
     // For some reason, this endpoint always returns the currently-playing
     // song regardless of which page you request.
-    if ((page != 1 || !_includeCurrentScrobble) &&
+    if ((page != 1 || !includeCurrentScrobble) &&
         tracks.isNotEmpty &&
         tracks.first.date == null) {
       tracks.removeAt(0);
@@ -99,6 +105,9 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
 
     return tracks;
   }
+
+  Future<int> getNumItems() async =>
+      (await _doRecentTracksRequest(1, 1)).attr.total;
 }
 
 class GetTopArtistsRequest

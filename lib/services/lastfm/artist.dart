@@ -3,6 +3,7 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'artist.g.dart';
@@ -95,6 +96,9 @@ class LArtist extends FullArtist {
   final LTopTags topTags;
 
   final LWiki? bio;
+
+  @override
+  String get displayTrailing => pluralize(stats.userPlayCount);
 
   LArtist(this.name, this.url, this.stats, this.topTags, this.bio);
 

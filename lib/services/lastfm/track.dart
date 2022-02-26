@@ -100,10 +100,13 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
 
 @JsonSerializable()
 class LRecentTracksResponseRecentTracks {
+  @JsonKey(name: '@attr')
+  final LAttr attr;
+
   @JsonKey(name: 'track')
   final List<LRecentTracksResponseTrack> tracks;
 
-  const LRecentTracksResponseRecentTracks(this.tracks);
+  const LRecentTracksResponseRecentTracks(this.attr, this.tracks);
 
   factory LRecentTracksResponseRecentTracks.fromJson(
           Map<String, dynamic> json) =>
@@ -225,6 +228,9 @@ class LTrack extends Track {
 
   @override
   String? get albumName => album?.name;
+
+  @override
+  String get displayTrailing => pluralize(userPlayCount);
 
   LTrack(
       this.name,

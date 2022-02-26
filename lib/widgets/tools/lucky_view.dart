@@ -27,11 +27,11 @@ class LuckyView extends StatefulWidget {
 class _LuckyViewState extends State<LuckyView> {
   static final _random = Random();
 
+  final _formKey = GlobalKey<CollapsibleFormViewState>();
   late final TextEditingController _usernameTextController;
   late Period _period;
   var _entityType = EntityType.track;
 
-  List<Entity>? _response;
   Entity? _entity;
 
   @override
@@ -43,22 +43,16 @@ class _LuckyViewState extends State<LuckyView> {
 
   Future<void> _loadData() async {
     final username = _usernameTextController.text;
-    PagedRequest<Entity> request;
+    final request = GetRecentTracksRequest(username,
+        from: _period.relativeStart, to: _period.end);
 
-    if (_entityType == EntityType.album) {
-      request = GetTopAlbumsRequest(username, _period);
-    } else if (_entityType == EntityType.artist) {
-      request = GetTopArtistsRequest(username, _period);
-    } else if (_entityType == EntityType.track) {
-      request = GetTopTracksRequest(username, _period);
-    } else {
-      throw Exception('$_entityType is not supported for collages.');
-    }
+    final numItems = await request.getNumItems();
+    final randomIndex = _random.nextInt(numItems) + 1;
 
-    List<Entity> response;
+    List<LRecentTracksResponseTrack> response;
 
     try {
-      response = await request.getAllData();
+      response = await request.doRequest(1, randomIndex);
     } on LException catch (e) {
       if (e.code == 6) {
         response = <LRecentTracksResponseTrack>[];
@@ -68,17 +62,24 @@ class _LuckyViewState extends State<LuckyView> {
     }
 
     if (response.isNotEmpty) {
-      _response = response;
-      _chooseEntity();
+      final responseEntity = response.single;
+      Entity entity;
+
+      if (_entityType == EntityType.album) {
+        entity = await Lastfm.getAlbum(ConcreteBasicAlbum(
+            responseEntity.albumName, responseEntity.artist));
+      } else if (_entityType == EntityType.artist) {
+        entity = await Lastfm.getArtist(responseEntity.artist);
+      } else if (_entityType == EntityType.track) {
+        entity = await Lastfm.getTrack(responseEntity);
+      } else {
+        throw Exception('This will never happen.');
+      }
+
+      setState(() {
+        _entity = entity;
+      });
     }
-  }
-
-  void _chooseEntity() {
-    final randomIndex = _random.nextInt(_response!.length);
-
-    setState(() {
-      _entity = _response!.removeAt(randomIndex);
-    });
   }
 
   String? _validator(String? value) =>
@@ -88,6 +89,7 @@ class _LuckyViewState extends State<LuckyView> {
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar("I'm Feeling Lucky"),
         body: CollapsibleFormView(
+          key: _formKey,
           submitButtonText: 'Roll the Dice',
           onFormSubmit: _loadData,
           formWidgets: [
@@ -132,7 +134,7 @@ class _LuckyViewState extends State<LuckyView> {
               ),
             ),
           ],
-          body: _response != null && _entity != null
+          body: _entity != null
               ? Column(
                   children: [
                     const SizedBox(height: 8),
@@ -183,11 +185,10 @@ class _LuckyViewState extends State<LuckyView> {
                             MaterialPageRoute(builder: (_) => detailWidget));
                       },
                     ),
-                    if (_response!.isNotEmpty)
-                      OutlinedButton(
-                        onPressed: _chooseEntity,
-                        child: const Text('Choose Another'),
-                      ),
+                    OutlinedButton(
+                      onPressed: _formKey.currentState?.onFormSubmit,
+                      child: const Text('Choose Another'),
+                    ),
                   ],
                 )
               : null,

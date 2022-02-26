@@ -1,6 +1,7 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'album.g.dart';
@@ -187,6 +188,9 @@ class LAlbum extends FullAlbum {
     ..forEach((element) {
       element.album = name;
     });
+
+  @override
+  String get displayTrailing => pluralize(userPlayCount);
 
   LAlbum(
       this.name,

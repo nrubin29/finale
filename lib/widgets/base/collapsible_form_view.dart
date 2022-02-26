@@ -8,22 +8,23 @@ class CollapsibleFormView extends StatefulWidget {
   final Future<void> Function() onFormSubmit;
 
   const CollapsibleFormView({
+    Key? key,
     required this.formWidgets,
     this.submitButtonText = 'Submit',
     required this.body,
     required this.onFormSubmit,
-  });
+  }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CollapsibleFormViewState();
+  State<StatefulWidget> createState() => CollapsibleFormViewState();
 }
 
-class _CollapsibleFormViewState extends State<CollapsibleFormView> {
+class CollapsibleFormViewState extends State<CollapsibleFormView> {
   final _formKey = GlobalKey<FormState>();
   var _isSettingsExpanded = true;
   bool? _loadingStatus;
 
-  Future<void> _onFormSubmit() async {
+  Future<void> onFormSubmit() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
         _isSettingsExpanded = false;
@@ -63,7 +64,7 @@ class _CollapsibleFormViewState extends State<CollapsibleFormView> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: OutlinedButton(
-                          onPressed: _onFormSubmit,
+                          onPressed: onFormSubmit,
                           child: Text(widget.submitButtonText),
                         ),
                       ),

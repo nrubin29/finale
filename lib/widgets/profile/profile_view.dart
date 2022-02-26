@@ -173,7 +173,8 @@ class _ProfileViewState extends State<ProfileView>
               children: [
                 EntityDisplay<LRecentTracksResponseTrack>(
                   key: _recentScrobblesKey,
-                  request: GetRecentTracksRequest(widget.username),
+                  request: GetRecentTracksRequest(widget.username,
+                      includeCurrentScrobble: true),
                   trailingWidgetBuilder: (track) => track.timestamp != null
                       ? const SizedBox()
                       : const NowPlayingAnimation(),
