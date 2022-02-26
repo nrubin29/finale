@@ -35,3 +35,27 @@ class _LoveButtonState extends State<LoveButton> {
         },
       );
 }
+
+class OutlinedLoveIcon extends StatelessWidget {
+  const OutlinedLoveIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Icon(
+          Icons.favorite,
+          color: theme.primaryColor,
+          size: 18,
+        ),
+        Icon(
+          Icons.favorite_outline,
+          color: theme.colorScheme.onBackground,
+          size: 18,
+        ),
+      ],
+    );
+  }
+}

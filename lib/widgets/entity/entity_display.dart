@@ -29,6 +29,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
+  final EntityWidgetBuilder<T>? badgeWidgetBuilder;
   final EntityWidgetBuilder<T>? trailingWidgetBuilder;
   final Future<Entity> Function(T item)? scrobbleableEntity;
   final RefreshCallback? onRefresh;
@@ -54,6 +55,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.detailWidgetBuilder,
       this.subtitleWidgetBuilder,
       this.leadingWidgetBuilder,
+      this.badgeWidgetBuilder,
       this.trailingWidgetBuilder,
       this.scrobbleableEntity,
       this.onRefresh,
@@ -72,6 +74,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
         assert(onTap == null || detailWidgetBuilder == null),
         assert(displayType == DisplayType.list ||
             (!displayNumbers && leadingWidgetBuilder == null)),
+        assert(badgeWidgetBuilder == null || displayImages),
         super(key: key);
 
   @override
@@ -230,10 +233,17 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                 if (widget.leadingWidgetBuilder != null)
                   widget.leadingWidgetBuilder!(item),
                 if (widget.displayImages)
-                  EntityImage(
-                    entity: item,
-                    isCircular: widget.displayCircularImages,
-                    placeholderBehavior: widget.placeholderBehavior,
+                  Stack(
+                    alignment: const Alignment(1.5, -1.5),
+                    children: [
+                      EntityImage(
+                        entity: item,
+                        isCircular: widget.displayCircularImages,
+                        placeholderBehavior: widget.placeholderBehavior,
+                      ),
+                      if (widget.badgeWidgetBuilder != null)
+                        widget.badgeWidgetBuilder!(item),
+                    ],
                   ),
                 if (widget.displayNumbers) Text('${index + 1}'),
               ],

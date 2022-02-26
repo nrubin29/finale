@@ -73,8 +73,11 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   @JsonKey(name: 'date')
   final LRecentTracksResponseTrackDate? timestamp;
 
+  @JsonKey(name: 'loved', fromJson: convertStringToBoolean)
+  final bool isLoved;
+
   LRecentTracksResponseTrack(this.name, this.url, this.imageId, this.artist,
-      this.album, this.timestamp);
+      this.album, this.timestamp, this.isLoved);
 
   @override
   String get artistName => artist.name;

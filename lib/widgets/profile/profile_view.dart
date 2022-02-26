@@ -14,6 +14,7 @@ import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
+import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/profile/period_selector.dart';
@@ -174,7 +175,10 @@ class _ProfileViewState extends State<ProfileView>
                 EntityDisplay<LRecentTracksResponseTrack>(
                   key: _recentScrobblesKey,
                   request: GetRecentTracksRequest(widget.username,
-                      includeCurrentScrobble: true),
+                      includeCurrentScrobble: true, extended: true),
+                  badgeWidgetBuilder: (track) => track.isLoved
+                      ? const OutlinedLoveIcon()
+                      : const SizedBox(),
                   trailingWidgetBuilder: (track) => track.timestamp != null
                       ? const SizedBox()
                       : const NowPlayingAnimation(),
