@@ -3,9 +3,9 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/collapsible_form_view.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
-import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +21,10 @@ class FriendScrobbleView extends StatefulWidget {
 }
 
 class _FriendScrobbleViewState extends State<FriendScrobbleView> {
-  var _isSettingsExpanded = true;
   late TextEditingController _usernameTextController;
   DateTime? _start;
   DateTime? _end;
 
-  var _isLoading = false;
   List<LRecentTracksResponseTrack>? _items;
   List<LRecentTracksResponseTrack>? _selection;
 
@@ -39,12 +37,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
   bool get _hasItemsToScrobble => _selection?.isNotEmpty ?? false;
 
   Future<void> _loadData() async {
-    setState(() {
-      _isLoading = true;
-      _isSettingsExpanded = false;
-    });
-
-    List<LRecentTracksResponseTrack>? response;
+    List<LRecentTracksResponseTrack> response;
 
     try {
       response = await GetRecentTracksRequest(_usernameTextController.text,
@@ -59,12 +52,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     }
 
     setState(() {
-      if (response != null) {
-        _items = response;
-        _selection = response;
-      }
-
-      _isLoading = false;
+      _items = response;
+      _selection = response;
     });
   }
 
@@ -90,6 +79,17 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     }
   }
 
+  String? _validator(Object? value) {
+    if (value == null || (value is String && value.isEmpty)) {
+      return 'This field is required.';
+    } else if (value is DateTime &&
+        (_start == null || _end == null || !_start!.isBefore(_end!))) {
+      return 'Start must be before end.';
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(
@@ -101,87 +101,61 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            ExpansionPanelList(
-              expandedHeaderPadding: EdgeInsets.zero,
-              expansionCallback: (_, __) {
-                setState(() {
-                  _isSettingsExpanded = !_isSettingsExpanded;
-                });
-              },
-              children: [
-                ExpansionPanel(
-                  headerBuilder: (_, __) =>
-                      const ListTile(title: Text('Settings')),
-                  canTapOnHeader: true,
-                  isExpanded: _isSettingsExpanded,
-                  body: Column(
-                    children: [
-                      ListTileTextField(
-                        title: 'Username',
-                        controller: _usernameTextController,
-                      ),
-                      SafeArea(
-                        top: false,
-                        bottom: false,
-                        minimum: const EdgeInsets.symmetric(horizontal: 16),
-                        child: DateTimeField(
-                          label: 'Start',
-                          initialValue: _start,
-                          onChanged: (dateTime) {
-                            setState(() {
-                              _start = dateTime;
-                            });
-                          },
-                        ),
-                      ),
-                      SafeArea(
-                        top: false,
-                        bottom: false,
-                        minimum: const EdgeInsets.symmetric(horizontal: 16),
-                        child: DateTimeField(
-                          label: 'End',
-                          initialValue: _end,
-                          onChanged: (dateTime) {
-                            setState(() {
-                              _end = dateTime;
-                            });
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: OutlinedButton(
-                          onPressed: _usernameTextController.text.isNotEmpty &&
-                                  _start != null &&
-                                  _end != null &&
-                                  _start!.isBefore(_end!)
-                              ? _loadData
-                              : null,
-                          child: const Text('Load Scrobbles'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+        body: CollapsibleFormView(
+          submitButtonText: 'Load Scrobbles',
+          onFormSubmit: _loadData,
+          formWidgets: [
+            ListTileTextField(
+              title: 'Username',
+              controller: _usernameTextController,
+              validator: _validator,
             ),
-            if (_isLoading)
-              const Expanded(child: LoadingComponent())
-            else if (_items != null)
-              Expanded(
-                child: EntityCheckboxList<LRecentTracksResponseTrack>(
-                  items: _items!,
-                  onSelectionChanged: (selection) {
-                    _selection = selection;
-                  },
-                  trailingWidgetBuilder: (track) => track.timestamp != null
-                      ? const SizedBox()
-                      : const NowPlayingAnimation(),
-                ),
+            SafeArea(
+              top: false,
+              bottom: false,
+              minimum: const EdgeInsets.symmetric(horizontal: 16),
+              child: DateTimeField(
+                label: 'Start',
+                initialValue: _start,
+                validator: _validator,
+                onChanged: (dateTime) {
+                  setState(() {
+                    _start = dateTime;
+                  });
+                },
               ),
+            ),
+            SafeArea(
+              top: false,
+              bottom: false,
+              minimum: const EdgeInsets.symmetric(horizontal: 16),
+              child: DateTimeField(
+                label: 'End',
+                initialValue: _end,
+                validator: _validator,
+                onChanged: (dateTime) {
+                  setState(() {
+                    _end = dateTime;
+                  });
+                },
+              ),
+            ),
           ],
+          body: _items != null
+              ? Expanded(
+                  child: EntityCheckboxList<LRecentTracksResponseTrack>(
+                    items: _items!,
+                    onSelectionChanged: (selection) {
+                      setState(() {
+                        _selection = selection;
+                      });
+                    },
+                    trailingWidgetBuilder: (track) => track.timestamp != null
+                        ? const SizedBox()
+                        : const NowPlayingAnimation(),
+                  ),
+                )
+              : null,
         ),
       );
 

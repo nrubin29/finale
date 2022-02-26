@@ -7,11 +7,13 @@ class DateTimeField extends StatelessWidget {
   final String label;
   final DateTime? initialValue;
   final ValueChanged<DateTime> onChanged;
+  final FormFieldValidator<DateTime>? validator;
 
   const DateTimeField({
     this.label = 'Timestamp',
     required this.initialValue,
     required this.onChanged,
+    this.validator,
   });
 
   @override
@@ -20,6 +22,7 @@ class DateTimeField extends StatelessWidget {
         resetIcon: null,
         format: dateTimeFormatWithYear,
         initialValue: initialValue,
+        validator: validator,
         onShowPicker: (context, currentValue) async {
           final date = await showDatePicker(
               context: context,

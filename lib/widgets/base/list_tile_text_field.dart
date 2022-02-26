@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class ListTileTextField extends StatelessWidget {
   final String title;
   final TextEditingController controller;
+  final FormFieldValidator<String>? validator;
 
-  const ListTileTextField({required this.title, required this.controller});
+  const ListTileTextField(
+      {required this.title, required this.controller, this.validator});
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -13,12 +15,16 @@ class ListTileTextField extends StatelessWidget {
         minimum: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            Text(title, style: Theme.of(context).textTheme.subtitle1),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
             const SizedBox(width: 16),
             Expanded(
-              child: TextField(
+              child: TextFormField(
                 controller: controller,
                 textAlign: TextAlign.end,
+                validator: validator,
               ),
             ),
           ],
