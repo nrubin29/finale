@@ -88,11 +88,16 @@ class _EntityImageState extends State<EntityImage> {
       return const CircularProgressIndicator();
     }
 
+    final constraints =
+        BoxConstraints(maxWidth: widget.width, maxHeight: widget.width);
+
     if (widget.entity.imageData != null) {
-      final image = Image.memory(
-        widget.entity.imageData!,
-        fit: widget.fit,
-        width: widget.width,
+      final image = ConstrainedBox(
+        constraints: constraints,
+        child: Image.memory(
+          widget.entity.imageData!,
+          fit: widget.fit,
+        ),
       );
 
       return widget.isCircular ? _buildCircularImage(image) : image;
@@ -107,8 +112,7 @@ class _EntityImageState extends State<EntityImage> {
     }
 
     final image = ConstrainedBox(
-      constraints:
-          BoxConstraints(maxWidth: widget.width, maxHeight: widget.width),
+      constraints: constraints,
       child: CachedNetworkImage(
         imageUrl: _imageId!.getUrl(widget.quality),
         placeholder: (_, __) =>
