@@ -93,6 +93,22 @@ class _LuckyViewState extends State<LuckyView> {
   String? _validator(String? value) =>
       value == null || value.isEmpty ? 'This field is required.' : null;
 
+  void _showDetails() {
+    Widget detailWidget;
+
+    if (_entity! is Track) {
+      detailWidget = TrackView(track: _entity as Track);
+    } else if (_entity is BasicAlbum) {
+      detailWidget = AlbumView(album: _entity as BasicAlbum);
+    } else if (_entity is BasicArtist) {
+      detailWidget = ArtistView(artist: _entity as BasicArtist);
+    } else {
+      throw Exception('This will never happen.');
+    }
+
+    Navigator.push(context, MaterialPageRoute(builder: (_) => detailWidget));
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar("I'm Feeling Lucky"),
@@ -157,44 +173,43 @@ class _LuckyViewState extends State<LuckyView> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _entity!.displayTitle,
-                      style: const TextStyle(fontSize: 22),
-                      textAlign: TextAlign.center,
-                    ),
-                    if (_entity!.displaySubtitle != null) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        _entity!.displaySubtitle!,
-                        style: const TextStyle(fontSize: 18),
+                    InkWell(
+                      onTap: _showDetails,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  _entity!.displayTitle,
+                                  style: const TextStyle(fontSize: 22),
+                                  textAlign: TextAlign.center,
+                                ),
+                                if (_entity!.displaySubtitle != null) ...[
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    _entity!.displaySubtitle!,
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                ],
+                                if (_entity!.displayTrailing != null) ...[
+                                  const SizedBox(height: 4),
+                                  Text(_entity!.displayTrailing!),
+                                ],
+                              ],
+                            ),
+                            const Align(
+                              alignment: Alignment.centerRight,
+                              child: SafeArea(
+                                minimum: EdgeInsets.only(right: 16),
+                                child: Icon(Icons.chevron_right),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                    if (_entity!.displayTrailing != null) ...[
-                      const SizedBox(height: 4),
-                      Text(_entity!.displayTrailing!),
-                    ],
-                    ListTile(
-                      title: const Text('Details'),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        Widget detailWidget;
-
-                        if (_entity! is Track) {
-                          detailWidget = TrackView(track: _entity as Track);
-                        } else if (_entity is BasicAlbum) {
-                          detailWidget =
-                              AlbumView(album: _entity as BasicAlbum);
-                        } else if (_entity is BasicArtist) {
-                          detailWidget =
-                              ArtistView(artist: _entity as BasicArtist);
-                        } else {
-                          throw Exception('This will never happen.');
-                        }
-
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => detailWidget));
-                      },
                     ),
                     OutlinedButton(
                       onPressed: _formKey.currentState?.onFormSubmit,
