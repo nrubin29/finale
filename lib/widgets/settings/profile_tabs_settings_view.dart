@@ -12,11 +12,24 @@ class ProfileTabsSettingsView extends StatefulWidget {
 
 class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
   late List<ProfileTab> _tabOrder;
+  late Map<ProfileTab, bool> _tabEnabled;
 
   @override
   void initState() {
     super.initState();
-    _tabOrder = [...Preferences().profileTabsOrder];
+
+    final preferencesTabOrder = Preferences().profileTabsOrder;
+    _tabOrder = [...ProfileTab.values]..sort((a, b) {
+        var aIndex = preferencesTabOrder.indexOf(a);
+        if (aIndex == -1) aIndex = 10;
+
+        var bIndex = preferencesTabOrder.indexOf(b);
+        if (bIndex == -1) bIndex = 10;
+
+        return aIndex.compareTo(bIndex);
+      });
+    _tabEnabled = Map.fromEntries(ProfileTab.values
+        .map((e) => MapEntry(e, preferencesTabOrder.contains(e))));
   }
 
   void _onReorder(int oldIndex, int newIndex) {
@@ -29,16 +42,27 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
     });
   }
 
+  void _onCheckboxChanged(ProfileTab tab, bool value) {
+    setState(() {
+      _tabEnabled[tab] = value;
+    });
+  }
+
   void _reset() {
     setState(() {
       _tabOrder = [...ProfileTab.values];
+      _tabEnabled = Map.fromIterable(ProfileTab.values, value: (_) => true);
     });
   }
 
   Future<bool> _save() async {
-    Preferences().profileTabsOrder = _tabOrder;
+    Preferences().profileTabsOrder =
+        _tabOrder.where((e) => _tabEnabled[e]!).toList(growable: false);
     return true;
   }
+
+  bool get _allowUncheck =>
+      _tabEnabled.values.where((element) => element).length > 2;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +89,31 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
                 key: ValueKey(tab),
                 title: Text(tab.displayName),
                 leading: Icon(tab.icon),
-                trailing: const Icon(Icons.drag_handle),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Checkbox(
+                      value: _tabEnabled[tab],
+                      onChanged: (value) {
+                        if (!value! && !_allowUncheck) {
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('You must enable at least two tabs.'),
+                              ),
+                            );
+
+                          return;
+                        }
+
+                        _onCheckboxChanged(tab, value);
+                      },
+                    ),
+                    const Icon(Icons.drag_handle),
+                  ],
+                ),
               ),
           ],
         ),

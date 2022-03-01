@@ -38,8 +38,8 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  late TabController _tabController;
+    with TickerProviderStateMixin, WidgetsBindingObserver {
+  TabController? _tabController;
   late List<ProfileTab> _tabOrder;
   var _tab = 0;
 
@@ -56,18 +56,14 @@ class _ProfileViewState extends State<ProfileView>
     _profileTabsOrderSubscription =
         Preferences().profileTabsOrderChanged.listen((tabOrder) {
       setState(() {
+        _createTabController(tabOrder.length);
         _tabOrder = tabOrder;
       });
     });
 
-    _tabController = TabController(length: _tabOrder.length, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        _tab = _tabController.index;
-      });
-    });
+    _createTabController();
 
-    if (!widget.isTab) {
+    if (widget.isTab) {
       _quickActionsSubscription =
           QuickActionsManager().quickActionStream.listen((action) async {
         await Future.delayed(const Duration(milliseconds: 250));
@@ -75,12 +71,25 @@ class _ProfileViewState extends State<ProfileView>
           final tab = action.value as ProfileTab;
           final index = _tabOrder.indexOf(tab);
 
-          setState(() {
-            _tabController.index = index;
-          });
+          if (index != -1) {
+            setState(() {
+              _tabController!.index = index;
+            });
+          }
         }
       });
     }
+  }
+
+  void _createTabController([int? length]) {
+    _tabController?.dispose();
+    _tabController =
+        TabController(length: length ?? _tabOrder.length, vsync: this);
+    _tabController!.addListener(() {
+      setState(() {
+        _tab = _tabController!.index;
+      });
+    });
   }
 
   Widget _widgetForTab(ProfileTab tab, LUser user) {
@@ -225,7 +234,7 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     _profileTabsOrderSubscription.cancel();
     _quickActionsSubscription?.cancel();
     WidgetsBinding.instance!.removeObserver(this);
