@@ -115,7 +115,7 @@ class QuickActionsManager {
       final artist = uri.queryParameters['artist']!;
       _quickActions
           .add(QuickAction.viewTrack(BasicConcreteTrack(name, artist, null)));
-    } else if (uri.host == 'profileTab') {
+    } else if (uri.host == 'profiletab') {
       final tabString = uri.queryParameters['tab'];
       ProfileTab tab;
 
