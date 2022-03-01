@@ -29,6 +29,12 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
     });
   }
 
+  void _reset() {
+    setState(() {
+      _tabOrder = [...ProfileTab.values];
+    });
+  }
+
   Future<bool> _save() async {
     Preferences().profileTabsOrder = _tabOrder;
     return true;
@@ -37,7 +43,18 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar('Profile Tabs'),
+      appBar: createAppBar(
+        'Profile Tabs',
+        actions: [
+          TextButton(
+            onPressed: _reset,
+            child: const Text(
+              'Reset',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
       body: WillPopScope(
         onWillPop: _save,
         child: ReorderableListView(
