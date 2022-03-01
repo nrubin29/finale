@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/auth.dart';
 import 'package:finale/services/lastfm/period.dart';
+import 'package:finale/util/profile_tab.dart';
 import 'package:finale/util/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -265,6 +266,32 @@ class Preferences {
 
   Stream<bool> get showAlbumArtistFieldChanged =>
       _showAlbumArtistFieldChanged.stream;
+
+  List<ProfileTab> get profileTabsOrder {
+    final order = _preferences.getStringList('profileTabsOrder');
+
+    if (order == null) {
+      return ProfileTab.values;
+    }
+
+    return order
+        .map((item) => ProfileTab.values[int.parse(item)])
+        .toList(growable: false);
+  }
+
+  set profileTabsOrder(List<ProfileTab> profileTabOrder) {
+    _preferences.setStringList('profileTabsOrder',
+        profileTabOrder.map((e) => e.index.toString()).toList(growable: false));
+    _profileTabsOrderChanged.add(profileTabOrder);
+  }
+
+  // This stream needs to be open for the entire lifetime of the app.
+  // ignore: close_sinks
+  final _profileTabsOrderChanged =
+      StreamController<List<ProfileTab>>.broadcast();
+
+  Stream<List<ProfileTab>> get profileTabsOrderChanged =>
+      _profileTabsOrderChanged.stream;
 
   void clear() {
     _preferences.clear();

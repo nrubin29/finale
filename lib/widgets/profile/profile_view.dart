@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/constants.dart';
+import 'package:finale/util/preferences.dart';
+import 'package:finale/util/profile_tab.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
@@ -39,52 +40,93 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
-  late StreamSubscription _subscription;
-  final _recentScrobblesKey = GlobalKey<EntityDisplayState>();
+  late List<ProfileTab> _tabOrder;
   var _tab = 0;
+
+  final _recentScrobblesKey = GlobalKey<EntityDisplayState>();
+  late final StreamSubscription _profileTabsOrderSubscription;
+  StreamSubscription? _quickActionsSubscription;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
 
-    _tabController = TabController(length: 6, vsync: this);
+    _tabOrder = Preferences().profileTabsOrder;
+    _profileTabsOrderSubscription =
+        Preferences().profileTabsOrderChanged.listen((tabOrder) {
+      setState(() {
+        _tabOrder = tabOrder;
+      });
+    });
+
+    _tabController = TabController(length: _tabOrder.length, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _tab = _tabController.index;
       });
     });
 
-    _subscription =
-        QuickActionsManager().quickActionStream.listen((action) async {
-      await Future.delayed(const Duration(milliseconds: 250));
-      if (action.type == QuickActionType.viewTab) {
-        final tab = action.value as EntityType;
-        int index;
+    if (!widget.isTab) {
+      _quickActionsSubscription =
+          QuickActionsManager().quickActionStream.listen((action) async {
+        await Future.delayed(const Duration(milliseconds: 250));
+        if (action.type == QuickActionType.viewTab) {
+          final tab = action.value as ProfileTab;
+          final index = _tabOrder.indexOf(tab);
 
-        switch (tab) {
-          case EntityType.playlist:
-            index = 0;
-            break;
-          case EntityType.artist:
-            index = 1;
-            break;
-          case EntityType.album:
-            index = 2;
-            break;
-          case EntityType.track:
-            index = 3;
-            break;
-          default:
-            assert(false);
-            return;
+          setState(() {
+            _tabController.index = index;
+          });
         }
+      });
+    }
+  }
 
-        setState(() {
-          _tabController.index = index;
-        });
-      }
-    });
+  Widget _widgetForTab(ProfileTab tab, LUser user) {
+    switch (tab) {
+      case ProfileTab.recentScrobbles:
+        return EntityDisplay<LRecentTracksResponseTrack>(
+          key: _recentScrobblesKey,
+          request: GetRecentTracksRequest(widget.username,
+              includeCurrentScrobble: true, extended: true),
+          badgeWidgetBuilder: (track) =>
+              track.isLoved ? const OutlinedLoveIcon() : const SizedBox(),
+          trailingWidgetBuilder: (track) => track.timestamp != null
+              ? const SizedBox()
+              : const NowPlayingAnimation(),
+          detailWidgetBuilder: (track) => TrackView(track: track),
+        );
+      case ProfileTab.topArtists:
+        return PeriodSelector<LTopArtistsResponseArtist>(
+          displayType: DisplayType.grid,
+          request: GetTopArtistsRequest(widget.username),
+          detailWidgetBuilder: (artist) => ArtistView(artist: artist),
+          subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
+        );
+      case ProfileTab.topAlbums:
+        return PeriodSelector<LTopAlbumsResponseAlbum>(
+          displayType: DisplayType.grid,
+          request: GetTopAlbumsRequest(widget.username),
+          detailWidgetBuilder: (album) => AlbumView(album: album),
+          subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
+        );
+      case ProfileTab.topTracks:
+        return PeriodSelector<LTopAlbumsResponseAlbum>(
+          displayType: DisplayType.grid,
+          request: GetTopAlbumsRequest(widget.username),
+          detailWidgetBuilder: (album) => AlbumView(album: album),
+          subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
+        );
+      case ProfileTab.friends:
+        return EntityDisplay<LUser>(
+          displayCircularImages: true,
+          request: GetFriendsRequest(widget.username),
+          detailWidgetBuilder: (user) => ProfileView(username: user.name),
+        );
+      case ProfileTab.charts:
+        return WeeklyChartSelectorView(user: user);
+    }
   }
 
   @override
@@ -137,7 +179,7 @@ class _ProfileViewState extends State<ProfileView>
                 ),
               ),
               SliverVisibility(
-                visible: _tab != 5,
+                visible: _tab != _tabOrder.indexOf(ProfileTab.charts),
                 maintainState: true,
                 sliver: SliverToBoxAdapter(
                   child: Column(children: [
@@ -158,13 +200,8 @@ class _ProfileViewState extends State<ProfileView>
                   labelColor: Theme.of(context).primaryColor,
                   unselectedLabelColor: Colors.grey,
                   indicatorColor: Theme.of(context).primaryColor,
-                  tabs: const [
-                    Tab(icon: Icon(Icons.queue_music)),
-                    Tab(icon: Icon(Icons.people)),
-                    Tab(icon: Icon(Icons.album)),
-                    Tab(icon: Icon(Icons.audiotrack)),
-                    Tab(icon: Icon(Icons.person)),
-                    Tab(icon: Icon(Icons.access_time)),
+                  tabs: [
+                    for (final tab in _tabOrder) Tab(icon: Icon(tab.icon)),
                   ],
                 ),
               ),
@@ -172,45 +209,7 @@ class _ProfileViewState extends State<ProfileView>
             body: TabBarView(
               controller: _tabController,
               children: [
-                EntityDisplay<LRecentTracksResponseTrack>(
-                  key: _recentScrobblesKey,
-                  request: GetRecentTracksRequest(widget.username,
-                      includeCurrentScrobble: true, extended: true),
-                  badgeWidgetBuilder: (track) => track.isLoved
-                      ? const OutlinedLoveIcon()
-                      : const SizedBox(),
-                  trailingWidgetBuilder: (track) => track.timestamp != null
-                      ? const SizedBox()
-                      : const NowPlayingAnimation(),
-                  detailWidgetBuilder: (track) => TrackView(track: track),
-                ),
-                PeriodSelector<LTopArtistsResponseArtist>(
-                  displayType: DisplayType.grid,
-                  request: GetTopArtistsRequest(widget.username),
-                  detailWidgetBuilder: (artist) => ArtistView(artist: artist),
-                  subtitleWidgetBuilder: (item, items) =>
-                      PlayCountBar(item, items),
-                ),
-                PeriodSelector<LTopAlbumsResponseAlbum>(
-                  displayType: DisplayType.grid,
-                  request: GetTopAlbumsRequest(widget.username),
-                  detailWidgetBuilder: (album) => AlbumView(album: album),
-                  subtitleWidgetBuilder: (item, items) =>
-                      PlayCountBar(item, items),
-                ),
-                PeriodSelector<LTopTracksResponseTrack>(
-                  request: GetTopTracksRequest(widget.username),
-                  detailWidgetBuilder: (track) => TrackView(track: track),
-                  subtitleWidgetBuilder: (item, items) =>
-                      PlayCountBar(item, items),
-                ),
-                EntityDisplay<LUser>(
-                  displayCircularImages: true,
-                  request: GetFriendsRequest(widget.username),
-                  detailWidgetBuilder: (user) =>
-                      ProfileView(username: user.name),
-                ),
-                WeeklyChartSelectorView(user: user),
+                for (final tab in _tabOrder) _widgetForTab(tab, user),
               ],
             ),
           ),
@@ -227,7 +226,8 @@ class _ProfileViewState extends State<ProfileView>
   @override
   void dispose() {
     _tabController.dispose();
-    _subscription.cancel();
+    _profileTabsOrderSubscription.cancel();
+    _quickActionsSubscription?.cancel();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }

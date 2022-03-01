@@ -1,4 +1,5 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/profile_tab.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uni_links/uni_links.dart';
@@ -28,7 +29,7 @@ class QuickAction {
       : type = QuickActionType.viewTrack,
         value = track;
 
-  QuickAction.viewTab(EntityType tab)
+  QuickAction.viewTab(ProfileTab tab)
       : type = QuickActionType.viewTab,
         value = tab;
 }
@@ -116,20 +117,20 @@ class QuickActionsManager {
           .add(QuickAction.viewTrack(BasicConcreteTrack(name, artist, null)));
     } else if (uri.host == 'profileTab') {
       final tabString = uri.queryParameters['tab'];
-      EntityType tab;
+      ProfileTab tab;
 
       switch (tabString) {
         case 'scrobble':
-          tab = EntityType.playlist;
+          tab = ProfileTab.recentScrobbles;
           break;
         case 'artist':
-          tab = EntityType.artist;
+          tab = ProfileTab.topArtists;
           break;
         case 'album':
-          tab = EntityType.album;
+          tab = ProfileTab.topAlbums;
           break;
         case 'track':
-          tab = EntityType.track;
+          tab = ProfileTab.topTracks;
           break;
         default:
           throw ArgumentError.value(tabString, 'tab', 'Unknown tab');
