@@ -121,10 +121,9 @@ class _ProfileViewState extends State<ProfileView>
           subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
         );
       case ProfileTab.topTracks:
-        return PeriodSelector<LTopAlbumsResponseAlbum>(
-          displayType: DisplayType.grid,
-          request: GetTopAlbumsRequest(widget.username),
-          detailWidgetBuilder: (album) => AlbumView(album: album),
+        return PeriodSelector<LTopTracksResponseTrack>(
+          request: GetTopTracksRequest(widget.username),
+          detailWidgetBuilder: (track) => TrackView(track: track),
           subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
         );
       case ProfileTab.friends:
