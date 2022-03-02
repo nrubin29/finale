@@ -9,6 +9,9 @@ const acrCloudAccessKey = '';
 const acrCloudAccessSecret = '';
 const acrCloudHost = '';
 
+const stravaClientId = '';
+const stravaClientSecret = '';
+
 @visibleForTesting
 const testName = '';
 @visibleForTesting
