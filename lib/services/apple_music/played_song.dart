@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:finale/services/lastfm/common.dart';
 import 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart';
 
@@ -17,6 +19,9 @@ class AMPlayedSong extends BasicScrobbledTrack {
 
   @override
   String get name => _playedSong.title;
+
+  @override
+  Uint8List? get imageData => _playedSong.artwork;
 
   @override
   String? get url => null;

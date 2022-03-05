@@ -64,14 +64,12 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   }
 
   Widget get _body {
-    if (_authorizationStatus == null) {
-      return const SizedBox();
+    if (_authorizationStatus == null || _items == null) {
+      return const LoadingComponent();
     } else if (_authorizationStatus != AuthorizationStatus.authorized) {
       return const Center(
         child: Text('Unable to access your music library.'),
       );
-    } else if (_items == null) {
-      return const Center(child: LoadingComponent());
     } else {
       return Column(
         children: [
@@ -101,7 +99,6 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
           Expanded(
             child: EntityCheckboxList<AMPlayedSong>(
               items: _items!,
-              displayImages: false,
               noResultsMessage: 'No music to scrobble.',
               onRefresh: _load,
               onSelectionChanged: (selection) {

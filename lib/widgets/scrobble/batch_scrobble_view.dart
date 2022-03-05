@@ -1,3 +1,4 @@
+import 'package:finale/services/apple_music/playlist.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/playlist.dart';
@@ -184,7 +185,8 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     isExpanded: _isTracksExpanded,
                     body: EntityCheckboxList<ScrobbleableTrack>(
                       items: widget.entity.tracks,
-                      displayImages: widget.entity is SPlaylistFull,
+                      displayImages: widget.entity is SPlaylistFull ||
+                          widget.entity is AMFullPlaylist,
                       scrollable: false,
                       onSelectionChanged: (selection) {
                         setState(() {
