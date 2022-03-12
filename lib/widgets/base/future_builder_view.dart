@@ -1,4 +1,5 @@
 import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,10 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
   Future<void> _resolveValue() async {
     try {
       _value = await widget.future;
+
+      setState(() {
+        _isLoading = false;
+      });
     } on Exception catch (e, st) {
       final isNotFoundError = e is LException && e.code == 6;
 
@@ -46,12 +51,10 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
         _isLoading = false;
       });
 
-      return;
+      if (isDebug) {
+        rethrow;
+      }
     }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   Widget get _loadingView => widget.isView

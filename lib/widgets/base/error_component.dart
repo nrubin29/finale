@@ -13,17 +13,11 @@ class ErrorComponent extends StatelessWidget {
   final Object? entity;
   final bool showSendFeedbackButton;
 
-  ErrorComponent(
+  const ErrorComponent(
       {required this.error,
       required this.stackTrace,
       this.entity,
-      this.showSendFeedbackButton = true})
-      // In debug mode, print the error.
-      : assert(() {
-          // ignore: avoid_print
-          print('$error\n$stackTrace');
-          return true;
-        }());
+      this.showSendFeedbackButton = true});
 
   Future<String> get _uri async {
     var errorString = '$error';

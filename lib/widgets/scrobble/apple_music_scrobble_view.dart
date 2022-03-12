@@ -4,6 +4,7 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:finale/widgets/settings/apple_music_settings_view.dart';
@@ -23,6 +24,9 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   List<AMPlayedSong>? _items;
   List<AMPlayedSong>? _selection;
 
+  Exception? _exception;
+  StackTrace? _stackTrace;
+
   @override
   void initState() {
     super.initState();
@@ -35,11 +39,22 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
     _authorizationStatus = await AppleMusic.authorize();
 
     if (_authorizationStatus == AuthorizationStatus.authorized) {
-      final tracks = await AppleMusic.getRecentTracks();
-      setState(() {
-        _items = tracks;
-        _selection = _items;
-      });
+      try {
+        final tracks = await AppleMusic.getRecentTracks();
+        setState(() {
+          _items = tracks;
+          _selection = _items;
+        });
+      } on Exception catch (err, stackTrace) {
+        setState(() {
+          _exception = err;
+          _stackTrace = stackTrace;
+        });
+
+        if (isDebug) {
+          rethrow;
+        }
+      }
     } else {
       setState(() {});
     }
@@ -64,7 +79,9 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   }
 
   Widget get _body {
-    if (_authorizationStatus == null || _items == null) {
+    if (_exception != null && _stackTrace != null) {
+      return ErrorComponent(error: _exception!, stackTrace: _stackTrace!);
+    } else if (_authorizationStatus == null || _items == null) {
       return const LoadingComponent();
     } else if (_authorizationStatus != AuthorizationStatus.authorized) {
       return const Center(
