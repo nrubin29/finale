@@ -36,27 +36,30 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   bool get _hasItemsToScrobble => _selection?.isNotEmpty ?? false;
 
   Future<void> _load() async {
-    _authorizationStatus = await AppleMusic.authorize();
+    try {
+      final authorizationStatus = await AppleMusic.authorize();
 
-    if (_authorizationStatus == AuthorizationStatus.authorized) {
-      try {
+      if (authorizationStatus == AuthorizationStatus.authorized) {
         final tracks = await AppleMusic.getRecentTracks();
         setState(() {
+          _authorizationStatus = authorizationStatus;
           _items = tracks;
           _selection = _items;
         });
-      } on Exception catch (err, stackTrace) {
+      } else {
         setState(() {
-          _exception = err;
-          _stackTrace = stackTrace;
+          _authorizationStatus = authorizationStatus;
         });
-
-        if (isDebug) {
-          rethrow;
-        }
       }
-    } else {
-      setState(() {});
+    } on Exception catch (err, stackTrace) {
+      setState(() {
+        _exception = err;
+        _stackTrace = stackTrace;
+      });
+
+      if (isDebug) {
+        rethrow;
+      }
     }
   }
 
