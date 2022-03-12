@@ -3,6 +3,7 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences_ios/shared_preferences_ios.dart';
 import 'package:workmanager/workmanager.dart';
 
 const _taskName = Workmanager.iOSBackgroundProcessingTask;
@@ -60,6 +61,8 @@ void runAppleMusicScrobbleBackgroundTask() {
         return false;
       }
 
+      // Necessary due to https://github.com/flutter/flutter/issues/98473.
+      SharedPreferencesIOS.registerWith();
       await Preferences().setup();
 
       final tracks = await AppleMusic.getRecentTracks();
