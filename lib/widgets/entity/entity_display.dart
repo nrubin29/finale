@@ -5,6 +5,7 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/constants.dart';
+import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
@@ -98,6 +99,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   PagedRequest<T>? _request;
   StreamSubscription? _subscription;
 
+  Exception? _exception;
+  StackTrace? _stackTrace;
+
+  bool get _hasException => _exception != null && _stackTrace != null;
+
   @override
   void initState() {
     super.initState();
@@ -138,18 +144,23 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (hasMorePages) {
             page = 2;
           }
+
+          _exception = null;
+          _stackTrace = null;
         });
       }
     } on Exception catch (error, stackTrace) {
-      if (isDebug) {
-        // ignore: avoid_print
-        print('$error\n$stackTrace');
-      }
-
       setState(() {
+        _exception = error;
+        _stackTrace = stackTrace;
         items = <T>[];
         hasMorePages = false;
+        didInitialRequest = true;
       });
+
+      if (isDebug) {
+        rethrow;
+      }
     }
   }
 
@@ -172,17 +183,23 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (hasMorePages) {
             page += 1;
           }
+
+          _exception = null;
+          _stackTrace = null;
         });
       }
     } on Exception catch (error, stackTrace) {
-      if (isDebug) {
-        // ignore: avoid_print
-        print('$error\n$stackTrace');
-      }
-
       setState(() {
+        _exception = error;
+        _stackTrace = stackTrace;
+        items = <T>[];
         hasMorePages = false;
+        didInitialRequest = true;
       });
+
+      if (isDebug) {
+        rethrow;
+      }
     } finally {
       setState(() {
         isDoingRequest = false;
@@ -353,13 +370,14 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   }
 
   Widget _mainBuilder(BuildContext context) {
-    if (items.isEmpty) {
+    if (_hasException || items.isEmpty) {
       // The Stack is a hack to make the RefreshIndicator work.
       return Stack(children: [
         ListView(),
-        widget.noResultsMessage != null
-            ? Center(child: Text(widget.noResultsMessage!))
-            : const SizedBox()
+        if (_hasException)
+          ErrorComponent(error: _exception!, stackTrace: _stackTrace!)
+        else if (widget.noResultsMessage != null)
+          Center(child: Text(widget.noResultsMessage!)),
       ]);
     }
 
