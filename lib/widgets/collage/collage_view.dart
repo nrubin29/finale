@@ -15,7 +15,7 @@ import 'package:finale/widgets/collage/src/grid_collage.dart';
 import 'package:finale/widgets/collage/src/list_collage.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/collage/collage_web_warning_dialog.dart';
-import 'package:finale/widgets/entity/no_entity_type_period_dialog.dart';
+import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
@@ -116,23 +116,7 @@ class _CollageViewState extends State<CollageView> {
         _isDoingRequest = false;
       });
 
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: Text(e.code == 6 ? 'User not found' : 'Error'),
-          content:
-              Text(e.code == 6 ? 'User $username does not exist.' : e.message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        ),
-      );
-
+      showLExceptionDialog(context, error: e, username: username);
       return;
     }
 

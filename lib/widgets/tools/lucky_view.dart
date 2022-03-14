@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/preferences.dart';
@@ -13,7 +14,7 @@ import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:finale/widgets/entity/no_entity_type_period_dialog.dart';
+import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:flutter/material.dart';
 
 class LuckyView extends StatefulWidget {
@@ -45,7 +46,17 @@ class _LuckyViewState extends State<LuckyView> {
     final request = GetRecentTracksRequest(username,
         from: _period.relativeStart, to: _period.end);
 
-    final numItems = await request.getNumItems();
+    int numItems;
+    try {
+      numItems = await request.getNumItems();
+    } on LException catch (e) {
+      if (e.message == 'no such page') {
+        numItems = 0;
+      } else {
+        showLExceptionDialog(context, error: e, username: username);
+        return;
+      }
+    }
 
     if (numItems == 0) {
       showNoEntityTypePeriodDialog(context,
