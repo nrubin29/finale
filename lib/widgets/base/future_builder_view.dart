@@ -38,18 +38,22 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
     try {
       _value = await widget.future;
 
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     } on Exception catch (e, st) {
       final isNotFoundError = e is LException && e.code == 6;
 
-      setState(() {
-        _exception = isNotFoundError ? 'Item not found' : e;
-        _stackTrace = st;
-        _showSendFeedbackButton = !isNotFoundError;
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _exception = isNotFoundError ? 'Item not found' : e;
+          _stackTrace = st;
+          _showSendFeedbackButton = !isNotFoundError;
+          _isLoading = false;
+        });
+      }
 
       if (isDebug) {
         rethrow;
