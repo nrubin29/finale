@@ -81,29 +81,31 @@ class _EntityCheckboxList<T extends Entity>
         },
         slivers: [
           if (_items.isNotEmpty)
-            SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: _items.values.any((value) => !value)
-                        ? () {
-                            _updateAll(isSelected: true);
-                          }
-                        : null,
-                    child: const Text('Select all'),
-                  ),
-                  const SizedBox(width: 16),
-                  TextButton(
-                    onPressed: _items.values.any((value) => value)
-                        ? () {
-                            _updateAll(isSelected: false);
-                          }
-                        : null,
-                    child: const Text('Deselect all'),
-                  ),
-                  const SizedBox(width: 16),
-                ],
+            SliverSafeArea(
+              minimum: const EdgeInsets.only(right: 16),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: _items.values.any((value) => !value)
+                          ? () {
+                              _updateAll(isSelected: true);
+                            }
+                          : null,
+                      child: const Text('Select all'),
+                    ),
+                    const SizedBox(width: 16),
+                    TextButton(
+                      onPressed: _items.values.any((value) => value)
+                          ? () {
+                              _updateAll(isSelected: false);
+                            }
+                          : null,
+                      child: const Text('Deselect all'),
+                    ),
+                  ],
+                ),
               ),
             ),
         ],
