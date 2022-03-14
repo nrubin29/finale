@@ -32,6 +32,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
   final EntityWidgetBuilder<T>? badgeWidgetBuilder;
   final EntityWidgetBuilder<T>? trailingWidgetBuilder;
+  final List<Widget>? slivers;
   final Future<Entity> Function(T item)? scrobbleableEntity;
   final RefreshCallback? onRefresh;
 
@@ -58,6 +59,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.leadingWidgetBuilder,
       this.badgeWidgetBuilder,
       this.trailingWidgetBuilder,
+      this.slivers,
       this.scrobbleableEntity,
       this.onRefresh,
       this.displayType = DisplayType.list,
@@ -387,6 +389,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             : const NeverScrollableScrollPhysics(),
         shrinkWrap: !widget.scrollable,
         slivers: [
+          ...?widget.slivers,
           if (widget.displayType == DisplayType.list)
             SliverList(
                 delegate: SliverChildBuilderDelegate(_listItemBuilder,

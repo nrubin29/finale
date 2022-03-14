@@ -60,6 +60,15 @@ class _EntityCheckboxList<T extends Entity>
         _items.keys.where((item) => _items[item]!).toList(growable: false));
   }
 
+  void _updateAll({required bool isSelected}) {
+    setState(() {
+      _items.updateAll((_, __) => isSelected);
+    });
+
+    widget.onSelectionChanged(
+        _items.keys.where((item) => _items[item]!).toList(growable: false));
+  }
+
   @override
   Widget build(BuildContext context) => EntityDisplay<T>(
         items: _items.keys.toList(growable: false),
@@ -67,9 +76,33 @@ class _EntityCheckboxList<T extends Entity>
         displayImages: widget.displayImages,
         noResultsMessage: widget.noResultsMessage,
         onRefresh: widget.onRefresh,
-        onTap: (T item) {
+        onTap: (item) {
           _updateItem(item, !_items[item]!);
         },
+        slivers: [
+          if (_items.isNotEmpty)
+            SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _updateAll(isSelected: true);
+                    },
+                    child: const Text('Select all'),
+                  ),
+                  const SizedBox(width: 16),
+                  TextButton(
+                    onPressed: () {
+                      _updateAll(isSelected: false);
+                    },
+                    child: const Text('Deselect all'),
+                  ),
+                  const SizedBox(width: 16),
+                ],
+              ),
+            ),
+        ],
         leadingWidgetBuilder: (item) => Checkbox(
           value: _items[item],
           onChanged: (value) {
