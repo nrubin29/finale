@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:finale/services/image_id.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/http_throttle.dart';
@@ -16,15 +17,30 @@ final httpClient = ThrottleClient(15);
 abstract class PagedRequest<T> {
   const PagedRequest();
 
+  @protected
   Future<List<T>> doRequest(int limit, int page);
 
+  @nonVirtual
+  Future<List<T>> getData(int limit, int page) async {
+    try {
+      return await doRequest(limit, page);
+    } on LException catch (e) {
+      if (e.message == 'no such page') {
+        return <T>[];
+      }
+
+      rethrow;
+    }
+  }
+
+  @nonVirtual
   Future<List<T>> getAllData() async {
     final result = <T>[];
     List<T> lastResult;
     var page = 1;
 
     do {
-      lastResult = await doRequest(50, page++);
+      lastResult = await getData(50, page++);
       result.addAll(lastResult);
     } while (lastResult.length >= 50);
 

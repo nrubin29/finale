@@ -134,7 +134,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     final id = ++requestId;
 
     try {
-      final initialItems = await _request!.doRequest(20, 1);
+      final initialItems = await _request!.getData(20, 1);
       if (id == requestId) {
         setState(() {
           items = [...initialItems];
@@ -174,7 +174,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     final id = ++requestId;
 
     try {
-      final moreItems = await _request!.doRequest(20, page);
+      final moreItems = await _request!.getData(20, page);
       if (id == requestId) {
         setState(() {
           items.addAll(moreItems);

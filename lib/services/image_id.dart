@@ -59,7 +59,7 @@ class ImageId {
       () async {
         if (isWeb) {
           if (spotifyFallback != null && Preferences().hasSpotifyAuthData) {
-            final fallbackEntity = await spotifyFallback.doRequest(1, 1);
+            final fallbackEntity = await spotifyFallback.getData(1, 1);
             if (fallbackEntity.isNotEmpty) {
               return fallbackEntity.single.imageId ??
                   await fallbackEntity.single.imageIdProvider?.call();

@@ -2,10 +2,8 @@ import 'dart:math';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
-import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
-import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
@@ -56,18 +54,7 @@ class _LuckyViewState extends State<LuckyView> {
     }
 
     final randomIndex = _random.nextInt(numItems) + 1;
-
-    List<LRecentTracksResponseTrack> response;
-
-    try {
-      response = await request.doRequest(1, randomIndex);
-    } on LException catch (e) {
-      if (e.code == 6) {
-        response = <LRecentTracksResponseTrack>[];
-      } else {
-        rethrow;
-      }
-    }
+    final response = await request.getData(1, randomIndex);
 
     if (response.isNotEmpty) {
       final responseEntity = response.single;

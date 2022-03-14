@@ -109,7 +109,7 @@ class _CollageViewState extends State<CollageView> {
     List<Entity> items;
 
     try {
-      items = await request.doRequest(_numItemsToLoad, 1);
+      items = await request.getData(_numItemsToLoad, 1);
     } on LException catch (e) {
       setState(() {
         _isSettingsExpanded = true;
