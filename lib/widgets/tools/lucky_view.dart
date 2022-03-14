@@ -41,7 +41,11 @@ class _LuckyViewState extends State<LuckyView> {
     _period = Preferences().period;
   }
 
-  Future<void> _loadData() async {
+  Future<bool> _loadData() async {
+    setState(() {
+      _entity = null;
+    });
+
     final username = _usernameTextController.text;
     final request = GetRecentTracksRequest(username,
         from: _period.relativeStart, to: _period.end);
@@ -54,14 +58,14 @@ class _LuckyViewState extends State<LuckyView> {
         numItems = 0;
       } else {
         showLExceptionDialog(context, error: e, username: username);
-        return;
+        return false;
       }
     }
 
     if (numItems == 0) {
       showNoEntityTypePeriodDialog(context,
           entityType: _entityType, username: username);
-      return;
+      return false;
     }
 
     final randomIndex = _random.nextInt(numItems) + 1;
@@ -86,6 +90,8 @@ class _LuckyViewState extends State<LuckyView> {
         _entity = entity;
       });
     }
+
+    return true;
   }
 
   String? _validator(String? value) =>

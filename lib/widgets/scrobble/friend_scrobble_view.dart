@@ -1,3 +1,4 @@
+import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
@@ -7,6 +8,7 @@ import 'package:finale/widgets/base/collapsible_form_view.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
+import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -36,12 +38,17 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
 
   bool get _hasItemsToScrobble => _selection?.isNotEmpty ?? false;
 
-  Future<void> _loadData() async {
+  Future<bool> _loadData() async {
+    setState(() {
+      _items = null;
+      _selection = null;
+    });
+
+    final username = _usernameTextController.text;
     List<LRecentTracksResponseTrack> response;
 
     try {
-      response = await GetRecentTracksRequest(_usernameTextController.text,
-              from: _start, to: _end)
+      response = await GetRecentTracksRequest(username, from: _start, to: _end)
           .getAllData();
     } on LException catch (e) {
       if (e.code == 6) {
@@ -51,10 +58,18 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
       }
     }
 
+    if (response.isEmpty) {
+      showNoEntityTypePeriodDialog(context,
+          entityType: EntityType.track, username: username);
+      return false;
+    }
+
     setState(() {
       _items = response;
       _selection = response;
     });
+
+    return true;
   }
 
   Future<void> _scrobble() async {

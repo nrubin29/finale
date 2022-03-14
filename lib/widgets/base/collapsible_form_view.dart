@@ -5,7 +5,7 @@ class CollapsibleFormView extends StatefulWidget {
   final List<Widget> formWidgets;
   final String submitButtonText;
   final Widget? body;
-  final Future<void> Function() onFormSubmit;
+  final Future<bool> Function() onFormSubmit;
 
   const CollapsibleFormView({
     Key? key,
@@ -27,11 +27,11 @@ class CollapsibleFormViewState extends State<CollapsibleFormView> {
   Future<void> onFormSubmit() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
-        _isSettingsExpanded = false;
         _loadingStatus = true;
       });
 
-      await widget.onFormSubmit();
+      final success = await widget.onFormSubmit();
+      _isSettingsExpanded = !success;
 
       setState(() {
         _loadingStatus = false;
