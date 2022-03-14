@@ -27,6 +27,7 @@ class CollapsibleFormViewState extends State<CollapsibleFormView> {
   Future<void> onFormSubmit() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
+        _isSettingsExpanded = false;
         _loadingStatus = true;
       });
 
