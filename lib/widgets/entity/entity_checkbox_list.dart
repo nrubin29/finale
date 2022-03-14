@@ -82,6 +82,8 @@ class _EntityCheckboxList<T extends Entity>
         slivers: [
           if (_items.isNotEmpty)
             SliverSafeArea(
+              top: false,
+              bottom: false,
               minimum: const EdgeInsets.only(right: 16),
               sliver: SliverToBoxAdapter(
                 child: Row(
