@@ -86,16 +86,20 @@ class _EntityCheckboxList<T extends Entity>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {
-                      _updateAll(isSelected: true);
-                    },
+                    onPressed: _items.values.any((value) => !value)
+                        ? () {
+                            _updateAll(isSelected: true);
+                          }
+                        : null,
                     child: const Text('Select all'),
                   ),
                   const SizedBox(width: 16),
                   TextButton(
-                    onPressed: () {
-                      _updateAll(isSelected: false);
-                    },
+                    onPressed: _items.values.any((value) => value)
+                        ? () {
+                            _updateAll(isSelected: false);
+                          }
+                        : null,
                     child: const Text('Deselect all'),
                   ),
                   const SizedBox(width: 16),
