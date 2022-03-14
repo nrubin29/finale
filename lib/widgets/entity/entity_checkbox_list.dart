@@ -74,6 +74,7 @@ class _EntityCheckboxList<T extends Entity>
         items: _items.keys.toList(growable: false),
         scrollable: widget.scrollable,
         displayImages: widget.displayImages,
+        shouldLeftPadListItems: false,
         noResultsMessage: widget.noResultsMessage,
         onRefresh: widget.onRefresh,
         onTap: (item) {

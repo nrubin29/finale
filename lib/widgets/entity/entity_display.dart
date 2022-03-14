@@ -40,6 +40,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final bool scrollable;
   final bool displayNumbers;
   final bool displayImages;
+  final bool shouldLeftPadListItems;
   final PlaceholderBehavior placeholderBehavior;
   final bool displayCircularImages;
   final String? noResultsMessage;
@@ -66,6 +67,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.scrollable = true,
       this.displayNumbers = false,
       this.displayImages = true,
+      this.shouldLeftPadListItems = true,
       this.placeholderBehavior = PlaceholderBehavior.image,
       this.displayCircularImages = false,
       this.noResultsMessage = 'No results.',
@@ -227,6 +229,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     return ListTile(
       visualDensity: VisualDensity.compact,
       title: Text(item.displayTitle),
+      contentPadding: widget.shouldLeftPadListItems
+          ? null
+          : const EdgeInsets.only(right: 16),
       onTap: widget.onTap != null || widget.detailWidgetBuilder != null
           ? () {
               _onTap(item);
