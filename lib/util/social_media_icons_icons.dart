@@ -21,16 +21,18 @@ class SocialMediaIcons {
   static const _kFontFam = 'SocialMediaIcons';
   static const String? _kFontPkg = null;
 
-  static const IconData apple =
+  static const IconData lastfm =
       IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData spotify =
+  static const IconData github =
       IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData twitter =
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData github =
+  static const IconData spotify =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData lastfm =
+  static const IconData apple =
       IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData strava =
       IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData reddit =
+      IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

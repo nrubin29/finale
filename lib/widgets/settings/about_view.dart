@@ -85,6 +85,16 @@ class AboutView extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: ListTile(
+              title: const Text('r/FinaleApp'),
+              leading: const Icon(SocialMediaIcons.reddit),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                launch('https://reddit.com/r/FinaleApp');
+              },
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: ListTile(
               title: const Text('Source code'),
               leading: const Icon(SocialMediaIcons.github),
               trailing: const Icon(Icons.chevron_right),
