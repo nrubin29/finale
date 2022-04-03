@@ -139,7 +139,7 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<LUser>(
-        future: Lastfm.getUser(widget.username),
+        futureFactory: () => Lastfm.getUser(widget.username),
         baseEntity: widget.username,
         builder: (user) => Scaffold(
           appBar: createAppBar(

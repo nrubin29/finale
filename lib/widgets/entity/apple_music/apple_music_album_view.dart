@@ -20,7 +20,7 @@ class AppleMusicAlbumView extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilderView<AMFullAlbum>(
       baseEntity: album,
-      future: AppleMusic.getFullAlbum(album),
+      futureFactory: () => AppleMusic.getFullAlbum(album),
       builder: (album) => Scaffold(
         appBar: createAppBar(
           album.name,

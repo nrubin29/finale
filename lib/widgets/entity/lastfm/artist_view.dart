@@ -21,9 +21,9 @@ class ArtistView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<LArtist>(
-        future: artist is LArtist
-            ? Future.value(artist as LArtist)
-            : Lastfm.getArtist(artist),
+        futureFactory: artist is LArtist
+            ? () => Future.value(artist as LArtist)
+            : () => Lastfm.getArtist(artist),
         baseEntity: artist,
         builder: (artist) => Scaffold(
           appBar: createAppBar(

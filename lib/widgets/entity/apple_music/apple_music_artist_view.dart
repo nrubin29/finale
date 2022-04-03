@@ -18,7 +18,7 @@ class AppleMusicArtistView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<AMArtist>(
-        future: AppleMusic.getArtist(artistId),
+        futureFactory: () => AppleMusic.getArtist(artistId),
         baseEntity: artistId,
         builder: (artist) => Scaffold(
           appBar: createAppBar(

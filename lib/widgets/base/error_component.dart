@@ -14,14 +14,16 @@ class ErrorComponent extends StatelessWidget {
   final Object? entity;
   final IconData icon;
   final bool showSendFeedbackButton;
+  final VoidCallback? onRetry;
 
   const ErrorComponent._(this.title, this.error, this.stackTrace, this.entity,
-      this.icon, this.showSendFeedbackButton);
+      this.icon, this.showSendFeedbackButton, this.onRetry);
 
   factory ErrorComponent(
       {required Exception error,
       required StackTrace stackTrace,
-      Object? entity}) {
+      Object? entity,
+      VoidCallback? onRetry}) {
     if (error is SocketException) {
       // Network error.
       return ErrorComponent._(
@@ -32,6 +34,7 @@ class ErrorComponent extends StatelessWidget {
         entity,
         Icons.wifi_off,
         true,
+        onRetry,
       );
     } else if (error is LException && (error.code == 8 || error.code == 29)) {
       // Last.fm back-end error or rate limit exceeded.
@@ -43,6 +46,7 @@ class ErrorComponent extends StatelessWidget {
         entity,
         Icons.error,
         true,
+        onRetry,
       );
     }
 
@@ -54,7 +58,7 @@ class ErrorComponent extends StatelessWidget {
     }
 
     return ErrorComponent._('An error occurred', error, stackTrace, entity,
-        Icons.error, showSendFeedbackButton);
+        Icons.error, showSendFeedbackButton, onRetry);
   }
 
   Future<String> get _uri async {
@@ -110,6 +114,13 @@ class ErrorComponent extends StatelessWidget {
             textAlign: TextAlign.center,
             style: theme.textTheme.caption,
           ),
+          if (onRetry != null) ...[
+            const SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: onRetry,
+              child: const Text('Retry'),
+            ),
+          ],
           if (showSendFeedbackButton) ...[
             const SizedBox(height: 10),
             OutlinedButton(

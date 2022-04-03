@@ -3,14 +3,16 @@ import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
 
+typedef FutureFactory<T> = Future<T> Function();
+
 class FutureBuilderView<T> extends StatefulWidget {
-  final Future<T> future;
+  final FutureFactory<T> futureFactory;
   final Object? baseEntity;
   final bool isView;
   final Widget Function(T value) builder;
 
   const FutureBuilderView({
-    required this.future,
+    required this.futureFactory,
     this.baseEntity,
     this.isView = true,
     required this.builder,
@@ -33,8 +35,14 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
   }
 
   Future<void> _resolveValue() async {
+    setState(() {
+      _isLoading = true;
+      _exception = null;
+      _stackTrace = null;
+    });
+
     try {
-      _value = await widget.future;
+      _value = await widget.futureFactory();
 
       if (mounted) {
         setState(() {
@@ -71,6 +79,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
       error: _exception!,
       stackTrace: _stackTrace!,
       entity: widget.baseEntity,
+      onRetry: _resolveValue,
     );
 
     return widget.isView

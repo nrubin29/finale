@@ -17,7 +17,7 @@ class SpotifyAlbumView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<SAlbumFull>(
-        future: Spotify.getFullAlbum(album),
+        futureFactory: () => Spotify.getFullAlbum(album),
         baseEntity: album,
         builder: (album) => Scaffold(
             appBar: createAppBar(

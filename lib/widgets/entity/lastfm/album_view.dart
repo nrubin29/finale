@@ -41,9 +41,9 @@ class AlbumView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<LAlbum>(
-        future: album is LAlbum
-            ? Future.value(album as LAlbum)
-            : Lastfm.getAlbum(album),
+        futureFactory: album is LAlbum
+            ? () => Future.value(album as LAlbum)
+            : () => Lastfm.getAlbum(album),
         baseEntity: album,
         builder: (album) => Scaffold(
           appBar: createAppBar(

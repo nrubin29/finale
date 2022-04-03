@@ -24,9 +24,9 @@ class TrackView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<LTrack>(
-        future: track is LTrack
-            ? Future.value(track as LTrack)
-            : Lastfm.getTrack(track),
+        futureFactory: track is LTrack
+            ? () => Future.value(track as LTrack)
+            : () => Lastfm.getTrack(track),
         baseEntity: track,
         builder: (track) => Scaffold(
           appBar: createAppBar(

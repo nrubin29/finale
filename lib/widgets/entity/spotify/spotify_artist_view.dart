@@ -19,9 +19,9 @@ class SpotifyArtistView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<SArtist>(
-        future: artist is SArtist
-            ? Future.value(artist)
-            : Spotify.getFullArtist(artist),
+        futureFactory: artist is SArtist
+            ? () => Future.value(artist)
+            : () => Spotify.getFullArtist(artist),
         baseEntity: artist,
         builder: (artist) => Scaffold(
           appBar: createAppBar(
@@ -40,7 +40,7 @@ class SpotifyArtistView extends StatelessWidget {
                       SpotifyAlbumView(album: album),
                 ),
                 tracksWidget: FutureBuilderView<List<STrack>>(
-                  future: Spotify.getTopTracksForArtist(artist),
+                  futureFactory: () => Spotify.getTopTracksForArtist(artist),
                   baseEntity: artist,
                   isView: false,
                   builder: (tracks) => EntityDisplay<STrack>(
