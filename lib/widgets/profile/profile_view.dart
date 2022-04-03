@@ -104,26 +104,38 @@ class _ProfileViewState extends State<ProfileView>
           trailingWidgetBuilder: (track) => track.timestamp != null
               ? const SizedBox()
               : const NowPlayingAnimation(),
-          detailWidgetBuilder: (track) => TrackView(track: track),
+          detailWidgetBuilder: (track) => TrackView(
+            track: track,
+            username: widget.username,
+          ),
         );
       case ProfileTab.topArtists:
         return PeriodSelector<LTopArtistsResponseArtist>(
           displayType: DisplayType.grid,
           request: GetTopArtistsRequest(widget.username),
-          detailWidgetBuilder: (artist) => ArtistView(artist: artist),
+          detailWidgetBuilder: (artist) => ArtistView(
+            artist: artist,
+            username: widget.username,
+          ),
           subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
         );
       case ProfileTab.topAlbums:
         return PeriodSelector<LTopAlbumsResponseAlbum>(
           displayType: DisplayType.grid,
           request: GetTopAlbumsRequest(widget.username),
-          detailWidgetBuilder: (album) => AlbumView(album: album),
+          detailWidgetBuilder: (album) => AlbumView(
+            album: album,
+            username: widget.username,
+          ),
           subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
         );
       case ProfileTab.topTracks:
         return PeriodSelector<LTopTracksResponseTrack>(
           request: GetTopTracksRequest(widget.username),
-          detailWidgetBuilder: (track) => TrackView(track: track),
+          detailWidgetBuilder: (track) => TrackView(
+            track: track,
+            username: widget.username,
+          ),
           subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
         );
       case ProfileTab.friends:

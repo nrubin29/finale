@@ -289,15 +289,16 @@ class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
 
 class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
   final LTrack track;
+  final String? username;
 
-  const UserGetTrackScrobblesRequest(this.track);
+  const UserGetTrackScrobblesRequest(this.track, [this.username]);
 
   @override
   Future<List<LUserTrackScrobble>> doRequest(int limit, int page) async {
     final rawResponse = await _doRequest('user.getTrackScrobbles', {
       'track': track.name,
       'artist': track.artistName,
-      'user': Preferences().name,
+      'user': username ?? Preferences().name,
       'limit': limit,
       'page': page,
     });
@@ -319,28 +320,29 @@ class Lastfm {
     return LUser.fromJson(rawResponse['user']);
   }
 
-  static Future<LTrack> getTrack(Track track) async {
+  static Future<LTrack> getTrack(Track track, {String? username}) async {
     final rawResponse = await _doRequest('track.getInfo', {
       'track': track.name,
       'artist': track.artistName,
-      'username': Preferences().name,
+      'username': username ?? Preferences().name,
     });
     return LTrack.fromJson(rawResponse['track']);
   }
 
-  static Future<LAlbum> getAlbum(BasicAlbum album) async {
+  static Future<LAlbum> getAlbum(BasicAlbum album, {String? username}) async {
     final rawResponse = await _doRequest('album.getInfo', {
       'album': album.name,
       'artist': album.artist.name,
-      'username': Preferences().name,
+      'username': username ?? Preferences().name,
     });
     return LAlbum.fromJson(rawResponse['album']);
   }
 
-  static Future<LArtist> getArtist(BasicArtist artist) async {
+  static Future<LArtist> getArtist(BasicArtist artist,
+      {String? username}) async {
     final rawResponse = await _doRequest('artist.getInfo', {
       'artist': artist.name,
-      'username': Preferences().name,
+      'username': username ?? Preferences().name,
     });
     return LArtist.fromJson(rawResponse['artist']);
   }

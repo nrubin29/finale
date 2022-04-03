@@ -7,6 +7,7 @@ import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
+import 'package:finale/widgets/entity/lastfm/entity_widget.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
@@ -14,10 +15,10 @@ import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ArtistView extends StatelessWidget {
+class ArtistView extends EntityWidget {
   final BasicArtist artist;
 
-  const ArtistView({required this.artist});
+  const ArtistView({required this.artist, String? username}): super(username);
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<LArtist>(
@@ -44,6 +45,10 @@ class ArtistView extends StatelessWidget {
                 'Scrobbles': artist.stats.playCount,
                 'Listeners': artist.stats.listeners,
                 'Your scrobbles': artist.stats.userPlayCount,
+                if (hasFriend)
+                  "$username's scrobbles":
+                  Lastfm.getArtist(artist, username: username)
+                      .then((value) => value.stats.userPlayCount),
               }),
               if (artist.topTags.tags.isNotEmpty) ...[
                 const Divider(),

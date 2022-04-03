@@ -8,6 +8,7 @@ import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
+import 'package:finale/widgets/entity/lastfm/entity_widget.dart';
 import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
@@ -17,10 +18,10 @@ import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-class TrackView extends StatelessWidget {
+class TrackView extends EntityWidget {
   final Track track;
 
-  const TrackView({required this.track});
+  const TrackView({required this.track, String? username}) : super(username);
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<LTrack>(
@@ -50,6 +51,10 @@ class TrackView extends StatelessWidget {
                   'Scrobbles': track.playCount,
                   'Listeners': track.listeners,
                   'Your scrobbles': track.userPlayCount,
+                  if (hasFriend)
+                    "$username's scrobbles":
+                        Lastfm.getTrack(track, username: username)
+                            .then((value) => value.userPlayCount),
                   if (track.userPlayCount > 0 && track.duration > 0)
                     'Total listen time': formatDuration(Duration(
                         milliseconds: track.userPlayCount * track.duration)),
@@ -60,10 +65,22 @@ class TrackView extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => YourScrobblesView(track: track),
+                          builder: (_) => YourScrobblesView(track: track),
                         ),
                       );
                     },
+                  if (hasFriend)
+                    "$username's scrobbles": () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => YourScrobblesView(
+                            track: track,
+                            username: username,
+                          ),
+                        ),
+                      );
+                    }
                 },
                 actions: [
                   LoveButton(track: track),

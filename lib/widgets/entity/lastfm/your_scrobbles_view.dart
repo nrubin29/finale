@@ -11,8 +11,9 @@ import 'package:flutter/material.dart';
 
 class YourScrobblesView extends StatefulWidget {
   final LTrack track;
+  final String? username;
 
-  const YourScrobblesView({required this.track});
+  const YourScrobblesView({required this.track, this.username});
 
   @override
   State<StatefulWidget> createState() => _YourScrobblesViewState();
@@ -30,7 +31,8 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
 
   Future<void> _fetchData() async {
     final scrobbles =
-        await UserGetTrackScrobblesRequest(widget.track).getAllData();
+        await UserGetTrackScrobblesRequest(widget.track, widget.username)
+            .getAllData();
 
     setState(() {
       _scrobbles = scrobbles;
@@ -84,7 +86,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
           appBar: createAppBar(
             widget.track.name,
             leadingEntity: widget.track,
-            subtitle: pluralize(widget.track.userPlayCount),
+            subtitle: _scrobbles != null ? pluralize(_scrobbles!.length) : null,
             actions: [const SizedBox(width: 32)],
             bottom: const TabBar(
               tabs: [

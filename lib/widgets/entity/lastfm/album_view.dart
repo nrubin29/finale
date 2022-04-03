@@ -8,6 +8,7 @@ import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
+import 'package:finale/widgets/entity/lastfm/entity_widget.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
@@ -16,10 +17,10 @@ import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-class AlbumView extends StatelessWidget {
+class AlbumView extends EntityWidget {
   final BasicAlbum album;
 
-  const AlbumView({required this.album});
+  const AlbumView({required this.album, String? username}) : super(username);
 
   Future<String?> _totalListenTime(LAlbum album) async {
     try {
@@ -66,6 +67,10 @@ class AlbumView extends StatelessWidget {
                 'Scrobbles': album.playCount,
                 'Listeners': album.listeners,
                 'Your scrobbles': album.userPlayCount,
+                if (hasFriend)
+                  "$username's scrobbles":
+                      Lastfm.getAlbum(album, username: username)
+                          .then((value) => value.userPlayCount),
                 if (album.userPlayCount > 0 && album.tracks.isNotEmpty)
                   'Total listen time': _totalListenTime(album),
               }),
