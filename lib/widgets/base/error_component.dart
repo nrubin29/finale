@@ -112,22 +112,27 @@ class ErrorComponent extends StatelessWidget {
           Text(
             '$error',
             textAlign: TextAlign.center,
-            style: theme.textTheme.caption,
           ),
-          if (onRetry != null) ...[
+          if (onRetry != null || showSendFeedbackButton) ...[
             const SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: onRetry,
-              child: const Text('Retry'),
-            ),
-          ],
-          if (showSendFeedbackButton) ...[
-            const SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: () async {
-                launch(await _uri);
-              },
-              child: const Text('Send feedback'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (onRetry != null)
+                  OutlinedButton(
+                    onPressed: onRetry,
+                    child: const Text('Retry'),
+                  ),
+                if (onRetry != null && showSendFeedbackButton)
+                  const SizedBox(width: 10),
+                if (showSendFeedbackButton)
+                  OutlinedButton(
+                    onPressed: () async {
+                      launch(await _uri);
+                    },
+                    child: const Text('Send feedback'),
+                  ),
+              ],
             ),
           ],
         ],
