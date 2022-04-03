@@ -8,16 +8,54 @@ import 'package:universal_io/io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ErrorComponent extends StatelessWidget {
+  final String title;
   final Object error;
   final StackTrace stackTrace;
   final Object? entity;
+  final IconData icon;
   final bool showSendFeedbackButton;
 
-  const ErrorComponent(
-      {required this.error,
-      required this.stackTrace,
-      this.entity,
-      this.showSendFeedbackButton = true});
+  const ErrorComponent._(this.title, this.error, this.stackTrace, this.entity,
+      this.icon, this.showSendFeedbackButton);
+
+  factory ErrorComponent(
+      {required Exception error,
+      required StackTrace stackTrace,
+      Object? entity}) {
+    if (error is SocketException) {
+      // Network error.
+      return ErrorComponent._(
+        'Network error',
+        'Please ensure you have a stable network connection, then try again. '
+            'If the error persists, please send feedback.',
+        stackTrace,
+        entity,
+        Icons.wifi_off,
+        true,
+      );
+    } else if (error is LException && (error.code == 8 || error.code == 29)) {
+      // Last.fm back-end error or rate limit exceeded.
+      return ErrorComponent._(
+        'Last.fm error',
+        'Last.fm is having trouble processing your request right now. Please '
+            'try again. If the error persists, please send feedback.',
+        stackTrace,
+        entity,
+        Icons.error,
+        true,
+      );
+    }
+
+    var showSendFeedbackButton = true;
+
+    if (error is LException && error.code == 6) {
+      // "Not found" error.
+      showSendFeedbackButton = false;
+    }
+
+    return ErrorComponent._('An error occurred', error, stackTrace, entity,
+        Icons.error, showSendFeedbackButton);
+  }
 
   Future<String> get _uri async {
     var errorString = '$error';
@@ -49,19 +87,29 @@ class ErrorComponent extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Center(
-          child: Column(
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Center(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error, size: 48),
+          Icon(
+            icon,
+            size: 48,
+            color: theme.primaryColor,
+          ),
           const SizedBox(height: 10),
-          Text('An error occurred',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline6),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.headline6,
+          ),
           const SizedBox(height: 10),
-          Text('$error',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.caption),
+          Text(
+            '$error',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.caption,
+          ),
           if (showSendFeedbackButton) ...[
             const SizedBox(height: 10),
             OutlinedButton(
@@ -72,5 +120,7 @@ class ErrorComponent extends StatelessWidget {
             ),
           ],
         ],
-      ));
+      ),
+    );
+  }
 }

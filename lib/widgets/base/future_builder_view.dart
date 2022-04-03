@@ -1,4 +1,3 @@
-import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
@@ -23,9 +22,8 @@ class FutureBuilderView<T> extends StatefulWidget {
 
 class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
   late T _value;
-  Object? _exception;
+  Exception? _exception;
   StackTrace? _stackTrace;
-  var _showSendFeedbackButton = true;
   var _isLoading = true;
 
   @override
@@ -44,13 +42,10 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
         });
       }
     } on Exception catch (e, st) {
-      final isNotFoundError = e is LException && e.code == 6;
-
       if (mounted) {
         setState(() {
-          _exception = isNotFoundError ? 'Item not found' : e;
+          _exception = e;
           _stackTrace = st;
-          _showSendFeedbackButton = !isNotFoundError;
           _isLoading = false;
         });
       }
@@ -76,7 +71,6 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
       error: _exception!,
       stackTrace: _stackTrace!,
       entity: widget.baseEntity,
-      showSendFeedbackButton: _showSendFeedbackButton,
     );
 
     return widget.isView
