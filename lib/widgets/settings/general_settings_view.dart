@@ -56,8 +56,8 @@ class _GeneralSettingsViewState extends State<GeneralSettingsView> {
             },
           ),
           CaptionedListTile(
-            title: 'Profile tabs order',
-            caption: 'Reorder the tabs on the profile page.',
+            title: 'Profile tabs',
+            caption: 'Reorder and show/hide the tabs on the profile page.',
             icon: Icons.list,
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
