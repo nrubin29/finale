@@ -7,6 +7,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/settings/apple_music_settings_view.dart';
+import 'package:finale/widgets/settings/settings_list_tile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,13 +45,11 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CaptionedListTile(
+          SettingsListTile(
             title: 'Last.fm',
             icon: SocialMediaIcons.lastfm,
-            trailing: Switch(
-              value: true,
-              onChanged: (_) {},
-            ),
+            value: true,
+            onChanged: (_) {},
           ),
           CaptionedListTile.advanced(
             title: Row(children: [
@@ -119,44 +118,41 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 );
               },
             ),
-          CaptionedListTile(
+          SettingsListTile(
             title: 'Libre.fm',
             icon: Icons.rss_feed,
-            caption:
+            description:
                 'Sign in with your Libre.fm account to send all scrobbles to '
                 'Libre.fm in addition to Last.fm.',
-            trailing: Switch(
-              value: _isLibreEnabled,
-              onChanged: (value) async {
-                if (value && Preferences().libreKey == null) {
-                  try {
-                    final result = await FlutterWebAuth.authenticate(
-                        url: Uri.https('libre.fm', 'api/auth', {
-                          'api_key': apiKey,
-                          'cb': authCallbackUrl
-                        }).toString(),
-                        callbackUrlScheme: 'finale');
-                    final token = Uri.parse(result).queryParameters['token']!;
-                    final session =
-                        await Lastfm.authenticate(token, libre: true);
-                    Preferences().libreKey = session.key;
-                  } on PlatformException {
-                    if (isDebug) {
-                      rethrow;
-                    }
-                    return;
+            value: _isLibreEnabled,
+            onChanged: (value) async {
+              if (value && Preferences().libreKey == null) {
+                try {
+                  final result = await FlutterWebAuth.authenticate(
+                      url: Uri.https('libre.fm', 'api/auth', {
+                        'api_key': apiKey,
+                        'cb': authCallbackUrl
+                      }).toString(),
+                      callbackUrlScheme: 'finale');
+                  final token = Uri.parse(result).queryParameters['token']!;
+                  final session = await Lastfm.authenticate(token, libre: true);
+                  Preferences().libreKey = session.key;
+                } on PlatformException {
+                  if (isDebug) {
+                    rethrow;
                   }
+                  return;
                 }
+              }
 
-                _isLibreEnabled = (Preferences().isLibreEnabled = value);
+              _isLibreEnabled = (Preferences().isLibreEnabled = value);
 
-                setState(() {
-                  if (!_isLibreEnabled) {
-                    Preferences().clearLibre();
-                  }
-                });
-              },
-            ),
+              setState(() {
+                if (!_isLibreEnabled) {
+                  Preferences().clearLibre();
+                }
+              });
+            },
           ),
         ],
       ),
