@@ -25,5 +25,8 @@ class SettingsListTile extends StatelessWidget {
           value: value,
           onChanged: onChanged,
         ),
+        onTap: () {
+          onChanged(!value);
+        },
       );
 }
