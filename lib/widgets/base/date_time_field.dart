@@ -30,7 +30,7 @@ class DateTimeField extends StatelessWidget {
             initialDate: currentValue ?? DateTime.now(),
             firstDate: DateTime.now().subtract(const Duration(days: 14)),
             lastDate: DateTime.now().add(const Duration(days: 1)),
-            initialEntryMode: Preferences().inputDateTimeAsText
+            initialEntryMode: Preferences.inputDateTimeAsText.value
                 ? DatePickerEntryMode.input
                 : DatePickerEntryMode.calendar,
           );
@@ -40,7 +40,7 @@ class DateTimeField extends StatelessWidget {
               context: context,
               initialTime:
                   TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-              initialEntryMode: Preferences().inputDateTimeAsText
+              initialEntryMode: Preferences.inputDateTimeAsText.value
                   ? TimePickerEntryMode.input
                   : TimePickerEntryMode.dial,
             );

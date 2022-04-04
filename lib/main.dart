@@ -1,6 +1,7 @@
 import 'package:finale/util/apple_music_scrobble_background_task.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/image_id_cache.dart';
+import 'package:finale/util/preference.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/util/theme.dart';
@@ -11,7 +12,7 @@ import 'package:universal_io/io.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Preferences().setup();
+  await Preference.setup();
 
   if (isMobile) {
     await QuickActionsManager().setup();
@@ -42,18 +43,18 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    Preferences().themeColorChange.listen((value) {
+    Preferences.themeColor.changes.listen((value) {
       setState(() {
         _themeColor = value;
       });
     });
 
-    _themeColor = Preferences().themeColor;
+    _themeColor = Preferences.themeColor.value;
   }
 
   @override
   Widget build(BuildContext context) {
-    final name = Preferences().name;
+    final name = Preferences.name.value;
 
     return MaterialApp(
       title: 'Finale',

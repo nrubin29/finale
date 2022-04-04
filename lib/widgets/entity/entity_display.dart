@@ -442,7 +442,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
 
       if (_request is PeriodPagedRequest) {
         final request = _request as PeriodPagedRequest;
-        if ((request.period ?? Preferences().period).isCustom) {
+        if ((request.period ?? Preferences.period.value).isCustom) {
           message = 'Custom date ranges can take a long time to load.';
         }
       }

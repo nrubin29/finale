@@ -27,13 +27,13 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
   @override
   void initState() {
     super.initState();
-    _isSpotifyEnabled = Preferences().isSpotifyEnabled;
-    _isLibreEnabled = Preferences().isLibreEnabled;
+    _isSpotifyEnabled = Preferences.spotifyEnabled.value;
+    _isLibreEnabled = Preferences.libreEnabled.value;
   }
 
   void _logOutSpotify() {
     setState(() {
-      Preferences().clearSpotify();
+      Preferences.clearSpotify();
     });
   }
 
@@ -56,7 +56,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
               const Text('Spotify'),
               if (_isSpotifyEnabled) ...[
                 const SizedBox(width: 20),
-                Preferences().hasSpotifyAuthData
+                Preferences.hasSpotifyAuthData
                     ? TextButton(
                         child: const Text('Log Out'),
                         onPressed: _logOutSpotify,
@@ -77,7 +77,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
               value: _isSpotifyEnabled,
               onChanged: (_) async {
                 _isSpotifyEnabled =
-                    (Preferences().isSpotifyEnabled = !_isSpotifyEnabled);
+                    (Preferences.spotifyEnabled.value = !_isSpotifyEnabled);
 
                 if (!_isSpotifyEnabled) {
                   _logOutSpotify();
@@ -126,7 +126,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 'Libre.fm in addition to Last.fm.',
             value: _isLibreEnabled,
             onChanged: (value) async {
-              if (value && Preferences().libreKey == null) {
+              if (value && Preferences.libreKey.value == null) {
                 try {
                   final result = await FlutterWebAuth.authenticate(
                       url: Uri.https('libre.fm', 'api/auth', {
@@ -136,7 +136,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                       callbackUrlScheme: 'finale');
                   final token = Uri.parse(result).queryParameters['token']!;
                   final session = await Lastfm.authenticate(token, libre: true);
-                  Preferences().libreKey = session.key;
+                  Preferences.libreKey.value = session.key;
                 } on PlatformException {
                   if (isDebug) {
                     rethrow;
@@ -145,11 +145,11 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 }
               }
 
-              _isLibreEnabled = (Preferences().isLibreEnabled = value);
+              _isLibreEnabled = (Preferences.libreEnabled.value = value);
 
               setState(() {
                 if (!_isLibreEnabled) {
-                  Preferences().clearLibre();
+                  Preferences.clearLibre();
                 }
               });
             },

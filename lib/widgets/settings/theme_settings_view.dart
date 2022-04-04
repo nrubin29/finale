@@ -14,12 +14,12 @@ class _ThemeSettingsViewState extends State<ThemeSettingsView> {
   @override
   void initState() {
     super.initState();
-    _themeColor = Preferences().themeColor;
+    _themeColor = Preferences.themeColor.value;
   }
 
   void _onOptionTapped(ThemeColor themeColor) {
     setState(() {
-      _themeColor = Preferences().themeColor = themeColor;
+      _themeColor = Preferences.themeColor.value = themeColor;
     });
   }
 

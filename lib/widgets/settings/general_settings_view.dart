@@ -17,8 +17,8 @@ class _GeneralSettingsViewState extends State<GeneralSettingsView> {
   @override
   void initState() {
     super.initState();
-    _showAlbumArtistField = Preferences().showAlbumArtistField;
-    _inputDateTimeAsText = Preferences().inputDateTimeAsText;
+    _showAlbumArtistField = Preferences.showAlbumArtistField.value;
+    _inputDateTimeAsText = Preferences.inputDateTimeAsText.value;
   }
 
   @override
@@ -37,7 +37,7 @@ class _GeneralSettingsViewState extends State<GeneralSettingsView> {
             onChanged: (value) {
               setState(() {
                 _showAlbumArtistField =
-                    (Preferences().showAlbumArtistField = value);
+                    (Preferences.showAlbumArtistField.value = value);
               });
             },
           ),
@@ -51,7 +51,7 @@ class _GeneralSettingsViewState extends State<GeneralSettingsView> {
             onChanged: (value) {
               setState(() {
                 _inputDateTimeAsText =
-                    (Preferences().inputDateTimeAsText = value);
+                    (Preferences.inputDateTimeAsText.value = value);
               });
             },
           ),

@@ -10,5 +10,5 @@ abstract class EntityWidget extends StatelessWidget {
 
   const EntityWidget(this.username);
 
-  bool get hasFriend => username != null && username != Preferences().name;
+  bool get hasFriend => username != null && username != Preferences.name.value;
 }

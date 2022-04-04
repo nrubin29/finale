@@ -29,7 +29,7 @@ class _WorkoutViewState extends State<WorkoutView> {
   }
 
   void _logout() {
-    Preferences().clearStravaAuthData();
+    Preferences.clearStravaAuthData();
 
     setState(() {});
   }
@@ -39,14 +39,14 @@ class _WorkoutViewState extends State<WorkoutView> {
         appBar: createAppBar(
           'Strava Workouts',
           actions: [
-            if (Preferences().hasStravaAuthData)
+            if (Preferences.hasStravaAuthData)
               IconButton(
                 icon: const Icon(Icons.logout),
                 onPressed: _logout,
               ),
           ],
         ),
-        body: Preferences().hasStravaAuthData
+        body: Preferences.hasStravaAuthData
             ? EntityDisplay<AthleteActivity>(
                 request: const StravaListActivitiesRequest(),
                 displayImages: false,

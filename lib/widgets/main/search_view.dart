@@ -129,7 +129,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   final _textController = TextEditingController();
   late TabController _tabController;
   final _query = ReplaySubject<SearchQuery>(maxSize: 2)
-    ..add(SearchQuery.empty(Preferences().searchEngine));
+    ..add(SearchQuery.empty(Preferences.searchEngine.value));
   var _isSpotifyEnabled = true;
   var _isAppleMusicEnabled = false;
 
@@ -140,17 +140,17 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     _setAppleMusicEnabled();
     _tabController = TabController(
         length: _searchEngine == SearchEngine.lastfm ? 3 : 4, vsync: this);
-    Preferences().spotifyEnabledChange.listen((_) {
+    Preferences.spotifyEnabled.changes.listen((_) {
       _setSpotifyEnabled();
       _updateTabController();
     });
-    Preferences().appleMusicChange.listen((_) {
+    Preferences.appleMusicEnabled.changes.listen((_) {
       _setAppleMusicEnabled();
       _updateTabController();
     });
 
     _query.listen((_) async {
-      Preferences().searchEngine = _searchEngine;
+      Preferences.searchEngine.value = _searchEngine;
     });
   }
 
@@ -167,10 +167,10 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   }
 
   void _setSpotifyEnabled() {
-    _isSpotifyEnabled = Preferences().isSpotifyEnabled;
+    _isSpotifyEnabled = Preferences.spotifyEnabled.value;
 
     if (_searchEngine == SearchEngine.spotify &&
-        (!_isSpotifyEnabled || !Preferences().hasSpotifyAuthData)) {
+        (!_isSpotifyEnabled || !Preferences.hasSpotifyAuthData)) {
       setState(() {
         _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
       });
@@ -182,7 +182,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
       return;
     }
 
-    _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
+    _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
 
     if (_searchEngine == SearchEngine.appleMusic && !_isAppleMusicEnabled) {
       setState(() {
@@ -249,7 +249,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                           var updateSearchEngine = true;
 
                           if (choice == SearchEngine.spotify &&
-                              !Preferences().hasSpotifyAuthData) {
+                              !Preferences.hasSpotifyAuthData) {
                             updateSearchEngine = await showDialog<bool>(
                                     context: context,
                                     builder: (context) => SpotifyDialog()) ??

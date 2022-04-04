@@ -7,7 +7,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/image_id_cache.dart';
-import 'package:finale/util/preferences.dart';
+import 'package:finale/util/preference.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
@@ -47,7 +47,7 @@ Future<void> main() async {
       'key': testKey,
       'periodValue': Period.overall.serializedValue,
     });
-    await Preferences().setup();
+    await Preference.setup();
     await ImageIdCache().setup();
   });
 

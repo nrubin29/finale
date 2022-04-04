@@ -104,7 +104,7 @@ class AppleMusic {
 
   static Future<List<AMPlayedSong>> getRecentTracks() async {
     var after = DateTime.now().subtract(const Duration(days: 14));
-    final last = Preferences().lastAppleMusicScrobble;
+    final last = Preferences.lastAppleMusicScrobble.value;
     if (last != null && last.isAfter(after)) {
       after = last;
     }
@@ -121,7 +121,7 @@ class AppleMusic {
     final success = response.ignored == 0;
 
     if (success) {
-      Preferences().lastAppleMusicScrobble = now;
+      Preferences.lastAppleMusicScrobble.value = now;
     }
 
     return success;

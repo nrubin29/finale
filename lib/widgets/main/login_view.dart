@@ -21,9 +21,8 @@ class LoginView extends StatelessWidget {
     final token = Uri.parse(result).queryParameters['token']!;
     final session = await Lastfm.authenticate(token);
 
-    Preferences()
-      ..name = session.name
-      ..key = session.key;
+    Preferences.name.value = session.name;
+    Preferences.key.value = session.key;
 
     await Navigator.pushReplacement(
         context,

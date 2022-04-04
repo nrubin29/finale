@@ -22,9 +22,9 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
   @override
   void initState() {
     super.initState();
-    _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
+    _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
     _isAppleMusicBackgroundScrobblingEnabled =
-        Preferences().isAppleMusicBackgroundScrobblingEnabled;
+        Preferences.appleMusicBackgroundScrobblingEnabled.value;
     _init();
   }
 
@@ -84,7 +84,7 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
             onChanged: (value) {
               setState(() {
                 _isAppleMusicEnabled =
-                    (Preferences().isAppleMusicEnabled = value);
+                    (Preferences.appleMusicEnabled.value = value);
               });
             },
           ),
@@ -110,8 +110,8 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
                 value: _isAppleMusicBackgroundScrobblingEnabled,
                 onChanged: (value) {
                   setState(() {
-                    _isAppleMusicBackgroundScrobblingEnabled = (Preferences()
-                        .isAppleMusicBackgroundScrobblingEnabled = value);
+                    _isAppleMusicBackgroundScrobblingEnabled = (Preferences
+                        .appleMusicBackgroundScrobblingEnabled.value = value);
                   });
                 },
               ),

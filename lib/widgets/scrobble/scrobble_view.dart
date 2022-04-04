@@ -50,23 +50,23 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _albumController.text = widget.track?.albumName ?? '';
 
     _showAlbumArtistFieldSubscription =
-        Preferences().showAlbumArtistFieldChanged.listen((value) {
+        Preferences.showAlbumArtistField.changes.listen((value) {
       setState(() {
         _showAlbumArtistField = value;
       });
     });
 
-    _showAlbumArtistField = Preferences().showAlbumArtistField;
+    _showAlbumArtistField = Preferences.showAlbumArtistField.value;
 
     if (!widget.isModal) {
       _appleMusicChangeSubscription =
-          Preferences().appleMusicChange.listen((_) {
+          Preferences.appleMusicEnabled.changes.listen((_) {
         setState(() {
-          _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
+          _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
         });
       });
 
-      _isAppleMusicEnabled = Preferences().isAppleMusicEnabled;
+      _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
     }
   }
 

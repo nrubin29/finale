@@ -43,7 +43,7 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
   @override
   @nonVirtual
   doRequest(int limit, int page) async {
-    final period = this.period ?? Preferences().period;
+    final period = this.period ?? Preferences.period.value;
 
     if (period.isCustom) {
       List<LRecentTracksResponseTrack> response;

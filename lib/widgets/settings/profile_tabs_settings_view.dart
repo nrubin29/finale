@@ -18,7 +18,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
   void initState() {
     super.initState();
 
-    final preferencesTabOrder = Preferences().profileTabsOrder;
+    final preferencesTabOrder = Preferences.profileTabsOrder.value;
     _tabOrder = [...ProfileTab.values]..sort((a, b) {
         var aIndex = preferencesTabOrder.indexOf(a);
         if (aIndex == -1) aIndex = 10;
@@ -56,7 +56,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
   }
 
   Future<bool> _save() async {
-    Preferences().profileTabsOrder =
+    Preferences.profileTabsOrder.value =
         _tabOrder.where((e) => _tabEnabled[e]!).toList(growable: false);
     return true;
   }

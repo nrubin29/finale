@@ -104,7 +104,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
               textAlign: TextAlign.center,
             ),
           ),
-          if (Preferences().lastAppleMusicScrobble != null)
+          if (Preferences.lastAppleMusicScrobble.value != null)
             SafeArea(
               minimum: const EdgeInsets.all(8),
               top: false,
@@ -112,7 +112,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
               child: Text(
                 'Last scrobbled: ' +
                     dateTimeFormat
-                        .format(Preferences().lastAppleMusicScrobble!),
+                        .format(Preferences.lastAppleMusicScrobble.value!),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -144,7 +144,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
                     duration: const Duration(milliseconds: 200),
                     builder: (_) => const AppleMusicSettingsView());
 
-                if (!Preferences().isAppleMusicEnabled) {
+                if (!Preferences.appleMusicEnabled.value) {
                   Navigator.pop(context);
                 }
               },

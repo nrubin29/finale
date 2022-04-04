@@ -93,7 +93,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
     while (mounted) {
       await _listen();
 
-      await Future.delayed(Preferences().listenMoreFrequently
+      await Future.delayed(Preferences.listenMoreFrequently.value
           ? const Duration(seconds: 30)
           : const Duration(minutes: 1));
     }
@@ -125,7 +125,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
       final resultMusicItem = result!.metadata!.music.first;
       var title = resultMusicItem.title;
 
-      if (Preferences().stripTags) {
+      if (Preferences.stripTags.value) {
         title =
             title.replaceAll(_tagRegex, '').replaceAll(_spaceRegex, ' ').trim();
       }
@@ -176,7 +176,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
             child: Text(
               'Keep your device on this page with the screen on. Your device '
               'will listen for music every '
-              '${Preferences().listenMoreFrequently ? '30 seconds' : 'minute'} '
+              '${Preferences.listenMoreFrequently.value ? '30 seconds' : 'minute'} '
               'or so and automatically scrobble the songs it detects. '
               'Duplicate songs will be skipped.',
               textAlign: TextAlign.center,

@@ -16,8 +16,8 @@ class _ListenContinuouslySettingsViewState
   @override
   void initState() {
     super.initState();
-    _stripTags = Preferences().stripTags;
-    _listenMoreFrequently = Preferences().listenMoreFrequently;
+    _stripTags = Preferences.stripTags.value;
+    _listenMoreFrequently = Preferences.listenMoreFrequently.value;
   }
 
   @override
@@ -37,7 +37,7 @@ class _ListenContinuouslySettingsViewState
             value: _stripTags,
             onChanged: (value) {
               setState(() {
-                _stripTags = (Preferences().stripTags = value);
+                _stripTags = (Preferences.stripTags.value = value);
               });
             },
           ),
@@ -52,7 +52,7 @@ class _ListenContinuouslySettingsViewState
             onChanged: (value) {
               setState(() {
                 _listenMoreFrequently =
-                    (Preferences().listenMoreFrequently = value);
+                    (Preferences.listenMoreFrequently.value = value);
               });
             },
           ),

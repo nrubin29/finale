@@ -30,7 +30,7 @@ class WorkoutDetails extends StatelessWidget {
           body: TabBarView(
             children: [
               EntityDisplay<LRecentTracksResponseTrack>(
-                request: GetRecentTracksRequest(Preferences().name!,
+                request: GetRecentTracksRequest(Preferences.name.value!,
                     from:
                         activity.startDate.subtract(const Duration(minutes: 1)),
                     to: activity.endDate.add(const Duration(minutes: 1))),

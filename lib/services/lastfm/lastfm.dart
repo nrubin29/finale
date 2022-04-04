@@ -298,7 +298,7 @@ class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
     final rawResponse = await _doRequest('user.getTrackScrobbles', {
       'track': track.name,
       'artist': track.artistName,
-      'user': username ?? Preferences().name,
+      'user': username ?? Preferences.name.value,
       'limit': limit,
       'page': page,
     });
@@ -324,7 +324,7 @@ class Lastfm {
     final rawResponse = await _doRequest('track.getInfo', {
       'track': track.name,
       'artist': track.artistName,
-      'username': username ?? Preferences().name,
+      'username': username ?? Preferences.name.value,
     });
     return LTrack.fromJson(rawResponse['track']);
   }
@@ -333,7 +333,7 @@ class Lastfm {
     final rawResponse = await _doRequest('album.getInfo', {
       'album': album.name,
       'artist': album.artist.name,
-      'username': username ?? Preferences().name,
+      'username': username ?? Preferences.name.value,
     });
     return LAlbum.fromJson(rawResponse['album']);
   }
@@ -342,7 +342,7 @@ class Lastfm {
       {String? username}) async {
     final rawResponse = await _doRequest('artist.getInfo', {
       'artist': artist.name,
-      'username': username ?? Preferences().name,
+      'username': username ?? Preferences.name.value,
     });
     return LArtist.fromJson(rawResponse['artist']);
   }
@@ -456,14 +456,14 @@ class Lastfm {
       data['timestamp[$i]'] = timestamps[i].millisecondsSinceEpoch ~/ 1000;
     });
 
-    if (Preferences().isLibreEnabled) {
+    if (Preferences.libreEnabled.value) {
       await _doRequest(
-          'track.scrobble', {...data, 'sk': Preferences().libreKey},
+          'track.scrobble', {...data, 'sk': Preferences.libreKey.value},
           post: true, libre: true);
     }
 
     final rawResponse = await _doRequest(
-        'track.scrobble', {...data, 'sk': Preferences().key},
+        'track.scrobble', {...data, 'sk': Preferences.key.value},
         post: true);
     return LScrobbleResponseScrobblesAttr.fromJson(
         rawResponse['scrobbles']['@attr']);
@@ -481,7 +481,7 @@ class Lastfm {
         {
           'track': track.name,
           'artist': track.artistName,
-          'sk': Preferences().key,
+          'sk': Preferences.key.value,
         },
         post: true);
     return true;

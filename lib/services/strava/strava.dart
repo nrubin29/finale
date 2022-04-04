@@ -14,12 +14,12 @@ Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
     data?.map((key, value) => MapEntry(key, value.toString())));
 
 Future<dynamic> _doRequest(String method, [Map<String, dynamic>? data]) async {
-  assert(Preferences().hasStravaAuthData);
-  if (!DateTime.now().isBefore(Preferences().stravaAuthData!.expiresAt)) {
-    await Strava().refreshAccessToken(Preferences().stravaAuthData!);
+  assert(Preferences.hasStravaAuthData);
+  if (!DateTime.now().isBefore(Preferences.stravaAuthData!.expiresAt)) {
+    await Strava().refreshAccessToken(Preferences.stravaAuthData!);
   }
 
-  final accessToken = Preferences().stravaAuthData?.accessToken;
+  final accessToken = Preferences.stravaAuthData?.accessToken;
 
   final uri = _buildUri(method, data);
 
@@ -93,7 +93,7 @@ class Strava {
         ),
         body: body);
     final response = TokenResponse.fromJson(json.decode(rawResponse.body));
-    Preferences().stravaAuthData = response;
+    Preferences.stravaAuthData = response;
   }
 
   Future<void> _getAccessToken(String code) => _callTokenEndpoint({

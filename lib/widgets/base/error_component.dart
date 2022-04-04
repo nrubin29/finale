@@ -76,7 +76,7 @@ class ErrorComponent extends StatelessWidget {
       errorString,
       'Platform: ${Platform.operatingSystem}',
       'Version number: ${(await PackageInfo.fromPlatform()).fullVersion}',
-      'Username: ${Preferences().name}',
+      'Username: ${Preferences.name.value}',
       if (entity != null) 'Entity: $entity',
       'Stack trace:\n$stackTrace',
     ];

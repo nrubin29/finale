@@ -34,7 +34,7 @@ class CollageView extends StatefulWidget {
 class _CollageViewState extends State<CollageView> {
   var _isSettingsExpanded = true;
   final _usernameTextController =
-      TextEditingController(text: Preferences().name);
+      TextEditingController(text: Preferences.name.value);
   var _chart = EntityType.album;
   var _type = DisplayType.grid;
   late Period _period;
@@ -59,7 +59,7 @@ class _CollageViewState extends State<CollageView> {
   void initState() {
     super.initState();
 
-    _periodChangeSubscription = Preferences().periodChange.listen((value) {
+    _periodChangeSubscription = Preferences.period.changes.listen((value) {
       if (mounted) {
         setState(() {
           _period = value;
@@ -68,7 +68,7 @@ class _CollageViewState extends State<CollageView> {
     });
 
     _themeColorChangeSubscription =
-        Preferences().themeColorChange.listen((value) {
+        Preferences.themeColor.changes.listen((value) {
       if (mounted) {
         setState(() {
           _themeColor = value;
@@ -76,8 +76,8 @@ class _CollageViewState extends State<CollageView> {
       }
     });
 
-    _period = Preferences().period;
-    _themeColor = Preferences().themeColor;
+    _period = Preferences.period.value;
+    _themeColor = Preferences.themeColor.value;
   }
 
   Future<void> _doRequest(BuildContext context) async {
@@ -209,7 +209,7 @@ class _CollageViewState extends State<CollageView> {
 
                             if (isWeb &&
                                 value == EntityType.artist &&
-                                !Preferences().hasSpotifyAuthData) {
+                                !Preferences.hasSpotifyAuthData) {
                               shouldSet = (await showDialog(
                                       context: context,
                                       builder: (_) =>

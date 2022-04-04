@@ -47,7 +47,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
     _initData();
 
     _themeStreamSubscription =
-        Preferences().themeColorChange.listen(_updateSeries);
+        Preferences.themeColor.changes.listen(_updateSeries);
   }
 
   @override
@@ -106,7 +106,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
   }
 
   void _updateSeries([ThemeColor? themeColor]) {
-    final color = (themeColor ?? Preferences().themeColor).color;
+    final color = (themeColor ?? Preferences.themeColor.value).color;
     _series = [
       Series<MapEntry<int, int>, String>(
         id: 'Recent Tracks',

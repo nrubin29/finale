@@ -52,9 +52,9 @@ class _ProfileViewState extends State<ProfileView>
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
 
-    _tabOrder = Preferences().profileTabsOrder;
+    _tabOrder = Preferences.profileTabsOrder.value;
     _profileTabsOrderSubscription =
-        Preferences().profileTabsOrderChanged.listen((tabOrder) {
+        Preferences.profileTabsOrder.changes.listen((tabOrder) {
       setState(() {
         _createTabController(tabOrder.length);
         _tabOrder = tabOrder;

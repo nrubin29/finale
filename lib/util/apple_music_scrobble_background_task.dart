@@ -1,5 +1,6 @@
 import 'package:finale/services/apple_music/apple_music.dart';
 import 'package:finale/util/constants.dart';
+import 'package:finale/util/preference.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -13,17 +14,21 @@ class AppleMusicScrobbleBackgroundTask {
     await Workmanager().initialize(runAppleMusicScrobbleBackgroundTask,
         isInDebugMode: isDebug);
 
-    if (Preferences().isAppleMusicBackgroundScrobblingEnabled) {
+    if (Preferences.appleMusicBackgroundScrobblingEnabled.value) {
       await _registerTask();
     }
 
-    Preferences().appleMusicChange.listen((_) async {
-      if (Preferences().isAppleMusicBackgroundScrobblingEnabled) {
-        await _registerTask();
-      } else {
-        await _cancelTask();
-      }
-    });
+    Preferences.appleMusicEnabled.changes.listen(_onAppleMusicChange);
+    Preferences.appleMusicBackgroundScrobblingEnabled.changes
+        .listen(_onAppleMusicChange);
+  }
+
+  static void _onAppleMusicChange(_) async {
+    if (Preferences.appleMusicBackgroundScrobblingEnabled.value) {
+      await _registerTask();
+    } else {
+      await _cancelTask();
+    }
   }
 
   static Future<void> _cancelTask() async {
@@ -63,7 +68,7 @@ void runAppleMusicScrobbleBackgroundTask() {
 
       // Necessary due to https://github.com/flutter/flutter/issues/98473.
       SharedPreferencesIOS.registerWith();
-      await Preferences().setup();
+      await Preference.setup();
 
       final tracks = await AppleMusic.getRecentTracks();
       var success = true;

@@ -1,6 +1,6 @@
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/image_id_cache.dart';
-import 'package:finale/util/preferences.dart';
+import 'package:finale/util/preference.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/settings/about_view.dart';
 import 'package:finale/widgets/settings/accounts_settings_view.dart';
@@ -103,7 +103,7 @@ class SettingsView extends StatelessWidget {
                         title: const Text('Log out'),
                         leading: const Icon(Icons.logout),
                         onTap: () {
-                          Preferences().clear();
+                          Preference.clearAll();
                           Navigator.popUntil(context, (route) => false);
                           Navigator.push(
                               context,

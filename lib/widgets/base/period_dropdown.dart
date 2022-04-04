@@ -20,9 +20,9 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
   @override
   void initState() {
     super.initState();
-    _period = Preferences().period;
+    _period = Preferences.period.value;
 
-    _periodChangeSubscription = Preferences().periodChange.listen((value) {
+    _periodChangeSubscription = Preferences.period.changes.listen((value) {
       if (mounted) {
         setState(() {
           _period = value;
@@ -58,14 +58,14 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
             context: context,
             firstDate: DateTime(2010),
             lastDate: DateTime.now(),
-            initialEntryMode: Preferences().inputDateTimeAsText
+            initialEntryMode: Preferences.inputDateTimeAsText.value
                 ? DatePickerEntryMode.input
                 : DatePickerEntryMode.calendar,
           );
 
           if (dateRange != null) {
             setState(() {
-              _period = Preferences().period = Period(
+              _period = Preferences.period.value = Period(
                   start: dateRange.start,
                   end: dateRange.end.add(
                       const Duration(hours: 23, minutes: 59, seconds: 59)));
@@ -74,7 +74,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
           }
         } else if (value != null && value != _period) {
           setState(() {
-            _period = Preferences().period = value;
+            _period = Preferences.period.value = value;
             widget.periodChanged?.call(value);
           });
         }

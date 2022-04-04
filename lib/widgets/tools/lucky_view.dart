@@ -37,8 +37,9 @@ class _LuckyViewState extends State<LuckyView> {
   @override
   void initState() {
     super.initState();
-    _usernameTextController = TextEditingController(text: Preferences().name);
-    _period = Preferences().period;
+    _usernameTextController =
+        TextEditingController(text: Preferences.name.value);
+    _period = Preferences.period.value;
   }
 
   Future<bool> _loadData() async {
