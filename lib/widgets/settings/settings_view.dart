@@ -37,7 +37,7 @@ class SettingsView extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => GeneralSettingsView()),
+                              builder: (_) => const GeneralSettingsView()),
                         );
                       },
                     ),
@@ -61,8 +61,8 @@ class SettingsView extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      ListenContinuouslySettingsView()));
+                                  builder: (_) =>
+                                      const ListenContinuouslySettingsView()));
                         },
                       ),
                     ListTile(

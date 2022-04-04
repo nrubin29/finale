@@ -166,7 +166,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
                 await showBarModalBottomSheet(
                     context: context,
                     duration: const Duration(milliseconds: 200),
-                    builder: (context) => ListenContinuouslySettingsView());
+                    builder: (_) => const ListenContinuouslySettingsView());
                 setState(() {});
               })
         ]),

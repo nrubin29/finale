@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finale/services/apple_music/apple_music.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
@@ -17,14 +19,17 @@ class AppleMusicSettingsView extends StatefulWidget {
 class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
   AuthorizationStatus? _authorizationStatus;
   late bool _isAppleMusicEnabled;
-  late bool _isAppleMusicBackgroundScrobblingEnabled;
+  late final StreamSubscription _streamSubscription;
 
   @override
   void initState() {
     super.initState();
     _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
-    _isAppleMusicBackgroundScrobblingEnabled =
-        Preferences.appleMusicBackgroundScrobblingEnabled.value;
+    _streamSubscription = Preferences.appleMusicEnabled.changes.listen((value) {
+      setState(() {
+        _isAppleMusicEnabled = value;
+      });
+    });
     _init();
   }
 
@@ -80,13 +85,7 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
           SettingsListTile(
             title: 'Enabled',
             icon: SocialMediaIcons.apple,
-            value: _isAppleMusicEnabled,
-            onChanged: (value) {
-              setState(() {
-                _isAppleMusicEnabled =
-                    (Preferences.appleMusicEnabled.value = value);
-              });
-            },
+            preference: Preferences.appleMusicEnabled,
           ),
           if (_isAppleMusicEnabled) ...[
             ListTile(
@@ -107,17 +106,17 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
                     'If enabled, Finale will scrobble in the background '
                     'periodically.',
                 icon: scrobbleIcon,
-                value: _isAppleMusicBackgroundScrobblingEnabled,
-                onChanged: (value) {
-                  setState(() {
-                    _isAppleMusicBackgroundScrobblingEnabled = (Preferences
-                        .appleMusicBackgroundScrobblingEnabled.value = value);
-                  });
-                },
+                preference: Preferences.appleMusicBackgroundScrobblingEnabled,
               ),
           ],
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    super.dispose();
   }
 }

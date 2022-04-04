@@ -3,22 +3,8 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/settings/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 
-class ListenContinuouslySettingsView extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _ListenContinuouslySettingsViewState();
-}
-
-class _ListenContinuouslySettingsViewState
-    extends State<ListenContinuouslySettingsView> {
-  late bool _stripTags;
-  late bool _listenMoreFrequently;
-
-  @override
-  void initState() {
-    super.initState();
-    _stripTags = Preferences.stripTags.value;
-    _listenMoreFrequently = Preferences.listenMoreFrequently.value;
-  }
+class ListenContinuouslySettingsView extends StatelessWidget {
+  const ListenContinuouslySettingsView();
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +20,7 @@ class _ListenContinuouslySettingsViewState
                 'can help with double scrobbles when the continuous scrobbler '
                 'finds multiple names for the same track.',
             icon: Icons.label_off,
-            value: _stripTags,
-            onChanged: (value) {
-              setState(() {
-                _stripTags = (Preferences.stripTags.value = value);
-              });
-            },
+            preference: Preferences.stripTags,
           ),
           SettingsListTile(
             title: 'Listen more frequently',
@@ -48,13 +29,7 @@ class _ListenContinuouslySettingsViewState
                 'ensure that shorter songs are not missed, but it will use '
                 'slightly more battery and data.',
             icon: Icons.more_time,
-            value: _listenMoreFrequently,
-            onChanged: (value) {
-              setState(() {
-                _listenMoreFrequently =
-                    (Preferences.listenMoreFrequently.value = value);
-              });
-            },
+            preference: Preferences.listenMoreFrequently,
           ),
         ],
       ),
