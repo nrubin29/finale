@@ -24,7 +24,8 @@ class AppleMusicScrobbleBackgroundTask {
   }
 
   static void _onAppleMusicChange(_) async {
-    if (Preferences.appleMusicBackgroundScrobblingEnabled.value) {
+    if (Preferences.appleMusicEnabled.value &&
+        Preferences.appleMusicBackgroundScrobblingEnabled.value) {
       await _registerTask();
     } else {
       await _cancelTask();
