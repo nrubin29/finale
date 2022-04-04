@@ -1,6 +1,7 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart'
     as impl;
 import 'package:finale/util/formatters.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:flutter/material.dart';
 
 class DateTimeField extends StatelessWidget {
@@ -25,16 +26,24 @@ class DateTimeField extends StatelessWidget {
         validator: validator,
         onShowPicker: (context, currentValue) async {
           final date = await showDatePicker(
-              context: context,
-              initialDate: currentValue ?? DateTime.now(),
-              firstDate: DateTime.now().subtract(const Duration(days: 14)),
-              lastDate: DateTime.now().add(const Duration(days: 1)));
+            context: context,
+            initialDate: currentValue ?? DateTime.now(),
+            firstDate: DateTime.now().subtract(const Duration(days: 14)),
+            lastDate: DateTime.now().add(const Duration(days: 1)),
+            initialEntryMode: Preferences().inputDateTimeAsText
+                ? DatePickerEntryMode.input
+                : DatePickerEntryMode.calendar,
+          );
 
           if (date != null) {
             final time = await showTimePicker(
-                context: context,
-                initialTime:
-                    TimeOfDay.fromDateTime(currentValue ?? DateTime.now()));
+              context: context,
+              initialTime:
+                  TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+              initialEntryMode: Preferences().inputDateTimeAsText
+                  ? TimePickerEntryMode.input
+                  : TimePickerEntryMode.dial,
+            );
 
             if (time != null) {
               return impl.DateTimeField.combine(date, time);

@@ -12,11 +12,13 @@ class GeneralSettingsView extends StatefulWidget {
 
 class _GeneralSettingsViewState extends State<GeneralSettingsView> {
   late bool _showAlbumArtistField;
+  late bool _inputDateTimeAsText;
 
   @override
   void initState() {
     super.initState();
     _showAlbumArtistField = Preferences().showAlbumArtistField;
+    _inputDateTimeAsText = Preferences().inputDateTimeAsText;
   }
 
   @override
@@ -36,6 +38,20 @@ class _GeneralSettingsViewState extends State<GeneralSettingsView> {
               setState(() {
                 _showAlbumArtistField =
                     (Preferences().showAlbumArtistField = value);
+              });
+            },
+          ),
+          SettingsListTile(
+            title: 'Input dates/times as text',
+            description:
+                'If enabled, date/time inputs will default to using text '
+                'fields rather than calendars/clocks.',
+            icon: Icons.date_range,
+            value: _inputDateTimeAsText,
+            onChanged: (value) {
+              setState(() {
+                _inputDateTimeAsText =
+                    (Preferences().inputDateTimeAsText = value);
               });
             },
           ),

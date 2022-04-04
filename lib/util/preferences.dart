@@ -267,6 +267,13 @@ class Preferences {
   Stream<bool> get showAlbumArtistFieldChanged =>
       _showAlbumArtistFieldChanged.stream;
 
+  bool get inputDateTimeAsText =>
+      _preferences.getBool('inputDateTimeAsText') ?? false;
+
+  set inputDateTimeAsText(bool value) {
+    _preferences.setBool('inputDateTimeAsText', value);
+  }
+
   List<ProfileTab> get profileTabsOrder {
     final order = _preferences.getStringList('profileTabsOrder');
 
