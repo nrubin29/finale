@@ -347,6 +347,14 @@ class Lastfm {
     return LArtist.fromJson(rawResponse['artist']);
   }
 
+  static Future<List<LSimilarArtist>> getSimilarArtists(BasicArtist artist,
+      {int limit = 20}) async {
+    final rawResponse = await _doRequest(
+        'artist.getSimilar', {'artist': artist.name, 'limit': limit});
+    return LSimilarArtistsResponse.fromJson(rawResponse['similarartists'])
+        .artists;
+  }
+
   static Future<LUserWeeklyChartList> getWeeklyChartList(LUser user) async {
     final rawResponse =
         await _doRequest('user.getWeeklyChartList', {'user': user.name});

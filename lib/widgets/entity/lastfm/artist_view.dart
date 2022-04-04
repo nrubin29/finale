@@ -12,13 +12,14 @@ import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
+import 'package:finale/widgets/base/fractional_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ArtistView extends EntityWidget {
   final BasicArtist artist;
 
-  const ArtistView({required this.artist, String? username}): super(username);
+  const ArtistView({required this.artist, String? username}) : super(username);
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<LArtist>(
@@ -47,8 +48,8 @@ class ArtistView extends EntityWidget {
                 'Your scrobbles': artist.stats.userPlayCount,
                 if (hasFriend)
                   "$username's scrobbles":
-                  Lastfm.getArtist(artist, username: username)
-                      .then((value) => value.stats.userPlayCount),
+                      Lastfm.getArtist(artist, username: username)
+                          .then((value) => value.stats.userPlayCount),
               }),
               if (artist.topTags.tags.isNotEmpty) ...[
                 const Divider(),
@@ -69,6 +70,18 @@ class ArtistView extends EntityWidget {
                   scrollable: false,
                   request: ArtistGetTopTracksRequest(artist.name),
                   detailWidgetBuilder: (track) => TrackView(track: track),
+                ),
+                similarArtistsWidget: FutureBuilderView<List<LSimilarArtist>>(
+                  futureFactory: () => Lastfm.getSimilarArtists(artist),
+                  baseEntity: artist,
+                  isView: false,
+                  builder: (items) => EntityDisplay<LSimilarArtist>(
+                    scrollable: false,
+                    items: items,
+                    detailWidgetBuilder: (artist) => ArtistView(artist: artist),
+                    subtitleWidgetBuilder: (artist, _) =>
+                        FractionalBar(artist.similarity),
+                  ),
                 ),
               ),
             ],

@@ -1,13 +1,13 @@
 import 'package:finale/services/lastfm/common.dart';
 import 'package:flutter/material.dart';
 
-class PlayCountBar<T extends HasPlayCount> extends StatelessWidget {
-  final T item;
-  final List<T> items;
+class FractionalBar extends StatelessWidget {
+  final double percent;
 
-  const PlayCountBar(this.item, this.items);
+  const FractionalBar(this.percent);
 
-  double get percent => item.playCount / items.first.playCount;
+  FractionalBar.forEntity(HasPlayCount item, List<HasPlayCount> items)
+      : percent = item.playCount / items.first.playCount;
 
   @override
   Widget build(BuildContext context) => Padding(

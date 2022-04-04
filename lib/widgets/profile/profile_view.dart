@@ -19,7 +19,7 @@ import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/profile/period_selector.dart';
-import 'package:finale/widgets/profile/play_count_bar.dart';
+import 'package:finale/widgets/base/fractional_bar.dart';
 import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/settings/settings_view.dart';
@@ -125,7 +125,7 @@ class _ProfileViewState extends State<ProfileView>
             artist: artist,
             username: widget.username,
           ),
-          subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
+          subtitleWidgetBuilder: FractionalBar.forEntity,
         );
       case ProfileTab.topAlbums:
         return PeriodSelector<LTopAlbumsResponseAlbum>(
@@ -135,7 +135,7 @@ class _ProfileViewState extends State<ProfileView>
             album: album,
             username: widget.username,
           ),
-          subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
+          subtitleWidgetBuilder: FractionalBar.forEntity,
         );
       case ProfileTab.topTracks:
         return PeriodSelector<LTopTracksResponseTrack>(
@@ -144,7 +144,7 @@ class _ProfileViewState extends State<ProfileView>
             track: track,
             username: widget.username,
           ),
-          subtitleWidgetBuilder: (item, items) => PlayCountBar(item, items),
+          subtitleWidgetBuilder: FractionalBar.forEntity,
         );
       case ProfileTab.friends:
         return EntityDisplay<LUser>(

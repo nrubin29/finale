@@ -66,6 +66,34 @@ class LArtistSearchResponse {
 }
 
 @JsonSerializable()
+class LSimilarArtist extends BasicArtist {
+  @override
+  final String name;
+
+  @override
+  final String url;
+
+  @JsonKey(name: 'match', fromJson: double.parse)
+  final double similarity;
+
+  LSimilarArtist(this.name, {required this.url, required this.similarity});
+
+  factory LSimilarArtist.fromJson(Map<String, dynamic> json) =>
+      _$LSimilarArtistFromJson(json);
+}
+
+@JsonSerializable()
+class LSimilarArtistsResponse {
+  @JsonKey(name: 'artist')
+  final List<LSimilarArtist> artists;
+
+  const LSimilarArtistsResponse(this.artists);
+
+  factory LSimilarArtistsResponse.fromJson(Map<String, dynamic> json) =>
+      _$LSimilarArtistsResponseFromJson(json);
+}
+
+@JsonSerializable()
 class LArtistStats {
   @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
