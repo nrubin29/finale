@@ -102,8 +102,8 @@ class SettingsView extends StatelessWidget {
                     ListTile(
                         title: const Text('Log out'),
                         leading: const Icon(Icons.logout),
-                        onTap: () {
-                          Preference.clearAll();
+                        onTap: () async {
+                          await Preference.clearAll();
                           Navigator.popUntil(context, (route) => false);
                           Navigator.push(
                               context,
