@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+typedef _StringList = List<String>;
+
 /// A preference stored in [SharedPreferences].
 ///
 /// [T] is the type of the value and [U] is the type stored in shared
@@ -50,7 +52,9 @@ class Preference<T, U extends Object> {
       return _defaultValue;
     }
 
-    final preferenceValue = _preferences.get(_key) as U;
+    final preferenceValue = U == _StringList
+        ? _preferences.getStringList(_key) as U
+        : _preferences.get(_key) as U;
 
     if (deserialize != null) {
       return deserialize!(preferenceValue);
