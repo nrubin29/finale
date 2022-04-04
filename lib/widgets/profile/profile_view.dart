@@ -47,6 +47,14 @@ class _ProfileViewState extends State<ProfileView>
   late final StreamSubscription _profileTabsOrderSubscription;
   StreamSubscription? _quickActionsSubscription;
 
+  /// When the recent scrobbles list should next be auto-updated by
+  /// [didChangeAppLifecycleState].
+  ///
+  /// The recent scrobbles list auto-updates when the app re-enters the
+  /// foreground, but we only want to update if it's been at least 5 minutes
+  /// since we last updated.
+  static var _nextAutoUpdate = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -238,8 +246,13 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    final now = DateTime.now();
     if (state == AppLifecycleState.resumed) {
-      _recentScrobblesKey.currentState?.getInitialItems();
+      if (now.isAfter(_nextAutoUpdate)) {
+        _recentScrobblesKey.currentState?.getInitialItems();
+      }
+    } else {
+      _nextAutoUpdate = now.add(const Duration(minutes: 5));
     }
   }
 
