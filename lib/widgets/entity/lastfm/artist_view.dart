@@ -7,7 +7,7 @@ import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
-import 'package:finale/widgets/entity/lastfm/entity_widget.dart';
+import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
@@ -16,76 +16,79 @@ import 'package:finale/widgets/base/fractional_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ArtistView extends EntityWidget {
+class ArtistView extends StatelessWidget {
   final BasicArtist artist;
 
-  const ArtistView({required this.artist, String? username}) : super(username);
+  const ArtistView({required this.artist});
 
   @override
-  Widget build(BuildContext context) => FutureBuilderView<LArtist>(
-        futureFactory: artist is LArtist
-            ? () => Future.value(artist as LArtist)
-            : () => Lastfm.getArtist(artist),
-        baseEntity: artist,
-        builder: (artist) => Scaffold(
-          appBar: createAppBar(
-            artist.name,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.adaptive.share),
-                onPressed: () {
-                  Share.share(artist.url);
-                },
-              ),
-            ],
-          ),
-          body: TwoUp(
-            entity: artist,
-            listItems: [
-              Scoreboard(statistics: {
-                'Scrobbles': artist.stats.playCount,
-                'Listeners': artist.stats.listeners,
-                'Your scrobbles': artist.stats.userPlayCount,
-                if (hasFriend)
-                  "$username's scrobbles":
-                      Lastfm.getArtist(artist, username: username)
-                          .then((value) => value.stats.userPlayCount),
-              }),
-              if (artist.topTags.tags.isNotEmpty) ...[
-                const Divider(),
-                TagChips(topTags: artist.topTags),
-              ],
-              if (artist.bio != null && artist.bio!.isNotEmpty) ...[
-                const Divider(),
-                WikiTile(entity: artist, wiki: artist.bio!),
-              ],
-              const Divider(),
-              ArtistTabs(
-                albumsWidget: EntityDisplay<LArtistTopAlbum>(
-                  scrollable: false,
-                  request: ArtistGetTopAlbumsRequest(artist.name),
-                  detailWidgetBuilder: (album) => AlbumView(album: album),
-                ),
-                tracksWidget: EntityDisplay<LArtistTopTrack>(
-                  scrollable: false,
-                  request: ArtistGetTopTracksRequest(artist.name),
-                  detailWidgetBuilder: (track) => TrackView(track: track),
-                ),
-                similarArtistsWidget: FutureBuilderView<List<LSimilarArtist>>(
-                  futureFactory: () => Lastfm.getSimilarArtists(artist),
-                  baseEntity: artist,
-                  isView: false,
-                  builder: (items) => EntityDisplay<LSimilarArtist>(
-                    scrollable: false,
-                    items: items,
-                    detailWidgetBuilder: (artist) => ArtistView(artist: artist),
-                    subtitleWidgetBuilder: (artist, _) =>
-                        FractionalBar(artist.similarity),
-                  ),
-                ),
-              ),
-            ],
-          ),
+  Widget build(BuildContext context) {
+    final friendUsername = ProfileStack.of(context).friendUsername;
+    return FutureBuilderView<LArtist>(
+      futureFactory: artist is LArtist
+          ? () => Future.value(artist as LArtist)
+          : () => Lastfm.getArtist(artist),
+      baseEntity: artist,
+      builder: (artist) => Scaffold(
+        appBar: createAppBar(
+          artist.name,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.adaptive.share),
+              onPressed: () {
+                Share.share(artist.url);
+              },
+            ),
+          ],
         ),
-      );
+        body: TwoUp(
+          entity: artist,
+          listItems: [
+            Scoreboard(statistics: {
+              'Scrobbles': artist.stats.playCount,
+              'Listeners': artist.stats.listeners,
+              'Your scrobbles': artist.stats.userPlayCount,
+              if (friendUsername != null)
+                "$friendUsername's scrobbles":
+                    Lastfm.getArtist(artist, username: friendUsername)
+                        .then((value) => value.stats.userPlayCount),
+            }),
+            if (artist.topTags.tags.isNotEmpty) ...[
+              const Divider(),
+              TagChips(topTags: artist.topTags),
+            ],
+            if (artist.bio != null && artist.bio!.isNotEmpty) ...[
+              const Divider(),
+              WikiTile(entity: artist, wiki: artist.bio!),
+            ],
+            const Divider(),
+            ArtistTabs(
+              albumsWidget: EntityDisplay<LArtistTopAlbum>(
+                scrollable: false,
+                request: ArtistGetTopAlbumsRequest(artist.name),
+                detailWidgetBuilder: (album) => AlbumView(album: album),
+              ),
+              tracksWidget: EntityDisplay<LArtistTopTrack>(
+                scrollable: false,
+                request: ArtistGetTopTracksRequest(artist.name),
+                detailWidgetBuilder: (track) => TrackView(track: track),
+              ),
+              similarArtistsWidget: FutureBuilderView<List<LSimilarArtist>>(
+                futureFactory: () => Lastfm.getSimilarArtists(artist),
+                baseEntity: artist,
+                isView: false,
+                builder: (items) => EntityDisplay<LSimilarArtist>(
+                  scrollable: false,
+                  items: items,
+                  detailWidgetBuilder: (artist) => ArtistView(artist: artist),
+                  subtitleWidgetBuilder: (artist, _) =>
+                      FractionalBar(artist.similarity),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

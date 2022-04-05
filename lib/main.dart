@@ -5,6 +5,7 @@ import 'package:finale/util/preference.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/util/theme.dart';
+import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/main/main_view.dart';
 import 'package:flutter/material.dart';
@@ -55,12 +56,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final name = Preferences.name.value;
-
-    return MaterialApp(
-      title: 'Finale',
-      theme: FinaleTheme.lightFor(_themeColor),
-      darkTheme: FinaleTheme.darkFor(_themeColor),
-      home: name == null ? LoginView() : MainView(username: name),
+    return ProfileStack(
+      child: MaterialApp(
+        title: 'Finale',
+        theme: FinaleTheme.lightFor(_themeColor),
+        darkTheme: FinaleTheme.darkFor(_themeColor),
+        home: name == null ? LoginView() : MainView(username: name),
+      ),
     );
   }
 }

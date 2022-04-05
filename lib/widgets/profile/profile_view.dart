@@ -16,6 +16,7 @@ import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/love_button.dart';
+import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/profile/period_selector.dart';
@@ -47,6 +48,8 @@ class _ProfileViewState extends State<ProfileView>
   late final StreamSubscription _profileTabsOrderSubscription;
   StreamSubscription? _quickActionsSubscription;
 
+  late ProfileStack _profileStack;
+
   /// When the recent scrobbles list should next be auto-updated by
   /// [didChangeAppLifecycleState].
   ///
@@ -59,6 +62,7 @@ class _ProfileViewState extends State<ProfileView>
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
+    ProfileStack.find(context).push(widget.username);
 
     _tabOrder = Preferences.profileTabsOrder.value;
     _profileTabsOrderSubscription =
@@ -112,38 +116,26 @@ class _ProfileViewState extends State<ProfileView>
           trailingWidgetBuilder: (track) => track.timestamp != null
               ? const SizedBox()
               : const NowPlayingAnimation(),
-          detailWidgetBuilder: (track) => TrackView(
-            track: track,
-            username: widget.username,
-          ),
+          detailWidgetBuilder: (track) => TrackView(track: track),
         );
       case ProfileTab.topArtists:
         return PeriodSelector<LTopArtistsResponseArtist>(
           displayType: DisplayType.grid,
           request: GetTopArtistsRequest(widget.username),
-          detailWidgetBuilder: (artist) => ArtistView(
-            artist: artist,
-            username: widget.username,
-          ),
+          detailWidgetBuilder: (artist) => ArtistView(artist: artist),
           subtitleWidgetBuilder: FractionalBar.forEntity,
         );
       case ProfileTab.topAlbums:
         return PeriodSelector<LTopAlbumsResponseAlbum>(
           displayType: DisplayType.grid,
           request: GetTopAlbumsRequest(widget.username),
-          detailWidgetBuilder: (album) => AlbumView(
-            album: album,
-            username: widget.username,
-          ),
+          detailWidgetBuilder: (album) => AlbumView(album: album),
           subtitleWidgetBuilder: FractionalBar.forEntity,
         );
       case ProfileTab.topTracks:
         return PeriodSelector<LTopTracksResponseTrack>(
           request: GetTopTracksRequest(widget.username),
-          detailWidgetBuilder: (track) => TrackView(
-            track: track,
-            username: widget.username,
-          ),
+          detailWidgetBuilder: (track) => TrackView(track: track),
           subtitleWidgetBuilder: FractionalBar.forEntity,
         );
       case ProfileTab.friends:
@@ -257,11 +249,18 @@ class _ProfileViewState extends State<ProfileView>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _profileStack = ProfileStack.of(context);
+  }
+
+  @override
   void dispose() {
     _tabController?.dispose();
     _profileTabsOrderSubscription.cancel();
     _quickActionsSubscription?.cancel();
     WidgetsBinding.instance!.removeObserver(this);
+    _profileStack.pop();
     super.dispose();
   }
 }
