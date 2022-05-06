@@ -61,7 +61,7 @@ class ErrorComponent extends StatelessWidget {
         Icons.error, showSendFeedbackButton, onRetry);
   }
 
-  Future<String> get _uri async {
+  Future<Uri> get _uri async {
     var errorString = '$error';
 
     if (error is LException) {
@@ -87,7 +87,7 @@ class ErrorComponent extends StatelessWidget {
       query: 'subject=Finale error&body=Please include any additional details '
           'that may be relevant. Thank you for helping to improve Finale!\n\n> '
           '\n\n-----\n\nError details:\n${errorParts.join('\n')}',
-    ).toString();
+    );
   }
 
   @override
@@ -128,7 +128,7 @@ class ErrorComponent extends StatelessWidget {
                 if (showSendFeedbackButton)
                   OutlinedButton(
                     onPressed: () async {
-                      launch(await _uri);
+                      launchUrl(await _uri);
                     },
                     child: const Text('Send feedback'),
                   ),

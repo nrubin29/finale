@@ -85,7 +85,7 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
             ],
           ),
           onPressed: () {
-            launch('https://acrcloud.com');
+            launchUrl(Uri.https('acrcloud.com', ''));
           },
         ),
         actions: [

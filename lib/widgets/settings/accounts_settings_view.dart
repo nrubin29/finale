@@ -99,7 +99,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 style: TextStyle(color: theme.primaryColor),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    launch('https://last.fm/settings/applications');
+                    launchUrl(Uri.https('last.fm', 'settings/applications'));
                   },
               ),
               const TextSpan(text: '.'),

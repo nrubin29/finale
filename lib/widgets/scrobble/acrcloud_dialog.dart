@@ -80,9 +80,8 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
               trailing: IconButton(
                 icon: const Icon(Icons.info),
                 onPressed: () {
-                  launch(
-                      'https://aha-music.com/${track.acrId}?utm_source=finale'
-                      '&utm_medium=app');
+                  launchUrl(Uri.https('aha-music.com', track.acrId,
+                      {'utm_source': 'finale', 'utm_medium': 'app'}));
                 },
               ),
               onTap: () {

@@ -69,7 +69,7 @@ class AboutView extends StatelessWidget {
               leading: const Icon(SocialMediaIcons.twitter),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launch('https://twitter.com/nrubin29');
+                launchUrl(Uri.https('twitter.com', 'nrubin29'));
               },
             ),
           ),
@@ -79,7 +79,7 @@ class AboutView extends StatelessWidget {
               leading: const Icon(Icons.web),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launch('https://nrubintech.com');
+                launchUrl(Uri.https('nrubintech.com', ''));
               },
             ),
           ),
@@ -89,7 +89,7 @@ class AboutView extends StatelessWidget {
               leading: const Icon(SocialMediaIcons.reddit),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launch('https://reddit.com/r/FinaleApp');
+                launchUrl(Uri.https('reddit.com', 'r/FinaleApp'));
               },
             ),
           ),
@@ -99,7 +99,7 @@ class AboutView extends StatelessWidget {
               leading: const Icon(SocialMediaIcons.github),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launch('https://github.com/nrubin29/finale');
+                launchUrl(Uri.https('github.com', 'nrubin29/finale'));
               },
             ),
           ),
@@ -109,8 +109,11 @@ class AboutView extends StatelessWidget {
               leading: const Icon(Icons.email),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launch('mailto:feedback@finale.app'
-                    '?subject=Finale%20feedback');
+                launchUrl(Uri(
+                  scheme: 'mailto',
+                  path: 'feedback@finale.app',
+                  query: 'subject=Finale feedback',
+                ));
               },
             ),
           ),
@@ -120,7 +123,7 @@ class AboutView extends StatelessWidget {
               leading: const Icon(Icons.privacy_tip),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launch('https://finale.app/privacy');
+                launchUrl(Uri.https('finale.app', 'privacy'));
               },
             ),
           ),
