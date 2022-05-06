@@ -11,6 +11,7 @@ import 'package:finale/util/preference.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
+import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/main/main_view.dart';
 import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
@@ -41,7 +42,7 @@ Future<void> main() async {
     }
   }
 
-  setUp(() async {
+  setUpAll(() async {
     SharedPreferences.setMockInitialValues({
       'name': testName,
       'key': testKey,
@@ -60,13 +61,15 @@ Future<void> main() async {
   /// bottom modal on top of [widgetBehindModal].
   Future<void> pumpWidget(WidgetTester tester, Widget widget,
       {bool asPage = false, Widget? widgetBehindModal}) async {
-    await tester.pumpWidget(MaterialApp(
-      title: 'Finale',
-      theme: FinaleTheme.lightFor(ThemeColor.red),
-      debugShowCheckedModeBanner: false,
-      home: asPage || widgetBehindModal != null
-          ? _AsPage(widget: widget, widgetBehindModal: widgetBehindModal)
-          : widget,
+    await tester.pumpWidget(ProfileStack(
+      child: MaterialApp(
+        title: 'Finale',
+        theme: FinaleTheme.lightFor(ThemeColor.red),
+        debugShowCheckedModeBanner: false,
+        home: asPage || widgetBehindModal != null
+            ? _AsPage(widget: widget, widgetBehindModal: widgetBehindModal)
+            : widget,
+      ),
     ));
 
     await tester.pumpAndSettle();
