@@ -1,88 +1,25 @@
 import 'package:flutter/material.dart';
 
 enum ThemeColor {
-  red,
-  pink,
-  purple,
-  deepPurple,
-  indigo,
-  blue,
-  lightBlue,
-  cyan,
-  teal,
-  green,
-  lightGreen,
-  orange,
-  brown,
-  blueGrey,
-}
+  red('Red', Colors.red),
+  pink('Pink', Colors.pink),
+  purple('Purple', Colors.purple),
+  deepPurple('Deep Purple', Colors.deepPurple),
+  indigo('Indigo', Colors.indigo),
+  blue('Blue', Colors.blue),
+  lightBlue('Light Blue', Colors.lightBlue),
+  cyan('Cyan', Colors.cyan),
+  teal('Teal', Colors.teal),
+  green('Green', Colors.green),
+  lightGreen('Light Green', Colors.lightGreen),
+  orange('Orange', Colors.deepOrange),
+  brown('Brown', Colors.brown),
+  blueGrey('Blue-Grey', Colors.blueGrey);
 
-extension ThemeColorData on ThemeColor {
-  String get displayName {
-    switch (this) {
-      case ThemeColor.red:
-        return 'Red';
-      case ThemeColor.pink:
-        return 'Pink';
-      case ThemeColor.purple:
-        return 'Purple';
-      case ThemeColor.deepPurple:
-        return 'Deep Purple';
-      case ThemeColor.indigo:
-        return 'Indigo';
-      case ThemeColor.blue:
-        return 'Blue';
-      case ThemeColor.lightBlue:
-        return 'Light Blue';
-      case ThemeColor.cyan:
-        return 'Cyan';
-      case ThemeColor.teal:
-        return 'Teal';
-      case ThemeColor.green:
-        return 'Green';
-      case ThemeColor.lightGreen:
-        return 'Light Green';
-      case ThemeColor.orange:
-        return 'Orange';
-      case ThemeColor.brown:
-        return 'Brown';
-      case ThemeColor.blueGrey:
-        return 'Blue-Grey';
-    }
-  }
+  final String displayName;
+  final MaterialColor color;
 
-  MaterialColor get color {
-    switch (this) {
-      case ThemeColor.red:
-        return Colors.red;
-      case ThemeColor.pink:
-        return Colors.pink;
-      case ThemeColor.purple:
-        return Colors.purple;
-      case ThemeColor.deepPurple:
-        return Colors.deepPurple;
-      case ThemeColor.indigo:
-        return Colors.indigo;
-      case ThemeColor.blue:
-        return Colors.blue;
-      case ThemeColor.lightBlue:
-        return Colors.lightBlue;
-      case ThemeColor.cyan:
-        return Colors.cyan;
-      case ThemeColor.teal:
-        return Colors.teal;
-      case ThemeColor.green:
-        return Colors.green;
-      case ThemeColor.lightGreen:
-        return Colors.lightGreen;
-      case ThemeColor.orange:
-        return Colors.deepOrange;
-      case ThemeColor.brown:
-        return Colors.brown;
-      case ThemeColor.blueGrey:
-        return Colors.blueGrey;
-    }
-  }
+  const ThemeColor(this.displayName, this.color);
 }
 
 class FinaleTheme {

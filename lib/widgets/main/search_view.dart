@@ -28,7 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:universal_io/io.dart';
 
-extension SearchEngineIcon on SearchEngine {
+extension on SearchEngine {
   IconData get icon {
     switch (this) {
       case SearchEngine.lastfm:
@@ -39,9 +39,7 @@ extension SearchEngineIcon on SearchEngine {
         return SocialMediaIcons.apple;
     }
   }
-}
 
-extension SearchEngineColor on SearchEngine {
   Color? get color {
     switch (this) {
       case SearchEngine.lastfm:
@@ -52,9 +50,7 @@ extension SearchEngineColor on SearchEngine {
         return appleMusicPink;
     }
   }
-}
 
-extension SearchEngineQuery on SearchEngine {
   PagedRequest<Track> searchTracks(String query) {
     switch (this) {
       case SearchEngine.lastfm:

@@ -3,15 +3,13 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:html/parser.dart' show parse;
 
-enum ImageQuality { low, high }
+enum ImageQuality {
+  low(64),
+  high(470);
 
-extension ImageQualityWidth on ImageQuality {
-  double get width {
-    switch (this) {
-      case ImageQuality.low: return 64;
-      case ImageQuality.high: return 470;
-    }
-  }
+  final double width;
+
+  const ImageQuality(this.width);
 }
 
 /// An image identifier that can be used to build an image URL for a given
