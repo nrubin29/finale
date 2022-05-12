@@ -16,7 +16,7 @@ class AppleMusicScrobbleView extends StatefulWidget {
   const AppleMusicScrobbleView();
 
   @override
-  _AppleMusicScrobbleViewState createState() => _AppleMusicScrobbleViewState();
+  State<StatefulWidget> createState() => _AppleMusicScrobbleViewState();
 }
 
 class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
@@ -110,9 +110,8 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
               top: false,
               bottom: false,
               child: Text(
-                'Last scrobbled: ' +
-                    dateTimeFormat
-                        .format(Preferences.lastAppleMusicScrobble.value!),
+                'Last scrobbled: '
+                '${dateTimeFormat.format(Preferences.lastAppleMusicScrobble.value!)}',
                 textAlign: TextAlign.center,
               ),
             ),

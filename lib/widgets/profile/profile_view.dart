@@ -61,7 +61,7 @@ class _ProfileViewState extends State<ProfileView>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     ProfileStack.find(context).push(widget.username);
 
     _tabOrder = Preferences.profileTabsOrder.value;
@@ -259,7 +259,7 @@ class _ProfileViewState extends State<ProfileView>
     _tabController?.dispose();
     _profileTabsOrderSubscription.cancel();
     _quickActionsSubscription?.cancel();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _profileStack.pop();
     super.dispose();
   }

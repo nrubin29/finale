@@ -19,7 +19,7 @@ class FriendScrobbleView extends StatefulWidget {
   const FriendScrobbleView({this.username});
 
   @override
-  _FriendScrobbleViewState createState() => _FriendScrobbleViewState();
+  State<StatefulWidget> createState() => _FriendScrobbleViewState();
 }
 
 class _FriendScrobbleViewState extends State<FriendScrobbleView> {

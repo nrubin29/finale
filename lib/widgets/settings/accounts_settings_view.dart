@@ -59,17 +59,17 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 const SizedBox(width: 20),
                 Preferences.hasSpotifyAuthData
                     ? TextButton(
-                        child: const Text('Log Out'),
                         onPressed: _logOutSpotify,
+                        child: const Text('Log Out'),
                       )
                     : TextButton(
-                        child: const Text('Log In'),
                         onPressed: () async {
                           await showDialog(
                               context: context,
                               builder: (context) => SpotifyDialog());
                           setState(() {});
                         },
+                        child: const Text('Log In'),
                       ),
               ],
             ]),

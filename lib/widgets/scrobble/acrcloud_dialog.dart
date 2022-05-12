@@ -98,13 +98,13 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
         content: results != null ? _resultsList() : _audioIndicator(),
         actions: [
           TextButton(
-            child: const Text('Cancel'),
             onPressed: results != null
                 ? () {
                     Navigator.pop(
                         context, const ACRCloudDialogResult.cancelled());
                   }
                 : session.cancel,
+            child: const Text('Cancel'),
           )
         ],
       );

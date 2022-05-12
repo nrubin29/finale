@@ -21,7 +21,7 @@ class LuckyView extends StatefulWidget {
   const LuckyView();
 
   @override
-  _LuckyViewState createState() => _LuckyViewState();
+  State<StatefulWidget> createState() => _LuckyViewState();
 }
 
 class _LuckyViewState extends State<LuckyView> {

@@ -26,6 +26,7 @@ class TitledBox extends StatelessWidget {
             children: [
               for (final action in actions)
                 OutlinedButton(
+                  onPressed: action.onPressed,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -34,7 +35,6 @@ class TitledBox extends StatelessWidget {
                       Text(action.name),
                     ],
                   ),
-                  onPressed: action.onPressed,
                 ),
             ],
           ),

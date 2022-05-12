@@ -61,7 +61,7 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
 
 class ListenContinuouslyView extends StatefulWidget {
   @override
-  _ListenContinuouslyViewState createState() => _ListenContinuouslyViewState();
+  State<StatefulWidget> createState() => _ListenContinuouslyViewState();
 }
 
 class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {

@@ -86,9 +86,8 @@ class AthleteActivity extends Entity {
       startDateLocal.add(Duration(seconds: elapsedTime));
 
   String get localTimeRangeFormatted =>
-      dateTimeFormat.format(startDateLocal) +
-      ' - ' +
-      timeFormat.format(endDateLocal);
+      '${dateTimeFormat.format(startDateLocal)} - '
+      '${timeFormat.format(endDateLocal)}';
 
   @override
   EntityType get type => EntityType.other;

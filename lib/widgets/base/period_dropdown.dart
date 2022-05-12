@@ -10,7 +10,7 @@ class PeriodDropdownButton extends StatefulWidget {
   const PeriodDropdownButton({this.periodChanged});
 
   @override
-  _PeriodDropdownButtonState createState() => _PeriodDropdownButtonState();
+  State<StatefulWidget> createState() => _PeriodDropdownButtonState();
 }
 
 class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {

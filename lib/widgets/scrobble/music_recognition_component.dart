@@ -17,8 +17,7 @@ class MusicRecognitionComponent extends StatefulWidget {
       : assert(isMobile);
 
   @override
-  _MusicRecognitionComponentState createState() =>
-      _MusicRecognitionComponentState();
+  State<StatefulWidget> createState() => _MusicRecognitionComponentState();
 }
 
 class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
