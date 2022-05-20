@@ -207,6 +207,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
+          foregroundColor: Colors.white,
           backgroundColor: _searchEngine.color,
           titleSpacing: _enabledSearchEngines.length > 1 ? 0 : null,
           title: Row(

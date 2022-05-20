@@ -30,10 +30,18 @@ class FinaleTheme {
       surface: themeColor.color,
     );
 
-    return ThemeData.from(colorScheme: colorScheme).copyWith(
+    return ThemeData.from(colorScheme: colorScheme, useMaterial3: true)
+        .copyWith(
       timePickerTheme:
           TimePickerThemeData(backgroundColor: colorScheme.background),
       cardColor: colorScheme.background,
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          side: MaterialStateProperty.all(
+            BorderSide(color: colorScheme.primary),
+          ),
+        ),
+      ),
     );
   }
 
@@ -44,11 +52,19 @@ class FinaleTheme {
       surface: themeColor.color,
     );
 
-    return ThemeData.from(colorScheme: colorScheme).copyWith(
+    return ThemeData.from(colorScheme: colorScheme, useMaterial3: true)
+        .copyWith(
       timePickerTheme:
           TimePickerThemeData(backgroundColor: colorScheme.background),
       toggleableActiveColor: colorScheme.primary,
       cardColor: colorScheme.background,
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          side: MaterialStateProperty.all(
+            BorderSide(color: colorScheme.primary),
+          ),
+        ),
+      ),
     );
   }
 }

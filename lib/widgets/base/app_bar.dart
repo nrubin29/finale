@@ -15,6 +15,7 @@ AppBar createAppBar(String title,
         List<Widget>? actions,
         PreferredSizeWidget? bottom}) =>
     AppBar(
+      foregroundColor: Colors.white,
       backgroundColor: backgroundColor,
       centerTitle: true,
       title: leadingEntity != null

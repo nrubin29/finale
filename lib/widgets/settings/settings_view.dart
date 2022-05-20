@@ -1,6 +1,7 @@
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/preference.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/settings/about_view.dart';
 import 'package:finale/widgets/settings/accounts_settings_view.dart';
@@ -14,7 +15,7 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Settings')),
+        appBar: createAppBar('Settings'),
         body: Builder(
             builder: (context) => ListView(
                   children: [

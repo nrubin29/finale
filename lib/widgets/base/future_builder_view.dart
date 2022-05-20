@@ -1,4 +1,5 @@
 import 'package:finale/util/constants.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
@@ -66,10 +67,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
 
   Widget get _loadingView => widget.isView
       ? Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text('Loading'),
-          ),
+          appBar: createAppBar('Loading'),
           body: const LoadingComponent(),
         )
       : const LoadingComponent();
@@ -84,10 +82,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
 
     return widget.isView
         ? Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: const Text('Error'),
-            ),
+            appBar: createAppBar('Error'),
             body: Padding(
               padding: const EdgeInsets.all(10),
               child: errorComponent,

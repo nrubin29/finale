@@ -6,6 +6,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
+import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -178,7 +179,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: AppBar(title: const Text('Top Tracks')),
+                            appBar: createAppBar('Top Tracks'),
                             body: EntityDisplay<LUserWeeklyTrackChartTrack>(
                               items: _tracks,
                               detailWidgetBuilder: (track) =>
@@ -214,7 +215,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: AppBar(title: const Text('Top Albums')),
+                            appBar: createAppBar('Top Albums'),
                             body: EntityDisplay<LUserWeeklyAlbumChartAlbum>(
                               items: _albums,
                               displayType: DisplayType.grid,
@@ -252,7 +253,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: AppBar(title: const Text('Top Artists')),
+                            appBar: createAppBar('Top Artists'),
                             body: EntityDisplay<LUserWeeklyArtistChartArtist>(
                               items: _artists,
                               displayType: DisplayType.grid,
