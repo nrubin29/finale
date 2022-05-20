@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences_ios/shared_preferences_ios.dart';
 import 'package:workmanager/workmanager.dart';
 
-const _taskName = Workmanager.iOSBackgroundProcessingTask;
+const _taskName = 'BackgroundScrobbling';
 
 class AppleMusicScrobbleBackgroundTask {
   static Future<void> setup() async {
