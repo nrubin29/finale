@@ -8,12 +8,12 @@ class CollapsibleFormView extends StatefulWidget {
   final Future<bool> Function() onFormSubmit;
 
   const CollapsibleFormView({
-    Key? key,
+    super.key,
     required this.formWidgets,
     this.submitButtonText = 'Submit',
     required this.body,
     required this.onFormSubmit,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => CollapsibleFormViewState();

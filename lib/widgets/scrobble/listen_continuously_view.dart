@@ -25,10 +25,9 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
   final DateTime timestamp;
   ListenContinuouslyTrackStatus? status;
 
-  ListenContinuouslyTrack(String name, String? artist, String? album,
+  ListenContinuouslyTrack(super.name, super.artistName, super.albumName,
       [this.status])
-      : timestamp = DateTime.now(),
-        super(name, artist, album);
+      : timestamp = DateTime.now();
 
   ListenContinuouslyTrack.noResults()
       : this('No music detected', null, null,

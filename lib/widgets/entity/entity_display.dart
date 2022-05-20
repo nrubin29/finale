@@ -50,7 +50,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final double fontSize;
 
   const EntityDisplay(
-      {Key? key,
+      {super.key,
       this.items,
       this.request,
       this.requestStream,
@@ -79,8 +79,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
         assert(onTap == null || detailWidgetBuilder == null),
         assert(displayType == DisplayType.list ||
             (!displayNumbers && leadingWidgetBuilder == null)),
-        assert(badgeWidgetBuilder == null || displayImages),
-        super(key: key);
+        assert(badgeWidgetBuilder == null || displayImages);
 
   @override
   State<StatefulWidget> createState() => EntityDisplayState<T>();
