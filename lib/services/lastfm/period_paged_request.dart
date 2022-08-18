@@ -69,4 +69,8 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
 
     return doPeriodRequest(period, limit, page);
   }
+
+  @override
+  String toString() => '$runtimeType(user=$username, '
+      'period=${(period ?? Preferences.period.value).value})';
 }

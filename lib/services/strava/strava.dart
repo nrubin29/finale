@@ -49,6 +49,9 @@ class StravaListActivitiesRequest extends PagedRequest<AthleteActivity> {
         .map((e) => AthleteActivity.fromJson(e))
         .toList(growable: false);
   }
+
+  @override
+  String toString() => 'StravaListActivitiesRequest()';
 }
 
 class Strava {

@@ -18,4 +18,7 @@ class AMArtist extends BasicArtist {
 
   @override
   Uint8List? get imageData => _artist.artwork;
+
+  @override
+  String toString() => 'AMArtist(name=$name)';
 }

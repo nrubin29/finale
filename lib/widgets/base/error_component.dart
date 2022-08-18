@@ -11,18 +11,18 @@ class ErrorComponent extends StatelessWidget {
   final String title;
   final Object error;
   final StackTrace stackTrace;
-  final Object? entity;
+  final Object? detailObject;
   final IconData icon;
   final bool showSendFeedbackButton;
   final VoidCallback? onRetry;
 
-  const ErrorComponent._(this.title, this.error, this.stackTrace, this.entity,
-      this.icon, this.showSendFeedbackButton, this.onRetry);
+  const ErrorComponent._(this.title, this.error, this.stackTrace,
+      this.detailObject, this.icon, this.showSendFeedbackButton, this.onRetry);
 
   factory ErrorComponent(
       {required Exception error,
       required StackTrace stackTrace,
-      Object? entity,
+      Object? detailObject,
       VoidCallback? onRetry}) {
     var title = 'An error occurred';
     Object errorObject = error;
@@ -62,7 +62,7 @@ class ErrorComponent extends StatelessWidget {
       }
     }
 
-    return ErrorComponent._(title, errorObject, stackTrace, entity, icon,
+    return ErrorComponent._(title, errorObject, stackTrace, detailObject, icon,
         showSendFeedbackButton, onRetry);
   }
 
@@ -82,7 +82,7 @@ class ErrorComponent extends StatelessWidget {
       'Platform: ${Platform.operatingSystem}',
       'Version number: ${(await PackageInfo.fromPlatform()).fullVersion}',
       'Username: ${Preferences.name.value}',
-      if (entity != null) 'Entity: $entity',
+      if (detailObject != null) 'Detail object: $detailObject',
       'Stack trace:\n$stackTrace',
     ];
 

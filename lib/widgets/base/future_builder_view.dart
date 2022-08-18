@@ -76,7 +76,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
     final errorComponent = ErrorComponent(
       error: _exception!,
       stackTrace: _stackTrace!,
-      entity: widget.baseEntity,
+      detailObject: widget.baseEntity,
       onRetry: _resolveValue,
     );
 

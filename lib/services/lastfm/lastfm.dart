@@ -108,6 +108,11 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
 
   Future<int> getNumItems() async =>
       (await _doRecentTracksRequest(1, 1)).attr.total;
+
+  @override
+  String toString() => 'GetRecentTracksRequest(user=$username, '
+      'from=${from?.secondsSinceEpoch}, to=${to?.secondsSinceEpoch}, '
+      'extended=$extended)';
 }
 
 class GetTopArtistsRequest
@@ -211,6 +216,9 @@ class GetFriendsRequest extends PagedRequest<LUser> {
         'user.getFriends', {'user': username, 'limit': limit, 'page': page});
     return LUserFriendsResponse.fromJson(rawResponse['friends']).friends;
   }
+
+  @override
+  String toString() => 'GetFriendsRequest(user=$username)';
 }
 
 class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
@@ -225,6 +233,9 @@ class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
     return LTrackSearchResponse.fromJson(rawResponse['results']['trackmatches'])
         .tracks;
   }
+
+  @override
+  String toString() => 'LSearchTracksRequest(track=$query)';
 }
 
 class LSearchArtistsRequest extends PagedRequest<LArtistMatch> {
@@ -240,6 +251,9 @@ class LSearchArtistsRequest extends PagedRequest<LArtistMatch> {
             rawResponse['results']['artistmatches'])
         .artists;
   }
+
+  @override
+  String toString() => 'LSearchArtistsRequest(artist=$query)';
 }
 
 class LSearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
@@ -254,6 +268,9 @@ class LSearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
     return LAlbumSearchResponse.fromJson(rawResponse['results']['albummatches'])
         .albums;
   }
+
+  @override
+  String toString() => 'LSearchAlbumsRequest(album=$query)';
 }
 
 class ArtistGetTopAlbumsRequest extends PagedRequest<LArtistTopAlbum> {
@@ -268,6 +285,9 @@ class ArtistGetTopAlbumsRequest extends PagedRequest<LArtistTopAlbum> {
     return LArtistGetTopAlbumsResponse.fromJson(rawResponse['topalbums'])
         .albums;
   }
+
+  @override
+  String toString() => 'ArtistGetTopAlbumsRequest(artist=$artist)';
 }
 
 class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
@@ -282,6 +302,9 @@ class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
     return LArtistGetTopTracksResponse.fromJson(rawResponse['toptracks'])
         .tracks;
   }
+
+  @override
+  String toString() => 'ArtistGetTopTracksRequest(artist=$artist)';
 }
 
 class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
@@ -302,6 +325,10 @@ class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
     return LUserTrackScrobblesResponse.fromJson(rawResponse['trackscrobbles'])
         .tracks;
   }
+
+  @override
+  String toString() => 'UserGetTrackScrobblesRequest(track=${track.name}, '
+      'artist=${track.artistName}, user=${username ?? Preferences.name.value})';
 }
 
 class Lastfm {

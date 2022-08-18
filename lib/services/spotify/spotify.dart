@@ -58,6 +58,9 @@ class SSearchTracksRequest extends PagedRequest<STrack> {
     });
     return SPage<STrack>.fromJson(rawResponse['tracks']).items;
   }
+
+  @override
+  String toString() => 'SSearchTracksRequest(q=$query)';
 }
 
 class SSearchArtistsRequest extends PagedRequest<SArtist> {
@@ -75,6 +78,9 @@ class SSearchArtistsRequest extends PagedRequest<SArtist> {
     });
     return SPage<SArtist>.fromJson(rawResponse['artists']).items;
   }
+
+  @override
+  String toString() => 'SSearchArtistsRequest(q=$query)';
 }
 
 class SSearchAlbumsRequest extends PagedRequest<SAlbumSimple> {
@@ -92,6 +98,9 @@ class SSearchAlbumsRequest extends PagedRequest<SAlbumSimple> {
     });
     return SPage<SAlbumSimple>.fromJson(rawResponse['albums']).items;
   }
+
+  @override
+  String toString() => 'SSearchAlbumsRequest(q=$query)';
 }
 
 class SSearchPlaylistsRequest extends PagedRequest<SPlaylistSimple> {
@@ -109,6 +118,9 @@ class SSearchPlaylistsRequest extends PagedRequest<SPlaylistSimple> {
     });
     return SPage<SPlaylistSimple>.fromJson(rawResponse['playlists']).items;
   }
+
+  @override
+  String toString() => 'SSearchPlaylistsRequest(q=$query)';
 }
 
 class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
@@ -122,6 +134,10 @@ class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
         {'limit': limit, 'offset': (page - 1) * limit});
     return SPage<SAlbumSimple>.fromJson(rawResponse).items;
   }
+
+  @override
+  String toString() =>
+      'SArtistAlbumsRequest(artist=${artist.id} (${artist.name}))';
 }
 
 class SPlaylistTracksRequest extends PagedRequest<STrack> {
@@ -139,6 +155,10 @@ class SPlaylistTracksRequest extends PagedRequest<STrack> {
         .whereNotNull()
         .toList();
   }
+
+  @override
+  String toString() =>
+      'SPlaylistTracksRequest(playlist=${playlist.id} (${playlist.name}))';
 }
 
 class Spotify {

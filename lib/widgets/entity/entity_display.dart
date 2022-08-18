@@ -381,7 +381,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       return Stack(children: [
         ListView(),
         if (_hasException)
-          ErrorComponent(error: _exception!, stackTrace: _stackTrace!)
+          ErrorComponent(
+            error: _exception!,
+            stackTrace: _stackTrace!,
+            detailObject: _request,
+          )
         else if (widget.noResultsMessage != null)
           Center(child: Text(widget.noResultsMessage!)),
       ]);

@@ -29,6 +29,9 @@ class AMSearchSongsRequest extends PagedRequest<AMSong> {
               query: query, artistId: artist?.id, limit: limit, page: page))
           .map(AMSong.new)
           .toList(growable: false);
+
+  @override
+  String toString() => 'AMSearchSongsRequest(query=$query, artist=$artist)';
 }
 
 class AMSearchAlbumsRequest extends PagedRequest<AMAlbum> {
@@ -49,6 +52,9 @@ class AMSearchAlbumsRequest extends PagedRequest<AMAlbum> {
               query: query, artistId: artist?.id, limit: limit, page: page))
           .map(AMAlbum.new)
           .toList(growable: false);
+
+  @override
+  String toString() => 'AMSearchAlbumsRequest(query=$query, artist=$artist)';
 }
 
 class AMSearchArtistsRequest extends PagedRequest<AMArtist> {
@@ -61,6 +67,9 @@ class AMSearchArtistsRequest extends PagedRequest<AMArtist> {
       (await FlutterMPMediaPlayer.searchArtists(query, limit, page))
           .map(AMArtist.new)
           .toList(growable: false);
+
+  @override
+  String toString() => 'AMSearchArtistsRequest(query=$query)';
 }
 
 class AMSearchPlaylistsRequest extends PagedRequest<AMPlaylist> {
@@ -73,6 +82,9 @@ class AMSearchPlaylistsRequest extends PagedRequest<AMPlaylist> {
       (await FlutterMPMediaPlayer.searchPlaylists(query, limit, page))
           .map(AMPlaylist.new)
           .toList(growable: false);
+
+  @override
+  String toString() => 'AMSearchPlaylistsRequest(query=$query)';
 }
 
 class AMPlaylistSongsRequest extends PagedRequest<AMSong> {
@@ -85,6 +97,9 @@ class AMPlaylistSongsRequest extends PagedRequest<AMSong> {
       (await FlutterMPMediaPlayer.getPlaylistSongs(playlistId, limit, page))
           .map(AMSong.new)
           .toList(growable: false);
+
+  @override
+  String toString() => 'AMPlaylistSongsRequest(playlistId=$playlistId)';
 }
 
 class AppleMusic {
