@@ -219,9 +219,9 @@ extension on WidgetTester {
     await expectLater(image, matchesGoldenFile('$directory/$name.png'));
   }
 
-  /// Pumps for 10 seconds, 100 milliseconds at a time.
+  /// Pumps for 15 seconds, 100 milliseconds at a time.
   Future<void> pumpMany() async {
-    final endTime = binding.clock.fromNowBy(const Duration(seconds: 10));
+    final endTime = binding.clock.fromNowBy(const Duration(seconds: 15));
     do {
       await binding.pump(const Duration(milliseconds: 100));
     } while (binding.clock.now().isBefore(endTime));
