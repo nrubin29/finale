@@ -24,41 +24,46 @@ class ErrorComponent extends StatelessWidget {
       required StackTrace stackTrace,
       Object? entity,
       VoidCallback? onRetry}) {
-    if (error is SocketException) {
-      // Network error.
-      return ErrorComponent._(
-        'Network error',
-        'Please ensure you have a stable network connection, then try again. '
-            'If the error persists, please send feedback.',
-        stackTrace,
-        entity,
-        Icons.wifi_off,
-        true,
-        onRetry,
-      );
-    } else if (error is LException && (error.code == 8 || error.code == 29)) {
-      // Last.fm back-end error or rate limit exceeded.
-      return ErrorComponent._(
-        'Last.fm error',
-        'Last.fm is having trouble processing your request right now. Please '
-            'try again. If the error persists, please send feedback.',
-        stackTrace,
-        entity,
-        Icons.error,
-        true,
-        onRetry,
-      );
-    }
-
+    var title = 'An error occurred';
+    Object errorObject = error;
+    var icon = Icons.error;
     var showSendFeedbackButton = true;
 
-    if (error is LException && error.code == 6) {
-      // "Not found" error.
+    if (error is SocketException ||
+        (error is HttpException &&
+            error.message ==
+                'Connection closed before full header was received')) {
+      // Network error.
+      title = 'Network error';
+      errorObject =
+          'Please ensure you have a stable network connection, then try again. '
+          'If the error persists, try again later.';
+      icon = Icons.wifi_off;
       showSendFeedbackButton = false;
+    } else if (error is LException) {
+      if (error.code == 6) {
+        // "Invalid parameters" error. This may also be the case when a track is
+        // not found.
+        showSendFeedbackButton = false;
+      } else if (error.code == 8) {
+        // Last.fm back-end error.
+        title = 'Last.fm error';
+        errorObject =
+            'Last.fm is having trouble processing your request right now. '
+            'Please try again. If the error persists, try again later.';
+        showSendFeedbackButton = false;
+      } else if (error.code == 29) {
+        // Last.fm back-end error or rate limit exceeded.
+        title = 'Rate limit exceeded';
+        errorObject =
+            'Too many people are using Finale right now. Please try again. If '
+            'the error persists, try again later.';
+        showSendFeedbackButton = false;
+      }
     }
 
-    return ErrorComponent._('An error occurred', error, stackTrace, entity,
-        Icons.error, showSendFeedbackButton, onRetry);
+    return ErrorComponent._(title, errorObject, stackTrace, entity, icon,
+        showSendFeedbackButton, onRetry);
   }
 
   Future<Uri> get _uri async {
