@@ -79,14 +79,25 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
 
   Future<LRecentTracksResponseRecentTracks> _doRecentTracksRequest(
       int limit, int page) async {
-    final rawResponse = await _doRequest('user.getRecentTracks', {
-      'user': username,
-      'limit': limit,
-      'page': page,
-      if (from != null) 'from': from!.secondsSinceEpoch.toString(),
-      if (to != null) 'to': to!.secondsSinceEpoch.toString(),
-      'extended': extended ? '1' : '0',
-    });
+    Map<String, dynamic> rawResponse;
+
+    try {
+      rawResponse = await _doRequest('user.getRecentTracks', {
+        'user': username,
+        'limit': limit,
+        'page': page,
+        if (from != null) 'from': from!.secondsSinceEpoch.toString(),
+        if (to != null) 'to': to!.secondsSinceEpoch.toString(),
+        'extended': extended ? '1' : '0',
+      });
+    } on LException catch (e) {
+      if (e.code == 17) {
+        // "Login: User required to be logged in"
+        throw RecentListeningInformationHiddenException(username);
+      }
+      rethrow;
+    }
+
     return LRecentTracksResponseRecentTracks.fromJson(
         rawResponse['recenttracks']);
   }

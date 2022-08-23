@@ -167,3 +167,14 @@ class LException implements Exception {
   @override
   String toString() => 'Error $code: $message';
 }
+
+class RecentListeningInformationHiddenException implements Exception {
+  final String username;
+
+  const RecentListeningInformationHiddenException(this.username);
+
+  @override
+  String toString() =>
+      '$username has the "Hide recent listening information" privacy setting '
+      'enabled, so their scrobbles cannot be fetched.';
+}

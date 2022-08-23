@@ -60,6 +60,10 @@ class ErrorComponent extends StatelessWidget {
             'the error persists, try again later.';
         showSendFeedbackButton = false;
       }
+    } else if (error is RecentListeningInformationHiddenException) {
+      title = 'Listening history hidden';
+      icon = Icons.lock;
+      showSendFeedbackButton = false;
     }
 
     return ErrorComponent._(title, errorObject, stackTrace, detailObject, icon,
