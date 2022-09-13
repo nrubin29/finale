@@ -28,6 +28,7 @@ class FinaleTheme {
       primary: themeColor.color,
       secondary: themeColor.color,
       surface: themeColor.color,
+      onSurfaceVariant: Colors.white,
     );
 
     return ThemeData.from(colorScheme: colorScheme, useMaterial3: true)

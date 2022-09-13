@@ -4,15 +4,15 @@ publish_to: 'none'
 version: 3.1.2+35
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
-  flutter: ">=3.0.0 <4.0.0"
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: ">=3.3.1 <4.0.0"
 
 dependencies:
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.1
   charts_flutter: ^0.12.0
   collection: ^1.16.0
-  crypto: ^3.0.1
+  crypto: ^3.0.2
   datetime_picker_formfield: ^2.0.1
   flutter:
     sdk: flutter

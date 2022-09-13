@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';

@@ -63,7 +63,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   flutter_web_auth: ae2c29ca9b98c00b4e0e8c0919bb4a05d44b76df
-  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
+  FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   in_app_review: a850789fad746e89bce03d4aeee8078b45a53fd0
   package_info_plus_macos: f010621b07802a241d96d01876d6705f15e77c1c
