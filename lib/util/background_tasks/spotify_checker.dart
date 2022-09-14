@@ -10,16 +10,16 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
 
   @override
   Future<bool> get shouldRun async =>
-      Preferences.spotifyEnabled.value && Preferences.hasSpotifyAuthData
-      // TODO: && Preferences.spotifyCheckerEnabled.value
-      ;
+      Preferences.spotifyEnabled.value &&
+      Preferences.hasSpotifyAuthData &&
+      Preferences.spotifyCheckerEnabled.value;
 
   @override
   Future<void> setup() async {
     super.setup();
 
     Preferences.spotifyEnabled.changes.listen(_onSpotifyChange);
-    // TODO: Preferences.spotifyCheckerEnabled.changes.listen(_onSpotifyChange);
+    Preferences.spotifyCheckerEnabled.changes.listen(_onSpotifyChange);
   }
 
   @override

@@ -31,6 +31,9 @@ class Preferences {
   static final spotifyEnabled =
       Preference<bool, bool>('spotifyEnabled', defaultValue: true);
 
+  static final spotifyCheckerEnabled =
+      Preference<bool, bool>('isSpotifyCheckedEnabled', defaultValue: true);
+
   /// Returns true if Spotify auth data is saved.
   static bool get hasSpotifyAuthData =>
       spotifyAccessToken.hasValue &&
