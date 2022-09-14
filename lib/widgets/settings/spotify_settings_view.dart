@@ -104,7 +104,7 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
                 description: 'If enabled, Finale will periodically check in the '
                     'background to ensure that your Spotify listens are '
                     "being scrobbled. If not, you'll get a notification. "
-                    'Re-connecting your Spotify account often  fixes the '
+                    'Re-connecting your Spotify account usually fixes the '
                     'issue.',
                 icon: Icons.youtube_searched_for,
                 preference: Preferences.spotifyCheckerEnabled,
