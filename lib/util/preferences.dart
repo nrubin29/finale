@@ -88,7 +88,7 @@ class Preferences {
   }
 
   static final searchEngine = Preference.forEnum<SearchEngine>(
-    'searchEngine',
+    'searchEngine2',
     SearchEngine.values,
     defaultValue: SearchEngine.lastfm,
   );
