@@ -5,14 +5,12 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
-import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/settings/apple_music_settings_view.dart';
-import 'package:flutter/gestures.dart';
+import 'package:finale/widgets/settings/spotify_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:universal_io/io.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AccountsSettingsView extends StatefulWidget {
   @override
@@ -20,25 +18,16 @@ class AccountsSettingsView extends StatefulWidget {
 }
 
 class _AccountsSettingsViewState extends State<AccountsSettingsView> {
-  late bool _isSpotifyEnabled;
   late bool _isLibreEnabled;
 
   @override
   void initState() {
     super.initState();
-    _isSpotifyEnabled = Preferences.spotifyEnabled.value;
     _isLibreEnabled = Preferences.libreEnabled.value;
-  }
-
-  void _logOutSpotify() {
-    setState(() {
-      Preferences.clearSpotify();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       appBar: createAppBar('Accounts'),
       body: Column(
@@ -52,58 +41,19 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
               onChanged: (_) {},
             ),
           ),
-          CaptionedListTile.advanced(
-            title: Row(children: [
-              const Text('Spotify'),
-              if (_isSpotifyEnabled) ...[
-                const SizedBox(width: 20),
-                Preferences.hasSpotifyAuthData
-                    ? TextButton(
-                        onPressed: _logOutSpotify,
-                        child: const Text('Log Out'),
-                      )
-                    : TextButton(
-                        onPressed: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (context) => SpotifyDialog());
-                          setState(() {});
-                        },
-                        child: const Text('Log In'),
-                      ),
-              ],
-            ]),
+          CaptionedListTile(
+            title: 'Spotify',
             icon: SocialMediaIcons.spotify,
-            trailing: Switch(
-              value: _isSpotifyEnabled,
-              onChanged: (_) async {
-                _isSpotifyEnabled =
-                    (Preferences.spotifyEnabled.value = !_isSpotifyEnabled);
-
-                if (!_isSpotifyEnabled) {
-                  _logOutSpotify();
-                } else {
-                  setState(() {});
-                }
-              },
-            ),
-            caption: [
-              const TextSpan(
-                text: 'Sign in with your Spotify account to search and '
-                    "scrobble from Spotify's database. Finale does not "
-                    'automatically scrobble from Spotify, but you can connect '
-                    'your Spotify account to Last.fm ',
-              ),
-              TextSpan(
-                text: 'on the web',
-                style: TextStyle(color: theme.primaryColor),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    launchUrl(Uri.https('last.fm', 'settings/applications'));
-                  },
-              ),
-              const TextSpan(text: '.'),
-            ],
+            trailing: const Icon(Icons.chevron_right),
+            caption:
+                'Search and scrobble from the Spotify database and ensure that '
+                'your Spotify listens are being scrobbled.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SpotifySettingsView()),
+              );
+            },
           ),
           if (Platform.isIOS)
             CaptionedListTile(
