@@ -762,7 +762,7 @@ packages:
     source: hosted
     version: "2.0.12"
   shared_preferences_ios:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: shared_preferences_ios
       url: "https://pub.dartlang.org"

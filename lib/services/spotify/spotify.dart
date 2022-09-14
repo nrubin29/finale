@@ -14,6 +14,8 @@ import 'package:finale/util/preferences.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:pkce/pkce.dart';
 
+import 'recent_track.dart';
+
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
     'api.spotify.com',
     'v1/$method',
@@ -186,6 +188,12 @@ class Spotify {
         .toList(growable: false);
   }
 
+  static Future<List<SRecentTrack>> getRecentTracks({int limit = 20}) async {
+    final rawResponse =
+        await _doRequest('me/player/recently-played', {'limit': limit});
+    return SRecentTracksResponse.fromJson(rawResponse).items;
+  }
+
   static Future<bool> authenticate() async {
     final pkcePair = PkcePair.generate();
     final result = await FlutterWebAuth.authenticate(
@@ -206,6 +214,7 @@ class Spotify {
         'client_id': spotifyClientId,
         'response_type': 'code',
         'redirect_uri': authCallbackUrl,
+        'scope': 'user-read-recently-played',
         'code_challenge_method': 'S256',
         'code_challenge': pkcePair.codeChallenge,
       });

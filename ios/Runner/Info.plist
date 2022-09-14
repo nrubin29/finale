@@ -6,7 +6,8 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>workmanager.background.task</string>
+		<string>com.nrubintech.finale.BackgroundScrobbling</string>
+		<string>com.nrubintech.finale.SpotifyChecker</string>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>

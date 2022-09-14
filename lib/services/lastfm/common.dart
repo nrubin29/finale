@@ -15,6 +15,8 @@ int? intParseSafe(value) => value == null
 
 int parseInt(value) => intParseSafe(value) ?? 0;
 
+DateTime parseDateTime(String str) => DateTime.parse(str);
+
 DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
     DateTime.fromMillisecondsSinceEpoch(
         (timestamp is int ? timestamp : int.parse(timestamp)) * 1000);

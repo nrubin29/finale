@@ -21,12 +21,12 @@ class Preferences {
   static final key = Preference<String?, String>('key');
 
   static final spotifyAccessToken =
-      Preference<String?, String>('spotifyAccessToken');
+      Preference<String?, String>('spotifyAccessToken2');
 
   static final spotifyRefreshToken =
-      Preference<String?, String>('spotifyRefreshToken');
+      Preference<String?, String>('spotifyRefreshToken2');
 
-  static final spotifyExpiration = Preference.dateTime('spotifyExpiration');
+  static final spotifyExpiration = Preference.dateTime('spotifyExpiration2');
 
   static final spotifyEnabled =
       Preference<bool, bool>('spotifyEnabled', defaultValue: true);
