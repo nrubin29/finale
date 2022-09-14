@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:finale/services/spotify/spotify.dart';
+import 'package:finale/util/constants.dart';
+import 'package:finale/util/notifications.dart' as notifications;
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
-import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/settings/settings_list_tile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,7 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
                     Text(Preferences.hasSpotifyAuthData ? 'Log Out' : 'Log In'),
               ),
             ),
-            if (Preferences.hasSpotifyAuthData)
+            if (Preferences.hasSpotifyAuthData && isMobile)
               SettingsListTile(
                 title: 'Background Checker',
                 description: 'If enabled, Finale will periodically check in the '
@@ -107,6 +108,13 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
                     'issue.',
                 icon: Icons.youtube_searched_for,
                 preference: Preferences.spotifyCheckerEnabled,
+                beforeUpdate: (newValue) async {
+                  if (newValue) {
+                    return await notifications.requestPermission();
+                  }
+
+                  return true;
+                },
               ),
           ],
         ],

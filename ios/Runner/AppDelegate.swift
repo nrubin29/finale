@@ -18,6 +18,9 @@ import workmanager
     
     AppDelegate.backgroundTasks.forEach { WorkmanagerPlugin.registerTask(withIdentifier: "com.nrubintech.finale.\($0)") }
 
+    // For local notifications
+    UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

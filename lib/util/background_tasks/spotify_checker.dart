@@ -1,11 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/spotify.dart';
+import 'package:finale/util/notifications.dart';
 import 'package:finale/util/preferences.dart';
 
 import 'background_task.dart';
 
 class SpotifyCheckerBackgroundTask extends BackgroundTask {
+  static const _maxDelta = Duration(minutes: 15);
+
   const SpotifyCheckerBackgroundTask() : super('SpotifyChecker');
 
   @override
@@ -33,10 +36,10 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
 
     if (latestLastfmTrack != null && latestSpotifyTrack != null) {
       if (latestSpotifyTrack.playedAt.difference(latestLastfmTrack.date!) >
-          const Duration(minutes: 15)) {
-        print('Out of sync!');
+          _maxDelta) {
+        showNotification('Spotify Checker', 'Out of sync!');
       } else {
-        print('In sync');
+        showNotification('Spotify Checker', 'In sync!');
       }
     }
 

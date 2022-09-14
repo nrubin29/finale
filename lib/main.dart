@@ -1,8 +1,8 @@
 import 'package:finale/util/background_tasks/background_task_manager.dart'
     as background_task_manager;
-import 'package:finale/util/background_tasks/spotify_checker.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/image_id_cache.dart';
+import 'package:finale/util/notifications.dart' as notifications;
 import 'package:finale/util/preference.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/quick_actions_manager.dart';
@@ -18,14 +18,12 @@ Future<void> main() async {
 
   if (isMobile) {
     await QuickActionsManager().setup();
+    await background_task_manager.setup();
+    await notifications.setup();
   }
 
   if (!isWeb) {
     await ImageIdCache().setup();
-  }
-
-  if (isMobile) {
-    await background_task_manager.setup();
   }
 
   runApp(const MyApp());

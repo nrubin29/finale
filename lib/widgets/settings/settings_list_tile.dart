@@ -8,12 +8,23 @@ class SettingsListTile extends StatelessWidget {
   final IconData icon;
   final Preference<bool, bool> preference;
 
+  /// Called before a new value is set.
+  ///
+  /// If this function resolves to `false`, the new value is not set.
+  final Future<bool> Function(bool newValue)? beforeUpdate;
+
   const SettingsListTile({
     required this.title,
     this.description,
     required this.icon,
     required this.preference,
+    this.beforeUpdate,
   });
+
+  Future<void> _updateValue(bool newValue) async {
+    if (beforeUpdate != null && !await beforeUpdate!(newValue)) return;
+    preference.value = newValue;
+  }
 
   @override
   Widget build(BuildContext context) => StreamBuilder<bool>(
@@ -25,12 +36,10 @@ class SettingsListTile extends StatelessWidget {
           icon: icon,
           trailing: Switch(
             value: snapshot.data!,
-            onChanged: (value) {
-              preference.value = value;
-            },
+            onChanged: _updateValue,
           ),
           onTap: () {
-            preference.value = !snapshot.data!;
+            _updateValue(!snapshot.data!);
           },
         ),
       );
