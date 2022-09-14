@@ -43,6 +43,8 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
       }
     }
 
+    await register(initialDelay: const Duration(hours: 3));
+
     return true;
   }
 
