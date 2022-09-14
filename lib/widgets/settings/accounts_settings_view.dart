@@ -122,9 +122,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
           CaptionedListTile(
             title: 'Libre.fm',
             icon: Icons.rss_feed,
-            caption:
-                'Sign in with your Libre.fm account to send all scrobbles to '
-                'Libre.fm in addition to Last.fm.',
+            caption: 'Send all scrobbles to Libre.fm in addition to Last.fm.',
             trailing: Switch(
               value: _isLibreEnabled,
               onChanged: (value) async {
