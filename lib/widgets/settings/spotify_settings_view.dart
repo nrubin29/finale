@@ -58,11 +58,12 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: RichText(
               text: TextSpan(
                 children: [
-                  const TextSpan(
+                  TextSpan(
+                    style: theme.textTheme.bodyMedium,
                     text: 'Sign in with your Spotify account to search and '
                         "scrobble from Spotify's database. Finale does not "
                         'automatically scrobble from Spotify, but you can '
@@ -70,14 +71,18 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
                   ),
                   TextSpan(
                     text: 'on the web',
-                    style: TextStyle(color: theme.primaryColor),
+                    style: theme.textTheme.bodyMedium
+                        ?.copyWith(color: theme.primaryColor),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         launchUrl(
                             Uri.https('last.fm', 'settings/applications'));
                       },
                   ),
-                  const TextSpan(text: '.'),
+                  TextSpan(
+                    style: theme.textTheme.bodyMedium,
+                    text: '.',
+                  ),
                 ],
               ),
             ),
@@ -101,7 +106,8 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
             if (Preferences.hasSpotifyAuthData && isMobile)
               SettingsListTile(
                 title: 'Background Checker',
-                description: 'If enabled, Finale will periodically check in the '
+                description:
+                    'If enabled, Finale will periodically check in the '
                     'background to ensure that your Spotify listens are '
                     "being scrobbled. If not, you'll get a notification. "
                     'Re-connecting your Spotify account usually fixes the '
