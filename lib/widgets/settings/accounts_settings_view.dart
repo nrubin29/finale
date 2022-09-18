@@ -45,9 +45,9 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
             title: 'Spotify',
             icon: SocialMediaIcons.spotify,
             trailing: const Icon(Icons.chevron_right),
-            caption:
-                'Search and scrobble from the Spotify database and ensure that '
-                'your Spotify listens are being scrobbled.',
+            caption: "Search and scrobble from Spotify's database"
+                '${isMobile ? ' and ensure that your Spotify listens are being '
+                    'scrobbled' : ''}.',
             onTap: () {
               Navigator.push(
                 context,
