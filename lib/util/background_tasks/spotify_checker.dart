@@ -34,13 +34,11 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
     final latestSpotifyTrack =
         (await Spotify.getRecentTracks(limit: 1)).lastOrNull;
 
-    if (latestLastfmTrack != null && latestSpotifyTrack != null) {
-      if (latestSpotifyTrack.playedAt.difference(latestLastfmTrack.date!) >
-          _maxDelta) {
-        showNotification('Spotify Checker', 'Out of sync!');
-      } else {
-        showNotification('Spotify Checker', 'In sync!');
-      }
+    if (latestLastfmTrack != null &&
+        latestSpotifyTrack != null &&
+        latestSpotifyTrack.playedAt.difference(latestLastfmTrack.date!) >
+            _maxDelta) {
+      showNotification(NotificationType.spotifyCheckerOutOfSync);
     }
 
     await register(initialDelay: const Duration(hours: 3));

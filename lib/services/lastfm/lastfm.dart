@@ -343,6 +343,9 @@ class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
 }
 
 class Lastfm {
+  static final applicationSettingsUri =
+      Uri.https('last.fm', 'settings/applications');
+
   static Future<LAuthenticationResponseSession> authenticate(String token,
       {bool libre = false}) async {
     final rawResponse = await _doRequest('auth.getSession', {'token': token},

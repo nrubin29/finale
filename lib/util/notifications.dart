@@ -1,11 +1,31 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:universal_io/io.dart';
+
+import 'time_safe_stream.dart';
+
+enum NotificationType {
+  spotifyCheckerOutOfSync(
+      'Spotify Checker', 'Spotify is not sending scrobbles to Last.fm!');
+
+  final String title;
+  final String body;
+
+  const NotificationType(this.title, this.body);
+}
+
+// This stream needs to be open for the entire lifetime of the app.
+// ignore: close_sinks
+final _notifications = ReplaySubject<Timestamped<NotificationType>>();
+
+/// A stream of notifications that should be handled.
+Stream<NotificationType> get notificationsStream =>
+    _notifications.timeSafeStream();
 
 Future<void> setup() async {
   const initializationSettings = InitializationSettings(
-    android: AndroidInitializationSettings('app_icon'),
-    iOS: IOSInitializationSettings(
+    android: AndroidInitializationSettings('@drawable/music_note'),
+    iOS: DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
@@ -14,11 +34,8 @@ Future<void> setup() async {
 
   await FlutterLocalNotificationsPlugin().initialize(
     initializationSettings,
-    onSelectNotification: (payload) async {
-      if (kDebugMode) {
-        print(payload);
-      }
-    },
+    onDidReceiveNotificationResponse: didReceiveNotification,
+    onDidReceiveBackgroundNotificationResponse: didReceiveNotification,
   );
 }
 
@@ -40,6 +57,17 @@ Future<bool> requestPermission() async {
   return false;
 }
 
-Future<void> showNotification(String title, String body) async {
-  await FlutterLocalNotificationsPlugin().show(0, title, body, null);
+Future<void> showNotification(NotificationType type) async {
+  await FlutterLocalNotificationsPlugin().show(
+    type.index,
+    type.title,
+    type.body,
+    NotificationDetails(
+        android: AndroidNotificationDetails(type.name, type.name)),
+  );
+}
+
+@pragma('vm:entry-point')
+void didReceiveNotification(NotificationResponse details) {
+  _notifications.addTimestamped(NotificationType.values[details.id!]);
 }

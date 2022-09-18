@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/notifications.dart' as notifications;
@@ -75,8 +76,7 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
                         ?.copyWith(color: theme.primaryColor),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        launchUrl(
-                            Uri.https('last.fm', 'settings/applications'));
+                        launchUrl(Lastfm.applicationSettingsUri);
                       },
                   ),
                   TextSpan(

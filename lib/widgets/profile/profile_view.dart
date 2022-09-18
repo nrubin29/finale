@@ -6,6 +6,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/constants.dart';
+import 'package:finale/util/notifications.dart' as notifications;
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/profile_tab.dart';
 import 'package:finale/util/quick_actions_manager.dart';
@@ -27,6 +28,7 @@ import 'package:finale/widgets/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileView extends StatefulWidget {
   final String username;
@@ -47,6 +49,7 @@ class _ProfileViewState extends State<ProfileView>
   final _recentScrobblesKey = GlobalKey<EntityDisplayState>();
   late final StreamSubscription _profileTabsOrderSubscription;
   StreamSubscription? _quickActionsSubscription;
+  StreamSubscription? _notificationsSubscription;
 
   late ProfileStack _profileStack;
 
@@ -88,6 +91,14 @@ class _ProfileViewState extends State<ProfileView>
               _tabController!.index = index;
             });
           }
+        }
+      });
+
+      _notificationsSubscription =
+          notifications.notificationsStream.listen((notification) {
+        if (notification ==
+            notifications.NotificationType.spotifyCheckerOutOfSync) {
+          launchUrl(Lastfm.applicationSettingsUri);
         }
       });
     }
@@ -259,6 +270,7 @@ class _ProfileViewState extends State<ProfileView>
     _tabController?.dispose();
     _profileTabsOrderSubscription.cancel();
     _quickActionsSubscription?.cancel();
+    _notificationsSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     _profileStack.pop();
     super.dispose();

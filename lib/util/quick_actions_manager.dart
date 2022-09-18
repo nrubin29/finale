@@ -4,10 +4,11 @@ import 'package:quick_actions/quick_actions.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uni_links/uni_links.dart';
 
+import 'time_safe_stream.dart';
+
 class QuickAction {
   final QuickActionType type;
   final dynamic value;
-  final timestamp = DateTime.now();
 
   QuickAction.scrobbleOnce()
       : type = QuickActionType.scrobbleOnce,
@@ -52,18 +53,10 @@ class QuickActionsManager {
 
   // This stream needs to be open for the entire lifetime of the app.
   // ignore: close_sinks
-  final _quickActions = ReplaySubject<QuickAction>();
+  final _quickActions = ReplaySubject<Timestamped<QuickAction>>();
 
-  /// A stream of [QuickAction]s.
-  ///
-  /// This stream will emit all recent [QuickAction]s to every subscriber. This
-  /// deals with the issue where a [QuickAction] may be emitted before the
-  /// subscriber is ready to handle it as well as the issue where a subscriber
-  /// may receive [QuickAction]s that have already been handled.
-  Stream<QuickAction> get quickActionStream =>
-      _quickActions.where((action) =>
-          DateTime.now().difference(action.timestamp) <
-          const Duration(seconds: 1));
+  /// A stream of [QuickAction]s that should be handled.
+  Stream<QuickAction> get quickActionStream => _quickActions.timeSafeStream();
 
   Future<void> setup() async {
     const quickActions = QuickActions();
@@ -99,22 +92,23 @@ class QuickActionsManager {
     if (uri == null) {
       return;
     } else if (uri.host == 'scrobbleonce') {
-      _quickActions.add(QuickAction.scrobbleOnce());
+      _quickActions.addTimestamped(QuickAction.scrobbleOnce());
     } else if (uri.host == 'scrobblecontinuously') {
-      _quickActions.add(QuickAction.scrobbleContinuously());
+      _quickActions.addTimestamped(QuickAction.scrobbleContinuously());
     } else if (uri.host == 'album') {
       final name = uri.queryParameters['name']!;
       final artist = uri.queryParameters['artist']!;
-      _quickActions.add(QuickAction.viewAlbum(
+      _quickActions.addTimestamped(QuickAction.viewAlbum(
           ConcreteBasicAlbum(name, ConcreteBasicArtist(artist))));
     } else if (uri.host == 'artist') {
       final name = uri.queryParameters['name']!;
-      _quickActions.add(QuickAction.viewArtist(ConcreteBasicArtist(name)));
+      _quickActions
+          .addTimestamped(QuickAction.viewArtist(ConcreteBasicArtist(name)));
     } else if (uri.host == 'track') {
       final name = uri.queryParameters['name']!;
       final artist = uri.queryParameters['artist']!;
-      _quickActions
-          .add(QuickAction.viewTrack(BasicConcreteTrack(name, artist, null)));
+      _quickActions.addTimestamped(
+          QuickAction.viewTrack(BasicConcreteTrack(name, artist, null)));
     } else if (uri.host == 'profiletab') {
       final tabString = uri.queryParameters['tab'];
       ProfileTab tab;
@@ -136,7 +130,7 @@ class QuickActionsManager {
           throw ArgumentError.value(tabString, 'tab', 'Unknown tab');
       }
 
-      _quickActions.add(QuickAction.viewTab(tab));
+      _quickActions.addTimestamped(QuickAction.viewTab(tab));
     }
   }
 }
