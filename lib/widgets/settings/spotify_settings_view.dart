@@ -91,6 +91,13 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
             title: 'Enabled',
             icon: SocialMediaIcons.spotify,
             preference: Preferences.spotifyEnabled,
+            afterUpdate: (newValue) {
+              if (!newValue) {
+                setState(() {
+                  Preferences.clearSpotify();
+                });
+              }
+            },
           ),
           if (_isSpotifyEnabled) ...[
             ListTile(

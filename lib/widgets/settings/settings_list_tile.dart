@@ -13,17 +13,22 @@ class SettingsListTile extends StatelessWidget {
   /// If this function resolves to `false`, the new value is not set.
   final Future<bool> Function(bool newValue)? beforeUpdate;
 
+  /// Called after a new value is set.
+  final void Function(bool newValue)? afterUpdate;
+
   const SettingsListTile({
     required this.title,
     this.description,
     required this.icon,
     required this.preference,
     this.beforeUpdate,
+    this.afterUpdate,
   });
 
   Future<void> _updateValue(bool newValue) async {
     if (beforeUpdate != null && !await beforeUpdate!(newValue)) return;
     preference.value = newValue;
+    afterUpdate?.call(newValue);
   }
 
   @override
