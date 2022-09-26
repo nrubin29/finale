@@ -6,7 +6,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/constants.dart';
-import 'package:finale/util/external_actions.dart';
+import 'package:finale/util/external_actions/external_actions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/profile_tab.dart';
 import 'package:finale/widgets/base/app_bar.dart';

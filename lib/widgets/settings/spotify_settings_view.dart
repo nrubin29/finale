@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/constants.dart';
-import 'package:finale/util/notifications.dart' as notifications;
+import 'package:finale/util/external_actions/notifications.dart' as notifications;
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';

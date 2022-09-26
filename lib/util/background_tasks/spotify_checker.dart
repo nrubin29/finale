@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/spotify.dart';
-import 'package:finale/util/notifications.dart';
+import 'package:finale/util/external_actions/notifications.dart';
 import 'package:finale/util/preferences.dart';
 
 import 'background_task.dart';

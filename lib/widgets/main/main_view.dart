@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/constants.dart';
-import 'package:finale/util/external_actions.dart';
+import 'package:finale/util/external_actions/external_actions.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';

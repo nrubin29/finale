@@ -1,4 +1,4 @@
-import 'package:finale/util/external_actions.dart';
+import 'package:finale/util/external_actions/external_actions.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:universal_io/io.dart';
 

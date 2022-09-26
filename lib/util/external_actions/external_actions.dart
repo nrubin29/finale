@@ -1,8 +1,8 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/profile_tab.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'profile_tab.dart';
 import 'time_safe_stream.dart';
 
 /// An action taken outside of the app that causes the app to open.

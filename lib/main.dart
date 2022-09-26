@@ -1,12 +1,12 @@
 import 'package:finale/util/background_tasks/background_task_manager.dart'
     as background_task_manager;
 import 'package:finale/util/constants.dart';
+import 'package:finale/util/external_actions/notifications.dart' as notifications;
+import 'package:finale/util/external_actions/quick_actions_manager.dart'
+    as quick_actions_manager;
 import 'package:finale/util/image_id_cache.dart';
-import 'package:finale/util/notifications.dart' as notifications;
 import 'package:finale/util/preference.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/quick_actions_manager.dart'
-    as quick_actions_manager;
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/main/login_view.dart';

@@ -2,11 +2,11 @@
 /// [ExternalAction]s.
 
 import 'package:finale/services/generic.dart';
-import 'package:finale/util/external_actions.dart';
+import 'package:finale/util/external_actions/external_actions.dart';
+import 'package:finale/util/profile_tab.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:uni_links/uni_links.dart';
 
-import 'profile_tab.dart';
 import 'time_safe_stream.dart';
 
 Future<void> setup() async {
