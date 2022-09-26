@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/constants.dart';
-import 'package:finale/util/quick_actions_manager.dart';
+import 'package:finale/util/external_actions.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
@@ -28,32 +28,32 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
-    _subscription = QuickActionsManager().quickActionStream.listen((action) {
-      if (action.type == QuickActionType.scrobbleOnce ||
-          action.type == QuickActionType.scrobbleContinuously) {
+    _subscription = externalActionsStream.listen((action) {
+      if (action.type == ExternalActionType.scrobbleOnce ||
+          action.type == ExternalActionType.scrobbleContinuously) {
         setState(() {
           Navigator.popUntil(context, (route) => route.isFirst);
           _index = 2;
         });
-      } else if (action.type == QuickActionType.viewAlbum) {
+      } else if (action.type == ExternalActionType.viewAlbum) {
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (_) => AlbumView(album: action.value as BasicAlbum)),
         );
-      } else if (action.type == QuickActionType.viewArtist) {
+      } else if (action.type == ExternalActionType.viewArtist) {
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (_) => ArtistView(artist: action.value as BasicArtist)),
         );
-      } else if (action.type == QuickActionType.viewTrack) {
+      } else if (action.type == ExternalActionType.viewTrack) {
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (_) => TrackView(track: action.value as Track)),
         );
-      } else if (action.type == QuickActionType.viewTab) {
+      } else if (action.type == ExternalActionType.viewTab) {
         setState(() {
           Navigator.popUntil(context, (route) => route.isFirst);
           _index = 0;

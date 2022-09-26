@@ -6,10 +6,9 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/constants.dart';
-import 'package:finale/util/notifications.dart' as notifications;
+import 'package:finale/util/external_actions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/profile_tab.dart';
-import 'package:finale/util/quick_actions_manager.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
@@ -48,8 +47,7 @@ class _ProfileViewState extends State<ProfileView>
 
   final _recentScrobblesKey = GlobalKey<EntityDisplayState>();
   late final StreamSubscription _profileTabsOrderSubscription;
-  StreamSubscription? _quickActionsSubscription;
-  StreamSubscription? _notificationsSubscription;
+  StreamSubscription? _externalActionsSubscription;
 
   late ProfileStack _profileStack;
 
@@ -79,10 +77,10 @@ class _ProfileViewState extends State<ProfileView>
     _createTabController();
 
     if (widget.isTab) {
-      _quickActionsSubscription =
-          QuickActionsManager().quickActionStream.listen((action) async {
+      _externalActionsSubscription =
+          externalActionsStream.listen((action) async {
         await Future.delayed(const Duration(milliseconds: 250));
-        if (action.type == QuickActionType.viewTab) {
+        if (action.type == ExternalActionType.viewTab) {
           final tab = action.value as ProfileTab;
           final index = _tabOrder.indexOf(tab);
 
@@ -91,13 +89,7 @@ class _ProfileViewState extends State<ProfileView>
               _tabController!.index = index;
             });
           }
-        }
-      });
-
-      _notificationsSubscription =
-          notifications.notificationsStream.listen((notification) {
-        if (notification ==
-            notifications.NotificationType.spotifyCheckerOutOfSync) {
+        } else if (action.type == ExternalActionType.openSpotifyChecker) {
           launchUrl(Lastfm.applicationSettingsUri);
         }
       });
@@ -269,8 +261,7 @@ class _ProfileViewState extends State<ProfileView>
   void dispose() {
     _tabController?.dispose();
     _profileTabsOrderSubscription.cancel();
-    _quickActionsSubscription?.cancel();
-    _notificationsSubscription?.cancel();
+    _externalActionsSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     _profileStack.pop();
     super.dispose();

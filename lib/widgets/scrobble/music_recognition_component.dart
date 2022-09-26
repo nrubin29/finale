@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finale/env.dart';
 import 'package:finale/util/constants.dart';
-import 'package:finale/util/quick_actions_manager.dart';
+import 'package:finale/util/external_actions.dart';
 import 'package:finale/widgets/base/titled_box.dart';
 import 'package:finale/widgets/scrobble/acrcloud_dialog.dart';
 import 'package:finale/widgets/scrobble/listen_continuously_view.dart';
@@ -27,12 +27,11 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
   void initState() {
     super.initState();
 
-    _subscription =
-        QuickActionsManager().quickActionStream.listen((action) async {
+    _subscription = externalActionsStream.listen((action) async {
       await Future.delayed(const Duration(milliseconds: 250));
-      if (action.type == QuickActionType.scrobbleOnce) {
+      if (action.type == ExternalActionType.scrobbleOnce) {
         _scrobbleOnce();
-      } else if (action.type == QuickActionType.scrobbleContinuously) {
+      } else if (action.type == ExternalActionType.scrobbleContinuously) {
         _scrobbleContinuously();
       }
     });

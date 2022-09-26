@@ -5,7 +5,8 @@ import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/util/notifications.dart' as notifications;
 import 'package:finale/util/preference.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:finale/util/quick_actions_manager.dart';
+import 'package:finale/util/quick_actions_manager.dart'
+    as quick_actions_manager;
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/main/login_view.dart';
@@ -17,7 +18,7 @@ Future<void> main() async {
   await Preference.setup();
 
   if (isMobile) {
-    await QuickActionsManager().setup();
+    await quick_actions_manager.setup();
     await background_task_manager.setup();
     await notifications.setup();
   }

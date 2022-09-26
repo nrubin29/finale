@@ -1,26 +1,21 @@
+import 'package:finale/util/external_actions.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:universal_io/io.dart';
 
 import 'time_safe_stream.dart';
 
 enum NotificationType {
   spotifyCheckerOutOfSync(
-      'Spotify Checker', 'Spotify is not sending scrobbles to Last.fm!');
+      'Spotify Checker',
+      'Spotify is not sending scrobbles to Last.fm!',
+      ExternalAction.openSpotifyChecker);
 
   final String title;
   final String body;
+  final ExternalAction Function() externalActionFactory;
 
-  const NotificationType(this.title, this.body);
+  const NotificationType(this.title, this.body, this.externalActionFactory);
 }
-
-// This stream needs to be open for the entire lifetime of the app.
-// ignore: close_sinks
-final _notifications = ReplaySubject<Timestamped<NotificationType>>();
-
-/// A stream of notifications that should be handled.
-Stream<NotificationType> get notificationsStream =>
-    _notifications.timeSafeStream();
 
 Future<void> setup() async {
   const initializationSettings = InitializationSettings(
@@ -69,5 +64,6 @@ Future<void> showNotification(NotificationType type) async {
 
 @pragma('vm:entry-point')
 void didReceiveNotification(NotificationResponse details) {
-  _notifications.addTimestamped(NotificationType.values[details.id!]);
+  externalActions.addTimestamped(
+      NotificationType.values[details.id!].externalActionFactory());
 }
