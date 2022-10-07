@@ -79,6 +79,9 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
               isThreeLine: true,
               trailing: IconButton(
                 icon: const Icon(Icons.info),
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.grey
+                    : null,
                 onPressed: () {
                   launchUrl(Uri.https('aha-music.com', track.acrId,
                       {'utm_source': 'finale', 'utm_medium': 'app'}));
