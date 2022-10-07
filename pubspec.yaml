@@ -5,7 +5,7 @@ version: 3.2.0+36
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
-  flutter: ">=3.3.1 <4.0.0"
+  flutter: ">=3.3.4 <4.0.0"
 
 dependencies:
   auto_size_text: ^3.0.0
@@ -18,7 +18,7 @@ dependencies:
     sdk: flutter
   flutter_acrcloud: ^0.1.6
   flutter_cache_manager: ^3.3.0
-  flutter_local_notifications: ^11.0.0
+  flutter_local_notifications: ^12.0.0
   flutter_mpmediaplayer: ^0.1.2
   flutter_web_auth: ^0.4.1
   gallery_saver: ^2.3.2
@@ -26,7 +26,7 @@ dependencies:
   http: ^0.13.5
   in_app_review: ^2.0.4
   intl: ^0.17.0
-  json_annotation: ^4.6.0
+  json_annotation: ^4.7.0
   modal_bottom_sheet: ^2.1.2
   package_info_plus: ^1.4.3+1
   path_provider: ^2.0.11
@@ -35,13 +35,13 @@ dependencies:
   quick_actions: ^1.0.0
   rxdart: ^0.27.5
   screenshot: ^1.2.3
-  share_plus: ^4.1.0
+  share_plus: ^4.5.2
   shared_preferences: ^2.0.15
-  sqflite: ^2.0.3+1
+  sqflite: ^2.1.0+1
   uni_links: ^0.5.1
   universal_html: ^2.0.8
   universal_io: ^2.0.4
-  url_launcher: ^6.1.5
+  url_launcher: ^6.1.6
   visibility_detector: ^0.3.3
   wakelock: ^0.6.2
   workmanager: ^0.5.0
@@ -55,7 +55,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  json_serializable: ^6.3.2
+  json_serializable: ^6.4.1
 
 flutter:
   uses-material-design: true
