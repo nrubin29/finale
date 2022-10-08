@@ -123,6 +123,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
       Duration(milliseconds: Duration.millisecondsPerSecond ~/ 2);
 
   final _textController = TextEditingController();
+  final _textFieldFocusNode = FocusNode();
   late TabController _tabController;
   final _query = ReplaySubject<SearchQuery>(maxSize: 2)
     ..add(SearchQuery.empty(Preferences.searchEngine.value));
@@ -273,6 +274,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               Expanded(
                 child: TextField(
                   controller: _textController,
+                  focusNode: _textFieldFocusNode,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     hintText: 'Search',
@@ -302,6 +304,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                   setState(() {
                     _textController.value = TextEditingValue.empty;
                     _query.add(_currentQuery.copyWith(text: ''));
+                    _textFieldFocusNode.requestFocus();
                   });
                 },
               ),
@@ -396,6 +399,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   @override
   void dispose() {
     _textController.dispose();
+    _textFieldFocusNode.dispose();
     _query.close();
     super.dispose();
   }
