@@ -34,6 +34,8 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
   var _isTracksExpanded = false;
   late List<ScrobbleableTrack> _selection;
 
+  var _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -69,7 +71,16 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
       }
     }
 
+    setState(() {
+      _isLoading = true;
+    });
+
     final response = await Lastfm.scrobble(tracks, timestamps);
+
+    setState(() {
+      _isLoading = false;
+    });
+
     Navigator.pop(context, response.ignored == 0);
   }
 
@@ -80,11 +91,13 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
         'Scrobble',
         actions: [
           Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(scrobbleIcon),
-              onPressed:
-                  _selection.isNotEmpty ? () => _scrobble(context) : null,
-            ),
+            builder: (context) => _isLoading
+                ? const AppBarLoadingIndicator()
+                : IconButton(
+                    icon: const Icon(scrobbleIcon),
+                    onPressed:
+                        _selection.isNotEmpty ? () => _scrobble(context) : null,
+                  ),
           )
         ],
       ),

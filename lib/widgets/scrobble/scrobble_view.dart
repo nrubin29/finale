@@ -37,6 +37,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   var _useCustomTimestamp = false;
   DateTime? _customTimestamp;
 
+  var _isLoading = false;
+
   late StreamSubscription _showAlbumArtistFieldSubscription;
   StreamSubscription? _appleMusicChangeSubscription;
   late bool _showAlbumArtistField;
@@ -79,12 +81,20 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   }
 
   Future<void> _scrobble(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final response = await Lastfm.scrobble([
       BasicConcreteTrack(_trackController.text, _artistController.text,
           _albumController.text, _albumArtistController.text),
     ], [
       _useCustomTimestamp ? _customTimestamp! : DateTime.now()
     ]);
+
+    setState(() {
+      _isLoading = false;
+    });
 
     if (widget.isModal) {
       Navigator.pop(context, response.ignored == 0);
@@ -115,14 +125,16 @@ class _ScrobbleViewState extends State<ScrobbleView> {
         'Scrobble',
         actions: [
           Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(scrobbleIcon),
-              onPressed: () {
-                if (_formKey.currentState?.validate() ?? false) {
-                  _scrobble(context);
-                }
-              },
-            ),
+            builder: (context) => _isLoading
+                ? const AppBarLoadingIndicator()
+                : IconButton(
+                    icon: const Icon(scrobbleIcon),
+                    onPressed: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        _scrobble(context);
+                      }
+                    },
+                  ),
           ),
         ],
       ),

@@ -64,3 +64,23 @@ AppBar createAppBar(String title,
       actions: actions,
       bottom: bottom,
     );
+
+/// A [CircularProgressIndicator] that fits nicely in [AppBar.actions].
+class AppBarLoadingIndicator extends StatelessWidget {
+  const AppBarLoadingIndicator();
+
+  @override
+  Widget build(BuildContext context) => const TextButton(
+        onPressed: null,
+        child: Center(
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              color: Colors.white,
+              strokeWidth: 3,
+            ),
+          ),
+        ),
+      );
+}
