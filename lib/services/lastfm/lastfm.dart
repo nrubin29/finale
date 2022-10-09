@@ -89,6 +89,7 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
         if (from != null) 'from': from!.secondsSinceEpoch.toString(),
         if (to != null) 'to': to!.secondsSinceEpoch.toString(),
         'extended': extended ? '1' : '0',
+        'sk': Preferences.key.value,
       });
     } on LException catch (e) {
       if (e.code == 17) {
