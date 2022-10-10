@@ -110,13 +110,14 @@ class _CollageViewState extends State<CollageView> {
 
     try {
       items = await request.getData(_numItemsToLoad, 1);
-    } on LException catch (e) {
+    } on Exception catch (e, st) {
       setState(() {
         _isSettingsExpanded = true;
         _isDoingRequest = false;
       });
 
-      showLExceptionDialog(context, error: e, username: username);
+      showExceptionDialog(context,
+          error: e, stackTrace: st, detailObject: username);
       return;
     }
 

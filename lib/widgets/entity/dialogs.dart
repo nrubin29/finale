@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/util/error_details.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showNoEntityTypePeriodDialog(BuildContext context,
@@ -13,26 +13,37 @@ Future<void> showNoEntityTypePeriodDialog(BuildContext context,
       ),
     );
 
-Future<void> showLExceptionDialog(BuildContext context,
-        {required LException error, required String username}) =>
-    showDialog(
-      context: context,
-      builder: (_) => _MessageDialog(
-          title: error.message == 'User not found' ? 'User not found' : 'Error',
-          content: error.message == 'User not found'
-              ? 'User $username does not exist.'
-              : error.message),
-    );
+Future<void> showExceptionDialog(BuildContext context,
+    {required Exception error,
+    required StackTrace stackTrace,
+    Object? detailObject}) {
+  final details = ErrorDetails(
+      error: error, stackTrace: stackTrace, detailObject: detailObject);
+  return showDialog(
+    context: context,
+    builder: (_) => _MessageDialog(
+      title: details.title,
+      content: '${details.error}',
+      icon: details.icon,
+    ),
+  );
+}
 
 class _MessageDialog extends StatelessWidget {
   final String title;
   final String content;
+  final IconData icon;
 
-  const _MessageDialog({required this.title, required this.content});
+  const _MessageDialog(
+      {required this.title, required this.content, this.icon = Icons.error});
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: Text(title),
+        title: Row(children: [
+          Icon(icon),
+          const SizedBox(width: 10),
+          Text(title),
+        ]),
         content: Text(content),
         actions: [
           TextButton(

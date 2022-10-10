@@ -54,11 +54,12 @@ class _LuckyViewState extends State<LuckyView> {
     int numItems;
     try {
       numItems = await request.getNumItems();
-    } on LException catch (e) {
-      if (e.message == 'no such page') {
+    } on Exception catch (e, st) {
+      if (e is LException && e.message == 'no such page') {
         numItems = 0;
       } else {
-        showLExceptionDialog(context, error: e, username: username);
+        showExceptionDialog(context,
+            error: e, stackTrace: st, detailObject: username);
         return false;
       }
     }
