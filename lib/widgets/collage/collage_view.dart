@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/constants.dart';
@@ -429,13 +428,24 @@ class _CollageViewState extends State<CollageView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 if (!isWeb)
-                                  OutlinedButton(
-                                    onPressed: () async {
-                                      final tempFile = await _imageFile;
-                                      await Share.shareFiles([tempFile.path]);
-                                    },
-                                    child: const Text('Share'),
-                                  ),
+                                  Builder(
+                                      builder: (context) => OutlinedButton(
+                                            onPressed: () async {
+                                              final box =
+                                                  context.findRenderObject()
+                                                      as RenderBox;
+                                              final position =
+                                                  box.localToGlobal(
+                                                          Offset.zero) &
+                                                      box.size;
+
+                                              final tempFile = await _imageFile;
+                                              await Share.shareFiles([
+                                                tempFile.path
+                                              ], sharePositionOrigin: position);
+                                            },
+                                            child: const Text('Share'),
+                                          )),
                                 // Both buttons are visible only on mobile.
                                 if (isMobile) const SizedBox(width: 10),
                                 if (!isDesktop)
