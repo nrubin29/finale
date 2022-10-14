@@ -25,7 +25,7 @@ class SpotifyAlbumView extends StatelessWidget {
               subtitle: album.artist.name,
               backgroundColor: spotifyGreen,
               actions: [
-                if (album.canScrobble) ScrobbleButton(entity: album),
+                ScrobbleButton(entity: album),
               ],
             ),
             body: TwoUp(

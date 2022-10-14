@@ -229,7 +229,7 @@ class ConcreteBasicAlbum extends BasicAlbum {
 mixin HasTracks on Entity {
   List<ScrobbleableTrack> get tracks;
 
-  bool get canScrobble =>
+  bool get hasTrackDurations =>
       tracks.every((track) => track.duration != null && track.duration! > 0);
 }
 

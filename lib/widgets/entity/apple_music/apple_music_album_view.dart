@@ -27,7 +27,7 @@ class AppleMusicAlbumView extends StatelessWidget {
           subtitle: album.artist.name,
           backgroundColor: appleMusicPink,
           actions: [
-            if (album.canScrobble) ScrobbleButton(entity: album),
+            ScrobbleButton(entity: album),
           ],
         ),
         body: TwoUp(

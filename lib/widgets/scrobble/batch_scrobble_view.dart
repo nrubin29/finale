@@ -21,17 +21,19 @@ enum ScrobbleTimestampBehavior {
 class BatchScrobbleView extends StatefulWidget {
   final HasTracks entity;
 
-  BatchScrobbleView({required this.entity}) : assert(entity.canScrobble);
+  const BatchScrobbleView({required this.entity});
 
   @override
   State<StatefulWidget> createState() => _BatchScrobbleViewState();
 }
 
 class _BatchScrobbleViewState extends State<BatchScrobbleView> {
+  static const _defaultDuration = 60 * 3;
+
   var _behavior = ScrobbleTimestampBehavior.startingNow;
   DateTime? _customTimestamp;
 
-  var _isTracksExpanded = false;
+  late bool _isTracksExpanded;
   late List<ScrobbleableTrack> _selection;
 
   var _isLoading = false;
@@ -39,6 +41,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
   @override
   void initState() {
     super.initState();
+    _isTracksExpanded = !widget.entity.hasTrackDurations;
     _selection = widget.entity.tracks;
   }
 
@@ -55,7 +58,8 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
       ];
 
       for (var track in tracks) {
-        timestamps.add(timestamps.last.add(Duration(seconds: track.duration!)));
+        timestamps.add(timestamps.last
+            .add(Duration(seconds: track.duration ?? _defaultDuration)));
       }
     } else {
       timestamps = [
@@ -66,8 +70,8 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
 
       tracks = tracks.reversed.toList(growable: false);
       for (var track in tracks) {
-        timestamps
-            .add(timestamps.last.subtract(Duration(seconds: track.duration!)));
+        timestamps.add(timestamps.last
+            .subtract(Duration(seconds: track.duration ?? _defaultDuration)));
       }
     }
 
@@ -115,7 +119,34 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     : null,
                 trailing: Text(pluralize(_selection.length, 'track')),
               ),
-              const SizedBox(height: 16),
+              if (widget.entity.hasTrackDurations)
+                const SizedBox(height: 16)
+              else ...[
+                Card(
+                  margin: const EdgeInsets.all(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: RichText(
+                      text: const TextSpan(children: [
+                        TextSpan(text: 'Tracks marked with '),
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.timer_off,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                        TextSpan(
+                            text:
+                                " don't have duration data. These tracks will "
+                                'be treated as having a duration of 3 minutes '
+                                'for the purpose of spacing out the scrobbles.')
+                      ]),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
               const HeaderListTile('Scrobble timing'),
               RadioListTile<ScrobbleTimestampBehavior>(
                 value: ScrobbleTimestampBehavior.startingNow,
@@ -206,6 +237,9 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                           _selection = selection;
                         });
                       },
+                      trailingWidgetBuilder: (track) => track.duration == null
+                          ? const Icon(Icons.timer_off)
+                          : const SizedBox(),
                     ),
                   ),
                 ],

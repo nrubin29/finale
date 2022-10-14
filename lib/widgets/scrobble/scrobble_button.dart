@@ -43,11 +43,6 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
         _showSnackbar(
             "This ${_cachedEntity!.type.name} doesn't have any tracks.");
         return;
-      } else if (!(_cachedEntity as HasTracks).canScrobble) {
-        _showSnackbar(
-            "Can't scrobble ${_cachedEntity!.type.name} because track duration "
-            'data is missing.');
-        return;
       }
 
       scrobbleView = BatchScrobbleView(entity: _cachedEntity as HasTracks);

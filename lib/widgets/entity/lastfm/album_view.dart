@@ -59,7 +59,7 @@ class AlbumView extends StatelessWidget {
                 Share.share(album.url);
               },
             ),
-            if (album.canScrobble) ScrobbleButton(entity: album),
+            ScrobbleButton(entity: album),
           ],
         ),
         body: TwoUp(
