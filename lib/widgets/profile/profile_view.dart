@@ -13,6 +13,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_display_controller.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/love_button.dart';
@@ -45,7 +46,8 @@ class _ProfileViewState extends State<ProfileView>
   late List<ProfileTab> _tabOrder;
   var _tab = 0;
 
-  final _recentScrobblesKey = GlobalKey<EntityDisplayState>();
+  late final EntityDisplayController<LRecentTracksResponseTrack>
+      _recentScrobblesController;
   late final StreamSubscription _profileTabsOrderSubscription;
   StreamSubscription? _externalActionsSubscription;
 
@@ -65,6 +67,9 @@ class _ProfileViewState extends State<ProfileView>
     WidgetsBinding.instance.addObserver(this);
     ProfileStack.find(context).push(widget.username);
 
+    _recentScrobblesController = EntityDisplayController.forRequest(
+        GetRecentTracksRequest(widget.username,
+            includeCurrentScrobble: true, extended: true));
     _tabOrder = Preferences.profileTabsOrder.value;
     _profileTabsOrderSubscription =
         Preferences.profileTabsOrder.changes.listen((tabOrder) {
@@ -111,9 +116,7 @@ class _ProfileViewState extends State<ProfileView>
     switch (tab) {
       case ProfileTab.recentScrobbles:
         return EntityDisplay<LRecentTracksResponseTrack>(
-          key: _recentScrobblesKey,
-          request: GetRecentTracksRequest(widget.username,
-              includeCurrentScrobble: true, extended: true),
+          controller: _recentScrobblesController,
           badgeWidgetBuilder: (track) =>
               track.isLoved ? const OutlinedLoveIcon() : const SizedBox(),
           trailingWidgetBuilder: (track) => track.timestamp != null
@@ -244,7 +247,7 @@ class _ProfileViewState extends State<ProfileView>
     final now = DateTime.now();
     if (state == AppLifecycleState.resumed) {
       if (now.isAfter(_nextAutoUpdate)) {
-        _recentScrobblesKey.currentState?.getInitialItems();
+        _recentScrobblesController.getInitialItems();
       }
     } else if (state == AppLifecycleState.paused) {
       _nextAutoUpdate = now.add(const Duration(minutes: 5));
@@ -259,6 +262,7 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   void dispose() {
+    _recentScrobblesController.dispose();
     _tabController?.dispose();
     _profileTabsOrderSubscription.cancel();
     _externalActionsSubscription?.cancel();

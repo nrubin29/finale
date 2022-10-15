@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_display_controller.dart';
 import 'package:flutter/material.dart';
 
 class EntityCheckboxList<T extends Entity> extends StatefulWidget {
@@ -30,6 +31,7 @@ class EntityCheckboxList<T extends Entity> extends StatefulWidget {
 class _EntityCheckboxList<T extends Entity>
     extends State<EntityCheckboxList<T>> {
   final _listEquality = ListEquality<T>();
+  EntityDisplayController<T>? _controller;
   late Map<T, bool> _items;
 
   @override
@@ -49,6 +51,9 @@ class _EntityCheckboxList<T extends Entity>
 
   void _itemsDidChange() {
     _items = Map.fromIterable(widget.items, value: (_) => true);
+    _controller?.dispose();
+    _controller =
+        EntityDisplayController.forItems(_items.keys.toList(growable: false));
   }
 
   void _updateItem(T item, bool selected) {
@@ -71,7 +76,7 @@ class _EntityCheckboxList<T extends Entity>
 
   @override
   Widget build(BuildContext context) => EntityDisplay<T>(
-        items: _items.keys.toList(growable: false),
+        controller: _controller!,
         scrollable: widget.scrollable,
         displayImages: widget.displayImages,
         shouldLeftPadListItems: false,
@@ -122,4 +127,10 @@ class _EntityCheckboxList<T extends Entity>
         ),
         trailingWidgetBuilder: widget.trailingWidgetBuilder,
       );
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
 }

@@ -4,6 +4,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_display_controller.dart';
 import 'package:flutter/material.dart';
 
 class PeriodSelector<T extends Entity> extends StatefulWidget {
@@ -24,21 +25,21 @@ class PeriodSelector<T extends Entity> extends StatefulWidget {
 }
 
 class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
+  late final EntityDisplayController<T> _controller;
   late DisplayType _displayType;
-
-  final _entityDisplayComponentKey = GlobalKey<EntityDisplayState>();
-  late StreamSubscription _periodChangeSubscription;
+  late final StreamSubscription _periodChangeSubscription;
 
   @override
   void initState() {
     super.initState();
 
+    _controller = EntityDisplayController.forRequest(widget.request);
     _displayType = widget.displayType;
 
     _periodChangeSubscription = Preferences.period.changes.listen((value) {
       if (mounted) {
         setState(() {
-          _entityDisplayComponentKey.currentState?.getInitialItems();
+          _controller.getInitialItems();
         });
       }
     });
@@ -78,9 +79,8 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
           ),
           Expanded(
             child: EntityDisplay<T>(
-              key: _entityDisplayComponentKey,
+              controller: _controller,
               displayType: _displayType,
-              request: widget.request,
               detailWidgetBuilder: widget.detailWidgetBuilder,
               subtitleWidgetBuilder: widget.subtitleWidgetBuilder,
             ),
@@ -90,6 +90,7 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
 
   @override
   void dispose() {
+    _controller.dispose();
     _periodChangeSubscription.cancel();
     super.dispose();
   }
