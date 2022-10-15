@@ -284,7 +284,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             widget.trailingWidgetBuilder!(item),
           if (widget.scrobbleableEntity != null)
             ScrobbleButton(
-                entityProvider: () => widget.scrobbleableEntity!(item)),
+              entityProvider: () => widget.scrobbleableEntity!(item),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.grey
+                  : null,
+            ),
         ],
       ),
     );
