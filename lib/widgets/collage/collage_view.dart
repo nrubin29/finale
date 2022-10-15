@@ -10,6 +10,7 @@ import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
+import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/collage/src/grid_collage.dart';
 import 'package:finale/widgets/collage/src/list_collage.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -18,6 +19,7 @@ import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
@@ -77,6 +79,24 @@ class _CollageViewState extends State<CollageView> {
 
     _period = Preferences.period.value;
     _themeColor = Preferences.themeColor.value;
+
+    _updateRequest();
+  }
+
+  final _requestStreamController = BehaviorSubject<PagedRequest<Entity>>();
+
+  void _updateRequest() {
+    final username = _usernameTextController.text;
+
+    if (_chart == EntityType.album) {
+      _requestStreamController.add(GetTopAlbumsRequest(username, _period));
+    } else if (_chart == EntityType.artist) {
+      _requestStreamController.add(GetTopArtistsRequest(username, _period));
+    } else if (_chart == EntityType.track) {
+      _requestStreamController.add(GetTopTracksRequest(username, _period));
+    } else {
+      throw Exception('$_chart is not supported for collages.');
+    }
   }
 
   Future<void> _doRequest(BuildContext context) async {
@@ -143,20 +163,20 @@ class _CollageViewState extends State<CollageView> {
       });
     }));
 
-    final image = await _screenshotController.captureFromWidget(
-      _type == DisplayType.list
-          ? ListCollage(_themeColor, _includeTitle, _includeBranding, _period,
-              _chart, items)
-          : GridCollage(_gridSize, _includeTitle, _includeText,
-              _includeBranding, _period, _chart, items),
-      pixelRatio: 3,
-      context: context,
-    );
-
-    setState(() {
-      _image = image;
-      _isDoingRequest = false;
-    });
+    // final image = await _screenshotController.captureFromWidget(
+    //   _type == DisplayType.list
+    //       ? ListCollage(_themeColor, _includeTitle, _includeBranding, _period,
+    //           _chart, request)
+    //       : GridCollage(_gridSize, _includeTitle, _includeText,
+    //           _includeBranding, _period, _chart, request),
+    //   pixelRatio: 3,
+    //   context: context,
+    // );
+    //
+    // setState(() {
+    //   _image = image;
+    //   _isDoingRequest = false;
+    // });
   }
 
   Future<File> get _imageFile async {
@@ -184,6 +204,11 @@ class _CollageViewState extends State<CollageView> {
                     ListTileTextField(
                       title: 'Username',
                       controller: _usernameTextController,
+                      onChanged: (_) {
+                        // TODO: debounce. Add to a stream here and listen to a
+                        //  debounced version to call _updateRequest().
+                        _updateRequest();
+                      },
                     ),
                     ListTile(
                       title: const Text('Chart'),
@@ -220,6 +245,7 @@ class _CollageViewState extends State<CollageView> {
                             if (shouldSet) {
                               setState(() {
                                 _chart = value;
+                                _updateRequest();
                               });
                             }
                           }
@@ -255,6 +281,7 @@ class _CollageViewState extends State<CollageView> {
                         periodChanged: (period) {
                           setState(() {
                             _period = period;
+                            _updateRequest();
                           });
                         },
                       ),
@@ -351,15 +378,15 @@ class _CollageViewState extends State<CollageView> {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: OutlinedButton(
-                        onPressed: () {
-                          _doRequest(context);
-                        },
-                        child: const Text('Generate'),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 10),
+                    //   child: OutlinedButton(
+                    //     onPressed: () {
+                    //       _doRequest(context);
+                    //     },
+                    //     child: const Text('Generate'),
+                    //   ),
+                    // ),
                   ],
                 )),
           ]);
@@ -390,10 +417,18 @@ class _CollageViewState extends State<CollageView> {
   /// will be downloaded as a png file. Image saving is not supported on
   /// desktop.
   Future<void> _saveImage() async {
+    print('Going to save.');
     if (isMobile) {
+      _image = await _screenshotController.capture(pixelRatio: 3);
+      print('Done capturing.');
       final tempFile = await _imageFile;
       await GallerySaver.saveImage(tempFile.path);
       await tempFile.delete();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Saved to camera roll!')));
+      }
     } else {
       AnchorElement()
         ..href = Uri.dataFromBytes(_image!).toString()
@@ -408,58 +443,130 @@ class _CollageViewState extends State<CollageView> {
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar('Collage Generator'),
         body: Builder(
-            builder: (context) => Center(
-                  child: _isDoingRequest
-                      ? _loadingWidget
-                      : ListView(children: [
-                          _form(context),
-                          if (_image != null) ...[
-                            const SizedBox(height: 16),
-                            Center(
-                              child: ConstrainedBox(
-                                constraints: _type == DisplayType.grid
-                                    ? const BoxConstraints(maxWidth: 600)
-                                    : const BoxConstraints(maxWidth: 400),
-                                child: Image.memory(_image!),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (!isWeb)
-                                  Builder(
-                                      builder: (context) => OutlinedButton(
-                                            onPressed: () async {
-                                              final box =
-                                                  context.findRenderObject()
-                                                      as RenderBox;
-                                              final position =
-                                                  box.localToGlobal(
-                                                          Offset.zero) &
-                                                      box.size;
+            builder: (context) => TwoUp(
+                first: SingleChildScrollView(child: _form(context)),
+                second: SingleChildScrollView(
+                  child: Column(children: [
+                    Screenshot(
+                      controller: _screenshotController,
+                      child: _type == DisplayType.list
+                          ? ListCollage(
+                              _themeColor,
+                              _includeTitle,
+                              _includeBranding,
+                              _period,
+                              _chart,
+                              _requestStreamController.stream)
+                          : GridCollage(
+                              _gridSize,
+                              _includeTitle,
+                              _includeText,
+                              _includeBranding,
+                              _period,
+                              _chart,
+                              _requestStreamController.stream),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // TODO: Move share and camera roll buttons to the
+                        //  AppBar.
+                        if (!isWeb)
+                          Builder(
+                              builder: (context) => OutlinedButton(
+                                    onPressed: () async {
+                                      final box = context.findRenderObject()
+                                          as RenderBox;
+                                      final position =
+                                          box.localToGlobal(Offset.zero) &
+                                              box.size;
 
-                                              final tempFile = await _imageFile;
-                                              await Share.shareFiles([
-                                                tempFile.path
-                                              ], sharePositionOrigin: position);
-                                            },
-                                            child: const Text('Share'),
-                                          )),
-                                // Both buttons are visible only on mobile.
-                                if (isMobile) const SizedBox(width: 10),
-                                if (!isDesktop)
-                                  OutlinedButton(
-                                    onPressed: _saveImage,
-                                    child: const Text(isWeb
-                                        ? 'Download'
-                                        : 'Save to camera roll'),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ]),
-                )),
+                                      final tempFile = await _imageFile;
+                                      await Share.shareFiles([tempFile.path],
+                                          sharePositionOrigin: position);
+                                    },
+                                    child: const Text('Share'),
+                                  )),
+                        // Both buttons are visible only on mobile.
+                        if (isMobile) const SizedBox(width: 10),
+                        if (!isDesktop)
+                          OutlinedButton(
+                            onPressed: _saveImage,
+                            child: const Text(
+                                isWeb ? 'Download' : 'Save to camera roll'),
+                          ),
+                      ],
+                    ),
+                  ]),
+                ))
+
+            // Center(
+            //   child: _isDoingRequest
+            //       ? _loadingWidget
+            //       : ListView(children: [
+            //           _form(context),
+            //           _type == DisplayType.list
+            //               ? ListCollage(
+            //                   _themeColor,
+            //                   _includeTitle,
+            //                   _includeBranding,
+            //                   _period,
+            //                   _chart,
+            //                   _requestStreamController.stream)
+            //               : GridCollage(
+            //                   _gridSize,
+            //                   _includeTitle,
+            //                   _includeText,
+            //                   _includeBranding,
+            //                   _period,
+            //                   _chart,
+            //                   _requestStreamController.stream),
+            //           const SizedBox(height: 16),
+            //           // Center(
+            //           //   child: ConstrainedBox(
+            //           //     constraints: _type == DisplayType.grid
+            //           //         ? const BoxConstraints(maxWidth: 600)
+            //           //         : const BoxConstraints(maxWidth: 400),
+            //           //     child: Image.memory(_image!),
+            //           //   ),
+            //           // ),
+            //           const SizedBox(height: 10),
+            //           Row(
+            //             mainAxisAlignment: MainAxisAlignment.center,
+            //             children: [
+            //               if (!isWeb)
+            //                 Builder(
+            //                     builder: (context) => OutlinedButton(
+            //                           onPressed: () async {
+            //                             final box =
+            //                                 context.findRenderObject()
+            //                                     as RenderBox;
+            //                             final position =
+            //                                 box.localToGlobal(Offset.zero) &
+            //                                     box.size;
+            //
+            //                             final tempFile = await _imageFile;
+            //                             await Share.shareFiles(
+            //                                 [tempFile.path],
+            //                                 sharePositionOrigin: position);
+            //                           },
+            //                           child: const Text('Share'),
+            //                         )),
+            //               // Both buttons are visible only on mobile.
+            //               if (isMobile) const SizedBox(width: 10),
+            //               if (!isDesktop)
+            //                 OutlinedButton(
+            //                   onPressed: _saveImage,
+            //                   child: const Text(isWeb
+            //                       ? 'Download'
+            //                       : 'Save to camera roll'),
+            //                 ),
+            //             ],
+            //           ),
+            //         ]),
+            // )
+            ),
       );
 
   @override

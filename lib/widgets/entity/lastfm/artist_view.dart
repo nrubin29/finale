@@ -3,9 +3,9 @@ import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
-import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_two_up.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
@@ -41,7 +41,7 @@ class ArtistView extends StatelessWidget {
             ),
           ],
         ),
-        body: TwoUp(
+        body: EntityTwoUp(
           entity: artist,
           listItems: [
             Scoreboard(statistics: {

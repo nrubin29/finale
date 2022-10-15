@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class ListTileTextField extends StatelessWidget {
   final String title;
   final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
   final FormFieldValidator<String>? validator;
 
   const ListTileTextField(
-      {required this.title, required this.controller, this.validator});
+      {required this.title,
+      required this.controller,
+      this.onChanged,
+      this.validator});
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -23,6 +27,7 @@ class ListTileTextField extends StatelessWidget {
             Expanded(
               child: TextFormField(
                 controller: controller,
+                onChanged: onChanged,
                 textAlign: TextAlign.end,
                 validator: validator,
               ),

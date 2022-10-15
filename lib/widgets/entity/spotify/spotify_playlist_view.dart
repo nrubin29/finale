@@ -3,8 +3,8 @@ import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
-import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/entity_two_up.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class SpotifyPlaylistView extends StatelessWidget {
                   entityProvider: () => Spotify.getFullPlaylist(playlist)),
           ],
         ),
-        body: TwoUp(
+        body: EntityTwoUp(
           entity: playlist,
           listItems: [
             EntityDisplay<STrack>(

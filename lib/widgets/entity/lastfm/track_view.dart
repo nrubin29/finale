@@ -4,8 +4,8 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
-import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
+import 'package:finale/widgets/entity/entity_two_up.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/love_button.dart';
@@ -45,7 +45,7 @@ class TrackView extends StatelessWidget {
             ScrobbleButton(entity: track),
           ],
         ),
-        body: TwoUp(
+        body: EntityTwoUp(
           entity: track,
           listItems: [
             Scoreboard(

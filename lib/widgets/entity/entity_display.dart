@@ -43,6 +43,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final bool shouldLeftPadListItems;
   final PlaceholderBehavior placeholderBehavior;
   final bool displayCircularImages;
+  final bool canLoadMoreItems;
   final String? noResultsMessage;
   final bool showGridTileGradient;
   final double gridTileSize;
@@ -70,6 +71,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.shouldLeftPadListItems = true,
       this.placeholderBehavior = PlaceholderBehavior.image,
       this.displayCircularImages = false,
+      this.canLoadMoreItems = true,
       this.noResultsMessage = 'No results.',
       this.showGridTileGradient = true,
       this.gridTileSize = 250,
@@ -408,7 +410,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                     maxCrossAxisExtent: widget.gridTileSize),
                 delegate: SliverChildBuilderDelegate(_gridItemBuilder,
                     childCount: items.length)),
-          if (_request != null && hasMorePages)
+          if (_request != null && hasMorePages && widget.canLoadMoreItems)
             SliverVisibilityDetector(
               key: UniqueKey(),
               sliver: SliverToBoxAdapter(

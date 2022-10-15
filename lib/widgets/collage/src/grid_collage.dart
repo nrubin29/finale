@@ -15,10 +15,10 @@ class GridCollage extends StatelessWidget {
   final bool includeBranding;
   final Period period;
   final EntityType entityType;
-  final List<Entity> items;
+  final Stream<PagedRequest<Entity>> requestStream;
 
   const GridCollage(this.gridSize, this.includeTitle, this.includeText,
-      this.includeBranding, this.period, this.entityType, this.items);
+      this.includeBranding, this.period, this.entityType, this.requestStream);
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +68,10 @@ class GridCollage extends StatelessWidget {
             ),
           Flexible(
             child: EntityDisplay(
-              items: items,
+              requestStream: requestStream,
               displayType: DisplayType.grid,
               scrollable: false,
+              canLoadMoreItems: false,
               showGridTileGradient: includeText,
               gridTileSize: gridTileSize,
               fontSize: includeText ? gridTileSize / 15 : 0,

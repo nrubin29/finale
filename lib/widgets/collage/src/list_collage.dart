@@ -14,10 +14,10 @@ class ListCollage extends StatelessWidget {
   final bool includeBranding;
   final Period period;
   final EntityType entityType;
-  final List<Entity> items;
+  final Stream<PagedRequest<Entity>> requestStream;
 
   const ListCollage(this.themeColor, this.includeTitle, this.includeBranding,
-      this.period, this.entityType, this.items);
+      this.period, this.entityType, this.requestStream);
 
   @override
   Widget build(BuildContext context) {
@@ -62,58 +62,71 @@ class ListCollage extends StatelessWidget {
               ),
             ),
           ],
-          for (final item in items)
-            Padding(
-              padding: EdgeInsets.all(width / 20),
-              child: Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: EntityImage(
-                      entity: item,
-                      quality: ImageQuality.high,
-                      placeholderBehavior: PlaceholderBehavior.active,
-                    ),
-                  ),
-                  SizedBox(width: width / 20),
-                  Flexible(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.displayTitle,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: width / 20,
+          StreamBuilder<PagedRequest<Entity>>(
+            stream: requestStream,
+            builder: (context, snapshot) => FutureBuilder(
+                future: snapshot.data?.getData(includeTitle ? 4 : 5, 1) ??
+                    Future.value(),
+                builder: (context, snapshot) {
+                  return Column(
+                    children: [
+                      for (final item in snapshot.data ?? const <Entity>[])
+                        Padding(
+                          padding: EdgeInsets.all(width / 20),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                child: EntityImage(
+                                  entity: item,
+                                  quality: ImageQuality.high,
+                                  placeholderBehavior:
+                                      PlaceholderBehavior.active,
+                                ),
+                              ),
+                              SizedBox(width: width / 20),
+                              Flexible(
+                                flex: 2,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.displayTitle,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: width / 20,
+                                      ),
+                                    ),
+                                    if (item.displaySubtitle != null) ...[
+                                      SizedBox(height: width / 75),
+                                      Text(
+                                        item.displaySubtitle!,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 25,
+                                        ),
+                                      ),
+                                    ],
+                                    if (item.displayTrailing != null) ...[
+                                      SizedBox(height: width / 75),
+                                      Text(
+                                        item.displayTrailing!,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 30,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        if (item.displaySubtitle != null) ...[
-                          SizedBox(height: width / 75),
-                          Text(
-                            item.displaySubtitle!,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: width / 25,
-                            ),
-                          ),
-                        ],
-                        if (item.displayTrailing != null) ...[
-                          SizedBox(height: width / 75),
-                          Text(
-                            item.displayTrailing!,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: width / 30,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                    ],
+                  );
+                }),
+          ),
           if (includeBranding)
             Padding(
               padding: EdgeInsets.only(

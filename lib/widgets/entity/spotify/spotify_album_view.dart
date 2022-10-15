@@ -3,9 +3,9 @@ import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
-import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
+import 'package:finale/widgets/entity/entity_two_up.dart';
 import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class SpotifyAlbumView extends StatelessWidget {
                 ScrobbleButton(entity: album),
               ],
             ),
-            body: TwoUp(
+            body: EntityTwoUp(
               entity: album,
               listItems: [
                 ListTile(

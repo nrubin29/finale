@@ -4,9 +4,9 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
-import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
+import 'package:finale/widgets/entity/entity_two_up.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
@@ -62,7 +62,7 @@ class AlbumView extends StatelessWidget {
             ScrobbleButton(entity: album),
           ],
         ),
-        body: TwoUp(
+        body: EntityTwoUp(
           entity: album,
           listItems: [
             Scoreboard(statistics: {
