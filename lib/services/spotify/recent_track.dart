@@ -1,4 +1,3 @@
-import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -18,7 +17,7 @@ class SRecentTracksResponse {
 class SRecentTrack {
   final STrack track;
 
-  @JsonKey(name: 'played_at', fromJson: parseDateTime)
+  @JsonKey(name: 'played_at', fromJson: DateTime.parse)
   final DateTime playedAt;
 
   const SRecentTrack(this.track, this.playedAt);
