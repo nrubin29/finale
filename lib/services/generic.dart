@@ -233,7 +233,7 @@ mixin HasTracks on Entity {
       tracks.every((track) => track.duration != null && track.duration! > 0);
 }
 
-abstract class FullAlbum extends BasicAlbum with HasTracks {}
+abstract class FullAlbum = BasicAlbum with HasTracks;
 
 class FullConcreteAlbum extends FullAlbum {
   @override
@@ -297,4 +297,4 @@ abstract class BasicPlaylist extends Entity {
   EntityType get type => EntityType.playlist;
 }
 
-abstract class FullPlaylist extends BasicPlaylist with HasTracks {}
+abstract class FullPlaylist = BasicPlaylist with HasTracks;
