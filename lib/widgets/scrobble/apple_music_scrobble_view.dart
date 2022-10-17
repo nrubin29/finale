@@ -40,7 +40,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
       final authorizationStatus = await AppleMusic.authorize();
 
       if (authorizationStatus == AuthorizationStatus.authorized) {
-        final tracks = await AppleMusic.getRecentTracks();
+        final tracks = await const AMRecentTracksRequest().getAllData();
         setState(() {
           _authorizationStatus = authorizationStatus;
           _items = tracks;

@@ -14,7 +14,9 @@ import 'package:json_annotation/json_annotation.dart';
 final httpClient = ThrottleClient(15);
 
 abstract class PagedRequest<T> {
-  const PagedRequest();
+  final int limitForAllDataRequest;
+
+  const PagedRequest({this.limitForAllDataRequest = 50});
 
   @protected
   Future<List<T>> doRequest(int limit, int page);
@@ -39,13 +41,13 @@ abstract class PagedRequest<T> {
     var page = 1;
 
     do {
-      lastResult = await getData(50, page++);
+      lastResult = await getData(limitForAllDataRequest, page++);
       result.addAll(lastResult);
-    } while (lastResult.length >= 50);
+    } while (lastResult.length >= limitForAllDataRequest);
 
-    // [GetRecentTracksRequest] will return 51 items on the first page if the
-    // user is currently scrobbling. In all other cases, we'll always get 50
-    // items.
+    // [GetRecentTracksRequest] will return [limitForAllDataRequest] + 1 items
+    // on the first page if the user is currently scrobbling. In all other
+    // cases, we'll always get [limitForAllDataRequest] items.
 
     return result;
   }

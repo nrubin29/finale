@@ -87,6 +87,27 @@ class AMSearchPlaylistsRequest extends PagedRequest<AMPlaylist> {
   String toString() => 'AMSearchPlaylistsRequest(query=$query)';
 }
 
+class AMRecentTracksRequest extends PagedRequest<AMPlayedSong> {
+  const AMRecentTracksRequest() : super(limitForAllDataRequest: 20);
+
+  @override
+  Future<List<AMPlayedSong>> doRequest(int limit, int page) async {
+    var after = DateTime.now().subtract(const Duration(days: 14));
+    final last = Preferences.lastAppleMusicScrobble.value;
+    if (last != null && last.isAfter(after)) {
+      after = last;
+    }
+
+    return (await FlutterMPMediaPlayer.getRecentTracks(
+            after: after, limit: limit, page: page))
+        .map(AMPlayedSong.new)
+        .toList(growable: false);
+  }
+
+  @override
+  String toString() => 'AMRecentTracksRequest()';
+}
+
 class AMPlaylistSongsRequest extends PagedRequest<AMSong> {
   final String playlistId;
 
@@ -116,18 +137,6 @@ class AppleMusic {
 
   static Future<AMArtist> getArtist(String artistId) async =>
       AMArtist(await FlutterMPMediaPlayer.getArtist(artistId));
-
-  static Future<List<AMPlayedSong>> getRecentTracks() async {
-    var after = DateTime.now().subtract(const Duration(days: 14));
-    final last = Preferences.lastAppleMusicScrobble.value;
-    if (last != null && last.isAfter(after)) {
-      after = last;
-    }
-
-    return (await FlutterMPMediaPlayer.getRecentTracks(after: after))
-        .map(AMPlayedSong.new)
-        .toList(growable: false);
-  }
 
   static Future<bool> scrobble(List<AMPlayedSong> songs) async {
     final now = DateTime.now();
