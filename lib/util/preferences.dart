@@ -9,6 +9,32 @@ enum SearchEngine { lastfm, spotify, appleMusic }
 class Preferences {
   const Preferences._();
 
+  static final _allPreferences = [
+    period,
+    name,
+    key,
+    spotifyAccessToken,
+    spotifyRefreshToken,
+    spotifyExpiration,
+    spotifyEnabled,
+    spotifyCheckerEnabled,
+    stravaAccessToken,
+    stravaRefreshToken,
+    stravaExpiresAt,
+    libreKey,
+    libreEnabled,
+    searchEngine,
+    stripTags,
+    listenMoreFrequently,
+    themeColor,
+    appleMusicEnabled,
+    appleMusicBackgroundScrobblingEnabled,
+    lastAppleMusicScrobble,
+    showAlbumArtistField,
+    inputDateTimeAsText,
+    profileTabsOrder,
+  ];
+
   static final period = Preference<Period, String>(
     'periodValue',
     defaultValue: Period.sevenDays,
@@ -135,4 +161,10 @@ class Preferences {
         .map((item) => ProfileTab.values[int.parse(item)])
         .toList(growable: false),
   );
+
+  static void clearAll() {
+    for (final preference in _allPreferences) {
+      preference.clear();
+    }
+  }
 }

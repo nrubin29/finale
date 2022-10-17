@@ -27,7 +27,7 @@ Future<void> main() async {
     await ImageIdCache().setup();
   }
 
-  runApp(const MyApp());
+  runApp(ProfileStack(child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -56,13 +56,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final name = Preferences.name.value;
-    return ProfileStack(
-      child: MaterialApp(
-        title: 'Finale',
-        theme: FinaleTheme.lightFor(_themeColor),
-        darkTheme: FinaleTheme.darkFor(_themeColor),
-        home: name == null ? const LoginView() : MainView(username: name),
-      ),
+    return MaterialApp(
+      title: 'Finale',
+      theme: FinaleTheme.lightFor(_themeColor),
+      darkTheme: FinaleTheme.darkFor(_themeColor),
+      home: name == null ? const LoginView() : MainView(username: name),
     );
   }
 }

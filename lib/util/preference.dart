@@ -92,6 +92,4 @@ class Preference<T, U extends Object> {
     _preferences.remove(_key);
     _changes.add(_defaultValue);
   }
-
-  static Future<void> clearAll() => _preferences.clear();
 }

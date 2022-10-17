@@ -1,6 +1,6 @@
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/image_id_cache.dart';
-import 'package:finale/util/preference.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/settings/about_view.dart';
@@ -104,9 +104,19 @@ class SettingsView extends StatelessWidget {
                         title: const Text('Log out'),
                         leading: const Icon(Icons.logout),
                         onTap: () async {
-                          await Preference.clearAll();
+                          Preferences.clearLastfm();
                           LoginView.popAllAndShow(context);
                         }),
+                    ListTile(
+                      title: const Text('Reset all settings'),
+                      leading: const Icon(Icons.clear),
+                      onTap: () async {
+                        Preferences.clearAll();
+                        await DefaultCacheManager().emptyCache();
+                        await ImageIdCache().drop();
+                        LoginView.popAllAndShow(context);
+                      },
+                    ),
                   ],
                 )));
   }
