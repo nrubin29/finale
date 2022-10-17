@@ -105,11 +105,7 @@ class SettingsView extends StatelessWidget {
                         leading: const Icon(Icons.logout),
                         onTap: () async {
                           await Preference.clearAll();
-                          Navigator.popUntil(context, (route) => false);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginView()));
+                          LoginView.popAllAndShow(context);
                         }),
                   ],
                 )));

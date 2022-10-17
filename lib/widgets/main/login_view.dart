@@ -13,6 +13,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class LoginView extends StatelessWidget {
+  const LoginView();
+
+  static void popAllAndShow(BuildContext context) {
+    Navigator.popUntil(context, (_) => false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginView()),
+    );
+  }
+
   void _logIn(BuildContext context) async {
     final result = await FlutterWebAuth.authenticate(
         url: Uri.https('last.fm', 'api/auth',

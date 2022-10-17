@@ -14,11 +14,14 @@ class Scoreboard extends StatefulWidget {
   final Map<String, FutureOr<Object?>> statistics;
   final Map<String, VoidCallback> statisticActions;
   final List<Widget> actions;
+  final void Function(Exception e)? onError;
 
-  const Scoreboard(
-      {this.statistics = const {},
-      this.statisticActions = const {},
-      this.actions = const []});
+  const Scoreboard({
+    this.statistics = const {},
+    this.statisticActions = const {},
+    this.actions = const [],
+    this.onError,
+  });
 
   @override
   State<Scoreboard> createState() => _ScoreboardState();
@@ -40,8 +43,9 @@ class _ScoreboardState extends State<Scoreboard> {
     try {
       final result = await futureOr;
       _data[key] = result;
-    } on Exception {
+    } on Exception catch (e) {
       _data[key] = null;
+      widget.onError?.call(e);
     } finally {
       setState(() {});
     }

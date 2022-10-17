@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
+import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
@@ -19,6 +20,7 @@ import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
+import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/profile/period_selector.dart';
 import 'package:finale/widgets/base/fractional_bar.dart';
 import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
@@ -207,12 +209,21 @@ class _ProfileViewState extends State<ProfileView>
                 sliver: SliverToBoxAdapter(
                   child: Column(children: [
                     const SizedBox(height: 10),
-                    Scoreboard(statistics: {
-                      'Scrobbles': user.playCount,
-                      'Artists': Lastfm.getNumArtists(widget.username),
-                      'Albums': Lastfm.getNumAlbums(widget.username),
-                      'Tracks': Lastfm.getNumTracks(widget.username),
-                    }),
+                    Scoreboard(
+                      statistics: {
+                        'Scrobbles': user.playCount,
+                        'Artists': Lastfm.getNumArtists(widget.username),
+                        'Albums': Lastfm.getNumAlbums(widget.username),
+                        'Tracks': Lastfm.getNumTracks(widget.username),
+                      },
+                      onError: (e) {
+                        if (widget.isTab && e is LException && e.code == 17) {
+                          // Username changed; force user to log in again.
+                          Preferences.clearLastfm();
+                          LoginView.popAllAndShow(context);
+                        }
+                      },
+                    ),
                     const SizedBox(height: 10),
                   ]),
                 ),

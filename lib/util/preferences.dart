@@ -20,6 +20,11 @@ class Preferences {
 
   static final key = Preference<String?, String>('key');
 
+  static void clearLastfm() {
+    name.clear();
+    key.clear();
+  }
+
   static final spotifyAccessToken =
       Preference<String?, String>('spotifyAccessToken2');
 

@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Finale',
         theme: FinaleTheme.lightFor(_themeColor),
         darkTheme: FinaleTheme.darkFor(_themeColor),
-        home: name == null ? LoginView() : MainView(username: name),
+        home: name == null ? const LoginView() : MainView(username: name),
       ),
     );
   }
