@@ -7,6 +7,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutView extends StatelessWidget {
+  int get year => DateTime.now().year;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,9 +145,9 @@ class AboutView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  Text('\u00a9 2020-2022 Noah Rubin Technologies LLC'),
-                  Text('All rights reserved'),
+                children: [
+                  Text('\u00a9 2020-$year Noah Rubin Technologies LLC'),
+                  const Text('All rights reserved'),
                 ],
               ),
             ),
