@@ -56,7 +56,7 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
               child: SizedBox(
                 width: 90 * snapshot.data! + 10,
                 height: 90 * snapshot.data! + 10,
-                child: Container(color: Theme.of(context).primaryColor),
+                child: Container(color: Theme.of(context).colorScheme.primary),
               ),
             ),
           ),

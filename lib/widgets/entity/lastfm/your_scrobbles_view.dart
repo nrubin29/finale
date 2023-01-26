@@ -90,8 +90,18 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
             actions: [const SizedBox(width: 32)],
             bottom: const TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.calendar_today)),
-                Tab(icon: Icon(Icons.list)),
+                Tab(
+                  icon: Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                  ),
+                ),
+                Tab(
+                  icon: Icon(
+                    Icons.list,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
           ),

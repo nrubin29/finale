@@ -22,50 +22,21 @@ enum ThemeColor {
   const ThemeColor(this.displayName, this.color);
 }
 
-class FinaleTheme {
-  static ThemeData lightFor(ThemeColor themeColor) {
-    final colorScheme = ColorScheme.light(
-      primary: themeColor.color,
-      secondary: themeColor.color,
-      surface: themeColor.color,
-      onSurfaceVariant: Colors.white,
-    );
+ThemeData finaleTheme(ThemeColor themeColor, Brightness brightness) {
+  var colorScheme = ColorScheme.fromSeed(
+    seedColor: themeColor.color,
+    brightness: brightness,
+    primary: themeColor.color,
+    background: brightness == Brightness.dark ? Colors.black : null,
+    surface: brightness == Brightness.dark ? Colors.black : null,
+  );
 
-    return ThemeData.from(colorScheme: colorScheme, useMaterial3: true)
-        .copyWith(
-      timePickerTheme:
-          TimePickerThemeData(backgroundColor: colorScheme.background),
-      cardColor: colorScheme.background,
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: ButtonStyle(
-          side: MaterialStateProperty.all(
-            BorderSide(color: colorScheme.primary),
-          ),
-        ),
-      ),
-    );
-  }
-
-  static ThemeData darkFor(ThemeColor themeColor) {
-    final colorScheme = ColorScheme.dark(
-      primary: themeColor.color,
-      secondary: themeColor.color,
-      surface: themeColor.color,
-    );
-
-    return ThemeData.from(colorScheme: colorScheme, useMaterial3: true)
-        .copyWith(
-      timePickerTheme:
-          TimePickerThemeData(backgroundColor: colorScheme.background),
-      toggleableActiveColor: colorScheme.primary,
-      cardColor: colorScheme.background,
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: ButtonStyle(
-          side: MaterialStateProperty.all(
-            BorderSide(color: colorScheme.primary),
-          ),
-        ),
-      ),
-    );
-  }
+  return ThemeData(
+    colorScheme: colorScheme,
+    brightness: brightness,
+    useMaterial3: true,
+    appBarTheme: AppBarTheme(
+      backgroundColor: themeColor.color,
+    ),
+  );
 }

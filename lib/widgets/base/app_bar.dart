@@ -61,7 +61,16 @@ AppBar createAppBar(String title,
                   )
               ],
             ),
-      actions: actions,
+      // Workaround for forcing icons to be white.
+      actions: actions == null
+          ? null
+          : [
+              for (final action in actions)
+                Theme(
+                  data: ThemeData(colorScheme: const ColorScheme.dark()),
+                  child: action,
+                ),
+            ],
       bottom: bottom,
     );
 

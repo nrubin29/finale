@@ -58,8 +58,8 @@ class _MyAppState extends State<MyApp> {
     final name = Preferences.name.value;
     return MaterialApp(
       title: 'Finale',
-      theme: FinaleTheme.lightFor(_themeColor),
-      darkTheme: FinaleTheme.darkFor(_themeColor),
+      theme: finaleTheme(_themeColor, Brightness.light),
+      darkTheme: finaleTheme(_themeColor, Brightness.dark),
       home: name == null ? const LoginView() : MainView(username: name),
     );
   }

@@ -17,7 +17,7 @@ class FractionalBar extends StatelessWidget {
           child: FractionallySizedBox(
             widthFactor: percent,
             alignment: Alignment.centerRight,
-            child: Material(color: Theme.of(context).primaryColor),
+            child: Material(color: Theme.of(context).colorScheme.primary),
           ),
         ),
       );

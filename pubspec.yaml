@@ -4,8 +4,8 @@ publish_to: 'none'
 version: 3.3.0+38
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
-  flutter: ">=3.3.4 <4.0.0"
+  sdk: ">=2.19.0 <3.0.0"
+  flutter: ">=3.7.0 <4.0.0"
 
 dependencies:
   auto_size_text: ^3.0.0
@@ -56,6 +56,12 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   json_serializable: ^6.5.1
+
+dependency_overrides:
+  modal_bottom_sheet:
+    git:
+      url: https://github.com/danReynolds/modal_bottom_sheet.git
+      path: modal_bottom_sheet
 
 flutter:
   uses-material-design: true

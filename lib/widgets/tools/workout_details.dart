@@ -22,8 +22,18 @@ class WorkoutDetails extends StatelessWidget {
             subtitle: activity.localTimeRangeFormatted,
             bottom: TabBar(
               tabs: [
-                const Tab(icon: Icon(Icons.queue_music)),
-                Tab(icon: Icon(activity.icon)),
+                const Tab(
+                  icon: Icon(
+                    Icons.queue_music,
+                    color: Colors.white,
+                  ),
+                ),
+                Tab(
+                  icon: Icon(
+                    activity.icon,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
           ),
@@ -54,8 +64,7 @@ class WorkoutDetails extends StatelessWidget {
                     ListTile(
                       title: const Text('Distance'),
                       leading: const Icon(Icons.map),
-                      trailing:
-                          Text(pluralize(activity.distance, 'mile')),
+                      trailing: Text(pluralize(activity.distance, 'mile')),
                     ),
                   if (activity.totalElevationGain > 0)
                     ListTile(

@@ -1,5 +1,6 @@
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/user.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/profile/weekly_chart_component.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
         : Column(
             children: [
               ColoredBox(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).colorScheme.primary,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

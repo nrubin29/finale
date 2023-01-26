@@ -58,7 +58,7 @@ class _AnimatedBarState extends State<_AnimatedBar>
   Widget build(BuildContext context) => Container(
         width: 4,
         height: 15 * _controller.value,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.primary,
       );
 
   @override

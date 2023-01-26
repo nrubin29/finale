@@ -231,9 +231,6 @@ class _ProfileViewState extends State<ProfileView>
               SliverToBoxAdapter(
                 child: TabBar(
                   controller: _tabController,
-                  labelColor: Theme.of(context).primaryColor,
-                  unselectedLabelColor: Colors.grey,
-                  indicatorColor: Theme.of(context).primaryColor,
                   tabs: [
                     for (final tab in _tabOrder) Tab(icon: Icon(tab.icon)),
                   ],

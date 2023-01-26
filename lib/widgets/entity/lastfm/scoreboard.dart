@@ -73,10 +73,8 @@ class _ScoreboardState extends State<Scoreboard> {
       .map((key) => widget.statisticActions.containsKey(key)
           ? OutlinedButton(
               style: ButtonStyle(
-                textStyle: MaterialStateProperty.all(
-                    const TextStyle(fontWeight: FontWeight.normal)),
-                visualDensity: VisualDensity.compact,
-              ),
+                  side: MaterialStateProperty.all(BorderSide(
+                      color: Theme.of(context).colorScheme.primary))),
               onPressed: widget.statisticActions[key],
               child: _scoreTile(key),
             )

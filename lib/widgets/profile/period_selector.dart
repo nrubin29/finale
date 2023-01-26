@@ -55,21 +55,30 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IntrinsicWidth(
-                    child: DefaultTabController(
-                      length: 2,
-                      initialIndex: _displayType.index,
-                      child: TabBar(
-                          labelColor: Theme.of(context).primaryColor,
-                          unselectedLabelColor: Colors.grey,
-                          indicatorColor: Colors.transparent,
-                          tabs: const [Icon(Icons.list), Icon(Icons.grid_view)],
-                          onTap: (index) {
-                            setState(() {
-                              _displayType = DisplayType.values[index];
-                            });
-                          }),
+                  SegmentedButton<DisplayType>(
+                    showSelectedIcon: false,
+                    style: const ButtonStyle(
+                      visualDensity: VisualDensity(
+                        horizontal: VisualDensity.minimumDensity,
+                        vertical: VisualDensity.minimumDensity,
+                      ),
                     ),
+                    segments: const [
+                      ButtonSegment(
+                        value: DisplayType.list,
+                        icon: Icon(Icons.list),
+                      ),
+                      ButtonSegment(
+                        value: DisplayType.grid,
+                        icon: Icon(Icons.grid_view),
+                      ),
+                    ],
+                    selected: {_displayType},
+                    onSelectionChanged: (newSelection) {
+                      setState(() {
+                        _displayType = newSelection.single;
+                      });
+                    },
                   ),
                   const PeriodDropdownButton(),
                 ],

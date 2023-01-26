@@ -24,7 +24,7 @@ class _LoveButtonState extends State<LoveButton> {
   Widget build(BuildContext context) => IconButton(
         icon: Icon(
           _isLoved ? Icons.favorite : Icons.favorite_border,
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
         onPressed: () async {
           if (await Lastfm.love(widget.track, !_isLoved)) {

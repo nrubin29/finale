@@ -230,7 +230,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                               child: Icon(
                                 searchEngine.icon,
                                 color: _searchEngine.color ??
-                                    Theme.of(context).primaryColor,
+                                    Theme.of(context).colorScheme.primary,
                               ),
                             ),
                         ],
@@ -299,7 +299,10 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               maintainAnimation: true,
               maintainSize: true,
               child: IconButton(
-                icon: const Icon(Icons.clear),
+                icon: const Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                ),
                 onPressed: () {
                   setState(() {
                     _textController.value = TextEditingValue.empty;
@@ -312,6 +315,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           ],
           bottom: TabBar(
             controller: _tabController,
+            indicatorColor: Colors.white,
             tabs: [
               const Tab(icon: Icon(Icons.audiotrack, color: Colors.white)),
               const Tab(icon: Icon(Icons.people, color: Colors.white)),
