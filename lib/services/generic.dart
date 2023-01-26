@@ -75,7 +75,7 @@ abstract class Entity {
   Uint8List? get imageData => null;
 
   /// Used by ImageComponent. Should not be overridden.
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @nonVirtual
   ImageId? cachedImageId;
 

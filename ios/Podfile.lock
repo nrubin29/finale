@@ -6,7 +6,7 @@ PODS:
     - Flutter
   - flutter_mpmediaplayer (0.0.1):
     - Flutter
-  - flutter_web_auth (0.4.3):
+  - flutter_web_auth (0.5.0):
     - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -108,7 +108,7 @@ SPEC CHECKSUMS:
   flutter_acrcloud: 8dc6ee574321bc08390c1e79900aad5ef683248d
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_mpmediaplayer: d6fda8913387edcbc6a1fd798087c693ac6937cb
-  flutter_web_auth: 71382897b8dc10ad94a2928cbb09ddf515749808
+  flutter_web_auth: c25208760459cec375a3c39f6a8759165ca0fa4d
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
