@@ -17,7 +17,7 @@ class ListTileTextField extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(width: 16),
             Expanded(

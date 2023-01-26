@@ -92,14 +92,14 @@ class LoginView extends StatelessWidget {
                   Text('Finale',
                       style: Theme.of(context)
                           .textTheme
-                          .headline2!
+                          .displayMedium!
                           .copyWith(color: Colors.white)),
                   const SizedBox(height: 10),
                   Text('A fully-featured Last.fm client and scrobbler',
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
-                          .subtitle1!
+                          .titleMedium!
                           .copyWith(color: Colors.white)),
                   const SizedBox(height: 10),
                   OutlinedButton(
@@ -115,7 +115,7 @@ class LoginView extends StatelessWidget {
                         Text('Log in with Last.fm',
                             style: Theme.of(context)
                                 .textTheme
-                                .subtitle1!
+                                .titleMedium!
                                 .copyWith(color: Colors.white))
                       ],
                     ),

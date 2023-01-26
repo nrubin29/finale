@@ -78,7 +78,7 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Powered by ', style: Theme.of(context).textTheme.caption),
+              Text('Powered by ', style: Theme.of(context).textTheme.bodySmall),
               Image.asset('assets/images/acrcloud.png', height: 20)
             ],
           ),

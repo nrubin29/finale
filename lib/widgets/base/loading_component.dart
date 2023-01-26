@@ -12,7 +12,7 @@ class LoadingComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
         child: small
             ? const SizedBox.square(
                 dimension: 16,

@@ -30,7 +30,7 @@ class ErrorComponent extends StatelessWidget {
           Text(
             details.title,
             textAlign: TextAlign.center,
-            style: theme.textTheme.headline6,
+            style: theme.textTheme.titleLarge,
           ),
           const SizedBox(height: 10),
           Text(

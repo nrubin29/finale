@@ -44,7 +44,7 @@ class _WikiPage extends StatelessWidget {
             SafeArea(
               child: Text(
                 'Published ${wiki.published}',
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           ],

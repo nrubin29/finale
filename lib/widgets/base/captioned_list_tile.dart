@@ -42,7 +42,7 @@ class CaptionedListTile extends StatelessWidget {
                 minimum: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
                 child: RichText(
                   text: TextSpan(
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                     children: caption,
                   ),
                 ),

@@ -43,7 +43,7 @@ class AboutView extends StatelessWidget {
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
                 children: const [
                   TextSpan(text: 'Made with '),
                   WidgetSpan(
