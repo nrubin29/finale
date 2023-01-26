@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/preference.dart';
 import 'package:universal_io/io.dart';
@@ -25,7 +23,6 @@ void backgroundTaskDispatcher() {
   Workmanager().executeTask((taskName, _) async {
     final task = _tasks.singleWhere((element) => element.name == taskName);
 
-    DartPluginRegistrant.ensureInitialized();
     await Preference.setup();
 
     if (!await task.shouldRun) return false;
