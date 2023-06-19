@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
@@ -66,29 +65,28 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
       _loaded = false;
     });
 
-    final data = await Future.wait([
-      Lastfm.getWeeklyTrackChart(widget.user, widget.chart),
-      Lastfm.getWeeklyAlbumChart(widget.user, widget.chart),
-      Lastfm.getWeeklyArtistChart(widget.user, widget.chart),
+    final (tracks, albums, artists, recentTracks) = await (
+      Lastfm.getWeeklyTrackChart(widget.user, widget.chart)
+          .then((value) => value.tracks),
+      Lastfm.getWeeklyAlbumChart(widget.user, widget.chart)
+          .then((value) => value.albums),
+      Lastfm.getWeeklyArtistChart(widget.user, widget.chart)
+          .then((value) => value.artists),
       GetRecentTracksRequest(widget.user.name,
               from: widget.chart.fromDate, to: widget.chart.toDate)
           .getAllData(),
-    ]);
+    ).wait;
 
-    final tracks = (data[0] as LUserWeeklyTrackChart).tracks;
-    final albums = (data[1] as LUserWeeklyAlbumChart).albums;
-    final artists = (data[2] as LUserWeeklyArtistChart).artists;
-    final recentTracks = data[3] as List<LRecentTracksResponseTrack>;
     final numScrobbles =
-        tracks.fold<int>(0, (sum, track) => sum + (track.playCount ?? 0));
-    final groupedTracks = Map<int, int>.fromIterable(
-        Iterable.generate(7, (i) => i + 1),
-        value: (_) => 0);
+        tracks.fold(0, (sum, track) => sum + (track.playCount ?? 0));
 
+    // The order matters, so I manually create the map instead of using a
+    // utility function.
+    final groupedTracks = {for (var i = 0; i < 7; i++) i: 0};
     for (final track in recentTracks) {
       if (track.date != null) {
-        groupedTracks[track.date!.weekday] =
-            groupedTracks[track.date!.weekday]! + 1;
+        groupedTracks[track.date!.weekday - 1] =
+            groupedTracks[track.date!.weekday - 1]! + 1;
       }
     }
 
@@ -173,8 +171,11 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
-                              getTitlesWidget: (double value, TitleMeta meta) =>
-                                  Text(_weekdays[value.toInt() - 1]),
+                              reservedSize: 24,
+                              getTitlesWidget: (value, _) => SideTitleWidget(
+                                axisSide: AxisSide.bottom,
+                                child: Text(_weekdays[value.toInt()]),
+                              ),
                             ),
                           ),
                         ),
