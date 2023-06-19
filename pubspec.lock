@@ -329,11 +329,12 @@ packages:
   flutter_cache_manager:
     dependency: "direct main"
     description:
-      name: flutter_cache_manager
-      sha256: "32cd900555219333326a2d0653aaaf8671264c29befa65bbd9856d204a4c9fb3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.0"
+      path: flutter_cache_manager
+      ref: HEAD
+      resolved-ref: dd0821ee0ff297f578783102373bed64d05bf178
+      url: "https://github.com/Carapacik/flutter_cache_manager.git"
+    source: git
+    version: "3.4.0"
   flutter_driver:
     dependency: transitive
     description: flutter
@@ -345,7 +346,7 @@ packages:
       path: "."
       ref: HEAD
       resolved-ref: f8250182f0bc4383dbd696df9681a17d36c5ea04
-      url: "https://github.com/fluttercommunity/flutter_launcher_icons"
+      url: "https://github.com/fluttercommunity/flutter_launcher_icons.git"
     source: git
     version: "0.13.1"
   flutter_lints:
@@ -422,11 +423,12 @@ packages:
   gallery_saver:
     dependency: "direct main"
     description:
-      name: gallery_saver
-      sha256: df8b7e207ca12d64c71e0710a7ee3bc48aa7206d51cc720716fedb1543a66712
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.2"
+      path: "."
+      ref: patch-1
+      resolved-ref: ba1085bc4a9c5b90940147b358f88556316f66c6
+      url: "https://github.com/Zazo032/gallery_saver.git"
+    source: git
+    version: "2.4.0"
   glob:
     dependency: transitive
     description:
@@ -455,10 +457,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "4c3f04bfb64d3efd508d06b41b825542f08122d30bda4933fb95c069d22a4fa3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.0.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -508,10 +510,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.1"
   io:
     dependency: transitive
     description:
@@ -596,11 +598,11 @@ packages:
     dependency: "direct main"
     description:
       path: modal_bottom_sheet
-      ref: HEAD
-      resolved-ref: d79185a564c6d1b1535568ea7dfef060e20a049d
-      url: "https://github.com/danReynolds/modal_bottom_sheet.git"
+      ref: "feat/sheet_improvements"
+      resolved-ref: "270a3b49ab7e9ce5df1648063c66820703776d7a"
+      url: "https://github.com/jamesblasco/modal_bottom_sheet.git"
     source: git
-    version: "2.1.2"
+    version: "3.0.1"
   octo_image:
     dependency: transitive
     description:
@@ -621,10 +623,10 @@ packages:
     dependency: "direct main"
     description:
       name: package_info_plus
-      sha256: "10259b111176fba5c505b102e3a5b022b51dd97e30522e906d6922c745584745"
+      sha256: ceb027f6bc6a60674a233b4a90a7658af1aebdea833da0b5b53c1e9821a78c7b
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.2"
+    version: "4.0.2"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -689,14 +691,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.7"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      sha256: "67fc27ed9639506c856c840ccce7594d0bdcd91bc8d53d6e52359449a1d50602"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.11.1"
   petitparser:
     dependency: transitive
     description:
@@ -821,10 +815,10 @@ packages:
     dependency: "direct main"
     description:
       name: share_plus
-      sha256: b1f15232d41e9701ab2f04181f21610c36c83a12ae426b79b4bd011c567934b1
+      sha256: ed3fcea4f789ed95913328e629c0c53e69e80e08b6c24542f1b3576046c614e8
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.4"
+    version: "7.0.2"
   share_plus_platform_interface:
     dependency: transitive
     description:
@@ -1177,10 +1171,11 @@ packages:
   wakelock:
     dependency: "direct main"
     description:
-      name: wakelock
-      sha256: "769ecf42eb2d07128407b50cb93d7c10bd2ee48f0276ef0119db1d25cc2f87db"
-      url: "https://pub.dev"
-    source: hosted
+      path: wakelock
+      ref: HEAD
+      resolved-ref: e90322e189243d2101b6298edaf00a04321c3d50
+      url: "https://github.com/formigas/wakelock.git"
+    source: git
     version: "0.6.2"
   wakelock_macos:
     dependency: transitive
@@ -1207,12 +1202,13 @@ packages:
     source: hosted
     version: "0.4.0"
   wakelock_windows:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: wakelock_windows
-      sha256: "857f77b3fe6ae82dd045455baa626bc4b93cb9bb6c86bf3f27c182167c3a5567"
-      url: "https://pub.dev"
-    source: hosted
+      path: wakelock_windows
+      ref: HEAD
+      resolved-ref: e90322e189243d2101b6298edaf00a04321c3d50
+      url: "https://github.com/formigas/wakelock.git"
+    source: git
     version: "0.2.1"
   watcher:
     dependency: transitive
@@ -1242,10 +1238,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: a6f0236dbda0f63aa9a25ad1ff9a9d8a4eaaa5012da0dc59d21afdb1dc361ca4
+      sha256: "7dacfda1edcca378031db9905ad7d7bd56b29fd1a90b0908b71a52a12c41e36b"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.4"
+    version: "5.0.3"
   workmanager:
     dependency: "direct main"
     description:
