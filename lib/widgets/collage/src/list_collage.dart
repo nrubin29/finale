@@ -123,9 +123,9 @@ class ListCollage extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         'Created with Finale for Last.fm',
                         style: TextStyle(

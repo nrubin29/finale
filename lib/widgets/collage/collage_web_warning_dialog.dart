@@ -6,7 +6,7 @@ class CollageWebWarningDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Row(children: const [
+      title: const Row(children: [
         Icon(Icons.warning),
         SizedBox(width: 10),
         Text('Top Artists on the Web'),

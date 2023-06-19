@@ -63,9 +63,9 @@ class _WorkoutViewState extends State<WorkoutView> {
             : Center(
                 child: OutlinedButton(
                   onPressed: _authenticate,
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Icon(SocialMediaIcons.strava),
                       SizedBox(width: 8),
                       Text('Log in with Strava'),
