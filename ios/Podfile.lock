@@ -54,7 +54,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -91,7 +91,7 @@ EXTERNAL SOURCES:
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   uni_links:
@@ -114,13 +114,13 @@ SPEC CHECKSUMS:
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   integration_test: 13825b8a9334a850581300559b8839134b124670
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider_foundation: 37748e03f12783f9de2cb2c4eadfaa25fe6d4852
-  quick_actions_ios: d211ffc5d7619ace7e9fb1800540b14a1aafe940
+  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
+  quick_actions_ios: 9e80dcfadfbc5d47d9cf8f47bcf428b11cf383d4
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
-  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
+  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
-  url_launcher_ios: ae1517e5e344f5544fb090b079e11f399dfbe4d2
+  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   workmanager: 0afdcf5628bbde6924c21af7836fed07b42e30e6
 
