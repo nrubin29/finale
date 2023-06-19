@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:charts_flutter/flutter.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/app_bar.dart';
@@ -15,6 +15,7 @@ import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart' hide Color;
 
 class WeeklyChartComponent extends StatefulWidget {
@@ -38,7 +39,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
   late List<LUserWeeklyAlbumChartAlbum> _albums;
   late List<LUserWeeklyArtistChartArtist> _artists;
   late Map<int, int> _groupedTracks;
-  late List<Series<MapEntry<int, int>, String>> _series;
+  late List<BarChartGroupData> _barGroups;
 
   late StreamSubscription _themeStreamSubscription;
 
@@ -108,15 +109,20 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
 
   void _updateSeries([ThemeColor? themeColor]) {
     final color = (themeColor ?? Preferences.themeColor.value).color;
-    _series = [
-      Series<MapEntry<int, int>, String>(
-        id: 'Recent Tracks',
-        colorFn: (_, __) => Color(r: color.red, g: color.green, b: color.blue),
-        domainFn: (day, _) => _weekdays[day.key - 1],
-        measureFn: (day, _) => day.value,
-        labelAccessorFn: (day, _) => '${day.value}',
-        data: _groupedTracks.entries.toList(growable: false),
-      ),
+    _barGroups = [
+      for (var group in _groupedTracks.entries)
+        BarChartGroupData(
+          x: group.key,
+          barRods: [
+            BarChartRodData(
+              toY: group.value.toDouble(),
+              color: color,
+              width: 25,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+            ),
+          ],
+        )
     ];
   }
 
@@ -141,16 +147,53 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: SizedBox(
                     height: 200,
-                    child: Row(children: [
-                      const RotatedBox(
-                          quarterTurns: 3, child: Text('Scrobbles')),
-                      const SizedBox(width: 5),
-                      Expanded(
-                          child: BarChart(
-                        _series,
-                        barRendererDecorator: BarLabelDecorator<String>(),
-                      )),
-                    ]),
+                    child: BarChart(
+                      BarChartData(
+                        barGroups: _barGroups,
+                        alignment: BarChartAlignment.center,
+                        titlesData: FlTitlesData(
+                          leftTitles: const AxisTitles(
+                            axisNameWidget: Text('Scrobbles'),
+                            axisNameSize: 32,
+                          ),
+                          topTitles: const AxisTitles(),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 48,
+                              getTitlesWidget: (value, meta) =>
+                                  value % meta.appliedInterval == 0
+                                      ? SideTitleWidget(
+                                          axisSide: AxisSide.right,
+                                          child: Text(meta.formattedValue),
+                                        )
+                                      : const SizedBox(),
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (double value, TitleMeta meta) =>
+                                  Text(_weekdays[value.toInt() - 1]),
+                            ),
+                          ),
+                        ),
+                        barTouchData: BarTouchData(
+                          touchTooltipData: BarTouchTooltipData(
+                            getTooltipItem: (_, __, rod, ___) => BarTooltipItem(
+                                pluralize(rod.toY),
+                                Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: Colors.white)),
+                          ),
+                        ),
+                        gridData: const FlGridData(
+                          drawVerticalLine: false,
+                        ),
+                        borderData: FlBorderData(show: false),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
