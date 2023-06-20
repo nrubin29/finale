@@ -87,8 +87,14 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     });
 
     final response = await Lastfm.scrobble([
-      BasicConcreteTrack(_trackController.text, _artistController.text,
-          _albumController.text, _albumArtistController.text),
+      BasicConcreteTrack(
+        _trackController.text,
+        _artistController.text,
+        _albumController.text,
+        _showAlbumArtistField && _albumArtistController.text.isNotEmpty
+            ? _albumArtistController.text
+            : null,
+      ),
     ], [
       _useCustomTimestamp ? _customTimestamp! : DateTime.now()
     ]);
