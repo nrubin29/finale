@@ -15,6 +15,9 @@ class AMSong extends ScrobbleableTrack {
   String? get artistName => _song.artist;
 
   @override
+  String? get albumArtist => _song.albumArtist;
+
+  @override
   String get name => _song.title;
 
   @override

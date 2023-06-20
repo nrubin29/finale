@@ -385,10 +385,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_mpmediaplayer
-      sha256: f6ecb01133372a256aeed84999544a3cead2daa26d1b4db692232c45143c7944
+      sha256: "9ed716b3912c5b22eaa5b39e63a8074e41e6d2be02d1a52e806925609e685c17"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "0.3.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

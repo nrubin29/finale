@@ -18,6 +18,9 @@ class AMPlayedSong extends BasicScrobbledTrack {
   String? get artistName => _playedSong.artist;
 
   @override
+  String? get albumArtist => _playedSong.albumArtist;
+
+  @override
   String get name => _playedSong.title;
 
   @override

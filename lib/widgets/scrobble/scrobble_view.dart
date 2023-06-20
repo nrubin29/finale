@@ -50,6 +50,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _trackController.text = widget.track?.name ?? '';
     _artistController.text = widget.track?.artistName ?? '';
     _albumController.text = widget.track?.albumName ?? '';
+    _albumArtistController.text = widget.track?.albumArtist ?? '';
 
     _showAlbumArtistFieldSubscription =
         Preferences.showAlbumArtistField.changes.listen((value) {

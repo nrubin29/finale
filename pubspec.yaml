@@ -19,7 +19,7 @@ dependencies:
   flutter_acrcloud: ^0.2.1
   flutter_cache_manager: ^3.3.0
   flutter_local_notifications: ^14.1.1
-  flutter_mpmediaplayer: ^0.2.0
+  flutter_mpmediaplayer: ^0.3.0
   flutter_web_auth: ^0.5.0
   gallery_saver: ^2.3.2
   html: ^0.15.4
