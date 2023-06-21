@@ -115,11 +115,12 @@ class _EntityImageState extends State<EntityImage> {
       constraints: constraints,
       child: CachedNetworkImage(
         imageUrl: _imageId!.getUrl(widget.quality),
-        placeholder: (_, __) =>
-            _placeholderBehavior == PlaceholderBehavior.active
-                ? const CircularProgressIndicator()
-                : placeholder,
-        errorWidget: (_, __, ___) => placeholder,
+        placeholder: (_, __) => placeholder,
+        errorWidget: (_, __, error) {
+          FlutterError.dumpErrorToConsole(
+              FlutterErrorDetails(exception: error, library: 'EntityImage'));
+          return placeholder;
+        },
         fit: widget.fit,
       ),
     );
