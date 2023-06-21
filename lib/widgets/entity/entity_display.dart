@@ -42,7 +42,6 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final bool displayNumbers;
   final bool displayImages;
   final bool shouldLeftPadListItems;
-  final PlaceholderBehavior placeholderBehavior;
   final bool displayCircularImages;
   final String? noResultsMessage;
   final bool showGridTileGradient;
@@ -70,7 +69,6 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.displayNumbers = false,
       this.displayImages = true,
       this.shouldLeftPadListItems = true,
-      this.placeholderBehavior = PlaceholderBehavior.image,
       this.displayCircularImages = false,
       this.noResultsMessage = 'No results.',
       this.showGridTileGradient = true,
@@ -264,7 +262,6 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                       EntityImage(
                         entity: item,
                         isCircular: widget.displayCircularImages,
-                        placeholderBehavior: widget.placeholderBehavior,
                         onLoaded: widget.onImageLoaded,
                       ),
                       if (widget.badgeWidgetBuilder != null)
@@ -350,7 +347,6 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               entity: item,
               quality: ImageQuality.high,
               fit: BoxFit.cover,
-              placeholderBehavior: widget.placeholderBehavior,
               onLoaded: widget.onImageLoaded,
             ),
           if (widget.showGridTileGradient)
