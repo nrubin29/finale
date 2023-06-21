@@ -82,7 +82,7 @@ Future<void> main() async {
 
   testWidgets('Scrobble screen', (tester) async {
     await pumpWidget(tester, const MainView(username: testName));
-    await tester.tap(find.byIcon(scrobbleIcon).at(1));
+    await tester.tap(find.byIcon(scrobbleIcon));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Custom timestamp', skipOffstage: !isAndroid),

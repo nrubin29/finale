@@ -49,8 +49,6 @@ class _EntityImageState extends State<EntityImage> {
       ? PlaceholderBehavior.active
       : widget.placeholderBehavior;
 
-  bool get _shouldAnimate => isScreenshotTest ? false : widget.shouldAnimate;
-
   Future<void> _fetchImageId() async {
     if (widget.entity.imageData != null) {
       return;
@@ -110,12 +108,9 @@ class _EntityImageState extends State<EntityImage> {
       return widget.isCircular ? _buildCircularImage(image) : image;
     }
 
-    final placeholder = switch (_placeholderBehavior) {
-      PlaceholderBehavior.image =>
-        _Placeholder(widget.entity, widget.quality, widget.width),
-      PlaceholderBehavior.active => const CircularProgressIndicator(),
-      PlaceholderBehavior.none => const SizedBox(),
-    };
+    final placeholder = _placeholderBehavior == PlaceholderBehavior.none
+        ? const SizedBox()
+        : _Placeholder(widget.entity, widget.quality, widget.width);
 
     if (_imageId == null) {
       if (!_isLoading) {
@@ -133,16 +128,18 @@ class _EntityImageState extends State<EntityImage> {
           widget.onLoaded?.call();
           return child;
         },
-        placeholderBuilder: (_) => placeholder,
+        placeholderBuilder: (_) =>
+            _placeholderBehavior == PlaceholderBehavior.active
+                ? const CircularProgressIndicator()
+                : placeholder,
         errorBuilder: (_, error, stackTrace) {
           FlutterError.dumpErrorToConsole(FlutterErrorDetails(
               exception: error, stack: stackTrace, library: 'EntityImage'));
           widget.onLoaded?.call();
           return placeholder;
         },
-        fadeOutDuration: _shouldAnimate ? null : Duration.zero,
-        fadeInDuration: _shouldAnimate ? null : Duration.zero,
-        placeholderFadeInDuration: _shouldAnimate ? null : Duration.zero,
+        fadeOutDuration: widget.shouldAnimate ? null : Duration.zero,
+        fadeInDuration: widget.shouldAnimate ? null : Duration.zero,
         fit: widget.fit,
       ),
     );

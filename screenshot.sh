@@ -17,14 +17,14 @@ flutter_test() { # $1 = device name, $2 = device id, $3 = censor images (true by
 
 # iOS
 if [ $RUN_IOS = true ]; then
-  for device in "iPhone 12 Pro Max" "iPhone 8 Plus" "iPad Pro (12.9-inch) (5th generation)" "iPad Pro (12.9-inch) (2nd generation)"; do
+  for device in "iPhone 14 Pro Max" "iPhone 8 Plus" "iPad Pro (12.9-inch) (6th generation)" "iPad Pro (12.9-inch) (2nd generation)"; do
     xcrun simctl boot "$device"
     flutter_test "$device" "$device"
   done
 
   # Get uncensored images for the landing page
-  xcrun simctl boot "iPhone 12 Pro"
-  flutter_test "iPhone 12 Pro" "iPhone 12 Pro" "false"
+  xcrun simctl boot "iPhone 14 Pro"
+  flutter_test "iPhone 14 Pro" "iPhone 14 Pro" "false"
 fi
 
 # macOS
@@ -48,7 +48,7 @@ fi
 # Android can't write to the Documents folder, so we have to put the screenshots
 # on the SD card and then pull them.
 if [ $RUN_ANDROID = true ]; then
-  for device in "Pixel_5_API_31" "7_WSVGA_Tablet_API_31" "10.1_WXGA_Tablet_API_31"; do
+  for device in "Pixel_6_Pro_API_34" "7_WSVGA_Tablet_API_34" "10.1_WXGA_Tablet_API_34"; do
     ~/Library/Android/sdk/emulator/emulator -avd "$device" &
     sleep 5
     ~/Library/Android/sdk/platform-tools/adb shell rm -rR "sdcard/Documents/$device"
