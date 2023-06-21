@@ -16,6 +16,7 @@ class EntityImage extends StatefulWidget {
   final BoxFit fit;
   final double width;
   final bool isCircular;
+  final bool shouldAnimate;
   final PlaceholderBehavior placeholderBehavior;
   final VoidCallback? onLoaded;
 
@@ -25,6 +26,7 @@ class EntityImage extends StatefulWidget {
     this.fit = BoxFit.contain,
     double? width,
     this.isCircular = false,
+    this.shouldAnimate = true,
     this.placeholderBehavior = PlaceholderBehavior.image,
     this.onLoaded,
   }) : width = width ?? quality.width;
@@ -46,6 +48,8 @@ class _EntityImageState extends State<EntityImage> {
   PlaceholderBehavior get _placeholderBehavior => isScreenshotTest
       ? PlaceholderBehavior.active
       : widget.placeholderBehavior;
+
+  bool get _shouldAnimate => isScreenshotTest ? false : widget.shouldAnimate;
 
   Future<void> _fetchImageId() async {
     if (widget.entity.imageData != null) {
@@ -137,6 +141,9 @@ class _EntityImageState extends State<EntityImage> {
           widget.onLoaded?.call();
           return placeholder;
         },
+        fadeOutDuration: _shouldAnimate ? null : Duration.zero,
+        fadeInDuration: _shouldAnimate ? null : Duration.zero,
+        placeholderFadeInDuration: _shouldAnimate ? null : Duration.zero,
         fit: widget.fit,
       ),
     );

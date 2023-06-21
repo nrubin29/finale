@@ -73,6 +73,7 @@ class ListCollage extends StatelessWidget {
                     child: EntityImage(
                       entity: item,
                       quality: ImageQuality.high,
+                      shouldAnimate: false,
                       onLoaded: onImageLoaded,
                     ),
                   ),

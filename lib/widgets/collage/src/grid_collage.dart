@@ -83,6 +83,7 @@ class GridCollage extends StatelessWidget {
               gridTileSize: gridTileSize,
               fontSize: includeText ? gridTileSize / 15 : 0,
               gridTileTextPadding: gridTileSize / 15,
+              shouldAnimateImages: false,
               onImageLoaded: onImageLoaded,
             ),
           ),

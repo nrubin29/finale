@@ -145,29 +145,33 @@ class _CollageViewState extends State<CollageView> {
       });
     }
 
+    Future<void> onDone() async {
+      // Wait for the widget to settle.
+      await Future.delayed(const Duration(seconds: 1));
+
+      final data = await capturer.captureImage();
+      setState(() {
+        _image = data.buffer.asUint8List();
+        _isDoingRequest = false;
+      });
+    }
+
     streamController.stream
-        .timeout(const Duration(seconds: 5))
+        .timeout(const Duration(seconds: 5), onTimeout: (_) {
+          onDone();
+        })
         .take(_numItemsToLoad)
         .listen(
-      (_) {
-        onEvent();
-      },
-      onError: (error, stackTrace) {
-        FlutterError.dumpErrorToConsole(FlutterErrorDetails(
-            exception: error, stack: stackTrace, library: 'CollageView'));
-        onEvent();
-      },
-      onDone: () async {
-        // Wait for the images to fade in.
-        await Future.delayed(const Duration(seconds: 1));
-
-        final data = await capturer.captureImage();
-        setState(() {
-          _image = data.buffer.asUint8List();
-          _isDoingRequest = false;
-        });
-      },
-    );
+          (_) {
+            onEvent();
+          },
+          onError: (error, stackTrace) {
+            FlutterError.dumpErrorToConsole(FlutterErrorDetails(
+                exception: error, stack: stackTrace, library: 'CollageView'));
+            onEvent();
+          },
+          onDone: onDone,
+        );
 
     void onImageLoaded() {
       streamController.add(null);
