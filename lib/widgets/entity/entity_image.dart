@@ -171,7 +171,7 @@ class _EntityImageState extends State<EntityImage> {
                           AutoSizeText(
                             'Image hidden due to copyright',
                             textAlign: TextAlign.center,
-                            minFontSize: 8,
+                            minFontSize: 4,
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -184,7 +184,7 @@ class _EntityImageState extends State<EntityImage> {
                           const AutoSizeText(
                             'Image hidden due to copyright',
                             textAlign: TextAlign.center,
-                            minFontSize: 8,
+                            minFontSize: 4,
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
