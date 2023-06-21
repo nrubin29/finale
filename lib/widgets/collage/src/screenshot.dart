@@ -84,9 +84,13 @@ class _HelperState extends State<_Helper> {
         offset: Offset(MediaQuery.of(context).size.width, 0),
         child: Material(
           type: MaterialType.transparency,
-          child: RepaintBoundary(
-            key: _key,
-            child: widget.widget,
+          child: Stack(
+            children: [
+              RepaintBoundary(
+                key: _key,
+                child: widget.widget,
+              ),
+            ],
           ),
         ),
       );
