@@ -125,7 +125,6 @@ class _EntityImageState extends State<EntityImage> {
       return widget.isCircular ? _buildCircularImage(placeholder) : placeholder;
     }
 
-    // print('${widget.entity.displayTitle} ${_imageId!.getUrl(widget.quality)}');
     final image = ConstrainedBox(
       constraints: constraints,
       child: OctoImage(
