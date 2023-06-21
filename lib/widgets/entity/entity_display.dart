@@ -35,6 +35,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final List<Widget>? slivers;
   final Future<Entity> Function(T item)? scrobbleableEntity;
   final RefreshCallback? onRefresh;
+  final VoidCallback? onImageLoaded;
 
   final DisplayType displayType;
   final bool scrollable;
@@ -63,6 +64,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.slivers,
       this.scrobbleableEntity,
       this.onRefresh,
+      this.onImageLoaded,
       this.displayType = DisplayType.list,
       this.scrollable = true,
       this.displayNumbers = false,
@@ -263,6 +265,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                         entity: item,
                         isCircular: widget.displayCircularImages,
                         placeholderBehavior: widget.placeholderBehavior,
+                        onLoaded: widget.onImageLoaded,
                       ),
                       if (widget.badgeWidgetBuilder != null)
                         widget.badgeWidgetBuilder!(item),
@@ -348,6 +351,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               quality: ImageQuality.high,
               fit: BoxFit.cover,
               placeholderBehavior: widget.placeholderBehavior,
+              onLoaded: widget.onImageLoaded,
             ),
           if (widget.showGridTileGradient)
             Container(

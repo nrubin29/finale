@@ -15,9 +15,10 @@ class ListCollage extends StatelessWidget {
   final Period period;
   final EntityType entityType;
   final List<Entity> items;
+  final VoidCallback onImageLoaded;
 
   const ListCollage(this.themeColor, this.includeTitle, this.includeBranding,
-      this.period, this.entityType, this.items);
+      this.period, this.entityType, this.items, this.onImageLoaded);
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class ListCollage extends StatelessWidget {
                     child: EntityImage(
                       entity: item,
                       quality: ImageQuality.high,
-                      placeholderBehavior: PlaceholderBehavior.active,
+                      onLoaded: onImageLoaded,
                     ),
                   ),
                   SizedBox(width: width / 20),

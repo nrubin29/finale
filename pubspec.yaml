@@ -28,13 +28,13 @@ dependencies:
   intl: ^0.18.1
   json_annotation: ^4.8.1
   modal_bottom_sheet: ^2.1.2
+  octo_image: ^1.0.2
   package_info_plus: ^4.0.2
   path_provider: ^2.0.15
   pkce: ^1.1.0+1
   pool: ^1.5.1
   quick_actions: ^1.0.5
   rxdart: ^0.27.7
-  screenshot: ^2.1.0
   share_plus: ^7.0.2
   shared_preferences: ^2.1.2
   sqflite: ^2.2.8+4

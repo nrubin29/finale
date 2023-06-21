@@ -6,6 +6,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/util/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:octo_image/octo_image.dart';
 
 enum PlaceholderBehavior { image, active, none }
 
@@ -16,6 +17,7 @@ class EntityImage extends StatefulWidget {
   final double width;
   final bool isCircular;
   final PlaceholderBehavior placeholderBehavior;
+  final VoidCallback? onLoaded;
 
   EntityImage({
     required this.entity,
@@ -24,6 +26,7 @@ class EntityImage extends StatefulWidget {
     double? width,
     this.isCircular = false,
     this.placeholderBehavior = PlaceholderBehavior.image,
+    this.onLoaded,
   }) : width = width ?? quality.width;
 
   @override
@@ -32,7 +35,7 @@ class EntityImage extends StatefulWidget {
 
 class _EntityImageState extends State<EntityImage> {
   ImageId? _imageId;
-  var _loading = true;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -50,7 +53,7 @@ class _EntityImageState extends State<EntityImage> {
     }
 
     setState(() {
-      _loading = true;
+      _isLoading = true;
     });
 
     await widget.entity.tryCacheImageId(widget.quality);
@@ -58,7 +61,7 @@ class _EntityImageState extends State<EntityImage> {
     if (mounted) {
       setState(() {
         _imageId = widget.entity.cachedImageId;
-        _loading = false;
+        _isLoading = false;
       });
     }
   }
@@ -84,7 +87,7 @@ class _EntityImageState extends State<EntityImage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading && _placeholderBehavior == PlaceholderBehavior.active) {
+    if (_isLoading && _placeholderBehavior == PlaceholderBehavior.active) {
       return const CircularProgressIndicator();
     }
 
@@ -103,22 +106,35 @@ class _EntityImageState extends State<EntityImage> {
       return widget.isCircular ? _buildCircularImage(image) : image;
     }
 
-    final placeholder = _placeholderBehavior == PlaceholderBehavior.none
-        ? const SizedBox()
-        : _Placeholder(widget.entity, widget.quality, widget.width);
+    final placeholder = switch (_placeholderBehavior) {
+      PlaceholderBehavior.image =>
+        _Placeholder(widget.entity, widget.quality, widget.width),
+      PlaceholderBehavior.active => const CircularProgressIndicator(),
+      PlaceholderBehavior.none => const SizedBox(),
+    };
 
     if (_imageId == null) {
+      if (!_isLoading) {
+        widget.onLoaded?.call();
+      }
+
       return widget.isCircular ? _buildCircularImage(placeholder) : placeholder;
     }
 
+    // print('${widget.entity.displayTitle} ${_imageId!.getUrl(widget.quality)}');
     final image = ConstrainedBox(
       constraints: constraints,
-      child: CachedNetworkImage(
-        imageUrl: _imageId!.getUrl(widget.quality),
-        placeholder: (_, __) => placeholder,
-        errorWidget: (_, __, error) {
-          FlutterError.dumpErrorToConsole(
-              FlutterErrorDetails(exception: error, library: 'EntityImage'));
+      child: OctoImage(
+        image: CachedNetworkImageProvider(_imageId!.getUrl(widget.quality)),
+        imageBuilder: (_, child) {
+          widget.onLoaded?.call();
+          return child;
+        },
+        placeholderBuilder: (_) => placeholder,
+        errorBuilder: (_, error, stackTrace) {
+          FlutterError.dumpErrorToConsole(FlutterErrorDetails(
+              exception: error, stack: stackTrace, library: 'EntityImage'));
+          widget.onLoaded?.call();
           return placeholder;
         },
         fit: widget.fit,

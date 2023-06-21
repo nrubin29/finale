@@ -18,10 +18,11 @@ import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
 import 'package:universal_io/io.dart';
+
+import 'src/screenshot.dart';
 
 class CollageView extends StatefulWidget {
   const CollageView();
@@ -47,7 +48,6 @@ class _CollageViewState extends State<CollageView> {
   var _loadingProgress = 0;
   var _numItemsToLoad = 0;
   Uint8List? _image;
-  final _screenshotController = ScreenshotController();
 
   late StreamSubscription _periodChangeSubscription;
   late StreamSubscription _themeColorChangeSubscription;
@@ -136,27 +136,51 @@ class _CollageViewState extends State<CollageView> {
       _numItemsToLoad = items.length;
     });
 
-    await Future.wait(items.map((item) async {
-      await item.tryCacheImageId();
+    final streamController = StreamController<void>();
+    final capturer = WidgetImageCapturer();
+
+    void onEvent() {
       setState(() {
         _loadingProgress++;
       });
-    }));
+    }
 
-    final image = await _screenshotController.captureFromWidget(
-      _type == DisplayType.list
-          ? ListCollage(_themeColor, _includeTitle, _includeBranding, _period,
-              _chart, items)
-          : GridCollage(_gridSize, _includeTitle, _includeText,
-              _includeBranding, _period, _chart, items),
-      pixelRatio: 3,
-      context: context,
+    streamController.stream
+        .timeout(const Duration(seconds: 5))
+        .take(_numItemsToLoad)
+        .listen(
+      (_) {
+        onEvent();
+      },
+      onError: (error, stackTrace) {
+        FlutterError.dumpErrorToConsole(FlutterErrorDetails(
+            exception: error, stack: stackTrace, library: 'CollageView'));
+        onEvent();
+      },
+      onDone: () async {
+        // Wait for the images to fade in.
+        await Future.delayed(const Duration(seconds: 1));
+
+        final data = await capturer.captureImage();
+        setState(() {
+          _image = data.buffer.asUint8List();
+          _isDoingRequest = false;
+        });
+      },
     );
 
-    setState(() {
-      _image = image;
-      _isDoingRequest = false;
-    });
+    void onImageLoaded() {
+      streamController.add(null);
+    }
+
+    capturer.setup(
+      context,
+      _type == DisplayType.list
+          ? ListCollage(_themeColor, _includeTitle, _includeBranding, _period,
+              _chart, items, onImageLoaded)
+          : GridCollage(_gridSize, _includeTitle, _includeText,
+              _includeBranding, _period, _chart, items, onImageLoaded),
+    );
   }
 
   Future<File> get _imageFile async {
