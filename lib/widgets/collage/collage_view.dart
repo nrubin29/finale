@@ -6,6 +6,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/widget_image_capturer.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
@@ -21,8 +22,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
 import 'package:universal_io/io.dart';
-
-import 'src/screenshot.dart';
 
 class CollageView extends StatefulWidget {
   const CollageView();

@@ -18,7 +18,7 @@ class WidgetImageCapturer {
 
       late OverlayEntry entry;
       entry = OverlayEntry(
-        builder: (context) {
+        builder: (_) {
           return _Helper(
             widget: widget,
             waitForCapture: _waitForCapture.future,
