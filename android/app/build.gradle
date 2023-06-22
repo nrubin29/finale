@@ -45,7 +45,7 @@ android {
     defaultConfig {
         applicationId "com.nrubintech.finale"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         vectorDrawables.useSupportLibrary = true
