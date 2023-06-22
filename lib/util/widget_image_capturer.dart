@@ -9,48 +9,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class WidgetImageCapturer {
-  final _waitForCapture = Completer<void>();
-  final _result = Completer<Uint8List>();
+  final _key = GlobalKey<_HelperState>();
+  late final OverlayEntry _overlayEntry;
 
   void setup(BuildContext context, Widget widget) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      OverlayState overlayState = Overlay.of(context);
-
-      late OverlayEntry entry;
-      entry = OverlayEntry(
+      _overlayEntry = OverlayEntry(
         builder: (_) {
           return _Helper(
+            key: _key,
             widget: widget,
-            waitForCapture: _waitForCapture.future,
-            callback: (data) {
-              _result.complete(data);
-              entry.remove();
-            },
           );
         },
         maintainState: true,
       );
 
-      overlayState.insert(entry);
+      Overlay.of(context).insert(_overlayEntry);
     });
   }
 
-  Future<Uint8List> captureImage() {
-    _waitForCapture.complete();
-    return _result.future;
+  Future<Uint8List> captureImage() async {
+    final data = await _key.currentState!._capture();
+    _overlayEntry.remove();
+    return data;
   }
 }
 
 class _Helper extends StatefulWidget {
   final Widget widget;
-  final Future<void> waitForCapture;
-  final void Function(Uint8List data) callback;
 
-  const _Helper({
-    required this.widget,
-    required this.waitForCapture,
-    required this.callback,
-  });
+  const _Helper({super.key, required this.widget});
 
   @override
   _HelperState createState() => _HelperState();
@@ -59,24 +47,21 @@ class _Helper extends StatefulWidget {
 class _HelperState extends State<_Helper> {
   final _key = GlobalKey();
 
-  @override
-  void initState() {
-    super.initState();
-    _waitAndCapture();
-  }
+  Future<Uint8List> _capture() {
+    final completer = Completer<Uint8List>();
 
-  Future<void> _waitAndCapture() async {
-    await widget.waitForCapture;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final boundary =
           _key.currentContext!.findRenderObject() as RenderRepaintBoundary;
       final image = await boundary.toImage(pixelRatio: 3);
       final byteData = await image.toByteData(format: ImageByteFormat.png);
-      widget.callback(byteData!.buffer.asUint8List());
+      completer.complete(byteData!.buffer.asUint8List());
     });
 
     // Force the post-frame callback to trigger.
-    setState(() {});
+    WidgetsBinding.instance.scheduleFrame();
+
+    return completer.future;
   }
 
   @override
