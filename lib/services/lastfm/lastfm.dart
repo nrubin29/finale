@@ -333,6 +333,7 @@ class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
       'user': username ?? Preferences.name.value,
       'limit': limit,
       'page': page,
+      'sk': Preferences.key.value,
     });
     return LUserTrackScrobblesResponse.fromJson(rawResponse['trackscrobbles'])
         .tracks;
