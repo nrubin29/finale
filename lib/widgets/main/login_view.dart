@@ -16,10 +16,10 @@ class LoginView extends StatelessWidget {
   const LoginView();
 
   static void popAllAndShow(BuildContext context) {
-    Navigator.popUntil(context, (_) => false);
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const LoginView()),
+      (_) => false,
     );
   }
 
