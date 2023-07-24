@@ -2,6 +2,7 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
+import 'package:finale/widgets/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 
 typedef FutureFactory<T> = Future<T> Function();
@@ -82,7 +83,20 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
 
     return widget.isView
         ? Scaffold(
-            appBar: createAppBar('Error'),
+            appBar: createAppBar(
+              'Error',
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SettingsView()),
+                    );
+                  },
+                )
+              ],
+            ),
             body: Padding(
               padding: const EdgeInsets.all(10),
               child: errorComponent,
