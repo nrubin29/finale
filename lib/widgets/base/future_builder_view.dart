@@ -12,12 +12,14 @@ class FutureBuilderView<T> extends StatefulWidget {
   final Object? baseEntity;
   final bool isView;
   final Widget Function(T value) builder;
+  final void Function(Exception e)? onError;
 
   const FutureBuilderView({
     required this.futureFactory,
     this.baseEntity,
     this.isView = true,
     required this.builder,
+    this.onError,
   });
 
   @override
@@ -58,6 +60,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
           _stackTrace = st;
           _isLoading = false;
         });
+        widget.onError?.call(e);
       }
 
       if (isDebug) {

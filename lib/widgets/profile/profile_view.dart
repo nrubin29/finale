@@ -158,6 +158,16 @@ class _ProfileViewState extends State<ProfileView>
   Widget build(BuildContext context) => FutureBuilderView<LUser>(
         futureFactory: () => Lastfm.getUser(widget.username),
         baseEntity: widget.username,
+        onError: (e) {
+          if (widget.isTab &&
+              e is LException &&
+              e.code == 6 &&
+              e.message == 'User not found') {
+            // Username changed; force user to log in again.
+            Preferences.clearLastfm();
+            LoginView.popAllAndShow(context);
+          }
+        },
         builder: (user) => Scaffold(
           appBar: createAppBar(
             user.name,
@@ -215,13 +225,6 @@ class _ProfileViewState extends State<ProfileView>
                         'Artists': Lastfm.getNumArtists(widget.username),
                         'Albums': Lastfm.getNumAlbums(widget.username),
                         'Tracks': Lastfm.getNumTracks(widget.username),
-                      },
-                      onError: (e) {
-                        if (widget.isTab && e is LException && e.code == 17) {
-                          // Username changed; force user to log in again.
-                          Preferences.clearLastfm();
-                          LoginView.popAllAndShow(context);
-                        }
                       },
                     ),
                     const SizedBox(height: 10),
