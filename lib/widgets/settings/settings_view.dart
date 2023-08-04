@@ -103,9 +103,8 @@ class SettingsView extends StatelessWidget {
                     ListTile(
                         title: const Text('Log out'),
                         leading: const Icon(Icons.logout),
-                        onTap: () async {
-                          Preferences.clearLastfm();
-                          LoginView.popAllAndShow(context);
+                        onTap: () {
+                          LoginView.logOutAndShow(context);
                         }),
                     ListTile(
                       title: const Text('Reset all settings'),
@@ -114,7 +113,7 @@ class SettingsView extends StatelessWidget {
                         Preferences.clearAll();
                         await DefaultCacheManager().emptyCache();
                         await ImageIdCache().drop();
-                        LoginView.popAllAndShow(context);
+                        LoginView.logOutAndShow(context);
                       },
                     ),
                   ],

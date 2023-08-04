@@ -1,4 +1,5 @@
 import 'package:finale/util/error_details.dart';
+import 'package:finale/widgets/main/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,16 +40,22 @@ class ErrorComponent extends StatelessWidget {
           ),
           if (onRetry != null || details.canSendFeedback) ...[
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
               children: [
+                if (details.canLogOut)
+                  OutlinedButton(
+                    onPressed: () {
+                      LoginView.logOutAndShow(context);
+                    },
+                    child: const Text('Log out'),
+                  ),
                 if (onRetry != null)
                   OutlinedButton(
                     onPressed: onRetry,
                     child: const Text('Retry'),
                   ),
-                if (onRetry != null && details.canSendFeedback)
-                  const SizedBox(width: 10),
                 if (details.canSendFeedback)
                   OutlinedButton(
                     onPressed: () async {

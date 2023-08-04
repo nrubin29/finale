@@ -164,8 +164,7 @@ class _ProfileViewState extends State<ProfileView>
               e.code == 6 &&
               e.message == 'User not found') {
             // Username changed; force user to log in again.
-            Preferences.clearLastfm();
-            LoginView.popAllAndShow(context);
+            LoginView.logOutAndShow(context);
           }
         },
         builder: (user) => Scaffold(

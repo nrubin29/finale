@@ -15,7 +15,8 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 class LoginView extends StatelessWidget {
   const LoginView();
 
-  static void popAllAndShow(BuildContext context) {
+  static void logOutAndShow(BuildContext context) {
+    Preferences.clearLastfm();
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const LoginView()),

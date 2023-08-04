@@ -14,9 +14,10 @@ class ErrorDetails {
   final Object? detailObject;
   final IconData icon;
   final bool canSendFeedback;
+  final bool canLogOut;
 
   const ErrorDetails._(this.title, this.error, this.stackTrace,
-      this.detailObject, this.icon, this.canSendFeedback);
+      this.detailObject, this.icon, this.canSendFeedback, this.canLogOut);
 
   factory ErrorDetails(
       {required Exception error,
@@ -26,6 +27,7 @@ class ErrorDetails {
     Object errorObject = error;
     var icon = Icons.error;
     var canSendFeedback = true;
+    var canLogOut = false;
 
     if (error is SocketException ||
         (error is HttpException &&
@@ -57,6 +59,13 @@ class ErrorDetails {
             'Last.fm is having trouble processing your request right now. '
             'Please try again. If the error persists, try again later.';
         canSendFeedback = false;
+      } else if (error.code == 9 &&
+          error.message == 'Invalid session key - Please re-authenticate') {
+        title = 'Session expired';
+        errorObject =
+            'Please log out, then log in again. If the error persists, try '
+            'again later.';
+        canLogOut = true;
       } else if (error.code == 29) {
         // Last.fm back-end error or rate limit exceeded.
         title = 'Rate limit exceeded';
@@ -71,8 +80,8 @@ class ErrorDetails {
       canSendFeedback = false;
     }
 
-    return ErrorDetails._(
-        title, errorObject, stackTrace, detailObject, icon, canSendFeedback);
+    return ErrorDetails._(title, errorObject, stackTrace, detailObject, icon,
+        canSendFeedback, canLogOut);
   }
 
   Future<Uri> get emailUri async {
