@@ -1,7 +1,7 @@
 name: finale
 description: A fully-featured Last.fm client
 publish_to: 'none'
-version: 3.4.1+40
+version: 3.4.2+41
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -57,10 +57,6 @@ dev_dependencies:
   json_serializable: ^6.7.0
 
 dependency_overrides:
-  flutter_cache_manager:
-    git:
-      url: https://github.com/Carapacik/flutter_cache_manager.git
-      path: flutter_cache_manager
   flutter_launcher_icons:
     git: https://github.com/fluttercommunity/flutter_launcher_icons.git
   gallery_saver:
