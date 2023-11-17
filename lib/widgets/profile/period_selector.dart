@@ -38,7 +38,7 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
     _periodChangeSubscription = Preferences.period.changes.listen((value) {
       if (mounted) {
         setState(() {
-          _entityDisplayComponentKey.currentState?.getInitialItems();
+          _entityDisplayComponentKey.currentState?.reload();
         });
       }
     });

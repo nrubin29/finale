@@ -254,7 +254,7 @@ class _ProfileViewState extends State<ProfileView>
     final now = DateTime.now();
     if (state == AppLifecycleState.resumed) {
       if (now.isAfter(_nextAutoUpdate)) {
-        _recentScrobblesKey.currentState?.getInitialItems();
+        _recentScrobblesKey.currentState?.reload();
       }
     } else if (state == AppLifecycleState.paused) {
       _nextAutoUpdate = now.add(const Duration(minutes: 5));

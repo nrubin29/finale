@@ -107,6 +107,8 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   Exception? _exception;
   StackTrace? _stackTrace;
 
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
   bool get _hasException => _exception != null && _stackTrace != null;
 
   @override
@@ -121,20 +123,20 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
 
     if (widget.request != null) {
       _request = widget.request;
-      getInitialItems();
+      _getInitialItems();
     } else {
       _subscription = widget.requestStream?.listen((newRequest) {
         if (mounted) {
           setState(() {
             _request = newRequest;
-            getInitialItems();
+            _getInitialItems();
           });
         }
       });
     }
   }
 
-  Future<void> getInitialItems() async {
+  Future<void> _getInitialItems() async {
     didInitialRequest = false;
     final id = ++requestId;
 
@@ -209,6 +211,15 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       setState(() {
         isDoingRequest = false;
       });
+    }
+  }
+
+  Future<void> reload() async {
+    final refreshIndicatorState = _refreshIndicatorKey.currentState;
+    if (refreshIndicatorState != null) {
+      await _refreshIndicatorKey.currentState?.show();
+    } else {
+      await _getInitialItems();
     }
   }
 
@@ -466,7 +477,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     }
 
     return RefreshIndicator(
-      onRefresh: widget.onRefresh != null ? widget.onRefresh! : getInitialItems,
+      key: _refreshIndicatorKey,
+      onRefresh:
+          widget.onRefresh != null ? widget.onRefresh! : _getInitialItems,
       child: _mainBuilder(context),
     );
   }
