@@ -1,4 +1,6 @@
 /// Automatically takes screenshots for the App Store and Play Store.
+library;
+
 import 'dart:io';
 
 import 'package:finale/env.dart';
@@ -208,7 +210,7 @@ extension on WidgetTester {
     assert(element.renderObject != null);
     var renderObject = element.renderObject!;
     while (!renderObject.isRepaintBoundary) {
-      renderObject = renderObject.parent! as RenderObject;
+      renderObject = renderObject.parent!;
     }
     assert(!renderObject.debugNeedsPaint);
     final layer = renderObject.debugLayer! as OffsetLayer;

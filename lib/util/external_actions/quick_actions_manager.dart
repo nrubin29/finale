@@ -1,5 +1,6 @@
 /// Handles [QuickActions] and initial links by firing the corresponding
 /// [ExternalAction]s.
+library;
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/external_actions/external_actions.dart';

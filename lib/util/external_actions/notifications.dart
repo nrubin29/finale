@@ -45,7 +45,7 @@ Future<bool> requestPermission() async {
     return await FlutterLocalNotificationsPlugin()
             .resolvePlatformSpecificImplementation<
                 AndroidFlutterLocalNotificationsPlugin>()!
-            .requestPermission() ??
+            .requestNotificationsPermission() ??
         false;
   }
 
