@@ -1,15 +1,34 @@
 import SwiftUI
 
-func getWidgetBackgroundGradient(for themeColor: ThemeColor) -> LinearGradient {
-    return LinearGradient(gradient: Gradient(colors: [themeColor.gradientStart, themeColor.gradientEnd]), startPoint: .top, endPoint: .bottom)
-}
-
 func getLinkUrl(_ method: String, queryItems: [URLQueryItem]? = nil) -> URL {
     var components = URLComponents()
     components.scheme = "finale"
     components.host = method
     components.queryItems = queryItems
     return components.url!
+}
+
+struct FinaleWidget<Content> : View where Content : View {
+    let themeColor: ThemeColor
+    @ViewBuilder let content: () -> Content
+    
+    private var gradient: some View {
+        return LinearGradient(gradient: Gradient(colors: [themeColor.gradientStart, themeColor.gradientEnd]), startPoint: .top, endPoint: .bottom)
+    }
+    
+    var body: some View {
+        if #available(iOS 17.0, *) {
+            content()
+                .containerBackground(for: .widget) {
+                    gradient
+                }
+        } else {
+            ZStack {
+                gradient
+                content()
+            }
+        }
+    }
 }
 
 struct FinaleWidgetLarge<Content> : View where Content : View {
@@ -21,8 +40,7 @@ struct FinaleWidgetLarge<Content> : View where Content : View {
     @ViewBuilder let content: () -> Content
     
     var body: some View {
-        ZStack {
-            getWidgetBackgroundGradient(for: themeColor)
+        FinaleWidget(themeColor: themeColor) {
             VStack {
                 TitleBar(title: title, period: period, themeColor: themeColor)
                 if !isPreview && username?.isEmpty ?? true {

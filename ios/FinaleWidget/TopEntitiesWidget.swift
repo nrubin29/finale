@@ -130,7 +130,7 @@ struct TopEntitiesWidgetEntryViewSmall : View {
         }
     }
     
-    var body: some View {
+    var content: some View {
         ZStack(alignment: .bottomLeading) {
             EntityImage(imageUrl: imageUrl, entityType: entity?.type, size: .large)
                 .aspectRatio(contentMode: .fit)
@@ -171,6 +171,15 @@ struct TopEntitiesWidgetEntryViewSmall : View {
             }
         }
         .widgetURL(entity != nil ? getLinkUrl(entity!) : nil)
+    }
+    
+    var body: some View {
+        if #available(iOS 17.0, *) {
+            content
+                .containerBackground(for: .widget) { }
+        } else {
+            content
+        }
     }
 }
 
@@ -233,6 +242,7 @@ struct TopEntitiesWidgetEntryViewLarge : View {
     }
 }
 
+@available(iOS 15.0, *)
 struct TopEntitiesWidget: Widget {
     let kind: String = "TopEntitiesWidget"
     
@@ -242,6 +252,7 @@ struct TopEntitiesWidget: Widget {
         }
         .configurationDisplayName("Top Charts")
         .description("Your top albums, artists, or tracks for a given period.")
+        .contentMarginsDisabled()
     }
 }
 

@@ -96,8 +96,7 @@ struct StatisticsWidgetEntryViewSmall : View {
     var entry: StatisticsProvider.Entry
     
     var body: some View {
-        ZStack {
-            getWidgetBackgroundGradient(for: entry.configuration.themeColor)
+        FinaleWidget(themeColor: entry.configuration.themeColor) {
             if !entry.isPreview && entry.configuration.username?.isEmpty ?? true {
                 VStack {
                     Image("FinaleIcon")
@@ -128,6 +127,7 @@ struct StatisticsWidgetEntryViewLarge : View {
     }
 }
 
+@available(iOS 15.0, *)
 struct StatisticsWidget: Widget {
     let kind: String = "StatisticsWidget"
     
@@ -138,6 +138,7 @@ struct StatisticsWidget: Widget {
         .configurationDisplayName("Statistics")
         .description("Your statistics for a given period.")
         .supportedFamilies([.systemSmall, .systemMedium])
+        .contentMarginsDisabled()
     }
 }
 
