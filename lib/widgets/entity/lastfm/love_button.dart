@@ -47,12 +47,12 @@ class OutlinedLoveIcon extends StatelessWidget {
       children: [
         Icon(
           Icons.favorite,
-          color: theme.primaryColor,
+          color: theme.colorScheme.primary,
           size: 18,
         ),
         Icon(
           Icons.favorite_outline,
-          color: theme.colorScheme.onBackground,
+          color: theme.colorScheme.onSurface,
           size: 18,
         ),
       ],

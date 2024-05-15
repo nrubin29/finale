@@ -27,7 +27,6 @@ ThemeData finaleTheme(ThemeColor themeColor, Brightness brightness) {
     seedColor: themeColor.color,
     brightness: brightness,
     primary: themeColor.color,
-    background: brightness == Brightness.dark ? Colors.black : null,
     surface: brightness == Brightness.dark ? Colors.black : null,
   );
 

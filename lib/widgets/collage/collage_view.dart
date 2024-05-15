@@ -467,8 +467,8 @@ class _CollageViewState extends State<CollageView> {
                                                       box.size;
 
                                               final tempFile = await _imageFile;
-                                              await Share.shareFiles([
-                                                tempFile.path
+                                              await Share.shareXFiles([
+                                                XFile(tempFile.path),
                                               ], sharePositionOrigin: position);
                                             },
                                             child: const Text('Share'),

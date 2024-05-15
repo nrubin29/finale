@@ -106,7 +106,7 @@ class LoginView extends StatelessWidget {
                   OutlinedButton(
                     onPressed: () => _logIn(context),
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.red)),
+                        backgroundColor: WidgetStateProperty.all(Colors.red)),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

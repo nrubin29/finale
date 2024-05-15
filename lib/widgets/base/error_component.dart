@@ -25,7 +25,7 @@ class ErrorComponent extends StatelessWidget {
           Icon(
             details.icon,
             size: 48,
-            color: theme.primaryColor,
+            color: theme.colorScheme.primary,
           ),
           const SizedBox(height: 10),
           Text(
