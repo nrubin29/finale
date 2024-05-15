@@ -81,7 +81,7 @@ class AboutView extends StatelessWidget {
               leading: const Icon(Icons.web),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launchUrl(Uri.https('nrubintech.com', ''));
+                launchUrl(Uri.https('nrubintech.com'));
               },
             ),
           ),
@@ -102,20 +102,6 @@ class AboutView extends StatelessWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 launchUrl(Uri.https('github.com', 'nrubin29/finale'));
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ListTile(
-              title: const Text('Send feedback'),
-              leading: const Icon(Icons.email),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                launchUrl(Uri(
-                  scheme: 'mailto',
-                  path: 'feedback@finale.app',
-                  query: 'subject=Finale feedback',
-                ));
               },
             ),
           ),

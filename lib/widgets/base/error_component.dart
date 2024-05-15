@@ -1,7 +1,6 @@
 import 'package:finale/util/error_details.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ErrorComponent extends StatelessWidget {
   final ErrorDetails details;
@@ -38,7 +37,7 @@ class ErrorComponent extends StatelessWidget {
             '${details.error}',
             textAlign: TextAlign.center,
           ),
-          if (onRetry != null || details.canSendFeedback) ...[
+          if (onRetry != null) ...[
             const SizedBox(height: 10),
             Wrap(
               alignment: WrapAlignment.center,
@@ -55,13 +54,6 @@ class ErrorComponent extends StatelessWidget {
                   OutlinedButton(
                     onPressed: onRetry,
                     child: const Text('Retry'),
-                  ),
-                if (details.canSendFeedback)
-                  OutlinedButton(
-                    onPressed: () async {
-                      launchUrl(await details.emailUri);
-                    },
-                    child: const Text('Send feedback'),
                   ),
               ],
             ),
