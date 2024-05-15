@@ -11,7 +11,7 @@ import 'package:finale/widgets/settings/listen_continuously_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 enum ListenContinuouslyTrackStatus {
   listening,
@@ -84,7 +84,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   @override
   void initState() {
     super.initState();
-    Wakelock.enable();
+    WakelockPlus.enable();
     _listenContinuously();
   }
 
@@ -195,6 +195,6 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   @override
   void dispose() {
     super.dispose();
-    Wakelock.disable();
+    WakelockPlus.disable();
   }
 }
