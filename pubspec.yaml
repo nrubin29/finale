@@ -47,17 +47,13 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.4.9
-  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
+  icons_launcher: ^2.1.7
   integration_test:
     sdk: flutter
   json_serializable: ^6.8.0
-
-dependency_overrides:
-  flutter_launcher_icons:
-    git: https://github.com/fluttercommunity/flutter_launcher_icons.git
 
 flutter:
   uses-material-design: true
@@ -68,16 +64,17 @@ flutter:
       fonts:
       - asset: assets/fonts/SocialMediaIcons.ttf
 
-flutter_icons:
+icons_launcher:
   image_path: 'assets/images/icon.png'
-  android: true
-  ios: true
-  macos:
-    generate: true
-    image_path: 'assets/images/icon_rounded.png'
-  web:
-    generate: true
-    background_color: "#f44336"
-    theme_color: "#f44336"
-  adaptive_icon_background: "#ff0000"
-  adaptive_icon_foreground: 'assets/images/music_note.png'
+  platforms:
+    android:
+      enable: true
+      adaptive_background_color: "#ff0000"
+      adaptive_foreground_image: 'assets/images/music_note.png'
+    ios:
+      enable: true
+    macos:
+      enable: true
+      image_path: 'assets/images/icon_rounded.png'
+    web:
+      enable: true
