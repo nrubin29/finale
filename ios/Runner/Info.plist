@@ -46,6 +46,8 @@
 	<string>Scrobble your recently played songs</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Identify music playing around you</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Save collages to the camera roll</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Save collages to the camera roll</string>
 	<key>NSUserActivityTypes</key>

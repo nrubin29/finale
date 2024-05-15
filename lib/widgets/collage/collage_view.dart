@@ -17,11 +17,9 @@ import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/collage/collage_web_warning_dialog.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:gal/gal.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
-import 'package:universal_io/io.dart';
 
 class CollageView extends StatefulWidget {
   const CollageView();
@@ -184,13 +182,6 @@ class _CollageViewState extends State<CollageView> {
           : GridCollage(_gridSize, _includeTitle, _includeText,
               _includeBranding, _period, _chart, items, onImageLoaded),
     );
-  }
-
-  Future<File> get _imageFile async {
-    final tempDir = (await getTemporaryDirectory()).path;
-    final tempFile = File('$tempDir/collage.png');
-    await tempFile.writeAsBytes(_image!);
-    return tempFile;
   }
 
   Widget _form(BuildContext context) => ExpansionPanelList(
@@ -413,14 +404,13 @@ class _CollageViewState extends State<CollageView> {
 
   /// Saves the image.
   ///
-  /// On mobile, the image will be saved to the camera roll. On web, the image
-  /// will be downloaded as a png file. Image saving is not supported on
-  /// desktop.
+  /// On mobile and macOS, the image will be saved to the gallery. On web, the
+  /// image will be downloaded as a png file.
   Future<void> _saveImage() async {
-    if (isMobile) {
-      final tempFile = await _imageFile;
-      await GallerySaver.saveImage(tempFile.path);
-      await tempFile.delete();
+    if (!isWeb) {
+      if (await Gal.requestAccess()) {
+        await Gal.putImageBytes(_image!, name: 'collage');
+      }
     } else {
       AnchorElement()
         ..href = Uri.dataFromBytes(_image!).toString()
@@ -454,7 +444,7 @@ class _CollageViewState extends State<CollageView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                if (!isWeb)
+                                if (!isWeb) ...[
                                   Builder(
                                       builder: (context) => OutlinedButton(
                                             onPressed: () async {
@@ -466,22 +456,21 @@ class _CollageViewState extends State<CollageView> {
                                                           Offset.zero) &
                                                       box.size;
 
-                                              final tempFile = await _imageFile;
                                               await Share.shareXFiles([
-                                                XFile(tempFile.path),
+                                                XFile.fromData(_image!,
+                                                    mimeType: 'image/png',
+                                                    name: 'collage.png'),
                                               ], sharePositionOrigin: position);
                                             },
                                             child: const Text('Share'),
                                           )),
-                                // Both buttons are visible only on mobile.
-                                if (isMobile) const SizedBox(width: 10),
-                                if (!isDesktop)
-                                  OutlinedButton(
-                                    onPressed: _saveImage,
-                                    child: const Text(isWeb
-                                        ? 'Download'
-                                        : 'Save to camera roll'),
-                                  ),
+                                  const SizedBox(width: 10),
+                                ],
+                                OutlinedButton(
+                                  onPressed: _saveImage,
+                                  child: const Text(
+                                      isWeb ? 'Download' : 'Save to gallery'),
+                                ),
                               ],
                             ),
                           ],

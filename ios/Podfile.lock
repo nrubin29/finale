@@ -8,6 +8,9 @@ PODS:
     - Flutter
   - flutter_web_auth (0.5.0):
     - Flutter
+  - gal (1.0.0):
+    - Flutter
+    - FlutterMacOS
   - gallery_saver (0.0.1):
     - Flutter
   - in_app_review (0.2.0):
@@ -44,6 +47,7 @@ DEPENDENCIES:
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_mpmediaplayer (from `.symlinks/plugins/flutter_mpmediaplayer/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
+  - gal (from `.symlinks/plugins/gal/darwin`)
   - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
@@ -69,6 +73,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_mpmediaplayer/ios"
   flutter_web_auth:
     :path: ".symlinks/plugins/flutter_web_auth/ios"
+  gal:
+    :path: ".symlinks/plugins/gal/darwin"
   gallery_saver:
     :path: ".symlinks/plugins/gallery_saver/ios"
   in_app_review:
@@ -102,6 +108,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_mpmediaplayer: d6fda8913387edcbc6a1fd798087c693ac6937cb
   flutter_web_auth: c25208760459cec375a3c39f6a8759165ca0fa4d
+  gal: 61e868295d28fe67ffa297fae6dacebf56fd53e1
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
