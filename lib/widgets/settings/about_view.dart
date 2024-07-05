@@ -71,7 +71,7 @@ class AboutView extends StatelessWidget {
               leading: const Icon(SocialMediaIcons.twitter),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launchUrl(Uri.https('twitter.com', 'nrubin29'));
+                launchUrl(Uri.https('x.com', 'nrubin29'));
               },
             ),
           ),
@@ -81,7 +81,7 @@ class AboutView extends StatelessWidget {
               leading: const Icon(Icons.web),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                launchUrl(Uri.https('nrubintech.com'));
+                launchUrl(Uri.https('noahzrubin.com'));
               },
             ),
           ),
