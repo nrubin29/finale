@@ -1,6 +1,7 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/top_listeners_ranking.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
@@ -64,6 +65,10 @@ class ArtistView extends StatelessWidget {
                     value: Lastfm.getArtist(artist, username: friendUsername)
                         .then((value) => value.stats.userPlayCount),
                   ),
+                ScoreboardItemModel.lazy(
+                  label: 'Top listeners ranking',
+                  supplier: () => fetchTopListenersRanking(artist),
+                ),
               ],
             ),
             if (artist.topTags.tags.isNotEmpty) ...[

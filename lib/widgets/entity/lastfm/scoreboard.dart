@@ -13,12 +13,16 @@ class ScoreboardItemModel {
   ///
   /// If not null, the item will be rendered as a button.
   final void Function()? callback;
-
-  bool get isAction => callback != null;
+  final bool isLazy;
 
   ScoreboardItemModel(
       {required this.label, required FutureOr<Object?> value, this.callback})
-      : supplier = (() => value);
+      : supplier = (() => value),
+        isLazy = false;
+
+  const ScoreboardItemModel.lazy({required this.label, required this.supplier})
+      : callback = null,
+        isLazy = true;
 }
 
 /// A widget that displays multiple [items] in a row.
@@ -82,7 +86,9 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
     unawaited(_loadValue());
   }
 
-  Future<void> _loadValue() async {
+  Future<void> _loadValue({bool forceLoad = false}) async {
+    if (widget.model.isLazy && !forceLoad) return;
+
     setState(() {
       _isLoading = true;
     });
@@ -109,18 +115,23 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
                 ? Text(_value is num
                     ? numberFormat.format(_value)
                     : _value.toString())
-                : const Text('---'),
+                : widget.model.isLazy
+                    ? const Text('Tap to load')
+                    : const Text('---'),
       ],
     );
   }
 
   @override
-  Widget build(BuildContext context) => widget.model.isAction
+  Widget build(BuildContext context) => widget.model.callback != null ||
+          (widget.model.isLazy && _value == null)
       ? OutlinedButton(
           style: ButtonStyle(
               side: WidgetStateProperty.all(
                   BorderSide(color: Theme.of(context).colorScheme.primary))),
-          onPressed: widget.model.callback,
+          onPressed: () => widget.model.isLazy
+              ? _loadValue(forceLoad: true)
+              : widget.model.callback?.call(),
           child: _scoreTile,
         )
       : _scoreTile;
