@@ -49,41 +49,47 @@ class TrackView extends StatelessWidget {
           entity: track,
           listItems: [
             Scoreboard(
-              statistics: {
-                'Scrobbles': track.playCount,
-                'Listeners': track.listeners,
-                'Your scrobbles': track.userPlayCount,
+              items: [
+                ScoreboardItemModel(label: 'Scrobbles', value: track.playCount),
+                ScoreboardItemModel(label: 'Listeners', value: track.listeners),
+                ScoreboardItemModel(
+                  label: 'Your scrobbles',
+                  value: track.userPlayCount,
+                  callback: track.userPlayCount > 0
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => YourScrobblesView(track: track),
+                            ),
+                          );
+                        }
+                      : null,
+                ),
                 if (friendUsername != null)
-                  "$friendUsername's scrobbles":
-                      Lastfm.getTrack(track, username: friendUsername)
-                          .then((value) => value.userPlayCount),
-                if (track.userPlayCount > 0 && track.duration > 0)
-                  'Total listen time': formatDuration(Duration(
-                      milliseconds: track.userPlayCount * track.duration)),
-              },
-              statisticActions: {
-                if (track.userPlayCount > 0)
-                  'Your scrobbles': () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => YourScrobblesView(track: track),
-                      ),
-                    );
-                  },
-                if (friendUsername != null)
-                  "$friendUsername's scrobbles": () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => YourScrobblesView(
-                          track: track,
-                          username: friendUsername,
+                  ScoreboardItemModel(
+                    label: "$friendUsername's scrobbles",
+                    value: Lastfm.getTrack(track, username: friendUsername)
+                        .then((value) => value.userPlayCount),
+                    callback: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => YourScrobblesView(
+                            track: track,
+                            username: friendUsername,
+                          ),
                         ),
-                      ),
-                    );
-                  }
-              },
+                      );
+                    },
+                  ),
+                if (track.userPlayCount > 0 && track.duration > 0)
+                  ScoreboardItemModel(
+                    label: 'Total listen time',
+                    value: formatDuration(Duration(
+                        milliseconds: track.userPlayCount * track.duration)),
+                  ),
+              ],
               actions: [
                 LoveButton(track: track),
               ],

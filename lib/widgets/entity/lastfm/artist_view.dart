@@ -44,15 +44,28 @@ class ArtistView extends StatelessWidget {
         body: TwoUp(
           entity: artist,
           listItems: [
-            Scoreboard(statistics: {
-              'Scrobbles': artist.stats.playCount,
-              'Listeners': artist.stats.listeners,
-              'Your scrobbles': artist.stats.userPlayCount,
-              if (friendUsername != null)
-                "$friendUsername's scrobbles":
-                    Lastfm.getArtist(artist, username: friendUsername)
+            Scoreboard(
+              items: [
+                ScoreboardItemModel(
+                  label: 'Scrobbles',
+                  value: artist.stats.playCount,
+                ),
+                ScoreboardItemModel(
+                  label: 'Listeners',
+                  value: artist.stats.listeners,
+                ),
+                ScoreboardItemModel(
+                  label: 'Your scrobbles',
+                  value: artist.stats.userPlayCount,
+                ),
+                if (friendUsername != null)
+                  ScoreboardItemModel(
+                    label: "$friendUsername's scrobbles",
+                    value: Lastfm.getArtist(artist, username: friendUsername)
                         .then((value) => value.stats.userPlayCount),
-            }),
+                  ),
+              ],
+            ),
             if (artist.topTags.tags.isNotEmpty) ...[
               const Divider(),
               TagChips(topTags: artist.topTags),

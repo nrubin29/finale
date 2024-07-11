@@ -65,17 +65,22 @@ class AlbumView extends StatelessWidget {
         body: TwoUp(
           entity: album,
           listItems: [
-            Scoreboard(statistics: {
-              'Scrobbles': album.playCount,
-              'Listeners': album.listeners,
-              'Your scrobbles': album.userPlayCount,
+            Scoreboard(items: [
+              ScoreboardItemModel(label: 'Scrobbles', value: album.playCount),
+              ScoreboardItemModel(label: 'Listeners', value: album.listeners),
+              ScoreboardItemModel(
+                  label: 'Your scrobbles', value: album.userPlayCount),
               if (friendUsername != null)
-                "$friendUsername's scrobbles":
-                    Lastfm.getAlbum(album, username: friendUsername)
-                        .then((value) => value.userPlayCount),
+                ScoreboardItemModel(
+                    label: "$friendUsername's scrobbles",
+                    value: Lastfm.getAlbum(album, username: friendUsername)
+                        .then((value) => value.userPlayCount)),
               if (album.userPlayCount > 0 && album.tracks.isNotEmpty)
-                'Total listen time': _totalListenTime(album),
-            }),
+                ScoreboardItemModel(
+                  label: 'Total listen time',
+                  value: _totalListenTime(album),
+                ),
+            ]),
             if (album.topTags.tags.isNotEmpty) ...[
               const Divider(),
               TagChips(topTags: album.topTags),

@@ -219,12 +219,22 @@ class _ProfileViewState extends State<ProfileView>
                   child: Column(children: [
                     const SizedBox(height: 10),
                     Scoreboard(
-                      statistics: {
-                        'Scrobbles': user.playCount,
-                        'Artists': Lastfm.getNumArtists(widget.username),
-                        'Albums': Lastfm.getNumAlbums(widget.username),
-                        'Tracks': Lastfm.getNumTracks(widget.username),
-                      },
+                      items: [
+                        ScoreboardItemModel(
+                            label: 'Scrobbles', value: user.playCount),
+                        ScoreboardItemModel(
+                          label: 'Artists',
+                          value: Lastfm.getNumArtists(widget.username),
+                        ),
+                        ScoreboardItemModel(
+                          label: 'Albums',
+                          value: Lastfm.getNumAlbums(widget.username),
+                        ),
+                        ScoreboardItemModel(
+                          label: 'Tracks',
+                          value: Lastfm.getNumTracks(widget.username),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                   ]),

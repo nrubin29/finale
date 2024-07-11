@@ -4,79 +4,38 @@ import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
 
-/// A widget that displays multiple [statistics] with labels.
-///
-/// If a statistic has a corresponding entry in [statisticActions], it will be
-/// rendered as a button that will call a callback when tapped.
+/// An item in a [Scoreboard].
+class ScoreboardItemModel {
+  final String label;
+  final FutureOr<Object?> Function() supplier;
+
+  /// An optional function to call when the item is pressed.
+  ///
+  /// If not null, the item will be rendered as a button.
+  final void Function()? callback;
+
+  bool get isAction => callback != null;
+
+  ScoreboardItemModel(
+      {required this.label, required FutureOr<Object?> value, this.callback})
+      : supplier = (() => value);
+}
+
+/// A widget that displays multiple [items] in a row.
 ///
 /// [actions] are arbitrary widgets that are appended to the scoreboard.
-class Scoreboard extends StatefulWidget {
-  final Map<String, FutureOr<Object?>> statistics;
-  final Map<String, VoidCallback> statisticActions;
+class Scoreboard extends StatelessWidget {
+  final List<ScoreboardItemModel> items;
   final List<Widget> actions;
 
   const Scoreboard({
-    this.statistics = const {},
-    this.statisticActions = const {},
+    required this.items,
     this.actions = const [],
   });
 
-  @override
-  State<Scoreboard> createState() => _ScoreboardState();
-}
-
-class _ScoreboardState extends State<Scoreboard> {
-  final _data = <String, Object?>{};
-
-  @override
-  void initState() {
-    super.initState();
-
-    for (var entry in widget.statistics.entries) {
-      unawaited(_resolveFuture(entry.key, entry.value));
-    }
-  }
-
-  Future<void> _resolveFuture(String key, FutureOr<Object?> futureOr) async {
-    try {
-      final result = await futureOr;
-      _data[key] = result;
-    } on Exception {
-      _data[key] = null;
-    } finally {
-      setState(() {});
-    }
-  }
-
-  Widget _scoreTile(String title) {
-    final value = _data[title];
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(title),
-        _data.containsKey(title)
-            ? value != null
-                ? Text(value is num
-                    ? numberFormat.format(value)
-                    : value.toString())
-                : const Text('---')
-            : const LoadingComponent.small()
-      ],
-    );
-  }
-
-  List<Widget> _widgets(BuildContext context) => widget.statistics.keys
-      .map((key) => widget.statisticActions.containsKey(key)
-          ? OutlinedButton(
-              style: ButtonStyle(
-                  side: WidgetStateProperty.all(BorderSide(
-                      color: Theme.of(context).colorScheme.primary))),
-              onPressed: widget.statisticActions[key],
-              child: _scoreTile(key),
-            )
-          : _scoreTile(key))
-      .followedBy(widget.actions)
+  List<Widget> _widgets(BuildContext context) => items
+      .map<Widget>((item) => _ScoreboardItem(model: item))
+      .followedBy(actions)
       .toList(growable: false);
 
   @override
@@ -102,4 +61,67 @@ class _ScoreboardState extends State<Scoreboard> {
       ),
     );
   }
+}
+
+class _ScoreboardItem extends StatefulWidget {
+  final ScoreboardItemModel model;
+
+  const _ScoreboardItem({required this.model});
+
+  @override
+  State<_ScoreboardItem> createState() => _ScoreboardItemState();
+}
+
+class _ScoreboardItemState extends State<_ScoreboardItem> {
+  var _isLoading = false;
+  Object? _value;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_loadValue());
+  }
+
+  Future<void> _loadValue() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      _value = await widget.model.supplier();
+    } on Exception {
+      _value = null;
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Widget get _scoreTile {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(widget.model.label),
+        _isLoading
+            ? const LoadingComponent.small()
+            : _value != null
+                ? Text(_value is num
+                    ? numberFormat.format(_value)
+                    : _value.toString())
+                : const Text('---'),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.model.isAction
+      ? OutlinedButton(
+          style: ButtonStyle(
+              side: WidgetStateProperty.all(
+                  BorderSide(color: Theme.of(context).colorScheme.primary))),
+          onPressed: widget.model.callback,
+          child: _scoreTile,
+        )
+      : _scoreTile;
 }

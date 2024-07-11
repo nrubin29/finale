@@ -134,12 +134,12 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
             child: ListView(
               children: [
                 const SizedBox(height: 10),
-                Scoreboard(statistics: {
-                  'Scrobbles': _numScrobbles,
-                  'Artists': _artists.length,
-                  'Albums': _albums.length,
-                  'Tracks': _tracks.length,
-                }),
+                Scoreboard(items: [
+                  ScoreboardItemModel(label: 'Scrobbles', value: _numScrobbles),
+                  ScoreboardItemModel(label: 'Artists', value: _artists.length),
+                  ScoreboardItemModel(label: 'Albums', value: _albums.length),
+                  ScoreboardItemModel(label: 'Tracks', value: _tracks.length),
+                ]),
                 const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
