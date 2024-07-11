@@ -18,47 +18,50 @@ class ErrorComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            details.icon,
-            size: 48,
-            color: theme.colorScheme.primary,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            details.title,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.titleLarge,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            '${details.error}',
-            textAlign: TextAlign.center,
-          ),
-          if (onRetry != null) ...[
-            const SizedBox(height: 10),
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              children: [
-                if (details.canLogOut)
-                  OutlinedButton(
-                    onPressed: () {
-                      LoginView.logOutAndShow(context);
-                    },
-                    child: const Text('Log out'),
-                  ),
-                if (onRetry != null)
-                  OutlinedButton(
-                    onPressed: onRetry,
-                    child: const Text('Retry'),
-                  ),
-              ],
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              details.icon,
+              size: 48,
+              color: theme.colorScheme.primary,
             ),
+            const SizedBox(height: 10),
+            Text(
+              details.title,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleLarge,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '${details.error}',
+              textAlign: TextAlign.center,
+            ),
+            if (onRetry != null) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                children: [
+                  if (details.canLogOut)
+                    OutlinedButton(
+                      onPressed: () {
+                        LoginView.logOutAndShow(context);
+                      },
+                      child: const Text('Log out'),
+                    ),
+                  if (onRetry != null)
+                    OutlinedButton(
+                      onPressed: onRetry,
+                      child: const Text('Retry'),
+                    ),
+                ],
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
