@@ -46,7 +46,7 @@ class ListCollage extends StatelessWidget {
               child: Text(
                 'Top ${entityType.name.toTitleCase()}s',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: themeColor.foregroundColor,
                   fontSize: width / 12,
                 ),
               ),
@@ -57,7 +57,7 @@ class ListCollage extends StatelessWidget {
               child: Text(
                 period.display,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: themeColor.foregroundColor,
                   fontSize: width / 24,
                 ),
               ),
@@ -86,7 +86,7 @@ class ListCollage extends StatelessWidget {
                         Text(
                           item.displayTitle,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: themeColor.foregroundColor,
                             fontSize: width / 20,
                           ),
                         ),
@@ -95,7 +95,7 @@ class ListCollage extends StatelessWidget {
                           Text(
                             item.displaySubtitle!,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: themeColor.foregroundColor,
                               fontSize: width / 25,
                             ),
                           ),
@@ -105,7 +105,7 @@ class ListCollage extends StatelessWidget {
                           Text(
                             item.displayTrailing!,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: themeColor.foregroundColor,
                               fontSize: width / 30,
                             ),
                           ),
@@ -125,19 +125,19 @@ class ListCollage extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Created with Finale for Last.fm',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: themeColor.foregroundColor,
                         ),
                       ),
                       Text(
                         'https://finale.app',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: themeColor.foregroundColor,
                         ),
                       ),
                     ],
@@ -146,6 +146,7 @@ class ListCollage extends StatelessWidget {
                   Image.asset(
                     'assets/images/music_note.png',
                     width: 60,
+                    color: themeColor.foregroundColor,
                   ),
                 ],
               ),

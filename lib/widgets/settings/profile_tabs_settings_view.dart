@@ -70,12 +70,9 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
       appBar: createAppBar(
         'Profile Tabs',
         actions: [
-          TextButton(
+          IconButton(
             onPressed: _reset,
-            child: const Text(
-              'Reset',
-              style: TextStyle(color: Colors.white),
-            ),
+            icon: const Icon(Icons.restart_alt),
           ),
         ],
       ),

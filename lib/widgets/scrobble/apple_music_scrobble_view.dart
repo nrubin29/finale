@@ -151,6 +151,8 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
             IconButton(
               icon: const Icon(scrobbleIcon),
               onPressed: _hasItemsToScrobble ? _scrobble : null,
+              disabledColor: Preferences.themeColor.value.foregroundColor
+                  .withOpacity(0.39),
             ),
           ],
         ),

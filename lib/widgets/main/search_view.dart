@@ -51,6 +51,17 @@ extension on SearchEngine {
     }
   }
 
+  Color get foregroundColor {
+    switch (this) {
+      case SearchEngine.lastfm:
+        // This is safe because if the themeColor changes, the entire app will
+        // update (see main.dart).
+        return Preferences.themeColor.value.foregroundColor;
+      default:
+        return Colors.white;
+    }
+  }
+
   PagedRequest<Track> searchTracks(String query) {
     switch (this) {
       case SearchEngine.lastfm:
@@ -208,7 +219,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          foregroundColor: Colors.white,
+          foregroundColor: _searchEngine.foregroundColor,
           backgroundColor: _searchEngine.color,
           titleSpacing: _enabledSearchEngines.length > 1 ? 0 : null,
           title: Row(
@@ -220,7 +231,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                     ButtonTheme(
                       alignedDropdown: true,
                       child: DropdownButton<SearchEngine>(
-                        iconEnabledColor: Colors.white,
+                        iconEnabledColor: _searchEngine.foregroundColor,
                         isDense: true,
                         underline: const SizedBox(),
                         items: [
@@ -236,7 +247,8 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                         ],
                         selectedItemBuilder: (_) => [
                           for (final searchEngine in _enabledSearchEngines)
-                            Icon(searchEngine.icon, color: Colors.white),
+                            Icon(searchEngine.icon,
+                                color: _searchEngine.foregroundColor),
                         ],
                         value: _searchEngine,
                         onChanged: (choice) async {
@@ -275,14 +287,15 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                 child: TextField(
                   controller: _textController,
                   focusNode: _textFieldFocusNode,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
+                  style: TextStyle(color: _searchEngine.foregroundColor),
+                  decoration: InputDecoration(
                     hintText: 'Search',
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: TextStyle(color: _searchEngine.foregroundColor),
                     focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
+                        borderSide:
+                            BorderSide(color: _searchEngine.foregroundColor)),
                   ),
-                  cursorColor: Colors.white,
+                  cursorColor: _searchEngine.foregroundColor,
                   onChanged: (text) {
                     setState(() {
                       _query.add(_currentQuery.copyWith(text: text));
@@ -299,9 +312,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               maintainAnimation: true,
               maintainSize: true,
               child: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.clear,
-                  color: Colors.white,
+                  color: _searchEngine.foregroundColor,
                 ),
                 onPressed: () {
                   setState(() {
@@ -315,13 +328,15 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           ],
           bottom: TabBar(
             controller: _tabController,
-            indicatorColor: Colors.white,
+            indicatorColor: _searchEngine.foregroundColor,
+            labelColor: _searchEngine.foregroundColor,
+            unselectedLabelColor: _searchEngine.foregroundColor,
             tabs: [
-              const Tab(icon: Icon(Icons.audiotrack, color: Colors.white)),
-              const Tab(icon: Icon(Icons.people, color: Colors.white)),
-              const Tab(icon: Icon(Icons.album, color: Colors.white)),
+              const Tab(icon: Icon(Icons.audiotrack)),
+              const Tab(icon: Icon(Icons.people)),
+              const Tab(icon: Icon(Icons.album)),
               if (_searchEngine != SearchEngine.lastfm)
-                const Tab(icon: Icon(Icons.queue_music, color: Colors.white)),
+                const Tab(icon: Icon(Icons.queue_music)),
             ],
           ),
         ),

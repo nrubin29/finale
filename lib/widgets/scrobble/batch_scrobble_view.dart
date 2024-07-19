@@ -4,6 +4,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/formatters.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:finale/widgets/base/header_list_tile.dart';
@@ -98,6 +99,8 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
             builder: (context) => _isLoading
                 ? const AppBarLoadingIndicator()
                 : IconButton(
+                    disabledColor: Preferences.themeColor.value.foregroundColor
+                        .withOpacity(0.39),
                     icon: const Icon(scrobbleIcon),
                     onPressed:
                         _selection.isNotEmpty ? () => _scrobble(context) : null,

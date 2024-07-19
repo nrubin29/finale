@@ -22,18 +22,8 @@ class WorkoutDetails extends StatelessWidget {
             subtitle: activity.localTimeRangeFormatted,
             bottom: TabBar(
               tabs: [
-                const Tab(
-                  icon: Icon(
-                    Icons.queue_music,
-                    color: Colors.white,
-                  ),
-                ),
-                Tab(
-                  icon: Icon(
-                    activity.icon,
-                    color: Colors.white,
-                  ),
-                ),
+                const Tab(icon: Icon(Icons.queue_music)),
+                Tab(icon: Icon(activity.icon)),
               ],
             ),
           ),

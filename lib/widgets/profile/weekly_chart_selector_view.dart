@@ -36,18 +36,19 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
   Widget build(BuildContext context) {
     super.build(context);
 
+    final colorScheme = Theme.of(context).colorScheme;
     return !_loaded
         ? const LoadingComponent()
         : Column(
             children: [
               ColoredBox(
-                color: Theme.of(context).colorScheme.primary,
+                color: colorScheme.primary,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IconButton(
                       icon: const Icon(Icons.chevron_left),
-                      color: Colors.white,
+                      color: colorScheme.onPrimary,
                       onPressed: _index > 0
                           ? () {
                               setState(() {
@@ -58,11 +59,11 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
                     ),
                     Text(
                       _charts[_index].title,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: colorScheme.onPrimary),
                     ),
                     IconButton(
                       icon: const Icon(Icons.chevron_right),
-                      color: Colors.white,
+                      color: colorScheme.onPrimary,
                       onPressed: _index < _charts.length - 1
                           ? () {
                               setState(() {

@@ -1,4 +1,6 @@
 import 'package:finale/services/generic.dart';
+import 'package:finale/util/preferences.dart';
+import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +17,6 @@ AppBar createAppBar(String title,
         List<Widget>? actions,
         PreferredSizeWidget? bottom}) =>
     AppBar(
-      foregroundColor: Colors.white,
       backgroundColor: backgroundColor,
       centerTitle: true,
       title: leadingEntity != null
@@ -61,17 +62,16 @@ AppBar createAppBar(String title,
                   )
               ],
             ),
-      // Workaround for forcing icons to be white.
-      actions: actions == null
-          ? null
-          : [
-              for (final action in actions)
-                Theme(
-                  data: ThemeData(colorScheme: const ColorScheme.dark()),
-                  child: action,
-                ),
-            ],
-      bottom: bottom,
+      actions: actions,
+      bottom: bottom != null
+          ? PreferredSize(
+              preferredSize: bottom.preferredSize,
+              child: Theme(
+                data: tabBarThemeDataForAppBar(Preferences.themeColor.value),
+                child: bottom,
+              ),
+            )
+          : null,
     );
 
 /// A [CircularProgressIndicator] that fits nicely in [AppBar.actions].
@@ -79,15 +79,15 @@ class AppBarLoadingIndicator extends StatelessWidget {
   const AppBarLoadingIndicator();
 
   @override
-  Widget build(BuildContext context) => const TextButton(
+  Widget build(BuildContext context) => TextButton(
         onPressed: null,
         child: Center(
           child: SizedBox(
-            width: 24,
-            height: 24,
+            width: 18,
+            height: 18,
             child: CircularProgressIndicator(
-              color: Colors.white,
-              strokeWidth: 3,
+              color: Preferences.themeColor.value.foregroundColor,
+              strokeWidth: 2,
             ),
           ),
         ),
