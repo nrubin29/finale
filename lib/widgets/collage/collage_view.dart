@@ -186,9 +186,9 @@ class _CollageViewState extends State<CollageView> {
 
   Widget _form(BuildContext context) => ExpansionPanelList(
           expandedHeaderPadding: EdgeInsets.zero,
-          expansionCallback: (_, __) {
+          expansionCallback: (_, isExpanded) {
             setState(() {
-              _isSettingsExpanded = !_isSettingsExpanded;
+              _isSettingsExpanded = isExpanded;
             });
           },
           children: [

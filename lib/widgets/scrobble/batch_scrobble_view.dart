@@ -218,7 +218,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 expandedHeaderPadding: EdgeInsets.zero,
                 expansionCallback: (_, isExpanded) {
                   setState(() {
-                    _isTracksExpanded = !isExpanded;
+                    _isTracksExpanded = isExpanded;
                   });
                 },
                 children: [

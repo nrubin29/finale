@@ -45,9 +45,9 @@ class CollapsibleFormViewState extends State<CollapsibleFormView> {
         children: [
           ExpansionPanelList(
             expandedHeaderPadding: EdgeInsets.zero,
-            expansionCallback: (_, __) {
+            expansionCallback: (_, isExpanded) {
               setState(() {
-                _isSettingsExpanded = !_isSettingsExpanded;
+                _isSettingsExpanded = isExpanded;
               });
             },
             children: [
