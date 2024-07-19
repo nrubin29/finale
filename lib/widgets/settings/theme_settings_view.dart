@@ -5,54 +5,67 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:flutter/material.dart';
 
-class ThemeSettingsView extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _ThemeSettingsViewState();
-}
+final _options =
+    ThemeColor.values.groupListsBy((themeColor) => themeColor.isBestInDarkMode);
 
-class _ThemeSettingsViewState extends State<ThemeSettingsView> {
-  late final Map<bool, List<ThemeColor>> options;
-  late ThemeColor _themeColor;
-
-  @override
-  void initState() {
-    super.initState();
-    options = ThemeColor.values
-        .groupListsBy((themeColor) => themeColor.isBestInDarkMode);
-    _themeColor = Preferences.themeColor.value;
-  }
-
+class ThemeSettingsView extends StatelessWidget {
   void _onOptionTapped(ThemeColor themeColor) {
-    setState(() {
-      _themeColor = Preferences.themeColor.value = themeColor;
-    });
+    Preferences.themeColor.value = themeColor;
   }
 
-  Widget themeColorTile(ThemeColor themeColor) => ListTile(
-        title: Text(themeColor.displayName),
-        leading: Icon(Icons.circle, color: themeColor.color),
-        trailing: Radio<ThemeColor>(
-          groupValue: _themeColor,
-          value: themeColor,
-          onChanged: (_) {
+  Widget themeColorTile(BuildContext context, ThemeColor themeColor) =>
+      Container(
+        margin: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: themeColor.color,
+          borderRadius: BorderRadius.circular(16),
+          border: Preferences.themeColor.value == themeColor
+              ? Border.all(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  width: 3,
+                )
+              : null,
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
             _onOptionTapped(themeColor);
           },
+          child: Center(
+            child: Text(
+              themeColor.displayName,
+              style: TextStyle(color: themeColor.foregroundColor),
+            ),
+          ),
         ),
-        onTap: () {
-          _onOptionTapped(themeColor);
-        },
+      );
+
+  Widget themeColorGrid(BuildContext context, bool isBestInDarkMode) =>
+      GridView.extent(
+        maxCrossAxisExtent: 120,
+        padding: const EdgeInsets.all(4),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          for (final themeColor in _options[isBestInDarkMode]!)
+            themeColorTile(context, themeColor),
+        ],
       );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar('Theme'),
-      body: ListView(
-        children: [
-          for (final themeColor in options[false]!) themeColorTile(themeColor),
-          const HeaderListTile('Best in Dark Mode'),
-          for (final themeColor in options[true]!) themeColorTile(themeColor),
-        ],
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              themeColorGrid(context, false),
+              const HeaderListTile('Best in Dark Mode'),
+              themeColorGrid(context, true),
+            ],
+          ),
+        ),
       ),
     );
   }
