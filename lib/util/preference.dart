@@ -42,7 +42,9 @@ class Preference<T, U extends Object> {
         key,
         defaultValue: defaultValue,
         serialize: (value) => value.index,
-        deserialize: (serialized) => enumValues[serialized],
+        deserialize: (serialized) => serialized < enumValues.length
+            ? enumValues[serialized]
+            : enumValues.first,
       );
 
   Stream<T> get changes => _changes.stream;
