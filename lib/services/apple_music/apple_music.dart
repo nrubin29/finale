@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:finale/services/apple_music/album.dart';
 import 'package:finale/services/apple_music/artist.dart';
 import 'package:finale/services/apple_music/played_song.dart';
@@ -139,13 +140,13 @@ class AppleMusic {
       AMArtist(await FlutterMPMediaPlayer.getArtist(artistId));
 
   static Future<bool> scrobble(List<AMPlayedSong> songs) async {
-    final now = DateTime.now();
     final response = await Lastfm.scrobble(
         songs, songs.map((track) => track.date).toList(growable: false));
     final success = response.ignored == 0;
 
-    if (success) {
-      Preferences.lastAppleMusicScrobble.value = now;
+    if (success && songs.isNotEmpty) {
+      Preferences.lastAppleMusicScrobble.value =
+          maxBy(songs, (song) => song.date)!.date;
     }
 
     return success;
