@@ -106,7 +106,7 @@ class LRecentTracksResponseRecentTracks {
   @JsonKey(name: '@attr')
   final LAttr attr;
 
-  @JsonKey(name: 'track')
+  @JsonKey(name: 'track', fromJson: parseTracks)
   final List<LRecentTracksResponseTrack> tracks;
 
   const LRecentTracksResponseRecentTracks(this.attr, this.tracks);
@@ -114,6 +114,16 @@ class LRecentTracksResponseRecentTracks {
   factory LRecentTracksResponseRecentTracks.fromJson(
           Map<String, dynamic> json) =>
       _$LRecentTracksResponseRecentTracksFromJson(json);
+
+  // If there's only one track, the Last.fm API in its infinite wisdom doesn't
+  // wrap it in an array.
+  static List<LRecentTracksResponseTrack> parseTracks(json) => json == null
+      ? []
+      : json is List<dynamic>
+          ? json
+              .map((json) => LRecentTracksResponseTrack.fromJson(json))
+              .toList()
+          : [LRecentTracksResponseTrack.fromJson(json)];
 }
 
 @JsonSerializable()
