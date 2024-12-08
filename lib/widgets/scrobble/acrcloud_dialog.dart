@@ -1,6 +1,10 @@
+import 'package:finale/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+const _okErrorCodes = {/* Success: */ 0, /* No results: */ 1001};
+const _limitExceededErrorCodes = {/* Request count: */ 3003, /* QpS: */ 3015};
 
 class ACRCloudDialogResult {
   final bool wasCancelled;
@@ -20,6 +24,7 @@ class ACRCloudDialog extends StatefulWidget {
 
 class _ACRCloudDialogState extends State<ACRCloudDialog> {
   late final ACRCloudSession session;
+  String? error;
   List<ACRCloudResponseMusicItem>? results;
 
   @override
@@ -35,6 +40,16 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
         return;
       }
 
+      final statusCode = result.status.code;
+      if (!_okErrorCodes.contains(statusCode)) {
+        setState(() {
+          error = _limitExceededErrorCodes.contains(statusCode)
+              ? rateLimitExceededMessage
+              : result.status.msg;
+        });
+        return;
+      }
+
       if (result.metadata != null && result.metadata!.music.isNotEmpty) {
         setState(() {
           results = result.metadata!.music;
@@ -46,8 +61,11 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      results != null ? _ResultsDialog(results!) : _ListeningDialog(session);
+  Widget build(BuildContext context) => error != null
+      ? _ErrorDialog(error!)
+      : results != null
+          ? _ResultsDialog(results!)
+          : _ListeningDialog(session);
 }
 
 class _ListeningDialog extends StatelessWidget {
@@ -133,6 +151,26 @@ class _ResultsDialog extends StatelessWidget {
               Navigator.pop(context, const ACRCloudDialogResult.cancelled());
             },
             child: const Text('Cancel'),
+          )
+        ],
+      );
+}
+
+class _ErrorDialog extends StatelessWidget {
+  final String error;
+
+  const _ErrorDialog(this.error);
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(error),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, const ACRCloudDialogResult.cancelled());
+            },
+            child: const Text('Close'),
           )
         ],
       );
