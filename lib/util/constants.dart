@@ -20,7 +20,3 @@ const authCallbackUrl = isWeb
 const spotifyGreen = Color.fromRGBO(30, 215, 96, 1);
 const appleMusicPink = Color.fromRGBO(252, 90, 113, 1);
 const scrobbleIcon = Icons.playlist_add;
-
-const rateLimitExceededMessage =
-    'Too many people are using Finale right now. Please try again. If the '
-    'error persists, try again later.';

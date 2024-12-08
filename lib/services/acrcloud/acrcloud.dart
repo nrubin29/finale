@@ -1,4 +1,3 @@
-import 'package:finale/util/constants.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 
 const _okErrorCodes = {/* Success: */ 0, /* No results: */ 1001};
@@ -9,7 +8,8 @@ extension ACRCloudResponseError on ACRCloudResponse {
     final statusCode = status.code;
     if (!_okErrorCodes.contains(statusCode)) {
       return _limitExceededErrorCodes.contains(statusCode)
-          ? rateLimitExceededMessage
+          ? 'Too many people are using Finale right now. Please try again '
+              'later.'
           : status.msg;
     }
 

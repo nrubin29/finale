@@ -1,5 +1,4 @@
 import 'package:finale/services/lastfm/common.dart';
-import 'package:finale/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart';
 
@@ -60,7 +59,9 @@ class ErrorDetails {
       } else if (error.code == 29) {
         // Last.fm back-end error or rate limit exceeded.
         title = 'Rate limit exceeded';
-        errorObject = rateLimitExceededMessage;
+        errorObject =
+            'Too many people are using Finale right now. Please try again. If '
+            'the error persists, try again later.';
       }
     } else if (error is RecentListeningInformationHiddenException) {
       title = 'Listening history hidden';
