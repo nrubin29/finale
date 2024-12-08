@@ -1,10 +1,7 @@
-import 'package:finale/util/constants.dart';
+import 'package:finale/services/acrcloud/acrcloud.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-const _okErrorCodes = {/* Success: */ 0, /* No results: */ 1001};
-const _limitExceededErrorCodes = {/* Request count: */ 3003, /* QpS: */ 3015};
 
 class ACRCloudDialogResult {
   final bool wasCancelled;
@@ -40,12 +37,10 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
         return;
       }
 
-      final statusCode = result.status.code;
-      if (!_okErrorCodes.contains(statusCode)) {
+      final errorMessage = result.errorMessage;
+      if (errorMessage != null) {
         setState(() {
-          error = _limitExceededErrorCodes.contains(statusCode)
-              ? rateLimitExceededMessage
-              : result.status.msg;
+          error = errorMessage;
         });
         return;
       }
