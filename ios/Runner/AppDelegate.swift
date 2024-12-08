@@ -2,7 +2,7 @@ import UIKit
 import Flutter
 import workmanager
 
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
   private static let backgroundTasks = ["BackgroundScrobbling", "SpotifyChecker"]
     
