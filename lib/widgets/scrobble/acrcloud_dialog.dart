@@ -45,7 +45,17 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
     });
   }
 
-  Widget _audioIndicator() => StreamBuilder<double>(
+  @override
+  Widget build(BuildContext context) =>
+      results != null ? _ResultsDialog(results!) : _ListeningDialog(session);
+}
+
+class _ListeningDialog extends StatelessWidget {
+  final ACRCloudSession session;
+
+  const _ListeningDialog(this.session);
+
+  Widget _audioIndicator(BuildContext context) => StreamBuilder<double>(
         stream: session.volumeStream,
         initialData: 0.0,
         builder: (_, snapshot) => SizedBox(
@@ -63,14 +73,32 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
         ),
       );
 
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+        title: const Text('Listening...'),
+        content: _audioIndicator(context),
+        actions: [
+          TextButton(
+            onPressed: session.cancel,
+            child: const Text('Cancel'),
+          )
+        ],
+      );
+}
+
+class _ResultsDialog extends StatelessWidget {
+  final List<ACRCloudResponseMusicItem> results;
+
+  const _ResultsDialog(this.results);
+
   Widget _resultsList() => SizedBox(
         width: double.maxFinite,
         child: ListView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.zero,
-          itemCount: results!.length,
+          itemCount: results.length,
           itemBuilder: (context, index) {
-            final track = results![index];
+            final track = results[index];
             return ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(track.title),
@@ -97,16 +125,13 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: Text(results != null ? 'Results' : 'Listening...'),
-        content: results != null ? _resultsList() : _audioIndicator(),
+        title: const Text('Results'),
+        content: _resultsList(),
         actions: [
           TextButton(
-            onPressed: results != null
-                ? () {
-                    Navigator.pop(
-                        context, const ACRCloudDialogResult.cancelled());
-                  }
-                : session.cancel,
+            onPressed: () {
+              Navigator.pop(context, const ACRCloudDialogResult.cancelled());
+            },
             child: const Text('Cancel'),
           )
         ],
