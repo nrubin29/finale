@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:finale/services/acrcloud/acrcloud.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/formatters.dart';
@@ -18,7 +19,8 @@ enum ListenContinuouslyTrackStatus {
   scrobbled,
   skipped,
   noResults,
-  error,
+  acrCloudError,
+  scrobbleError,
 }
 
 class ListenContinuouslyTrack extends BasicConcreteTrack {
@@ -32,6 +34,10 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
   ListenContinuouslyTrack.noResults()
       : this('No music detected', null, null,
             ListenContinuouslyTrackStatus.noResults);
+
+  ListenContinuouslyTrack.acrCloudError(String errorMessage)
+      : this(errorMessage, null, null,
+            ListenContinuouslyTrackStatus.acrCloudError);
 
   ListenContinuouslyTrack.listening()
       : this('Listening...', null, null,
@@ -68,7 +74,8 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
     ListenContinuouslyTrackStatus.listening: Icons.mic,
     ListenContinuouslyTrackStatus.scrobbled: Icons.check_circle,
     ListenContinuouslyTrackStatus.skipped: Icons.skip_next,
-    ListenContinuouslyTrackStatus.error: Icons.error,
+    ListenContinuouslyTrackStatus.acrCloudError: Icons.error,
+    ListenContinuouslyTrackStatus.scrobbleError: Icons.error,
     ListenContinuouslyTrackStatus.noResults: Icons.cancel,
   };
 
@@ -120,6 +127,14 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
       _tracks.removeFirst();
     });
 
+    final errorMessage = result?.errorMessage;
+    if (errorMessage != null) {
+      setState(() {
+        _tracks.addFirst(ListenContinuouslyTrack.acrCloudError(errorMessage));
+      });
+      return;
+    }
+
     if (result?.metadata?.music.isNotEmpty ?? false) {
       final resultMusicItem = result!.metadata!.music.first;
       var title = resultMusicItem.title;
@@ -138,7 +153,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
         final response = await Lastfm.scrobble([track], [track.timestamp]);
         track.status = response.accepted == 1
             ? ListenContinuouslyTrackStatus.scrobbled
-            : ListenContinuouslyTrackStatus.error;
+            : ListenContinuouslyTrackStatus.scrobbleError;
       }
 
       setState(() {
