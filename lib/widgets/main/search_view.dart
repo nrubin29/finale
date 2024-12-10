@@ -427,6 +427,6 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 extension _DebounceWhere<T> on Stream<T> {
   Stream<T> debounceWhere(bool Function(T) test, Duration duration) {
     return debounce(
-        (e) => test(e) ? TimerStream(true, duration) : Stream.value(true));
+        (e) => test(e) ? TimerStream(null, duration) : Stream.value(null));
   }
 }

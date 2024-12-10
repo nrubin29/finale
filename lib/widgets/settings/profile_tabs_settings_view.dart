@@ -55,7 +55,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
     });
   }
 
-  Future<bool> _save(_) async {
+  Future<bool> _save(_, __) async {
     Preferences.profileTabsOrder.value =
         _tabOrder.where((e) => _tabEnabled[e]!).toList(growable: false);
     return true;
@@ -77,7 +77,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
         ],
       ),
       body: PopScope(
-        onPopInvoked: _save,
+        onPopInvokedWithResult: _save,
         child: ReorderableListView(
           onReorder: _onReorder,
           children: [
