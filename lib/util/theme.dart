@@ -27,12 +27,19 @@ enum ThemeColor {
       {this.isBestInDarkMode = false});
 }
 
-ThemeData finaleTheme(ThemeColor themeColor, Brightness brightness) {
+const _offBlackBackgroundColor = Color.fromRGBO(16, 20, 23, 1);
+
+ThemeData finaleTheme(ThemeColor themeColor, Brightness brightness,
+    [bool? offBlackBackground]) {
   var colorScheme = ColorScheme.fromSeed(
     seedColor: themeColor.color,
     brightness: brightness,
     primary: themeColor.color,
-    surface: brightness == Brightness.dark ? Colors.black : null,
+    surface: brightness == Brightness.dark
+        ? offBlackBackground == true
+            ? _offBlackBackgroundColor
+            : Colors.black
+        : null,
     onPrimary: themeColor.foregroundColor,
   );
 

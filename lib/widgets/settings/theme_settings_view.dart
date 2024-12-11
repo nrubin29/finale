@@ -3,6 +3,7 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/header_list_tile.dart';
+import 'package:finale/widgets/settings/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 
 final _options =
@@ -60,6 +61,15 @@ class ThemeSettingsView extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
+              SettingsListTile(
+                title: 'Off-black background',
+                description:
+                    'In dark mode, the background will be off-black instead of '
+                    'pure black.',
+                icon: Icons.dark_mode,
+                preference: Preferences.themeBackground,
+              ),
+              const HeaderListTile('Colors'),
               themeColorGrid(context, false),
               const HeaderListTile('Best in Dark Mode'),
               themeColorGrid(context, true),

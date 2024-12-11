@@ -27,6 +27,7 @@ class Preferences {
     stripTags,
     listenMoreFrequently,
     themeColor,
+    themeBackground,
     appleMusicEnabled,
     appleMusicBackgroundScrobblingEnabled,
     lastAppleMusicScrobble,
@@ -135,6 +136,9 @@ class Preferences {
     ThemeColor.values,
     defaultValue: ThemeColor.red,
   );
+
+  static final themeBackground =
+      Preference<bool, bool>('themeBackground', defaultValue: false);
 
   static final appleMusicEnabled =
       Preference<bool, bool>('isAppleMusicEnabled', defaultValue: true);

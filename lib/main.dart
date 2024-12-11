@@ -1,7 +1,8 @@
 import 'package:finale/util/background_tasks/background_task_manager.dart'
     as background_task_manager;
 import 'package:finale/util/constants.dart';
-import 'package:finale/util/external_actions/notifications.dart' as notifications;
+import 'package:finale/util/external_actions/notifications.dart'
+    as notifications;
 import 'package:finale/util/external_actions/quick_actions_manager.dart'
     as quick_actions_manager;
 import 'package:finale/util/image_id_cache.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late ThemeColor _themeColor;
+  late bool _offBlackBackground;
 
   @override
   void initState() {
@@ -50,7 +52,14 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
+    Preferences.themeBackground.changes.listen((value) {
+      setState(() {
+        _offBlackBackground = value;
+      });
+    });
+
     _themeColor = Preferences.themeColor.value;
+    _offBlackBackground = Preferences.themeBackground.value;
   }
 
   @override
@@ -59,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Finale',
       theme: finaleTheme(_themeColor, Brightness.light),
-      darkTheme: finaleTheme(_themeColor, Brightness.dark),
+      darkTheme: finaleTheme(_themeColor, Brightness.dark, _offBlackBackground),
       home: name == null ? const LoginView() : MainView(username: name),
     );
   }
