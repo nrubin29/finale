@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:finale/env.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/spotify/album.dart';
@@ -154,7 +153,7 @@ class SPlaylistTracksRequest extends PagedRequest<STrack> {
     return SPage<SPlaylistItem>.fromJson(rawResponse)
         .items
         .map((e) => e.track)
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 
@@ -224,11 +223,10 @@ class Spotify {
       Uri.https('accounts.spotify.com', 'api/token'),
       body: body,
     );
-    final response =
-        TokenResponse.fromJson(json.decode(rawResponse.body));
-      Preferences.spotifyAccessToken.value = response.accessToken;
-      Preferences.spotifyRefreshToken.value = response.refreshToken;
-      Preferences.spotifyExpiration.value = response.expiresAt;
+    final response = TokenResponse.fromJson(json.decode(rawResponse.body));
+    Preferences.spotifyAccessToken.value = response.accessToken;
+    Preferences.spotifyRefreshToken.value = response.refreshToken;
+    Preferences.spotifyExpiration.value = response.expiresAt;
   }
 
   static Future<void> _getAccessToken(String code, PkcePair pkcePair) =>

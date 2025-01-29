@@ -37,6 +37,7 @@ class _WorkoutViewState extends State<WorkoutView> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(
+          context,
           'Strava Workouts',
           actions: [
             if (Preferences.hasStravaAuthData)

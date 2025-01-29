@@ -423,7 +423,7 @@ class _CollageViewState extends State<CollageView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar('Collage Generator'),
+        appBar: createAppBar(context, 'Collage Generator'),
         body: Builder(
             builder: (context) => Center(
                   child: _isDoingRequest

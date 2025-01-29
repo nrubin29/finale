@@ -11,7 +11,7 @@ class ToolsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar('Tools'),
+        appBar: createAppBar(context, 'Tools'),
         body: ListView(
           children: [
             CaptionedListTile(

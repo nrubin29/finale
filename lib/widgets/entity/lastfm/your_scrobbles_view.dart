@@ -84,6 +84,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
         length: 2,
         child: Scaffold(
           appBar: createAppBar(
+            context,
             widget.track.name,
             leadingEntity: widget.track,
             subtitle: _scrobbles != null ? pluralize(_scrobbles!.length) : null,

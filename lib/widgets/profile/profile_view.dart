@@ -169,6 +169,7 @@ class _ProfileViewState extends State<ProfileView>
         },
         builder: (user) => Scaffold(
           appBar: createAppBar(
+            context,
             user.name,
             leadingEntity: user,
             circularLeadingImage: true,

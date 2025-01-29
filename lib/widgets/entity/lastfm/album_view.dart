@@ -50,6 +50,7 @@ class AlbumView extends StatelessWidget {
       baseEntity: album,
       builder: (album) => Scaffold(
         appBar: createAppBar(
+          context,
           album.name,
           subtitle: album.artist.name,
           actions: [

@@ -223,7 +223,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: createAppBar('Top Tracks'),
+                            appBar: createAppBar(context, 'Top Tracks'),
                             body: EntityDisplay<LUserWeeklyTrackChartTrack>(
                               items: _tracks,
                               detailWidgetBuilder: (track) =>
@@ -259,7 +259,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: createAppBar('Top Albums'),
+                            appBar: createAppBar(context, 'Top Albums'),
                             body: EntityDisplay<LUserWeeklyAlbumChartAlbum>(
                               items: _albums,
                               displayType: DisplayType.grid,
@@ -297,7 +297,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                         context,
                         MaterialPageRoute(
                           builder: (context) => Scaffold(
-                            appBar: createAppBar('Top Artists'),
+                            appBar: createAppBar(context, 'Top Artists'),
                             body: EntityDisplay<LUserWeeklyArtistChartArtist>(
                               items: _artists,
                               displayType: DisplayType.grid,

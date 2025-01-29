@@ -25,6 +25,7 @@ class SpotifyArtistView extends StatelessWidget {
         baseEntity: artist,
         builder: (artist) => Scaffold(
           appBar: createAppBar(
+            context,
             artist.name,
             backgroundColor: spotifyGreen,
           ),

@@ -22,6 +22,7 @@ class AppleMusicArtistView extends StatelessWidget {
         baseEntity: artistId,
         builder: (artist) => Scaffold(
           appBar: createAppBar(
+            context,
             artist.name,
             backgroundColor: appleMusicPink,
           ),

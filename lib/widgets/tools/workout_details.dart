@@ -18,6 +18,7 @@ class WorkoutDetails extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: createAppBar(
+            context,
             activity.name,
             subtitle: activity.localTimeRangeFormatted,
             bottom: TabBar(

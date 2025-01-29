@@ -29,7 +29,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar('Accounts'),
+      appBar: createAppBar(context, 'Accounts'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

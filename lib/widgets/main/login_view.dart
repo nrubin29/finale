@@ -77,11 +77,11 @@ class LoginView extends StatelessWidget {
           ),
           Container(
               decoration: BoxDecoration(
-                  color: Colors.grey.shade800.withOpacity(2 / 3))),
+                  color: Colors.grey.shade800.withValues(alpha: 2 / 3))),
           Center(
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.grey.shade800.withOpacity(0.9),
+                  color: Colors.grey.shade800.withValues(alpha: 0.9),
                   border: Border.all(),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
               padding: const EdgeInsets.all(10),

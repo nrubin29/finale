@@ -68,6 +68,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar(
+        context,
         'Profile Tabs',
         actions: [
           IconButton(

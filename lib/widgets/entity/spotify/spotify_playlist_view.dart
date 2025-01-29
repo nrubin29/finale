@@ -16,6 +16,7 @@ class SpotifyPlaylistView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(
+          context,
           playlist.name,
           backgroundColor: spotifyGreen,
           actions: [

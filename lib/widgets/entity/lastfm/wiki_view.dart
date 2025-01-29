@@ -35,7 +35,8 @@ class _WikiPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar(entity.displayTitle, leadingEntity: entity),
+        appBar:
+            createAppBar(context, entity.displayTitle, leadingEntity: entity),
         body: ListView(
           padding: const EdgeInsets.all(10),
           children: [

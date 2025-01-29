@@ -15,7 +15,7 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: createAppBar('Settings'),
+        appBar: createAppBar(context, 'Settings'),
         body: Builder(
             builder: (context) => ListView(
                   children: [

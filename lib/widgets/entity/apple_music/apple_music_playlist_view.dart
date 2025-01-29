@@ -15,11 +15,11 @@ class AppleMusicPlaylistView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(
+          context,
           playlist.displayTitle,
           backgroundColor: appleMusicPink,
           actions: [
-            ScrobbleButton(
-                entityProvider: () => AMFullPlaylist.get(playlist)),
+            ScrobbleButton(entityProvider: () => AMFullPlaylist.get(playlist)),
           ],
         ),
         body: EntityDisplay<AMSong>(

@@ -23,6 +23,7 @@ class AppleMusicAlbumView extends StatelessWidget {
       futureFactory: () => AppleMusic.getFullAlbum(album),
       builder: (album) => Scaffold(
         appBar: createAppBar(
+          context,
           album.name,
           subtitle: album.artist.name,
           backgroundColor: appleMusicPink,

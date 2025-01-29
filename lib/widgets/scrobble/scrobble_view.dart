@@ -129,6 +129,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar(
+        context,
         'Scrobble',
         actions: [
           Builder(

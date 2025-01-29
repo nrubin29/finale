@@ -33,6 +33,7 @@ class TrackView extends StatelessWidget {
       baseEntity: track,
       builder: (track) => Scaffold(
         appBar: createAppBar(
+          context,
           track.name,
           subtitle: track.artist?.name,
           actions: [

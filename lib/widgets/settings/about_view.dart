@@ -12,7 +12,7 @@ class AboutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar('About'),
+      appBar: createAppBar(context, 'About'),
       body: CustomScrollView(
         physics: const ScrollPhysics(),
         slivers: [

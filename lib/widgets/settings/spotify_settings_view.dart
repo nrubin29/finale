@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/constants.dart';
-import 'package:finale/util/external_actions/notifications.dart' as notifications;
+import 'package:finale/util/external_actions/notifications.dart'
+    as notifications;
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
@@ -54,7 +55,7 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: createAppBar('Spotify Settings'),
+      appBar: createAppBar(context, 'Spotify Settings'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

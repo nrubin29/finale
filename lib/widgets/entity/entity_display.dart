@@ -371,8 +371,8 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                   begin: FractionalOffset.topCenter,
                   end: FractionalOffset.bottomCenter,
                   colors: [
-                    Colors.grey.withOpacity(0),
-                    Colors.black.withOpacity(0.75),
+                    Colors.grey.withValues(alpha: 0),
+                    Colors.black.withValues(alpha: 0.75),
                   ],
                 ),
               ),

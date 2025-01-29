@@ -78,7 +78,7 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar('Apple Music Settings'),
+      appBar: createAppBar(context, 'Apple Music Settings'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

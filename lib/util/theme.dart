@@ -61,17 +61,21 @@ ThemeData finaleTheme(ThemeColor themeColor, Brightness brightness,
   );
 }
 
-/// Returns a [ThemeData] whose `tabBarTheme` is appropriate a [TabBar] on an
-/// [AppBar].
+/// Returns a [ThemeData] with overrides necessary for an [AppBar].
 ///
-/// The app-wide `tabBarTheme` (defined above) is meant to go on top of the
-/// background color, so it uses the theme color as the indicator and label
-/// color. In an [AppBar], the theme color is the background color, so we need
-/// to use the foreground color as the indicator and label color instead.
-ThemeData tabBarThemeDataForAppBar(ThemeColor themeColor) => ThemeData(
-      tabBarTheme: TabBarTheme(
-        indicatorColor: themeColor.foregroundColor,
-        labelColor: themeColor.foregroundColor,
-        unselectedLabelColor: themeColor.foregroundColor,
-      ),
-    );
+/// The app-wide theme assumes that colorful components are placed on top of a
+/// white or black background. In an [AopBar], the background is colorful, so we
+/// need to use the foreground color as the accent color instead.
+ThemeData themeDataForAppBar(BuildContext context, ThemeColor themeColor) {
+  final theme = Theme.of(context);
+  return theme.copyWith(
+    // Color disabled icon buttons correctly.
+    colorScheme:
+        theme.colorScheme.copyWith(onSurface: themeColor.foregroundColor),
+    tabBarTheme: theme.tabBarTheme.copyWith(
+      indicatorColor: themeColor.foregroundColor,
+      labelColor: themeColor.foregroundColor,
+      unselectedLabelColor: themeColor.foregroundColor,
+    ),
+  );
+}

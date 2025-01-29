@@ -9,7 +9,7 @@ class ListenContinuouslySettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar('Listen Continuously Settings'),
+      appBar: createAppBar(context, 'Listen Continuously Settings'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

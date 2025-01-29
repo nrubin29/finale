@@ -168,13 +168,11 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar('Listening Continuously', actions: [
+        appBar: createAppBar(context, 'Listening Continuously', actions: [
           IconButton(
             icon: const Icon(Icons.mic),
             onPressed: _isListening ? null : _listen,
             tooltip: 'Listen now',
-            disabledColor:
-                Preferences.themeColor.value.foregroundColor.withOpacity(0.39),
           ),
           IconButton(
               icon: const Icon(Icons.settings),

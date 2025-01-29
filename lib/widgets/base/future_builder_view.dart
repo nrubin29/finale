@@ -71,7 +71,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
 
   Widget get _loadingView => widget.isView
       ? Scaffold(
-          appBar: createAppBar('Loading'),
+          appBar: createAppBar(context, 'Loading'),
           body: const LoadingComponent(),
         )
       : const LoadingComponent();
@@ -87,6 +87,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
     return widget.isView
         ? Scaffold(
             appBar: createAppBar(
+              context,
               'Error',
               actions: [
                 IconButton(

@@ -56,7 +56,7 @@ class ThemeSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar('Theme'),
+      appBar: createAppBar(context, 'Theme'),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(

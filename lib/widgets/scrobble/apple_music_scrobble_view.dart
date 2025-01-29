@@ -133,6 +133,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(
+          context,
           'Scrobble from Apple Music',
           actions: [
             IconButton(
@@ -151,8 +152,6 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
             IconButton(
               icon: const Icon(scrobbleIcon),
               onPressed: _hasItemsToScrobble ? _scrobble : null,
-              disabledColor: Preferences.themeColor.value.foregroundColor
-                  .withOpacity(0.39),
             ),
           ],
         ),

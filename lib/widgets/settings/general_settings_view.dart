@@ -11,7 +11,7 @@ class GeneralSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar('General Settings'),
+      appBar: createAppBar(context, 'General Settings'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

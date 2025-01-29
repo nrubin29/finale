@@ -117,7 +117,7 @@ class _LuckyViewState extends State<LuckyView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar("I'm Feeling Lucky"),
+        appBar: createAppBar(context, "I'm Feeling Lucky"),
         body: CollapsibleFormView(
           key: _formKey,
           submitButtonText: 'Roll the Dice',
