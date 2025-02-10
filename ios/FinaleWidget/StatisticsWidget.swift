@@ -114,6 +114,7 @@ struct StatisticsWidgetEntryViewSmall : View {
                     .padding()
             }
         }
+        .safeWidgetAccentable()
     }
 }
 
@@ -124,6 +125,7 @@ struct StatisticsWidgetEntryViewLarge : View {
         FinaleWidgetLarge(title: "Last.fm Stats", period: entry.configuration.period, username: entry.configuration.username, themeColor: entry.configuration.themeColor, isPreview: entry.isPreview) {
             Scoreboard(themeColor: entry.configuration.themeColor, alignment: .horizontal, tiles: getScoreTiles(entry))
         }
+        .safeWidgetAccentable()
     }
 }
 

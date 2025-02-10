@@ -135,7 +135,7 @@ struct TopEntitiesWidgetEntryViewSmall : View {
             EntityImage(imageUrl: imageUrl, entityType: entity?.type, size: .large)
                 .aspectRatio(contentMode: .fit)
             if (entry.configuration.showTitles ?? 1) == 1 {
-                imageForegroundGradient
+                ImageForegroundGradient()
             }
             VStack {
                 Spacer()
@@ -216,7 +216,7 @@ struct TopEntitiesWidgetEntryViewLarge : View {
                                     EntityImage(imageUrl: unnest(entry.imageUrls[entity.url]), entityType: entity.type, size: .small)
                                         .aspectRatio(contentMode: .fill)
                                     if (entry.configuration.showTitles ?? 1) == 1 {
-                                        imageForegroundGradient
+                                        ImageForegroundGradient()
                                         Text(entity.name)
                                             .font(Font.system(size: 8))
                                             .foregroundColor(.white)
@@ -230,6 +230,7 @@ struct TopEntitiesWidgetEntryViewLarge : View {
                                     .font(Font.system(size: 8))
                                     .foregroundColor(entry.configuration.themeColor.accent)
                                     .bold()
+                                    .safeWidgetAccentable()
                             }
                         }
                     }

@@ -2,30 +2,64 @@ import SwiftUI
 
 let censorImages = false
 
-let imageForegroundGradient = LinearGradient(gradient: Gradient(colors: [.clear, Color(.sRGBLinear, white: 0, opacity: 0.75)]), startPoint: .top, endPoint: .bottom)
+private let imageForegroundGradient = LinearGradient(
+    gradient: Gradient(colors: [
+        .clear, Color(.sRGBLinear, white: 0, opacity: 0.75),
+    ]), startPoint: .top, endPoint: .bottom
+)
+
+@available(iOSApplicationExtension 16.0, *)
+private struct DynamicImageForegroundGradient: View {
+    @Environment(\.widgetRenderingMode) var widgetRenderingMode
+
+    var body: some View {
+        if widgetRenderingMode == .fullColor {
+            imageForegroundGradient
+        } else {
+            EmptyView()
+        }
+    }
+}
+
+struct ImageForegroundGradient: View {
+    var body: some View {
+        if #available(iOSApplicationExtension 16.0, *) {
+            DynamicImageForegroundGradient()
+        } else {
+            imageForegroundGradient
+        }
+    }
+}
 
 enum EntityImageSize {
     case small
     case large
 }
 
-struct EntityImage : View {
+struct EntityImage: View {
     let imageUrl: String?
     let entityType: EntityType?
     let size: EntityImageSize
-    
+
     @ViewBuilder
     private var imageView: some View {
-        get {
-            if let imageUrl = imageUrl, let url = URL(string: imageUrl), let imageData = try? Data(contentsOf: url), let uiImage = UIImage(data: imageData) {
+        if let imageUrl = imageUrl, let url = URL(string: imageUrl),
+            let imageData = try? Data(contentsOf: url),
+            let uiImage = UIImage(data: imageData)
+        {
+            if #available(iOSApplicationExtension 18.0, *) {
                 Image(uiImage: uiImage)
                     .resizable()
+                    .widgetAccentedRenderingMode(.fullColor)
             } else {
-                Placeholder(entityType: entityType)
+                Image(uiImage: uiImage)
+                    .resizable()
             }
+        } else {
+            Placeholder(entityType: entityType)
         }
     }
-    
+
     var body: some View {
         if censorImages {
             ZStack(alignment: size == .small ? .center : .top) {
@@ -44,25 +78,30 @@ struct EntityImage : View {
     }
 }
 
-private struct Placeholder : View {
+private struct Placeholder: View {
     let entityType: EntityType?
-    
+
     private var iconName: String {
-        get {
-            switch entityType {
-            case .track: return "MusicNoteIcon"
-            case .artist: return "ArtistIcon"
-            case .album: return "AlbumIcon"
-            default: return "AlbumIcon"
-            }
+        switch entityType {
+        case .track: return "MusicNoteIcon"
+        case .artist: return "ArtistIcon"
+        case .album: return "AlbumIcon"
+        default: return "AlbumIcon"
         }
     }
-    
+
     var body: some View {
         ZStack {
-            Image(iconName)
-                .resizable()
-                .padding()
+            if #available(iOSApplicationExtension 18.0, *) {
+                Image(iconName)
+                    .resizable()
+                    .widgetAccentedRenderingMode(.fullColor)
+                    .padding()
+            } else {
+                Image(iconName)
+                    .resizable()
+                    .padding()
+            }
         }
         .background(Color("PlaceholderBackground"))
     }
