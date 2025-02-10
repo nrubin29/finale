@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 /// An item in a [Scoreboard].
 class ScoreboardItemModel {
   final String label;
+  final Object? _value;
   final FutureOr<Object?> Function() supplier;
 
   /// An optional function to call when the item is pressed.
@@ -15,13 +16,22 @@ class ScoreboardItemModel {
   final void Function()? callback;
   final bool isLazy;
 
-  ScoreboardItemModel(
-      {required this.label, required FutureOr<Object?> value, this.callback})
-      : supplier = (() => value),
+  ScoreboardItemModel.value(
+      {required this.label, required Object? value, this.callback})
+      : assert(value is! Future),
+        _value = value,
+        supplier = (() => value),
+        isLazy = false;
+
+  ScoreboardItemModel.future(
+      {required this.label, required Future<Object?> future, this.callback})
+      : _value = null,
+        supplier = (() => future),
         isLazy = false;
 
   const ScoreboardItemModel.lazy({required this.label, required this.supplier})
-      : callback = null,
+      : _value = null,
+        callback = null,
         isLazy = true;
 }
 
@@ -86,6 +96,14 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
     unawaited(_loadValue());
   }
 
+  @override
+  void didUpdateWidget(_ScoreboardItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.model._value != oldWidget.model._value) {
+      _loadValue(forceLoad: true);
+    }
+  }
+
   Future<void> _loadValue({bool forceLoad = false}) async {
     if (widget.model.isLazy && !forceLoad) return;
 
@@ -109,7 +127,7 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(widget.model.label),
-        _isLoading
+        _isLoading && widget.model._value == null
             ? const LoadingComponent.small()
             : _value != null
                 ? Text(_value is num

@@ -51,9 +51,11 @@ class TrackView extends StatelessWidget {
           listItems: [
             Scoreboard(
               items: [
-                ScoreboardItemModel(label: 'Scrobbles', value: track.playCount),
-                ScoreboardItemModel(label: 'Listeners', value: track.listeners),
-                ScoreboardItemModel(
+                ScoreboardItemModel.value(
+                    label: 'Scrobbles', value: track.playCount),
+                ScoreboardItemModel.value(
+                    label: 'Listeners', value: track.listeners),
+                ScoreboardItemModel.value(
                   label: 'Your scrobbles',
                   value: track.userPlayCount,
                   callback: track.userPlayCount > 0
@@ -68,9 +70,9 @@ class TrackView extends StatelessWidget {
                       : null,
                 ),
                 if (friendUsername != null)
-                  ScoreboardItemModel(
+                  ScoreboardItemModel.future(
                     label: "$friendUsername's scrobbles",
-                    value: Lastfm.getTrack(track, username: friendUsername)
+                    future: Lastfm.getTrack(track, username: friendUsername)
                         .then((value) => value.userPlayCount),
                     callback: () {
                       Navigator.push(
@@ -85,7 +87,7 @@ class TrackView extends StatelessWidget {
                     },
                   ),
                 if (track.userPlayCount > 0 && track.duration > 0)
-                  ScoreboardItemModel(
+                  ScoreboardItemModel.value(
                     label: 'Total listen time',
                     value: formatDuration(Duration(
                         milliseconds: track.userPlayCount * track.duration)),

@@ -67,19 +67,21 @@ class AlbumView extends StatelessWidget {
           entity: album,
           listItems: [
             Scoreboard(items: [
-              ScoreboardItemModel(label: 'Scrobbles', value: album.playCount),
-              ScoreboardItemModel(label: 'Listeners', value: album.listeners),
-              ScoreboardItemModel(
+              ScoreboardItemModel.value(
+                  label: 'Scrobbles', value: album.playCount),
+              ScoreboardItemModel.value(
+                  label: 'Listeners', value: album.listeners),
+              ScoreboardItemModel.value(
                   label: 'Your scrobbles', value: album.userPlayCount),
               if (friendUsername != null)
-                ScoreboardItemModel(
+                ScoreboardItemModel.future(
                     label: "$friendUsername's scrobbles",
-                    value: Lastfm.getAlbum(album, username: friendUsername)
+                    future: Lastfm.getAlbum(album, username: friendUsername)
                         .then((value) => value.userPlayCount)),
               if (album.userPlayCount > 0 && album.tracks.isNotEmpty)
-                ScoreboardItemModel(
+                ScoreboardItemModel.future(
                   label: 'Total listen time',
-                  value: _totalListenTime(album),
+                  future: _totalListenTime(album),
                 ),
             ]),
             if (album.topTags.tags.isNotEmpty) ...[

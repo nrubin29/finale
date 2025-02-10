@@ -135,10 +135,14 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
               children: [
                 const SizedBox(height: 10),
                 Scoreboard(items: [
-                  ScoreboardItemModel(label: 'Scrobbles', value: _numScrobbles),
-                  ScoreboardItemModel(label: 'Artists', value: _artists.length),
-                  ScoreboardItemModel(label: 'Albums', value: _albums.length),
-                  ScoreboardItemModel(label: 'Tracks', value: _tracks.length),
+                  ScoreboardItemModel.value(
+                      label: 'Scrobbles', value: _numScrobbles),
+                  ScoreboardItemModel.value(
+                      label: 'Artists', value: _artists.length),
+                  ScoreboardItemModel.value(
+                      label: 'Albums', value: _albums.length),
+                  ScoreboardItemModel.value(
+                      label: 'Tracks', value: _tracks.length),
                 ]),
                 const SizedBox(height: 10),
                 Padding(

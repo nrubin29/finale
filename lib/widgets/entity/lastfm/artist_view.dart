@@ -48,22 +48,22 @@ class ArtistView extends StatelessWidget {
           listItems: [
             Scoreboard(
               items: [
-                ScoreboardItemModel(
+                ScoreboardItemModel.value(
                   label: 'Scrobbles',
                   value: artist.stats.playCount,
                 ),
-                ScoreboardItemModel(
+                ScoreboardItemModel.value(
                   label: 'Listeners',
                   value: artist.stats.listeners,
                 ),
-                ScoreboardItemModel(
+                ScoreboardItemModel.value(
                   label: 'Your scrobbles',
                   value: artist.stats.userPlayCount,
                 ),
                 if (friendUsername != null)
-                  ScoreboardItemModel(
+                  ScoreboardItemModel.future(
                     label: "$friendUsername's scrobbles",
-                    value: Lastfm.getArtist(artist, username: friendUsername)
+                    future: Lastfm.getArtist(artist, username: friendUsername)
                         .then((value) => value.stats.userPlayCount),
                   ),
                 ScoreboardItemModel.lazy(
