@@ -23,6 +23,7 @@ import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/profile/period_selector.dart';
 import 'package:finale/widgets/base/fractional_bar.dart';
+import 'package:finale/widgets/profile/profile_scrobble_distribution_component.dart';
 import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/settings/settings_view.dart';
@@ -30,6 +31,11 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+const _profileTabsToHideOverallStats = {
+  ProfileTab.charts,
+  ProfileTab.scrobbleDistribution
+};
 
 class ProfileView extends StatefulWidget {
   final String username;
@@ -151,6 +157,8 @@ class _ProfileViewState extends State<ProfileView>
         );
       case ProfileTab.charts:
         return WeeklyChartSelectorView(user: user);
+      case ProfileTab.scrobbleDistribution:
+        return ProfileScrobbleDistributionComponent(username: widget.username);
     }
   }
 
@@ -214,7 +222,9 @@ class _ProfileViewState extends State<ProfileView>
                 ),
               ),
               SliverVisibility(
-                visible: _tab != _tabOrder.indexOf(ProfileTab.charts),
+                visible: !_profileTabsToHideOverallStats
+                    .map(_tabOrder.indexOf)
+                    .contains(_tab),
                 maintainState: true,
                 sliver: SliverToBoxAdapter(
                   child: Column(children: [

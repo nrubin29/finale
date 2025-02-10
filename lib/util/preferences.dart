@@ -157,7 +157,7 @@ class Preferences {
       Preference<bool, bool>('inputDateTimeAsText', defaultValue: false);
 
   static final profileTabsOrder = Preference<List<ProfileTab>, List<String>>(
-    'profileTabsOrder',
+    'profileTabsOrder2',
     defaultValue: ProfileTab.values,
     serialize: (value) =>
         value.map((e) => e.index.toString()).toList(growable: false),

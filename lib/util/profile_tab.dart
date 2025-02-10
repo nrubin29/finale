@@ -6,7 +6,9 @@ enum ProfileTab {
   topAlbums('Top Albums', Icons.album),
   topTracks('Top Tracks', Icons.audiotrack),
   friends('Friends', Icons.person),
-  charts('Charts', Icons.access_time);
+  charts('Charts', Icons.access_time),
+  scrobbleDistribution('Scrobble Distribution', Icons.numbers),
+  ;
 
   final String displayName;
   final IconData icon;
