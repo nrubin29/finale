@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
@@ -162,6 +163,29 @@ class _ProfileViewState extends State<ProfileView>
     }
   }
 
+  Widget _tabBar(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final maxIconSize = screenWidth / _tabOrder.length - 32;
+    final iconSize = min(maxIconSize, 24.0);
+
+    return TabBar(
+      controller: _tabController,
+      isScrollable: true,
+      tabAlignment: TabAlignment.center,
+      tabs: [
+        for (final tab in _tabOrder)
+          Tab(
+            icon: tab.iconRotationDegrees != null
+                ? Transform.rotate(
+                    angle: tab.iconRotationDegrees! * pi / 180,
+                    child: Icon(tab.icon, size: iconSize),
+                  )
+                : Icon(tab.icon, size: iconSize),
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) => FutureBuilderView<LUser>(
         futureFactory: () => Lastfm.getUser(widget.username),
@@ -251,14 +275,7 @@ class _ProfileViewState extends State<ProfileView>
                   ]),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: TabBar(
-                  controller: _tabController,
-                  tabs: [
-                    for (final tab in _tabOrder) Tab(icon: Icon(tab.icon)),
-                  ],
-                ),
-              ),
+              SliverToBoxAdapter(child: _tabBar(context)),
             ],
             body: TabBarView(
               controller: _tabController,
