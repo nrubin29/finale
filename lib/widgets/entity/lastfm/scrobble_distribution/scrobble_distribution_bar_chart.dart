@@ -69,7 +69,9 @@ class ScrobbleDistributionBarChart extends StatelessWidget {
             touchCallback: level == ScrobbleDistributionLevel.month
                 ? null
                 : (event, response) {
-                    if (!event.isInterestedForInteractions) return;
+                    if (event is! FlTapUpEvent && event is! FlLongPressEnd) {
+                      return;
+                    }
                     final index = response?.spot?.touchedBarGroup.x;
                     if (index != null) {
                       onTap(items[index]);
