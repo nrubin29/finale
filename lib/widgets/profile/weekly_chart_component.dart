@@ -159,21 +159,19 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                             sideTitles: SideTitles(
                               showTitles: true,
                               reservedSize: 48,
-                              getTitlesWidget: (value, meta) =>
-                                  value % meta.appliedInterval == 0
-                                      ? SideTitleWidget(
-                                          axisSide: AxisSide.right,
-                                          child: Text(meta.formattedValue),
-                                        )
-                                      : const SizedBox(),
+                              maxIncluded: false,
+                              getTitlesWidget: (value, meta) => SideTitleWidget(
+                                meta: meta,
+                                child: Text(meta.formattedValue),
+                              ),
                             ),
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
                               reservedSize: 24,
-                              getTitlesWidget: (value, _) => SideTitleWidget(
-                                axisSide: AxisSide.bottom,
+                              getTitlesWidget: (value, meta) => SideTitleWidget(
+                                meta: meta,
                                 child: Text(_weekdays[value.toInt()]),
                               ),
                             ),

@@ -14,7 +14,7 @@ dependencies:
   collection: ^1.18.0
   crypto: ^3.0.6
   datetime_picker_formfield: ^2.0.1
-  fl_chart: ^0.69.2
+  fl_chart: ^0.70.2
   flutter:
     sdk: flutter
   flutter_acrcloud: ^0.2.2
