@@ -79,3 +79,10 @@ ThemeData themeDataForAppBar(BuildContext context, ThemeColor themeColor) {
     ),
   );
 }
+
+final minimumSizeButtonStyle = SegmentedButton.styleFrom(
+  visualDensity: const VisualDensity(
+    horizontal: VisualDensity.minimumDensity,
+    vertical: VisualDensity.minimumDensity,
+  ),
+);

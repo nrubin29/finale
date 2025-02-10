@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:flutter/material.dart';
@@ -57,12 +58,7 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
                 children: [
                   SegmentedButton<DisplayType>(
                     showSelectedIcon: false,
-                    style: const ButtonStyle(
-                      visualDensity: VisualDensity(
-                        horizontal: VisualDensity.minimumDensity,
-                        vertical: VisualDensity.minimumDensity,
-                      ),
-                    ),
+                    style: minimumSizeButtonStyle,
                     segments: const [
                       ButtonSegment(
                         value: DisplayType.list,
