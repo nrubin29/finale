@@ -5,6 +5,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/request_sequencer.dart';
 import 'package:finale/util/theme.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:flutter/material.dart';
 
 import 'scrobble_distribution_bar_chart.dart';
@@ -56,6 +57,8 @@ class _ScrobbleDistributionComponentState
   var _level = ScrobbleDistributionLevel.overall;
   late DateTime _scrobblingSince, _dateTime;
   var _items = <ScrobbleDistributionItem>[];
+  var _totalScrobbles = 0;
+  var _scrobblesPerDay = 0.0;
   var _isLoading = true;
 
   final _requestSequencer = RequestSequencer();
@@ -123,6 +126,21 @@ class _ScrobbleDistributionComponentState
             dateTime: data.first as DateTime,
             scrobbles: data.last as int))
         .toList(growable: false);
+    _totalScrobbles = scrobbleCounts.fold(0, (a, b) => a + b);
+    final totalDays = switch (_level) {
+      ScrobbleDistributionLevel.overall =>
+        DateTime.now().difference(_scrobblingSince).inDays,
+      ScrobbleDistributionLevel.year => 365,
+      ScrobbleDistributionLevel.month =>
+        DateUtils.getDaysInMonth(_dateTime.year, _dateTime.month),
+    };
+
+    _scrobblesPerDay = _totalScrobbles / totalDays;
+    if (_scrobblesPerDay >= 1) {
+      _scrobblesPerDay = _scrobblesPerDay.floorToDouble();
+    } else {
+      _scrobblesPerDay = double.parse(_scrobblesPerDay.toStringAsPrecision(2));
+    }
 
     setState(() {
       _isLoading = false;
@@ -156,6 +174,17 @@ class _ScrobbleDistributionComponentState
             ],
           ),
         ),
+        if (!_isLoading) ...[
+          Scoreboard(
+            items: [
+              ScoreboardItemModel.value(
+                  label: 'Scrobbles', value: _totalScrobbles),
+              ScoreboardItemModel.value(
+                  label: 'Scrobbles/Day (Avg)', value: _scrobblesPerDay),
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
         Expanded(
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
