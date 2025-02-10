@@ -6,10 +6,10 @@ enum ProfileTab {
   topAlbums('Top Albums', Icons.album),
   topTracks('Top Tracks', Icons.audiotrack),
   friends('Friends', Icons.person),
-  charts('Charts', Icons.access_time),
+  charts('Charts', Icons.access_time_filled),
   scrobbleDistribution(
     'Scrobble Distribution',
-    Icons.numbers,
+    Icons.bar_chart,
     iconRotationDegrees: 90,
   ),
   ;
