@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 extension DateTimeUtil on DateTime {
@@ -19,4 +20,31 @@ extension PackageInfoFullVersion on PackageInfo {
 
 extension TitleCase on String {
   String toTitleCase() => this[0].toUpperCase() + substring(1);
+}
+
+extension ListBinarySearchIndexWhere<T> on List<T> {
+  int binarySearchIndexWhere<E>(E value, int Function(T, E) compare) {
+    var min = 0;
+    var max = length;
+    while (min < max) {
+      var mid = min + ((max - min) >> 1);
+      var element = this[mid];
+      var comp = compare(element, value);
+      if (comp == 0) return mid;
+      if (comp < 0) {
+        min = mid + 1;
+      } else {
+        max = mid;
+      }
+    }
+    return -1;
+  }
+}
+
+extension DateTimeRangeCompareContains on DateTimeRange {
+  int compareContains(DateTime dateTime) => dateTime.isBefore(start)
+      ? 1
+      : dateTime.isAfter(end)
+          ? -1
+          : 0;
 }

@@ -4,9 +4,11 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/formatters.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/base/loading_component.dart';
+import 'package:finale/widgets/entity/lastfm/scrobble_distribution/scrobble_distribution_component.dart';
 import 'package:flutter/material.dart';
 
 class YourScrobblesView extends StatefulWidget {
@@ -39,6 +41,24 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
       _selectedDate = scrobbles.first.date.beginningOfDay;
     });
   }
+
+  Widget get _barChartView => ScrobbleDistributionComponent(
+        username: widget.username ?? Preferences.name.value!,
+        fetchScrobbleCounts: (ranges) {
+          final counts = List.filled(ranges.length, 0);
+
+          for (final scrobble in _scrobbles!) {
+            final index = ranges.binarySearchIndexWhere(
+                scrobble.date, (range, date) => range.compareContains(date));
+
+            if (index != -1) {
+              counts[index]++;
+            }
+          }
+
+          return counts.map(Future.value);
+        },
+      );
 
   List<Widget> get _calendarView => [
         CalendarDatePicker(
@@ -81,7 +101,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: createAppBar(
             context,
@@ -91,6 +111,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
             actions: [const SizedBox(width: 32)],
             bottom: const TabBar(
               tabs: [
+                Tab(icon: Icon(Icons.bar_chart)),
                 Tab(icon: Icon(Icons.calendar_today)),
                 Tab(icon: Icon(Icons.list)),
               ],
@@ -100,6 +121,7 @@ class _YourScrobblesViewState extends State<YourScrobblesView> {
               ? const LoadingComponent()
               : TabBarView(
                   children: [
+                    _barChartView,
                     ListView(children: _calendarView),
                     ListView(children: _listView),
                   ],
