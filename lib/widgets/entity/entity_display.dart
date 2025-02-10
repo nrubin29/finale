@@ -5,6 +5,7 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/constants.dart';
+import 'package:finale/util/request_sequencer.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
@@ -95,18 +96,13 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   var isDoingRequest = false;
   var hasMorePages = true;
 
-  /// Keeps track of the latest request.
-  ///
-  /// When a new request starts, this value is incremented. When a request ends,
-  /// we make sure it's still the latest request before using the data.
-  var requestId = 0;
-
   PagedRequest<T>? _request;
   StreamSubscription? _subscription;
 
   Exception? _exception;
   StackTrace? _stackTrace;
 
+  final _requestSequencer = RequestSequencer();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   bool get _hasException => _exception != null && _stackTrace != null;
@@ -138,11 +134,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
 
   Future<void> _getInitialItems() async {
     didInitialRequest = false;
-    final id = ++requestId;
+    final requestHandle = _requestSequencer.startRequest();
 
     try {
       final initialItems = await _request!.getData(20, 1);
-      if (id == requestId) {
+      if (requestHandle.isLatestRequest) {
         setState(() {
           items = [...initialItems];
           hasMorePages = initialItems.length >= 20;
@@ -178,11 +174,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       isDoingRequest = true;
     });
 
-    final id = ++requestId;
+    final requestHandle = _requestSequencer.startRequest();
 
     try {
       final moreItems = await _request!.getData(20, page);
-      if (id == requestId) {
+      if (requestHandle.isLatestRequest) {
         setState(() {
           items.addAll(moreItems);
           hasMorePages = moreItems.length >= 20;
