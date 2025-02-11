@@ -58,6 +58,15 @@ abstract class BasicScrobbledArtist extends BasicArtist {
   String get displayTrailing => pluralize(playCount);
 }
 
+abstract class LPagedResponse<T extends HasPlayCount> {
+  @JsonKey(name: '@attr')
+  final LAttr attr;
+
+  List<T> get items;
+
+  const LPagedResponse(this.attr);
+}
+
 @JsonSerializable()
 class LScrobbleResponseScrobblesAttr {
   @JsonKey(fromJson: parseInt)

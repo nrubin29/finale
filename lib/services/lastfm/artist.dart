@@ -27,14 +27,13 @@ class LTopArtistsResponseArtist extends BasicScrobbledArtist with HasPlayCount {
 }
 
 @JsonSerializable()
-class LTopArtistsResponseTopArtists {
+class LTopArtistsResponseTopArtists
+    extends LPagedResponse<LTopArtistsResponseArtist> {
   @JsonKey(name: 'artist')
-  final List<LTopArtistsResponseArtist> artists;
+  @override
+  final List<LTopArtistsResponseArtist> items;
 
-  @JsonKey(name: '@attr')
-  final LAttr attr;
-
-  const LTopArtistsResponseTopArtists(this.artists, this.attr);
+  const LTopArtistsResponseTopArtists(super.attr, this.items);
 
   factory LTopArtistsResponseTopArtists.fromJson(Map<String, dynamic> json) =>
       _$LTopArtistsResponseTopArtistsFromJson(json);

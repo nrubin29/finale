@@ -47,14 +47,13 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
 }
 
 @JsonSerializable()
-class LTopAlbumsResponseTopAlbums {
+class LTopAlbumsResponseTopAlbums
+    extends LPagedResponse<LTopAlbumsResponseAlbum> {
   @JsonKey(name: 'album')
-  final List<LTopAlbumsResponseAlbum> albums;
+  @override
+  final List<LTopAlbumsResponseAlbum> items;
 
-  @JsonKey(name: '@attr')
-  final LAttr attr;
-
-  const LTopAlbumsResponseTopAlbums(this.albums, this.attr);
+  const LTopAlbumsResponseTopAlbums(super.attr, this.items);
 
   factory LTopAlbumsResponseTopAlbums.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseTopAlbumsFromJson(json);

@@ -27,14 +27,14 @@ class _CacheKey {
 
 final _cache = <_CacheKey, List<LRecentTracksResponseTrack>>{};
 
-abstract class PeriodPagedRequest<T extends HasPlayCount>
-    extends PagedRequest<T> {
+abstract class PeriodPagedRequest<R extends LPagedResponse<T>,
+    T extends HasPlayCount> extends PagedRequest<T> {
   final String username;
   final Period? period;
 
   PeriodPagedRequest(this.username, this.period);
 
-  Future<List<T>> doPeriodRequest(Period period, int limit, int page);
+  Future<R> doPeriodRequest(Period period, int limit, int page);
 
   String groupBy(LRecentTracksResponseTrack track);
 
@@ -67,7 +67,18 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
       return data.slice(limit * (page - 1), min(limit * page, data.length));
     }
 
-    return doPeriodRequest(period, limit, page);
+    return (await doPeriodRequest(period, limit, page)).items;
+  }
+
+  @nonVirtual
+  Future<int> getNumItems() async {
+    final period = this.period ?? Preferences.period.value;
+
+    if (period.isCustom) {
+      return (await getAllData()).length;
+    }
+
+    return (await doPeriodRequest(period, 1, 1)).attr.total;
   }
 
   @override

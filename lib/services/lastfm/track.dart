@@ -298,14 +298,13 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
 }
 
 @JsonSerializable()
-class LTopTracksResponseTopTracks {
+class LTopTracksResponseTopTracks
+    extends LPagedResponse<LTopTracksResponseTrack> {
   @JsonKey(name: 'track')
-  final List<LTopTracksResponseTrack> tracks;
+  @override
+  final List<LTopTracksResponseTrack> items;
 
-  @JsonKey(name: '@attr')
-  final LAttr attr;
-
-  const LTopTracksResponseTopTracks(this.tracks, this.attr);
+  const LTopTracksResponseTopTracks(super.attr, this.items);
 
   factory LTopTracksResponseTopTracks.fromJson(Map<String, dynamic> json) =>
       _$LTopTracksResponseTopTracksFromJson(json);

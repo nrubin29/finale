@@ -127,8 +127,8 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
       'extended=$extended)';
 }
 
-class GetTopArtistsRequest
-    extends PeriodPagedRequest<LTopArtistsResponseArtist> {
+class GetTopArtistsRequest extends PeriodPagedRequest<
+    LTopArtistsResponseTopArtists, LTopArtistsResponseArtist> {
   GetTopArtistsRequest(super.username, [super.period]);
 
   @override
@@ -139,8 +139,7 @@ class GetTopArtistsRequest
       'page': page,
       'period': period.value,
     });
-    return LTopArtistsResponseTopArtists.fromJson(rawResponse['topartists'])
-        .artists;
+    return LTopArtistsResponseTopArtists.fromJson(rawResponse['topartists']);
   }
 
   @override
@@ -153,7 +152,8 @@ class GetTopArtistsRequest
           entry.key, entry.value.first.artist.url!, entry.value.length));
 }
 
-class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
+class GetTopAlbumsRequest extends PeriodPagedRequest<
+    LTopAlbumsResponseTopAlbums, LTopAlbumsResponseAlbum> {
   GetTopAlbumsRequest(super.username, [super.period]);
 
   @override
@@ -164,8 +164,7 @@ class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
       'page': page,
       'period': period.value,
     });
-    return LTopAlbumsResponseTopAlbums.fromJson(rawResponse['topalbums'])
-        .albums;
+    return LTopAlbumsResponseTopAlbums.fromJson(rawResponse['topalbums']);
   }
 
   @override
@@ -188,7 +187,8 @@ class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
   }
 }
 
-class GetTopTracksRequest extends PeriodPagedRequest<LTopTracksResponseTrack> {
+class GetTopTracksRequest extends PeriodPagedRequest<
+    LTopTracksResponseTopTracks, LTopTracksResponseTrack> {
   GetTopTracksRequest(super.username, [super.period]);
 
   @override
@@ -199,8 +199,7 @@ class GetTopTracksRequest extends PeriodPagedRequest<LTopTracksResponseTrack> {
       'page': page,
       'period': period.value,
     });
-    return LTopTracksResponseTopTracks.fromJson(rawResponse['toptracks'])
-        .tracks;
+    return LTopTracksResponseTopTracks.fromJson(rawResponse['toptracks']);
   }
 
   @override
