@@ -2,7 +2,6 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:intl/intl.dart';
@@ -164,10 +163,7 @@ class LUserWeeklyTrackChartTrack extends Track {
 
   @override
   ImageIdProvider get imageIdProvider =>
-      ImageId.scrape(url, '.cover-art > :first-child',
-          attribute: 'src',
-          endUrlAtPeriod: true,
-          spotifyFallback: SSearchTracksRequest('$name $artistName'));
+      () async => (await Lastfm.getTrack(this)).imageId;
 }
 
 @JsonSerializable()
