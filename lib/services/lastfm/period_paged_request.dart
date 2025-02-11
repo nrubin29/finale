@@ -61,6 +61,10 @@ abstract class PeriodPagedRequest<R extends LPagedResponse<T>,
       }
 
       final groupedData = response.groupListsBy(groupBy);
+      // If an entity doesn't have a name, it will be grouped into the empty
+      // string group which will mess up the request. The best we can do is
+      // filter it out.
+      groupedData.remove('');
       final data = (await Future.wait(groupedData.entries.map(map)))
           .sorted((a, b) => b.playCount.compareTo(a.playCount));
 
