@@ -6,34 +6,43 @@ import 'package:flutter/material.dart';
 
 class PeriodDropdownButton extends StatefulWidget {
   final ValueChanged<Period>? periodChanged;
+  final bool allowCustom;
 
-  const PeriodDropdownButton({this.periodChanged});
+  const PeriodDropdownButton({this.periodChanged, this.allowCustom = true});
 
   @override
   State<StatefulWidget> createState() => _PeriodDropdownButtonState();
 }
 
 class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
-  Period? _period;
+  late Period _period;
   late StreamSubscription _periodChangeSubscription;
 
   @override
   void initState() {
     super.initState();
-    _period = Preferences.period.value;
+    _setPeriod(Preferences.period.value, defaultPeriod: Period.overall);
 
     _periodChangeSubscription = Preferences.period.changes.listen((value) {
       if (mounted) {
         setState(() {
-          _period = value;
+          _setPeriod(value);
         });
       }
     });
   }
 
+  void _setPeriod(Period period, {Period? defaultPeriod}) {
+    if (!period.isCustom || widget.allowCustom) {
+      _period = period;
+    } else if (defaultPeriod != null) {
+      _period = defaultPeriod;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<Period?>(
+    return DropdownButton<Period>(
       value: _period,
       items: [
         for (final period in Period.apiValues)
@@ -41,16 +50,17 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
             value: period,
             child: Text(period.display),
           ),
-        if (_period?.isCustom ?? false)
-          DropdownMenuItem(
-            value: _period,
-            child: Text(_period!.display),
-          )
-        else
-          const DropdownMenuItem(
-            value: null,
-            child: Text('Custom'),
-          ),
+        if (widget.allowCustom)
+          if (_period.isCustom)
+            DropdownMenuItem(
+              value: _period,
+              child: Text(_period.display),
+            )
+          else
+            const DropdownMenuItem(
+              value: null,
+              child: Text('Custom'),
+            ),
       ],
       onChanged: (value) async {
         if (value?.isCustom ?? true) {
@@ -69,7 +79,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
                   start: dateRange.start,
                   end: dateRange.end.add(
                       const Duration(hours: 23, minutes: 59, seconds: 59)));
-              widget.periodChanged?.call(_period!);
+              widget.periodChanged?.call(_period);
             });
           }
         } else if (value != null && value != _period) {
