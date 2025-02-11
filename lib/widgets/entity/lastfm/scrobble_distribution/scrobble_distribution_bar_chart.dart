@@ -66,17 +66,15 @@ class ScrobbleDistributionBarChart extends StatelessWidget {
             ),
           ),
           barTouchData: BarTouchData(
-            touchCallback: level == ScrobbleDistributionLevel.month
-                ? null
-                : (event, response) {
-                    if (event is! FlTapUpEvent && event is! FlLongPressEnd) {
-                      return;
-                    }
-                    final index = response?.spot?.touchedBarGroup.x;
-                    if (index != null) {
-                      onTap(items[index]);
-                    }
-                  },
+            touchCallback: (event, response) {
+              if (event is! FlTapUpEvent && event is! FlLongPressEnd) {
+                return;
+              }
+              final index = response?.spot?.touchedBarGroup.x;
+              if (index != null) {
+                onTap(items[index]);
+              }
+            },
             touchTooltipData: BarTouchTooltipData(
               getTooltipColor: (_) => Colors.transparent,
               getTooltipItem: (_, __, rod, ___) => rod.toY == 0

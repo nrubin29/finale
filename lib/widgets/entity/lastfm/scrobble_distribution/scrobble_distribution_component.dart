@@ -14,11 +14,15 @@ enum ScrobbleDistributionLevel { overall, year, month }
 
 class ScrobbleDistributionItem {
   final ScrobbleDistributionLevel level;
-  final DateTime dateTime;
+  final DateTimeRange dateTimeRange;
   final int scrobbles;
 
+  DateTime get dateTime => dateTimeRange.start;
+
   const ScrobbleDistributionItem(
-      {required this.level, required this.dateTime, required this.scrobbles});
+      {required this.level,
+      required this.dateTimeRange,
+      required this.scrobbles});
 
   String get title => switch (level) {
         ScrobbleDistributionLevel.overall => '${dateTime.year}',
@@ -40,10 +44,12 @@ class ScrobbleDistributionComponent extends StatefulWidget {
   final String username;
   final Iterable<Future<int>> Function(List<DateTimeRange> ranges)
       fetchScrobbleCounts;
+  final void Function(ScrobbleDistributionItem)? onDayTapped;
 
   const ScrobbleDistributionComponent({
     required this.username,
     required this.fetchScrobbleCounts,
+    this.onDayTapped,
   });
 
   @override
@@ -77,6 +83,11 @@ class _ScrobbleDistributionComponentState
   }
 
   Future<void> _drillDown(ScrobbleDistributionItem item) async {
+    if (_level == ScrobbleDistributionLevel.month) {
+      widget.onDayTapped?.call(item);
+      return;
+    }
+
     _level = ScrobbleDistributionLevel.values[_level.index + 1];
     _dateTime = item.dateTime;
     await _update();
@@ -120,10 +131,10 @@ class _ScrobbleDistributionComponentState
       return;
     }
 
-    _items = IterableZip([dateTimes, scrobbleCounts])
+    _items = IterableZip([ranges, scrobbleCounts])
         .map((data) => ScrobbleDistributionItem(
             level: _level,
-            dateTime: data.first as DateTime,
+            dateTimeRange: data.first as DateTimeRange,
             scrobbles: data.last as int))
         .toList(growable: false);
     _totalScrobbles = scrobbleCounts.fold(0, (a, b) => a + b);
