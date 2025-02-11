@@ -2,6 +2,7 @@ import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/collage/collage_view.dart';
+import 'package:finale/widgets/tools/h_index_view.dart';
 import 'package:finale/widgets/tools/lucky_view.dart';
 import 'package:finale/widgets/tools/workout_view.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,20 @@ class ToolsView extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const LuckyView()),
+                );
+              },
+            ),
+            CaptionedListTile(
+              title: 'h-index',
+              icon: Icons.read_more,
+              trailing: const Icon(Icons.chevron_right),
+              caption:
+                  "Calculate your (or a friend's) h-index for artists, albums, "
+                  'or tracks over various time periods.',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HIndexView()),
                 );
               },
             ),

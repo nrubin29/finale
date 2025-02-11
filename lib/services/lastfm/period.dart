@@ -78,4 +78,15 @@ class Period {
 
   @override
   String toString() => display;
+
+  String get formattedForSentence => switch (this) {
+        sevenDays => 'in the last 7 days',
+        oneMonth => 'in the last month',
+        threeMonths => 'in the last 3 months',
+        sixMonths => 'in the last 6 months',
+        twelveMonths => 'in the last 12 months',
+        overall => 'overall',
+        _ => 'between '
+            '${formatDateRange(start!, end!, separator: 'and')}'
+      };
 }

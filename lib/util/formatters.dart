@@ -55,10 +55,17 @@ String formatDateTimeDelta(DateTime? date, {bool withYear = false}) {
   return (withYear ? dateTimeFormatWithYear : dateTimeFormat).format(date);
 }
 
-String formatDateRange(DateTime start, DateTime end) {
+String formatDateRange(DateTime start, DateTime end, {String separator = '-'}) {
   final startFormatted = start.year == end.year
       ? dateFormat.format(start)
       : dateFormatWithYear.format(start);
   final endFormatted = dateFormatWithYear.format(end);
-  return '$startFormatted - $endFormatted';
+  return '$startFormatted $separator $endFormatted';
 }
+
+String formatOrdinal(int number) => switch (number % 10) {
+      1 && != 11 => '${number}st',
+      2 && != 12 => '${number}nd',
+      3 && != 13 => '${number}rd',
+      _ => '${number}th',
+    };
