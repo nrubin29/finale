@@ -47,6 +47,22 @@ class Preference<T, U extends Object> {
             : enumValues.first,
       );
 
+  static Preference<List<T>, List<String>> forEnumList<T extends Enum>(
+          String key, List<T> enumValues,
+          {required List<T> defaultValue}) =>
+      Preference<List<T>, List<String>>(
+        key,
+        defaultValue: defaultValue,
+        serialize: (values) => [for (final value in values) value.name],
+        deserialize: (serialized) {
+          final nameMap = enumValues.asNameMap();
+          return [
+            for (final name in serialized)
+              if (nameMap.containsKey(name)) nameMap[name]!
+          ];
+        },
+      );
+
   Stream<T> get changes => _changes.stream;
 
   T get value {

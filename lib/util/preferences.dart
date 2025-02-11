@@ -156,14 +156,10 @@ class Preferences {
   static final inputDateTimeAsText =
       Preference<bool, bool>('inputDateTimeAsText', defaultValue: false);
 
-  static final profileTabsOrder = Preference<List<ProfileTab>, List<String>>(
+  static final profileTabsOrder = Preference.forEnumList<ProfileTab>(
     'profileTabsOrder2',
+    ProfileTab.values,
     defaultValue: ProfileTab.values,
-    serialize: (value) =>
-        value.map((e) => e.index.toString()).toList(growable: false),
-    deserialize: (serialized) => serialized
-        .map((item) => ProfileTab.values[int.parse(item)])
-        .toList(growable: false),
   );
 
   static void clearAll() {
