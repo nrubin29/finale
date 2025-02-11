@@ -5,15 +5,13 @@ import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
+import 'package:finale/util/functions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:finale/widgets/entity/lastfm/album_view.dart';
-import 'package:finale/widgets/entity/lastfm/artist_view.dart';
-import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:flutter/material.dart';
 
@@ -99,22 +97,6 @@ class _LuckyViewState extends State<LuckyView> {
   String? _validator(String? value) =>
       value == null || value.isEmpty ? 'This field is required.' : null;
 
-  void _showDetails() {
-    Widget detailWidget;
-
-    if (_entity! is Track) {
-      detailWidget = TrackView(track: _entity as Track);
-    } else if (_entity is BasicAlbum) {
-      detailWidget = AlbumView(album: _entity as BasicAlbum);
-    } else if (_entity is BasicArtist) {
-      detailWidget = ArtistView(artist: _entity as BasicArtist);
-    } else {
-      throw Exception('This will never happen.');
-    }
-
-    Navigator.push(context, MaterialPageRoute(builder: (_) => detailWidget));
-  }
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(context, "I'm Feeling Lucky"),
@@ -180,7 +162,9 @@ class _LuckyViewState extends State<LuckyView> {
                       ),
                     ),
                     InkWell(
-                      onTap: _showDetails,
+                      onTap: () {
+                        pushLastfmEntityDetailView(context, _entity!);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Stack(
