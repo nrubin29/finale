@@ -117,9 +117,8 @@ class _ProfileViewState extends State<ProfileView>
   }
 
   Widget _widgetForTab(ProfileTab tab, LUser user) {
-    switch (tab) {
-      case ProfileTab.recentScrobbles:
-        return EntityDisplay<LRecentTracksResponseTrack>(
+    return switch (tab) {
+      ProfileTab.recentScrobbles => EntityDisplay<LRecentTracksResponseTrack>(
           key: _recentScrobblesKey,
           request: GetRecentTracksRequest(widget.username,
               includeCurrentScrobble: true, extended: true),
@@ -129,38 +128,37 @@ class _ProfileViewState extends State<ProfileView>
               ? const SizedBox()
               : const NowPlayingAnimation(),
           detailWidgetBuilder: (track) => TrackView(track: track),
-        );
-      case ProfileTab.topArtists:
-        return PeriodSelector<LTopArtistsResponseArtist>(
+        ),
+      ProfileTab.topArtists => PeriodSelector<LTopArtistsResponseArtist>(
           displayType: DisplayType.grid,
           request: GetTopArtistsRequest(widget.username),
           detailWidgetBuilder: (artist) => ArtistView(artist: artist),
           subtitleWidgetBuilder: FractionalBar.forEntity,
-        );
-      case ProfileTab.topAlbums:
-        return PeriodSelector<LTopAlbumsResponseAlbum>(
+        ),
+      ProfileTab.topAlbums => PeriodSelector<LTopAlbumsResponseAlbum>(
           displayType: DisplayType.grid,
           request: GetTopAlbumsRequest(widget.username),
           detailWidgetBuilder: (album) => AlbumView(album: album),
           subtitleWidgetBuilder: FractionalBar.forEntity,
-        );
-      case ProfileTab.topTracks:
-        return PeriodSelector<LTopTracksResponseTrack>(
+        ),
+      ProfileTab.topTracks => PeriodSelector<LTopTracksResponseTrack>(
           request: GetTopTracksRequest(widget.username),
           detailWidgetBuilder: (track) => TrackView(track: track),
           subtitleWidgetBuilder: FractionalBar.forEntity,
-        );
-      case ProfileTab.friends:
-        return EntityDisplay<LUser>(
+        ),
+      ProfileTab.lovedTracks => EntityDisplay<LUserLovedTrack>(
+          request: UserGetLovedTracksRequest(widget.username),
+          detailWidgetBuilder: (track) => TrackView(track: track),
+        ),
+      ProfileTab.friends => EntityDisplay<LUser>(
           displayCircularImages: true,
           request: GetFriendsRequest(widget.username),
           detailWidgetBuilder: (user) => ProfileView(username: user.name),
-        );
-      case ProfileTab.charts:
-        return WeeklyChartSelectorView(user: user);
-      case ProfileTab.scrobbleDistribution:
-        return ProfileScrobbleDistributionComponent(username: widget.username);
-    }
+        ),
+      ProfileTab.charts => WeeklyChartSelectorView(user: user),
+      ProfileTab.scrobbleDistribution =>
+        ProfileScrobbleDistributionComponent(username: widget.username),
+    };
   }
 
   Widget _tabBar(BuildContext context) {

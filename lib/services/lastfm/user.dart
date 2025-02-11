@@ -323,3 +323,67 @@ class LUserTrackScrobbleAlbum {
   factory LUserTrackScrobbleAlbum.fromJson(Map<String, dynamic> json) =>
       _$LUserTrackScrobbleAlbumFromJson(json);
 }
+
+@JsonSerializable()
+class LUserLovedTracksResponse {
+  @JsonKey(name: 'track')
+  final List<LUserLovedTrack> tracks;
+
+  const LUserLovedTracksResponse(this.tracks);
+
+  factory LUserLovedTracksResponse.fromJson(Map<String, dynamic> json) =>
+      _$LUserLovedTracksResponseFromJson(json);
+}
+
+@JsonSerializable()
+class LUserLovedTrackArtist {
+  final String name;
+
+  const LUserLovedTrackArtist(this.name);
+
+  factory LUserLovedTrackArtist.fromJson(Map<String, dynamic> json) =>
+      _$LUserLovedTrackArtistFromJson(json);
+}
+
+@JsonSerializable()
+class LUserLovedTrackDate {
+  @JsonKey(name: 'uts', fromJson: fromSecondsSinceEpoch)
+  final DateTime date;
+
+  const LUserLovedTrackDate(this.date);
+
+  factory LUserLovedTrackDate.fromJson(Map<String, dynamic> json) =>
+      _$LUserLovedTrackDateFromJson(json);
+}
+
+@JsonSerializable()
+class LUserLovedTrack extends Track {
+  @override
+  final String name;
+
+  @override
+  final String url;
+
+  final LUserLovedTrackArtist artist;
+
+  @JsonKey(name: 'date')
+  final LUserLovedTrackDate timestamp;
+
+  LUserLovedTrack(this.name, this.url, this.artist, this.timestamp);
+
+  factory LUserLovedTrack.fromJson(Map<String, dynamic> json) =>
+      _$LUserLovedTrackFromJson(json);
+
+  @override
+  String? get albumName => null;
+
+  @override
+  String get artistName => artist.name;
+
+  @override
+  String? get displayTrailing => dateFormatWithYear.format(timestamp.date);
+
+  @override
+  ImageIdProvider get imageIdProvider =>
+      () async => (await Lastfm.getTrack(this)).imageId;
+}

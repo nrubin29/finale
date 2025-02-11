@@ -344,6 +344,26 @@ class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
       'artist=${track.artistName}, user=${username ?? Preferences.name.value})';
 }
 
+class UserGetLovedTracksRequest extends PagedRequest<LUserLovedTrack> {
+  final String? username;
+
+  const UserGetLovedTracksRequest([this.username]);
+
+  @override
+  Future<List<LUserLovedTrack>> doRequest(int limit, int page) async {
+    final rawResponse = await _doRequest('user.getLovedTracks', {
+      'user': username ?? Preferences.name.value,
+      'limit': limit,
+      'page': page,
+    });
+    return LUserLovedTracksResponse.fromJson(rawResponse['lovedtracks']).tracks;
+  }
+
+  @override
+  String toString() =>
+      'UserGetLovedTracksRequest(user=${username ?? Preferences.name.value})';
+}
+
 class Lastfm {
   static final applicationSettingsUri =
       Uri.https('last.fm', 'settings/applications');
