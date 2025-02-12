@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 
 class PeriodDropdownButton extends StatefulWidget {
   final ValueChanged<Period>? periodChanged;
-  final bool allowCustom;
 
-  const PeriodDropdownButton({this.periodChanged, this.allowCustom = true});
+  const PeriodDropdownButton({this.periodChanged});
 
   @override
   State<StatefulWidget> createState() => _PeriodDropdownButtonState();
@@ -21,23 +20,15 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
   @override
   void initState() {
     super.initState();
-    _setPeriod(Preferences.period.value, defaultPeriod: Period.overall);
+    _period = Preferences.period.value;
 
     _periodChangeSubscription = Preferences.period.changes.listen((value) {
       if (mounted) {
         setState(() {
-          _setPeriod(value);
+          _period = value;
         });
       }
     });
-  }
-
-  void _setPeriod(Period period, {Period? defaultPeriod}) {
-    if (!period.isCustom || widget.allowCustom) {
-      _period = period;
-    } else if (defaultPeriod != null) {
-      _period = defaultPeriod;
-    }
   }
 
   @override
@@ -50,17 +41,16 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
             value: period,
             child: Text(period.display),
           ),
-        if (widget.allowCustom)
-          if (_period.isCustom)
-            DropdownMenuItem(
-              value: _period,
-              child: Text(_period.display),
-            )
-          else
-            const DropdownMenuItem(
-              value: null,
-              child: Text('Custom'),
-            ),
+        if (_period.isCustom)
+          DropdownMenuItem(
+            value: _period,
+            child: Text(_period.display),
+          )
+        else
+          const DropdownMenuItem(
+            value: null,
+            child: Text('Custom'),
+          ),
       ],
       onChanged: (value) async {
         if (value?.isCustom ?? true) {

@@ -52,9 +52,6 @@ class _HIndexViewState extends State<HIndexView> {
     _usernameTextController =
         TextEditingController(text: Preferences.name.value);
     _period = Preferences.period.value;
-    if (_period.isCustom) {
-      _period = Period.overall;
-    }
   }
 
   Future<bool> _loadData() async {
@@ -208,7 +205,6 @@ class _HIndexViewState extends State<HIndexView> {
             ListTile(
               title: const Text('Period'),
               trailing: PeriodDropdownButton(
-                allowCustom: false,
                 periodChanged: (period) {
                   _period = period;
                 },
