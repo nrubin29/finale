@@ -16,9 +16,7 @@ class HeaderListTile extends StatelessWidget {
       textColor: theme.brightness == Brightness.light
           ? theme.primaryColor
           : Colors.white,
-      tileColor: theme.brightness == Brightness.light
-          ? Colors.grey[200]
-          : Colors.grey[800],
+      tileColor: theme.colorScheme.surfaceContainer,
     );
   }
 }

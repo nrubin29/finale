@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/request_sequencer.dart';
-import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:flutter/material.dart';
 
@@ -168,24 +167,29 @@ class _ScrobbleDistributionComponentState
   Widget build(BuildContext context) {
     super.build(context);
     return Column(
+      spacing: 8,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            children: [
-              IconButton(
-                style: minimumSizeButtonStyle,
-                icon: const Icon(Icons.arrow_upward),
-                onPressed: _level == ScrobbleDistributionLevel.overall
-                    ? null
-                    : _drillUp,
-              ),
-              const SizedBox(width: 8),
-              Text(_levelTitle),
-            ],
+        ColoredBox(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              spacing: 8,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_upward),
+                  onPressed: _level == ScrobbleDistributionLevel.overall
+                      ? null
+                      : _drillUp,
+                ),
+                Text(
+                  _levelTitle,
+                ),
+              ],
+            ),
           ),
         ),
-        if (!_isLoading) ...[
+        if (!_isLoading)
           Scoreboard(
             items: [
               ScoreboardItemModel.value(
@@ -194,8 +198,6 @@ class _ScrobbleDistributionComponentState
                   label: 'Scrobbles/Day (Avg)', value: _scrobblesPerDay),
             ],
           ),
-          const SizedBox(height: 8),
-        ],
         Expanded(
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())

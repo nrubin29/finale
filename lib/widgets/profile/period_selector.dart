@@ -48,36 +48,39 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: SafeArea(
-              top: false,
-              bottom: false,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SegmentedButton<DisplayType>(
-                    showSelectedIcon: false,
-                    style: minimumSizeButtonStyle,
-                    segments: const [
-                      ButtonSegment(
-                        value: DisplayType.list,
-                        icon: Icon(Icons.list),
-                      ),
-                      ButtonSegment(
-                        value: DisplayType.grid,
-                        icon: Icon(Icons.grid_view),
-                      ),
-                    ],
-                    selected: {_displayType},
-                    onSelectionChanged: (newSelection) {
-                      setState(() {
-                        _displayType = newSelection.single;
-                      });
-                    },
-                  ),
-                  const PeriodDropdownButton(),
-                ],
+          ColoredBox(
+            color: Theme.of(context).colorScheme.surfaceContainer,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SafeArea(
+                top: false,
+                bottom: false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SegmentedButton<DisplayType>(
+                      showSelectedIcon: false,
+                      style: minimumSizeButtonStyle,
+                      segments: const [
+                        ButtonSegment(
+                          value: DisplayType.list,
+                          icon: Icon(Icons.list),
+                        ),
+                        ButtonSegment(
+                          value: DisplayType.grid,
+                          icon: Icon(Icons.grid_view),
+                        ),
+                      ],
+                      selected: {_displayType},
+                      onSelectionChanged: (newSelection) {
+                        setState(() {
+                          _displayType = newSelection.single;
+                        });
+                      },
+                    ),
+                    const PeriodDropdownButton(),
+                  ],
+                ),
               ),
             ),
           ),
