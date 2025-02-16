@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/common.dart';
@@ -34,11 +35,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const _profileTabsToHideOverallStats = {
-  ProfileTab.charts,
-  ProfileTab.scrobbleDistribution
-};
-
 class ProfileView extends StatefulWidget {
   final String username;
   final bool isTab;
@@ -53,7 +49,6 @@ class _ProfileViewState extends State<ProfileView>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   TabController? _tabController;
   late List<ProfileTab> _tabOrder;
-  var _tab = 0;
 
   final _recentScrobblesKey = GlobalKey<EntityDisplayState>();
   late final StreamSubscription _profileTabsOrderSubscription;
@@ -110,11 +105,6 @@ class _ProfileViewState extends State<ProfileView>
     _tabController?.dispose();
     _tabController =
         TabController(length: length ?? _tabOrder.length, vsync: this);
-    _tabController!.addListener(() {
-      setState(() {
-        _tab = _tabController!.index;
-      });
-    });
   }
 
   Widget _widgetForTab(ProfileTab tab, LUser user) {
@@ -129,20 +119,59 @@ class _ProfileViewState extends State<ProfileView>
               ? const SizedBox()
               : const NowPlayingAnimation(),
           detailWidgetBuilder: (track) => TrackView(track: track),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                  'Scrobbling since ${user.registered.dateFormatted}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+          scoreboardItems: [
+            ScoreboardItemModel.future(
+              label: 'Scrobbles',
+              futureProvider: () => Lastfm.getUser(widget.username)
+                  .then((user) => user.playCount),
+            ),
+            ScoreboardItemModel.future(
+              label: 'Artists',
+              futureProvider: () =>
+                  GetTopArtistsRequest(widget.username, Period.overall)
+                      .getNumItems(),
+            ),
+            ScoreboardItemModel.future(
+              label: 'Albums',
+              futureProvider: () =>
+                  GetTopAlbumsRequest(widget.username, Period.overall)
+                      .getNumItems(),
+            ),
+            ScoreboardItemModel.future(
+              label: 'Tracks',
+              futureProvider: () =>
+                  GetTopTracksRequest(widget.username, Period.overall)
+                      .getNumItems(),
+            ),
+          ],
         ),
       ProfileTab.topArtists => PeriodSelector<LTopArtistsResponseArtist>(
+          entityType: EntityType.artist,
           displayType: DisplayType.grid,
           request: GetTopArtistsRequest(widget.username),
           detailWidgetBuilder: (artist) => ArtistView(artist: artist),
           subtitleWidgetBuilder: FractionalBar.forEntity,
         ),
       ProfileTab.topAlbums => PeriodSelector<LTopAlbumsResponseAlbum>(
+          entityType: EntityType.album,
           displayType: DisplayType.grid,
           request: GetTopAlbumsRequest(widget.username),
           detailWidgetBuilder: (album) => AlbumView(album: album),
           subtitleWidgetBuilder: FractionalBar.forEntity,
         ),
       ProfileTab.topTracks => PeriodSelector<LTopTracksResponseTrack>(
+          entityType: EntityType.track,
           request: GetTopTracksRequest(widget.username),
           detailWidgetBuilder: (track) => TrackView(track: track),
           subtitleWidgetBuilder: FractionalBar.forEntity,
@@ -162,7 +191,7 @@ class _ProfileViewState extends State<ProfileView>
     };
   }
 
-  Widget _tabBar(BuildContext context) {
+  PreferredSizeWidget _tabBar(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final maxIconSize = screenWidth / _tabOrder.length - 32;
     final iconSize = min(maxIconSize, 24.0);
@@ -233,61 +262,13 @@ class _ProfileViewState extends State<ProfileView>
                   },
                 ),
             ],
+            bottom: _tabBar(context),
           ),
-          body: NestedScrollView(
-            floatHeaderSlivers: true,
-            headerSliverBuilder: (_, __) => [
-              const SliverToBoxAdapter(child: SizedBox(height: 10)),
-              SliverToBoxAdapter(
-                child: Text(
-                  'Scrobbling since ${user.registered.dateFormatted}',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SliverVisibility(
-                visible: !_profileTabsToHideOverallStats
-                    .map(_tabOrder.indexOf)
-                    .contains(_tab),
-                maintainState: true,
-                sliver: SliverToBoxAdapter(
-                  child: Column(children: [
-                    const SizedBox(height: 10),
-                    Scoreboard(
-                      items: [
-                        ScoreboardItemModel.value(
-                            label: 'Scrobbles', value: user.playCount),
-                        ScoreboardItemModel.future(
-                          label: 'Artists',
-                          futureProvider: () => GetTopArtistsRequest(
-                                  widget.username, Period.overall)
-                              .getNumItems(),
-                        ),
-                        ScoreboardItemModel.future(
-                          label: 'Albums',
-                          futureProvider: () => GetTopAlbumsRequest(
-                                  widget.username, Period.overall)
-                              .getNumItems(),
-                        ),
-                        ScoreboardItemModel.future(
-                          label: 'Tracks',
-                          futureProvider: () => GetTopTracksRequest(
-                                  widget.username, Period.overall)
-                              .getNumItems(),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                  ]),
-                ),
-              ),
-              SliverToBoxAdapter(child: _tabBar(context)),
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              for (final tab in _tabOrder) _widgetForTab(tab, user),
             ],
-            body: TabBarView(
-              controller: _tabController,
-              children: [
-                for (final tab in _tabOrder) _widgetForTab(tab, user),
-              ],
-            ),
           ),
         ),
       );

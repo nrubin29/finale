@@ -9,6 +9,7 @@ import 'package:finale/util/request_sequencer.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -34,6 +35,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? badgeWidgetBuilder;
   final EntityWidgetBuilder<T>? trailingWidgetBuilder;
   final List<Widget>? slivers;
+  final List<ScoreboardItemModel>? scoreboardItems;
   final Future<Entity> Function(T item)? scrobbleableEntity;
   final RefreshCallback? onRefresh;
   final VoidCallback? onImageLoaded;
@@ -63,6 +65,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
       this.badgeWidgetBuilder,
       this.trailingWidgetBuilder,
       this.slivers,
+      this.scoreboardItems,
       this.scrobbleableEntity,
       this.onRefresh,
       this.onImageLoaded,
@@ -93,6 +96,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   var items = <T>[];
   var page = 1;
   var didInitialRequest = false;
+  var _numInitialRequests = 0;
   var isDoingRequest = false;
   var hasMorePages = true;
 
@@ -133,8 +137,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   }
 
   Future<void> _getInitialItems() async {
-    didInitialRequest = false;
     final requestHandle = _requestSequencer.startRequest();
+
+    setState(() {
+      _numInitialRequests++;
+    });
 
     try {
       final initialItems = await _request!.getData(20, 1);
@@ -413,6 +420,16 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
         shrinkWrap: !widget.scrollable,
         slivers: [
           ...?widget.slivers,
+          if (widget.scoreboardItems != null)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Scoreboard(
+                  key: ValueKey(_numInitialRequests),
+                  items: widget.scoreboardItems!,
+                ),
+              ),
+            ),
           if (widget.displayType == DisplayType.list)
             SliverList(
                 delegate: SliverChildBuilderDelegate(_listItemBuilder,

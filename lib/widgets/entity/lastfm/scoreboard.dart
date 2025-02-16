@@ -43,6 +43,7 @@ class Scoreboard extends StatelessWidget {
   final List<Widget> actions;
 
   const Scoreboard({
+    super.key,
     required this.items,
     this.actions = const [],
   });

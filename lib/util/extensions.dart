@@ -44,3 +44,10 @@ extension DateTimeRangeCompareContains on DateTimeRange {
           ? -1
           : 0;
 }
+
+extension FutureErrorToNull<T> on Future<T> {
+  Future<T?> errorToNull<E extends Exception>() => then<T?>(
+        (value) => value,
+        onError: (error) => error is E ? null : throw error,
+      );
+}

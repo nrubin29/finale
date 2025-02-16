@@ -1,19 +1,26 @@
 import 'dart:async';
 
 import 'package:finale/services/generic.dart';
+import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/period_paged_request.dart';
+import 'package:finale/util/extensions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:flutter/material.dart';
 
-class PeriodSelector<T extends Entity> extends StatefulWidget {
+class PeriodSelector<T extends HasPlayCount> extends StatefulWidget {
+  final EntityType entityType;
   final DisplayType displayType;
-  final PagedRequest<T> request;
+  final PeriodPagedRequest<LPagedResponse<T>, T> request;
   final EntityWidgetBuilder<T> detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
 
   const PeriodSelector({
+    required this.entityType,
     this.displayType = DisplayType.list,
     required this.request,
     required this.detailWidgetBuilder,
@@ -24,7 +31,8 @@ class PeriodSelector<T extends Entity> extends StatefulWidget {
   State<StatefulWidget> createState() => _PeriodSelectorState<T>();
 }
 
-class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
+class _PeriodSelectorState<T extends HasPlayCount>
+    extends State<PeriodSelector<T>> {
   late DisplayType _displayType;
 
   final _entityDisplayComponentKey = GlobalKey<EntityDisplayState>();
@@ -91,6 +99,23 @@ class _PeriodSelectorState<T extends Entity> extends State<PeriodSelector<T>> {
               request: widget.request,
               detailWidgetBuilder: widget.detailWidgetBuilder,
               subtitleWidgetBuilder: widget.subtitleWidgetBuilder,
+              scoreboardItems: [
+                ScoreboardItemModel.future(
+                  label: 'Scrobbles',
+                  futureProvider: () => GetRecentTracksRequest(
+                    widget.request.username,
+                    from: (widget.request.period ?? Preferences.period.value)
+                        .relativeStart,
+                    to: (widget.request.period ?? Preferences.period.value).end,
+                  )
+                      .getNumItems()
+                      .errorToNull<RecentListeningInformationHiddenException>(),
+                ),
+                ScoreboardItemModel.future(
+                  label: '${widget.entityType.displayName}s',
+                  futureProvider: () => widget.request.getNumItems(),
+                ),
+              ],
             ),
           ),
         ],
