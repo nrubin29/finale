@@ -5,6 +5,7 @@ import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/constants.dart';
@@ -257,18 +258,21 @@ class _ProfileViewState extends State<ProfileView>
                             label: 'Scrobbles', value: user.playCount),
                         ScoreboardItemModel.future(
                           label: 'Artists',
-                          futureProvider: () =>
-                              Lastfm.getNumArtists(widget.username),
+                          futureProvider: () => GetTopArtistsRequest(
+                                  widget.username, Period.overall)
+                              .getNumItems(),
                         ),
                         ScoreboardItemModel.future(
                           label: 'Albums',
-                          futureProvider: () =>
-                              Lastfm.getNumAlbums(widget.username),
+                          futureProvider: () => GetTopAlbumsRequest(
+                                  widget.username, Period.overall)
+                              .getNumItems(),
                         ),
                         ScoreboardItemModel.future(
                           label: 'Tracks',
-                          futureProvider: () =>
-                              Lastfm.getNumTracks(widget.username),
+                          futureProvider: () => GetTopTracksRequest(
+                                  widget.username, Period.overall)
+                              .getNumItems(),
                         ),
                       ],
                     ),

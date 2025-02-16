@@ -450,30 +450,6 @@ class Lastfm {
     return LUserWeeklyArtistChart.fromJson(rawResponse['weeklyartistchart']);
   }
 
-  static Future<int> getNumArtists(String username) async {
-    final rawResponse = await _doRequest('user.getTopArtists',
-        {'user': username, 'period': 'overall', 'limit': '1', 'page': '1'});
-    return LTopArtistsResponseTopArtists.fromJson(rawResponse['topartists'])
-        .attr
-        .total;
-  }
-
-  static Future<int> getNumAlbums(String username) async {
-    final rawResponse = await _doRequest('user.getTopAlbums',
-        {'user': username, 'period': 'overall', 'limit': '1', 'page': '1'});
-    return LTopAlbumsResponseTopAlbums.fromJson(rawResponse['topalbums'])
-        .attr
-        .total;
-  }
-
-  static Future<int> getNumTracks(String username) async {
-    final rawResponse = await _doRequest('user.getTopTracks',
-        {'user': username, 'period': 'overall', 'limit': '1', 'page': '1'});
-    return LTopTracksResponseTopTracks.fromJson(rawResponse['toptracks'])
-        .attr
-        .total;
-  }
-
   static Future<List<LTopArtistsResponseArtist>> getGlobalTopArtists(
       int limit) async {
     final rawResponse =
