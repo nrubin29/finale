@@ -337,7 +337,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                     color: Colors.white,
                   ),
                 ),
-              if (item.displaySubtitle != null)
+              if (item.displaySubtitle != null && widget.fontSize > 1)
                 Text(
                   item.displaySubtitle!,
                   style: TextStyle(
@@ -345,7 +345,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                     color: Colors.white,
                   ),
                 ),
-              if (item.displayTrailing != null)
+              if (item.displayTrailing != null && widget.fontSize > 1)
                 Text(
                   item.displayTrailing!,
                   style: TextStyle(
