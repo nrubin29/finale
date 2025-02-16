@@ -127,8 +127,8 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
       'extended=$extended)';
 }
 
-class GetTopArtistsRequest extends PeriodPagedRequest<
-    LTopArtistsResponseTopArtists, LTopArtistsResponseArtist> {
+class GetTopArtistsRequest
+    extends PeriodPagedRequest<LTopArtistsResponseArtist> {
   GetTopArtistsRequest(super.username, super.period);
 
   @override
@@ -152,8 +152,7 @@ class GetTopArtistsRequest extends PeriodPagedRequest<
           entry.key, entry.value.first.artist.url!, entry.value.length));
 }
 
-class GetTopAlbumsRequest extends PeriodPagedRequest<
-    LTopAlbumsResponseTopAlbums, LTopAlbumsResponseAlbum> {
+class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
   GetTopAlbumsRequest(super.username, super.period);
 
   @override
@@ -187,8 +186,7 @@ class GetTopAlbumsRequest extends PeriodPagedRequest<
   }
 }
 
-class GetTopTracksRequest extends PeriodPagedRequest<
-    LTopTracksResponseTopTracks, LTopTracksResponseTrack> {
+class GetTopTracksRequest extends PeriodPagedRequest<LTopTracksResponseTrack> {
   GetTopTracksRequest(super.username, super.period);
 
   @override

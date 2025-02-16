@@ -29,8 +29,8 @@ class _CacheKey {
 /// This cache can be global because all custom requests are based on tracks.
 final _globalCache = <_CacheKey, List<LRecentTracksResponseTrack>>{};
 
-abstract class PeriodPagedRequest<R extends LPagedResponse<T>,
-    T extends HasPlayCount> extends PagedRequest<T> {
+abstract class PeriodPagedRequest<T extends HasPlayCount>
+    extends PagedRequest<T> {
   final String username;
   final Period period;
 
@@ -42,7 +42,7 @@ abstract class PeriodPagedRequest<R extends LPagedResponse<T>,
 
   PeriodPagedRequest(this.username, this.period);
 
-  Future<R> doPeriodRequest(Period period, int limit, int page);
+  Future<LPagedResponse<T>> doPeriodRequest(Period period, int limit, int page);
 
   String groupBy(LRecentTracksResponseTrack track);
 

@@ -17,8 +17,8 @@ import 'package:rxdart/rxdart.dart';
 class PeriodSelector<T extends HasPlayCount> extends StatefulWidget {
   final EntityType entityType;
   final DisplayType displayType;
-  final PeriodPagedRequest<LPagedResponse<T>, T> Function(
-      String username, Period period) requestConstructor;
+  final PeriodPagedRequest<T> Function(String username, Period period)
+      requestConstructor;
   final String username;
   final EntityWidgetBuilder<T> detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
@@ -42,8 +42,7 @@ class _PeriodSelectorState<T extends HasPlayCount>
   late Period _period;
 
   late StreamSubscription _periodChangeSubscription;
-  final _requestSubject =
-      BehaviorSubject<PeriodPagedRequest<LPagedResponse<T>, T>>();
+  final _requestSubject = BehaviorSubject<PeriodPagedRequest<T>>();
 
   @override
   void initState() {
