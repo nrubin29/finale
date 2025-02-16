@@ -13,7 +13,6 @@ dependencies:
   cached_network_image: ^3.4.1
   collection: ^1.18.0
   crypto: ^3.0.6
-  datetime_picker_formfield: ^2.0.1
   fl_chart: ^0.70.2
   flutter:
     sdk: flutter
