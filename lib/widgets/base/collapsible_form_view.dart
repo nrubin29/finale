@@ -1,41 +1,49 @@
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:flutter/material.dart';
 
-class CollapsibleFormView extends StatefulWidget {
-  final List<Widget> formWidgets;
+typedef WidgetListBuilder = List<Widget> Function(BuildContext context);
+
+typedef BodyWidgetBuilder<R> = Widget Function(BuildContext context, R result);
+
+class CollapsibleFormView<R extends Object> extends StatefulWidget {
   final String submitButtonText;
-  final Widget? body;
-  final Future<bool> Function() onFormSubmit;
+  final Future<R?> Function() onFormSubmit;
+  final WidgetListBuilder formWidgetsBuilder;
+  final BodyWidgetBuilder<R> bodyBuilder;
 
   const CollapsibleFormView({
     super.key,
-    required this.formWidgets,
     this.submitButtonText = 'Submit',
-    required this.body,
     required this.onFormSubmit,
+    required this.formWidgetsBuilder,
+    required this.bodyBuilder,
   });
 
   @override
-  State<StatefulWidget> createState() => CollapsibleFormViewState();
+  State<StatefulWidget> createState() => CollapsibleFormViewState<R>();
 }
 
-class CollapsibleFormViewState extends State<CollapsibleFormView> {
+class CollapsibleFormViewState<R extends Object>
+    extends State<CollapsibleFormView<R>> {
   final _formKey = GlobalKey<FormState>();
   var _isSettingsExpanded = true;
-  bool? _loadingStatus;
+  var _isLoading = false;
+  R? _result;
 
   Future<void> onFormSubmit() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
         _isSettingsExpanded = false;
-        _loadingStatus = true;
+        _result = null;
+        _isLoading = true;
       });
 
-      final success = await widget.onFormSubmit();
-      _isSettingsExpanded = !success;
+      final result = await widget.onFormSubmit();
 
       setState(() {
-        _loadingStatus = false;
+        _isSettingsExpanded = result == null;
+        _result = result;
+        _isLoading = false;
       });
     }
   }
@@ -61,7 +69,7 @@ class CollapsibleFormViewState extends State<CollapsibleFormView> {
                   autovalidateMode: AutovalidateMode.disabled,
                   child: Column(
                     children: [
-                      ...widget.formWidgets,
+                      ...widget.formWidgetsBuilder(context),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: OutlinedButton(
@@ -75,10 +83,10 @@ class CollapsibleFormViewState extends State<CollapsibleFormView> {
               ),
             ],
           ),
-          if (_loadingStatus == true)
+          if (_isLoading)
             const LoadingComponent()
-          else if (_loadingStatus == false && widget.body != null)
-            widget.body!,
+          else if (_result case R result)
+            widget.bodyBuilder(context, result),
         ],
       );
 }

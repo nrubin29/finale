@@ -27,7 +27,6 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
   DateTime? _start;
   DateTime? _end;
 
-  List<LRecentTracksResponseTrack>? _items;
   List<LRecentTracksResponseTrack>? _selection;
 
   @override
@@ -38,9 +37,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
 
   bool get _hasItemsToScrobble => _selection?.isNotEmpty ?? false;
 
-  Future<bool> _loadData() async {
+  Future<List<LRecentTracksResponseTrack>?> _loadData() async {
     setState(() {
-      _items = null;
       _selection = null;
     });
 
@@ -61,15 +59,14 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     if (response.isEmpty) {
       showNoEntityTypePeriodDialog(context,
           entityType: EntityType.track, username: username);
-      return false;
+      return null;
     }
 
     setState(() {
-      _items = response;
       _selection = response;
     });
 
-    return true;
+    return response;
   }
 
   Future<void> _scrobble() async {
@@ -117,10 +114,10 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
             ),
           ],
         ),
-        body: CollapsibleFormView(
+        body: CollapsibleFormView<List<LRecentTracksResponseTrack>>(
           submitButtonText: 'Load Scrobbles',
           onFormSubmit: _loadData,
-          formWidgets: [
+          formWidgetsBuilder: (_) => [
             ListTileTextField(
               title: 'Username',
               controller: _usernameTextController,
@@ -157,20 +154,19 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
               ),
             ),
           ],
-          body: _items != null
-              ? EntityCheckboxList<LRecentTracksResponseTrack>(
-                  items: _items!,
-                  scrollable: false,
-                  onSelectionChanged: (selection) {
-                    setState(() {
-                      _selection = selection;
-                    });
-                  },
-                  trailingWidgetBuilder: (track) => track.timestamp != null
-                      ? const SizedBox()
-                      : const NowPlayingAnimation(),
-                )
-              : null,
+          bodyBuilder: (_, items) =>
+              EntityCheckboxList<LRecentTracksResponseTrack>(
+            items: items,
+            scrollable: false,
+            onSelectionChanged: (selection) {
+              setState(() {
+                _selection = selection;
+              });
+            },
+            trailingWidgetBuilder: (track) => track.timestamp != null
+                ? const SizedBox()
+                : const NowPlayingAnimation(),
+          ),
         ),
       );
 

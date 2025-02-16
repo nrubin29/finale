@@ -30,8 +30,6 @@ class _LuckyViewState extends State<LuckyView> {
   late Period _period;
   var _entityType = EntityType.track;
 
-  Entity? _entity;
-
   @override
   void initState() {
     super.initState();
@@ -40,11 +38,7 @@ class _LuckyViewState extends State<LuckyView> {
     _period = Preferences.period.value;
   }
 
-  Future<bool> _loadData() async {
-    setState(() {
-      _entity = null;
-    });
-
+  Future<Entity?> _loadData() async {
     final username = _usernameTextController.text;
     final request = GetRecentTracksRequest(username,
         from: _period.relativeStart, to: _period.end);
@@ -58,14 +52,14 @@ class _LuckyViewState extends State<LuckyView> {
       } else {
         showExceptionDialog(context,
             error: e, stackTrace: st, detailObject: username);
-        return false;
+        return null;
       }
     }
 
     if (numItems == 0) {
       showNoEntityTypePeriodDialog(context,
           entityType: _entityType, username: username);
-      return false;
+      return null;
     }
 
     final randomIndex = _random.nextInt(numItems) + 1;
@@ -86,12 +80,10 @@ class _LuckyViewState extends State<LuckyView> {
         throw Exception('This will never happen.');
       }
 
-      setState(() {
-        _entity = entity;
-      });
+      return entity;
     }
 
-    return true;
+    return null;
   }
 
   String? _validator(String? value) =>
@@ -100,11 +92,11 @@ class _LuckyViewState extends State<LuckyView> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(context, "I'm Feeling Lucky"),
-        body: CollapsibleFormView(
+        body: CollapsibleFormView<Entity>(
           key: _formKey,
           submitButtonText: 'Roll the Dice',
           onFormSubmit: _loadData,
-          formWidgets: [
+          formWidgetsBuilder: (_) => [
             ListTileTextField(
               title: 'Username',
               controller: _usernameTextController,
@@ -146,68 +138,66 @@ class _LuckyViewState extends State<LuckyView> {
               ),
             ),
           ],
-          body: _entity != null
-              ? Column(
-                  children: [
-                    const SizedBox(height: 8),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.height / 2),
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: EntityImage(
-                          entity: _entity!,
-                          quality: ImageQuality.high,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        pushLastfmEntityDetailView(context, _entity!);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  _entity!.displayTitle,
-                                  style: const TextStyle(fontSize: 22),
-                                  textAlign: TextAlign.center,
-                                ),
-                                if (_entity!.displaySubtitle != null) ...[
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _entity!.displaySubtitle!,
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                ],
-                                if (_entity!.displayTrailing != null) ...[
-                                  const SizedBox(height: 4),
-                                  Text(_entity!.displayTrailing!),
-                                ],
-                              ],
-                            ),
-                            const Align(
-                              alignment: Alignment.centerRight,
-                              child: SafeArea(
-                                minimum: EdgeInsets.only(right: 16),
-                                child: Icon(Icons.chevron_right),
-                              ),
+          bodyBuilder: (context, entity) => Column(
+            children: [
+              const SizedBox(height: 8),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.height / 2),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: EntityImage(
+                    entity: entity,
+                    quality: ImageQuality.high,
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  pushLastfmEntityDetailView(context, entity);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            entity.displayTitle,
+                            style: const TextStyle(fontSize: 22),
+                            textAlign: TextAlign.center,
+                          ),
+                          if (entity.displaySubtitle != null) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              entity.displaySubtitle!,
+                              style: const TextStyle(fontSize: 18),
                             ),
                           ],
+                          if (entity.displayTrailing != null) ...[
+                            const SizedBox(height: 4),
+                            Text(entity.displayTrailing!),
+                          ],
+                        ],
+                      ),
+                      const Align(
+                        alignment: Alignment.centerRight,
+                        child: SafeArea(
+                          minimum: EdgeInsets.only(right: 16),
+                          child: Icon(Icons.chevron_right),
                         ),
                       ),
-                    ),
-                    OutlinedButton(
-                      onPressed: _formKey.currentState?.onFormSubmit,
-                      child: const Text('Choose Another'),
-                    ),
-                  ],
-                )
-              : null,
+                    ],
+                  ),
+                ),
+              ),
+              OutlinedButton(
+                onPressed: _formKey.currentState?.onFormSubmit,
+                child: const Text('Choose Another'),
+              ),
+            ],
+          ),
         ),
       );
 

@@ -44,8 +44,6 @@ class _HIndexViewState extends State<HIndexView> {
   late Period _period;
   var _entityType = EntityType.artist;
 
-  _HIndexResult? _result;
-
   @override
   void initState() {
     super.initState();
@@ -54,11 +52,7 @@ class _HIndexViewState extends State<HIndexView> {
     _period = Preferences.period.value;
   }
 
-  Future<bool> _loadData() async {
-    setState(() {
-      _result = null;
-    });
-
+  Future<_HIndexResult?> _loadData() async {
     final username = _usernameTextController.text;
     final PeriodPagedRequest request = switch (_entityType) {
       EntityType.artist => GetTopArtistsRequest(username, _period),
@@ -74,18 +68,18 @@ class _HIndexViewState extends State<HIndexView> {
       if (e is LException && e.message == 'no such page') {
         numItems = 0;
       } else {
-        if (!mounted) return false;
+        if (!mounted) return null;
         showExceptionDialog(context,
             error: e, stackTrace: st, detailObject: username);
-        return false;
+        return null;
       }
     }
 
     if (numItems == 0) {
-      if (!mounted) return false;
+      if (!mounted) return null;
       showNoEntityTypePeriodDialog(context,
           entityType: _entityType, username: username);
-      return false;
+      return null;
     }
 
     final hIndex = await upperBound(
@@ -97,18 +91,14 @@ class _HIndexViewState extends State<HIndexView> {
     final hEntity = (await request.getData(1, hIndex)).single;
     final hPlusOneEntity = (await request.getData(1, hIndex + 1)).firstOrNull;
 
-    setState(() {
-      _result = _HIndexResult(
-        username: username,
-        period: _period,
-        entityType: _entityType,
-        hIndex: hIndex,
-        hEntity: hEntity,
-        hPlusOneEntity: hPlusOneEntity,
-      );
-    });
-
-    return true;
+    return _HIndexResult(
+      username: username,
+      period: _period,
+      entityType: _entityType,
+      hIndex: hIndex,
+      hEntity: hEntity,
+      hPlusOneEntity: hPlusOneEntity,
+    );
   }
 
   String? _validator(String? value) =>
@@ -128,8 +118,7 @@ class _HIndexViewState extends State<HIndexView> {
         },
       );
 
-  Widget get _body {
-    final result = _result!;
+  Widget _body(BuildContext context, _HIndexResult result) {
     final hIndex = numberFormat.format(result.hIndex);
     final hIndexOrdinal = formatOrdinal(result.hIndex);
     final hIndexPlusOne = numberFormat.format(result.hIndex + 1);
@@ -193,10 +182,10 @@ class _HIndexViewState extends State<HIndexView> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: createAppBar(context, 'h-index'),
-        body: CollapsibleFormView(
+        body: CollapsibleFormView<_HIndexResult>(
           submitButtonText: 'Calculate',
           onFormSubmit: _loadData,
-          formWidgets: [
+          formWidgetsBuilder: (_) => [
             ListTileTextField(
               title: 'Username',
               controller: _usernameTextController,
@@ -238,7 +227,7 @@ class _HIndexViewState extends State<HIndexView> {
               ),
             ),
           ],
-          body: _result != null ? _body : null,
+          bodyBuilder: _body,
         ),
       );
 
