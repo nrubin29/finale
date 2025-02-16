@@ -8,6 +8,7 @@ typedef BodyWidgetBuilder<R> = Widget Function(BuildContext context, R result);
 class CollapsibleFormView<R extends Object> extends StatefulWidget {
   final String submitButtonText;
   final Future<R?> Function() onFormSubmit;
+  final WidgetBuilder? loadingWidgetBuilder;
   final WidgetListBuilder formWidgetsBuilder;
   final BodyWidgetBuilder<R> bodyBuilder;
 
@@ -15,6 +16,7 @@ class CollapsibleFormView<R extends Object> extends StatefulWidget {
     super.key,
     this.submitButtonText = 'Submit',
     required this.onFormSubmit,
+    this.loadingWidgetBuilder,
     required this.formWidgetsBuilder,
     required this.bodyBuilder,
   });
@@ -49,53 +51,58 @@ class CollapsibleFormViewState<R extends Object>
   }
 
   @override
-  Widget build(BuildContext context) => CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: ExpansionPanelList(
-              expandedHeaderPadding: EdgeInsets.zero,
-              expansionCallback: (_, isExpanded) {
-                setState(() {
-                  _isSettingsExpanded = isExpanded;
-                });
-              },
-              children: [
-                ExpansionPanel(
-                  headerBuilder: (_, __) =>
-                      const ListTile(title: Text('Settings')),
-                  canTapOnHeader: true,
-                  isExpanded: _isSettingsExpanded,
-                  body: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    child: Column(
-                      children: [
-                        ...widget.formWidgetsBuilder(context),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: OutlinedButton(
-                            onPressed: onFormSubmit,
-                            child: Text(widget.submitButtonText),
+  Widget build(BuildContext context) =>
+      _isLoading && widget.loadingWidgetBuilder != null
+          ? Center(child: widget.loadingWidgetBuilder!.call(context))
+          : CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: ExpansionPanelList(
+                    expandedHeaderPadding: EdgeInsets.zero,
+                    expansionCallback: (_, isExpanded) {
+                      setState(() {
+                        _isSettingsExpanded = isExpanded;
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (_, __) =>
+                            const ListTile(title: Text('Settings')),
+                        canTapOnHeader: true,
+                        isExpanded: _isSettingsExpanded,
+                        body: Form(
+                          key: _formKey,
+                          autovalidateMode: AutovalidateMode.disabled,
+                          child: Column(
+                            children: [
+                              ...widget.formWidgetsBuilder(context),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: OutlinedButton(
+                                  onPressed: onFormSubmit,
+                                  child: Text(widget.submitButtonText),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
+                if (_isLoading)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: widget.loadingWidgetBuilder?.call(context) ??
+                        const LoadingComponent(),
+                  )
+                else if (_result case R result)
+                  SliverSafeArea(
+                    sliver: SliverToBoxAdapter(
+                      child: widget.bodyBuilder(context, result),
+                    ),
+                  ),
               ],
-            ),
-          ),
-          if (_isLoading)
-            const SliverFillRemaining(
-              hasScrollBody: false,
-              child: LoadingComponent(),
-            )
-          else if (_result case R result)
-            SliverSafeArea(
-              sliver: SliverToBoxAdapter(
-                child: widget.bodyBuilder(context, result),
-              ),
-            ),
-        ],
-      );
+            );
 }
