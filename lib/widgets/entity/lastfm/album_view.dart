@@ -76,12 +76,13 @@ class AlbumView extends StatelessWidget {
               if (friendUsername != null)
                 ScoreboardItemModel.future(
                     label: "$friendUsername's scrobbles",
-                    future: Lastfm.getAlbum(album, username: friendUsername)
-                        .then((value) => value.userPlayCount)),
+                    futureProvider: () =>
+                        Lastfm.getAlbum(album, username: friendUsername)
+                            .then((value) => value.userPlayCount)),
               if (album.userPlayCount > 0 && album.tracks.isNotEmpty)
                 ScoreboardItemModel.future(
                   label: 'Total listen time',
-                  future: _totalListenTime(album),
+                  futureProvider: () => _totalListenTime(album),
                 ),
             ]),
             if (album.topTags.tags.isNotEmpty) ...[

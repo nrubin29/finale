@@ -63,12 +63,13 @@ class ArtistView extends StatelessWidget {
                 if (friendUsername != null)
                   ScoreboardItemModel.future(
                     label: "$friendUsername's scrobbles",
-                    future: Lastfm.getArtist(artist, username: friendUsername)
-                        .then((value) => value.stats.userPlayCount),
+                    futureProvider: () =>
+                        Lastfm.getArtist(artist, username: friendUsername)
+                            .then((value) => value.stats.userPlayCount),
                   ),
                 ScoreboardItemModel.lazy(
                   label: 'Top listeners ranking',
-                  supplier: () => fetchTopListenersRanking(artist),
+                  futureProvider: () => fetchTopListenersRanking(artist),
                 ),
               ],
             ),

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class ScoreboardItemModel {
   final String label;
   final Object? _value;
-  final FutureOr<Object?> Function() supplier;
+  final FutureOr<Object?> Function() futureProvider;
 
   /// An optional function to call when the item is pressed.
   ///
@@ -18,18 +18,18 @@ class ScoreboardItemModel {
 
   ScoreboardItemModel.value(
       {required this.label, required Object? value, this.callback})
-      : assert(value is! Future),
+      : assert(value is! Function),
         _value = value,
-        supplier = (() => value),
+        futureProvider = (() => value),
         isLazy = false;
 
   ScoreboardItemModel.future(
-      {required this.label, required Future<Object?> future, this.callback})
+      {required this.label, required this.futureProvider, this.callback})
       : _value = null,
-        supplier = (() => future),
         isLazy = false;
 
-  const ScoreboardItemModel.lazy({required this.label, required this.supplier})
+  const ScoreboardItemModel.lazy(
+      {required this.label, required this.futureProvider})
       : _value = null,
         callback = null,
         isLazy = true;
@@ -112,7 +112,7 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
     });
 
     try {
-      _value = await widget.model.supplier();
+      _value = await widget.model.futureProvider();
     } on Exception {
       _value = null;
     } finally {

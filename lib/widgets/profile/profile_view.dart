@@ -257,15 +257,18 @@ class _ProfileViewState extends State<ProfileView>
                             label: 'Scrobbles', value: user.playCount),
                         ScoreboardItemModel.future(
                           label: 'Artists',
-                          future: Lastfm.getNumArtists(widget.username),
+                          futureProvider: () =>
+                              Lastfm.getNumArtists(widget.username),
                         ),
                         ScoreboardItemModel.future(
                           label: 'Albums',
-                          future: Lastfm.getNumAlbums(widget.username),
+                          futureProvider: () =>
+                              Lastfm.getNumAlbums(widget.username),
                         ),
                         ScoreboardItemModel.future(
                           label: 'Tracks',
-                          future: Lastfm.getNumTracks(widget.username),
+                          futureProvider: () =>
+                              Lastfm.getNumTracks(widget.username),
                         ),
                       ],
                     ),

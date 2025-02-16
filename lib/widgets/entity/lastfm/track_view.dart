@@ -72,8 +72,9 @@ class TrackView extends StatelessWidget {
                 if (friendUsername != null)
                   ScoreboardItemModel.future(
                     label: "$friendUsername's scrobbles",
-                    future: Lastfm.getTrack(track, username: friendUsername)
-                        .then((value) => value.userPlayCount),
+                    futureProvider: () =>
+                        Lastfm.getTrack(track, username: friendUsername)
+                            .then((value) => value.userPlayCount),
                     callback: () {
                       Navigator.push(
                         context,
