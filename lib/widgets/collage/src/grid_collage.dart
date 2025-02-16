@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/period.dart';
-import 'package:finale/util/extensions.dart';
 import 'package:finale/widgets/base/app_icon.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +56,7 @@ class GridCollage extends StatelessWidget {
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(
-                    'Top ${entityType.name.toTitleCase()}s',
+                    'Top ${entityType.displayName}s',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: gridTileSize / 6,

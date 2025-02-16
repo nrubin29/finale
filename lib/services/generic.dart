@@ -53,7 +53,18 @@ abstract class PagedRequest<T> {
   }
 }
 
-enum EntityType { track, album, artist, user, playlist, other }
+enum EntityType {
+  track('Track'),
+  album('Album'),
+  artist('Artist'),
+  user('User'),
+  playlist('Playlist'),
+  other('Other');
+
+  final String displayName;
+
+  const EntityType(this.displayName);
+}
 
 typedef ImageIdProvider = Future<ImageId?> Function();
 

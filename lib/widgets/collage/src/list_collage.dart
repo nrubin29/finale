@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period.dart';
-import 'package:finale/util/extensions.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +43,7 @@ class ListCollage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(width / 20).copyWith(bottom: 0),
               child: Text(
-                'Top ${entityType.name.toTitleCase()}s',
+                'Top ${entityType.displayName}s',
                 style: TextStyle(
                   color: themeColor.foregroundColor,
                   fontSize: width / 12,

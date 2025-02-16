@@ -18,10 +18,6 @@ extension PackageInfoFullVersion on PackageInfo {
   String get fullVersion => '$version+$buildNumber';
 }
 
-extension TitleCase on String {
-  String toTitleCase() => this[0].toUpperCase() + substring(1);
-}
-
 extension ListBinarySearchIndexWhere<T> on List<T> {
   int binarySearchIndexWhere<E>(E value, int Function(T, E) compare) {
     var min = 0;

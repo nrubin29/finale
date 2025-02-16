@@ -136,7 +136,7 @@ class _HIndexViewState extends State<HIndexView> {
     final hIndexPlusOneOrdinal = formatOrdinal(result.hIndex + 1);
     final username =
         result.username == Preferences.name.value ? null : result.username;
-    final entityName = result.entityType.name;
+    final entityName = result.entityType.displayName.toLowerCase();
     final period = result.period.formattedForSentence;
 
     String your, youve, youHavent, increase;
