@@ -129,7 +129,7 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
 
 class GetTopArtistsRequest extends PeriodPagedRequest<
     LTopArtistsResponseTopArtists, LTopArtistsResponseArtist> {
-  GetTopArtistsRequest(super.username, [super.period]);
+  GetTopArtistsRequest(super.username, super.period);
 
   @override
   doPeriodRequest(Period period, int limit, int page) async {
@@ -154,7 +154,7 @@ class GetTopArtistsRequest extends PeriodPagedRequest<
 
 class GetTopAlbumsRequest extends PeriodPagedRequest<
     LTopAlbumsResponseTopAlbums, LTopAlbumsResponseAlbum> {
-  GetTopAlbumsRequest(super.username, [super.period]);
+  GetTopAlbumsRequest(super.username, super.period);
 
   @override
   doPeriodRequest(Period period, int limit, int page) async {
@@ -189,7 +189,7 @@ class GetTopAlbumsRequest extends PeriodPagedRequest<
 
 class GetTopTracksRequest extends PeriodPagedRequest<
     LTopTracksResponseTopTracks, LTopTracksResponseTrack> {
-  GetTopTracksRequest(super.username, [super.period]);
+  GetTopTracksRequest(super.username, super.period);
 
   @override
   doPeriodRequest(Period period, int limit, int page) async {

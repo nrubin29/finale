@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
-import 'package:finale/util/preferences.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/request_sequencer.dart';
 import 'package:finale/widgets/base/error_component.dart';
@@ -129,7 +128,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
         if (mounted) {
           setState(() {
             _request = newRequest;
-            _getInitialItems();
+            reload();
           });
         }
       });
@@ -475,11 +474,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     if (!didInitialRequest) {
       String? message;
 
-      if (_request is PeriodPagedRequest) {
-        final request = _request as PeriodPagedRequest;
-        if ((request.period ?? Preferences.period.value).isCustom) {
-          message = 'Custom date ranges can take a long time to load.';
-        }
+      if (_request case PeriodPagedRequest request
+          when request.period.isCustom) {
+        message = 'Custom date ranges can take a long time to load.';
       }
 
       return LoadingComponent(message: message);

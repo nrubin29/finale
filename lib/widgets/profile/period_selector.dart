@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/preferences.dart';
@@ -11,18 +12,22 @@ import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 class PeriodSelector<T extends HasPlayCount> extends StatefulWidget {
   final EntityType entityType;
   final DisplayType displayType;
-  final PeriodPagedRequest<LPagedResponse<T>, T> request;
+  final PeriodPagedRequest<LPagedResponse<T>, T> Function(
+      String username, Period period) requestConstructor;
+  final String username;
   final EntityWidgetBuilder<T> detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
 
   const PeriodSelector({
     required this.entityType,
     this.displayType = DisplayType.list,
-    required this.request,
+    required this.requestConstructor,
+    required this.username,
     required this.detailWidgetBuilder,
     required this.subtitleWidgetBuilder,
   });
@@ -34,23 +39,32 @@ class PeriodSelector<T extends HasPlayCount> extends StatefulWidget {
 class _PeriodSelectorState<T extends HasPlayCount>
     extends State<PeriodSelector<T>> {
   late DisplayType _displayType;
+  late Period _period;
 
-  final _entityDisplayComponentKey = GlobalKey<EntityDisplayState>();
   late StreamSubscription _periodChangeSubscription;
+  final _requestSubject =
+      BehaviorSubject<PeriodPagedRequest<LPagedResponse<T>, T>>();
 
   @override
   void initState() {
     super.initState();
 
     _displayType = widget.displayType;
+    _period = Preferences.period.value;
+    _updatePeriod();
 
     _periodChangeSubscription = Preferences.period.changes.listen((value) {
       if (mounted) {
         setState(() {
-          _entityDisplayComponentKey.currentState?.reload();
+          _period = value;
+          _updatePeriod();
         });
       }
     });
+  }
+
+  void _updatePeriod() {
+    _requestSubject.add(widget.requestConstructor(widget.username, _period));
   }
 
   @override
@@ -94,26 +108,24 @@ class _PeriodSelectorState<T extends HasPlayCount>
           ),
           Expanded(
             child: EntityDisplay<T>(
-              key: _entityDisplayComponentKey,
               displayType: _displayType,
-              request: widget.request,
+              requestStream: _requestSubject.stream,
               detailWidgetBuilder: widget.detailWidgetBuilder,
               subtitleWidgetBuilder: widget.subtitleWidgetBuilder,
               scoreboardItems: [
                 ScoreboardItemModel.future(
                   label: 'Scrobbles',
                   futureProvider: () => GetRecentTracksRequest(
-                    widget.request.username,
-                    from: (widget.request.period ?? Preferences.period.value)
-                        .relativeStart,
-                    to: (widget.request.period ?? Preferences.period.value).end,
+                    widget.username,
+                    from: _period.relativeStart,
+                    to: _period.end,
                   )
                       .getNumItems()
                       .errorToNull<RecentListeningInformationHiddenException>(),
                 ),
                 ScoreboardItemModel.future(
                   label: '${widget.entityType.displayName}s',
-                  futureProvider: () => widget.request.getNumItems(),
+                  futureProvider: () => _requestSubject.value.getNumItems(),
                 ),
               ],
             ),
@@ -124,6 +136,7 @@ class _PeriodSelectorState<T extends HasPlayCount>
   @override
   void dispose() {
     _periodChangeSubscription.cancel();
+    _requestSubject.close();
     super.dispose();
   }
 }

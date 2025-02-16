@@ -6,7 +6,6 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:finale/util/preferences.dart';
 import 'package:flutter/foundation.dart';
 
 class _CacheKey {
@@ -33,7 +32,7 @@ final _globalCache = <_CacheKey, List<LRecentTracksResponseTrack>>{};
 abstract class PeriodPagedRequest<R extends LPagedResponse<T>,
     T extends HasPlayCount> extends PagedRequest<T> {
   final String username;
-  final Period? period;
+  final Period period;
 
   /// A local cache of post-processed data.
   ///
@@ -78,8 +77,6 @@ abstract class PeriodPagedRequest<R extends LPagedResponse<T>,
   @override
   @nonVirtual
   doRequest(int limit, int page) async {
-    final period = this.period ?? Preferences.period.value;
-
     if (!period.isCustom) {
       return (await doPeriodRequest(period, limit, page)).items;
     }
@@ -100,8 +97,6 @@ abstract class PeriodPagedRequest<R extends LPagedResponse<T>,
 
   @nonVirtual
   Future<int> getNumItems() async {
-    final period = this.period ?? Preferences.period.value;
-
     if (!period.isCustom) {
       return (await doPeriodRequest(period, 1, 1)).attr.total;
     }
@@ -110,6 +105,5 @@ abstract class PeriodPagedRequest<R extends LPagedResponse<T>,
   }
 
   @override
-  String toString() => '$runtimeType(user=$username, '
-      'period=${period ?? Preferences.period.value})';
+  String toString() => '$runtimeType(user=$username, period=$period)';
 }
