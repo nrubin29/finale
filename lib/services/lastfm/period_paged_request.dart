@@ -58,8 +58,8 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
     if (globalCachedData != null) {
       response = globalCachedData;
     } else {
-      final request = GetRecentTracksRequest(username,
-          from: period.start, to: period.end, extended: true);
+      final request =
+          GetRecentTracksRequest.forPeriod(username, period, extended: true);
 
       response = await request.getAllData();
       _globalCache[cacheKey] = response;

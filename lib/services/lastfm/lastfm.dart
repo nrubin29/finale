@@ -77,6 +77,12 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
     this.extended = false,
   });
 
+  GetRecentTracksRequest.forPeriod(this.username, Period period,
+      {this.extended = false})
+      : from = period.relativeStart,
+        to = period.end,
+        includeCurrentScrobble = false;
+
   Future<LRecentTracksResponseRecentTracks> _doRecentTracksRequest(
       int limit, int page) async {
     Map<String, dynamic> rawResponse;

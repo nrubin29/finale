@@ -40,8 +40,7 @@ class _LuckyViewState extends State<LuckyView> {
 
   Future<Entity?> _loadData() async {
     final username = _usernameTextController.text;
-    final request = GetRecentTracksRequest(username,
-        from: _period.relativeStart, to: _period.end);
+    final request = GetRecentTracksRequest.forPeriod(username, _period);
 
     int numItems;
     try {
