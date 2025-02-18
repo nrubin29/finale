@@ -4,9 +4,8 @@ import 'package:finale/env.dart';
 import 'package:finale/services/auth.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/strava/activity.dart';
-import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:finale/util/web_auth.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
     'www.strava.com',
@@ -75,9 +74,8 @@ class Strava {
       });
 
   Future<bool> authenticate() async {
-    final result = await FlutterWebAuth.authenticate(
-        url: createAuthorizationUri().toString(), callbackUrlScheme: 'finale');
-    final code = Uri.parse(result).queryParameters['code'];
+    final code =
+        await showWebAuth(createAuthorizationUri(), queryParam: 'code');
 
     if (code != null) {
       await _getAccessToken(code);

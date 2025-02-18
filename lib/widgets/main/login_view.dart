@@ -4,13 +4,12 @@ import 'package:finale/env.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
-import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
+import 'package:finale/util/web_auth.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/main/main_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView();
@@ -25,11 +24,11 @@ class LoginView extends StatelessWidget {
   }
 
   void _logIn(BuildContext context) async {
-    final result = await FlutterWebAuth.authenticate(
-        url: Uri.https('last.fm', 'api/auth',
-            {'api_key': apiKey, 'cb': authCallbackUrl}).toString(),
-        callbackUrlScheme: 'finale');
-    final token = Uri.parse(result).queryParameters['token']!;
+    final token = await showWebAuth(
+        Uri.https(
+            'last.fm', 'api/auth', {'api_key': apiKey, 'cb': authCallbackUrl}),
+        queryParam: 'token');
+    if (token == null) return;
     final session = await Lastfm.authenticate(token);
 
     Preferences.name.value = session.name;

@@ -8,9 +8,8 @@ import 'package:finale/services/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/track.dart';
-import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:finale/util/web_auth.dart';
 import 'package:pkce/pkce.dart';
 
 import 'recent_track.dart';
@@ -195,10 +194,8 @@ class Spotify {
 
   static Future<bool> authenticate() async {
     final pkcePair = PkcePair.generate();
-    final result = await FlutterWebAuth.authenticate(
-        url: _createAuthorizationUri(pkcePair).toString(),
-        callbackUrlScheme: 'finale');
-    final code = Uri.parse(result).queryParameters['code'];
+    final code = await showWebAuth(_createAuthorizationUri(pkcePair),
+        queryParam: 'code');
 
     if (code != null) {
       await _getAccessToken(code, pkcePair);

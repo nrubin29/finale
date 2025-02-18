@@ -3,13 +3,13 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
+import 'package:finale/util/web_auth.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/settings/apple_music_settings_view.dart';
 import 'package:finale/widgets/settings/spotify_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:universal_io/io.dart';
 
 class AccountsSettingsView extends StatefulWidget {
@@ -78,13 +78,11 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
               onChanged: (value) async {
                 if (value && Preferences.libreKey.value == null) {
                   try {
-                    final result = await FlutterWebAuth.authenticate(
-                        url: Uri.https('libre.fm', 'api/auth', {
-                          'api_key': apiKey,
-                          'cb': authCallbackUrl
-                        }).toString(),
-                        callbackUrlScheme: 'finale');
-                    final token = Uri.parse(result).queryParameters['token']!;
+                    final token = await showWebAuth(
+                        Uri.https('libre.fm', 'api/auth',
+                            {'api_key': apiKey, 'cb': authCallbackUrl}),
+                        queryParam: 'token');
+                    if (token == null) return;
                     final session =
                         await Lastfm.authenticate(token, libre: true);
                     Preferences.libreKey.value = session.key;

@@ -11,12 +11,6 @@ const isScreenshotTest =
     bool.fromEnvironment('isScreenshotTest', defaultValue: false);
 const censorImages = bool.fromEnvironment('censorImages', defaultValue: false);
 
-const authCallbackUrl = isWeb
-    ? isDebug
-        ? 'http://localhost:52486/auth.html'
-        : 'https://web.finale.app/auth.html'
-    : 'finale://web.finale.app/auth';
-
 const spotifyGreen = Color.fromRGBO(30, 215, 96, 1);
 const appleMusicPink = Color.fromRGBO(252, 90, 113, 1);
 const scrobbleIcon = Icons.playlist_add;
