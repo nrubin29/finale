@@ -37,6 +37,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>finale</string>
+				<string>finale-auth</string>
 			</array>
 		</dict>
 	</array>

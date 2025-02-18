@@ -2,7 +2,7 @@ import 'package:finale/util/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
-const _authScheme = 'finale';
+const _authScheme = 'finale-auth';
 const authCallbackUrl = isWeb
     ? isDebug
         ? 'http://localhost:52486/auth.html'
