@@ -20,8 +20,8 @@ class ToolsView extends StatelessWidget {
               icon: Icons.grid_view,
               trailing: const Icon(Icons.chevron_right),
               caption:
-                  'Generate grids and lists of your top albums, artists, and '
-                  'tracks over various time periods.',
+                  'Generate personalized images of your top albums, artists, '
+                  'and tracks over various time periods.',
               onTap: () {
                 Navigator.push(
                   context,
