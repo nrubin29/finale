@@ -1,9 +1,9 @@
-import 'dart:math';
-
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/theme.dart';
+import 'package:finale/widgets/base/scaled_box.dart';
+import 'package:finale/widgets/collage/src/collage_branding.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
@@ -20,138 +20,110 @@ class ListCollage extends StatelessWidget {
       this.period, this.entityType, this.items, this.onImageLoaded);
 
   @override
-  Widget build(BuildContext context) {
-    final width = min(MediaQuery.of(context).size.width, 400).toDouble();
-
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            themeColor.color.shade500,
-            themeColor.color.shade900,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (includeTitle) ...[
-            Padding(
-              padding: EdgeInsets.all(width / 20).copyWith(bottom: 0),
-              child: Text(
-                'Top ${entityType.displayName}s',
-                style: TextStyle(
-                  color: themeColor.foregroundColor,
-                  fontSize: width / 12,
-                ),
-              ),
+  Widget build(BuildContext context) => ScaledBox(
+        targetWidth: 400,
+        builder: (context, scale) => Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 24 * scale,
+            vertical: 16 * scale,
+          ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                themeColor.color.shade500,
+                themeColor.color.shade900,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: EdgeInsets.all(width / 20).copyWith(top: 0),
-              child: Text(
-                period.display,
-                style: TextStyle(
-                  color: themeColor.foregroundColor,
-                  fontSize: width / 24,
-                ),
-              ),
-            ),
-          ],
-          for (final item in items)
-            Padding(
-              padding: EdgeInsets.all(width / 20),
-              child: Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: EntityImage(
-                      entity: item,
-                      quality: ImageQuality.high,
-                      shouldAnimate: false,
-                      onLoaded: onImageLoaded,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 8 * scale,
+            children: [
+              if (includeTitle)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  spacing: 12 * scale,
+                  children: [
+                    Text(
+                      'Top ${entityType.displayName}s',
+                      style: TextStyle(
+                        color: themeColor.foregroundColor,
+                        fontSize: 28 * scale,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: width / 20),
-                  Flexible(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.displayTitle,
-                          style: TextStyle(
-                            color: themeColor.foregroundColor,
-                            fontSize: width / 20,
-                          ),
-                        ),
-                        if (item.displaySubtitle != null) ...[
-                          SizedBox(height: width / 75),
-                          Text(
-                            item.displaySubtitle!,
-                            style: TextStyle(
-                              color: themeColor.foregroundColor,
-                              fontSize: width / 25,
-                            ),
-                          ),
-                        ],
-                        if (item.displayTrailing != null) ...[
-                          SizedBox(height: width / 75),
-                          Text(
-                            item.displayTrailing!,
-                            style: TextStyle(
-                              color: themeColor.foregroundColor,
-                              fontSize: width / 30,
-                            ),
-                          ),
-                        ],
-                      ],
+                    Text(
+                      period.display,
+                      style: TextStyle(
+                        color: themeColor.foregroundColor,
+                        fontSize: 16 * scale,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          if (includeBranding)
-            Padding(
-              padding: EdgeInsets.only(
-                left: width / 20,
-                right: width / 20,
-                bottom: width / 50,
-              ),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  ],
+                ),
+              for (final item in items)
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16 * scale),
+                  child: Row(
+                    spacing: 20 * scale,
                     children: [
-                      Text(
-                        'Created with Finale for Last.fm',
-                        style: TextStyle(
-                          color: themeColor.foregroundColor,
+                      Flexible(
+                        flex: 1,
+                        child: EntityImage(
+                          entity: item,
+                          quality: ImageQuality.high,
+                          width: 128 * scale,
+                          shouldAnimate: false,
+                          onLoaded: onImageLoaded,
                         ),
                       ),
-                      Text(
-                        'https://finale.app',
-                        style: TextStyle(
-                          color: themeColor.foregroundColor,
+                      Flexible(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.displayTitle,
+                              style: TextStyle(
+                                color: themeColor.foregroundColor,
+                                fontSize: 20 * scale,
+                              ),
+                            ),
+                            if (item.displaySubtitle != null) ...[
+                              Text(
+                                item.displaySubtitle!,
+                                style: TextStyle(
+                                  color: themeColor.foregroundColor,
+                                  fontSize: 16 * scale,
+                                ),
+                              ),
+                            ],
+                            if (item.displayTrailing != null) ...[
+                              SizedBox(height: 2 * scale),
+                              Text(
+                                item.displayTrailing!,
+                                style: TextStyle(
+                                  color: themeColor.foregroundColor,
+                                  fontSize: 12 * scale,
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
                       ),
                     ],
                   ),
-                  const Spacer(),
-                  Image.asset(
-                    'assets/images/music_note.png',
-                    width: 60,
-                    color: themeColor.foregroundColor,
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+                ),
+              if (includeBranding)
+                CollageBranding(
+                  themeColor: themeColor,
+                  scale: scale,
+                ),
+            ],
+          ),
+        ),
+      );
 }
