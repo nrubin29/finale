@@ -93,18 +93,18 @@ Future<void> main() async {
 
     final formFields =
         find.byWidgetPredicate((widget) => widget is TextFormField);
-    await tester.enterText(formFields.at(0), 'A Lack of Color');
-    await tester.enterText(formFields.at(1), 'Death Cab for Cutie');
-    await tester.enterText(formFields.at(2), 'Transatlanticism');
+    await tester.enterText(formFields.at(0), 'Trapdoor');
+    await tester.enterText(formFields.at(1), 'The Dear Hunter');
+    await tester.enterText(formFields.at(2), 'The Color Spectrum');
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
     await tester.saveScreenshot('2_scrobble');
   });
 
-  testWidgets('Weekly track screen', (tester) async {
+  testWidgets('Weekly chart screen', (tester) async {
     await pumpWidget(tester, const MainView(username: testName));
-    await tester.tap(find.byIcon(Icons.access_time));
+    await tester.tap(find.byIcon(Icons.access_time_filled));
     await tester.pumpAndSettle();
     await tester.saveScreenshot('3_weekly_chart');
   });
@@ -140,7 +140,7 @@ Future<void> main() async {
   });
 
   testWidgets('Artist screen', (tester) async {
-    final artist = await Lastfm.getArtist(ConcreteBasicArtist('Mae'));
+    final artist = await Lastfm.getArtist(ConcreteBasicArtist('Valley'));
 
     await pumpWidget(tester, ArtistView(artist: artist), asPage: true);
     await tester.saveScreenshot('6_artist');
@@ -148,7 +148,7 @@ Future<void> main() async {
 
   testWidgets('Album screen', (tester) async {
     final album =
-        await Lastfm.getAlbum(FullConcreteAlbum('Deas Vail', 'Deas Vail'));
+        await Lastfm.getAlbum(FullConcreteAlbum('Always Repeating', 'Runnner'));
 
     await pumpWidget(tester, AlbumView(album: album), asPage: true);
     await tester.saveScreenshot('7_album');
@@ -156,7 +156,7 @@ Future<void> main() async {
 
   testWidgets('Album scrobble screen', (tester) async {
     final album =
-        await Lastfm.getAlbum(FullConcreteAlbum('Deas Vail', 'Deas Vail'));
+        await Lastfm.getAlbum(FullConcreteAlbum('The Everglow', 'Mae'));
 
     await pumpWidget(tester, BatchScrobbleView(entity: album),
         widgetBehindModal: AlbumView(album: album));

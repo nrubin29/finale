@@ -400,7 +400,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     if (_hasException || items.isEmpty) {
       // The Stack is a hack to make the RefreshIndicator work.
       return Stack(children: [
-        ListView(),
+        ListView(
+          shrinkWrap: !widget.scrollable,
+        ),
         if (_hasException)
           ErrorComponent(
             error: _exception!,
