@@ -1,6 +1,6 @@
 import 'package:finale/util/constants.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 
 const _authScheme = 'finale-auth';
 const authCallbackUrl =
@@ -13,7 +13,7 @@ const authCallbackUrl =
 Future<String?> showWebAuth(Uri uri, {required String queryParam}) async {
   String result;
   try {
-    result = await FlutterWebAuth.authenticate(
+    result = await FlutterWebAuth2.authenticate(
       url: uri.toString(),
       callbackUrlScheme: _authScheme,
     );

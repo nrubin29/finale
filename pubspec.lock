@@ -397,14 +397,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_web_auth:
+  flutter_web_auth_2:
     dependency: "direct main"
     description:
-      name: flutter_web_auth
-      sha256: "95e4856e24fb6ac1678f5ff334743b63f782d839ab324543d29ccbd295176209"
+      name: flutter_web_auth_2
+      sha256: "3c14babeaa066c371f3a743f204dd0d348b7d42ffa6fae7a9847a521aff33696"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "4.1.0"
+  flutter_web_auth_2_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_web_auth_2_platform_interface
+      sha256: c63a472c8070998e4e422f6b34a17070e60782ac442107c70000dd1bed645f4d
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -1273,13 +1281,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.9.0"
+  window_to_front:
+    dependency: transitive
+    description:
+      name: window_to_front
+      sha256: "7aef379752b7190c10479e12b5fd7c0b9d92adc96817d9e96c59937929512aee"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   workmanager:
     dependency: "direct main"
     description:
-      name: workmanager
-      sha256: ed13530cccd28c5c9959ad42d657cd0666274ca74c56dea0ca183ddd527d3a00
-      url: "https://pub.dev"
-    source: hosted
+      path: workmanager
+      ref: main
+      resolved-ref: "4ce065135dc1b91fee918f81596b42a56850391d"
+      url: "https://github.com/fluttercommunity/flutter_workmanager.git"
+    source: git
     version: "0.5.2"
   xdg_directories:
     dependency: transitive

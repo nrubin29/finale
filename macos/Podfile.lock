@@ -3,7 +3,7 @@ PODS:
     - FlutterMacOS
   - flutter_local_notifications (0.0.1):
     - FlutterMacOS
-  - flutter_web_auth (0.6.0):
+  - flutter_web_auth_2 (3.0.0):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - gal (1.0.0):
@@ -32,7 +32,7 @@ PODS:
 DEPENDENCIES:
   - app_links (from `Flutter/ephemeral/.symlinks/plugins/app_links/macos`)
   - flutter_local_notifications (from `Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos`)
-  - flutter_web_auth (from `Flutter/ephemeral/.symlinks/plugins/flutter_web_auth/macos`)
+  - flutter_web_auth_2 (from `Flutter/ephemeral/.symlinks/plugins/flutter_web_auth_2/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - gal (from `Flutter/ephemeral/.symlinks/plugins/gal/darwin`)
   - in_app_review (from `Flutter/ephemeral/.symlinks/plugins/in_app_review/macos`)
@@ -49,8 +49,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/app_links/macos
   flutter_local_notifications:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos
-  flutter_web_auth:
-    :path: Flutter/ephemeral/.symlinks/plugins/flutter_web_auth/macos
+  flutter_web_auth_2:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_web_auth_2/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   gal:
@@ -75,7 +75,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_links: 10e0a0ab602ffaf34d142cd4862f29d34b303b2a
   flutter_local_notifications: 7062189aabf7f50938a7b8b6614ffa97656eb0bf
-  flutter_web_auth: 1966f190ad0051456e12d9f2db506a4df81e7434
+  flutter_web_auth_2: 2e1dc2d2139973e4723c5286ce247dd590390d70
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   gal: 61e868295d28fe67ffa297fae6dacebf56fd53e1
   in_app_review: a6a031b9acd03c7d103e341aa334adf2c493fb93

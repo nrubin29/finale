@@ -20,7 +20,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   flutter_local_notifications: ^18.0.1
   flutter_mpmediaplayer: ^0.3.0
-  flutter_web_auth: ^0.6.0
+  flutter_web_auth_2: ^4.1.0
   gal: ^2.3.0
   html: ^0.15.5
   http: ^1.2.2
@@ -53,6 +53,13 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   json_serializable: ^6.9.0
+
+dependency_overrides:
+  workmanager:
+    git:
+      url: https://github.com/fluttercommunity/flutter_workmanager.git
+      path: workmanager
+      ref: main
 
 flutter:
   uses-material-design: true

@@ -8,7 +8,7 @@ PODS:
     - Flutter
   - flutter_mpmediaplayer (0.0.1):
     - Flutter
-  - flutter_web_auth (0.6.0):
+  - flutter_web_auth_2 (3.0.0):
     - Flutter
   - gal (1.0.0):
     - Flutter
@@ -45,7 +45,7 @@ DEPENDENCIES:
   - flutter_acrcloud (from `.symlinks/plugins/flutter_acrcloud/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_mpmediaplayer (from `.symlinks/plugins/flutter_mpmediaplayer/ios`)
-  - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
+  - flutter_web_auth_2 (from `.symlinks/plugins/flutter_web_auth_2/ios`)
   - gal (from `.symlinks/plugins/gal/darwin`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
@@ -70,8 +70,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_mpmediaplayer:
     :path: ".symlinks/plugins/flutter_mpmediaplayer/ios"
-  flutter_web_auth:
-    :path: ".symlinks/plugins/flutter_web_auth/ios"
+  flutter_web_auth_2:
+    :path: ".symlinks/plugins/flutter_web_auth_2/ios"
   gal:
     :path: ".symlinks/plugins/gal/darwin"
   in_app_review:
@@ -103,7 +103,7 @@ SPEC CHECKSUMS:
   flutter_acrcloud: 8dc6ee574321bc08390c1e79900aad5ef683248d
   flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
   flutter_mpmediaplayer: d6fda8913387edcbc6a1fd798087c693ac6937cb
-  flutter_web_auth: acc15a8fd7bba796a933c724a6dffc3d00f07c27
+  flutter_web_auth_2: 06d500582775790a0d4c323222fcb6d7990f9603
   gal: 61e868295d28fe67ffa297fae6dacebf56fd53e1
   in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
