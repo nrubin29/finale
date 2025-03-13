@@ -1,4 +1,5 @@
 import 'package:finale/services/auth.dart';
+import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/preference.dart';
 import 'package:finale/util/profile_tab.dart';
@@ -47,9 +48,10 @@ class Preferences {
 
   static final key = Preference<String?, String>('key');
 
-  static void clearLastfm() {
+  static Future<void> clearLastfm() async {
     name.clear();
     key.clear();
+    await LastfmCookie.clear();
   }
 
   static final spotifyAccessToken = Preference<String?, String>(
@@ -190,9 +192,10 @@ class Preferences {
     defaultValue: ProfileTab.values,
   );
 
-  static void clearAll() {
+  static Future<void> clearAll() async {
     for (final preference in _allPreferences) {
       preference.clear();
     }
+    await LastfmCookie.clear();
   }
 }

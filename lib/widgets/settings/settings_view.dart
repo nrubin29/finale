@@ -119,7 +119,7 @@ class SettingsView extends StatelessWidget {
                   title: const Text('Reset all settings'),
                   leading: const Icon(Icons.clear),
                   onTap: () async {
-                    Preferences.clearAll();
+                    await Preferences.clearAll();
                     await DefaultCacheManager().emptyCache();
                     await ImageIdCache().drop();
                     if (!context.mounted) return;

@@ -36,6 +36,11 @@ PODS:
     - Flutter
   - wakelock_plus (0.0.1):
     - Flutter
+  - webview_cookie_manager_plus (0.0.1):
+    - Flutter
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - workmanager (0.0.1):
     - Flutter
 
@@ -57,6 +62,8 @@ DEPENDENCIES:
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
+  - webview_cookie_manager_plus (from `.symlinks/plugins/webview_cookie_manager_plus/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
   - workmanager (from `.symlinks/plugins/workmanager/ios`)
 
 EXTERNAL SOURCES:
@@ -94,6 +101,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   wakelock_plus:
     :path: ".symlinks/plugins/wakelock_plus/ios"
+  webview_cookie_manager_plus:
+    :path: ".symlinks/plugins/webview_cookie_manager_plus/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
   workmanager:
     :path: ".symlinks/plugins/workmanager/ios"
 
@@ -115,6 +126,8 @@ SPEC CHECKSUMS:
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
+  webview_cookie_manager_plus: bb56cf9e53c086a22a2aa033ec6ce374da3095b6
+  webview_flutter_wkwebview: a4af96a051138e28e29f60101d094683b9f82188
   workmanager: 0afdcf5628bbde6924c21af7836fed07b42e30e6
 
 PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048

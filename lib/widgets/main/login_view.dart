@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:finale/env.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
@@ -14,8 +13,9 @@ import 'package:flutter/material.dart';
 class LoginView extends StatelessWidget {
   const LoginView();
 
-  static void logOutAndShow(BuildContext context) {
-    Preferences.clearLastfm();
+  static void logOutAndShow(BuildContext context) async {
+    await Preferences.clearLastfm();
+    if (!context.mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const LoginView()),
@@ -25,10 +25,7 @@ class LoginView extends StatelessWidget {
 
   void _logIn(BuildContext context) async {
     final token = await showWebAuth(
-      Uri.https('last.fm', 'api/auth', {
-        'api_key': apiKey,
-        'cb': authCallbackUrl,
-      }),
+      Lastfm.authorizationUri,
       queryParam: 'token',
     );
     if (token == null) return;

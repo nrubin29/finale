@@ -13,6 +13,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:finale/util/web_auth.dart';
 
 Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
   final allData = {
@@ -425,6 +426,11 @@ class Lastfm {
     'last.fm',
     'settings/applications',
   );
+
+  static final authorizationUri = Uri.https('last.fm', 'api/auth', {
+    'api_key': apiKey,
+    'cb': authCallbackUrl,
+  });
 
   static Future<LAuthenticationResponseSession> authenticate(
     String token, {

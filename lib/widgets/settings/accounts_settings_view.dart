@@ -7,6 +7,7 @@ import 'package:finale/util/web_auth.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/settings/apple_music_settings_view.dart';
+import 'package:finale/widgets/settings/lastfm_settings_view.dart';
 import 'package:finale/widgets/settings/spotify_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +37,21 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
           CaptionedListTile(
             title: 'Last.fm',
             icon: SocialMediaIcons.lastfm,
-            trailing: Switch(value: true, onChanged: (_) {}),
+            trailing:
+                isMobile
+                    ? const Icon(Icons.chevron_right)
+                    : Switch(value: true, onChanged: (_) {}),
+            onTap:
+                isMobile
+                    ? () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const LastfmSettingsView(),
+                        ),
+                      );
+                    }
+                    : null,
           ),
           CaptionedListTile(
             title: 'Spotify',

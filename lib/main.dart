@@ -1,3 +1,4 @@
+import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/util/background_tasks/background_task_manager.dart'
     as background_task_manager;
 import 'package:finale/util/constants.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
     await quick_actions_manager.setup();
     await background_task_manager.setup();
     await notifications.setup();
+    await LastfmCookie.setup();
   }
 
   if (!isWeb) {
