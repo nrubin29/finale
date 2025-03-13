@@ -91,6 +91,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
       _isLoading = false;
     });
 
+    if (!context.mounted) return;
     Navigator.pop(context, response.ignored == 0);
   }
 

@@ -31,6 +31,7 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
       session.dispose();
 
       if (result == null) {
+        if (!mounted) return;
         Navigator.pop(context, const ACRCloudDialogResult.cancelled());
         return;
       }
@@ -48,6 +49,7 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
           results = result.metadata!.music;
         });
       } else {
+        if (!mounted) return;
         Navigator.pop(context, const ACRCloudDialogResult());
       }
     });

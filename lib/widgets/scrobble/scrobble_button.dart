@@ -35,6 +35,7 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
         _cachedEntity = await widget.entityProvider!();
       }
     }
+    if (!mounted) return;
 
     Widget scrobbleView;
 

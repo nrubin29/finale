@@ -27,7 +27,9 @@ class SpotifyDialog extends StatelessWidget {
         TextButton(
           child: const Text('Sign in'),
           onPressed: () async {
-            Navigator.pop(context, await Spotify.authenticate());
+            final result = await Spotify.authenticate();
+            if (!context.mounted) return;
+            Navigator.pop(context, result);
           },
         ),
       ],

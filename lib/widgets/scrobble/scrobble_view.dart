@@ -105,10 +105,12 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     });
 
     if (widget.isModal) {
+      if (!context.mounted) return;
       Navigator.pop(context, response.ignored == 0);
       return;
     }
 
+    if (!context.mounted) return;
     if (response.ignored == 0) {
       ScaffoldMessenger.of(
         context,

@@ -66,6 +66,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
   Future<void> _scrobble() async {
     final success = await AppleMusic.scrobble(_selection!);
 
+    if (!mounted) return;
     if (success) {
       Navigator.pop(context);
       ScaffoldMessenger.of(
@@ -145,6 +146,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
               builder: (_) => const AppleMusicSettingsView(),
             );
 
+            if (!context.mounted) return;
             if (!Preferences.appleMusicEnabled.value) {
               Navigator.pop(context);
             }

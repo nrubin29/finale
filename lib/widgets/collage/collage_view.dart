@@ -120,6 +120,7 @@ class _CollageViewState extends State<CollageView> {
         otherResults = await Future.wait(otherRequests);
       }
     } on Exception catch (e, st) {
+      if (!context.mounted) return null;
       showExceptionDialog(
         context,
         error: e,
@@ -130,6 +131,7 @@ class _CollageViewState extends State<CollageView> {
     }
 
     if (items.isEmpty) {
+      if (!context.mounted) return null;
       showNoEntityTypePeriodDialog(
         context,
         entityType: _chart,
@@ -190,6 +192,7 @@ class _CollageViewState extends State<CollageView> {
       streamController.add(null);
     }
 
+    if (!context.mounted) return null;
     capturer.setup(context, switch (_type) {
       _CollageType.grid => GridCollage(
         _gridSize,

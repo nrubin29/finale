@@ -91,6 +91,7 @@ class SettingsView extends StatelessWidget {
                       await DefaultCacheManager().emptyCache();
                       await ImageIdCache().drop();
 
+                      if (!context.mounted) return;
                       showDialog(
                         context: context,
                         builder:
@@ -121,6 +122,7 @@ class SettingsView extends StatelessWidget {
                     Preferences.clearAll();
                     await DefaultCacheManager().emptyCache();
                     await ImageIdCache().drop();
+                    if (!context.mounted) return;
                     LoginView.logOutAndShow(context);
                   },
                 ),

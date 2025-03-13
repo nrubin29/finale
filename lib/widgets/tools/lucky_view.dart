@@ -50,6 +50,7 @@ class _LuckyViewState extends State<LuckyView> {
       if (e is LException && e.message == 'no such page') {
         numItems = 0;
       } else {
+        if (!mounted) return null;
         showExceptionDialog(
           context,
           error: e,
@@ -61,6 +62,7 @@ class _LuckyViewState extends State<LuckyView> {
     }
 
     if (numItems == 0) {
+      if (!mounted) return null;
       showNoEntityTypePeriodDialog(
         context,
         entityType: _entityType,

@@ -29,6 +29,7 @@ class _MainViewState extends State<MainView> {
   void initState() {
     super.initState();
     _subscription = externalActionsStream.listen((action) {
+      if (!mounted) return;
       if (action.type == ExternalActionType.scrobbleOnce ||
           action.type == ExternalActionType.scrobbleContinuously) {
         setState(() {

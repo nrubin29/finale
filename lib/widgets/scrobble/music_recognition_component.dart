@@ -51,12 +51,14 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
 
   Future<void> _scrobbleOnce() async {
     await _setUp();
+    if (!mounted) return;
     final result = await showDialog<ACRCloudDialogResult>(
       context: context,
       barrierDismissible: false,
       builder: (context) => ACRCloudDialog(),
     );
 
+    if (!mounted) return;
     if (result?.wasCancelled ?? true) return;
 
     if (result!.track != null) {
@@ -70,6 +72,7 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
 
   Future<void> _scrobbleContinuously() async {
     await _setUp();
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ListenContinuouslyView()),

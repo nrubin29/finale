@@ -37,6 +37,7 @@ class LoginView extends StatelessWidget {
     Preferences.name.value = session.name;
     Preferences.key.value = session.key;
 
+    if (!context.mounted) return;
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => MainView(username: session.name)),

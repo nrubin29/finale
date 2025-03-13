@@ -61,6 +61,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     }
 
     if (response.isEmpty) {
+      if (!mounted) return null;
       showNoEntityTypePeriodDialog(
         context,
         entityType: EntityType.track,
@@ -84,6 +85,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
           .toList(growable: false),
     );
 
+    if (!mounted) return;
     if (response.ignored == 0) {
       Navigator.pop(context);
       ScaffoldMessenger.of(

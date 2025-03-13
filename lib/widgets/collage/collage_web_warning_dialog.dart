@@ -28,13 +28,16 @@ class CollageWebWarningDialog extends StatelessWidget {
           child: const Text('Download Finale for Mobile'),
           onPressed: () async {
             await launchUrl(Uri.https('finale.app', ''));
+            if (!context.mounted) return;
             Navigator.pop(context, false);
           },
         ),
         TextButton(
           child: const Text('Sign in with Spotify'),
           onPressed: () async {
-            Navigator.pop(context, await Spotify.authenticate());
+            final result = await Spotify.authenticate();
+            if (!context.mounted) return;
+            Navigator.pop(context, result);
           },
         ),
       ],
