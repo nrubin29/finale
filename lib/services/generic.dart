@@ -91,8 +91,9 @@ abstract class Entity {
   ImageId? cachedImageId;
 
   /// Attempts to populate [cachedImageId] and download the image.
-  Future<void> tryCacheImageId(
-      [ImageQuality quality = ImageQuality.high]) async {
+  Future<void> tryCacheImageId([
+    ImageQuality quality = ImageQuality.high,
+  ]) async {
     if (cachedImageId != null || url == null) {
       return;
     }
@@ -187,8 +188,13 @@ class BasicConcreteTrack extends Track {
   @override
   final String? url;
 
-  BasicConcreteTrack(this.name, this.artistName, this.albumName,
-      [this.albumArtist, this.url]);
+  BasicConcreteTrack(
+    this.name,
+    this.artistName,
+    this.albumName, [
+    this.albumArtist,
+    this.url,
+  ]);
 
   @override
   String toString() =>
@@ -261,9 +267,12 @@ class FullConcreteAlbum extends FullAlbum {
   @override
   List<ScrobbleableTrack> tracks;
 
-  FullConcreteAlbum(this.name, String artistName,
-      [this.tracks = const <ScrobbleableTrack>[], this.url])
-      : artist = ConcreteBasicArtist(artistName);
+  FullConcreteAlbum(
+    this.name,
+    String artistName, [
+    this.tracks = const <ScrobbleableTrack>[],
+    this.url,
+  ]) : artist = ConcreteBasicArtist(artistName);
 
   @override
   String toString() => 'FullConcreteAlbum(name=$name, artist=$artist)';
@@ -273,9 +282,11 @@ abstract class BasicArtist extends Entity {
   String get name;
 
   @override
-  ImageIdProvider get imageIdProvider =>
-      ImageId.scrape(url, '.header-new-gallery--link',
-          spotifyFallback: SSearchArtistsRequest(name));
+  ImageIdProvider get imageIdProvider => ImageId.scrape(
+    url,
+    '.header-new-gallery--link',
+    spotifyFallback: SSearchArtistsRequest(name),
+  );
 
   @override
   EntityType get type => EntityType.artist;

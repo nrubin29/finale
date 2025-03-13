@@ -15,12 +15,15 @@ import 'package:pkce/pkce.dart';
 import 'recent_track.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
-    'api.spotify.com',
-    'v1/$method',
-    data?.map((key, value) => MapEntry(key, value.toString())));
+  'api.spotify.com',
+  'v1/$method',
+  data?.map((key, value) => MapEntry(key, value.toString())),
+);
 
-Future<Map<String, dynamic>> _doRequest(String method,
-    [Map<String, dynamic>? data]) async {
+Future<Map<String, dynamic>> _doRequest(
+  String method, [
+  Map<String, dynamic>? data,
+]) async {
   assert(Preferences.hasSpotifyAuthData);
   if (!DateTime.now().isBefore(Preferences.spotifyExpiration.value!)) {
     await Spotify.refreshAccessToken(Preferences.spotifyRefreshToken.value!);
@@ -30,14 +33,17 @@ Future<Map<String, dynamic>> _doRequest(String method,
 
   final uri = _buildUri(method, data);
 
-  final response = await httpClient
-      .get(uri, headers: {'Authorization': 'Bearer $accessToken'});
+  final response = await httpClient.get(
+    uri,
+    headers: {'Authorization': 'Bearer $accessToken'},
+  );
 
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
   } else if (response.statusCode ~/ 100 == 4) {
     throw SException.fromJson(
-        json.decode(utf8.decode(response.bodyBytes))['error']);
+      json.decode(utf8.decode(response.bodyBytes))['error'],
+    );
   } else {
     throw Exception('Could not do request $method');
   }
@@ -54,7 +60,7 @@ class SSearchTracksRequest extends PagedRequest<STrack> {
       'q': query,
       'type': 'track',
       'limit': limit,
-      'offset': (page - 1) * limit
+      'offset': (page - 1) * limit,
     });
     return SPage<STrack>.fromJson(rawResponse['tracks']).items;
   }
@@ -74,7 +80,7 @@ class SSearchArtistsRequest extends PagedRequest<SArtist> {
       'q': query,
       'type': 'artist',
       'limit': limit,
-      'offset': (page - 1) * limit
+      'offset': (page - 1) * limit,
     });
     return SPage<SArtist>.fromJson(rawResponse['artists']).items;
   }
@@ -94,7 +100,7 @@ class SSearchAlbumsRequest extends PagedRequest<SAlbumSimple> {
       'q': query,
       'type': 'album',
       'limit': limit,
-      'offset': (page - 1) * limit
+      'offset': (page - 1) * limit,
     });
     return SPage<SAlbumSimple>.fromJson(rawResponse['albums']).items;
   }
@@ -130,8 +136,10 @@ class SArtistAlbumsRequest extends PagedRequest<SAlbumSimple> {
 
   @override
   Future<List<SAlbumSimple>> doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest('artists/${artist.id}/albums',
-        {'limit': limit, 'offset': (page - 1) * limit});
+    final rawResponse = await _doRequest('artists/${artist.id}/albums', {
+      'limit': limit,
+      'offset': (page - 1) * limit,
+    });
     return SPage<SAlbumSimple>.fromJson(rawResponse).items;
   }
 
@@ -147,13 +155,13 @@ class SPlaylistTracksRequest extends PagedRequest<STrack> {
 
   @override
   Future<List<STrack>> doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest('playlists/${playlist.id}/tracks',
-        {'limit': limit, 'offset': (page - 1) * limit});
-    return SPage<SPlaylistItem>.fromJson(rawResponse)
-        .items
-        .map((e) => e.track)
-        .nonNulls
-        .toList();
+    final rawResponse = await _doRequest('playlists/${playlist.id}/tracks', {
+      'limit': limit,
+      'offset': (page - 1) * limit,
+    });
+    return SPage<SPlaylistItem>.fromJson(
+      rawResponse,
+    ).items.map((e) => e.track).nonNulls.toList();
   }
 
   @override
@@ -173,29 +181,34 @@ class Spotify {
   }
 
   static Future<SPlaylistFull> getFullPlaylist(
-      SPlaylistSimple simplePlaylist) async {
+    SPlaylistSimple simplePlaylist,
+  ) async {
     final tracks = await SPlaylistTracksRequest(simplePlaylist).getAllData();
     return SPlaylistFull(simplePlaylist, tracks);
   }
 
   static Future<List<STrack>> getTopTracksForArtist(SArtist artist) async {
-    final rawResponse =
-        await _doRequest('artists/${artist.id}/top-tracks', {'market': 'US'});
+    final rawResponse = await _doRequest('artists/${artist.id}/top-tracks', {
+      'market': 'US',
+    });
     return (rawResponse['tracks'] as List<dynamic>)
         .map((track) => STrack.fromJson(track))
         .toList(growable: false);
   }
 
   static Future<List<SRecentTrack>> getRecentTracks({int limit = 20}) async {
-    final rawResponse =
-        await _doRequest('me/player/recently-played', {'limit': limit});
+    final rawResponse = await _doRequest('me/player/recently-played', {
+      'limit': limit,
+    });
     return SRecentTracksResponse.fromJson(rawResponse).items;
   }
 
   static Future<bool> authenticate() async {
     final pkcePair = PkcePair.generate();
-    final code = await showWebAuth(_createAuthorizationUri(pkcePair),
-        queryParam: 'code');
+    final code = await showWebAuth(
+      _createAuthorizationUri(pkcePair),
+      queryParam: 'code',
+    );
 
     if (code != null) {
       await _getAccessToken(code, pkcePair);

@@ -15,18 +15,28 @@ class ImageIdCache {
   ImageIdCache._();
 
   Future<void> setup() async {
-    db = await openDatabase('imageId.db',
-        version: 1,
-        onCreate: (Database db, int version) =>
-            db.execute('CREATE TABLE ImageId (url TEXT, imageId TEXT)'));
+    db = await openDatabase(
+      'imageId.db',
+      version: 1,
+      onCreate:
+          (Database db, int version) =>
+              db.execute('CREATE TABLE ImageId (url TEXT, imageId TEXT)'),
+    );
   }
 
-  Future<void> insert(String url, ImageId imageId) async => await db
-      ?.insert('ImageId', {'url': url, 'imageId': imageId.serializedValue});
+  Future<void> insert(String url, ImageId imageId) async => await db?.insert(
+    'ImageId',
+    {'url': url, 'imageId': imageId.serializedValue},
+  );
 
   Future<ImageId?> get(String url) async {
-    final results = await db?.query('ImageId',
-            columns: ['imageId'], where: 'url = ?', whereArgs: [url]) ??
+    final results =
+        await db?.query(
+          'ImageId',
+          columns: ['imageId'],
+          where: 'url = ?',
+          whereArgs: [url],
+        ) ??
         const [];
 
     if (results.isNotEmpty) {

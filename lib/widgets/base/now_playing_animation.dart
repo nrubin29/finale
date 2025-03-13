@@ -8,15 +8,15 @@ class NowPlayingAnimation extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
     height: 15,
     child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            for (var i = 0; i < 3; i++) ...[
-              _AnimatedBar(start: i / 2),
-              if (i < 2) const SizedBox(width: 2),
-            ],
-          ],
-        ),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        for (var i = 0; i < 3; i++) ...[
+          _AnimatedBar(start: i / 2),
+          if (i < 2) const SizedBox(width: 2),
+        ],
+      ],
+    ),
   );
 }
 
@@ -56,10 +56,10 @@ class _AnimatedBarState extends State<_AnimatedBar>
 
   @override
   Widget build(BuildContext context) => Container(
-        width: 4,
-        height: 15 * _controller.value,
-        color: Theme.of(context).colorScheme.primary,
-      );
+    width: 4,
+    height: 15 * _controller.value,
+    color: Theme.of(context).colorScheme.primary,
+  );
 
   @override
   void dispose() {

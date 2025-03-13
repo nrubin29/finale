@@ -47,8 +47,9 @@ class _HIndexViewState extends State<HIndexView> {
   @override
   void initState() {
     super.initState();
-    _usernameTextController =
-        TextEditingController(text: Preferences.name.value);
+    _usernameTextController = TextEditingController(
+      text: Preferences.name.value,
+    );
     _period = Preferences.period.value;
   }
 
@@ -69,23 +70,32 @@ class _HIndexViewState extends State<HIndexView> {
         numItems = 0;
       } else {
         if (!mounted) return null;
-        showExceptionDialog(context,
-            error: e, stackTrace: st, detailObject: username);
+        showExceptionDialog(
+          context,
+          error: e,
+          stackTrace: st,
+          detailObject: username,
+        );
         return null;
       }
     }
 
     if (numItems == 0) {
       if (!mounted) return null;
-      showNoEntityTypePeriodDialog(context,
-          entityType: _entityType, username: username);
+      showNoEntityTypePeriodDialog(
+        context,
+        entityType: _entityType,
+        username: username,
+      );
       return null;
     }
 
-    final hIndex = await upperBound(
+    final hIndex =
+        await upperBound(
           numItems,
-          (index) async => index
-              .compareTo((await request.getData(1, index)).single.playCount),
+          (index) async => index.compareTo(
+            (await request.getData(1, index)).single.playCount,
+          ),
         ) -
         1;
     final hEntity = (await request.getData(1, hIndex)).single;
@@ -105,18 +115,16 @@ class _HIndexViewState extends State<HIndexView> {
       value == null || value.isEmpty ? 'This field is required.' : null;
 
   Widget _entityListTile(Entity entity) => ListTile(
-        title: Text(entity.displayTitle),
-        subtitle: entity.displaySubtitle == null
-            ? null
-            : Text(entity.displaySubtitle!),
-        trailing: entity.displayTrailing == null
-            ? null
-            : Text(entity.displayTrailing!),
-        leading: EntityImage(entity: entity),
-        onTap: () {
-          pushLastfmEntityDetailView(context, entity);
-        },
-      );
+    title: Text(entity.displayTitle),
+    subtitle:
+        entity.displaySubtitle == null ? null : Text(entity.displaySubtitle!),
+    trailing:
+        entity.displayTrailing == null ? null : Text(entity.displayTrailing!),
+    leading: EntityImage(entity: entity),
+    onTap: () {
+      pushLastfmEntityDetailView(context, entity);
+    },
+  );
 
   Widget _body(BuildContext context, _HIndexResult result) {
     final hIndex = numberFormat.format(result.hIndex);
@@ -135,25 +143,29 @@ class _HIndexViewState extends State<HIndexView> {
       your = 'Your';
       youve = "you've";
       youHavent = "you haven't";
-      increase = 'Want to increase your h-index? The quickest way is to '
+      increase =
+          'Want to increase your h-index? The quickest way is to '
           'scrobble your $hIndexPlusOneOrdinal $entityName more:';
     } else {
       your = "$username's";
       youve = '$username has';
       youHavent = "they haven't";
-      increase = 'Does $username want to increase their h-index? The quickest '
+      increase =
+          'Does $username want to increase their h-index? The quickest '
           'way is for them to scrobble their $hIndexPlusOneOrdinal $entityName '
           'more:';
     }
 
     if (result.period == Period.overall) {
       leadIn = '$your h-index for ${entityName}s is:';
-      explanation = "This means that $youve scrobbled $hIndex "
+      explanation =
+          "This means that $youve scrobbled $hIndex "
           "${entityName}s at least $hIndex times, but $youHavent scrobbled "
           '$hIndexPlusOne ${entityName}s at least $hIndexPlusOne times.';
     } else {
       leadIn = '$your h-index for ${entityName}s $period is:';
-      explanation = "This means that $period, $youve scrobbled $hIndex "
+      explanation =
+          "This means that $period, $youve scrobbled $hIndex "
           "${entityName}s at least $hIndex times, but $youHavent scrobbled "
           '$hIndexPlusOne ${entityName}s at least $hIndexPlusOne times.';
     }
@@ -164,10 +176,7 @@ class _HIndexViewState extends State<HIndexView> {
         spacing: 8,
         children: [
           Text(leadIn),
-          Text(
-            hIndex,
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
+          Text(hIndex, style: Theme.of(context).textTheme.displayLarge),
           Text('$explanation $your $hIndexOrdinal $entityName is:'),
           _entityListTile(result.hEntity),
           if (result.hPlusOneEntity != null) ...[
@@ -181,11 +190,12 @@ class _HIndexViewState extends State<HIndexView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar(context, 'h-index'),
-        body: CollapsibleFormView<_HIndexResult>(
-          submitButtonText: 'Calculate',
-          onFormSubmit: _loadData,
-          formWidgetsBuilder: (_) => [
+    appBar: createAppBar(context, 'h-index'),
+    body: CollapsibleFormView<_HIndexResult>(
+      submitButtonText: 'Calculate',
+      onFormSubmit: _loadData,
+      formWidgetsBuilder:
+          (_) => [
             ListTileTextField(
               title: 'Username',
               controller: _usernameTextController,
@@ -227,9 +237,9 @@ class _HIndexViewState extends State<HIndexView> {
               ),
             ),
           ],
-          bodyBuilder: _body,
-        ),
-      );
+      bodyBuilder: _body,
+    ),
+  );
 
   @override
   void dispose() {

@@ -15,71 +15,75 @@ class WorkoutDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: createAppBar(
-            context,
-            activity.name,
-            subtitle: activity.localTimeRangeFormatted,
-            bottom: TabBar(
-              tabs: [
-                const Tab(icon: Icon(Icons.queue_music)),
-                Tab(icon: Icon(activity.icon)),
-              ],
+    length: 2,
+    child: Scaffold(
+      appBar: createAppBar(
+        context,
+        activity.name,
+        subtitle: activity.localTimeRangeFormatted,
+        bottom: TabBar(
+          tabs: [
+            const Tab(icon: Icon(Icons.queue_music)),
+            Tab(icon: Icon(activity.icon)),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        children: [
+          EntityDisplay<LRecentTracksResponseTrack>(
+            request: GetRecentTracksRequest(
+              Preferences.name.value!,
+              from: activity.startDate.subtract(const Duration(minutes: 1)),
+              to: activity.endDate.add(const Duration(minutes: 1)),
             ),
+            detailWidgetBuilder: (track) => TrackView(track: track),
           ),
-          body: TabBarView(
+          ListView(
             children: [
-              EntityDisplay<LRecentTracksResponseTrack>(
-                request: GetRecentTracksRequest(Preferences.name.value!,
-                    from:
-                        activity.startDate.subtract(const Duration(minutes: 1)),
-                    to: activity.endDate.add(const Duration(minutes: 1))),
-                detailWidgetBuilder: (track) => TrackView(track: track),
+              ListTile(
+                title: const Text('Elapsed Time'),
+                leading: const Icon(Icons.schedule),
+                trailing: Text(
+                  formatDuration(Duration(seconds: activity.elapsedTime)),
+                ),
               ),
-              ListView(
-                children: [
-                  ListTile(
-                    title: const Text('Elapsed Time'),
-                    leading: const Icon(Icons.schedule),
-                    trailing: Text(formatDuration(
-                        Duration(seconds: activity.elapsedTime))),
-                  ),
-                  ListTile(
-                    title: const Text('Moving Time'),
-                    leading: const Icon(Icons.timer),
-                    trailing: Text(
-                        formatDuration(Duration(seconds: activity.movingTime))),
-                  ),
-                  if (activity.distance > 0)
-                    ListTile(
-                      title: const Text('Distance'),
-                      leading: const Icon(Icons.map),
-                      trailing: Text(pluralize(activity.distance, 'mile')),
-                    ),
-                  if (activity.totalElevationGain > 0)
-                    ListTile(
-                      title: const Text('Elevation Gain'),
-                      leading: const Icon(Icons.height),
-                      trailing: Text('${activity.totalElevationGain} ft'),
-                    ),
-                  if (activity.averageSpeed > 0)
-                    ListTile(
-                      title: const Text('Average Speed'),
-                      leading: const Icon(Icons.speed),
-                      trailing: Text(
-                          '${activity.averageSpeed.toStringAsFixed(1)} mph'),
-                    ),
-                  if (activity.averageHeartRate != null)
-                    ListTile(
-                      title: const Text('Average Heart Rate'),
-                      leading: const Icon(Icons.favorite),
-                      trailing: Text('${activity.averageHeartRate} bpm'),
-                    ),
-                ],
+              ListTile(
+                title: const Text('Moving Time'),
+                leading: const Icon(Icons.timer),
+                trailing: Text(
+                  formatDuration(Duration(seconds: activity.movingTime)),
+                ),
               ),
+              if (activity.distance > 0)
+                ListTile(
+                  title: const Text('Distance'),
+                  leading: const Icon(Icons.map),
+                  trailing: Text(pluralize(activity.distance, 'mile')),
+                ),
+              if (activity.totalElevationGain > 0)
+                ListTile(
+                  title: const Text('Elevation Gain'),
+                  leading: const Icon(Icons.height),
+                  trailing: Text('${activity.totalElevationGain} ft'),
+                ),
+              if (activity.averageSpeed > 0)
+                ListTile(
+                  title: const Text('Average Speed'),
+                  leading: const Icon(Icons.speed),
+                  trailing: Text(
+                    '${activity.averageSpeed.toStringAsFixed(1)} mph',
+                  ),
+                ),
+              if (activity.averageHeartRate != null)
+                ListTile(
+                  title: const Text('Average Heart Rate'),
+                  leading: const Icon(Icons.favorite),
+                  trailing: Text('${activity.averageHeartRate} bpm'),
+                ),
             ],
           ),
-        ),
-      );
+        ],
+      ),
+    ),
+  );
 }

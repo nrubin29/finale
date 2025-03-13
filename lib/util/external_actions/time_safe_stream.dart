@@ -13,7 +13,7 @@ extension TimeSafeStream<T> on ReplaySubject<Timestamped<T>> {
   /// with the issue where a value may be emitted before the subscriber is ready
   /// to handle it as well as the issue where a subscriber may receive values
   /// that have already been handled.
-  Stream<T> timeSafeStream() =>
-      where((item) => DateTime.now().difference(item.timestamp) < _duration)
-          .map((item) => item.value);
+  Stream<T> timeSafeStream() => where(
+    (item) => DateTime.now().difference(item.timestamp) < _duration,
+  ).map((item) => item.value);
 }

@@ -18,7 +18,7 @@ class ScrobbleButton<T extends Entity> extends StatefulWidget {
   final Color? color;
 
   const ScrobbleButton({this.entity, this.entityProvider, this.color})
-      : assert(entity != null || entityProvider != null);
+    : assert(entity != null || entityProvider != null);
 
   @override
   State<StatefulWidget> createState() => _ScrobbleButtonState<T>();
@@ -41,7 +41,8 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
     if (_cachedEntity is HasTracks) {
       if ((_cachedEntity as HasTracks).tracks.isEmpty) {
         _showSnackbar(
-            "This ${_cachedEntity!.type.name} doesn't have any tracks.");
+          "This ${_cachedEntity!.type.name} doesn't have any tracks.",
+        );
         return;
       }
 
@@ -54,9 +55,10 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
     }
 
     final result = await showBarModalBottomSheet<bool>(
-        context: context,
-        duration: const Duration(milliseconds: 200),
-        builder: (_) => scrobbleView);
+      context: context,
+      duration: const Duration(milliseconds: 200),
+      builder: (_) => scrobbleView,
+    );
 
     if (result != null) {
       if (result) {
@@ -72,14 +74,15 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
     }
   }
 
-  void _showSnackbar(String text) => ScaffoldMessenger.of(context)
-    ..clearSnackBars()
-    ..showSnackBar(SnackBar(content: Text(text)));
+  void _showSnackbar(String text) =>
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(text)));
 
   @override
   Widget build(BuildContext context) => IconButton(
-        icon: const Icon(scrobbleIcon),
-        color: widget.color,
-        onPressed: _onPressed,
-      );
+    icon: const Icon(scrobbleIcon),
+    color: widget.color,
+    onPressed: _onPressed,
+  );
 }

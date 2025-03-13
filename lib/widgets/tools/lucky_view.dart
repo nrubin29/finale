@@ -33,8 +33,9 @@ class _LuckyViewState extends State<LuckyView> {
   @override
   void initState() {
     super.initState();
-    _usernameTextController =
-        TextEditingController(text: Preferences.name.value);
+    _usernameTextController = TextEditingController(
+      text: Preferences.name.value,
+    );
     _period = Preferences.period.value;
   }
 
@@ -49,15 +50,22 @@ class _LuckyViewState extends State<LuckyView> {
       if (e is LException && e.message == 'no such page') {
         numItems = 0;
       } else {
-        showExceptionDialog(context,
-            error: e, stackTrace: st, detailObject: username);
+        showExceptionDialog(
+          context,
+          error: e,
+          stackTrace: st,
+          detailObject: username,
+        );
         return null;
       }
     }
 
     if (numItems == 0) {
-      showNoEntityTypePeriodDialog(context,
-          entityType: _entityType, username: username);
+      showNoEntityTypePeriodDialog(
+        context,
+        entityType: _entityType,
+        username: username,
+      );
       return null;
     }
 
@@ -69,8 +77,9 @@ class _LuckyViewState extends State<LuckyView> {
       Entity entity;
 
       if (_entityType == EntityType.album) {
-        entity = await Lastfm.getAlbum(ConcreteBasicAlbum(
-            responseEntity.albumName, responseEntity.artist));
+        entity = await Lastfm.getAlbum(
+          ConcreteBasicAlbum(responseEntity.albumName, responseEntity.artist),
+        );
       } else if (_entityType == EntityType.artist) {
         entity = await Lastfm.getArtist(responseEntity.artist);
       } else if (_entityType == EntityType.track) {
@@ -90,12 +99,13 @@ class _LuckyViewState extends State<LuckyView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar(context, "I'm Feeling Lucky"),
-        body: CollapsibleFormView<Entity>(
-          key: _formKey,
-          submitButtonText: 'Roll the Dice',
-          onFormSubmit: _loadData,
-          formWidgetsBuilder: (_) => [
+    appBar: createAppBar(context, "I'm Feeling Lucky"),
+    body: CollapsibleFormView<Entity>(
+      key: _formKey,
+      submitButtonText: 'Roll the Dice',
+      onFormSubmit: _loadData,
+      formWidgetsBuilder:
+          (_) => [
             ListTileTextField(
               title: 'Username',
               controller: _usernameTextController,
@@ -137,12 +147,14 @@ class _LuckyViewState extends State<LuckyView> {
               ),
             ),
           ],
-          bodyBuilder: (context, entity) => Column(
+      bodyBuilder:
+          (context, entity) => Column(
             children: [
               const SizedBox(height: 8),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.height / 2),
+                  maxWidth: MediaQuery.of(context).size.height / 2,
+                ),
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: EntityImage(
@@ -197,8 +209,8 @@ class _LuckyViewState extends State<LuckyView> {
               ),
             ],
           ),
-        ),
-      );
+    ),
+  );
 
   @override
   void dispose() {

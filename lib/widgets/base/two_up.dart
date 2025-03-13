@@ -14,53 +14,52 @@ class TwoUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final isTwoUp = mediaQuery.size.width > 600 &&
+    final isTwoUp =
+        mediaQuery.size.width > 600 &&
         mediaQuery.orientation == Orientation.landscape;
     return isTwoUp
         ? Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (entity != null)
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: FractionallySizedBox(
-                    widthFactor: .8,
-                    heightFactor: .8,
-                    child: EntityImage(
-                      entity: entity!,
-                      quality: ImageQuality.high,
-                    ),
-                  ),
-                ),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (entity != null)
               Flexible(
                 fit: FlexFit.tight,
                 child: FractionallySizedBox(
-                  widthFactor: entity == null ? .8 : 1,
-                  child: ListView(
-                    shrinkWrap: true,
-                    physics: const ScrollPhysics(),
-                    children: [const SizedBox(height: 16), ...listItems],
-                  ),
-                ),
-              ),
-            ],
-          )
-        : ListView(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            children: [
-              if (entity != null)
-                ConstrainedBox(
-                  constraints:
-                      BoxConstraints(maxHeight: mediaQuery.size.height / 2),
+                  widthFactor: .8,
+                  heightFactor: .8,
                   child: EntityImage(
                     entity: entity!,
                     quality: ImageQuality.high,
                   ),
                 ),
-              const SizedBox(height: 10),
-              ...listItems,
-            ],
-          );
+              ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: FractionallySizedBox(
+                widthFactor: entity == null ? .8 : 1,
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: const ScrollPhysics(),
+                  children: [const SizedBox(height: 16), ...listItems],
+                ),
+              ),
+            ),
+          ],
+        )
+        : ListView(
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          children: [
+            if (entity != null)
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: mediaQuery.size.height / 2,
+                ),
+                child: EntityImage(entity: entity!, quality: ImageQuality.high),
+              ),
+            const SizedBox(height: 10),
+            ...listItems,
+          ],
+        );
   }
 }

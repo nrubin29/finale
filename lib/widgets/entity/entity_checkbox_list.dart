@@ -57,7 +57,8 @@ class _EntityCheckboxList<T extends Entity>
     });
 
     widget.onSelectionChanged(
-        _items.keys.where((item) => _items[item]!).toList(growable: false));
+      _items.keys.where((item) => _items[item]!).toList(growable: false),
+    );
   }
 
   void _updateAll({required bool isSelected}) {
@@ -66,53 +67,57 @@ class _EntityCheckboxList<T extends Entity>
     });
 
     widget.onSelectionChanged(
-        _items.keys.where((item) => _items[item]!).toList(growable: false));
+      _items.keys.where((item) => _items[item]!).toList(growable: false),
+    );
   }
 
   @override
   Widget build(BuildContext context) => EntityDisplay<T>(
-        items: _items.keys.toList(growable: false),
-        scrollable: widget.scrollable,
-        displayImages: widget.displayImages,
-        shouldLeftPadListItems: false,
-        noResultsMessage: widget.noResultsMessage,
-        onRefresh: widget.onRefresh,
-        onTap: (item) {
-          _updateItem(item, !_items[item]!);
-        },
-        slivers: [
-          if (_items.isNotEmpty)
-            SliverSafeArea(
-              top: false,
-              bottom: false,
-              minimum: const EdgeInsets.only(right: 16),
-              sliver: SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: _items.values.any((value) => !value)
+    items: _items.keys.toList(growable: false),
+    scrollable: widget.scrollable,
+    displayImages: widget.displayImages,
+    shouldLeftPadListItems: false,
+    noResultsMessage: widget.noResultsMessage,
+    onRefresh: widget.onRefresh,
+    onTap: (item) {
+      _updateItem(item, !_items[item]!);
+    },
+    slivers: [
+      if (_items.isNotEmpty)
+        SliverSafeArea(
+          top: false,
+          bottom: false,
+          minimum: const EdgeInsets.only(right: 16),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed:
+                      _items.values.any((value) => !value)
                           ? () {
-                              _updateAll(isSelected: true);
-                            }
+                            _updateAll(isSelected: true);
+                          }
                           : null,
-                      child: const Text('Select all'),
-                    ),
-                    const SizedBox(width: 16),
-                    TextButton(
-                      onPressed: _items.values.any((value) => value)
-                          ? () {
-                              _updateAll(isSelected: false);
-                            }
-                          : null,
-                      child: const Text('Deselect all'),
-                    ),
-                  ],
+                  child: const Text('Select all'),
                 ),
-              ),
+                const SizedBox(width: 16),
+                TextButton(
+                  onPressed:
+                      _items.values.any((value) => value)
+                          ? () {
+                            _updateAll(isSelected: false);
+                          }
+                          : null,
+                  child: const Text('Deselect all'),
+                ),
+              ],
             ),
-        ],
-        leadingWidgetBuilder: (item) => Checkbox(
+          ),
+        ),
+    ],
+    leadingWidgetBuilder:
+        (item) => Checkbox(
           value: _items[item],
           onChanged: (value) {
             if (value != null) {
@@ -120,6 +125,6 @@ class _EntityCheckboxList<T extends Entity>
             }
           },
         ),
-        trailingWidgetBuilder: widget.trailingWidgetBuilder,
-      );
+    trailingWidgetBuilder: widget.trailingWidgetBuilder,
+  );
 }

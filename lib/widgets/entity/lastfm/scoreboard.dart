@@ -16,23 +16,28 @@ class ScoreboardItemModel {
   final void Function()? callback;
   final bool isLazy;
 
-  ScoreboardItemModel.value(
-      {required this.label, required Object? value, this.callback})
-      : assert(value is! Function),
-        _value = value,
-        futureProvider = (() => value),
-        isLazy = false;
+  ScoreboardItemModel.value({
+    required this.label,
+    required Object? value,
+    this.callback,
+  }) : assert(value is! Function),
+       _value = value,
+       futureProvider = (() => value),
+       isLazy = false;
 
-  ScoreboardItemModel.future(
-      {required this.label, required this.futureProvider, this.callback})
-      : _value = null,
-        isLazy = false;
+  ScoreboardItemModel.future({
+    required this.label,
+    required this.futureProvider,
+    this.callback,
+  }) : _value = null,
+       isLazy = false;
 
-  const ScoreboardItemModel.lazy(
-      {required this.label, required this.futureProvider})
-      : _value = null,
-        callback = null,
-        isLazy = true;
+  const ScoreboardItemModel.lazy({
+    required this.label,
+    required this.futureProvider,
+  }) : _value = null,
+       callback = null,
+       isLazy = true;
 }
 
 /// A widget that displays multiple [items] in a row.
@@ -42,11 +47,7 @@ class Scoreboard extends StatelessWidget {
   final List<ScoreboardItemModel> items;
   final List<Widget> actions;
 
-  const Scoreboard({
-    super.key,
-    required this.items,
-    this.actions = const [],
-  });
+  const Scoreboard({super.key, required this.items, this.actions = const []});
 
   List<Widget> _widgets(BuildContext context) => items
       .map<Widget>((item) => _ScoreboardItem(model: item))
@@ -69,7 +70,7 @@ class Scoreboard extends StatelessWidget {
               for (var i = 0; i < widgets.length; i++) ...[
                 widgets[i],
                 if (i < widgets.length - 1) const VerticalDivider(width: 24),
-              ]
+              ],
             ],
           ),
         ),
@@ -131,27 +132,31 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
         _isLoading && widget.model._value == null
             ? const LoadingComponent.small()
             : _value != null
-                ? Text(_value is num
-                    ? numberFormat.format(_value)
-                    : _value.toString())
-                : widget.model.isLazy
-                    ? const Text('Tap to load')
-                    : const Text('---'),
+            ? Text(
+              _value is num ? numberFormat.format(_value) : _value.toString(),
+            )
+            : widget.model.isLazy
+            ? const Text('Tap to load')
+            : const Text('---'),
       ],
     );
   }
 
   @override
-  Widget build(BuildContext context) => widget.model.callback != null ||
-          (widget.model.isLazy && _value == null)
-      ? OutlinedButton(
-          style: ButtonStyle(
+  Widget build(BuildContext context) =>
+      widget.model.callback != null || (widget.model.isLazy && _value == null)
+          ? OutlinedButton(
+            style: ButtonStyle(
               side: WidgetStateProperty.all(
-                  BorderSide(color: Theme.of(context).colorScheme.primary))),
-          onPressed: () => widget.model.isLazy
-              ? _loadValue(forceLoad: true)
-              : widget.model.callback?.call(),
-          child: _scoreTile,
-        )
-      : _scoreTile;
+                BorderSide(color: Theme.of(context).colorScheme.primary),
+              ),
+            ),
+            onPressed:
+                () =>
+                    widget.model.isLazy
+                        ? _loadValue(forceLoad: true)
+                        : widget.model.callback?.call(),
+            child: _scoreTile,
+          )
+          : _scoreTile;
 }

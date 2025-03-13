@@ -9,18 +9,21 @@ import 'package:json_annotation/json_annotation.dart';
 part 'common.g.dart';
 
 ImageId? extractImageId(
-    List<dynamic>? /* List<Map<String, dynamic>>? */ images) {
+  List<dynamic>? /* List<Map<String, dynamic>>? */ images,
+) {
   if (images == null || images.isEmpty) {
     return null;
   }
 
   var lowQualityImageId = images.first['url'] as String;
-  lowQualityImageId =
-      lowQualityImageId.substring(lowQualityImageId.lastIndexOf('/') + 1);
+  lowQualityImageId = lowQualityImageId.substring(
+    lowQualityImageId.lastIndexOf('/') + 1,
+  );
 
   var highQualityImageId = images.first['url'] as String;
-  highQualityImageId =
-      highQualityImageId.substring(highQualityImageId.lastIndexOf('/') + 1);
+  highQualityImageId = highQualityImageId.substring(
+    highQualityImageId.lastIndexOf('/') + 1,
+  );
 
   return ImageId.spotify(lowQualityImageId, highQualityImageId);
 }
@@ -50,7 +53,10 @@ class SPage<T extends Entity> {
     }
 
     throw ArgumentError.value(
-        json, 'json', 'Cannot convert the provided data.');
+      json,
+      'json',
+      'Cannot convert the provided data.',
+    );
   }
 }
 

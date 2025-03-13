@@ -18,9 +18,6 @@ class ScaledBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = min(MediaQuery.of(context).size.width, targetWidth);
     final scale = width / targetWidth;
-    return SizedBox(
-      width: width,
-      child: builder(context, scale),
-    );
+    return SizedBox(width: width, child: builder(context, scale));
   }
 }

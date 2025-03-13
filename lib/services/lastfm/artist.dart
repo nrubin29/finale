@@ -152,7 +152,12 @@ class LArtistTopAlbum extends BasicAlbum {
   final ImageId? imageId;
 
   LArtistTopAlbum(
-      this.name, this.url, this.playCount, this.artist, this.imageId);
+    this.name,
+    this.url,
+    this.playCount,
+    this.artist,
+    this.imageId,
+  );
 
   factory LArtistTopAlbum.fromJson(Map<String, dynamic> json) =>
       _$LArtistTopAlbumFromJson(json);

@@ -52,19 +52,25 @@ class Preferences {
     key.clear();
   }
 
-  static final spotifyAccessToken =
-      Preference<String?, String>('spotifyAccessToken2');
+  static final spotifyAccessToken = Preference<String?, String>(
+    'spotifyAccessToken2',
+  );
 
-  static final spotifyRefreshToken =
-      Preference<String?, String>('spotifyRefreshToken2');
+  static final spotifyRefreshToken = Preference<String?, String>(
+    'spotifyRefreshToken2',
+  );
 
   static final spotifyExpiration = Preference.dateTime('spotifyExpiration2');
 
-  static final spotifyEnabled =
-      Preference<bool, bool>('spotifyEnabled', defaultValue: true);
+  static final spotifyEnabled = Preference<bool, bool>(
+    'spotifyEnabled',
+    defaultValue: true,
+  );
 
-  static final spotifyCheckerEnabled =
-      Preference<bool, bool>('isSpotifyCheckedEnabled', defaultValue: false);
+  static final spotifyCheckerEnabled = Preference<bool, bool>(
+    'isSpotifyCheckedEnabled',
+    defaultValue: false,
+  );
 
   /// Returns true if Spotify auth data is saved.
   static bool get hasSpotifyAuthData =>
@@ -78,11 +84,13 @@ class Preferences {
     spotifyExpiration.clear();
   }
 
-  static final stravaAccessToken =
-      Preference<String?, String>('stravaAccessToken');
+  static final stravaAccessToken = Preference<String?, String>(
+    'stravaAccessToken',
+  );
 
-  static final stravaRefreshToken =
-      Preference<String?, String>('stravaRefreshToken');
+  static final stravaRefreshToken = Preference<String?, String>(
+    'stravaRefreshToken',
+  );
 
   static final stravaExpiresAt = Preference.dateTime('stravaExpiresAt');
 
@@ -91,10 +99,14 @@ class Preferences {
       stravaRefreshToken.hasValue &&
       stravaExpiresAt.hasValue;
 
-  static TokenResponse? get stravaAuthData => hasStravaAuthData
-      ? TokenResponse(stravaAccessToken.value!, stravaExpiresAt.value!,
-          stravaRefreshToken.value!)
-      : null;
+  static TokenResponse? get stravaAuthData =>
+      hasStravaAuthData
+          ? TokenResponse(
+            stravaAccessToken.value!,
+            stravaExpiresAt.value!,
+            stravaRefreshToken.value!,
+          )
+          : null;
 
   static set stravaAuthData(TokenResponse? tokenResponse) {
     assert(tokenResponse != null);
@@ -111,8 +123,10 @@ class Preferences {
 
   static final libreKey = Preference<String?, String>('libreKey');
 
-  static final libreEnabled =
-      Preference<bool, bool>('libreEnabled', defaultValue: false);
+  static final libreEnabled = Preference<bool, bool>(
+    'libreEnabled',
+    defaultValue: false,
+  );
 
   static void clearLibre() {
     libreEnabled.value = false;
@@ -125,11 +139,15 @@ class Preferences {
     defaultValue: SearchEngine.lastfm,
   );
 
-  static final stripTags =
-      Preference<bool, bool>('stripTags', defaultValue: false);
+  static final stripTags = Preference<bool, bool>(
+    'stripTags',
+    defaultValue: false,
+  );
 
-  static final listenMoreFrequently =
-      Preference<bool, bool>('listenMoreFrequently', defaultValue: false);
+  static final listenMoreFrequently = Preference<bool, bool>(
+    'listenMoreFrequently',
+    defaultValue: false,
+  );
 
   static final themeColor = Preference.forEnum<ThemeColor>(
     'themeColorIndex',
@@ -137,24 +155,34 @@ class Preferences {
     defaultValue: ThemeColor.red,
   );
 
-  static final themeBackground =
-      Preference<bool, bool>('themeBackground', defaultValue: false);
+  static final themeBackground = Preference<bool, bool>(
+    'themeBackground',
+    defaultValue: false,
+  );
 
-  static final appleMusicEnabled =
-      Preference<bool, bool>('isAppleMusicEnabled', defaultValue: true);
+  static final appleMusicEnabled = Preference<bool, bool>(
+    'isAppleMusicEnabled',
+    defaultValue: true,
+  );
 
   static final appleMusicBackgroundScrobblingEnabled = Preference<bool, bool>(
-      'isAppleMusicBackgroundScrobblingEnabled',
-      defaultValue: true);
+    'isAppleMusicBackgroundScrobblingEnabled',
+    defaultValue: true,
+  );
 
-  static final lastAppleMusicScrobble =
-      Preference.dateTime('lastAppleMusicScrobble');
+  static final lastAppleMusicScrobble = Preference.dateTime(
+    'lastAppleMusicScrobble',
+  );
 
-  static final showAlbumArtistField =
-      Preference<bool, bool>('showAlbumArtistField', defaultValue: true);
+  static final showAlbumArtistField = Preference<bool, bool>(
+    'showAlbumArtistField',
+    defaultValue: true,
+  );
 
-  static final inputDateTimeAsText =
-      Preference<bool, bool>('inputDateTimeAsText', defaultValue: false);
+  static final inputDateTimeAsText = Preference<bool, bool>(
+    'inputDateTimeAsText',
+    defaultValue: false,
+  );
 
   static final profileTabsOrder = Preference.forEnumList<ProfileTab>(
     'profileTabsOrder2',

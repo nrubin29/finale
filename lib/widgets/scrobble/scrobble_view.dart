@@ -52,22 +52,22 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     _albumController.text = widget.track?.albumName ?? '';
     _albumArtistController.text = widget.track?.albumArtist ?? '';
 
-    _showAlbumArtistFieldSubscription =
-        Preferences.showAlbumArtistField.changes.listen((value) {
-      setState(() {
-        _showAlbumArtistField = value;
-      });
-    });
+    _showAlbumArtistFieldSubscription = Preferences.showAlbumArtistField.changes
+        .listen((value) {
+          setState(() {
+            _showAlbumArtistField = value;
+          });
+        });
 
     _showAlbumArtistField = Preferences.showAlbumArtistField.value;
 
     if (!widget.isModal) {
-      _appleMusicChangeSubscription =
-          Preferences.appleMusicEnabled.changes.listen((_) {
-        setState(() {
-          _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
-        });
-      });
+      _appleMusicChangeSubscription = Preferences.appleMusicEnabled.changes
+          .listen((_) {
+            setState(() {
+              _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
+            });
+          });
 
       _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
     }
@@ -86,18 +86,19 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       _isLoading = true;
     });
 
-    final response = await Lastfm.scrobble([
-      BasicConcreteTrack(
-        _trackController.text,
-        _artistController.text,
-        _albumController.text,
-        _showAlbumArtistField && _albumArtistController.text.isNotEmpty
-            ? _albumArtistController.text
-            : null,
-      ),
-    ], [
-      _useCustomTimestamp ? _customTimestamp! : DateTime.now()
-    ]);
+    final response = await Lastfm.scrobble(
+      [
+        BasicConcreteTrack(
+          _trackController.text,
+          _artistController.text,
+          _albumController.text,
+          _showAlbumArtistField && _albumArtistController.text.isNotEmpty
+              ? _albumArtistController.text
+              : null,
+        ),
+      ],
+      [_useCustomTimestamp ? _customTimestamp! : DateTime.now()],
+    );
 
     setState(() {
       _isLoading = false;
@@ -109,8 +110,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
     }
 
     if (response.ignored == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Scrobbled successfully!')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Scrobbled successfully!')));
       _trackController.text = '';
       _artistController.text = '';
       _albumController.text = '';
@@ -121,7 +123,8 @@ class _ScrobbleViewState extends State<ScrobbleView> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('An error occurred while scrobbling')));
+        const SnackBar(content: Text('An error occurred while scrobbling')),
+      );
     }
   }
 
@@ -133,16 +136,18 @@ class _ScrobbleViewState extends State<ScrobbleView> {
         'Scrobble',
         actions: [
           Builder(
-            builder: (context) => _isLoading
-                ? const AppBarLoadingIndicator()
-                : IconButton(
-                    icon: const Icon(scrobbleIcon),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _scrobble(context);
-                      }
-                    },
-                  ),
+            builder:
+                (context) =>
+                    _isLoading
+                        ? const AppBarLoadingIndicator()
+                        : IconButton(
+                          icon: const Icon(scrobbleIcon),
+                          onPressed: () {
+                            if (_formKey.currentState?.validate() ?? false) {
+                              _scrobble(context);
+                            }
+                          },
+                        ),
           ),
         ],
       ),
@@ -173,14 +178,17 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => const AppleMusicScrobbleView()),
+                            builder: (_) => const AppleMusicScrobbleView(),
+                          ),
                         );
                       }),
                     ButtonAction('Friend', Icons.people, () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const FriendScrobbleView()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const FriendScrobbleView(),
+                        ),
+                      );
                     }),
                   ],
                 ),
@@ -215,8 +223,9 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
                     controller: _albumArtistController,
-                    decoration:
-                        const InputDecoration(labelText: 'Album Artist'),
+                    decoration: const InputDecoration(
+                      labelText: 'Album Artist',
+                    ),
                   ),
                 ),
               Padding(
@@ -227,15 +236,13 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                   title: const Text('Custom timestamp'),
                   value: _useCustomTimestamp,
                   onChanged: (value) {
-                    setState(
-                      () {
-                        _useCustomTimestamp = value;
+                    setState(() {
+                      _useCustomTimestamp = value;
 
-                        if (_useCustomTimestamp) {
-                          _customTimestamp = DateTime.now();
-                        }
-                      },
-                    );
+                      if (_useCustomTimestamp) {
+                        _customTimestamp = DateTime.now();
+                      }
+                    });
                   },
                 ),
               ),

@@ -6,13 +6,16 @@ class ErrorComponent extends StatelessWidget {
   final ErrorDetails details;
   final VoidCallback? onRetry;
 
-  ErrorComponent(
-      {required Exception error,
-      required StackTrace stackTrace,
-      Object? detailObject,
-      this.onRetry})
-      : details = ErrorDetails(
-            error: error, stackTrace: stackTrace, detailObject: detailObject);
+  ErrorComponent({
+    required Exception error,
+    required StackTrace stackTrace,
+    Object? detailObject,
+    this.onRetry,
+  }) : details = ErrorDetails(
+         error: error,
+         stackTrace: stackTrace,
+         detailObject: detailObject,
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +26,7 @@ class ErrorComponent extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              details.icon,
-              size: 48,
-              color: theme.colorScheme.primary,
-            ),
+            Icon(details.icon, size: 48, color: theme.colorScheme.primary),
             const SizedBox(height: 10),
             Text(
               details.title,
@@ -35,10 +34,7 @@ class ErrorComponent extends StatelessWidget {
               style: theme.textTheme.titleLarge,
             ),
             const SizedBox(height: 10),
-            Text(
-              '${details.error}',
-              textAlign: TextAlign.center,
-            ),
+            Text('${details.error}', textAlign: TextAlign.center),
             if (onRetry != null) ...[
               const SizedBox(height: 10),
               Wrap(

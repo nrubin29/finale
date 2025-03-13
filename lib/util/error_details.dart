@@ -10,13 +10,20 @@ class ErrorDetails {
   final IconData icon;
   final bool canLogOut;
 
-  const ErrorDetails._(this.title, this.error, this.stackTrace,
-      this.detailObject, this.icon, this.canLogOut);
+  const ErrorDetails._(
+    this.title,
+    this.error,
+    this.stackTrace,
+    this.detailObject,
+    this.icon,
+    this.canLogOut,
+  );
 
-  factory ErrorDetails(
-      {required Exception error,
-      required StackTrace stackTrace,
-      Object? detailObject}) {
+  factory ErrorDetails({
+    required Exception error,
+    required StackTrace stackTrace,
+    Object? detailObject,
+  }) {
     var title = 'An error occurred';
     Object errorObject = error;
     var icon = Icons.error;
@@ -38,9 +45,10 @@ class ErrorDetails {
         // not found.
         if (error.message == 'User not found') {
           title = 'User not found';
-          errorObject = detailObject != null
-              ? 'User $detailObject does not exist.'
-              : 'User does not exist.';
+          errorObject =
+              detailObject != null
+                  ? 'User $detailObject does not exist.'
+                  : 'User does not exist.';
           icon = Icons.person_off;
         }
       } else if (error.code == 8) {
@@ -69,6 +77,12 @@ class ErrorDetails {
     }
 
     return ErrorDetails._(
-        title, errorObject, stackTrace, detailObject, icon, canLogOut);
+      title,
+      errorObject,
+      stackTrace,
+      detailObject,
+      icon,
+      canLogOut,
+    );
   }
 }

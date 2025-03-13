@@ -21,26 +21,30 @@ class WrappedCollage extends StatelessWidget {
   final int numScrobbles;
   final VoidCallback onImageLoaded;
 
-  WrappedCollage(this.themeColor, this.includeBranding, this.username,
-      this.period, this.items, List<Object> otherResults, this.onImageLoaded)
-      : topArtists = otherResults[0] as List<LTopArtistsResponseArtist>,
-        topTracks = otherResults[1] as List<LTopTracksResponseTrack>,
-        numScrobbles = otherResults[2] as int;
+  WrappedCollage(
+    this.themeColor,
+    this.includeBranding,
+    this.username,
+    this.period,
+    this.items,
+    List<Object> otherResults,
+    this.onImageLoaded,
+  ) : topArtists = otherResults[0] as List<LTopArtistsResponseArtist>,
+      topTracks = otherResults[1] as List<LTopTracksResponseTrack>,
+      numScrobbles = otherResults[2] as int;
 
   @override
   Widget build(BuildContext context) => ScaledBox(
-        targetWidth: 400,
-        builder: (context, scale) => Container(
+    targetWidth: 400,
+    builder:
+        (context, scale) => Container(
           padding: EdgeInsets.symmetric(
             horizontal: 24 * scale,
             vertical: 16 * scale,
           ),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                themeColor.color.shade500,
-                themeColor.color.shade900,
-              ],
+              colors: [themeColor.color.shade500, themeColor.color.shade900],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -117,7 +121,7 @@ class WrappedCollage extends StatelessWidget {
                           ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               Row(
@@ -170,18 +174,15 @@ class WrappedCollage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               if (includeBranding)
-                CollageBranding(
-                  themeColor: themeColor,
-                  scale: scale,
-                )
+                CollageBranding(themeColor: themeColor, scale: scale)
               else
                 SizedBox(height: 8 * scale),
             ],
           ),
         ),
-      );
+  );
 }

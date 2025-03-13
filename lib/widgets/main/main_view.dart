@@ -39,19 +39,22 @@ class _MainViewState extends State<MainView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => AlbumView(album: action.value as BasicAlbum)),
+            builder: (_) => AlbumView(album: action.value as BasicAlbum),
+          ),
         );
       } else if (action.type == ExternalActionType.viewArtist) {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => ArtistView(artist: action.value as BasicArtist)),
+            builder: (_) => ArtistView(artist: action.value as BasicArtist),
+          ),
         );
       } else if (action.type == ExternalActionType.viewTrack) {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => TrackView(track: action.value as Track)),
+            builder: (_) => TrackView(track: action.value as Track),
+          ),
         );
       } else if (action.type == ExternalActionType.viewTab) {
         setState(() {

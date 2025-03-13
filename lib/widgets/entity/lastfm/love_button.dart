@@ -22,18 +22,18 @@ class _LoveButtonState extends State<LoveButton> {
 
   @override
   Widget build(BuildContext context) => IconButton(
-        icon: Icon(
-          _isLoved ? Icons.favorite : Icons.favorite_border,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        onPressed: () async {
-          if (await Lastfm.love(widget.track, !_isLoved)) {
-            setState(() {
-              _isLoved = !_isLoved;
-            });
-          }
-        },
-      );
+    icon: Icon(
+      _isLoved ? Icons.favorite : Icons.favorite_border,
+      color: Theme.of(context).colorScheme.primary,
+    ),
+    onPressed: () async {
+      if (await Lastfm.love(widget.track, !_isLoved)) {
+        setState(() {
+          _isLoved = !_isLoved;
+        });
+      }
+    },
+  );
 }
 
 class OutlinedLoveIcon extends StatelessWidget {
@@ -45,11 +45,7 @@ class OutlinedLoveIcon extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Icon(
-          Icons.favorite,
-          color: theme.colorScheme.primary,
-          size: 18,
-        ),
+        Icon(Icons.favorite, color: theme.colorScheme.primary, size: 18),
         Icon(
           Icons.favorite_outline,
           color: theme.colorScheme.onSurface,

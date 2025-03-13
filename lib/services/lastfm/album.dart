@@ -40,7 +40,12 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
   final ImageId? imageId;
 
   LTopAlbumsResponseAlbum(
-      this.name, this.url, this.playCount, this.artist, this.imageId);
+    this.name,
+    this.url,
+    this.playCount,
+    this.artist,
+    this.imageId,
+  );
 
   factory LTopAlbumsResponseAlbum.fromJson(Map<String, dynamic> json) =>
       _$LTopAlbumsResponseAlbumFromJson(json);
@@ -139,9 +144,10 @@ class LAlbumTracks {
   factory LAlbumTracks.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTracksFromJson(json);
 
-  static List<LAlbumTrack> parseTracks(json) => json == null
-      ? const []
-      : json is List<dynamic>
+  static List<LAlbumTrack> parseTracks(json) =>
+      json == null
+          ? const []
+          : json is List<dynamic>
           ? json.map((e) => LAlbumTrack.fromJson(e)).toList(growable: false)
           : List.unmodifiable([LAlbumTrack.fromJson(json)]);
 }
@@ -183,25 +189,26 @@ class LAlbum extends FullAlbum {
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
   @override
-  List<LAlbumTrack> get tracks => (tracksObject?.tracks ?? const [])
-    ..forEach((element) {
-      element.album = name;
-    });
+  List<LAlbumTrack> get tracks =>
+      (tracksObject?.tracks ?? const [])..forEach((element) {
+        element.album = name;
+      });
 
   @override
   String get displayTrailing => pluralize(userPlayCount);
 
   LAlbum(
-      this.name,
-      this.artistName,
-      this.url,
-      this.imageId,
-      this.playCount,
-      this.userPlayCount,
-      this.listeners,
-      this.tracksObject,
-      this.topTags,
-      this.wiki);
+    this.name,
+    this.artistName,
+    this.url,
+    this.imageId,
+    this.playCount,
+    this.userPlayCount,
+    this.listeners,
+    this.tracksObject,
+    this.topTags,
+    this.wiki,
+  );
 
   factory LAlbum.fromJson(Map<String, dynamic> json) => _$LAlbumFromJson(json);
 }

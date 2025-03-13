@@ -23,23 +23,30 @@ enum ThemeColor {
 
   Color get foregroundColor => isBestInDarkMode ? Colors.black : Colors.white;
 
-  const ThemeColor(this.displayName, this.color,
-      {this.isBestInDarkMode = false});
+  const ThemeColor(
+    this.displayName,
+    this.color, {
+    this.isBestInDarkMode = false,
+  });
 }
 
 const _offBlackBackgroundColor = Color.fromRGBO(16, 20, 23, 1);
 
-ThemeData finaleTheme(ThemeColor themeColor, Brightness brightness,
-    [bool? offBlackBackground]) {
+ThemeData finaleTheme(
+  ThemeColor themeColor,
+  Brightness brightness, [
+  bool? offBlackBackground,
+]) {
   var colorScheme = ColorScheme.fromSeed(
     seedColor: themeColor.color,
     brightness: brightness,
     primary: themeColor.color,
-    surface: brightness == Brightness.dark
-        ? offBlackBackground == true
-            ? _offBlackBackgroundColor
-            : Colors.black
-        : null,
+    surface:
+        brightness == Brightness.dark
+            ? offBlackBackground == true
+                ? _offBlackBackgroundColor
+                : Colors.black
+            : null,
     onPrimary: themeColor.foregroundColor,
   );
 
@@ -70,8 +77,9 @@ ThemeData themeDataForAppBar(BuildContext context, ThemeColor themeColor) {
   final theme = Theme.of(context);
   return theme.copyWith(
     // Color disabled icon buttons correctly.
-    colorScheme:
-        theme.colorScheme.copyWith(onSurface: themeColor.foregroundColor),
+    colorScheme: theme.colorScheme.copyWith(
+      onSurface: themeColor.foregroundColor,
+    ),
     tabBarTheme: theme.tabBarTheme.copyWith(
       indicatorColor: themeColor.foregroundColor,
       labelColor: themeColor.foregroundColor,

@@ -16,23 +16,28 @@ class ListCollage extends StatelessWidget {
   final List<Entity> items;
   final VoidCallback onImageLoaded;
 
-  const ListCollage(this.themeColor, this.includeTitle, this.includeBranding,
-      this.period, this.entityType, this.items, this.onImageLoaded);
+  const ListCollage(
+    this.themeColor,
+    this.includeTitle,
+    this.includeBranding,
+    this.period,
+    this.entityType,
+    this.items,
+    this.onImageLoaded,
+  );
 
   @override
   Widget build(BuildContext context) => ScaledBox(
-        targetWidth: 400,
-        builder: (context, scale) => Container(
+    targetWidth: 400,
+    builder:
+        (context, scale) => Container(
           padding: EdgeInsets.symmetric(
             horizontal: 24 * scale,
             vertical: 16 * scale,
           ),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                themeColor.color.shade500,
-                themeColor.color.shade900,
-              ],
+              colors: [themeColor.color.shade500, themeColor.color.shade900],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -118,12 +123,9 @@ class ListCollage extends StatelessWidget {
                   ),
                 ),
               if (includeBranding)
-                CollageBranding(
-                  themeColor: themeColor,
-                  scale: scale,
-                ),
+                CollageBranding(themeColor: themeColor, scale: scale),
             ],
           ),
         ),
-      );
+  );
 }

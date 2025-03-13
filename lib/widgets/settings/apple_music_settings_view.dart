@@ -94,9 +94,9 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
               trailing:
                   _authorizationStatus == AuthorizationStatus.notDetermined
                       ? TextButton(
-                          onPressed: _authorize,
-                          child: const Text('Authorize'),
-                        )
+                        onPressed: _authorize,
+                        child: const Text('Authorize'),
+                      )
                       : null,
             ),
             if (_authorizationStatus == AuthorizationStatus.authorized)

@@ -22,8 +22,8 @@ class ThrottleClient extends BaseClient {
   /// If [inner] is passed, it's used as the inner client for sending HTTP
   /// requests. It defaults to `http.Client()`.
   ThrottleClient(int maxActiveRequests, [Client? inner])
-      : _pool = Pool(maxActiveRequests),
-        _inner = inner ?? Client();
+    : _pool = Pool(maxActiveRequests),
+      _inner = inner ?? Client();
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -38,18 +38,23 @@ class ThrottleClient extends BaseClient {
     }
 
     var stream = response.stream.transform(
-        StreamTransformer<List<int>, List<int>>.fromHandlers(
-            handleDone: (sink) {
-      resource.release();
-      sink.close();
-    }));
-    return StreamedResponse(stream, response.statusCode,
-        contentLength: response.contentLength,
-        request: response.request,
-        headers: response.headers,
-        isRedirect: response.isRedirect,
-        persistentConnection: response.persistentConnection,
-        reasonPhrase: response.reasonPhrase);
+      StreamTransformer<List<int>, List<int>>.fromHandlers(
+        handleDone: (sink) {
+          resource.release();
+          sink.close();
+        },
+      ),
+    );
+    return StreamedResponse(
+      stream,
+      response.statusCode,
+      contentLength: response.contentLength,
+      request: response.request,
+      headers: response.headers,
+      isRedirect: response.isRedirect,
+      persistentConnection: response.persistentConnection,
+      reasonPhrase: response.reasonPhrase,
+    );
   }
 
   @override

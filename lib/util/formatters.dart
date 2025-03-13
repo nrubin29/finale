@@ -1,9 +1,10 @@
 import 'package:intl/intl.dart';
 
-String pluralize(num howMany, [String noun = 'scrobble']) =>
-    Intl.plural(howMany,
-        one: '$howMany $noun',
-        other: '${numberFormat.format(howMany)} ${noun}s');
+String pluralize(num howMany, [String noun = 'scrobble']) => Intl.plural(
+  howMany,
+  one: '$howMany $noun',
+  other: '${numberFormat.format(howMany)} ${noun}s',
+);
 
 final numberFormat = NumberFormat();
 final dateFormat = DateFormat('d MMM');
@@ -56,16 +57,17 @@ String formatDateTimeDelta(DateTime? date, {bool withYear = false}) {
 }
 
 String formatDateRange(DateTime start, DateTime end, {String separator = '-'}) {
-  final startFormatted = start.year == end.year
-      ? dateFormat.format(start)
-      : dateFormatWithYear.format(start);
+  final startFormatted =
+      start.year == end.year
+          ? dateFormat.format(start)
+          : dateFormatWithYear.format(start);
   final endFormatted = dateFormatWithYear.format(end);
   return '$startFormatted $separator $endFormatted';
 }
 
 String formatOrdinal(int number) => switch (number % 10) {
-      1 && != 11 => '${number}st',
-      2 && != 12 => '${number}nd',
-      3 && != 13 => '${number}rd',
-      _ => '${number}th',
-    };
+  1 && != 11 => '${number}st',
+  2 && != 12 => '${number}nd',
+  3 && != 13 => '${number}rd',
+  _ => '${number}th',
+};

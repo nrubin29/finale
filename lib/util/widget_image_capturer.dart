@@ -16,10 +16,7 @@ class WidgetImageCapturer {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _overlayEntry = OverlayEntry(
         builder: (_) {
-          return _Helper(
-            key: _key,
-            widget: widget,
-          );
+          return _Helper(key: _key, widget: widget);
         },
         maintainState: true,
       );
@@ -66,17 +63,12 @@ class _HelperState extends State<_Helper> {
 
   @override
   Widget build(BuildContext context) => Transform.translate(
-        offset: Offset(MediaQuery.of(context).size.width, 0),
-        child: Material(
-          type: MaterialType.transparency,
-          child: Stack(
-            children: [
-              RepaintBoundary(
-                key: _key,
-                child: widget.widget,
-              ),
-            ],
-          ),
-        ),
-      );
+    offset: Offset(MediaQuery.of(context).size.width, 0),
+    child: Material(
+      type: MaterialType.transparency,
+      child: Stack(
+        children: [RepaintBoundary(key: _key, child: widget.widget)],
+      ),
+    ),
+  );
 }

@@ -36,18 +36,16 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
           CaptionedListTile(
             title: 'Last.fm',
             icon: SocialMediaIcons.lastfm,
-            trailing: Switch(
-              value: true,
-              onChanged: (_) {},
-            ),
+            trailing: Switch(value: true, onChanged: (_) {}),
           ),
           CaptionedListTile(
             title: 'Spotify',
             icon: SocialMediaIcons.spotify,
             trailing: const Icon(Icons.chevron_right),
-            caption: "Search and scrobble from Spotify's database"
+            caption:
+                "Search and scrobble from Spotify's database"
                 '${isMobile ? ' and ensure that your Spotify listens are being '
-                    'scrobbled' : ''}.',
+                        'scrobbled' : ''}.',
             onTap: () {
               Navigator.push(
                 context,
@@ -65,7 +63,8 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => const AppleMusicSettingsView()),
+                    builder: (_) => const AppleMusicSettingsView(),
+                  ),
                 );
               },
             ),
@@ -79,12 +78,17 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
                 if (value && Preferences.libreKey.value == null) {
                   try {
                     final token = await showWebAuth(
-                        Uri.https('libre.fm', 'api/auth',
-                            {'api_key': apiKey, 'cb': authCallbackUrl}),
-                        queryParam: 'token');
+                      Uri.https('libre.fm', 'api/auth', {
+                        'api_key': apiKey,
+                        'cb': authCallbackUrl,
+                      }),
+                      queryParam: 'token',
+                    );
                     if (token == null) return;
-                    final session =
-                        await Lastfm.authenticate(token, libre: true);
+                    final session = await Lastfm.authenticate(
+                      token,
+                      libre: true,
+                    );
                     Preferences.libreKey.value = session.key;
                   } on PlatformException {
                     if (isDebug) {

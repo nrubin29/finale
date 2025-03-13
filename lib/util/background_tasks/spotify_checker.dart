@@ -28,8 +28,9 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
   @override
   Future<bool> run() async {
     final latestLastfmTrack =
-        (await GetRecentTracksRequest(Preferences.name.value!).getData(1, 1))
-            .lastOrNull;
+        (await GetRecentTracksRequest(
+          Preferences.name.value!,
+        ).getData(1, 1)).lastOrNull;
 
     final latestSpotifyTrack =
         (await Spotify.getRecentTracks(limit: 1)).lastOrNull;

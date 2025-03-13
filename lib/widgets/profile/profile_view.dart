@@ -71,19 +71,21 @@ class _ProfileViewState extends State<ProfileView>
     ProfileStack.find(context).push(widget.username);
 
     _tabOrder = Preferences.profileTabsOrder.value;
-    _profileTabsOrderSubscription =
-        Preferences.profileTabsOrder.changes.listen((tabOrder) {
-      setState(() {
-        _createTabController(tabOrder.length);
-        _tabOrder = tabOrder;
-      });
-    });
+    _profileTabsOrderSubscription = Preferences.profileTabsOrder.changes.listen(
+      (tabOrder) {
+        setState(() {
+          _createTabController(tabOrder.length);
+          _tabOrder = tabOrder;
+        });
+      },
+    );
 
     _createTabController();
 
     if (widget.isTab) {
-      _externalActionsSubscription =
-          externalActionsStream.listen((action) async {
+      _externalActionsSubscription = externalActionsStream.listen((
+        action,
+      ) async {
         await Future.delayed(const Duration(milliseconds: 250));
         if (action.type == ExternalActionType.viewTab) {
           final tab = action.value as ProfileTab;
@@ -103,94 +105,114 @@ class _ProfileViewState extends State<ProfileView>
 
   void _createTabController([int? length]) {
     _tabController?.dispose();
-    _tabController =
-        TabController(length: length ?? _tabOrder.length, vsync: this);
+    _tabController = TabController(
+      length: length ?? _tabOrder.length,
+      vsync: this,
+    );
   }
 
   Widget _widgetForTab(ProfileTab tab, LUser user) {
     return switch (tab) {
       ProfileTab.recentScrobbles => EntityDisplay<LRecentTracksResponseTrack>(
-          key: _recentScrobblesKey,
-          request: GetRecentTracksRequest(widget.username,
-              includeCurrentScrobble: true, extended: true),
-          badgeWidgetBuilder: (track) =>
-              track.isLoved ? const OutlinedLoveIcon() : const SizedBox(),
-          trailingWidgetBuilder: (track) => track.timestamp != null
-              ? const SizedBox()
-              : const NowPlayingAnimation(),
-          detailWidgetBuilder: (track) => TrackView(track: track),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Text(
-                  'Scrobbling since ${user.registered.dateFormatted}',
-                  textAlign: TextAlign.center,
-                ),
+        key: _recentScrobblesKey,
+        request: GetRecentTracksRequest(
+          widget.username,
+          includeCurrentScrobble: true,
+          extended: true,
+        ),
+        badgeWidgetBuilder:
+            (track) =>
+                track.isLoved ? const OutlinedLoveIcon() : const SizedBox(),
+        trailingWidgetBuilder:
+            (track) =>
+                track.timestamp != null
+                    ? const SizedBox()
+                    : const NowPlayingAnimation(),
+        detailWidgetBuilder: (track) => TrackView(track: track),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Text(
+                'Scrobbling since ${user.registered.dateFormatted}',
+                textAlign: TextAlign.center,
               ),
             ),
-          ],
-          scoreboardItems: [
-            ScoreboardItemModel.future(
-              label: 'Scrobbles',
-              futureProvider: () => Lastfm.getUser(widget.username)
-                  .then((user) => user.playCount),
-            ),
-            ScoreboardItemModel.future(
-              label: 'Artists',
-              futureProvider: () =>
-                  GetTopArtistsRequest(widget.username, Period.overall)
-                      .getNumItems(),
-            ),
-            ScoreboardItemModel.future(
-              label: 'Albums',
-              futureProvider: () =>
-                  GetTopAlbumsRequest(widget.username, Period.overall)
-                      .getNumItems(),
-            ),
-            ScoreboardItemModel.future(
-              label: 'Tracks',
-              futureProvider: () =>
-                  GetTopTracksRequest(widget.username, Period.overall)
-                      .getNumItems(),
-            ),
-          ],
-        ),
+          ),
+        ],
+        scoreboardItems: [
+          ScoreboardItemModel.future(
+            label: 'Scrobbles',
+            futureProvider:
+                () => Lastfm.getUser(
+                  widget.username,
+                ).then((user) => user.playCount),
+          ),
+          ScoreboardItemModel.future(
+            label: 'Artists',
+            futureProvider:
+                () =>
+                    GetTopArtistsRequest(
+                      widget.username,
+                      Period.overall,
+                    ).getNumItems(),
+          ),
+          ScoreboardItemModel.future(
+            label: 'Albums',
+            futureProvider:
+                () =>
+                    GetTopAlbumsRequest(
+                      widget.username,
+                      Period.overall,
+                    ).getNumItems(),
+          ),
+          ScoreboardItemModel.future(
+            label: 'Tracks',
+            futureProvider:
+                () =>
+                    GetTopTracksRequest(
+                      widget.username,
+                      Period.overall,
+                    ).getNumItems(),
+          ),
+        ],
+      ),
       ProfileTab.topArtists => PeriodSelector<LTopArtistsResponseArtist>(
-          entityType: EntityType.artist,
-          displayType: DisplayType.grid,
-          requestConstructor: GetTopArtistsRequest.new,
-          username: widget.username,
-          detailWidgetBuilder: (artist) => ArtistView(artist: artist),
-          subtitleWidgetBuilder: FractionalBar.forEntity,
-        ),
+        entityType: EntityType.artist,
+        displayType: DisplayType.grid,
+        requestConstructor: GetTopArtistsRequest.new,
+        username: widget.username,
+        detailWidgetBuilder: (artist) => ArtistView(artist: artist),
+        subtitleWidgetBuilder: FractionalBar.forEntity,
+      ),
       ProfileTab.topAlbums => PeriodSelector<LTopAlbumsResponseAlbum>(
-          entityType: EntityType.album,
-          displayType: DisplayType.grid,
-          requestConstructor: GetTopAlbumsRequest.new,
-          username: widget.username,
-          detailWidgetBuilder: (album) => AlbumView(album: album),
-          subtitleWidgetBuilder: FractionalBar.forEntity,
-        ),
+        entityType: EntityType.album,
+        displayType: DisplayType.grid,
+        requestConstructor: GetTopAlbumsRequest.new,
+        username: widget.username,
+        detailWidgetBuilder: (album) => AlbumView(album: album),
+        subtitleWidgetBuilder: FractionalBar.forEntity,
+      ),
       ProfileTab.topTracks => PeriodSelector<LTopTracksResponseTrack>(
-          entityType: EntityType.track,
-          requestConstructor: GetTopTracksRequest.new,
-          username: widget.username,
-          detailWidgetBuilder: (track) => TrackView(track: track),
-          subtitleWidgetBuilder: FractionalBar.forEntity,
-        ),
+        entityType: EntityType.track,
+        requestConstructor: GetTopTracksRequest.new,
+        username: widget.username,
+        detailWidgetBuilder: (track) => TrackView(track: track),
+        subtitleWidgetBuilder: FractionalBar.forEntity,
+      ),
       ProfileTab.lovedTracks => EntityDisplay<LUserLovedTrack>(
-          request: UserGetLovedTracksRequest(widget.username),
-          detailWidgetBuilder: (track) => TrackView(track: track),
-        ),
+        request: UserGetLovedTracksRequest(widget.username),
+        detailWidgetBuilder: (track) => TrackView(track: track),
+      ),
       ProfileTab.friends => EntityDisplay<LUser>(
-          displayCircularImages: true,
-          request: GetFriendsRequest(widget.username),
-          detailWidgetBuilder: (user) => ProfileView(username: user.name),
-        ),
+        displayCircularImages: true,
+        request: GetFriendsRequest(widget.username),
+        detailWidgetBuilder: (user) => ProfileView(username: user.name),
+      ),
       ProfileTab.charts => WeeklyChartSelectorView(user: user),
-      ProfileTab.scrobbleDistribution =>
-        ProfileScrobbleDistributionComponent(username: widget.username),
+      ProfileTab.scrobbleDistribution => ProfileScrobbleDistributionComponent(
+        username: widget.username,
+      ),
     };
   }
 
@@ -206,12 +228,13 @@ class _ProfileViewState extends State<ProfileView>
       tabs: [
         for (final tab in _tabOrder)
           Tab(
-            icon: tab.iconRotationDegrees != null
-                ? Transform.rotate(
-                    angle: tab.iconRotationDegrees! * pi / 180,
-                    child: Icon(tab.icon, size: iconSize),
-                  )
-                : Icon(tab.icon, size: iconSize),
+            icon:
+                tab.iconRotationDegrees != null
+                    ? Transform.rotate(
+                      angle: tab.iconRotationDegrees! * pi / 180,
+                      child: Icon(tab.icon, size: iconSize),
+                    )
+                    : Icon(tab.icon, size: iconSize),
           ),
       ],
     );
@@ -219,18 +242,19 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<LUser>(
-        futureFactory: () => Lastfm.getUser(widget.username),
-        baseEntity: widget.username,
-        onError: (e) {
-          if (widget.isTab &&
-              e is LException &&
-              e.code == 6 &&
-              e.message == 'User not found') {
-            // Username changed; force user to log in again.
-            LoginView.logOutAndShow(context);
-          }
-        },
-        builder: (user) => Scaffold(
+    futureFactory: () => Lastfm.getUser(widget.username),
+    baseEntity: widget.username,
+    onError: (e) {
+      if (widget.isTab &&
+          e is LException &&
+          e.code == 6 &&
+          e.message == 'User not found') {
+        // Username changed; force user to log in again.
+        LoginView.logOutAndShow(context);
+      }
+    },
+    builder:
+        (user) => Scaffold(
           appBar: createAppBar(
             context,
             user.name,
@@ -269,12 +293,10 @@ class _ProfileViewState extends State<ProfileView>
           ),
           body: TabBarView(
             controller: _tabController,
-            children: [
-              for (final tab in _tabOrder) _widgetForTab(tab, user),
-            ],
+            children: [for (final tab in _tabOrder) _widgetForTab(tab, user)],
           ),
         ),
-      );
+  );
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

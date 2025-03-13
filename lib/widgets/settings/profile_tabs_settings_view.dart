@@ -20,16 +20,19 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
 
     final preferencesTabOrder = Preferences.profileTabsOrder.value;
     _tabOrder = [...ProfileTab.values]..sort((a, b) {
-        var aIndex = preferencesTabOrder.indexOf(a);
-        if (aIndex == -1) aIndex = 10;
+      var aIndex = preferencesTabOrder.indexOf(a);
+      if (aIndex == -1) aIndex = 10;
 
-        var bIndex = preferencesTabOrder.indexOf(b);
-        if (bIndex == -1) bIndex = 10;
+      var bIndex = preferencesTabOrder.indexOf(b);
+      if (bIndex == -1) bIndex = 10;
 
-        return aIndex.compareTo(bIndex);
-      });
-    _tabEnabled = Map.fromEntries(ProfileTab.values
-        .map((e) => MapEntry(e, preferencesTabOrder.contains(e))));
+      return aIndex.compareTo(bIndex);
+    });
+    _tabEnabled = Map.fromEntries(
+      ProfileTab.values.map(
+        (e) => MapEntry(e, preferencesTabOrder.contains(e)),
+      ),
+    );
   }
 
   void _onReorder(int oldIndex, int newIndex) {
@@ -56,8 +59,9 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
   }
 
   Future<bool> _save(_, __) async {
-    Preferences.profileTabsOrder.value =
-        _tabOrder.where((e) => _tabEnabled[e]!).toList(growable: false);
+    Preferences.profileTabsOrder.value = _tabOrder
+        .where((e) => _tabEnabled[e]!)
+        .toList(growable: false);
     return true;
   }
 
@@ -71,10 +75,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
         context,
         'Profile Tabs',
         actions: [
-          IconButton(
-            onPressed: _reset,
-            icon: const Icon(Icons.restart_alt),
-          ),
+          IconButton(onPressed: _reset, icon: const Icon(Icons.restart_alt)),
         ],
       ),
       body: PopScope(
@@ -98,8 +99,9 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
                             ..removeCurrentSnackBar()
                             ..showSnackBar(
                               const SnackBar(
-                                content:
-                                    Text('You must enable at least two tabs.'),
+                                content: Text(
+                                  'You must enable at least two tabs.',
+                                ),
                               ),
                             );
 

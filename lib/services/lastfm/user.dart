@@ -41,8 +41,14 @@ class LUser extends Entity {
 
   final LUserRegistered registered;
 
-  LUser(this.name, this.realName, this.url, this.imageId, this.playCount,
-      this.registered);
+  LUser(
+    this.name,
+    this.realName,
+    this.url,
+    this.imageId,
+    this.playCount,
+    this.registered,
+  );
 
   @override
   EntityType get type => EntityType.user;
@@ -130,8 +136,8 @@ class LUserWeeklyTrackChartTrackArtist {
   const LUserWeeklyTrackChartTrackArtist(this.name);
 
   factory LUserWeeklyTrackChartTrackArtist.fromJson(
-          Map<String, dynamic> json) =>
-      _$LUserWeeklyTrackChartTrackArtistFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$LUserWeeklyTrackChartTrackArtistFromJson(json);
 }
 
 @JsonSerializable()
@@ -186,8 +192,8 @@ class LUserWeeklyAlbumChartAlbumArtist extends BasicArtist {
   LUserWeeklyAlbumChartAlbumArtist(this.name);
 
   factory LUserWeeklyAlbumChartAlbumArtist.fromJson(
-          Map<String, dynamic> json) =>
-      _$LUserWeeklyAlbumChartAlbumArtistFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$LUserWeeklyAlbumChartAlbumArtistFromJson(json);
 
   @override
   String? get url => null;
@@ -213,8 +219,11 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
       _$LUserWeeklyAlbumChartAlbumFromJson(json);
 
   @override
-  String get displayTrailing => Intl.plural(playCount ?? 0,
-      one: '$playCount scrobble', other: '$playCount scrobbles');
+  String get displayTrailing => Intl.plural(
+    playCount ?? 0,
+    one: '$playCount scrobble',
+    other: '$playCount scrobbles',
+  );
 
   @override
   ImageIdProvider get imageIdProvider =>
@@ -254,8 +263,11 @@ class LUserWeeklyArtistChartArtist extends BasicArtist {
       _$LUserWeeklyArtistChartArtistFromJson(json);
 
   @override
-  String get displayTrailing => Intl.plural(playCount ?? 0,
-      one: '$playCount scrobble', other: '$playCount scrobbles');
+  String get displayTrailing => Intl.plural(
+    playCount ?? 0,
+    one: '$playCount scrobble',
+    other: '$playCount scrobbles',
+  );
 }
 
 @JsonSerializable()

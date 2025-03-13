@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 class ProfileStack extends InheritedWidget {
   final List<String> _usernames;
 
-  ProfileStack({required super.child})
-      : _usernames = <String>[];
+  ProfileStack({required super.child}) : _usernames = <String>[];
 
   static ProfileStack of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<ProfileStack>()!;

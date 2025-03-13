@@ -18,7 +18,7 @@ class PeriodSelector<T extends HasPlayCount> extends StatefulWidget {
   final EntityType entityType;
   final DisplayType displayType;
   final PeriodPagedRequest<T> Function(String username, Period period)
-      requestConstructor;
+  requestConstructor;
   final String username;
   final EntityWidgetBuilder<T> detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T> subtitleWidgetBuilder;
@@ -68,66 +68,69 @@ class _PeriodSelectorState<T extends HasPlayCount>
 
   @override
   Widget build(BuildContext context) => Column(
-        children: [
-          ColoredBox(
-            color: Theme.of(context).colorScheme.surfaceContainer,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: SafeArea(
-                top: false,
-                bottom: false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SegmentedButton<DisplayType>(
-                      showSelectedIcon: false,
-                      style: minimumSizeButtonStyle,
-                      segments: const [
-                        ButtonSegment(
-                          value: DisplayType.list,
-                          icon: Icon(Icons.list),
-                        ),
-                        ButtonSegment(
-                          value: DisplayType.grid,
-                          icon: Icon(Icons.grid_view),
-                        ),
-                      ],
-                      selected: {_displayType},
-                      onSelectionChanged: (newSelection) {
-                        setState(() {
-                          _displayType = newSelection.single;
-                        });
-                      },
+    children: [
+      ColoredBox(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SegmentedButton<DisplayType>(
+                  showSelectedIcon: false,
+                  style: minimumSizeButtonStyle,
+                  segments: const [
+                    ButtonSegment(
+                      value: DisplayType.list,
+                      icon: Icon(Icons.list),
                     ),
-                    const PeriodDropdownButton(),
+                    ButtonSegment(
+                      value: DisplayType.grid,
+                      icon: Icon(Icons.grid_view),
+                    ),
                   ],
+                  selected: {_displayType},
+                  onSelectionChanged: (newSelection) {
+                    setState(() {
+                      _displayType = newSelection.single;
+                    });
+                  },
                 ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: EntityDisplay<T>(
-              displayType: _displayType,
-              requestStream: _requestSubject.stream,
-              detailWidgetBuilder: widget.detailWidgetBuilder,
-              subtitleWidgetBuilder: widget.subtitleWidgetBuilder,
-              scoreboardItems: [
-                ScoreboardItemModel.future(
-                  label: 'Scrobbles',
-                  futureProvider: () => GetRecentTracksRequest.forPeriod(
-                          widget.username, _period)
-                      .getNumItems()
-                      .errorToNull<RecentListeningInformationHiddenException>(),
-                ),
-                ScoreboardItemModel.future(
-                  label: '${widget.entityType.displayName}s',
-                  futureProvider: () => _requestSubject.value.getNumItems(),
-                ),
+                const PeriodDropdownButton(),
               ],
             ),
           ),
-        ],
-      );
+        ),
+      ),
+      Expanded(
+        child: EntityDisplay<T>(
+          displayType: _displayType,
+          requestStream: _requestSubject.stream,
+          detailWidgetBuilder: widget.detailWidgetBuilder,
+          subtitleWidgetBuilder: widget.subtitleWidgetBuilder,
+          scoreboardItems: [
+            ScoreboardItemModel.future(
+              label: 'Scrobbles',
+              futureProvider:
+                  () =>
+                      GetRecentTracksRequest.forPeriod(widget.username, _period)
+                          .getNumItems()
+                          .errorToNull<
+                            RecentListeningInformationHiddenException
+                          >(),
+            ),
+            ScoreboardItemModel.future(
+              label: '${widget.entityType.displayName}s',
+              futureProvider: () => _requestSubject.value.getNumItems(),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
 
   @override
   void dispose() {

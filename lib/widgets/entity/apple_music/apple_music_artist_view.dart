@@ -18,9 +18,10 @@ class AppleMusicArtistView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<AMArtist>(
-        futureFactory: () => AppleMusic.getArtist(artistId),
-        baseEntity: artistId,
-        builder: (artist) => Scaffold(
+    futureFactory: () => AppleMusic.getArtist(artistId),
+    baseEntity: artistId,
+    builder:
+        (artist) => Scaffold(
           appBar: createAppBar(
             context,
             artist.name,
@@ -34,8 +35,8 @@ class AppleMusicArtistView extends StatelessWidget {
                 albumsWidget: EntityDisplay<AMAlbum>(
                   scrollable: false,
                   request: AMSearchAlbumsRequest.forArtist(artist),
-                  detailWidgetBuilder: (album) =>
-                      AppleMusicAlbumView(album: album),
+                  detailWidgetBuilder:
+                      (album) => AppleMusicAlbumView(album: album),
                 ),
                 tracksWidget: EntityDisplay<AMSong>(
                   scrollable: false,
@@ -46,5 +47,5 @@ class AppleMusicArtistView extends StatelessWidget {
             ],
           ),
         ),
-      );
+  );
 }

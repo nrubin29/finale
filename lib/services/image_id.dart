@@ -21,16 +21,16 @@ class ImageId {
 
   // small=34s, medium=64s, large=174s, extralarge=300x300
   const ImageId.lastfm(String imageId)
-      : _lowQualityUrl =
-            'https://lastfm.freetls.fastly.net/i/u/174s/$imageId.jpg',
-        _highQualityUrl =
-            'https://lastfm.freetls.fastly.net/i/u/470x470/$imageId.jpg',
-        serializedValue = imageId;
+    : _lowQualityUrl =
+          'https://lastfm.freetls.fastly.net/i/u/174s/$imageId.jpg',
+      _highQualityUrl =
+          'https://lastfm.freetls.fastly.net/i/u/470x470/$imageId.jpg',
+      serializedValue = imageId;
 
   const ImageId.spotify(String lowQualityImageId, String highQualityImageId)
-      : _lowQualityUrl = 'https://i.scdn.co/image/$lowQualityImageId',
-        _highQualityUrl = 'https://i.scdn.co/image/$highQualityImageId',
-        serializedValue = '$lowQualityImageId|$highQualityImageId';
+    : _lowQualityUrl = 'https://i.scdn.co/image/$lowQualityImageId',
+      _highQualityUrl = 'https://i.scdn.co/image/$highQualityImageId',
+      serializedValue = '$lowQualityImageId|$highQualityImageId';
 
   factory ImageId.fromSerializedValue(String serializedValue) {
     if (serializedValue.contains('|')) {
@@ -50,43 +50,47 @@ class ImageId {
   /// The web app can't scrape images due to CORS, so if [spotifyFallback] is
   /// specified and the user is logged in with Spotify, the web app will execute
   /// the request and return the image id if a result is found.
-  static ImageIdProvider scrape(String? url, String selector,
-          {String attribute = 'href',
-          bool endUrlAtPeriod = false,
-          PagedRequest<Entity>? spotifyFallback}) =>
-      () async {
-        if (isWeb) {
-          if (spotifyFallback != null && Preferences.hasSpotifyAuthData) {
-            final fallbackEntity = await spotifyFallback.getData(1, 1);
-            if (fallbackEntity.isNotEmpty) {
-              return fallbackEntity.single.imageId ??
-                  await fallbackEntity.single.imageIdProvider?.call();
-            }
-          }
-          return null;
+  static ImageIdProvider scrape(
+    String? url,
+    String selector, {
+    String attribute = 'href',
+    bool endUrlAtPeriod = false,
+    PagedRequest<Entity>? spotifyFallback,
+  }) => () async {
+    if (isWeb) {
+      if (spotifyFallback != null && Preferences.hasSpotifyAuthData) {
+        final fallbackEntity = await spotifyFallback.getData(1, 1);
+        if (fallbackEntity.isNotEmpty) {
+          return fallbackEntity.single.imageId ??
+              await fallbackEntity.single.imageIdProvider?.call();
         }
+      }
+      return null;
+    }
 
-        if (url == null) {
-          return null;
-        }
+    if (url == null) {
+      return null;
+    }
 
-        final lastfmResponse = await httpClient.get(Uri.parse(url));
+    final lastfmResponse = await httpClient.get(Uri.parse(url));
 
-        try {
-          final doc = parse(lastfmResponse.body);
-          final rawUrl = doc.querySelector(selector)?.attributes[attribute];
+    try {
+      final doc = parse(lastfmResponse.body);
+      final rawUrl = doc.querySelector(selector)?.attributes[attribute];
 
-          if (rawUrl == null) {
-            return null;
-          }
+      if (rawUrl == null) {
+        return null;
+      }
 
-          final imageId = rawUrl.substring(rawUrl.lastIndexOf('/') + 1,
-              endUrlAtPeriod ? rawUrl.lastIndexOf('.') : null);
-          return ImageId.lastfm(imageId);
-        } on Exception {
-          return null;
-        }
-      };
+      final imageId = rawUrl.substring(
+        rawUrl.lastIndexOf('/') + 1,
+        endUrlAtPeriod ? rawUrl.lastIndexOf('.') : null,
+      );
+      return ImageId.lastfm(imageId);
+    } on Exception {
+      return null;
+    }
+  };
 
   String getUrl(ImageQuality quality) {
     return quality == ImageQuality.low ? _lowQualityUrl : _highQualityUrl;

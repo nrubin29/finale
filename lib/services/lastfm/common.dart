@@ -7,9 +7,10 @@ part 'common.g.dart';
 
 bool convertStringToBoolean(String? text) => text == '1';
 
-int? intParseSafe(value) => value == null
-    ? null
-    : value is int
+int? intParseSafe(value) =>
+    value == null
+        ? null
+        : value is int
         ? value
         : int.tryParse(value);
 
@@ -17,10 +18,12 @@ int parseInt(value) => intParseSafe(value) ?? 0;
 
 DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
     DateTime.fromMillisecondsSinceEpoch(
-        (timestamp is int ? timestamp : int.parse(timestamp)) * 1000);
+      (timestamp is int ? timestamp : int.parse(timestamp)) * 1000,
+    );
 
 ImageId? extractImageId(
-    List<dynamic>? /* List<Map<String, dynamic>>? */ images) {
+  List<dynamic>? /* List<Map<String, dynamic>>? */ images,
+) {
   if (images == null ||
       images.isEmpty ||
       !images.first.containsKey('#text') ||
@@ -29,8 +32,12 @@ ImageId? extractImageId(
   }
 
   final String imageUrl = images.first['#text'];
-  return ImageId.lastfm(imageUrl.substring(
-      imageUrl.lastIndexOf('/') + 1, imageUrl.lastIndexOf('.')));
+  return ImageId.lastfm(
+    imageUrl.substring(
+      imageUrl.lastIndexOf('/') + 1,
+      imageUrl.lastIndexOf('.'),
+    ),
+  );
 }
 
 mixin HasPlayCount on Entity {
@@ -107,9 +114,10 @@ class LTopTags {
 
   // If there's only one tag, the Last.fm API in its infinite wisdom doesn't
   // wrap it in an array literal.
-  static List<LTag> parseTags(json) => json == null
-      ? const []
-      : json is List<dynamic>
+  static List<LTag> parseTags(json) =>
+      json == null
+          ? const []
+          : json is List<dynamic>
           ? json.map((json) => LTag.fromJson(json)).toList(growable: false)
           : [LTag.fromJson(json)];
 }

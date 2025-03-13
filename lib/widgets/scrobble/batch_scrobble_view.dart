@@ -15,7 +15,7 @@ enum ScrobbleTimestampBehavior {
   startingNow,
   endingNow,
   startingCustom,
-  endingCustom
+  endingCustom,
 }
 
 class BatchScrobbleView extends StatefulWidget {
@@ -54,24 +54,30 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
       timestamps = [
         _behavior == ScrobbleTimestampBehavior.startingNow
             ? DateTime.now()
-            : _customTimestamp!
+            : _customTimestamp!,
       ];
 
       for (var track in tracks) {
-        timestamps.add(timestamps.last
-            .add(Duration(seconds: track.duration ?? _defaultDuration)));
+        timestamps.add(
+          timestamps.last.add(
+            Duration(seconds: track.duration ?? _defaultDuration),
+          ),
+        );
       }
     } else {
       timestamps = [
         _behavior == ScrobbleTimestampBehavior.endingNow
             ? DateTime.now()
-            : _customTimestamp!
+            : _customTimestamp!,
       ];
 
       tracks = tracks.reversed.toList(growable: false);
       for (var track in tracks) {
-        timestamps.add(timestamps.last
-            .subtract(Duration(seconds: track.duration ?? _defaultDuration)));
+        timestamps.add(
+          timestamps.last.subtract(
+            Duration(seconds: track.duration ?? _defaultDuration),
+          ),
+        );
       }
     }
 
@@ -96,14 +102,18 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
         'Scrobble',
         actions: [
           Builder(
-            builder: (context) => _isLoading
-                ? const AppBarLoadingIndicator()
-                : IconButton(
-                    icon: const Icon(scrobbleIcon),
-                    onPressed:
-                        _selection.isNotEmpty ? () => _scrobble(context) : null,
-                  ),
-          )
+            builder:
+                (context) =>
+                    _isLoading
+                        ? const AppBarLoadingIndicator()
+                        : IconButton(
+                          icon: const Icon(scrobbleIcon),
+                          onPressed:
+                              _selection.isNotEmpty
+                                  ? () => _scrobble(context)
+                                  : null,
+                        ),
+          ),
         ],
       ),
       body: SafeArea(
@@ -115,9 +125,10 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
               ListTile(
                 leading: EntityImage(entity: widget.entity),
                 title: Text(widget.entity.displayTitle),
-                subtitle: widget.entity.displaySubtitle != null
-                    ? Text(widget.entity.displaySubtitle!)
-                    : null,
+                subtitle:
+                    widget.entity.displaySubtitle != null
+                        ? Text(widget.entity.displaySubtitle!)
+                        : null,
                 trailing: Text(pluralize(_selection.length, 'track')),
               ),
               if (widget.entity.hasTrackDurations)
@@ -128,21 +139,24 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                   child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: RichText(
-                      text: const TextSpan(children: [
-                        TextSpan(text: 'Tracks marked with '),
-                        WidgetSpan(
-                          child: Icon(
-                            Icons.timer_off,
-                            color: Colors.white,
-                            size: 16,
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(text: 'Tracks marked with '),
+                          WidgetSpan(
+                            child: Icon(
+                              Icons.timer_off,
+                              color: Colors.white,
+                              size: 16,
+                            ),
                           ),
-                        ),
-                        TextSpan(
+                          TextSpan(
                             text:
                                 " don't have duration data. These tracks will "
                                 'be treated as having a duration of 3 minutes '
-                                'for the purpose of spacing out the scrobbles.')
-                      ]),
+                                'for the purpose of spacing out the scrobbles.',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -202,7 +216,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
               Visibility(
                 visible:
                     _behavior == ScrobbleTimestampBehavior.startingCustom ||
-                        _behavior == ScrobbleTimestampBehavior.endingCustom,
+                    _behavior == ScrobbleTimestampBehavior.endingCustom,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: DateTimeField(
@@ -224,13 +238,14 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 },
                 children: [
                   ExpansionPanel(
-                    headerBuilder: (_, __) =>
-                        const ListTile(title: Text('Tracks')),
+                    headerBuilder:
+                        (_, __) => const ListTile(title: Text('Tracks')),
                     canTapOnHeader: true,
                     isExpanded: _isTracksExpanded,
                     body: EntityCheckboxList<ScrobbleableTrack>(
                       items: widget.entity.tracks,
-                      displayImages: widget.entity is SPlaylistFull ||
+                      displayImages:
+                          widget.entity is SPlaylistFull ||
                           widget.entity is AMFullPlaylist,
                       scrollable: false,
                       onSelectionChanged: (selection) {
@@ -238,9 +253,11 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                           _selection = selection;
                         });
                       },
-                      trailingWidgetBuilder: (track) => track.duration == null
-                          ? const Icon(Icons.timer_off)
-                          : const SizedBox(),
+                      trailingWidgetBuilder:
+                          (track) =>
+                              track.duration == null
+                                  ? const Icon(Icons.timer_off)
+                                  : const SizedBox(),
                     ),
                   ),
                 ],

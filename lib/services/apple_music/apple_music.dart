@@ -16,20 +16,20 @@ class AMSearchSongsRequest extends PagedRequest<AMSong> {
   final String? query;
   final AMArtist? artist;
 
-  const AMSearchSongsRequest(this.query)
-      : assert(query != null),
-        artist = null;
+  const AMSearchSongsRequest(this.query) : assert(query != null), artist = null;
 
   const AMSearchSongsRequest.forArtist(this.artist)
-      : assert(artist != null),
-        query = null;
+    : assert(artist != null),
+      query = null;
 
   @override
   Future<List<AMSong>> doRequest(int limit, int page) async =>
       (await FlutterMPMediaPlayer.searchSongs(
-              query: query, artistId: artist?.id, limit: limit, page: page))
-          .map(AMSong.new)
-          .toList(growable: false);
+        query: query,
+        artistId: artist?.id,
+        limit: limit,
+        page: page,
+      )).map(AMSong.new).toList(growable: false);
 
   @override
   String toString() => 'AMSearchSongsRequest(query=$query, artist=$artist)';
@@ -40,19 +40,21 @@ class AMSearchAlbumsRequest extends PagedRequest<AMAlbum> {
   final AMArtist? artist;
 
   const AMSearchAlbumsRequest(this.query)
-      : assert(query != null),
-        artist = null;
+    : assert(query != null),
+      artist = null;
 
   const AMSearchAlbumsRequest.forArtist(this.artist)
-      : assert(artist != null),
-        query = null;
+    : assert(artist != null),
+      query = null;
 
   @override
   Future<List<AMAlbum>> doRequest(int limit, int page) async =>
       (await FlutterMPMediaPlayer.searchAlbums(
-              query: query, artistId: artist?.id, limit: limit, page: page))
-          .map(AMAlbum.new)
-          .toList(growable: false);
+        query: query,
+        artistId: artist?.id,
+        limit: limit,
+        page: page,
+      )).map(AMAlbum.new).toList(growable: false);
 
   @override
   String toString() => 'AMSearchAlbumsRequest(query=$query, artist=$artist)';
@@ -65,9 +67,11 @@ class AMSearchArtistsRequest extends PagedRequest<AMArtist> {
 
   @override
   Future<List<AMArtist>> doRequest(int limit, int page) async =>
-      (await FlutterMPMediaPlayer.searchArtists(query, limit, page))
-          .map(AMArtist.new)
-          .toList(growable: false);
+      (await FlutterMPMediaPlayer.searchArtists(
+        query,
+        limit,
+        page,
+      )).map(AMArtist.new).toList(growable: false);
 
   @override
   String toString() => 'AMSearchArtistsRequest(query=$query)';
@@ -80,9 +84,11 @@ class AMSearchPlaylistsRequest extends PagedRequest<AMPlaylist> {
 
   @override
   Future<List<AMPlaylist>> doRequest(int limit, int page) async =>
-      (await FlutterMPMediaPlayer.searchPlaylists(query, limit, page))
-          .map(AMPlaylist.new)
-          .toList(growable: false);
+      (await FlutterMPMediaPlayer.searchPlaylists(
+        query,
+        limit,
+        page,
+      )).map(AMPlaylist.new).toList(growable: false);
 
   @override
   String toString() => 'AMSearchPlaylistsRequest(query=$query)';
@@ -100,9 +106,10 @@ class AMRecentTracksRequest extends PagedRequest<AMPlayedSong> {
     }
 
     return (await FlutterMPMediaPlayer.getRecentTracks(
-            after: after, limit: limit, page: page))
-        .map(AMPlayedSong.new)
-        .toList(growable: false);
+      after: after,
+      limit: limit,
+      page: page,
+    )).map(AMPlayedSong.new).toList(growable: false);
   }
 
   @override
@@ -116,9 +123,11 @@ class AMPlaylistSongsRequest extends PagedRequest<AMSong> {
 
   @override
   Future<List<AMSong>> doRequest(int limit, int page) async =>
-      (await FlutterMPMediaPlayer.getPlaylistSongs(playlistId, limit, page))
-          .map(AMSong.new)
-          .toList(growable: false);
+      (await FlutterMPMediaPlayer.getPlaylistSongs(
+        playlistId,
+        limit,
+        page,
+      )).map(AMSong.new).toList(growable: false);
 
   @override
   String toString() => 'AMPlaylistSongsRequest(playlistId=$playlistId)';
@@ -141,7 +150,9 @@ class AppleMusic {
 
   static Future<bool> scrobble(List<AMPlayedSong> songs) async {
     final response = await Lastfm.scrobble(
-        songs, songs.map((track) => track.date).toList(growable: false));
+      songs,
+      songs.map((track) => track.date).toList(growable: false),
+    );
     final success = response.ignored == 0;
 
     if (success && songs.isNotEmpty) {

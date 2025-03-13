@@ -32,8 +32,9 @@ class CollageView extends StatefulWidget {
 }
 
 class _CollageViewState extends State<CollageView> {
-  final _usernameTextController =
-      TextEditingController(text: Preferences.name.value);
+  final _usernameTextController = TextEditingController(
+    text: Preferences.name.value,
+  );
   var _chart = EntityType.album;
   var _type = _CollageType.grid;
   late Period _period;
@@ -63,8 +64,9 @@ class _CollageViewState extends State<CollageView> {
       }
     });
 
-    _themeColorChangeSubscription =
-        Preferences.themeColor.changes.listen((value) {
+    _themeColorChangeSubscription = Preferences.themeColor.changes.listen((
+      value,
+    ) {
       if (mounted) {
         setState(() {
           _themeColor = value;
@@ -118,14 +120,21 @@ class _CollageViewState extends State<CollageView> {
         otherResults = await Future.wait(otherRequests);
       }
     } on Exception catch (e, st) {
-      showExceptionDialog(context,
-          error: e, stackTrace: st, detailObject: username);
+      showExceptionDialog(
+        context,
+        error: e,
+        stackTrace: st,
+        detailObject: username,
+      );
       return null;
     }
 
     if (items.isEmpty) {
-      showNoEntityTypePeriodDialog(context,
-          entityType: _chart, username: username);
+      showNoEntityTypePeriodDialog(
+        context,
+        entityType: _chart,
+        username: username,
+      );
 
       return null;
     }
@@ -153,17 +162,25 @@ class _CollageViewState extends State<CollageView> {
     }
 
     streamController.stream
-        .timeout(const Duration(seconds: 5), onTimeout: (_) {
-          onDone();
-        })
+        .timeout(
+          const Duration(seconds: 5),
+          onTimeout: (_) {
+            onDone();
+          },
+        )
         .take(_numItemsToLoad)
         .listen(
           (_) {
             onEvent();
           },
           onError: (error, stackTrace) {
-            FlutterError.dumpErrorToConsole(FlutterErrorDetails(
-                exception: error, stack: stackTrace, library: 'CollageView'));
+            FlutterError.dumpErrorToConsole(
+              FlutterErrorDetails(
+                exception: error,
+                stack: stackTrace,
+                library: 'CollageView',
+              ),
+            );
             onEvent();
           },
           onDone: onDone,
@@ -173,218 +190,221 @@ class _CollageViewState extends State<CollageView> {
       streamController.add(null);
     }
 
-    capturer.setup(
-      context,
-      switch (_type) {
-        _CollageType.grid => GridCollage(_gridSize, _includeTitle, _includeText,
-            _includeBranding, _period, _chart, items, onImageLoaded),
-        _CollageType.list => ListCollage(_themeColor, _includeTitle,
-            _includeBranding, _period, _chart, items, onImageLoaded),
-        _CollageType.wrapped => WrappedCollage(_themeColor, _includeBranding,
-            username, _period, items, otherResults, onImageLoaded),
-      },
-    );
+    capturer.setup(context, switch (_type) {
+      _CollageType.grid => GridCollage(
+        _gridSize,
+        _includeTitle,
+        _includeText,
+        _includeBranding,
+        _period,
+        _chart,
+        items,
+        onImageLoaded,
+      ),
+      _CollageType.list => ListCollage(
+        _themeColor,
+        _includeTitle,
+        _includeBranding,
+        _period,
+        _chart,
+        items,
+        onImageLoaded,
+      ),
+      _CollageType.wrapped => WrappedCollage(
+        _themeColor,
+        _includeBranding,
+        username,
+        _period,
+        items,
+        otherResults,
+        onImageLoaded,
+      ),
+    });
 
     return result.future;
   }
 
   List<Widget> _formWidgetsBuilder(BuildContext context) => [
-        ListTileTextField(
-          title: 'Username',
-          controller: _usernameTextController,
-        ),
-        ListTile(
-          title: const Text('Type'),
-          trailing: DropdownButton<_CollageType>(
-            value: _type,
-            items: const [
-              DropdownMenuItem(
-                value: _CollageType.grid,
-                child: Text('Grid'),
-              ),
-              DropdownMenuItem(
-                value: _CollageType.list,
-                child: Text('List'),
-              ),
-              DropdownMenuItem(
-                value: _CollageType.wrapped,
-                child: Text('Wrapped'),
-              ),
-            ],
-            onChanged: (value) async {
-              if (value != null) {
-                setState(() {
-                  _type = value;
-                });
-              }
-            },
-          ),
-        ),
-        if (_type != _CollageType.wrapped)
-          ListTile(
-            title: const Text('Chart'),
-            trailing: DropdownButton<EntityType>(
-              value: _chart,
-              items: const [
-                DropdownMenuItem(
-                  value: EntityType.album,
-                  child: Text('Top Albums'),
-                ),
-                DropdownMenuItem(
-                  value: EntityType.artist,
-                  child: Text('Top Artists'),
-                ),
-                DropdownMenuItem(
-                  value: EntityType.track,
-                  child: Text('Top Tracks'),
-                ),
-              ],
-              onChanged: (value) async {
-                if (value != null) {
-                  var shouldSet = true;
-
-                  if (isWeb &&
-                      value == EntityType.artist &&
-                      !Preferences.hasSpotifyAuthData) {
-                    shouldSet = (await showDialog(
-                            context: context,
-                            builder: (_) => CollageWebWarningDialog())) ??
-                        false;
-                  }
-
-                  if (shouldSet) {
-                    setState(() {
-                      _chart = value;
-                    });
-                  }
-                }
-              },
+    ListTileTextField(title: 'Username', controller: _usernameTextController),
+    ListTile(
+      title: const Text('Type'),
+      trailing: DropdownButton<_CollageType>(
+        value: _type,
+        items: const [
+          DropdownMenuItem(value: _CollageType.grid, child: Text('Grid')),
+          DropdownMenuItem(value: _CollageType.list, child: Text('List')),
+          DropdownMenuItem(value: _CollageType.wrapped, child: Text('Wrapped')),
+        ],
+        onChanged: (value) async {
+          if (value != null) {
+            setState(() {
+              _type = value;
+            });
+          }
+        },
+      ),
+    ),
+    if (_type != _CollageType.wrapped)
+      ListTile(
+        title: const Text('Chart'),
+        trailing: DropdownButton<EntityType>(
+          value: _chart,
+          items: const [
+            DropdownMenuItem(
+              value: EntityType.album,
+              child: Text('Top Albums'),
             ),
-          ),
-        ListTile(
-          title: const Text('Period'),
-          trailing: PeriodDropdownButton(
-            periodChanged: (period) {
-              setState(() {
-                _period = period;
-              });
-            },
-          ),
-        ),
-        if (_type == _CollageType.grid)
-          ListTile(
-            title: const Text('Grid size'),
-            trailing: DropdownButton<int>(
-              value: _gridSize,
-              items: [
-                for (var i = 3; i <= 10; i++)
-                  DropdownMenuItem(
-                    value: i,
-                    child: Text('${i}x$i'),
-                  ),
-              ],
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _gridSize = value;
-                  });
-                }
-              },
+            DropdownMenuItem(
+              value: EntityType.artist,
+              child: Text('Top Artists'),
             ),
-          ),
-        if (_type != _CollageType.wrapped)
-          ListTile(
-            title: const Text('Include title'),
-            trailing: Switch(
-              value: _includeTitle,
-              onChanged: (value) {
-                if (value != _includeTitle) {
-                  setState(() {
-                    _includeTitle = value;
-                  });
-                }
-              },
-            ),
-          ),
-        if (_type == _CollageType.grid)
-          ListTile(
-            title: const Text('Include text'),
-            trailing: Switch(
-              value: _includeText,
-              onChanged: (value) {
-                if (value != _includeText) {
-                  setState(() {
-                    _includeText = value;
-                  });
-                }
-              },
-            ),
-          )
-        else
-          ListTile(
-            title: const Text('Background color'),
-            trailing: DropdownButton<ThemeColor>(
-              value: _themeColor,
-              items: [
-                for (final themeColor in ThemeColor.values)
-                  DropdownMenuItem(
-                    value: themeColor,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.circle,
-                          color: themeColor.color,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(themeColor.displayName),
-                      ],
-                    ),
-                  ),
-              ],
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _themeColor = value;
-                  });
-                }
-              },
-            ),
-          ),
-        ListTile(
-          title: const Text('Include Finale branding'),
-          trailing: Switch(
-            value: _includeBranding,
-            onChanged: (value) {
-              if (value != _includeBranding) {
-                setState(() {
-                  _includeBranding = value;
-                });
-              }
-            },
-          ),
-        ),
-      ];
-
-  Widget _loadingWidgetBuilder(BuildContext context) => SafeArea(
-        minimum: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            LinearProgressIndicator(
-              value: _loadingProgress / _numItemsToLoad,
-              backgroundColor: Colors.grey.shade300,
-            ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text('$_loadingProgress / $_numItemsToLoad images loaded'),
-              ],
+            DropdownMenuItem(
+              value: EntityType.track,
+              child: Text('Top Tracks'),
             ),
           ],
+          onChanged: (value) async {
+            if (value != null) {
+              var shouldSet = true;
+
+              if (isWeb &&
+                  value == EntityType.artist &&
+                  !Preferences.hasSpotifyAuthData) {
+                shouldSet =
+                    (await showDialog(
+                      context: context,
+                      builder: (_) => CollageWebWarningDialog(),
+                    )) ??
+                    false;
+              }
+
+              if (shouldSet) {
+                setState(() {
+                  _chart = value;
+                });
+              }
+            }
+          },
         ),
-      );
+      ),
+    ListTile(
+      title: const Text('Period'),
+      trailing: PeriodDropdownButton(
+        periodChanged: (period) {
+          setState(() {
+            _period = period;
+          });
+        },
+      ),
+    ),
+    if (_type == _CollageType.grid)
+      ListTile(
+        title: const Text('Grid size'),
+        trailing: DropdownButton<int>(
+          value: _gridSize,
+          items: [
+            for (var i = 3; i <= 10; i++)
+              DropdownMenuItem(value: i, child: Text('${i}x$i')),
+          ],
+          onChanged: (value) {
+            if (value != null) {
+              setState(() {
+                _gridSize = value;
+              });
+            }
+          },
+        ),
+      ),
+    if (_type != _CollageType.wrapped)
+      ListTile(
+        title: const Text('Include title'),
+        trailing: Switch(
+          value: _includeTitle,
+          onChanged: (value) {
+            if (value != _includeTitle) {
+              setState(() {
+                _includeTitle = value;
+              });
+            }
+          },
+        ),
+      ),
+    if (_type == _CollageType.grid)
+      ListTile(
+        title: const Text('Include text'),
+        trailing: Switch(
+          value: _includeText,
+          onChanged: (value) {
+            if (value != _includeText) {
+              setState(() {
+                _includeText = value;
+              });
+            }
+          },
+        ),
+      )
+    else
+      ListTile(
+        title: const Text('Background color'),
+        trailing: DropdownButton<ThemeColor>(
+          value: _themeColor,
+          items: [
+            for (final themeColor in ThemeColor.values)
+              DropdownMenuItem(
+                value: themeColor,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.circle, color: themeColor.color),
+                    const SizedBox(width: 4),
+                    Text(themeColor.displayName),
+                  ],
+                ),
+              ),
+          ],
+          onChanged: (value) {
+            if (value != null) {
+              setState(() {
+                _themeColor = value;
+              });
+            }
+          },
+        ),
+      ),
+    ListTile(
+      title: const Text('Include Finale branding'),
+      trailing: Switch(
+        value: _includeBranding,
+        onChanged: (value) {
+          if (value != _includeBranding) {
+            setState(() {
+              _includeBranding = value;
+            });
+          }
+        },
+      ),
+    ),
+  ];
+
+  Widget _loadingWidgetBuilder(BuildContext context) => SafeArea(
+    minimum: const EdgeInsets.symmetric(horizontal: 16),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        LinearProgressIndicator(
+          value: _loadingProgress / _numItemsToLoad,
+          backgroundColor: Colors.grey.shade300,
+        ),
+        const SizedBox(height: 5),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text('$_loadingProgress / $_numItemsToLoad images loaded'),
+          ],
+        ),
+      ],
+    ),
+  );
 
   /// Saves the image.
   ///
@@ -407,57 +427,66 @@ class _CollageViewState extends State<CollageView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar(context, 'Collage Generator'),
-        body: Builder(
-          builder: (context) => CollapsibleFormView<Uint8List>(
+    appBar: createAppBar(context, 'Collage Generator'),
+    body: Builder(
+      builder:
+          (context) => CollapsibleFormView<Uint8List>(
             formWidgetsBuilder: _formWidgetsBuilder,
             loadingWidgetBuilder: _loadingWidgetBuilder,
             submitButtonText: 'Generate',
-            bodyBuilder: (context, image) => Column(
-              children: [
-                const SizedBox(height: 16),
-                Center(
-                  child: ConstrainedBox(
-                    constraints: _type == _CollageType.grid
-                        ? const BoxConstraints(maxWidth: 600)
-                        : const BoxConstraints(maxWidth: 400),
-                    child: Image.memory(image),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            bodyBuilder:
+                (context, image) => Column(
                   children: [
-                    if (!isWeb) ...[
-                      OutlinedButton(
-                        onPressed: () async {
-                          final box = context.findRenderObject() as RenderBox;
-                          final position =
-                              box.localToGlobal(Offset.zero) & box.size;
-
-                          await Share.shareXFiles([
-                            XFile.fromData(image,
-                                mimeType: 'image/png', name: 'collage.png'),
-                          ], sharePositionOrigin: position);
-                        },
-                        child: const Text('Share'),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: ConstrainedBox(
+                        constraints:
+                            _type == _CollageType.grid
+                                ? const BoxConstraints(maxWidth: 600)
+                                : const BoxConstraints(maxWidth: 400),
+                        child: Image.memory(image),
                       ),
-                      const SizedBox(width: 10),
-                    ],
-                    OutlinedButton(
-                      onPressed: () {
-                        _saveImage(image);
-                      },
-                      child: const Text(isWeb ? 'Download' : 'Save to gallery'),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (!isWeb) ...[
+                          OutlinedButton(
+                            onPressed: () async {
+                              final box =
+                                  context.findRenderObject() as RenderBox;
+                              final position =
+                                  box.localToGlobal(Offset.zero) & box.size;
+
+                              await Share.shareXFiles([
+                                XFile.fromData(
+                                  image,
+                                  mimeType: 'image/png',
+                                  name: 'collage.png',
+                                ),
+                              ], sharePositionOrigin: position);
+                            },
+                            child: const Text('Share'),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
+                        OutlinedButton(
+                          onPressed: () {
+                            _saveImage(image);
+                          },
+                          child: const Text(
+                            isWeb ? 'Download' : 'Save to gallery',
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
             onFormSubmit: () => _doRequest(context),
           ),
-        ),
-      );
+    ),
+  );
 
   @override
   void dispose() {

@@ -3,7 +3,12 @@ import 'package:finale/util/preferences.dart';
 import 'package:flutter/material.dart';
 
 DateTime _combine(DateTime date, TimeOfDay? time) => DateTime(
-    date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
+  date.year,
+  date.month,
+  date.day,
+  time?.hour ?? 0,
+  time?.minute ?? 0,
+);
 
 class DateTimeField extends StatefulWidget {
   final String label;
@@ -54,9 +59,10 @@ class _DateTimeFieldState extends State<DateTimeField> {
       initialDate: _value ?? DateTime.now(),
       firstDate: DateTime.now().subtract(const Duration(days: 14)),
       lastDate: DateTime.now().add(const Duration(days: 1)),
-      initialEntryMode: Preferences.inputDateTimeAsText.value
-          ? DatePickerEntryMode.input
-          : DatePickerEntryMode.calendar,
+      initialEntryMode:
+          Preferences.inputDateTimeAsText.value
+              ? DatePickerEntryMode.input
+              : DatePickerEntryMode.calendar,
     );
 
     if (date == null) {
@@ -75,9 +81,10 @@ class _DateTimeFieldState extends State<DateTimeField> {
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(_value ?? DateTime.now()),
-      initialEntryMode: Preferences.inputDateTimeAsText.value
-          ? TimePickerEntryMode.input
-          : TimePickerEntryMode.dial,
+      initialEntryMode:
+          Preferences.inputDateTimeAsText.value
+              ? TimePickerEntryMode.input
+              : TimePickerEntryMode.dial,
     );
 
     if (time != null) {
@@ -91,43 +98,43 @@ class _DateTimeFieldState extends State<DateTimeField> {
 
   @override
   Widget build(BuildContext context) => Row(
-        spacing: 8,
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () async {
-                final result = await _showDatePicker();
-                if (result != null) {
-                  _updateValue(result);
-                }
-              },
-              child: AbsorbPointer(
-                child: TextFormField(
-                  decoration: InputDecoration(labelText: widget.label),
-                  controller: _dateController,
-                  validator: _validator,
-                ),
+    spacing: 8,
+    children: [
+      Expanded(
+        child: GestureDetector(
+          onTap: () async {
+            final result = await _showDatePicker();
+            if (result != null) {
+              _updateValue(result);
+            }
+          },
+          child: AbsorbPointer(
+            child: TextFormField(
+              decoration: InputDecoration(labelText: widget.label),
+              controller: _dateController,
+              validator: _validator,
+            ),
+          ),
+        ),
+      ),
+      if (_value != null)
+        Expanded(
+          child: GestureDetector(
+            onTap: () async {
+              final result = await _showTimePicker();
+              if (result != null) {
+                _updateValue(result);
+              }
+            },
+            child: AbsorbPointer(
+              child: TextFormField(
+                decoration: const InputDecoration(labelText: ''),
+                controller: _timeController,
+                validator: (value) => _validator(value) == null ? null : '',
               ),
             ),
           ),
-          if (_value != null)
-            Expanded(
-              child: GestureDetector(
-                onTap: () async {
-                  final result = await _showTimePicker();
-                  if (result != null) {
-                    _updateValue(result);
-                  }
-                },
-                child: AbsorbPointer(
-                  child: TextFormField(
-                    decoration: const InputDecoration(labelText: ''),
-                    controller: _timeController,
-                    validator: (value) => _validator(value) == null ? null : '',
-                  ),
-                ),
-              ),
-            ),
-        ],
-      );
+        ),
+    ],
+  );
 }

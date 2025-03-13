@@ -19,8 +19,8 @@ typedef OnTap<T extends Entity> = void Function(T item);
 
 typedef EntityWidgetBuilder<T extends Entity> = Widget Function(T item);
 
-typedef EntityAndItemsWidgetBuilder<T extends Entity> = Widget Function(
-    T item, List<T> items);
+typedef EntityAndItemsWidgetBuilder<T extends Entity> =
+    Widget Function(T item, List<T> items);
 
 class EntityDisplay<T extends Entity> extends StatefulWidget {
   final List<T>? items;
@@ -52,39 +52,41 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final double gridTileTextPadding;
   final double fontSize;
 
-  const EntityDisplay(
-      {super.key,
-      this.items,
-      this.request,
-      this.requestStream,
-      this.onTap,
-      this.detailWidgetBuilder,
-      this.subtitleWidgetBuilder,
-      this.leadingWidgetBuilder,
-      this.badgeWidgetBuilder,
-      this.trailingWidgetBuilder,
-      this.slivers,
-      this.scoreboardItems,
-      this.scrobbleableEntity,
-      this.onRefresh,
-      this.onImageLoaded,
-      this.displayType = DisplayType.list,
-      this.scrollable = true,
-      this.displayNumbers = false,
-      this.displayImages = true,
-      this.shouldAnimateImages = true,
-      this.shouldLeftPadListItems = true,
-      this.displayCircularImages = false,
-      this.noResultsMessage = 'No results.',
-      this.showGridTileGradient = true,
-      this.gridTileSize = 250,
-      this.gridTileTextPadding = 16,
-      this.fontSize = 14})
-      : assert(items != null || request != null || requestStream != null),
-        assert(onTap == null || detailWidgetBuilder == null),
-        assert(displayType == DisplayType.list ||
-            (!displayNumbers && leadingWidgetBuilder == null)),
-        assert(badgeWidgetBuilder == null || displayImages);
+  const EntityDisplay({
+    super.key,
+    this.items,
+    this.request,
+    this.requestStream,
+    this.onTap,
+    this.detailWidgetBuilder,
+    this.subtitleWidgetBuilder,
+    this.leadingWidgetBuilder,
+    this.badgeWidgetBuilder,
+    this.trailingWidgetBuilder,
+    this.slivers,
+    this.scoreboardItems,
+    this.scrobbleableEntity,
+    this.onRefresh,
+    this.onImageLoaded,
+    this.displayType = DisplayType.list,
+    this.scrollable = true,
+    this.displayNumbers = false,
+    this.displayImages = true,
+    this.shouldAnimateImages = true,
+    this.shouldLeftPadListItems = true,
+    this.displayCircularImages = false,
+    this.noResultsMessage = 'No results.',
+    this.showGridTileGradient = true,
+    this.gridTileSize = 250,
+    this.gridTileTextPadding = 16,
+    this.fontSize = 14,
+  }) : assert(items != null || request != null || requestStream != null),
+       assert(onTap == null || detailWidgetBuilder == null),
+       assert(
+         displayType == DisplayType.list ||
+             (!displayNumbers && leadingWidgetBuilder == null),
+       ),
+       assert(badgeWidgetBuilder == null || displayImages);
 
   @override
   State<StatefulWidget> createState() => EntityDisplayState<T>();
@@ -243,51 +245,54 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     return ListTile(
       visualDensity: VisualDensity.compact,
       title: Text(item.displayTitle),
-      contentPadding: widget.shouldLeftPadListItems
-          ? null
-          : const EdgeInsets.only(right: 16),
-      onTap: widget.onTap != null || widget.detailWidgetBuilder != null
-          ? () {
-              _onTap(item);
-            }
-          : null,
-      subtitle: item.displaySubtitle != null ||
-              widget.subtitleWidgetBuilder != null
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (item.displaySubtitle != null) Text(item.displaySubtitle!),
-                if (widget.subtitleWidgetBuilder != null)
-                  widget.subtitleWidgetBuilder!(item, items),
-              ],
-            )
-          : null,
-      leading: widget.leadingWidgetBuilder != null ||
-              widget.displayImages ||
-              widget.displayNumbers
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (widget.leadingWidgetBuilder != null)
-                  widget.leadingWidgetBuilder!(item),
-                if (widget.displayImages)
-                  Stack(
-                    alignment: const Alignment(1.5, -1.5),
-                    children: [
-                      EntityImage(
-                        entity: item,
-                        isCircular: widget.displayCircularImages,
-                        shouldAnimate: widget.shouldAnimateImages,
-                        onLoaded: widget.onImageLoaded,
-                      ),
-                      if (widget.badgeWidgetBuilder != null)
-                        widget.badgeWidgetBuilder!(item),
-                    ],
-                  ),
-                if (widget.displayNumbers) Text('${index + 1}'),
-              ],
-            )
-          : null,
+      contentPadding:
+          widget.shouldLeftPadListItems
+              ? null
+              : const EdgeInsets.only(right: 16),
+      onTap:
+          widget.onTap != null || widget.detailWidgetBuilder != null
+              ? () {
+                _onTap(item);
+              }
+              : null,
+      subtitle:
+          item.displaySubtitle != null || widget.subtitleWidgetBuilder != null
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (item.displaySubtitle != null) Text(item.displaySubtitle!),
+                  if (widget.subtitleWidgetBuilder != null)
+                    widget.subtitleWidgetBuilder!(item, items),
+                ],
+              )
+              : null,
+      leading:
+          widget.leadingWidgetBuilder != null ||
+                  widget.displayImages ||
+                  widget.displayNumbers
+              ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (widget.leadingWidgetBuilder != null)
+                    widget.leadingWidgetBuilder!(item),
+                  if (widget.displayImages)
+                    Stack(
+                      alignment: const Alignment(1.5, -1.5),
+                      children: [
+                        EntityImage(
+                          entity: item,
+                          isCircular: widget.displayCircularImages,
+                          shouldAnimate: widget.shouldAnimateImages,
+                          onLoaded: widget.onImageLoaded,
+                        ),
+                        if (widget.badgeWidgetBuilder != null)
+                          widget.badgeWidgetBuilder!(item),
+                      ],
+                    ),
+                  if (widget.displayNumbers) Text('${index + 1}'),
+                ],
+              )
+              : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -301,9 +306,10 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (widget.scrobbleableEntity != null)
             ScrobbleButton(
               entityProvider: () => widget.scrobbleableEntity!(item),
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.grey
-                  : null,
+              color:
+                  Theme.of(context).brightness == Brightness.light
+                      ? Colors.grey
+                      : null,
             ),
         ],
       ),
@@ -313,48 +319,51 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   Widget _gridTileBuilder(BuildContext context, int index) {
     final item = items[index];
     return GridTile(
-      header: widget.scrobbleableEntity != null
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                ScrobbleButton(
+      header:
+          widget.scrobbleableEntity != null
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  ScrobbleButton(
                     entityProvider: () => widget.scrobbleableEntity!(item),
-                    color: Colors.white),
-              ],
-            )
-          : null,
+                    color: Colors.white,
+                  ),
+                ],
+              )
+              : null,
       footer: Container(
-          margin: EdgeInsets.all(widget.gridTileTextPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (widget.fontSize > 0)
-                Text(
-                  item.displayTitle,
-                  style: TextStyle(
-                    fontSize: widget.fontSize,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+        margin: EdgeInsets.all(widget.gridTileTextPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.fontSize > 0)
+              Text(
+                item.displayTitle,
+                style: TextStyle(
+                  fontSize: widget.fontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-              if (item.displaySubtitle != null && widget.fontSize > 1)
-                Text(
-                  item.displaySubtitle!,
-                  style: TextStyle(
-                    fontSize: widget.fontSize - 1,
-                    color: Colors.white,
-                  ),
+              ),
+            if (item.displaySubtitle != null && widget.fontSize > 1)
+              Text(
+                item.displaySubtitle!,
+                style: TextStyle(
+                  fontSize: widget.fontSize - 1,
+                  color: Colors.white,
                 ),
-              if (item.displayTrailing != null && widget.fontSize > 1)
-                Text(
-                  item.displayTrailing!,
-                  style: TextStyle(
-                    fontSize: widget.fontSize - 1,
-                    color: Colors.white,
-                  ),
+              ),
+            if (item.displayTrailing != null && widget.fontSize > 1)
+              Text(
+                item.displayTrailing!,
+                style: TextStyle(
+                  fontSize: widget.fontSize - 1,
+                  color: Colors.white,
                 ),
-            ],
-          )),
+              ),
+          ],
+        ),
+      ),
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -387,10 +396,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   Widget _gridItemBuilder(BuildContext context, int index) {
     if (widget.onTap != null || widget.detailWidgetBuilder != null) {
       return InkWell(
-          onTap: () {
-            _onTap(items[index]);
-          },
-          child: _gridTileBuilder(context, index));
+        onTap: () {
+          _onTap(items[index]);
+        },
+        child: _gridTileBuilder(context, index),
+      );
     }
 
     return _gridTileBuilder(context, index);
@@ -399,74 +409,84 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   Widget _mainBuilder(BuildContext context) {
     if (_hasException || items.isEmpty) {
       // The Stack is a hack to make the RefreshIndicator work.
-      return Stack(children: [
-        ListView(
-          shrinkWrap: !widget.scrollable,
-        ),
-        if (_hasException)
-          ErrorComponent(
-            error: _exception!,
-            stackTrace: _stackTrace!,
-            detailObject: _request,
-          )
-        else if (widget.noResultsMessage != null)
-          Center(child: Text(widget.noResultsMessage!)),
-      ]);
+      return Stack(
+        children: [
+          ListView(shrinkWrap: !widget.scrollable),
+          if (_hasException)
+            ErrorComponent(
+              error: _exception!,
+              stackTrace: _stackTrace!,
+              detailObject: _request,
+            )
+          else if (widget.noResultsMessage != null)
+            Center(child: Text(widget.noResultsMessage!)),
+        ],
+      );
     }
 
     return CustomScrollView(
-        physics: widget.scrollable
-            ? const AlwaysScrollableScrollPhysics()
-            : const NeverScrollableScrollPhysics(),
-        shrinkWrap: !widget.scrollable,
-        slivers: [
-          ...?widget.slivers,
-          if (widget.scoreboardItems != null)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Scoreboard(
-                  key: ValueKey(_numInitialRequests),
-                  items: widget.scoreboardItems!,
-                ),
+      physics:
+          widget.scrollable
+              ? const AlwaysScrollableScrollPhysics()
+              : const NeverScrollableScrollPhysics(),
+      shrinkWrap: !widget.scrollable,
+      slivers: [
+        ...?widget.slivers,
+        if (widget.scoreboardItems != null)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Scoreboard(
+                key: ValueKey(_numInitialRequests),
+                items: widget.scoreboardItems!,
               ),
             ),
-          if (widget.displayType == DisplayType.list)
-            SliverList(
-                delegate: SliverChildBuilderDelegate(_listItemBuilder,
-                    childCount: items.length)),
-          if (widget.displayType == DisplayType.grid)
-            SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: widget.gridTileSize),
-                delegate: SliverChildBuilderDelegate(_gridItemBuilder,
-                    childCount: items.length)),
-          if (_request != null && hasMorePages)
-            SliverVisibilityDetector(
-              key: UniqueKey(),
-              sliver: SliverToBoxAdapter(
-                child: SafeArea(
-                  child: isDoingRequest
-                      ? const ListTile(
+          ),
+        if (widget.displayType == DisplayType.list)
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              _listItemBuilder,
+              childCount: items.length,
+            ),
+          ),
+        if (widget.displayType == DisplayType.grid)
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: widget.gridTileSize,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              _gridItemBuilder,
+              childCount: items.length,
+            ),
+          ),
+        if (_request != null && hasMorePages)
+          SliverVisibilityDetector(
+            key: UniqueKey(),
+            sliver: SliverToBoxAdapter(
+              child: SafeArea(
+                child:
+                    isDoingRequest
+                        ? const ListTile(
                           leading: CircularProgressIndicator(),
                           title: Text('Loading...'),
                         )
-                      : const ListTile(
+                        : const ListTile(
                           leading: Padding(
                             padding: EdgeInsets.only(left: 6),
                             child: Icon(Icons.arrow_upward, size: 36),
                           ),
                           title: Text('Scroll to load more items'),
                         ),
-                ),
               ),
-              onVisibilityChanged: (visibilityInfo) {
-                if (visibilityInfo.visibleFraction > 0.95) {
-                  _getMoreItems();
-                }
-              },
-            )
-        ]);
+            ),
+            onVisibilityChanged: (visibilityInfo) {
+              if (visibilityInfo.visibleFraction > 0.95) {
+                _getMoreItems();
+              }
+            },
+          ),
+      ],
+    );
   }
 
   @override

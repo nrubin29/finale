@@ -13,7 +13,9 @@ import 'package:flutter/material.dart';
 /// unnecessary to (fetch and) store the entire search space in memory. Only the
 /// items that need to be compared are fetched.
 Future<int> upperBound(
-    int length, Future<int> Function(int index) compare) async {
+  int length,
+  Future<int> Function(int index) compare,
+) async {
   var min = 0;
   var max = length;
   while (min < max) {
@@ -38,8 +40,10 @@ void pushLastfmEntityDetailView(BuildContext context, Entity entity) {
   } else if (entity is BasicArtist) {
     detailWidget = ArtistView(artist: entity);
   } else {
-    throw UnsupportedError('Unsupported entity type '
-        '${entity.runtimeType}');
+    throw UnsupportedError(
+      'Unsupported entity type '
+      '${entity.runtimeType}',
+    );
   }
 
   Navigator.push(context, MaterialPageRoute(builder: (_) => detailWidget));

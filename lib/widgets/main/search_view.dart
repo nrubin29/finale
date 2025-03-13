@@ -130,8 +130,9 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
-  static const _debounceDuration =
-      Duration(milliseconds: Duration.millisecondsPerSecond ~/ 2);
+  static const _debounceDuration = Duration(
+    milliseconds: Duration.millisecondsPerSecond ~/ 2,
+  );
 
   final _textController = TextEditingController();
   final _textFieldFocusNode = FocusNode();
@@ -147,7 +148,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     _setSpotifyEnabled();
     _setAppleMusicEnabled();
     _tabController = TabController(
-        length: _searchEngine == SearchEngine.lastfm ? 3 : 4, vsync: this);
+      length: _searchEngine == SearchEngine.lastfm ? 3 : 4,
+      vsync: this,
+    );
     Preferences.spotifyEnabled.changes.listen((_) {
       _setSpotifyEnabled();
       _updateTabController();
@@ -168,9 +171,10 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     var length = (searchEngine ?? _searchEngine) == SearchEngine.lastfm ? 3 : 4;
     setState(() {
       _tabController = TabController(
-          initialIndex: min(_tabController.index, length - 1),
-          length: length,
-          vsync: this);
+        initialIndex: min(_tabController.index, length - 1),
+        length: length,
+        vsync: this,
+      );
     });
   }
 
@@ -200,10 +204,10 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   }
 
   List<SearchEngine> get _enabledSearchEngines => [
-        SearchEngine.lastfm,
-        if (_isSpotifyEnabled) SearchEngine.spotify,
-        if (_isAppleMusicEnabled) SearchEngine.appleMusic,
-      ];
+    SearchEngine.lastfm,
+    if (_isSpotifyEnabled) SearchEngine.spotify,
+    if (_isAppleMusicEnabled) SearchEngine.appleMusic,
+  ];
 
   SearchQuery get _currentQuery => _query.values.last;
 
@@ -218,202 +222,225 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          foregroundColor: _searchEngine.foregroundColor,
-          backgroundColor: _searchEngine.color,
-          titleSpacing: _enabledSearchEngines.length > 1 ? 0 : null,
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (_enabledSearchEngines.length > 1)
-                Row(
-                  children: [
-                    ButtonTheme(
-                      alignedDropdown: true,
-                      child: DropdownButton<SearchEngine>(
-                        iconEnabledColor: _searchEngine.foregroundColor,
-                        isDense: true,
-                        underline: const SizedBox(),
-                        items: [
+    appBar: AppBar(
+      foregroundColor: _searchEngine.foregroundColor,
+      backgroundColor: _searchEngine.color,
+      titleSpacing: _enabledSearchEngines.length > 1 ? 0 : null,
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (_enabledSearchEngines.length > 1)
+            Row(
+              children: [
+                ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButton<SearchEngine>(
+                    iconEnabledColor: _searchEngine.foregroundColor,
+                    isDense: true,
+                    underline: const SizedBox(),
+                    items: [
+                      for (final searchEngine in _enabledSearchEngines)
+                        DropdownMenuItem(
+                          value: searchEngine,
+                          child: Icon(
+                            searchEngine.icon,
+                            color:
+                                _searchEngine.color ??
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                    ],
+                    selectedItemBuilder:
+                        (_) => [
                           for (final searchEngine in _enabledSearchEngines)
-                            DropdownMenuItem(
-                              value: searchEngine,
-                              child: Icon(
-                                searchEngine.icon,
-                                color: _searchEngine.color ??
-                                    Theme.of(context).colorScheme.primary,
-                              ),
+                            Icon(
+                              searchEngine.icon,
+                              color: _searchEngine.foregroundColor,
                             ),
                         ],
-                        selectedItemBuilder: (_) => [
-                          for (final searchEngine in _enabledSearchEngines)
-                            Icon(searchEngine.icon,
-                                color: _searchEngine.foregroundColor),
-                        ],
-                        value: _searchEngine,
-                        onChanged: (choice) async {
-                          if (choice == _searchEngine) {
-                            return;
-                          }
+                    value: _searchEngine,
+                    onChanged: (choice) async {
+                      if (choice == _searchEngine) {
+                        return;
+                      }
 
-                          var updateSearchEngine = true;
+                      var updateSearchEngine = true;
 
-                          if (choice == SearchEngine.spotify &&
-                              !Preferences.hasSpotifyAuthData) {
-                            updateSearchEngine = await showDialog<bool>(
-                                    context: context,
-                                    builder: (context) => SpotifyDialog()) ??
-                                false;
-                          } else if (choice == SearchEngine.appleMusic) {
-                            updateSearchEngine =
-                                (await AppleMusic.authorize()) ==
-                                    AuthorizationStatus.authorized;
-                          }
+                      if (choice == SearchEngine.spotify &&
+                          !Preferences.hasSpotifyAuthData) {
+                        updateSearchEngine =
+                            await showDialog<bool>(
+                              context: context,
+                              builder: (context) => SpotifyDialog(),
+                            ) ??
+                            false;
+                      } else if (choice == SearchEngine.appleMusic) {
+                        updateSearchEngine =
+                            (await AppleMusic.authorize()) ==
+                            AuthorizationStatus.authorized;
+                      }
 
-                          if (updateSearchEngine) {
-                            _updateTabController(choice);
-                            setState(() {
-                              _query.add(
-                                  _currentQuery.copyWith(searchEngine: choice));
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                  ],
-                ),
-              Expanded(
-                child: TextField(
-                  controller: _textController,
-                  focusNode: _textFieldFocusNode,
-                  style: TextStyle(color: _searchEngine.foregroundColor),
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: TextStyle(color: _searchEngine.foregroundColor),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: _searchEngine.foregroundColor)),
+                      if (updateSearchEngine) {
+                        _updateTabController(choice);
+                        setState(() {
+                          _query.add(
+                            _currentQuery.copyWith(searchEngine: choice),
+                          );
+                        });
+                      }
+                    },
                   ),
-                  cursorColor: _searchEngine.foregroundColor,
-                  onChanged: (text) {
-                    setState(() {
-                      _query.add(_currentQuery.copyWith(text: text));
-                    });
-                  },
                 ),
-              ),
-            ],
-          ),
-          actions: [
-            Visibility(
-              visible: _textController.text != '',
-              maintainState: true,
-              maintainAnimation: true,
-              maintainSize: true,
-              child: IconButton(
-                icon: Icon(
-                  Icons.clear,
-                  color: _searchEngine.foregroundColor,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _textController.value = TextEditingValue.empty;
-                    _query.add(_currentQuery.copyWith(text: ''));
-                    _textFieldFocusNode.requestFocus();
-                  });
-                },
-              ),
+                const SizedBox(width: 10),
+              ],
             ),
-          ],
-          bottom: TabBar(
-            controller: _tabController,
-            indicatorColor: _searchEngine.foregroundColor,
-            labelColor: _searchEngine.foregroundColor,
-            unselectedLabelColor: _searchEngine.foregroundColor,
-            tabs: [
-              const Tab(icon: Icon(Icons.audiotrack)),
-              const Tab(icon: Icon(Icons.people)),
-              const Tab(icon: Icon(Icons.album)),
-              if (_searchEngine != SearchEngine.lastfm)
-                const Tab(icon: Icon(Icons.queue_music)),
-            ],
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              focusNode: _textFieldFocusNode,
+              style: TextStyle(color: _searchEngine.foregroundColor),
+              decoration: InputDecoration(
+                hintText: 'Search',
+                hintStyle: TextStyle(color: _searchEngine.foregroundColor),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: _searchEngine.foregroundColor),
+                ),
+              ),
+              cursorColor: _searchEngine.foregroundColor,
+              onChanged: (text) {
+                setState(() {
+                  _query.add(_currentQuery.copyWith(text: text));
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        Visibility(
+          visible: _textController.text != '',
+          maintainState: true,
+          maintainAnimation: true,
+          maintainSize: true,
+          child: IconButton(
+            icon: Icon(Icons.clear, color: _searchEngine.foregroundColor),
+            onPressed: () {
+              setState(() {
+                _textController.value = TextEditingValue.empty;
+                _query.add(_currentQuery.copyWith(text: ''));
+                _textFieldFocusNode.requestFocus();
+              });
+            },
           ),
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: _currentQuery.text != ''
+      ],
+      bottom: TabBar(
+        controller: _tabController,
+        indicatorColor: _searchEngine.foregroundColor,
+        labelColor: _searchEngine.foregroundColor,
+        unselectedLabelColor: _searchEngine.foregroundColor,
+        tabs: [
+          const Tab(icon: Icon(Icons.audiotrack)),
+          const Tab(icon: Icon(Icons.people)),
+          const Tab(icon: Icon(Icons.album)),
+          if (_searchEngine != SearchEngine.lastfm)
+            const Tab(icon: Icon(Icons.queue_music)),
+        ],
+      ),
+    ),
+    body: TabBarView(
+      controller: _tabController,
+      children:
+          _currentQuery.text != ''
               ? [
-                  EntityDisplay<Track>(
-                    scrobbleableEntity: (item) async => item is LTrackMatch
-                        ? await Lastfm.getTrack(item)
-                        : item,
-                    requestStream: _query
-                        .debounceWhere(_shouldDebounce, _debounceDuration)
-                        .map((query) =>
-                            query.searchEngine.searchTracks(query.text)),
-                    detailWidgetBuilder: _searchEngine == SearchEngine.lastfm
-                        ? (track) => TrackView(track: track)
-                        : null,
-                  ),
-                  EntityDisplay<BasicArtist>(
-                    displayType: DisplayType.grid,
-                    requestStream: _query
-                        .debounceWhere(_shouldDebounce, _debounceDuration)
-                        .map((query) =>
-                            query.searchEngine.searchArtists(query.text)),
-                    detailWidgetBuilder: (artist) =>
-                        _searchEngine == SearchEngine.lastfm
-                            ? ArtistView(artist: artist)
-                            : _searchEngine == SearchEngine.appleMusic
-                                ? AppleMusicArtistView(
-                                    artistId: (artist as AMArtist).id)
-                                : SpotifyArtistView(artist: artist),
-                  ),
-                  EntityDisplay<BasicAlbum>(
-                    scrobbleableEntity: (item) => item is SAlbumSimple
-                        ? Spotify.getFullAlbum(item)
-                        : item is AMAlbum
-                            ? AppleMusic.getFullAlbum(item)
-                            : Lastfm.getAlbum(item),
-                    displayType: DisplayType.grid,
-                    requestStream: _query
-                        .debounceWhere(_shouldDebounce, _debounceDuration)
-                        .map((query) =>
-                            query.searchEngine.searchAlbums(query.text)),
-                    detailWidgetBuilder: (album) =>
-                        _searchEngine == SearchEngine.spotify
-                            ? SpotifyAlbumView(album: album as SAlbumSimple)
-                            : _searchEngine == SearchEngine.appleMusic
-                                ? AppleMusicAlbumView(album: album as AMAlbum)
-                                : AlbumView(album: album),
-                  ),
-                  if (_searchEngine != SearchEngine.lastfm)
-                    EntityDisplay<BasicPlaylist>(
-                      scrobbleableEntity: (item) => item is SPlaylistSimple
-                          ? Spotify.getFullPlaylist(item)
-                          : AMFullPlaylist.get(item as AMPlaylist),
-                      displayType: DisplayType.grid,
-                      requestStream: _query
-                          .debounceWhere(_shouldDebounce, _debounceDuration)
-                          .map((query) =>
-                              query.searchEngine.searchPlaylists(query.text)),
-                      detailWidgetBuilder: (playlist) =>
+                EntityDisplay<Track>(
+                  scrobbleableEntity:
+                      (item) async =>
+                          item is LTrackMatch
+                              ? await Lastfm.getTrack(item)
+                              : item,
+                  requestStream: _query
+                      .debounceWhere(_shouldDebounce, _debounceDuration)
+                      .map(
+                        (query) => query.searchEngine.searchTracks(query.text),
+                      ),
+                  detailWidgetBuilder:
+                      _searchEngine == SearchEngine.lastfm
+                          ? (track) => TrackView(track: track)
+                          : null,
+                ),
+                EntityDisplay<BasicArtist>(
+                  displayType: DisplayType.grid,
+                  requestStream: _query
+                      .debounceWhere(_shouldDebounce, _debounceDuration)
+                      .map(
+                        (query) => query.searchEngine.searchArtists(query.text),
+                      ),
+                  detailWidgetBuilder:
+                      (artist) =>
+                          _searchEngine == SearchEngine.lastfm
+                              ? ArtistView(artist: artist)
+                              : _searchEngine == SearchEngine.appleMusic
+                              ? AppleMusicArtistView(
+                                artistId: (artist as AMArtist).id,
+                              )
+                              : SpotifyArtistView(artist: artist),
+                ),
+                EntityDisplay<BasicAlbum>(
+                  scrobbleableEntity:
+                      (item) =>
+                          item is SAlbumSimple
+                              ? Spotify.getFullAlbum(item)
+                              : item is AMAlbum
+                              ? AppleMusic.getFullAlbum(item)
+                              : Lastfm.getAlbum(item),
+                  displayType: DisplayType.grid,
+                  requestStream: _query
+                      .debounceWhere(_shouldDebounce, _debounceDuration)
+                      .map(
+                        (query) => query.searchEngine.searchAlbums(query.text),
+                      ),
+                  detailWidgetBuilder:
+                      (album) =>
                           _searchEngine == SearchEngine.spotify
-                              ? SpotifyPlaylistView(
-                                  playlist: playlist as SPlaylistSimple)
-                              : AppleMusicPlaylistView(
-                                  playlist: playlist as AMPlaylist),
-                    ),
-                ]
+                              ? SpotifyAlbumView(album: album as SAlbumSimple)
+                              : _searchEngine == SearchEngine.appleMusic
+                              ? AppleMusicAlbumView(album: album as AMAlbum)
+                              : AlbumView(album: album),
+                ),
+                if (_searchEngine != SearchEngine.lastfm)
+                  EntityDisplay<BasicPlaylist>(
+                    scrobbleableEntity:
+                        (item) =>
+                            item is SPlaylistSimple
+                                ? Spotify.getFullPlaylist(item)
+                                : AMFullPlaylist.get(item as AMPlaylist),
+                    displayType: DisplayType.grid,
+                    requestStream: _query
+                        .debounceWhere(_shouldDebounce, _debounceDuration)
+                        .map(
+                          (query) =>
+                              query.searchEngine.searchPlaylists(query.text),
+                        ),
+                    detailWidgetBuilder:
+                        (playlist) =>
+                            _searchEngine == SearchEngine.spotify
+                                ? SpotifyPlaylistView(
+                                  playlist: playlist as SPlaylistSimple,
+                                )
+                                : AppleMusicPlaylistView(
+                                  playlist: playlist as AMPlaylist,
+                                ),
+                  ),
+              ]
               : [
-                  const SizedBox(),
-                  const SizedBox(),
-                  const SizedBox(),
-                  if (_searchEngine != SearchEngine.lastfm) const SizedBox(),
-                ],
-        ),
-      );
+                const SizedBox(),
+                const SizedBox(),
+                const SizedBox(),
+                if (_searchEngine != SearchEngine.lastfm) const SizedBox(),
+              ],
+    ),
+  );
 
   @override
   void dispose() {
@@ -427,6 +454,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 extension _DebounceWhere<T> on Stream<T> {
   Stream<T> debounceWhere(bool Function(T) test, Duration duration) {
     return debounce(
-        (e) => test(e) ? TimerStream(null, duration) : Stream.value(null));
+      (e) => test(e) ? TimerStream(null, duration) : Stream.value(null),
+    );
   }
 }

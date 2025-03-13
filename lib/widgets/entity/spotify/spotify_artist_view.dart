@@ -15,15 +15,17 @@ class SpotifyArtistView extends StatelessWidget {
   final dynamic /* SArtist|SArtistSimple */ artist;
 
   const SpotifyArtistView({required this.artist})
-      : assert(artist is SArtist || artist is SArtistSimple);
+    : assert(artist is SArtist || artist is SArtistSimple);
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<SArtist>(
-        futureFactory: artist is SArtist
+    futureFactory:
+        artist is SArtist
             ? () => Future.value(artist)
             : () => Spotify.getFullArtist(artist),
-        baseEntity: artist,
-        builder: (artist) => Scaffold(
+    baseEntity: artist,
+    builder:
+        (artist) => Scaffold(
           appBar: createAppBar(
             context,
             artist.name,
@@ -37,22 +39,23 @@ class SpotifyArtistView extends StatelessWidget {
                 albumsWidget: EntityDisplay<SAlbumSimple>(
                   scrollable: false,
                   request: SArtistAlbumsRequest(artist),
-                  detailWidgetBuilder: (album) =>
-                      SpotifyAlbumView(album: album),
+                  detailWidgetBuilder:
+                      (album) => SpotifyAlbumView(album: album),
                 ),
                 tracksWidget: FutureBuilderView<List<STrack>>(
                   futureFactory: () => Spotify.getTopTracksForArtist(artist),
                   baseEntity: artist,
                   isView: false,
-                  builder: (tracks) => EntityDisplay<STrack>(
-                    scrollable: false,
-                    items: tracks,
-                    scrobbleableEntity: (track) => Future.value(track),
-                  ),
+                  builder:
+                      (tracks) => EntityDisplay<STrack>(
+                        scrollable: false,
+                        items: tracks,
+                        scrobbleableEntity: (track) => Future.value(track),
+                      ),
                 ),
               ),
             ],
           ),
         ),
-      );
+  );
 }

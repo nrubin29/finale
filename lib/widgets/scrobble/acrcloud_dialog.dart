@@ -9,9 +9,7 @@ class ACRCloudDialogResult {
 
   const ACRCloudDialogResult([this.track]) : wasCancelled = false;
 
-  const ACRCloudDialogResult.cancelled()
-      : wasCancelled = true,
-        track = null;
+  const ACRCloudDialogResult.cancelled() : wasCancelled = true, track = null;
 }
 
 class ACRCloudDialog extends StatefulWidget {
@@ -56,9 +54,10 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => error != null
-      ? _ErrorDialog(error!)
-      : results != null
+  Widget build(BuildContext context) =>
+      error != null
+          ? _ErrorDialog(error!)
+          : results != null
           ? _ResultsDialog(results!)
           : _ListeningDialog(session);
 }
@@ -69,9 +68,10 @@ class _ListeningDialog extends StatelessWidget {
   const _ListeningDialog(this.session);
 
   Widget _audioIndicator(BuildContext context) => StreamBuilder<double>(
-        stream: session.volumeStream,
-        initialData: 0.0,
-        builder: (_, snapshot) => SizedBox(
+    stream: session.volumeStream,
+    initialData: 0.0,
+    builder:
+        (_, snapshot) => SizedBox(
           width: 100,
           height: 100,
           child: Center(
@@ -84,19 +84,16 @@ class _ListeningDialog extends StatelessWidget {
             ),
           ),
         ),
-      );
+  );
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: const Text('Listening...'),
-        content: _audioIndicator(context),
-        actions: [
-          TextButton(
-            onPressed: session.cancel,
-            child: const Text('Cancel'),
-          )
-        ],
-      );
+    title: const Text('Listening...'),
+    content: _audioIndicator(context),
+    actions: [
+      TextButton(onPressed: session.cancel, child: const Text('Cancel')),
+    ],
+  );
 }
 
 class _ResultsDialog extends StatelessWidget {
@@ -105,50 +102,54 @@ class _ResultsDialog extends StatelessWidget {
   const _ResultsDialog(this.results);
 
   Widget _resultsList() => SizedBox(
-        width: double.maxFinite,
-        child: ListView.builder(
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          itemCount: results.length,
-          itemBuilder: (context, index) {
-            final track = results[index];
-            return ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(track.title),
-              subtitle:
-                  Text('${track.artists.first.name}\n${track.album.name}'),
-              isThreeLine: true,
-              trailing: IconButton(
-                icon: const Icon(Icons.info),
-                color: Theme.of(context).brightness == Brightness.light
+    width: double.maxFinite,
+    child: ListView.builder(
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      itemCount: results.length,
+      itemBuilder: (context, index) {
+        final track = results[index];
+        return ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(track.title),
+          subtitle: Text('${track.artists.first.name}\n${track.album.name}'),
+          isThreeLine: true,
+          trailing: IconButton(
+            icon: const Icon(Icons.info),
+            color:
+                Theme.of(context).brightness == Brightness.light
                     ? Colors.grey
                     : null,
-                onPressed: () {
-                  launchUrl(Uri.https('aha-music.com', track.acrId,
-                      {'utm_source': 'finale', 'utm_medium': 'app'}));
-                },
-              ),
-              onTap: () {
-                Navigator.pop(context, ACRCloudDialogResult(track));
-              },
-            );
+            onPressed: () {
+              launchUrl(
+                Uri.https('aha-music.com', track.acrId, {
+                  'utm_source': 'finale',
+                  'utm_medium': 'app',
+                }),
+              );
+            },
+          ),
+          onTap: () {
+            Navigator.pop(context, ACRCloudDialogResult(track));
           },
-        ),
-      );
+        );
+      },
+    ),
+  );
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: const Text('Results'),
-        content: _resultsList(),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, const ACRCloudDialogResult.cancelled());
-            },
-            child: const Text('Cancel'),
-          )
-        ],
-      );
+    title: const Text('Results'),
+    content: _resultsList(),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context, const ACRCloudDialogResult.cancelled());
+        },
+        child: const Text('Cancel'),
+      ),
+    ],
+  );
 }
 
 class _ErrorDialog extends StatelessWidget {
@@ -158,15 +159,15 @@ class _ErrorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(error),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, const ACRCloudDialogResult.cancelled());
-            },
-            child: const Text('Close'),
-          )
-        ],
-      );
+    title: const Text('Error'),
+    content: Text(error),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context, const ACRCloudDialogResult.cancelled());
+        },
+        child: const Text('Close'),
+      ),
+    ],
+  );
 }

@@ -26,89 +26,95 @@ class ArtistView extends StatelessWidget {
   Widget build(BuildContext context) {
     final friendUsername = ProfileStack.of(context).friendUsername;
     return FutureBuilderView<LArtist>(
-      futureFactory: artist is LArtist
-          ? () => Future.value(artist as LArtist)
-          : () => Lastfm.getArtist(artist),
+      futureFactory:
+          artist is LArtist
+              ? () => Future.value(artist as LArtist)
+              : () => Lastfm.getArtist(artist),
       baseEntity: artist,
-      builder: (artist) => Scaffold(
-        appBar: createAppBar(
-          context,
-          artist.name,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.adaptive.share),
-              onPressed: () {
-                Share.share(artist.url);
-              },
-            ),
-          ],
-        ),
-        body: TwoUp(
-          entity: artist,
-          listItems: [
-            Scoreboard(
-              items: [
-                ScoreboardItemModel.value(
-                  label: 'Scrobbles',
-                  value: artist.stats.playCount,
-                ),
-                ScoreboardItemModel.value(
-                  label: 'Listeners',
-                  value: artist.stats.listeners,
-                ),
-                ScoreboardItemModel.value(
-                  label: 'Your scrobbles',
-                  value: artist.stats.userPlayCount,
-                ),
-                if (friendUsername != null)
-                  ScoreboardItemModel.future(
-                    label: "$friendUsername's scrobbles",
-                    futureProvider: () =>
-                        Lastfm.getArtist(artist, username: friendUsername)
-                            .then((value) => value.stats.userPlayCount),
-                  ),
-                ScoreboardItemModel.lazy(
-                  label: 'Top listeners ranking',
-                  futureProvider: () => fetchTopListenersRanking(artist),
+      builder:
+          (artist) => Scaffold(
+            appBar: createAppBar(
+              context,
+              artist.name,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.adaptive.share),
+                  onPressed: () {
+                    Share.share(artist.url);
+                  },
                 ),
               ],
             ),
-            if (artist.topTags.tags.isNotEmpty) ...[
-              const Divider(),
-              TagChips(topTags: artist.topTags),
-            ],
-            if (artist.bio != null && artist.bio!.isNotEmpty) ...[
-              const Divider(),
-              WikiTile(entity: artist, wiki: artist.bio!),
-            ],
-            const Divider(),
-            ArtistTabs(
-              albumsWidget: EntityDisplay<LArtistTopAlbum>(
-                scrollable: false,
-                request: ArtistGetTopAlbumsRequest(artist.name),
-                detailWidgetBuilder: (album) => AlbumView(album: album),
-              ),
-              tracksWidget: EntityDisplay<LArtistTopTrack>(
-                scrollable: false,
-                request: ArtistGetTopTracksRequest(artist.name),
-                detailWidgetBuilder: (track) => TrackView(track: track),
-              ),
-              similarArtistsWidget: FutureBuilderView<List<LSimilarArtist>>(
-                futureFactory: () => Lastfm.getSimilarArtists(artist),
-                baseEntity: artist,
-                isView: false,
-                builder: (items) => EntityDisplay<LSimilarArtist>(
-                  scrollable: false,
-                  items: items,
-                  detailWidgetBuilder: (artist) => ArtistView(artist: artist),
-                  subtitleWidgetBuilder: (artist, _) =>
-                      FractionalBar(artist.similarity),
+            body: TwoUp(
+              entity: artist,
+              listItems: [
+                Scoreboard(
+                  items: [
+                    ScoreboardItemModel.value(
+                      label: 'Scrobbles',
+                      value: artist.stats.playCount,
+                    ),
+                    ScoreboardItemModel.value(
+                      label: 'Listeners',
+                      value: artist.stats.listeners,
+                    ),
+                    ScoreboardItemModel.value(
+                      label: 'Your scrobbles',
+                      value: artist.stats.userPlayCount,
+                    ),
+                    if (friendUsername != null)
+                      ScoreboardItemModel.future(
+                        label: "$friendUsername's scrobbles",
+                        futureProvider:
+                            () => Lastfm.getArtist(
+                              artist,
+                              username: friendUsername,
+                            ).then((value) => value.stats.userPlayCount),
+                      ),
+                    ScoreboardItemModel.lazy(
+                      label: 'Top listeners ranking',
+                      futureProvider: () => fetchTopListenersRanking(artist),
+                    ),
+                  ],
                 ),
-              ),
+                if (artist.topTags.tags.isNotEmpty) ...[
+                  const Divider(),
+                  TagChips(topTags: artist.topTags),
+                ],
+                if (artist.bio != null && artist.bio!.isNotEmpty) ...[
+                  const Divider(),
+                  WikiTile(entity: artist, wiki: artist.bio!),
+                ],
+                const Divider(),
+                ArtistTabs(
+                  albumsWidget: EntityDisplay<LArtistTopAlbum>(
+                    scrollable: false,
+                    request: ArtistGetTopAlbumsRequest(artist.name),
+                    detailWidgetBuilder: (album) => AlbumView(album: album),
+                  ),
+                  tracksWidget: EntityDisplay<LArtistTopTrack>(
+                    scrollable: false,
+                    request: ArtistGetTopTracksRequest(artist.name),
+                    detailWidgetBuilder: (track) => TrackView(track: track),
+                  ),
+                  similarArtistsWidget: FutureBuilderView<List<LSimilarArtist>>(
+                    futureFactory: () => Lastfm.getSimilarArtists(artist),
+                    baseEntity: artist,
+                    isView: false,
+                    builder:
+                        (items) => EntityDisplay<LSimilarArtist>(
+                          scrollable: false,
+                          items: items,
+                          detailWidgetBuilder:
+                              (artist) => ArtistView(artist: artist),
+                          subtitleWidgetBuilder:
+                              (artist, _) => FractionalBar(artist.similarity),
+                        ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 }

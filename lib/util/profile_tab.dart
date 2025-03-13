@@ -12,8 +12,7 @@ enum ProfileTab {
     'Scrobble Distribution',
     Icons.bar_chart,
     iconRotationDegrees: 90,
-  ),
-  ;
+  );
 
   final String displayName;
   final IconData icon;

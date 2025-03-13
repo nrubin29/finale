@@ -25,9 +25,12 @@ class LoginView extends StatelessWidget {
 
   void _logIn(BuildContext context) async {
     final token = await showWebAuth(
-        Uri.https(
-            'last.fm', 'api/auth', {'api_key': apiKey, 'cb': authCallbackUrl}),
-        queryParam: 'token');
+      Uri.https('last.fm', 'api/auth', {
+        'api_key': apiKey,
+        'cb': authCallbackUrl,
+      }),
+      queryParam: 'token',
+    );
     if (token == null) return;
     final session = await Lastfm.authenticate(token);
 
@@ -35,9 +38,9 @@ class LoginView extends StatelessWidget {
     Preferences.key.value = session.key;
 
     await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MainView(username: session.name)));
+      context,
+      MaterialPageRoute(builder: (context) => MainView(username: session.name)),
+    );
   }
 
   @override
@@ -57,69 +60,87 @@ class LoginView extends StatelessWidget {
               return GridView.count(
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
-                crossAxisCount:
-                    max(MediaQuery.of(context).size.width ~/ 200, 3),
-                children: snapshot.data!
-                    .map((artist) => FutureBuilder<List<LArtistTopAlbum>>(
-                        future: ArtistGetTopAlbumsRequest(artist.name)
-                            .getData(1, 1),
-                        builder: (context, snapshot) => snapshot.hasData
-                            ? EntityImage(
-                                entity: snapshot.data!.first,
-                                quality: ImageQuality.high,
-                                placeholderBehavior: PlaceholderBehavior.none,
-                              )
-                            : Container()))
-                    .toList(),
+                crossAxisCount: max(
+                  MediaQuery.of(context).size.width ~/ 200,
+                  3,
+                ),
+                children:
+                    snapshot.data!
+                        .map(
+                          (artist) => FutureBuilder<List<LArtistTopAlbum>>(
+                            future: ArtistGetTopAlbumsRequest(
+                              artist.name,
+                            ).getData(1, 1),
+                            builder:
+                                (context, snapshot) =>
+                                    snapshot.hasData
+                                        ? EntityImage(
+                                          entity: snapshot.data!.first,
+                                          quality: ImageQuality.high,
+                                          placeholderBehavior:
+                                              PlaceholderBehavior.none,
+                                        )
+                                        : Container(),
+                          ),
+                        )
+                        .toList(),
               );
             },
           ),
           Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade800.withValues(alpha: 2 / 3))),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade800.withValues(alpha: 2 / 3),
+            ),
+          ),
           Center(
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.grey.shade800.withValues(alpha: 0.9),
-                  border: Border.all(),
-                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+                color: Colors.grey.shade800.withValues(alpha: 0.9),
+                border: Border.all(),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Finale',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium!
-                          .copyWith(color: Colors.white)),
+                  Text(
+                    'Finale',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.displayMedium!.copyWith(color: Colors.white),
+                  ),
                   const SizedBox(height: 10),
-                  Text('A fully-featured Last.fm client and scrobbler',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(color: Colors.white)),
+                  Text(
+                    'A fully-featured Last.fm client and scrobbler',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleMedium!.copyWith(color: Colors.white),
+                  ),
                   const SizedBox(height: 10),
                   OutlinedButton(
                     onPressed: () => _logIn(context),
                     style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(Colors.red)),
+                      backgroundColor: WidgetStateProperty.all(Colors.red),
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(SocialMediaIcons.lastfm,
-                            color: Colors.white),
+                        const Icon(
+                          SocialMediaIcons.lastfm,
+                          color: Colors.white,
+                        ),
                         const SizedBox(width: 8),
-                        Text('Log in with Last.fm',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(color: Colors.white))
+                        Text(
+                          'Log in with Last.fm',
+                          style: Theme.of(context).textTheme.titleMedium!
+                              .copyWith(color: Colors.white),
+                        ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

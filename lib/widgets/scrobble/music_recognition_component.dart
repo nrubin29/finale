@@ -14,7 +14,7 @@ class MusicRecognitionComponent extends StatefulWidget {
   final ValueChanged<ACRCloudResponseMusicItem> onTrackRecognized;
 
   MusicRecognitionComponent({required this.onTrackRecognized})
-      : assert(isMobile);
+    : assert(isMobile);
 
   @override
   State<StatefulWidget> createState() => _MusicRecognitionComponentState();
@@ -39,25 +39,32 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
 
   Future<void> _setUp() async {
     if (!ACRCloud.isSetUp) {
-      await ACRCloud.setUp(const ACRCloudConfig(
-          acrCloudAccessKey, acrCloudAccessSecret, acrCloudHost));
+      await ACRCloud.setUp(
+        const ACRCloudConfig(
+          acrCloudAccessKey,
+          acrCloudAccessSecret,
+          acrCloudHost,
+        ),
+      );
     }
   }
 
   Future<void> _scrobbleOnce() async {
     await _setUp();
     final result = await showDialog<ACRCloudDialogResult>(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => ACRCloudDialog());
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => ACRCloudDialog(),
+    );
 
     if (result?.wasCancelled ?? true) return;
 
     if (result!.track != null) {
       widget.onTrackRecognized(result.track!);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not recognize song')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Could not recognize song')));
     }
   }
 
@@ -65,33 +72,30 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
     await _setUp();
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => ListenContinuouslyView(),
-      ),
+      MaterialPageRoute(builder: (context) => ListenContinuouslyView()),
     );
   }
 
   @override
   Widget build(BuildContext context) => TitledBox(
-        title: 'Music Recognition',
-        trailing: TextButton(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Powered by ', style: Theme.of(context).textTheme.bodySmall),
-              Image.asset('assets/images/acrcloud.png', height: 20)
-            ],
-          ),
-          onPressed: () {
-            launchUrl(Uri.https('acrcloud.com', ''));
-          },
-        ),
-        actions: [
-          ButtonAction('Once', Icons.mic, _scrobbleOnce),
-          ButtonAction(
-              'Continuously', Icons.all_inclusive, _scrobbleContinuously),
+    title: 'Music Recognition',
+    trailing: TextButton(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Powered by ', style: Theme.of(context).textTheme.bodySmall),
+          Image.asset('assets/images/acrcloud.png', height: 20),
         ],
-      );
+      ),
+      onPressed: () {
+        launchUrl(Uri.https('acrcloud.com', ''));
+      },
+    ),
+    actions: [
+      ButtonAction('Once', Icons.mic, _scrobbleOnce),
+      ButtonAction('Continuously', Icons.all_inclusive, _scrobbleContinuously),
+    ],
+  );
 
   @override
   void dispose() {

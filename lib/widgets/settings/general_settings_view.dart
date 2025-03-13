@@ -39,7 +39,8 @@ class GeneralSettingsView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => const ProfileTabsSettingsView()),
+                  builder: (_) => const ProfileTabsSettingsView(),
+                ),
               );
             },
           ),

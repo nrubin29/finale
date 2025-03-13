@@ -27,7 +27,9 @@ class AMFullPlaylist extends FullPlaylist {
 
   static Future<AMFullPlaylist> get(AMPlaylist playlist) async =>
       AMFullPlaylist._(
-          playlist, await AMPlaylistSongsRequest(playlist.id).getAllData());
+        playlist,
+        await AMPlaylistSongsRequest(playlist.id).getAllData(),
+      );
 
   @override
   String get displayTitle => _playlist.displayTitle;

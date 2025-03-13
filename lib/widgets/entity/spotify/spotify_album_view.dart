@@ -17,43 +17,46 @@ class SpotifyAlbumView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<SAlbumFull>(
-        futureFactory: () => Spotify.getFullAlbum(album),
-        baseEntity: album,
-        builder: (album) => Scaffold(
-            appBar: createAppBar(
-              context,
-              album.name,
-              subtitle: album.artist.name,
-              backgroundColor: spotifyGreen,
-              actions: [
-                ScrobbleButton(entity: album),
+    futureFactory: () => Spotify.getFullAlbum(album),
+    baseEntity: album,
+    builder:
+        (album) => Scaffold(
+          appBar: createAppBar(
+            context,
+            album.name,
+            subtitle: album.artist.name,
+            backgroundColor: spotifyGreen,
+            actions: [ScrobbleButton(entity: album)],
+          ),
+          body: TwoUp(
+            entity: album,
+            listItems: [
+              ListTile(
+                leading: EntityImage(entity: album.artist),
+                title: Text(album.artist.name),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => SpotifyArtistView(artist: album.artist),
+                    ),
+                  );
+                },
+              ),
+              if (album.tracks.isNotEmpty) ...[
+                const Divider(),
+                EntityDisplay<SAlbumTrack>(
+                  items: album.tracks,
+                  scrollable: false,
+                  displayNumbers: true,
+                  displayImages: false,
+                  scrobbleableEntity: (track) => Future.value(track),
+                ),
               ],
-            ),
-            body: TwoUp(
-              entity: album,
-              listItems: [
-                ListTile(
-                    leading: EntityImage(entity: album.artist),
-                    title: Text(album.artist.name),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SpotifyArtistView(artist: album.artist)));
-                    }),
-                if (album.tracks.isNotEmpty) ...[
-                  const Divider(),
-                  EntityDisplay<SAlbumTrack>(
-                    items: album.tracks,
-                    scrollable: false,
-                    displayNumbers: true,
-                    displayImages: false,
-                    scrobbleableEntity: (track) => Future.value(track),
-                  ),
-                ],
-              ],
-            )),
-      );
+            ],
+          ),
+        ),
+  );
 }

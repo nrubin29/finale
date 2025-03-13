@@ -38,7 +38,7 @@ class GridCollage extends StatelessWidget {
     final widthGridTileSize = size.width / gridSize;
     final heightGridTileSize =
         (size.height - (includeBranding ? 26 : 0) - (includeTitle ? 50 : 0)) /
-            gridSize;
+        gridSize;
     final gridTileSize = min(widthGridTileSize, heightGridTileSize);
 
     return Container(
@@ -89,25 +89,27 @@ class GridCollage extends StatelessWidget {
           if (includeBranding)
             Padding(
               padding: const EdgeInsets.all(3),
-              child: Row(children: [
-                AppIcon(size: gridTileSize / 8),
-                SizedBox(width: gridTileSize / 24),
-                Text(
-                  'Created with Finale for Last.fm',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: gridTileSize / 12,
+              child: Row(
+                children: [
+                  AppIcon(size: gridTileSize / 8),
+                  SizedBox(width: gridTileSize / 24),
+                  Text(
+                    'Created with Finale for Last.fm',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: gridTileSize / 12,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                Text(
-                  'https://finale.app',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: gridTileSize / 12,
+                  const Spacer(),
+                  Text(
+                    'https://finale.app',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: gridTileSize / 12,
+                    ),
                   ),
-                ),
-              ]),
+                ],
+              ),
             ),
         ],
       ),

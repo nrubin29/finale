@@ -66,24 +66,24 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
                 children: [
                   TextSpan(
                     style: theme.textTheme.bodyMedium,
-                    text: 'Sign in with your Spotify account to search and '
+                    text:
+                        'Sign in with your Spotify account to search and '
                         "scrobble from Spotify's database. Finale does not "
                         'automatically scrobble from Spotify, but you can '
                         'connect your Spotify account to Last.fm ',
                   ),
                   TextSpan(
                     text: 'on the web',
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(color: theme.primaryColor),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        launchUrl(Lastfm.applicationSettingsUri);
-                      },
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.primaryColor,
+                    ),
+                    recognizer:
+                        TapGestureRecognizer()
+                          ..onTap = () {
+                            launchUrl(Lastfm.applicationSettingsUri);
+                          },
                   ),
-                  TextSpan(
-                    style: theme.textTheme.bodyMedium,
-                    text: '.',
-                  ),
+                  TextSpan(style: theme.textTheme.bodyMedium, text: '.'),
                 ],
               ),
             ),
@@ -103,12 +103,14 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
           if (_isSpotifyEnabled) ...[
             ListTile(
               title: Text(
-                  Preferences.hasSpotifyAuthData ? 'Logged In' : 'Account'),
+                Preferences.hasSpotifyAuthData ? 'Logged In' : 'Account',
+              ),
               leading: const Icon(Icons.vpn_key),
               trailing: TextButton(
                 onPressed: _updateSpotifyAccount,
-                child:
-                    Text(Preferences.hasSpotifyAuthData ? 'Log Out' : 'Log In'),
+                child: Text(
+                  Preferences.hasSpotifyAuthData ? 'Log Out' : 'Log In',
+                ),
               ),
             ),
             if (Preferences.hasSpotifyAuthData && isMobile)

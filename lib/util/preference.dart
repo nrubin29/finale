@@ -24,9 +24,9 @@ class Preference<T, U extends Object> {
   late final _changes = StreamController<T>.broadcast();
 
   Preference(this._key, {T? defaultValue, this.serialize, this.deserialize})
-      : assert(null is T || defaultValue != null),
-        assert((serialize != null) == (deserialize != null)),
-        _defaultValue = null is T ? defaultValue as T : defaultValue!;
+    : assert(null is T || defaultValue != null),
+      assert((serialize != null) == (deserialize != null)),
+      _defaultValue = null is T ? defaultValue as T : defaultValue!;
 
   static Preference<DateTime?, int> dateTime(String key) =>
       Preference<DateTime?, int>(
@@ -36,32 +36,36 @@ class Preference<T, U extends Object> {
       );
 
   static Preference<T, int> forEnum<T extends Enum>(
-          String key, List<T> enumValues,
-          {required T defaultValue}) =>
-      Preference<T, int>(
-        key,
-        defaultValue: defaultValue,
-        serialize: (value) => value.index,
-        deserialize: (serialized) => serialized < enumValues.length
-            ? enumValues[serialized]
-            : enumValues.first,
-      );
+    String key,
+    List<T> enumValues, {
+    required T defaultValue,
+  }) => Preference<T, int>(
+    key,
+    defaultValue: defaultValue,
+    serialize: (value) => value.index,
+    deserialize:
+        (serialized) =>
+            serialized < enumValues.length
+                ? enumValues[serialized]
+                : enumValues.first,
+  );
 
   static Preference<List<T>, List<String>> forEnumList<T extends Enum>(
-          String key, List<T> enumValues,
-          {required List<T> defaultValue}) =>
-      Preference<List<T>, List<String>>(
-        key,
-        defaultValue: defaultValue,
-        serialize: (values) => [for (final value in values) value.name],
-        deserialize: (serialized) {
-          final nameMap = enumValues.asNameMap();
-          return [
-            for (final name in serialized)
-              if (nameMap.containsKey(name)) nameMap[name]!
-          ];
-        },
-      );
+    String key,
+    List<T> enumValues, {
+    required List<T> defaultValue,
+  }) => Preference<List<T>, List<String>>(
+    key,
+    defaultValue: defaultValue,
+    serialize: (values) => [for (final value in values) value.name],
+    deserialize: (serialized) {
+      final nameMap = enumValues.asNameMap();
+      return [
+        for (final name in serialized)
+          if (nameMap.containsKey(name)) nameMap[name]!,
+      ];
+    },
+  );
 
   Stream<T> get changes => _changes.stream;
 
@@ -70,9 +74,10 @@ class Preference<T, U extends Object> {
       return _defaultValue;
     }
 
-    final preferenceValue = U == _StringList
-        ? _preferences.getStringList(_key) as U
-        : _preferences.get(_key) as U;
+    final preferenceValue =
+        U == _StringList
+            ? _preferences.getStringList(_key) as U
+            : _preferences.get(_key) as U;
 
     if (deserialize != null) {
       return deserialize!(preferenceValue);
@@ -97,8 +102,11 @@ class Preference<T, U extends Object> {
     } else if (value is List<String>) {
       _preferences.setStringList(_key, value);
     } else {
-      throw ArgumentError.value(newValue, null,
-          "Can't handle type $T. Provide a serialize function.");
+      throw ArgumentError.value(
+        newValue,
+        null,
+        "Can't handle type $T. Provide a serialize function.",
+      );
     }
 
     _changes.add(newValue);

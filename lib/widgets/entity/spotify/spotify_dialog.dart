@@ -6,16 +6,19 @@ class SpotifyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Row(children: [
-        Icon(SocialMediaIcons.spotify),
-        SizedBox(width: 10),
-        Text('Spotify Search')
-      ]),
+      title: const Row(
+        children: [
+          Icon(SocialMediaIcons.spotify),
+          SizedBox(width: 10),
+          Text('Spotify Search'),
+        ],
+      ),
       content: const Text(
-          'Sign in with your Spotify account to search and scrobble from '
-          'Spotify\'s database. Spotify\'s database is much cleaner than '
-          'Last.fm\'s, but it may not have some tracks.\n\nIf you don\'t want '
-          'to use this feature, you can disable it in the in-app settings.'),
+        'Sign in with your Spotify account to search and scrobble from '
+        'Spotify\'s database. Spotify\'s database is much cleaner than '
+        'Last.fm\'s, but it may not have some tracks.\n\nIf you don\'t want '
+        'to use this feature, you can disable it in the in-app settings.',
+      ),
       actions: [
         TextButton(
           child: const Text('Cancel'),

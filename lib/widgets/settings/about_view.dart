@@ -29,12 +29,16 @@ class AboutView extends StatelessWidget {
                     const Text('Finale', style: TextStyle(fontSize: 24)),
                     FutureBuilder<PackageInfo>(
                       future: PackageInfo.fromPlatform(),
-                      builder: (_, snapshot) => snapshot.hasData
-                          ? Text('Version ${snapshot.data!.fullVersion}')
-                          : const SizedBox(),
-                    )
+                      builder:
+                          (_, snapshot) =>
+                              snapshot.hasData
+                                  ? Text(
+                                    'Version ${snapshot.data!.fullVersion}',
+                                  )
+                                  : const SizedBox(),
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -46,19 +50,9 @@ class AboutView extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
                 children: const [
                   TextSpan(text: 'Made with '),
-                  WidgetSpan(
-                    child: Icon(
-                      Icons.favorite,
-                      size: 16,
-                    ),
-                  ),
+                  WidgetSpan(child: Icon(Icons.favorite, size: 16)),
                   TextSpan(text: ' and '),
-                  WidgetSpan(
-                    child: Icon(
-                      Icons.music_note,
-                      size: 16,
-                    ),
-                  ),
+                  WidgetSpan(child: Icon(Icons.music_note, size: 16)),
                   TextSpan(text: ' by Noah Rubin'),
                 ],
               ),

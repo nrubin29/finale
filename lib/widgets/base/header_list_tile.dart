@@ -13,9 +13,10 @@ class HeaderListTile extends StatelessWidget {
       title: Text(title),
       trailing: trailing,
       visualDensity: VisualDensity.compact,
-      textColor: theme.brightness == Brightness.light
-          ? theme.primaryColor
-          : Colors.white,
+      textColor:
+          theme.brightness == Brightness.light
+              ? theme.primaryColor
+              : Colors.white,
       tileColor: theme.colorScheme.surfaceContainer,
     );
   }

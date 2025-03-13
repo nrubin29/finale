@@ -17,8 +17,9 @@ class AppleMusicScrobbleBackgroundTask extends BackgroundTask {
     super.setup();
 
     Preferences.appleMusicEnabled.changes.listen(_onAppleMusicChange);
-    Preferences.appleMusicBackgroundScrobblingEnabled.changes
-        .listen(_onAppleMusicChange);
+    Preferences.appleMusicBackgroundScrobblingEnabled.changes.listen(
+      _onAppleMusicChange,
+    );
   }
 
   @override

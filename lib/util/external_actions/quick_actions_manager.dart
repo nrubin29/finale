@@ -44,17 +44,22 @@ void _handleLink(Uri? uri) {
   } else if (uri.host == 'album') {
     final name = uri.queryParameters['name']!;
     final artist = uri.queryParameters['artist']!;
-    externalActions.addTimestamped(ExternalAction.viewAlbum(
-        ConcreteBasicAlbum(name, ConcreteBasicArtist(artist))));
+    externalActions.addTimestamped(
+      ExternalAction.viewAlbum(
+        ConcreteBasicAlbum(name, ConcreteBasicArtist(artist)),
+      ),
+    );
   } else if (uri.host == 'artist') {
     final name = uri.queryParameters['name']!;
-    externalActions
-        .addTimestamped(ExternalAction.viewArtist(ConcreteBasicArtist(name)));
+    externalActions.addTimestamped(
+      ExternalAction.viewArtist(ConcreteBasicArtist(name)),
+    );
   } else if (uri.host == 'track') {
     final name = uri.queryParameters['name']!;
     final artist = uri.queryParameters['artist']!;
     externalActions.addTimestamped(
-        ExternalAction.viewTrack(BasicConcreteTrack(name, artist, null)));
+      ExternalAction.viewTrack(BasicConcreteTrack(name, artist, null)),
+    );
   } else if (uri.host == 'profiletab') {
     final tabString = uri.queryParameters['tab'];
     ProfileTab tab;

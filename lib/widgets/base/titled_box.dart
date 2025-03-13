@@ -18,26 +18,26 @@ class TitledBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
+    children: [
+      HeaderListTile(title, trailing: trailing),
+      const SizedBox(height: 8),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          HeaderListTile(title, trailing: trailing),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              for (final action in actions)
-                OutlinedButton(
-                  onPressed: action.onPressed,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(action.icon),
-                      const SizedBox(width: 8),
-                      Text(action.name),
-                    ],
-                  ),
-                ),
-            ],
-          ),
+          for (final action in actions)
+            OutlinedButton(
+              onPressed: action.onPressed,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(action.icon),
+                  const SizedBox(width: 8),
+                  Text(action.name),
+                ],
+              ),
+            ),
         ],
-      );
+      ),
+    ],
+  );
 }

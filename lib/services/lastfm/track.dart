@@ -28,8 +28,8 @@ class LRecentTracksResponseTrackArtist extends BasicArtist {
   LRecentTracksResponseTrackArtist(this.text, this.nameString, this.url);
 
   factory LRecentTracksResponseTrackArtist.fromJson(
-          Map<String, dynamic> json) =>
-      _$LRecentTracksResponseTrackArtistFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$LRecentTracksResponseTrackArtistFromJson(json);
 }
 
 @JsonSerializable()
@@ -76,8 +76,15 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   @JsonKey(name: 'loved', fromJson: convertStringToBoolean)
   final bool isLoved;
 
-  LRecentTracksResponseTrack(this.name, this.url, this.imageId, this.artist,
-      this.album, this.timestamp, this.isLoved);
+  LRecentTracksResponseTrack(
+    this.name,
+    this.url,
+    this.imageId,
+    this.artist,
+    this.album,
+    this.timestamp,
+    this.isLoved,
+  );
 
   @override
   String get artistName => artist.name;
@@ -112,14 +119,15 @@ class LRecentTracksResponseRecentTracks {
   const LRecentTracksResponseRecentTracks(this.attr, this.tracks);
 
   factory LRecentTracksResponseRecentTracks.fromJson(
-          Map<String, dynamic> json) =>
-      _$LRecentTracksResponseRecentTracksFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$LRecentTracksResponseRecentTracksFromJson(json);
 
   // If there's only one track, the Last.fm API in its infinite wisdom doesn't
   // wrap it in an array.
-  static List<LRecentTracksResponseTrack> parseTracks(json) => json == null
-      ? []
-      : json is List<dynamic>
+  static List<LRecentTracksResponseTrack> parseTracks(json) =>
+      json == null
+          ? []
+          : json is List<dynamic>
           ? json
               .map((json) => LRecentTracksResponseTrack.fromJson(json))
               .toList()
@@ -249,17 +257,18 @@ class LTrack extends Track {
   String get displayTrailing => pluralize(userPlayCount);
 
   LTrack(
-      this.name,
-      this.url,
-      this.duration,
-      this.listeners,
-      this.playCount,
-      this.userPlayCount,
-      this.userLoved,
-      this.artist,
-      this.album,
-      this.topTags,
-      this.wiki);
+    this.name,
+    this.url,
+    this.duration,
+    this.listeners,
+    this.playCount,
+    this.userPlayCount,
+    this.userLoved,
+    this.artist,
+    this.album,
+    this.topTags,
+    this.wiki,
+  );
 
   factory LTrack.fromJson(Map<String, dynamic> json) => _$LTrackFromJson(json);
 }

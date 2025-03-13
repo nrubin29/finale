@@ -65,7 +65,13 @@ class SAlbumFull extends FullAlbum {
       .toList(growable: false);
 
   SAlbumFull(
-      this.artists, this.url, this.name, this.id, this.imageId, this.rawTracks);
+    this.artists,
+    this.url,
+    this.name,
+    this.id,
+    this.imageId,
+    this.rawTracks,
+  );
 
   factory SAlbumFull.fromJson(Map<String, dynamic> json) =>
       _$SAlbumFullFromJson(json);
@@ -81,7 +87,7 @@ class SAlbumTrack extends STrackSimple {
   final String albumName;
 
   SAlbumTrack(STrackSimple track, this.albumName)
-      : super(track.artists, track.durationMs, track.url, track.name);
+    : super(track.artists, track.durationMs, track.url, track.name);
 
   @override
   String? get displaySubtitle => null;

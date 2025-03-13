@@ -15,25 +15,26 @@ class SpotifyPlaylistView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar(
-          context,
-          playlist.name,
-          backgroundColor: spotifyGreen,
-          actions: [
-            if (playlist.isNotEmpty)
-              ScrobbleButton(
-                  entityProvider: () => Spotify.getFullPlaylist(playlist)),
-          ],
+    appBar: createAppBar(
+      context,
+      playlist.name,
+      backgroundColor: spotifyGreen,
+      actions: [
+        if (playlist.isNotEmpty)
+          ScrobbleButton(
+            entityProvider: () => Spotify.getFullPlaylist(playlist),
+          ),
+      ],
+    ),
+    body: TwoUp(
+      entity: playlist,
+      listItems: [
+        EntityDisplay<STrack>(
+          request: SPlaylistTracksRequest(playlist),
+          scrollable: false,
+          scrobbleableEntity: (track) => Future.value(track),
         ),
-        body: TwoUp(
-          entity: playlist,
-          listItems: [
-            EntityDisplay<STrack>(
-              request: SPlaylistTracksRequest(playlist),
-              scrollable: false,
-              scrobbleableEntity: (track) => Future.value(track),
-            ),
-          ],
-        ),
-      );
+      ],
+    ),
+  );
 }

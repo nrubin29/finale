@@ -21,7 +21,8 @@ Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
     'method': method,
   };
 
-  final hash = (allData.keys.toList()..sort())
+  final hash =
+      (allData.keys.toList()..sort())
           .map((key) => '$key${allData[key]}')
           .join() +
       apiSecret;
@@ -30,19 +31,24 @@ Uri _buildUri(String method, Map<String, dynamic> data, {bool libre = false}) {
   allData['format'] = 'json';
 
   return Uri(
-      scheme: 'https',
-      host: libre ? 'libre.fm' : 'ws.audioscrobbler.com',
-      path: '2.0/',
-      queryParameters: allData);
+    scheme: 'https',
+    host: libre ? 'libre.fm' : 'ws.audioscrobbler.com',
+    path: '2.0/',
+    queryParameters: allData,
+  );
 }
 
 Future<Map<String, dynamic>> _doRequest(
-    String method, Map<String, dynamic> data,
-    {bool post = false, bool libre = false}) async {
+  String method,
+  Map<String, dynamic> data, {
+  bool post = false,
+  bool libre = false,
+}) async {
   final uri = _buildUri(method, data, libre: libre);
-  final response = post
-      ? await httpClient.post(uri, body: libre ? uri.queryParameters : null)
-      : await httpClient.get(uri);
+  final response =
+      post
+          ? await httpClient.post(uri, body: libre ? uri.queryParameters : null)
+          : await httpClient.get(uri);
 
   dynamic jsonObject;
 
@@ -50,7 +56,8 @@ Future<Map<String, dynamic>> _doRequest(
     jsonObject = json.decode(utf8.decode(response.bodyBytes));
   } on FormatException {
     throw Exception(
-        'Could not do request $method($data). Got response ${response.body}');
+      'Could not do request $method($data). Got response ${response.body}',
+    );
   }
 
   if (jsonObject is! Map<String, dynamic>) {
@@ -77,14 +84,18 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
     this.extended = false,
   });
 
-  GetRecentTracksRequest.forPeriod(this.username, Period period,
-      {this.extended = false})
-      : from = period.relativeStart,
-        to = period.end,
-        includeCurrentScrobble = false;
+  GetRecentTracksRequest.forPeriod(
+    this.username,
+    Period period, {
+    this.extended = false,
+  }) : from = period.relativeStart,
+       to = period.end,
+       includeCurrentScrobble = false;
 
   Future<LRecentTracksResponseRecentTracks> _doRecentTracksRequest(
-      int limit, int page) async {
+    int limit,
+    int page,
+  ) async {
     Map<String, dynamic> rawResponse;
 
     try {
@@ -106,7 +117,8 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
     }
 
     return LRecentTracksResponseRecentTracks.fromJson(
-        rawResponse['recenttracks']);
+      rawResponse['recenttracks'],
+    );
   }
 
   @override
@@ -128,7 +140,8 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
       (await _doRecentTracksRequest(1, 1)).attr.total;
 
   @override
-  String toString() => 'GetRecentTracksRequest(user=$username, '
+  String toString() =>
+      'GetRecentTracksRequest(user=$username, '
       'from=${from?.secondsSinceEpoch}, to=${to?.secondsSinceEpoch}, '
       'extended=$extended)';
 }
@@ -153,9 +166,14 @@ class GetTopArtistsRequest
 
   @override
   Future<LTopArtistsResponseArtist> map(
-          MapEntry<String, List<LRecentTracksResponseTrack>> entry) =>
-      Future.value(LTopArtistsResponseArtist(
-          entry.key, entry.value.first.artist.url!, entry.value.length));
+    MapEntry<String, List<LRecentTracksResponseTrack>> entry,
+  ) => Future.value(
+    LTopArtistsResponseArtist(
+      entry.key,
+      entry.value.first.artist.url!,
+      entry.value.length,
+    ),
+  );
 }
 
 class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
@@ -177,18 +195,24 @@ class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
 
   @override
   Future<LTopAlbumsResponseAlbum> map(
-      MapEntry<String, List<LRecentTracksResponseTrack>> entry) async {
+    MapEntry<String, List<LRecentTracksResponseTrack>> entry,
+  ) async {
     final basicAlbum = ConcreteBasicAlbum(
-        entry.key, ConcreteBasicArtist(entry.value.first.artist.name));
+      entry.key,
+      ConcreteBasicArtist(entry.value.first.artist.name),
+    );
     final fullAlbum = await Lastfm.getAlbum(basicAlbum);
 
     return LTopAlbumsResponseAlbum(
-        fullAlbum.name,
-        fullAlbum.url,
-        entry.value.length,
-        LTopAlbumsResponseAlbumArtist(
-            fullAlbum.artist.name, fullAlbum.artist.url),
-        fullAlbum.imageId);
+      fullAlbum.name,
+      fullAlbum.url,
+      entry.value.length,
+      LTopAlbumsResponseAlbumArtist(
+        fullAlbum.artist.name,
+        fullAlbum.artist.url,
+      ),
+      fullAlbum.imageId,
+    );
   }
 }
 
@@ -211,13 +235,18 @@ class GetTopTracksRequest extends PeriodPagedRequest<LTopTracksResponseTrack> {
 
   @override
   Future<LTopTracksResponseTrack> map(
-          MapEntry<String, List<LRecentTracksResponseTrack>> entry) =>
-      Future.value(LTopTracksResponseTrack(
-          entry.key,
-          entry.value.first.url,
-          LTrackArtist(entry.value.first.artist.nameString!,
-              entry.value.first.artist.url!),
-          entry.value.length));
+    MapEntry<String, List<LRecentTracksResponseTrack>> entry,
+  ) => Future.value(
+    LTopTracksResponseTrack(
+      entry.key,
+      entry.value.first.url,
+      LTrackArtist(
+        entry.value.first.artist.nameString!,
+        entry.value.first.artist.url!,
+      ),
+      entry.value.length,
+    ),
+  );
 }
 
 class GetFriendsRequest extends PagedRequest<LUser> {
@@ -227,8 +256,11 @@ class GetFriendsRequest extends PagedRequest<LUser> {
 
   @override
   doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest(
-        'user.getFriends', {'user': username, 'limit': limit, 'page': page});
+    final rawResponse = await _doRequest('user.getFriends', {
+      'user': username,
+      'limit': limit,
+      'page': page,
+    });
     return LUserFriendsResponse.fromJson(rawResponse['friends']).friends;
   }
 
@@ -243,10 +275,14 @@ class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
 
   @override
   Future<List<LTrackMatch>> doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest(
-        'track.search', {'track': query, 'limit': limit, 'page': page});
-    return LTrackSearchResponse.fromJson(rawResponse['results']['trackmatches'])
-        .tracks;
+    final rawResponse = await _doRequest('track.search', {
+      'track': query,
+      'limit': limit,
+      'page': page,
+    });
+    return LTrackSearchResponse.fromJson(
+      rawResponse['results']['trackmatches'],
+    ).tracks;
   }
 
   @override
@@ -260,11 +296,14 @@ class LSearchArtistsRequest extends PagedRequest<LArtistMatch> {
 
   @override
   Future<List<LArtistMatch>> doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest(
-        'artist.search', {'artist': query, 'limit': limit, 'page': page});
+    final rawResponse = await _doRequest('artist.search', {
+      'artist': query,
+      'limit': limit,
+      'page': page,
+    });
     return LArtistSearchResponse.fromJson(
-            rawResponse['results']['artistmatches'])
-        .artists;
+      rawResponse['results']['artistmatches'],
+    ).artists;
   }
 
   @override
@@ -278,10 +317,14 @@ class LSearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
 
   @override
   Future<List<LAlbumMatch>> doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest(
-        'album.search', {'album': query, 'limit': limit, 'page': page});
-    return LAlbumSearchResponse.fromJson(rawResponse['results']['albummatches'])
-        .albums;
+    final rawResponse = await _doRequest('album.search', {
+      'album': query,
+      'limit': limit,
+      'page': page,
+    });
+    return LAlbumSearchResponse.fromJson(
+      rawResponse['results']['albummatches'],
+    ).albums;
   }
 
   @override
@@ -295,10 +338,14 @@ class ArtistGetTopAlbumsRequest extends PagedRequest<LArtistTopAlbum> {
 
   @override
   Future<List<LArtistTopAlbum>> doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest('artist.getTopAlbums',
-        {'artist': artist, 'limit': limit, 'page': page});
-    return LArtistGetTopAlbumsResponse.fromJson(rawResponse['topalbums'])
-        .albums;
+    final rawResponse = await _doRequest('artist.getTopAlbums', {
+      'artist': artist,
+      'limit': limit,
+      'page': page,
+    });
+    return LArtistGetTopAlbumsResponse.fromJson(
+      rawResponse['topalbums'],
+    ).albums;
   }
 
   @override
@@ -312,10 +359,14 @@ class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
 
   @override
   Future<List<LArtistTopTrack>> doRequest(int limit, int page) async {
-    final rawResponse = await _doRequest('artist.getTopTracks',
-        {'artist': artist, 'limit': limit, 'page': page});
-    return LArtistGetTopTracksResponse.fromJson(rawResponse['toptracks'])
-        .tracks;
+    final rawResponse = await _doRequest('artist.getTopTracks', {
+      'artist': artist,
+      'limit': limit,
+      'page': page,
+    });
+    return LArtistGetTopTracksResponse.fromJson(
+      rawResponse['toptracks'],
+    ).tracks;
   }
 
   @override
@@ -338,12 +389,14 @@ class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
       'page': page,
       'sk': Preferences.key.value,
     });
-    return LUserTrackScrobblesResponse.fromJson(rawResponse['trackscrobbles'])
-        .tracks;
+    return LUserTrackScrobblesResponse.fromJson(
+      rawResponse['trackscrobbles'],
+    ).tracks;
   }
 
   @override
-  String toString() => 'UserGetTrackScrobblesRequest(track=${track.name}, '
+  String toString() =>
+      'UserGetTrackScrobblesRequest(track=${track.name}, '
       'artist=${track.artistName}, user=${username ?? Preferences.name.value})';
 }
 
@@ -368,13 +421,21 @@ class UserGetLovedTracksRequest extends PagedRequest<LUserLovedTrack> {
 }
 
 class Lastfm {
-  static final applicationSettingsUri =
-      Uri.https('last.fm', 'settings/applications');
+  static final applicationSettingsUri = Uri.https(
+    'last.fm',
+    'settings/applications',
+  );
 
-  static Future<LAuthenticationResponseSession> authenticate(String token,
-      {bool libre = false}) async {
-    final rawResponse = await _doRequest('auth.getSession', {'token': token},
-        post: true, libre: libre);
+  static Future<LAuthenticationResponseSession> authenticate(
+    String token, {
+    bool libre = false,
+  }) async {
+    final rawResponse = await _doRequest(
+      'auth.getSession',
+      {'token': token},
+      post: true,
+      libre: libre,
+    );
     return LAuthenticationResponseSession.fromJson(rawResponse['session']);
   }
 
@@ -401,8 +462,10 @@ class Lastfm {
     return LAlbum.fromJson(rawResponse['album']);
   }
 
-  static Future<LArtist> getArtist(BasicArtist artist,
-      {String? username}) async {
+  static Future<LArtist> getArtist(
+    BasicArtist artist, {
+    String? username,
+  }) async {
     final rawResponse = await _doRequest('artist.getInfo', {
       'artist': artist.name,
       'username': username ?? Preferences.name.value,
@@ -410,22 +473,30 @@ class Lastfm {
     return LArtist.fromJson(rawResponse['artist']);
   }
 
-  static Future<List<LSimilarArtist>> getSimilarArtists(BasicArtist artist,
-      {int limit = 20}) async {
-    final rawResponse = await _doRequest(
-        'artist.getSimilar', {'artist': artist.name, 'limit': limit});
-    return LSimilarArtistsResponse.fromJson(rawResponse['similarartists'])
-        .artists;
+  static Future<List<LSimilarArtist>> getSimilarArtists(
+    BasicArtist artist, {
+    int limit = 20,
+  }) async {
+    final rawResponse = await _doRequest('artist.getSimilar', {
+      'artist': artist.name,
+      'limit': limit,
+    });
+    return LSimilarArtistsResponse.fromJson(
+      rawResponse['similarartists'],
+    ).artists;
   }
 
   static Future<LUserWeeklyChartList> getWeeklyChartList(LUser user) async {
-    final rawResponse =
-        await _doRequest('user.getWeeklyChartList', {'user': user.name});
+    final rawResponse = await _doRequest('user.getWeeklyChartList', {
+      'user': user.name,
+    });
     return LUserWeeklyChartList.fromJson(rawResponse['weeklychartlist']);
   }
 
   static Future<LUserWeeklyTrackChart> getWeeklyTrackChart(
-      LUser user, LUserWeeklyChart chart) async {
+    LUser user,
+    LUserWeeklyChart chart,
+  ) async {
     final rawResponse = await _doRequest('user.getWeeklyTrackChart', {
       'user': user.name,
       'from': chart.from,
@@ -435,7 +506,9 @@ class Lastfm {
   }
 
   static Future<LUserWeeklyAlbumChart> getWeeklyAlbumChart(
-      LUser user, LUserWeeklyChart chart) async {
+    LUser user,
+    LUserWeeklyChart chart,
+  ) async {
     final rawResponse = await _doRequest('user.getWeeklyAlbumChart', {
       'user': user.name,
       'from': chart.from,
@@ -445,7 +518,9 @@ class Lastfm {
   }
 
   static Future<LUserWeeklyArtistChart> getWeeklyArtistChart(
-      LUser user, LUserWeeklyChart chart) async {
+    LUser user,
+    LUserWeeklyChart chart,
+  ) async {
     final rawResponse = await _doRequest('user.getWeeklyArtistChart', {
       'user': user.name,
       'from': chart.from,
@@ -455,14 +530,19 @@ class Lastfm {
   }
 
   static Future<List<LTopArtistsResponseArtist>> getGlobalTopArtists(
-      int limit) async {
-    final rawResponse =
-        await _doRequest('chart.getTopArtists', {'limit': limit, 'page': 1});
+    int limit,
+  ) async {
+    final rawResponse = await _doRequest('chart.getTopArtists', {
+      'limit': limit,
+      'page': 1,
+    });
     return LChartTopArtists.fromJson(rawResponse['artists']).artists;
   }
 
   static Future<LScrobbleResponseScrobblesAttr> scrobble(
-      List<Track> tracks, List<DateTime> timestamps) async {
+    List<Track> tracks,
+    List<DateTime> timestamps,
+  ) async {
     assert(timestamps.length - tracks.length <= 1);
 
     var accepted = 0;
@@ -470,12 +550,14 @@ class Lastfm {
 
     final zip = IterableZip([
       tracks.splitBeforeIndexed((i, _) => i % 50 == 0),
-      timestamps.splitBeforeIndexed((i, _) => i % 50 == 0)
+      timestamps.splitBeforeIndexed((i, _) => i % 50 == 0),
     ]);
 
     for (var entry in zip) {
-      final response =
-          await _scrobble(entry[0] as List<Track>, entry[1] as List<DateTime>);
+      final response = await _scrobble(
+        entry[0] as List<Track>,
+        entry[1] as List<DateTime>,
+      );
       accepted += response.accepted;
       ignored += response.ignored;
     }
@@ -484,7 +566,9 @@ class Lastfm {
   }
 
   static Future<LScrobbleResponseScrobblesAttr> _scrobble(
-      List<Track> tracks, List<DateTime> timestamps) async {
+    List<Track> tracks,
+    List<DateTime> timestamps,
+  ) async {
     assert(tracks.length <= 50);
     assert(timestamps.length <= 50);
     final data = <String, dynamic>{};
@@ -505,15 +589,20 @@ class Lastfm {
 
     if (Preferences.libreEnabled.value) {
       await _doRequest(
-          'track.scrobble', {...data, 'sk': Preferences.libreKey.value},
-          post: true, libre: true);
+        'track.scrobble',
+        {...data, 'sk': Preferences.libreKey.value},
+        post: true,
+        libre: true,
+      );
     }
 
-    final rawResponse = await _doRequest(
-        'track.scrobble', {...data, 'sk': Preferences.key.value},
-        post: true);
+    final rawResponse = await _doRequest('track.scrobble', {
+      ...data,
+      'sk': Preferences.key.value,
+    }, post: true);
     return LScrobbleResponseScrobblesAttr.fromJson(
-        rawResponse['scrobbles']['@attr']);
+      rawResponse['scrobbles']['@attr'],
+    );
   }
 
   /// Loves or unloves a track. If [love] is true, the track will be loved;
@@ -523,14 +612,11 @@ class Lastfm {
       return false;
     }
 
-    await _doRequest(
-        love ? 'track.love' : 'track.unlove',
-        {
-          'track': track.name,
-          'artist': track.artistName,
-          'sk': Preferences.key.value,
-        },
-        post: true);
+    await _doRequest(love ? 'track.love' : 'track.unlove', {
+      'track': track.name,
+      'artist': track.artistName,
+      'sk': Preferences.key.value,
+    }, post: true);
     return true;
   }
 }

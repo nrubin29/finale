@@ -46,8 +46,12 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     List<LRecentTracksResponseTrack> response;
 
     try {
-      response = await GetRecentTracksRequest(username, from: _start, to: _end)
-          .getAllData();
+      response =
+          await GetRecentTracksRequest(
+            username,
+            from: _start,
+            to: _end,
+          ).getAllData();
     } on LException catch (e) {
       if (e.code == 6) {
         response = <LRecentTracksResponseTrack>[];
@@ -57,8 +61,11 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     }
 
     if (response.isEmpty) {
-      showNoEntityTypePeriodDialog(context,
-          entityType: EntityType.track, username: username);
+      showNoEntityTypePeriodDialog(
+        context,
+        entityType: EntityType.track,
+        username: username,
+      );
       return null;
     }
 
@@ -71,15 +78,17 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
 
   Future<void> _scrobble() async {
     final response = await Lastfm.scrobble(
-        _selection!,
-        _selection!
-            .map((track) => track.timestamp?.date ?? DateTime.now())
-            .toList(growable: false));
+      _selection!,
+      _selection!
+          .map((track) => track.timestamp?.date ?? DateTime.now())
+          .toList(growable: false),
+    );
 
     if (response.ignored == 0) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Scrobbled successfully!')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Scrobbled successfully!')));
 
       // Ask for a review
       if (await InAppReview.instance.isAvailable()) {
@@ -87,7 +96,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('An error occurred while scrobbling')));
+        const SnackBar(content: Text('An error occurred while scrobbling')),
+      );
     }
   }
 
@@ -104,20 +114,21 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar(
-          context,
-          'Scrobble from a friend',
-          actions: [
-            IconButton(
-              icon: const Icon(scrobbleIcon),
-              onPressed: _hasItemsToScrobble ? _scrobble : null,
-            ),
-          ],
+    appBar: createAppBar(
+      context,
+      'Scrobble from a friend',
+      actions: [
+        IconButton(
+          icon: const Icon(scrobbleIcon),
+          onPressed: _hasItemsToScrobble ? _scrobble : null,
         ),
-        body: CollapsibleFormView<List<LRecentTracksResponseTrack>>(
-          submitButtonText: 'Load Scrobbles',
-          onFormSubmit: _loadData,
-          formWidgetsBuilder: (_) => [
+      ],
+    ),
+    body: CollapsibleFormView<List<LRecentTracksResponseTrack>>(
+      submitButtonText: 'Load Scrobbles',
+      onFormSubmit: _loadData,
+      formWidgetsBuilder:
+          (_) => [
             ListTileTextField(
               title: 'Username',
               controller: _usernameTextController,
@@ -154,8 +165,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
               ),
             ),
           ],
-          bodyBuilder: (_, items) =>
-              EntityCheckboxList<LRecentTracksResponseTrack>(
+      bodyBuilder:
+          (_, items) => EntityCheckboxList<LRecentTracksResponseTrack>(
             items: items,
             scrollable: false,
             onSelectionChanged: (selection) {
@@ -163,12 +174,14 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                 _selection = selection;
               });
             },
-            trailingWidgetBuilder: (track) => track.timestamp != null
-                ? const SizedBox()
-                : const NowPlayingAnimation(),
+            trailingWidgetBuilder:
+                (track) =>
+                    track.timestamp != null
+                        ? const SizedBox()
+                        : const NowPlayingAnimation(),
           ),
-        ),
-      );
+    ),
+  );
 
   @override
   void dispose() {

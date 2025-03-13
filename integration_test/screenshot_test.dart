@@ -29,9 +29,10 @@ final isIos = device.contains('iPhone') || device.contains('iPad');
 final isIpad = device.contains('iPad');
 final isMacOS = device.contains('macOS');
 final isAndroid = !isIos && !isMacOS;
-final directory = isIos
-    ? '/Users/noahrubin/Documents/DartProjects/finale/screenshots/$device'
-    : isMacOS
+final directory =
+    isIos
+        ? '/Users/noahrubin/Documents/DartProjects/finale/screenshots/$device'
+        : isMacOS
         ? '/Users/noahrubin/Downloads/$device'
         : '/sdcard/Documents/$device';
 
@@ -61,18 +62,28 @@ Future<void> main() async {
   ///
   /// If [widgetBehindModal] is not null, [widget] will be displayed as a bar
   /// bottom modal on top of [widgetBehindModal].
-  Future<void> pumpWidget(WidgetTester tester, Widget widget,
-      {bool asPage = false, Widget? widgetBehindModal}) async {
-    await tester.pumpWidget(ProfileStack(
-      child: MaterialApp(
-        title: 'Finale',
-        theme: finaleTheme(ThemeColor.red, Brightness.light),
-        debugShowCheckedModeBanner: false,
-        home: asPage || widgetBehindModal != null
-            ? _AsPage(widget: widget, widgetBehindModal: widgetBehindModal)
-            : widget,
+  Future<void> pumpWidget(
+    WidgetTester tester,
+    Widget widget, {
+    bool asPage = false,
+    Widget? widgetBehindModal,
+  }) async {
+    await tester.pumpWidget(
+      ProfileStack(
+        child: MaterialApp(
+          title: 'Finale',
+          theme: finaleTheme(ThemeColor.red, Brightness.light),
+          debugShowCheckedModeBanner: false,
+          home:
+              asPage || widgetBehindModal != null
+                  ? _AsPage(
+                    widget: widget,
+                    widgetBehindModal: widgetBehindModal,
+                  )
+                  : widget,
+        ),
       ),
-    ));
+    );
 
     await tester.pumpAndSettle();
   }
@@ -87,12 +98,15 @@ Future<void> main() async {
     await tester.tap(find.byIcon(scrobbleIcon));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Custom timestamp', skipOffstage: !isAndroid),
-        warnIfMissed: !isAndroid);
+    await tester.tap(
+      find.text('Custom timestamp', skipOffstage: !isAndroid),
+      warnIfMissed: !isAndroid,
+    );
     await tester.pumpAndSettle();
 
-    final formFields =
-        find.byWidgetPredicate((widget) => widget is TextFormField);
+    final formFields = find.byWidgetPredicate(
+      (widget) => widget is TextFormField,
+    );
     await tester.enterText(formFields.at(0), 'Trapdoor');
     await tester.enterText(formFields.at(1), 'The Dear Hunter');
     await tester.enterText(formFields.at(2), 'The Color Spectrum');
@@ -119,8 +133,10 @@ Future<void> main() async {
     await tester.pumpAndSettle();
 
     // Collage Generator page
-    await tester.tap(find.text('Generate', skipOffstage: !isAndroid),
-        warnIfMissed: !isAndroid);
+    await tester.tap(
+      find.text('Generate', skipOffstage: !isAndroid),
+      warnIfMissed: !isAndroid,
+    );
     await tester.pumpMany();
 
     if (isIpad) {
@@ -132,8 +148,13 @@ Future<void> main() async {
   });
 
   testWidgets('Track screen', (tester) async {
-    final track = await Lastfm.getTrack(BasicConcreteTrack(
-        'A Lack of Color', 'Death Cab for Cutie', 'Transatlanticism'));
+    final track = await Lastfm.getTrack(
+      BasicConcreteTrack(
+        'A Lack of Color',
+        'Death Cab for Cutie',
+        'Transatlanticism',
+      ),
+    );
 
     await pumpWidget(tester, TrackView(track: track), asPage: true);
     await tester.saveScreenshot('5_track');
@@ -147,19 +168,24 @@ Future<void> main() async {
   });
 
   testWidgets('Album screen', (tester) async {
-    final album =
-        await Lastfm.getAlbum(FullConcreteAlbum('Always Repeating', 'Runnner'));
+    final album = await Lastfm.getAlbum(
+      FullConcreteAlbum('Always Repeating', 'Runnner'),
+    );
 
     await pumpWidget(tester, AlbumView(album: album), asPage: true);
     await tester.saveScreenshot('7_album');
   });
 
   testWidgets('Album scrobble screen', (tester) async {
-    final album =
-        await Lastfm.getAlbum(FullConcreteAlbum('The Everglow', 'Mae'));
+    final album = await Lastfm.getAlbum(
+      FullConcreteAlbum('The Everglow', 'Mae'),
+    );
 
-    await pumpWidget(tester, BatchScrobbleView(entity: album),
-        widgetBehindModal: AlbumView(album: album));
+    await pumpWidget(
+      tester,
+      BatchScrobbleView(entity: album),
+      widgetBehindModal: AlbumView(album: album),
+    );
 
     await tester.tap(find.text('Tracks'), warnIfMissed: !isAndroid);
     await tester.pumpAndSettle();
@@ -186,12 +212,15 @@ class _AsPageState extends State<_AsPage> {
     Future.delayed(const Duration(milliseconds: 100), () async {
       if (widget.widgetBehindModal != null) {
         await showBarModalBottomSheet(
-            context: context,
-            duration: Duration.zero,
-            builder: (_) => widget.widget);
+          context: context,
+          duration: Duration.zero,
+          builder: (_) => widget.widget,
+        );
       } else {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => widget.widget));
+          context,
+          MaterialPageRoute(builder: (_) => widget.widget),
+        );
       }
     });
   }
@@ -214,8 +243,10 @@ extension on WidgetTester {
     }
     assert(!renderObject.debugNeedsPaint);
     final layer = renderObject.debugLayer! as OffsetLayer;
-    final image = layer.toImage(renderObject.paintBounds,
-        pixelRatio: isIpad || isMacOS ? 2 : 3);
+    final image = layer.toImage(
+      renderObject.paintBounds,
+      pixelRatio: isIpad || isMacOS ? 2 : 3,
+    );
     // END: Copied code.
 
     await expectLater(image, matchesGoldenFile('$directory/$name.png'));

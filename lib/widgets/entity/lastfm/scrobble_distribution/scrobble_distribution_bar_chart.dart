@@ -18,77 +18,79 @@ class ScrobbleDistributionBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BarChart(
-        BarChartData(
-          barGroups: [
-            for (final (i, item) in items.indexed)
-              BarChartGroupData(
-                x: i,
-                barRods: [
-                  BarChartRodData(
-                    toY: item.scrobbles.toDouble(),
-                    color: Preferences.themeColor.value.color,
-                  ),
-                ],
-                showingTooltipIndicators: [0],
+    BarChartData(
+      barGroups: [
+        for (final (i, item) in items.indexed)
+          BarChartGroupData(
+            x: i,
+            barRods: [
+              BarChartRodData(
+                toY: item.scrobbles.toDouble(),
+                color: Preferences.themeColor.value.color,
               ),
-          ],
-          alignment: BarChartAlignment.center,
-          rotationQuarterTurns: 1,
-          titlesData: FlTitlesData(
-            leftTitles: const AxisTitles(),
-            topTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 72,
-                getTitlesWidget: (_, __) => const SizedBox(),
-              ),
-            ),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 48,
-                maxIncluded: false,
-                getTitlesWidget: (value, meta) => SideTitleWidget(
+            ],
+            showingTooltipIndicators: [0],
+          ),
+      ],
+      alignment: BarChartAlignment.center,
+      rotationQuarterTurns: 1,
+      titlesData: FlTitlesData(
+        leftTitles: const AxisTitles(),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 72,
+            getTitlesWidget: (_, __) => const SizedBox(),
+          ),
+        ),
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 48,
+            maxIncluded: false,
+            getTitlesWidget:
+                (value, meta) => SideTitleWidget(
                   meta: meta,
                   child: Text(meta.formattedValue),
                 ),
-              ),
-            ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 48,
-                getTitlesWidget: (value, meta) => SideTitleWidget(
+          ),
+        ),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 48,
+            getTitlesWidget:
+                (value, meta) => SideTitleWidget(
                   meta: meta,
                   child: Text(items[value.toInt()].shortTitle),
                 ),
-              ),
-            ),
           ),
-          barTouchData: BarTouchData(
-            touchCallback: (event, response) {
-              if (event is! FlTapUpEvent && event is! FlLongPressEnd) {
-                return;
-              }
-              final index = response?.spot?.touchedBarGroup.x;
-              if (index != null) {
-                onTap(items[index]);
-              }
-            },
-            touchTooltipData: BarTouchTooltipData(
-              getTooltipColor: (_) => Colors.transparent,
-              getTooltipItem: (_, __, rod, ___) => rod.toY == 0
-                  ? null
-                  : BarTooltipItem(
-                      numberFormat.format(rod.toY),
-                      Theme.of(context).textTheme.bodyMedium!,
-                    ),
-            ),
-          ),
-          gridData: const FlGridData(
-            drawVerticalLine: false,
-          ),
-          borderData: FlBorderData(show: false),
         ),
-      );
+      ),
+      barTouchData: BarTouchData(
+        touchCallback: (event, response) {
+          if (event is! FlTapUpEvent && event is! FlLongPressEnd) {
+            return;
+          }
+          final index = response?.spot?.touchedBarGroup.x;
+          if (index != null) {
+            onTap(items[index]);
+          }
+        },
+        touchTooltipData: BarTouchTooltipData(
+          getTooltipColor: (_) => Colors.transparent,
+          getTooltipItem:
+              (_, __, rod, ___) =>
+                  rod.toY == 0
+                      ? null
+                      : BarTooltipItem(
+                        numberFormat.format(rod.toY),
+                        Theme.of(context).textTheme.bodyMedium!,
+                      ),
+        ),
+      ),
+      gridData: const FlGridData(drawVerticalLine: false),
+      borderData: FlBorderData(show: false),
+    ),
+  );
 }

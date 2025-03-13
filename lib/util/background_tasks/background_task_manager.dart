@@ -12,8 +12,10 @@ final _tasks = [
 ];
 
 Future<void> setup() async {
-  await Workmanager()
-      .initialize(backgroundTaskDispatcher, isInDebugMode: isDebug);
+  await Workmanager().initialize(
+    backgroundTaskDispatcher,
+    isInDebugMode: isDebug,
+  );
 
   await Future.wait(_tasks.map((task) => task.setup()));
 }

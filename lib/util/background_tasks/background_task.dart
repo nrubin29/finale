@@ -34,14 +34,21 @@ abstract class BackgroundTask {
     if (!await shouldRun) return;
 
     try {
-      await Workmanager().registerOneOffTask(name, name,
-          initialDelay: initialDelay,
-          constraints: Constraints(
-              networkType: NetworkType.connected, requiresCharging: false));
+      await Workmanager().registerOneOffTask(
+        name,
+        name,
+        initialDelay: initialDelay,
+        constraints: Constraints(
+          networkType: NetworkType.connected,
+          requiresCharging: false,
+        ),
+      );
     } on PlatformException {
       if (kDebugMode) {
-        print('Unable to register background task. This is expected in the '
-            'simulator.');
+        print(
+          'Unable to register background task. This is expected in the '
+          'simulator.',
+        );
       }
     }
   }

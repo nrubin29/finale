@@ -13,32 +13,32 @@ class ExternalAction {
   final dynamic value;
 
   ExternalAction.scrobbleOnce()
-      : type = ExternalActionType.scrobbleOnce,
-        value = null;
+    : type = ExternalActionType.scrobbleOnce,
+      value = null;
 
   ExternalAction.scrobbleContinuously()
-      : type = ExternalActionType.scrobbleContinuously,
-        value = null;
+    : type = ExternalActionType.scrobbleContinuously,
+      value = null;
 
   ExternalAction.viewAlbum(BasicAlbum album)
-      : type = ExternalActionType.viewAlbum,
-        value = album;
+    : type = ExternalActionType.viewAlbum,
+      value = album;
 
   ExternalAction.viewArtist(BasicArtist artist)
-      : type = ExternalActionType.viewArtist,
-        value = artist;
+    : type = ExternalActionType.viewArtist,
+      value = artist;
 
   ExternalAction.viewTrack(Track track)
-      : type = ExternalActionType.viewTrack,
-        value = track;
+    : type = ExternalActionType.viewTrack,
+      value = track;
 
   ExternalAction.viewTab(ProfileTab tab)
-      : type = ExternalActionType.viewTab,
-        value = tab;
+    : type = ExternalActionType.viewTab,
+      value = tab;
 
   ExternalAction.openSpotifyChecker()
-      : type = ExternalActionType.openSpotifyChecker,
-        value = null;
+    : type = ExternalActionType.openSpotifyChecker,
+      value = null;
 }
 
 enum ExternalActionType {

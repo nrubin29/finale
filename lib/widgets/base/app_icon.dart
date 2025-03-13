@@ -7,7 +7,7 @@ class AppIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ClipRRect(
-        borderRadius: BorderRadius.circular(size * .22),
-        child: Image.asset('assets/images/icon.png', width: size),
-      );
+    borderRadius: BorderRadius.circular(size * .22),
+    child: Image.asset('assets/images/icon.png', width: size),
+  );
 }

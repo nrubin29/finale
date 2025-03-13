@@ -37,20 +37,11 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
       value: _period,
       items: [
         for (final period in Period.apiValues)
-          DropdownMenuItem(
-            value: period,
-            child: Text(period.display),
-          ),
+          DropdownMenuItem(value: period, child: Text(period.display)),
         if (_period.isCustom)
-          DropdownMenuItem(
-            value: _period,
-            child: Text(_period.display),
-          )
+          DropdownMenuItem(value: _period, child: Text(_period.display))
         else
-          const DropdownMenuItem(
-            value: null,
-            child: Text('Custom'),
-          ),
+          const DropdownMenuItem(value: null, child: Text('Custom')),
       ],
       onChanged: (value) async {
         if (value?.isCustom ?? true) {
@@ -58,17 +49,21 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
             context: context,
             firstDate: DateTime(2010),
             lastDate: DateTime.now(),
-            initialEntryMode: Preferences.inputDateTimeAsText.value
-                ? DatePickerEntryMode.input
-                : DatePickerEntryMode.calendar,
+            initialEntryMode:
+                Preferences.inputDateTimeAsText.value
+                    ? DatePickerEntryMode.input
+                    : DatePickerEntryMode.calendar,
           );
 
           if (dateRange != null) {
             setState(() {
-              _period = Preferences.period.value = Period(
-                  start: dateRange.start,
-                  end: dateRange.end.add(
-                      const Duration(hours: 23, minutes: 59, seconds: 59)));
+              _period =
+                  Preferences.period.value = Period(
+                    start: dateRange.start,
+                    end: dateRange.end.add(
+                      const Duration(hours: 23, minutes: 59, seconds: 59),
+                    ),
+                  );
               widget.periodChanged?.call(_period);
             });
           }

@@ -6,9 +6,10 @@ import 'time_safe_stream.dart';
 
 enum NotificationType {
   spotifyCheckerOutOfSync(
-      'Spotify Checker',
-      'Spotify is not sending scrobbles to Last.fm!',
-      ExternalAction.openSpotifyChecker);
+    'Spotify Checker',
+    'Spotify is not sending scrobbles to Last.fm!',
+    ExternalAction.openSpotifyChecker,
+  );
 
   final String title;
   final String body;
@@ -38,13 +39,15 @@ Future<bool> requestPermission() async {
   if (Platform.isIOS) {
     return await FlutterLocalNotificationsPlugin()
             .resolvePlatformSpecificImplementation<
-                IOSFlutterLocalNotificationsPlugin>()!
+              IOSFlutterLocalNotificationsPlugin
+            >()!
             .requestPermissions(alert: true, badge: true, sound: true) ??
         false;
   } else if (Platform.isAndroid) {
     return await FlutterLocalNotificationsPlugin()
             .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()!
+              AndroidFlutterLocalNotificationsPlugin
+            >()!
             .requestNotificationsPermission() ??
         false;
   }
@@ -58,12 +61,14 @@ Future<void> showNotification(NotificationType type) async {
     type.title,
     type.body,
     NotificationDetails(
-        android: AndroidNotificationDetails(type.name, type.name)),
+      android: AndroidNotificationDetails(type.name, type.name),
+    ),
   );
 }
 
 @pragma('vm:entry-point')
 void didReceiveNotification(NotificationResponse details) {
   externalActions.addTimestamped(
-      NotificationType.values[details.id!].externalActionFactory());
+    NotificationType.values[details.id!].externalActionFactory(),
+  );
 }

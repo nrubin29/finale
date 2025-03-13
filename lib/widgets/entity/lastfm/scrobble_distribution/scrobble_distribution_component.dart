@@ -18,23 +18,25 @@ class ScrobbleDistributionItem {
 
   DateTime get dateTime => dateTimeRange.start;
 
-  const ScrobbleDistributionItem(
-      {required this.level,
-      required this.dateTimeRange,
-      required this.scrobbles});
+  const ScrobbleDistributionItem({
+    required this.level,
+    required this.dateTimeRange,
+    required this.scrobbles,
+  });
 
   String get title => switch (level) {
-        ScrobbleDistributionLevel.overall => '${dateTime.year}',
-        ScrobbleDistributionLevel.year => monthNameFormat.format(dateTime),
-        ScrobbleDistributionLevel.month => '${dateTime.day}',
-      };
+    ScrobbleDistributionLevel.overall => '${dateTime.year}',
+    ScrobbleDistributionLevel.year => monthNameFormat.format(dateTime),
+    ScrobbleDistributionLevel.month => '${dateTime.day}',
+  };
 
   String get shortTitle => switch (level) {
-        ScrobbleDistributionLevel.overall => '${dateTime.year}',
-        ScrobbleDistributionLevel.year =>
-          abbreviatedMonthNameFormat.format(dateTime),
-        ScrobbleDistributionLevel.month => '${dateTime.day}',
-      };
+    ScrobbleDistributionLevel.overall => '${dateTime.year}',
+    ScrobbleDistributionLevel.year => abbreviatedMonthNameFormat.format(
+      dateTime,
+    ),
+    ScrobbleDistributionLevel.month => '${dateTime.day}',
+  };
 
   String get subtitle => pluralize(scrobbles);
 }
@@ -42,7 +44,7 @@ class ScrobbleDistributionItem {
 class ScrobbleDistributionComponent extends StatefulWidget {
   final String username;
   final Iterable<Future<int>> Function(List<DateTimeRange> ranges)
-      fetchScrobbleCounts;
+  fetchScrobbleCounts;
   final void Function(ScrobbleDistributionItem)? onDayTapped;
 
   const ScrobbleDistributionComponent({
@@ -112,37 +114,50 @@ class _ScrobbleDistributionComponentState
 
     final dateTimes = switch (_level) {
       ScrobbleDistributionLevel.overall => _listGenerateRange(
-          _dateTime.year, DateTime.now().year + 1, DateTime.new),
-      ScrobbleDistributionLevel.year =>
-        _listGenerateRange(1, 13, (month) => DateTime(_dateTime.year, month)),
+        _dateTime.year,
+        DateTime.now().year + 1,
+        DateTime.new,
+      ),
+      ScrobbleDistributionLevel.year => _listGenerateRange(
+        1,
+        13,
+        (month) => DateTime(_dateTime.year, month),
+      ),
       ScrobbleDistributionLevel.month => _listGenerateRange(
-          1,
-          DateUtils.getDaysInMonth(_dateTime.year, _dateTime.month) + 1,
-          (day) => DateTime(_dateTime.year, _dateTime.month, day)),
+        1,
+        DateUtils.getDaysInMonth(_dateTime.year, _dateTime.month) + 1,
+        (day) => DateTime(_dateTime.year, _dateTime.month, day),
+      ),
     };
     final ranges = IterableZip([dateTimes, dateTimes.skip(1)])
         .map((item) => DateTimeRange(start: item.first, end: item.last))
         .toList(growable: false);
-    final scrobbleCounts =
-        await Future.wait(widget.fetchScrobbleCounts(ranges));
+    final scrobbleCounts = await Future.wait(
+      widget.fetchScrobbleCounts(ranges),
+    );
 
     if (!requestHandle.isLatestRequest) {
       return;
     }
 
     _items = IterableZip([ranges, scrobbleCounts])
-        .map((data) => ScrobbleDistributionItem(
+        .map(
+          (data) => ScrobbleDistributionItem(
             level: _level,
             dateTimeRange: data.first as DateTimeRange,
-            scrobbles: data.last as int))
+            scrobbles: data.last as int,
+          ),
+        )
         .toList(growable: false);
     _totalScrobbles = scrobbleCounts.fold(0, (a, b) => a + b);
     final totalDays = switch (_level) {
       ScrobbleDistributionLevel.overall =>
         DateTime.now().difference(_scrobblingSince).inDays,
       ScrobbleDistributionLevel.year => 365,
-      ScrobbleDistributionLevel.month =>
-        DateUtils.getDaysInMonth(_dateTime.year, _dateTime.month),
+      ScrobbleDistributionLevel.month => DateUtils.getDaysInMonth(
+        _dateTime.year,
+        _dateTime.month,
+      ),
     };
 
     _scrobblesPerDay = _totalScrobbles / totalDays;
@@ -158,10 +173,10 @@ class _ScrobbleDistributionComponentState
   }
 
   String get _levelTitle => switch (_level) {
-        ScrobbleDistributionLevel.overall => 'Overall',
-        ScrobbleDistributionLevel.year => '${_dateTime.year}',
-        ScrobbleDistributionLevel.month => monthFormat.format(_dateTime),
-      };
+    ScrobbleDistributionLevel.overall => 'Overall',
+    ScrobbleDistributionLevel.year => '${_dateTime.year}',
+    ScrobbleDistributionLevel.month => monthFormat.format(_dateTime),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -178,13 +193,12 @@ class _ScrobbleDistributionComponentState
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_upward),
-                  onPressed: _level == ScrobbleDistributionLevel.overall
-                      ? null
-                      : _drillUp,
+                  onPressed:
+                      _level == ScrobbleDistributionLevel.overall
+                          ? null
+                          : _drillUp,
                 ),
-                Text(
-                  _levelTitle,
-                ),
+                Text(_levelTitle),
               ],
             ),
           ),
@@ -193,16 +207,24 @@ class _ScrobbleDistributionComponentState
           Scoreboard(
             items: [
               ScoreboardItemModel.value(
-                  label: 'Scrobbles', value: _totalScrobbles),
+                label: 'Scrobbles',
+                value: _totalScrobbles,
+              ),
               ScoreboardItemModel.value(
-                  label: 'Scrobbles/Day (Avg)', value: _scrobblesPerDay),
+                label: 'Scrobbles/Day (Avg)',
+                value: _scrobblesPerDay,
+              ),
             ],
           ),
         Expanded(
-          child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ScrobbleDistributionBarChart(
-                  level: _level, items: _items, onTap: _drillDown),
+          child:
+              _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ScrobbleDistributionBarChart(
+                    level: _level,
+                    items: _items,
+                    onTap: _drillDown,
+                  ),
         ),
       ],
     );
@@ -213,5 +235,7 @@ class _ScrobbleDistributionComponentState
 }
 
 List<E> _listGenerateRange<E>(
-        int start, int end, E Function(int index) generator) =>
-    [for (var i = start; i <= end; i++) generator(i)];
+  int start,
+  int end,
+  E Function(int index) generator,
+) => [for (var i = start; i <= end; i++) generator(i)];

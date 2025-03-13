@@ -27,117 +27,133 @@ class TrackView extends StatelessWidget {
   Widget build(BuildContext context) {
     final friendUsername = ProfileStack.of(context).friendUsername;
     return FutureBuilderView<LTrack>(
-      futureFactory: track is LTrack
-          ? () => Future.value(track as LTrack)
-          : () => Lastfm.getTrack(track),
+      futureFactory:
+          track is LTrack
+              ? () => Future.value(track as LTrack)
+              : () => Lastfm.getTrack(track),
       baseEntity: track,
-      builder: (track) => Scaffold(
-        appBar: createAppBar(
-          context,
-          track.name,
-          subtitle: track.artist?.name,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.adaptive.share),
-              onPressed: () {
-                Share.share(track.url);
-              },
+      builder:
+          (track) => Scaffold(
+            appBar: createAppBar(
+              context,
+              track.name,
+              subtitle: track.artist?.name,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.adaptive.share),
+                  onPressed: () {
+                    Share.share(track.url);
+                  },
+                ),
+                ScrobbleButton(entity: track),
+              ],
             ),
-            ScrobbleButton(entity: track),
-          ],
-        ),
-        body: TwoUp(
-          entity: track,
-          listItems: [
-            Scoreboard(
-              items: [
-                ScoreboardItemModel.value(
-                    label: 'Scrobbles', value: track.playCount),
-                ScoreboardItemModel.value(
-                    label: 'Listeners', value: track.listeners),
-                ScoreboardItemModel.value(
-                  label: 'Your scrobbles',
-                  value: track.userPlayCount,
-                  callback: track.userPlayCount > 0
-                      ? () {
+            body: TwoUp(
+              entity: track,
+              listItems: [
+                Scoreboard(
+                  items: [
+                    ScoreboardItemModel.value(
+                      label: 'Scrobbles',
+                      value: track.playCount,
+                    ),
+                    ScoreboardItemModel.value(
+                      label: 'Listeners',
+                      value: track.listeners,
+                    ),
+                    ScoreboardItemModel.value(
+                      label: 'Your scrobbles',
+                      value: track.userPlayCount,
+                      callback:
+                          track.userPlayCount > 0
+                              ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (_) => YourScrobblesView(track: track),
+                                  ),
+                                );
+                              }
+                              : null,
+                    ),
+                    if (friendUsername != null)
+                      ScoreboardItemModel.future(
+                        label: "$friendUsername's scrobbles",
+                        futureProvider:
+                            () => Lastfm.getTrack(
+                              track,
+                              username: friendUsername,
+                            ).then((value) => value.userPlayCount),
+                        callback: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => YourScrobblesView(track: track),
+                              builder:
+                                  (_) => YourScrobblesView(
+                                    track: track,
+                                    username: friendUsername,
+                                  ),
                             ),
                           );
-                        }
-                      : null,
+                        },
+                      ),
+                    if (track.userPlayCount > 0 && track.duration > 0)
+                      ScoreboardItemModel.value(
+                        label: 'Total listen time',
+                        value: formatDuration(
+                          Duration(
+                            milliseconds: track.userPlayCount * track.duration,
+                          ),
+                        ),
+                      ),
+                  ],
+                  actions: [LoveButton(track: track)],
                 ),
-                if (friendUsername != null)
-                  ScoreboardItemModel.future(
-                    label: "$friendUsername's scrobbles",
-                    futureProvider: () =>
-                        Lastfm.getTrack(track, username: friendUsername)
-                            .then((value) => value.userPlayCount),
-                    callback: () {
+                if (track.topTags.tags.isNotEmpty) ...[
+                  const Divider(),
+                  TagChips(topTags: track.topTags),
+                ],
+                if (track.wiki != null && track.wiki!.isNotEmpty) ...[
+                  const Divider(),
+                  WikiTile(entity: track, wiki: track.wiki!),
+                ],
+                if (track.artist != null || track.album != null)
+                  const Divider(),
+                if (track.artist != null)
+                  ListTile(
+                    leading: EntityImage(entity: track.artist!),
+                    title: Text(track.artist!.name),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => YourScrobblesView(
-                            track: track,
-                            username: friendUsername,
-                          ),
+                          builder:
+                              (context) => ArtistView(artist: track.artist!),
                         ),
                       );
                     },
                   ),
-                if (track.userPlayCount > 0 && track.duration > 0)
-                  ScoreboardItemModel.value(
-                    label: 'Total listen time',
-                    value: formatDuration(Duration(
-                        milliseconds: track.userPlayCount * track.duration)),
+                if (track.album != null)
+                  ListTile(
+                    leading: EntityImage(entity: track.album!),
+                    title: Text(track.album!.name),
+                    subtitle:
+                        track.artist != null ? Text(track.artist!.name) : null,
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AlbumView(album: track.album!),
+                        ),
+                      );
+                    },
                   ),
               ],
-              actions: [
-                LoveButton(track: track),
-              ],
             ),
-            if (track.topTags.tags.isNotEmpty) ...[
-              const Divider(),
-              TagChips(topTags: track.topTags),
-            ],
-            if (track.wiki != null && track.wiki!.isNotEmpty) ...[
-              const Divider(),
-              WikiTile(entity: track, wiki: track.wiki!),
-            ],
-            if (track.artist != null || track.album != null) const Divider(),
-            if (track.artist != null)
-              ListTile(
-                leading: EntityImage(entity: track.artist!),
-                title: Text(track.artist!.name),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ArtistView(artist: track.artist!)));
-                },
-              ),
-            if (track.album != null)
-              ListTile(
-                leading: EntityImage(entity: track.album!),
-                title: Text(track.album!.name),
-                subtitle:
-                    track.artist != null ? Text(track.artist!.name) : null,
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => AlbumView(album: track.album!)),
-                  );
-                },
-              ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 }

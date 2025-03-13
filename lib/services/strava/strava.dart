@@ -8,9 +8,10 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/web_auth.dart';
 
 Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
-    'www.strava.com',
-    'api/v3/$method',
-    data?.map((key, value) => MapEntry(key, value.toString())));
+  'www.strava.com',
+  'api/v3/$method',
+  data?.map((key, value) => MapEntry(key, value.toString())),
+);
 
 Future<dynamic> _doRequest(String method, [Map<String, dynamic>? data]) async {
   assert(Preferences.hasStravaAuthData);
@@ -22,14 +23,17 @@ Future<dynamic> _doRequest(String method, [Map<String, dynamic>? data]) async {
 
   final uri = _buildUri(method, data);
 
-  final response = await httpClient
-      .get(uri, headers: {'Authorization': 'Bearer $accessToken'});
+  final response = await httpClient.get(
+    uri,
+    headers: {'Authorization': 'Bearer $accessToken'},
+  );
 
   if (response.statusCode == 200) {
     return json.decode(utf8.decode(response.bodyBytes));
   } else if (response.statusCode ~/ 100 == 4) {
     throw StravaException.fromJson(
-        json.decode(utf8.decode(response.bodyBytes)));
+      json.decode(utf8.decode(response.bodyBytes)),
+    );
   } else {
     throw Exception('Could not do request $method');
   }
@@ -60,22 +64,24 @@ class Strava {
 
   const Strava._();
 
-  Uri createAuthorizationUri() =>
-      Uri(scheme: 'https', host: 'www.strava.com', pathSegments: [
-        'oauth',
-        'mobile',
-        'authorize',
-      ], queryParameters: {
-        'client_id': stravaClientId,
-        'redirect_uri': authCallbackUrl,
-        'response_type': 'code',
-        'approval_prompt': 'auto',
-        'scope': 'activity:read',
-      });
+  Uri createAuthorizationUri() => Uri(
+    scheme: 'https',
+    host: 'www.strava.com',
+    pathSegments: ['oauth', 'mobile', 'authorize'],
+    queryParameters: {
+      'client_id': stravaClientId,
+      'redirect_uri': authCallbackUrl,
+      'response_type': 'code',
+      'approval_prompt': 'auto',
+      'scope': 'activity:read',
+    },
+  );
 
   Future<bool> authenticate() async {
-    final code =
-        await showWebAuth(createAuthorizationUri(), queryParam: 'code');
+    final code = await showWebAuth(
+      createAuthorizationUri(),
+      queryParam: 'code',
+    );
 
     if (code != null) {
       await _getAccessToken(code);
@@ -87,22 +93,23 @@ class Strava {
 
   Future<void> _callTokenEndpoint(Map<String, dynamic> body) async {
     final rawResponse = await httpClient.post(
-        Uri(
-          scheme: 'https',
-          host: 'www.strava.com',
-          pathSegments: ['api', 'v3', 'oauth', 'token'],
-        ),
-        body: body);
+      Uri(
+        scheme: 'https',
+        host: 'www.strava.com',
+        pathSegments: ['api', 'v3', 'oauth', 'token'],
+      ),
+      body: body,
+    );
     final response = TokenResponse.fromJson(json.decode(rawResponse.body));
     Preferences.stravaAuthData = response;
   }
 
   Future<void> _getAccessToken(String code) => _callTokenEndpoint({
-        'client_id': stravaClientId,
-        'client_secret': stravaClientSecret,
-        'code': code,
-        'grant_type': 'authorization_code',
-      });
+    'client_id': stravaClientId,
+    'client_secret': stravaClientSecret,
+    'code': code,
+    'grant_type': 'authorization_code',
+  });
 
   Future<void> refreshAccessToken(TokenResponse stravaAuthData) =>
       _callTokenEndpoint({

@@ -68,8 +68,9 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
 
     if (success) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Scrobbled successfully!')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Scrobbled successfully!')));
 
       // Ask for a review
       if (await InAppReview.instance.isAvailable()) {
@@ -77,7 +78,8 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('An error occurred while scrobbling')));
+        const SnackBar(content: Text('An error occurred while scrobbling')),
+      );
     }
   }
 
@@ -87,9 +89,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
     } else if (_authorizationStatus == null || _items == null) {
       return const LoadingComponent();
     } else if (_authorizationStatus != AuthorizationStatus.authorized) {
-      return const Center(
-        child: Text('Unable to access your music library.'),
-      );
+      return const Center(child: Text('Unable to access your music library.'));
     } else {
       return Column(
         children: [
@@ -132,29 +132,30 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: createAppBar(
-          context,
-          'Scrobble from Apple Music',
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () async {
-                await showBarModalBottomSheet(
-                    context: context,
-                    duration: const Duration(milliseconds: 200),
-                    builder: (_) => const AppleMusicSettingsView());
+    appBar: createAppBar(
+      context,
+      'Scrobble from Apple Music',
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () async {
+            await showBarModalBottomSheet(
+              context: context,
+              duration: const Duration(milliseconds: 200),
+              builder: (_) => const AppleMusicSettingsView(),
+            );
 
-                if (!Preferences.appleMusicEnabled.value) {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            IconButton(
-              icon: const Icon(scrobbleIcon),
-              onPressed: _hasItemsToScrobble ? _scrobble : null,
-            ),
-          ],
+            if (!Preferences.appleMusicEnabled.value) {
+              Navigator.pop(context);
+            }
+          },
         ),
-        body: _body,
-      );
+        IconButton(
+          icon: const Icon(scrobbleIcon),
+          onPressed: _hasItemsToScrobble ? _scrobble : null,
+        ),
+      ],
+    ),
+    body: _body,
+  );
 }

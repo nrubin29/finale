@@ -58,8 +58,11 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
     if (globalCachedData != null) {
       response = globalCachedData;
     } else {
-      final request =
-          GetRecentTracksRequest.forPeriod(username, period, extended: true);
+      final request = GetRecentTracksRequest.forPeriod(
+        username,
+        period,
+        extended: true,
+      );
 
       response = await request.getAllData();
       _globalCache[cacheKey] = response;
@@ -70,8 +73,9 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
     // string group which will mess up the request. The best we can do is
     // filter it out.
     groupedData.remove('');
-    _localCachedData = (await Future.wait(groupedData.entries.map(map)))
-        .sorted((a, b) => b.playCount.compareTo(a.playCount));
+    _localCachedData = (await Future.wait(
+      groupedData.entries.map(map),
+    )).sorted((a, b) => b.playCount.compareTo(a.playCount));
   }
 
   @override
@@ -91,8 +95,10 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
       await _populateCachedData(period);
     }
 
-    return _localCachedData!
-        .slice(limit * (page - 1), min(limit * page, _localCachedData!.length));
+    return _localCachedData!.slice(
+      limit * (page - 1),
+      min(limit * page, _localCachedData!.length),
+    );
   }
 
   @nonVirtual
