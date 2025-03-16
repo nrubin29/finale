@@ -51,6 +51,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
             username,
             from: _start,
             to: _end,
+            includeCurrentScrobble: true,
           ).getAllData();
     } on LException catch (e) {
       if (e.code == 6) {
