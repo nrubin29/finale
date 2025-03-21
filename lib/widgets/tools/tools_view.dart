@@ -6,7 +6,7 @@ import 'package:finale/widgets/collage/collage_view.dart';
 import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
 import 'package:finale/widgets/tools/h_index_view.dart';
 import 'package:finale/widgets/tools/lucky_view.dart';
-import 'package:finale/widgets/tools/scrobble_manager_view.dart';
+import 'package:finale/widgets/tools/scrobble_manager/scrobble_manager_view.dart';
 import 'package:finale/widgets/tools/workout_view.dart';
 import 'package:flutter/material.dart';
 

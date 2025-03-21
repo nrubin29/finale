@@ -39,6 +39,17 @@ Future<void> showExceptionDialog(
   );
 }
 
+Future<bool> showConfirmationDialog(
+  BuildContext context, {
+  required String title,
+  required String content,
+}) async =>
+    await showDialog<bool>(
+      context: context,
+      builder: (_) => _ConfirmationDialog(title: title, content: content),
+    ) ??
+    false;
+
 class _MessageDialog extends StatelessWidget {
   final String title;
   final String content;
@@ -60,6 +71,36 @@ class _MessageDialog extends StatelessWidget {
           Navigator.pop(context);
         },
         child: const Text('Close'),
+      ),
+    ],
+  );
+}
+
+class _ConfirmationDialog extends StatelessWidget {
+  final String title;
+  final String content;
+
+  const _ConfirmationDialog({required this.title, required this.content});
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+    title: Row(
+      spacing: 10,
+      children: [const Icon(Icons.question_mark), Text(title)],
+    ),
+    content: Text(content),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context, true);
+        },
+        child: const Text('Yes'),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context, false);
+        },
+        child: const Text('No'),
       ),
     ],
   );

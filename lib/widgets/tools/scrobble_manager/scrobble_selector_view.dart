@@ -1,6 +1,7 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
@@ -8,14 +9,17 @@ import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:flutter/material.dart';
 
-class ScrobbleManagerView extends StatefulWidget {
-  const ScrobbleManagerView();
+class ScrobbleSelectorView extends StatefulWidget {
+  final void Function(List<LRecentTracksResponseTrack> selectedTracks)
+  onOperationReady;
+
+  const ScrobbleSelectorView({required this.onOperationReady});
 
   @override
-  State<ScrobbleManagerView> createState() => _ScrobbleManagerViewState();
+  State<ScrobbleSelectorView> createState() => _ScrobbleSelectorViewState();
 }
 
-class _ScrobbleManagerViewState extends State<ScrobbleManagerView> {
+class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
   List<LRecentTracksResponseTrack>? _selectedTracks;
 
   Future<List<LRecentTracksResponseTrack>> _fetchTracks() async {
@@ -46,7 +50,17 @@ class _ScrobbleManagerViewState extends State<ScrobbleManagerView> {
     return result;
   }
 
-  void _deleteScrobbles() {}
+  void _deleteScrobbles() async {
+    final confirmation = await showConfirmationDialog(
+      context,
+      title: 'Confirm',
+      content:
+          'Are you sure you want to delete '
+          '${pluralize(_selectedTracks!.length)}?',
+    );
+    if (!confirmation) return;
+    widget.onOperationReady(_selectedTracks!);
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
