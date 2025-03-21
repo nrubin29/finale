@@ -10,6 +10,7 @@ import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
+import 'package:finale/widgets/entity/lastfm/scrobble_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 
@@ -26,6 +27,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
   late TextEditingController _usernameTextController;
   DateTime? _start;
   DateTime? _end;
+  var _filters = <ScrobbleFilter>[];
 
   List<LRecentTracksResponseTrack>? _selection;
 
@@ -70,6 +72,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
       );
       return null;
     }
+
+    response = response.whereAllFiltersMatch(_filters);
 
     setState(() {
       _selection = response;
@@ -166,6 +170,14 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
                   });
                 },
               ),
+            ),
+            ScrobbleFiltersListTile(
+              filters: _filters,
+              onChanged: (value) {
+                setState(() {
+                  _filters = value;
+                });
+              },
             ),
           ],
       bodyBuilder:
