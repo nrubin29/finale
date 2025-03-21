@@ -7,6 +7,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
+import 'package:finale/widgets/entity/lastfm/scrobble_filter.dart';
 import 'package:flutter/material.dart';
 
 class ScrobbleSelectorView extends StatefulWidget {
@@ -21,13 +22,14 @@ class ScrobbleSelectorView extends StatefulWidget {
 
 class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
   List<LRecentTracksResponseTrack>? _selectedTracks;
+  var _scrobbleFilters = <ScrobbleFilter>[];
 
   Future<List<LRecentTracksResponseTrack>> _fetchTracks() async {
     setState(() {
       _selectedTracks = null;
     });
 
-    final result =
+    var result =
         await GetRecentTracksRequest(
           Preferences.name.value!,
           from: DateTime.now().subtract(const Duration(days: 1)),
@@ -42,6 +44,8 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
       );
       return const [];
     }
+
+    result = result.whereAllFiltersMatch(_scrobbleFilters);
 
     setState(() {
       _selectedTracks = result;
@@ -78,7 +82,17 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
     body: CollapsibleFormView<List<LRecentTracksResponseTrack>>(
       submitButtonText: 'Load Scrobbles',
       onFormSubmit: _fetchTracks,
-      formWidgetsBuilder: (_) => [],
+      formWidgetsBuilder:
+          (_) => [
+            ScrobbleFiltersListTile(
+              filters: _scrobbleFilters,
+              onChanged: (value) {
+                setState(() {
+                  _scrobbleFilters = value;
+                });
+              },
+            ),
+          ],
       bodyBuilder:
           (_, tracks) => EntityCheckboxList<LRecentTracksResponseTrack>(
             scrollable: false,
