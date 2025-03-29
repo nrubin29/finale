@@ -124,17 +124,21 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
 
   @override
   doRequest(int limit, int page) async {
+    final requestStartTime = DateTime.now();
     final tracks = (await _doRecentTracksRequest(limit, page)).tracks;
 
     // For some reason, this endpoint always returns the currently-playing
     // song regardless of which page you request.
-    if ((page != 1 || !includeCurrentScrobble) &&
-        tracks.isNotEmpty &&
-        tracks.first.date == null) {
-      tracks.removeAt(0);
+    // We only want to include this result if we're on the first page,
+    // [includeCurrentScrobble] is true, and the time period includes now.
+    if (tracks.isEmpty || tracks.first.date != null) return tracks;
+    // At this point, we know that the first result is currently playing.
+    if (page != 1 || !includeCurrentScrobble) return tracks.sublist(1);
+    if ((from == null || !from!.isAfter(requestStartTime)) &&
+        (to == null || !to!.isBefore(requestStartTime))) {
+      return tracks;
     }
-
-    return tracks;
+    return tracks.sublist(1);
   }
 
   Future<int> getNumItems() async =>
