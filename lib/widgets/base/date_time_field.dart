@@ -12,13 +12,15 @@ DateTime _combine(DateTime date, TimeOfDay? time) => DateTime(
 
 class DateTimeField extends StatefulWidget {
   final String label;
+  final bool showNowIcon;
   final DateTime? initialValue;
   final ValueChanged<DateTime> onChanged;
   final FormFieldValidator<DateTime>? validator;
 
   const DateTimeField({
     this.label = 'Timestamp',
-    required this.initialValue,
+    this.showNowIcon = false,
+    this.initialValue,
     required this.onChanged,
     this.validator,
   });
@@ -99,6 +101,8 @@ class _DateTimeFieldState extends State<DateTimeField> {
   @override
   Widget build(BuildContext context) => Row(
     spacing: 8,
+    textBaseline: TextBaseline.ideographic,
+    crossAxisAlignment: CrossAxisAlignment.baseline,
     children: [
       Expanded(
         child: GestureDetector(
@@ -134,6 +138,14 @@ class _DateTimeFieldState extends State<DateTimeField> {
               ),
             ),
           ),
+        ),
+      if (widget.showNowIcon)
+        IconButton(
+          icon: const Icon(Icons.access_time),
+          tooltip: 'Set to now',
+          onPressed: () {
+            _updateValue(DateTime.now());
+          },
         ),
     ],
   );

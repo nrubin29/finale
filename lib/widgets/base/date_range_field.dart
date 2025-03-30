@@ -38,7 +38,6 @@ class _DateRangeFieldState extends State<DateRangeField> {
         minimum: const EdgeInsets.symmetric(horizontal: 16),
         child: DateTimeField(
           label: 'Start',
-          initialValue: _start,
           validator: _validator,
           onChanged: (dateTime) {
             setState(() {
@@ -54,7 +53,7 @@ class _DateRangeFieldState extends State<DateRangeField> {
         minimum: const EdgeInsets.symmetric(horizontal: 16),
         child: DateTimeField(
           label: 'End',
-          initialValue: _end,
+          showNowIcon: true,
           validator: _validator,
           onChanged: (dateTime) {
             setState(() {
