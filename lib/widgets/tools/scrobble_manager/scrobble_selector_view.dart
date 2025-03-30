@@ -10,10 +10,15 @@ import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_filter.dart';
+import 'package:finale/widgets/tools/scrobble_manager/scrobble_editor_view.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ScrobbleSelectorView extends StatefulWidget {
-  final void Function(List<LRecentTracksResponseTrack> selectedTracks)
+  final void Function(
+    List<LRecentTracksResponseTrack> selectedTracks, [
+    ScrobbleEditRequest? editRequest,
+  ])
   onOperationReady;
 
   const ScrobbleSelectorView({required this.onOperationReady});
@@ -61,7 +66,6 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
   void _deleteScrobbles() async {
     final confirmation = await showConfirmationDialog(
       context,
-      title: 'Confirm',
       content:
           'Are you sure you want to delete '
           '${pluralize(_selectedTracks!.length)}?',
@@ -70,17 +74,46 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
     widget.onOperationReady(_selectedTracks!);
   }
 
+  void _editScrobbles() async {
+    final cutoff = DateTime.now().subtract(
+      const Duration(days: 14, minutes: 1),
+    );
+    if (_selectedTracks!.any((track) => track.date!.isBefore(cutoff))) {
+      showMessageDialog(
+        context,
+        title: 'Error',
+        content:
+            'Only tracks scrobbled in the last two weeks (since '
+            '${dateTimeFormat.format(cutoff)}) can be edited.',
+      );
+      return;
+    }
+
+    final editRequest = await showBarModalBottomSheet<ScrobbleEditRequest>(
+      context: context,
+      duration: const Duration(milliseconds: 200),
+      builder: (_) => ScrobbleEditorView(tracks: _selectedTracks!),
+    );
+    if (editRequest == null) return;
+    widget.onOperationReady(_selectedTracks!, editRequest);
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: createAppBar(
       context,
       'Scrobble Manager',
       actions: [
-        if (_selectedTracks != null)
+        if (_selectedTracks != null) ...[
+          IconButton(
+            onPressed: _selectedTracks!.isEmpty ? null : _editScrobbles,
+            icon: const Icon(Icons.edit),
+          ),
           IconButton(
             onPressed: _selectedTracks!.isEmpty ? null : _deleteScrobbles,
             icon: const Icon(Icons.delete),
           ),
+        ],
       ],
     ),
     body: CollapsibleFormView<List<LRecentTracksResponseTrack>>(

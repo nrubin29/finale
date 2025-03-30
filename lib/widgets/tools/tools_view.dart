@@ -1,4 +1,5 @@
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
@@ -32,26 +33,27 @@ class ToolsView extends StatelessWidget {
             );
           },
         ),
-        CaptionedListTile(
-          title: 'Scrobble Manager',
-          icon: Icons.edit,
-          trailing: const Icon(Icons.chevron_right),
-          caption: 'Edit and delete scrobbles.',
-          onTap: () async {
-            if (!await LastfmCookie.hasCookies()) {
-              if (!context.mounted) return;
-              if (!await showCookieDialog(context)) {
-                return;
+        if (isMobile)
+          CaptionedListTile(
+            title: 'Scrobble Manager',
+            icon: Icons.edit,
+            trailing: const Icon(Icons.chevron_right),
+            caption: 'Edit and delete scrobbles.',
+            onTap: () async {
+              if (!await LastfmCookie.hasCookies()) {
+                if (!context.mounted) return;
+                if (!await showCookieDialog(context)) {
+                  return;
+                }
               }
-            }
 
-            if (!context.mounted) return;
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ScrobbleManagerView()),
-            );
-          },
-        ),
+              if (!context.mounted) return;
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ScrobbleManagerView()),
+              );
+            },
+          ),
         CaptionedListTile(
           title: "I'm Feeling Lucky",
           icon: Icons.casino,

@@ -1,42 +1,71 @@
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
+import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
+import 'package:finale/widgets/tools/scrobble_manager/scrobble_editor_view.dart';
 import 'package:flutter/material.dart';
 
 enum _ScrobbleStatus { pending, processing, success, error }
 
 class _Scrobble extends BasicScrobbledTrack {
-  final LRecentTracksResponseTrack _track;
   var _status = _ScrobbleStatus.pending;
 
-  _Scrobble(this._track) {
-    cachedImageId = _track.cachedImageId;
+  _Scrobble(LRecentTracksResponseTrack track)
+    : name = track.name,
+      artistName = track.artistName,
+      albumName = track.albumName,
+      albumArtist = track.albumArtist,
+      url = track.url,
+      imageId = track.imageId,
+      date = track.date {
+    cachedImageId = track.cachedImageId;
   }
 
-  @override
-  String get name => _track.name;
+  _Scrobble._({
+    required this.name,
+    required this.artistName,
+    required this.albumName,
+    required this.albumArtist,
+    required this.url,
+    required this.imageId,
+    required this.date,
+  });
+
+  _Scrobble copyApplyingRequest(ScrobbleEditRequest request) => _Scrobble._(
+    name: request.newTitle ?? name,
+    artistName: request.newArtist ?? artistName,
+    albumName: request.newAlbum ?? albumName,
+    albumArtist: albumArtist,
+    url: url,
+    imageId: imageId,
+    // Avoid two scrobbles at the exact same timestamp.
+    date: date?.add(const Duration(seconds: 1)),
+  );
 
   @override
-  String get artistName => _track.artistName;
+  final String name;
 
   @override
-  String get albumName => _track.albumName;
+  final String artistName;
 
   @override
-  String? get albumArtist => _track.albumArtist;
+  final String albumName;
 
   @override
-  String get url => _track.url;
+  final String? albumArtist;
 
   @override
-  ImageId? get imageId => _track.imageId;
+  final String url;
 
   @override
-  DateTime? get date => _track.date;
+  final ImageId? imageId;
+
+  @override
+  final DateTime? date;
 
   @override
   String? get displayTrailing =>
@@ -45,8 +74,12 @@ class _Scrobble extends BasicScrobbledTrack {
 
 class ScrobbleModificationView extends StatefulWidget {
   final List<LRecentTracksResponseTrack> selectedTracks;
+  final ScrobbleEditRequest? editRequest;
 
-  const ScrobbleModificationView({required this.selectedTracks});
+  const ScrobbleModificationView({
+    required this.selectedTracks,
+    this.editRequest,
+  });
 
   @override
   State<ScrobbleModificationView> createState() =>
@@ -71,6 +104,20 @@ class _ScrobbleModificationViewState extends State<ScrobbleModificationView> {
         scrobble._status = _ScrobbleStatus.processing;
       });
 
+      if (widget.editRequest case ScrobbleEditRequest request) {
+        final newScrobble = scrobble.copyApplyingRequest(request);
+        final result = await Lastfm.scrobble(
+          [newScrobble],
+          [newScrobble.date!],
+        );
+        if (result.accepted != 1) {
+          setState(() {
+            scrobble._status = _ScrobbleStatus.error;
+          });
+          continue;
+        }
+      }
+
       final success = await LastfmCookie.deleteScrobble(scrobble);
 
       setState(() {
@@ -82,7 +129,12 @@ class _ScrobbleModificationViewState extends State<ScrobbleModificationView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: createAppBar(context, 'Deleting scrobbles...'),
+    appBar: createAppBar(
+      context,
+      widget.editRequest == null
+          ? 'Deleting scrobbles...'
+          : 'Editing scrobbles...',
+    ),
     body: EntityDisplay(
       items: _scrobbles,
       trailingWidgetBuilder:

@@ -39,9 +39,18 @@ Future<void> showExceptionDialog(
   );
 }
 
-Future<bool> showConfirmationDialog(
+Future<void> showMessageDialog(
   BuildContext context, {
   required String title,
+  required String content,
+}) => showDialog(
+  context: context,
+  builder: (_) => _MessageDialog(title: title, content: content),
+);
+
+Future<bool> showConfirmationDialog(
+  BuildContext context, {
+  String title = 'Confirm',
   required String content,
 }) async =>
     await showDialog<bool>(
