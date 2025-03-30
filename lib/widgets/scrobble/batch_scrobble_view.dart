@@ -97,6 +97,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: createAppBar(
         context,
@@ -140,16 +141,11 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                   child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: RichText(
-                      text: const TextSpan(
-                        children: [
+                      text: TextSpan(
+                        style: TextStyle(color: theme.colorScheme.onSurface),
+                        children: const [
                           TextSpan(text: 'Tracks marked with '),
-                          WidgetSpan(
-                            child: Icon(
-                              Icons.timer_off,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                          ),
+                          WidgetSpan(child: Icon(Icons.timer_off, size: 16)),
                           TextSpan(
                             text:
                                 " don't have duration data. These tracks will "
