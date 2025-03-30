@@ -5,7 +5,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
-import 'package:finale/widgets/base/date_time_field.dart';
+import 'package:finale/widgets/base/date_range_field.dart';
 import 'package:finale/widgets/base/list_tile_text_field.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
@@ -25,8 +25,7 @@ class FriendScrobbleView extends StatefulWidget {
 
 class _FriendScrobbleViewState extends State<FriendScrobbleView> {
   late TextEditingController _usernameTextController;
-  DateTime? _start;
-  DateTime? _end;
+  DateTimeRange? _dateRange;
   var _filters = <ScrobbleFilter>[];
 
   List<LRecentTracksResponseTrack>? _selection;
@@ -51,8 +50,8 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
       response =
           await GetRecentTracksRequest(
             username,
-            from: _start,
-            to: _end,
+            from: _dateRange!.start,
+            to: _dateRange!.end,
             includeCurrentScrobble: true,
           ).getAllData();
     } on LException catch (e) {
@@ -108,12 +107,9 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     }
   }
 
-  String? _validator(Object? value) {
-    if (value == null || (value is String && value.isEmpty)) {
+  String? _validator(String? value) {
+    if (value == null || value.isEmpty) {
       return 'This field is required.';
-    } else if (value is DateTime &&
-        (_start == null || _end == null || !_start!.isBefore(_end!))) {
-      return 'Start must be before end.';
     }
 
     return null;
@@ -141,35 +137,12 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
               controller: _usernameTextController,
               validator: _validator,
             ),
-            SafeArea(
-              top: false,
-              bottom: false,
-              minimum: const EdgeInsets.symmetric(horizontal: 16),
-              child: DateTimeField(
-                label: 'Start',
-                initialValue: _start,
-                validator: _validator,
-                onChanged: (dateTime) {
-                  setState(() {
-                    _start = dateTime;
-                  });
-                },
-              ),
-            ),
-            SafeArea(
-              top: false,
-              bottom: false,
-              minimum: const EdgeInsets.symmetric(horizontal: 16),
-              child: DateTimeField(
-                label: 'End',
-                initialValue: _end,
-                validator: _validator,
-                onChanged: (dateTime) {
-                  setState(() {
-                    _end = dateTime;
-                  });
-                },
-              ),
+            DateRangeField(
+              onChanged: (dateRange) {
+                setState(() {
+                  _dateRange = dateRange;
+                });
+              },
             ),
             ScrobbleFiltersListTile(
               filters: _filters,

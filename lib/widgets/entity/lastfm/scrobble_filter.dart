@@ -85,7 +85,9 @@ class _ScrobbleFilterDialogState extends State<_ScrobbleFilterDialog> {
             ],
             onChanged: (value) {
               if (value == null) return;
-              _field = value;
+              setState(() {
+                _field = value;
+              });
             },
           ),
         ),

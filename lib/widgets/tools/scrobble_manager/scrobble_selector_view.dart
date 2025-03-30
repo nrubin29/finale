@@ -5,6 +5,7 @@ import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
+import 'package:finale/widgets/base/date_range_field.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_filter.dart';
@@ -22,6 +23,7 @@ class ScrobbleSelectorView extends StatefulWidget {
 
 class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
   List<LRecentTracksResponseTrack>? _selectedTracks;
+  DateTimeRange? _dateRange;
   var _scrobbleFilters = <ScrobbleFilter>[];
 
   Future<List<LRecentTracksResponseTrack>> _fetchTracks() async {
@@ -32,7 +34,8 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
     var result =
         await GetRecentTracksRequest(
           Preferences.name.value!,
-          from: DateTime.now().subtract(const Duration(days: 1)),
+          from: _dateRange!.start,
+          to: _dateRange!.end,
         ).getAllData();
 
     if (result.isEmpty) {
@@ -84,6 +87,13 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
       onFormSubmit: _fetchTracks,
       formWidgetsBuilder:
           (_) => [
+            DateRangeField(
+              onChanged: (dateRange) {
+                setState(() {
+                  _dateRange = dateRange;
+                });
+              },
+            ),
             ScrobbleFiltersListTile(
               filters: _scrobbleFilters,
               onChanged: (value) {
