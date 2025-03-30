@@ -11,6 +11,9 @@ extension DateTimeUtil on DateTime {
   /// Returns a [DateTime] at the beginning of the [month].
   DateTime get beginningOfMonth => DateTime(year, month);
 
+  /// Returns a [DateTime] at the end of the current [minute].
+  DateTime get endOfMinute => DateTime(year, month, day, hour, minute, 59);
+
   int get secondsSinceEpoch => millisecondsSinceEpoch ~/ 1000;
 }
 

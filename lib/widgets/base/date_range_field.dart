@@ -54,6 +54,7 @@ class _DateRangeFieldState extends State<DateRangeField> {
         child: DateTimeField(
           label: 'End',
           showNowIcon: true,
+          includeEndOfMinute: true,
           validator: _validator,
           onChanged: (dateTime) {
             setState(() {

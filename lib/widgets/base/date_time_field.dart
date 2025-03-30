@@ -1,3 +1,4 @@
+import 'package:finale/util/extensions.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,11 @@ DateTime _combine(DateTime date, TimeOfDay? time) => DateTime(
 class DateTimeField extends StatefulWidget {
   final String label;
   final bool showNowIcon;
+
+  /// If true, the resulting [DateTime] will have a `seconds` value of 59;
+  /// otherwise, 0.
+  final bool includeEndOfMinute;
+
   final DateTime? initialValue;
   final ValueChanged<DateTime> onChanged;
   final FormFieldValidator<DateTime>? validator;
@@ -20,6 +26,7 @@ class DateTimeField extends StatefulWidget {
   const DateTimeField({
     this.label = 'Timestamp',
     this.showNowIcon = false,
+    this.includeEndOfMinute = false,
     this.initialValue,
     required this.onChanged,
     this.validator,
@@ -45,6 +52,7 @@ class _DateTimeFieldState extends State<DateTimeField> {
   }
 
   void _updateValue(DateTime newValue, {bool isInitState = false}) {
+    newValue = widget.includeEndOfMinute ? newValue.endOfMinute : newValue;
     _value = newValue;
     _dateController.text = dateFormatWithYear.format(newValue);
     _timeController.text = timeFormat.format(newValue);
