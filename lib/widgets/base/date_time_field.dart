@@ -20,6 +20,7 @@ class DateTimeField extends StatefulWidget {
   final bool includeEndOfMinute;
 
   final DateTime? initialValue;
+  final DateTime? lowerBound;
   final ValueChanged<DateTime> onChanged;
   final FormFieldValidator<DateTime>? validator;
 
@@ -28,6 +29,7 @@ class DateTimeField extends StatefulWidget {
     this.showNowIcon = false,
     this.includeEndOfMinute = false,
     this.initialValue,
+    this.lowerBound,
     required this.onChanged,
     this.validator,
   });
@@ -67,7 +69,9 @@ class _DateTimeFieldState extends State<DateTimeField> {
     final date = await showDatePicker(
       context: context,
       initialDate: _value ?? DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 14)),
+      firstDate:
+          widget.lowerBound ??
+          DateTime.now().subtract(const Duration(days: 14)),
       lastDate: DateTime.now().add(const Duration(days: 1)),
       initialEntryMode:
           Preferences.inputDateTimeAsText.value

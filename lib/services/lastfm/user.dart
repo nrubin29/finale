@@ -66,6 +66,9 @@ class LUser extends Entity {
 
   @override
   int get hashCode => name.hashCode;
+
+  @override
+  String toString() => 'LUser(name=$name)';
 }
 
 @JsonSerializable()

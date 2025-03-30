@@ -31,6 +31,7 @@ import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/settings/settings_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +55,7 @@ class _ProfileViewState extends State<ProfileView>
   late final StreamSubscription _profileTabsOrderSubscription;
   StreamSubscription? _externalActionsSubscription;
 
-  late ProfileStack _profileStack;
+  late ProfileStackData _profileStack;
 
   /// When the recent scrobbles list should next be auto-updated by
   /// [didChangeAppLifecycleState].
@@ -68,7 +69,9 @@ class _ProfileViewState extends State<ProfileView>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    ProfileStack.find(context).push(widget.username);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      ProfileStack.find(context).push(widget.username);
+    });
 
     _tabOrder = Preferences.profileTabsOrder.value;
     _profileTabsOrderSubscription = Preferences.profileTabsOrder.changes.listen(
@@ -253,6 +256,10 @@ class _ProfileViewState extends State<ProfileView>
         LoginView.logOutAndShow(context);
       }
     },
+    onValue: (user) {
+      if (!widget.isTab) return;
+      _profileStack.me = user;
+    },
     builder:
         (user) => Scaffold(
           appBar: createAppBar(
@@ -313,7 +320,7 @@ class _ProfileViewState extends State<ProfileView>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _profileStack = ProfileStack.of(context);
+    _profileStack = ProfileStack.find(context);
   }
 
   @override
@@ -322,7 +329,9 @@ class _ProfileViewState extends State<ProfileView>
     _profileTabsOrderSubscription.cancel();
     _externalActionsSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
-    _profileStack.pop();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _profileStack.pop();
+    });
     super.dispose();
   }
 }

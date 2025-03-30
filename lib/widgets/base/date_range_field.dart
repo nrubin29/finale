@@ -2,9 +2,10 @@ import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:flutter/material.dart';
 
 class DateRangeField extends StatefulWidget {
+  final DateTime? lowerBound;
   final ValueChanged<DateTimeRange> onChanged;
 
-  const DateRangeField({required this.onChanged});
+  const DateRangeField({this.lowerBound, required this.onChanged});
 
   @override
   State<DateRangeField> createState() => _DateRangeFieldState();
@@ -38,6 +39,7 @@ class _DateRangeFieldState extends State<DateRangeField> {
         minimum: const EdgeInsets.symmetric(horizontal: 16),
         child: DateTimeField(
           label: 'Start',
+          lowerBound: widget.lowerBound,
           validator: _validator,
           onChanged: (dateTime) {
             setState(() {
@@ -55,6 +57,7 @@ class _DateRangeFieldState extends State<DateRangeField> {
           label: 'End',
           showNowIcon: true,
           includeEndOfMinute: true,
+          lowerBound: widget.lowerBound,
           validator: _validator,
           onChanged: (dateTime) {
             setState(() {

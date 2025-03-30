@@ -8,6 +8,7 @@ import 'package:finale/widgets/base/collapsible_form_view.dart';
 import 'package:finale/widgets/base/date_range_field.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
+import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_filter.dart';
 import 'package:flutter/material.dart';
 
@@ -88,6 +89,7 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
       formWidgetsBuilder:
           (_) => [
             DateRangeField(
+              lowerBound: ProfileStack.of(context).me.registered.date,
               onChanged: (dateRange) {
                 setState(() {
                   _dateRange = dateRange;

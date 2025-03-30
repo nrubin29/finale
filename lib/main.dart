@@ -30,7 +30,7 @@ Future<void> main() async {
     await ImageIdCache().setup();
   }
 
-  runApp(ProfileStack(child: const MyApp()));
+  runApp(const ProfileStack(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {

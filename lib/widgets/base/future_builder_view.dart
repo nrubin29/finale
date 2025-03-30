@@ -13,6 +13,7 @@ class FutureBuilderView<T> extends StatefulWidget {
   final bool isView;
   final Widget Function(T value) builder;
   final void Function(Exception e)? onError;
+  final void Function(T value)? onValue;
 
   const FutureBuilderView({
     required this.futureFactory,
@@ -20,6 +21,7 @@ class FutureBuilderView<T> extends StatefulWidget {
     this.isView = true,
     required this.builder,
     this.onError,
+    this.onValue,
   });
 
   @override
@@ -47,6 +49,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
 
     try {
       _value = await widget.futureFactory();
+      widget.onValue?.call(_value);
 
       if (mounted) {
         setState(() {
