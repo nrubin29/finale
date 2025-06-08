@@ -112,15 +112,14 @@ class LAlbumTrack extends ScrobbleableTrack {
   @override
   final int? duration;
 
-  // Not final because it's set by LAlbum.
-  String? album;
+  // Set by LAlbum.
+  @JsonKey(includeFromJson: false)
+  late String album;
 
   final LTopAlbumsResponseAlbumArtist artist;
 
-  // The non-null assertion is safe because [album] will be set before this is
-  // called.
   @override
-  String get albumName => album!;
+  String get albumName => album;
 
   @override
   String get artistName => artist.name;
@@ -128,7 +127,7 @@ class LAlbumTrack extends ScrobbleableTrack {
   @override
   String? get displaySubtitle => null;
 
-  LAlbumTrack(this.name, this.url, this.duration, this.album, this.artist);
+  LAlbumTrack(this.name, this.url, this.duration, this.artist);
 
   factory LAlbumTrack.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTrackFromJson(json);
@@ -189,10 +188,7 @@ class LAlbum extends FullAlbum {
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
   @override
-  List<LAlbumTrack> get tracks =>
-      (tracksObject?.tracks ?? const [])..forEach((element) {
-        element.album = name;
-      });
+  List<LAlbumTrack> get tracks => tracksObject?.tracks ?? const [];
 
   @override
   String get displayTrailing => pluralize(userPlayCount);
@@ -208,7 +204,13 @@ class LAlbum extends FullAlbum {
     this.tracksObject,
     this.topTags,
     this.wiki,
-  );
+  ) {
+    if (tracksObject != null) {
+      for (final track in tracksObject!.tracks) {
+        track.album = name;
+      }
+    }
+  }
 
   factory LAlbum.fromJson(Map<String, dynamic> json) => _$LAlbumFromJson(json);
 }
