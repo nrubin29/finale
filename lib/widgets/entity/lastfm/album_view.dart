@@ -7,6 +7,7 @@ import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
+import 'package:finale/widgets/entity/lastfm/album_scrobbles_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
@@ -85,6 +86,18 @@ class AlbumView extends StatelessWidget {
                     ScoreboardItemModel.value(
                       label: 'Your scrobbles',
                       value: album.userPlayCount,
+                      callback:
+                          album.userPlayCount > 0
+                              ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (_) => AlbumScrobblesView(album: album),
+                                  ),
+                                );
+                              }
+                              : null,
                     ),
                     if (friendUsername != null)
                       ScoreboardItemModel.future(
@@ -94,6 +107,18 @@ class AlbumView extends StatelessWidget {
                               album,
                               username: friendUsername,
                             ).then((value) => value.userPlayCount),
+                        callback: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => AlbumScrobblesView(
+                                    album: album,
+                                    username: friendUsername,
+                                  ),
+                            ),
+                          );
+                        },
                       ),
                     if (album.userPlayCount > 0 && album.tracks.isNotEmpty)
                       ScoreboardItemModel.future(

@@ -235,7 +235,7 @@ class LTrackAlbum extends BasicAlbum {
 }
 
 @JsonSerializable()
-class LTrack extends Track {
+class LTrack extends Track with HasPlayCount {
   @override
   final String name;
 
@@ -250,7 +250,7 @@ class LTrack extends Track {
   final int listeners;
 
   @JsonKey(name: 'playcount', fromJson: parseInt)
-  final int playCount;
+  final int globalPlayCount;
 
   @JsonKey(name: 'userplaycount', fromJson: parseInt)
   final int userPlayCount;
@@ -278,12 +278,15 @@ class LTrack extends Track {
   @override
   String get displayTrailing => pluralize(userPlayCount);
 
+  @Deprecated("Don't use directly; use [userPlayCount] instead.")
+  @override
+  int get playCount => userPlayCount;
   LTrack(
     this.name,
     this.url,
     this.duration,
     this.listeners,
-    this.playCount,
+    this.globalPlayCount,
     this.userPlayCount,
     this.userLoved,
     this.artist,

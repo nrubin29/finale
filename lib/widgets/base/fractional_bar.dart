@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,12 @@ class FractionalBar extends StatelessWidget {
   const FractionalBar(this.percent);
 
   FractionalBar.forEntity(HasPlayCount item, List<HasPlayCount> items)
-    : percent = item.playCount / items.first.playCount;
+    : percent =
+          item.playCount /
+          items
+              .sorted((a, b) => b.playCount.compareTo(a.playCount))
+              .first
+              .playCount;
 
   @override
   Widget build(BuildContext context) => Padding(

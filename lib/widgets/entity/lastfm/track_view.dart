@@ -55,7 +55,7 @@ class TrackView extends StatelessWidget {
                   items: [
                     ScoreboardItemModel.value(
                       label: 'Scrobbles',
-                      value: track.playCount,
+                      value: track.globalPlayCount,
                     ),
                     ScoreboardItemModel.value(
                       label: 'Listeners',
