@@ -12,8 +12,8 @@ import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
+import 'package:finale/widgets/entity/lastfm/track_scrobbles_view.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
-import 'package:finale/widgets/entity/lastfm/your_scrobbles_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -71,7 +71,7 @@ class TrackView extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder:
-                                        (_) => YourScrobblesView(track: track),
+                                        (_) => TrackScrobblesView(track: track),
                                   ),
                                 );
                               }
@@ -90,7 +90,7 @@ class TrackView extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (_) => YourScrobblesView(
+                                  (_) => TrackScrobblesView(
                                     track: track,
                                     username: friendUsername,
                                   ),

@@ -11,17 +11,17 @@ import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_distribution/scrobble_distribution_component.dart';
 import 'package:flutter/material.dart';
 
-class YourScrobblesView extends StatefulWidget {
+class TrackScrobblesView extends StatefulWidget {
   final LTrack track;
   final String? username;
 
-  const YourScrobblesView({required this.track, this.username});
+  const TrackScrobblesView({required this.track, this.username});
 
   @override
-  State<StatefulWidget> createState() => _YourScrobblesViewState();
+  State<StatefulWidget> createState() => _TrackScrobblesViewState();
 }
 
-class _YourScrobblesViewState extends State<YourScrobblesView> {
+class _TrackScrobblesViewState extends State<TrackScrobblesView> {
   List<LUserTrackScrobble>? _scrobbles;
   DateTime? _selectedDate;
 
