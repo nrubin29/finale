@@ -14,6 +14,7 @@ import 'package:finale/util/external_actions/external_actions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/profile_tab.dart';
 import 'package:finale/widgets/base/app_bar.dart';
+import 'package:finale/widgets/base/fractional_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -25,7 +26,6 @@ import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/profile/period_selector.dart';
-import 'package:finale/widgets/base/fractional_bar.dart';
 import 'package:finale/widgets/profile/profile_scrobble_distribution_component.dart';
 import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
@@ -312,7 +312,8 @@ class _ProfileViewState extends State<ProfileView>
       if (now.isAfter(_nextAutoUpdate)) {
         _recentScrobblesKey.currentState?.reload();
       }
-    } else if (state == AppLifecycleState.paused) {
+    } else if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       _nextAutoUpdate = now.add(const Duration(minutes: 5));
     }
   }

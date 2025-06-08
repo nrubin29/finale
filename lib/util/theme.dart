@@ -61,7 +61,7 @@ ThemeData finaleTheme(
     datePickerTheme: DatePickerThemeData(
       todayForegroundColor: WidgetStateProperty.all(themeColor.foregroundColor),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       indicatorColor: themeColor.color,
       labelColor: themeColor.color,
     ),
