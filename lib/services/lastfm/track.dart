@@ -33,14 +33,23 @@ class LRecentTracksResponseTrackArtist extends BasicArtist {
 }
 
 @JsonSerializable()
-class LRecentTracksResponseTrackAlbum {
+class LRecentTracksResponseTrackAlbum extends BasicAlbum {
   @JsonKey(name: '#text')
-  final String title;
+  @override
+  final String name;
 
-  const LRecentTracksResponseTrackAlbum(this.title);
+  // Set by LRecentTracksResponseTrack.
+  @JsonKey(includeFromJson: false)
+  @override
+  late LRecentTracksResponseTrackArtist artist;
+
+  LRecentTracksResponseTrackAlbum(this.name);
 
   factory LRecentTracksResponseTrackAlbum.fromJson(Map<String, dynamic> json) =>
       _$LRecentTracksResponseTrackAlbumFromJson(json);
+
+  @override
+  String? get url => null;
 }
 
 @JsonSerializable()
@@ -84,13 +93,15 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
     this.album,
     this.timestamp,
     this.isLoved,
-  );
+  ) {
+    album.artist = artist;
+  }
 
   @override
   String get artistName => artist.name;
 
   @override
-  String get albumName => album.title;
+  String get albumName => album.name;
 
   @override
   DateTime? get date => timestamp?.date;
@@ -106,6 +117,17 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   String toString() =>
       'LRecentTracksResponseTrack(name=$name, artist=$artistName, '
       'album=$albumName)';
+
+  LRecentTracksResponseTrack copyWith({bool? isLoved}) =>
+      LRecentTracksResponseTrack(
+        name,
+        url,
+        imageId,
+        artist,
+        album,
+        timestamp,
+        isLoved ?? this.isLoved,
+      );
 }
 
 @JsonSerializable()

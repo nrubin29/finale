@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
+import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/request_sequencer.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
+import 'package:finale/widgets/entity/lastfm/track_menu_button.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -295,6 +297,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
+        spacing: 4,
         children: [
           if (item.displayTrailing != null)
             Text(
@@ -310,6 +313,15 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                   Theme.of(context).brightness == Brightness.light
                       ? Colors.grey
                       : null,
+            ),
+          if (item is LRecentTracksResponseTrack)
+            TrackMenuButton(
+              track: item,
+              onTrackChange: (track) {
+                setState(() {
+                  items[index] = track as T;
+                });
+              },
             ),
         ],
       ),
