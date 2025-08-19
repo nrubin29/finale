@@ -75,10 +75,9 @@ class _ScrobbleButtonState<T extends Entity> extends State<ScrobbleButton<T>> {
     }
   }
 
-  void _showSnackbar(String text) =>
-      ScaffoldMessenger.of(context)
-        ..clearSnackBars()
-        ..showSnackBar(SnackBar(content: Text(text)));
+  void _showSnackbar(String text) => ScaffoldMessenger.of(context)
+    ..clearSnackBars()
+    ..showSnackBar(SnackBar(content: Text(text)));
 
   @override
   Widget build(BuildContext context) => IconButton(

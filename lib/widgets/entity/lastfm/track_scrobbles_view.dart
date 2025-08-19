@@ -32,11 +32,10 @@ class _TrackScrobblesViewState extends State<TrackScrobblesView> {
   }
 
   Future<void> _fetchData() async {
-    final scrobbles =
-        await UserGetTrackScrobblesRequest(
-          widget.track,
-          widget.username,
-        ).getAllData();
+    final scrobbles = await UserGetTrackScrobblesRequest(
+      widget.track,
+      widget.username,
+    ).getAllData();
 
     setState(() {
       _scrobbles = scrobbles;
@@ -70,10 +69,8 @@ class _TrackScrobblesViewState extends State<TrackScrobblesView> {
       firstDate: _scrobbles!.last.date,
       lastDate: _scrobbles!.first.date,
       currentDate: _selectedDate,
-      selectableDayPredicate:
-          (day) => _scrobbles!.any(
-            (scrobble) => scrobble.date.beginningOfDay == day,
-          ),
+      selectableDayPredicate: (day) =>
+          _scrobbles!.any((scrobble) => scrobble.date.beginningOfDay == day),
       onDateChanged: (date) {
         setState(() {
           _selectedDate = date;
@@ -91,11 +88,10 @@ class _TrackScrobblesViewState extends State<TrackScrobblesView> {
   ];
 
   List<Widget> get _listView => [
-    for (final entry
-        in groupBy<LUserTrackScrobble, DateTime>(
-          _scrobbles!,
-          (scrobble) => scrobble.date.beginningOfMonth,
-        ).entries) ...[
+    for (final entry in groupBy<LUserTrackScrobble, DateTime>(
+      _scrobbles!,
+      (scrobble) => scrobble.date.beginningOfMonth,
+    ).entries) ...[
       HeaderListTile(
         monthFormat.format(entry.key),
         trailing: Text(pluralize(entry.value.length)),
@@ -126,16 +122,15 @@ class _TrackScrobblesViewState extends State<TrackScrobblesView> {
           ],
         ),
       ),
-      body:
-          _scrobbles == null
-              ? const LoadingComponent()
-              : TabBarView(
-                children: [
-                  _barChartView,
-                  ListView(children: _calendarView),
-                  ListView(children: _listView),
-                ],
-              ),
+      body: _scrobbles == null
+          ? const LoadingComponent()
+          : TabBarView(
+              children: [
+                _barChartView,
+                ListView(children: _calendarView),
+                ListView(children: _listView),
+              ],
+            ),
     ),
   );
 }

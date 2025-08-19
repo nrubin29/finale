@@ -21,46 +21,44 @@ class AppleMusicAlbumView extends StatelessWidget {
     return FutureBuilderView<AMFullAlbum>(
       baseEntity: album,
       futureFactory: () => AppleMusic.getFullAlbum(album),
-      builder:
-          (album) => Scaffold(
-            appBar: createAppBar(
-              context,
-              album.name,
-              subtitle: album.artist.name,
-              backgroundColor: appleMusicPink,
-              actions: [ScrobbleButton(entity: album)],
-            ),
-            body: TwoUp(
-              entity: album,
-              listItems: [
-                ListTile(
-                  leading: EntityImage(entity: album.artist),
-                  title: Text(album.artist.name),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (_) =>
-                                AppleMusicArtistView(artistId: album.artistId),
-                      ),
-                    );
-                  },
-                ),
-                if (album.tracks.isNotEmpty) ...[
-                  const Divider(),
-                  EntityDisplay<AMSong>(
-                    items: album.tracks,
-                    scrollable: false,
-                    displayNumbers: true,
-                    displayImages: false,
-                    scrobbleableEntity: (track) async => track,
+      builder: (album) => Scaffold(
+        appBar: createAppBar(
+          context,
+          album.name,
+          subtitle: album.artist.name,
+          backgroundColor: appleMusicPink,
+          actions: [ScrobbleButton(entity: album)],
+        ),
+        body: TwoUp(
+          entity: album,
+          listItems: [
+            ListTile(
+              leading: EntityImage(entity: album.artist),
+              title: Text(album.artist.name),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        AppleMusicArtistView(artistId: album.artistId),
                   ),
-                ],
-              ],
+                );
+              },
             ),
-          ),
+            if (album.tracks.isNotEmpty) ...[
+              const Divider(),
+              EntityDisplay<AMSong>(
+                items: album.tracks,
+                scrollable: false,
+                displayNumbers: true,
+                displayImages: false,
+                scrobbleableEntity: (track) async => track,
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }

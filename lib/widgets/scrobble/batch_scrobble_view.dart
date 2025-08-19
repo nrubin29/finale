@@ -104,17 +104,14 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
         'Scrobble',
         actions: [
           Builder(
-            builder:
-                (context) =>
-                    _isLoading
-                        ? const AppBarLoadingIndicator()
-                        : IconButton(
-                          icon: const Icon(scrobbleIcon),
-                          onPressed:
-                              _selection.isNotEmpty
-                                  ? () => _scrobble(context)
-                                  : null,
-                        ),
+            builder: (context) => _isLoading
+                ? const AppBarLoadingIndicator()
+                : IconButton(
+                    icon: const Icon(scrobbleIcon),
+                    onPressed: _selection.isNotEmpty
+                        ? () => _scrobble(context)
+                        : null,
+                  ),
           ),
         ],
       ),
@@ -127,10 +124,9 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
               ListTile(
                 leading: EntityImage(entity: widget.entity),
                 title: Text(widget.entity.displayTitle),
-                subtitle:
-                    widget.entity.displaySubtitle != null
-                        ? Text(widget.entity.displaySubtitle!)
-                        : null,
+                subtitle: widget.entity.displaySubtitle != null
+                    ? Text(widget.entity.displaySubtitle!)
+                    : null,
                 trailing: Text(pluralize(_selection.length, 'track')),
               ),
               if (widget.entity.hasTrackDurations)
@@ -160,8 +156,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 const SizedBox(height: 8),
               ],
               const HeaderListTile('Scrobble timing'),
-              RadioListTile<ScrobbleTimestampBehavior>(
-                value: ScrobbleTimestampBehavior.startingNow,
+              RadioGroup(
                 groupValue: _behavior,
                 onChanged: (value) {
                   if (value != null) {
@@ -170,45 +165,26 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                     });
                   }
                 },
-                title: const Text('Starting now'),
-              ),
-              RadioListTile<ScrobbleTimestampBehavior>(
-                value: ScrobbleTimestampBehavior.startingCustom,
-                groupValue: _behavior,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _behavior = value;
-                      _customTimestamp = DateTime.now();
-                    });
-                  }
-                },
-                title: const Text('Starting at a custom timestamp'),
-              ),
-              RadioListTile<ScrobbleTimestampBehavior>(
-                value: ScrobbleTimestampBehavior.endingNow,
-                groupValue: _behavior,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _behavior = value;
-                    });
-                  }
-                },
-                title: const Text('Ending now'),
-              ),
-              RadioListTile<ScrobbleTimestampBehavior>(
-                value: ScrobbleTimestampBehavior.endingCustom,
-                groupValue: _behavior,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _behavior = value;
-                      _customTimestamp = DateTime.now();
-                    });
-                  }
-                },
-                title: const Text('Ending at a custom timestamp'),
+                child: const Column(
+                  children: [
+                    RadioListTile<ScrobbleTimestampBehavior>(
+                      value: ScrobbleTimestampBehavior.startingNow,
+                      title: Text('Starting now'),
+                    ),
+                    RadioListTile<ScrobbleTimestampBehavior>(
+                      value: ScrobbleTimestampBehavior.startingCustom,
+                      title: Text('Starting at a custom timestamp'),
+                    ),
+                    RadioListTile<ScrobbleTimestampBehavior>(
+                      value: ScrobbleTimestampBehavior.endingNow,
+                      title: Text('Ending now'),
+                    ),
+                    RadioListTile<ScrobbleTimestampBehavior>(
+                      value: ScrobbleTimestampBehavior.endingCustom,
+                      title: Text('Ending at a custom timestamp'),
+                    ),
+                  ],
+                ),
               ),
               Visibility(
                 visible:
@@ -235,8 +211,8 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 },
                 children: [
                   ExpansionPanel(
-                    headerBuilder:
-                        (_, __) => const ListTile(title: Text('Tracks')),
+                    headerBuilder: (_, _) =>
+                        const ListTile(title: Text('Tracks')),
                     canTapOnHeader: true,
                     isExpanded: _isTracksExpanded,
                     body: EntityCheckboxList<ScrobbleableTrack>(
@@ -250,11 +226,9 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                           _selection = selection;
                         });
                       },
-                      trailingWidgetBuilder:
-                          (track) =>
-                              track.duration == null
-                                  ? const Icon(Icons.timer_off)
-                                  : const SizedBox(),
+                      trailingWidgetBuilder: (track) => track.duration == null
+                          ? const Icon(Icons.timer_off)
+                          : const SizedBox(),
                     ),
                   ),
                 ],

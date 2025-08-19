@@ -73,10 +73,9 @@ class _DateTimeFieldState extends State<DateTimeField> {
           widget.lowerBound ??
           DateTime.now().subtract(const Duration(days: 14)),
       lastDate: DateTime.now().add(const Duration(days: 1)),
-      initialEntryMode:
-          Preferences.inputDateTimeAsText.value
-              ? DatePickerEntryMode.input
-              : DatePickerEntryMode.calendar,
+      initialEntryMode: Preferences.inputDateTimeAsText.value
+          ? DatePickerEntryMode.input
+          : DatePickerEntryMode.calendar,
     );
 
     if (date == null) {
@@ -95,10 +94,9 @@ class _DateTimeFieldState extends State<DateTimeField> {
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(_value ?? DateTime.now()),
-      initialEntryMode:
-          Preferences.inputDateTimeAsText.value
-              ? TimePickerEntryMode.input
-              : TimePickerEntryMode.dial,
+      initialEntryMode: Preferences.inputDateTimeAsText.value
+          ? TimePickerEntryMode.input
+          : TimePickerEntryMode.dial,
     );
 
     if (time != null) {

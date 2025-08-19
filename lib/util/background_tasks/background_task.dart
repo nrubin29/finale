@@ -1,13 +1,15 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:workmanager/workmanager.dart';
 
 abstract class BackgroundTask {
   final String name;
 
-  const BackgroundTask(String name) : name = 'com.nrubintech.finale.$name';
+  final Duration frequency;
 
-  Future<bool> get shouldRun;
+  const BackgroundTask(String name, {required this.frequency})
+    : name = 'com.nrubintech.finale.$name';
+
+  Future<bool> isEnabled();
 
   @mustCallSuper
   Future<void> setup() async {
@@ -22,34 +24,25 @@ abstract class BackgroundTask {
     await Workmanager().cancelByUniqueName(name);
   }
 
-  /// Registers the task with [Workmanager] if it should run.
+  /// Registers the task with [Workmanager] if it should be enabled.
   ///
-  /// If [shouldRun] is `false`, the task will be cancelled and won't be
+  /// If [isEnabled] returns `false`, the task will be cancelled and won't be
   /// registered.
   @protected
   @nonVirtual
-  Future<void> register({Duration initialDelay = Duration.zero}) async {
+  Future<void> register() async {
     await cancel();
 
-    if (!await shouldRun) return;
+    if (!await isEnabled()) return;
 
-    try {
-      await Workmanager().registerOneOffTask(
-        name,
-        name,
-        initialDelay: initialDelay,
-        constraints: Constraints(
-          networkType: NetworkType.connected,
-          requiresCharging: false,
-        ),
-      );
-    } on PlatformException {
-      if (kDebugMode) {
-        print(
-          'Unable to register background task. This is expected in the '
-          'simulator.',
-        );
-      }
-    }
+    await Workmanager().registerPeriodicTask(
+      name,
+      name,
+      frequency: frequency,
+      constraints: Constraints(
+        networkType: NetworkType.connected,
+        requiresCharging: false,
+      ),
+    );
   }
 }

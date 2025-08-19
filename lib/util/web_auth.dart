@@ -3,12 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 
 const _authScheme = 'finale-auth';
-const authCallbackUrl =
-    isWeb
-        ? isDebug
-            ? 'http://localhost:52486/auth.html'
-            : 'https://web.finale.app/auth.html'
-        : '$_authScheme://web.finale.app/auth';
+const authCallbackUrl = isWeb
+    ? isDebug
+          ? 'http://localhost:52486/auth.html'
+          : 'https://web.finale.app/auth.html'
+    : '$_authScheme://web.finale.app/auth';
 
 Future<String?> showWebAuth(Uri uri, {required String queryParam}) async {
   String result;

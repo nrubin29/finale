@@ -35,15 +35,14 @@ class SettingsListTile extends StatelessWidget {
   Widget build(BuildContext context) => StreamBuilder<bool>(
     stream: preference.changes,
     initialData: preference.value,
-    builder:
-        (_, snapshot) => CaptionedListTile(
-          title: title,
-          caption: description,
-          icon: icon,
-          trailing: Switch(value: snapshot.data!, onChanged: _updateValue),
-          onTap: () {
-            _updateValue(!snapshot.data!);
-          },
-        ),
+    builder: (_, snapshot) => CaptionedListTile(
+      title: title,
+      caption: description,
+      icon: icon,
+      trailing: Switch(value: snapshot.data!, onChanged: _updateValue),
+      onTap: () {
+        _updateValue(!snapshot.data!);
+      },
+    ),
   );
 }

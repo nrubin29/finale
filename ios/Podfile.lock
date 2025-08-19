@@ -1,5 +1,5 @@
 PODS:
-  - app_links (0.0.2):
+  - app_links (6.4.1):
     - Flutter
   - Flutter (1.0.0)
   - flutter_acrcloud (0.0.1):
@@ -41,7 +41,7 @@ PODS:
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
-  - workmanager (0.0.1):
+  - workmanager_apple (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -64,7 +64,7 @@ DEPENDENCIES:
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
   - webview_cookie_manager_plus (from `.symlinks/plugins/webview_cookie_manager_plus/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
-  - workmanager (from `.symlinks/plugins/workmanager/ios`)
+  - workmanager_apple (from `.symlinks/plugins/workmanager_apple/ios`)
 
 EXTERNAL SOURCES:
   app_links:
@@ -105,17 +105,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_cookie_manager_plus/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
-  workmanager:
-    :path: ".symlinks/plugins/workmanager/ios"
+  workmanager_apple:
+    :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
-  app_links: e7a6750a915a9e161c58d91bc610e8cd1d4d0ad0
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  app_links: 585674be3c6661708e6cd794ab4f39fb9d8356f9
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_acrcloud: 8dc6ee574321bc08390c1e79900aad5ef683248d
-  flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
+  flutter_local_notifications: ff50f8405aaa0ccdc7dcfb9022ca192e8ad9688f
   flutter_mpmediaplayer: d6fda8913387edcbc6a1fd798087c693ac6937cb
   flutter_web_auth_2: 06d500582775790a0d4c323222fcb6d7990f9603
-  gal: 61e868295d28fe67ffa297fae6dacebf56fd53e1
+  gal: 6a522c75909f1244732d4596d11d6a2f86ff37a5
   in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
   package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
@@ -125,11 +125,11 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
-  wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
+  wakelock_plus: 76957ab028e12bfa4e66813c99e46637f367fc7e
   webview_cookie_manager_plus: bb56cf9e53c086a22a2aa033ec6ce374da3095b6
   webview_flutter_wkwebview: a4af96a051138e28e29f60101d094683b9f82188
-  workmanager: 0afdcf5628bbde6924c21af7836fed07b42e30e6
+  workmanager_apple: 7bac258335c310689a641e2d66e88d4845d372e9
 
-PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+PODFILE CHECKSUM: 775997f741c536251164e3eacf6e34abf2eb7a17
 
 COCOAPODS: 1.16.2

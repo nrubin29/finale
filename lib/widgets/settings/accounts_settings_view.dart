@@ -37,21 +37,19 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
           CaptionedListTile(
             title: 'Last.fm',
             icon: SocialMediaIcons.lastfm,
-            trailing:
-                isMobile
-                    ? const Icon(Icons.chevron_right)
-                    : Switch(value: true, onChanged: (_) {}),
-            onTap:
-                isMobile
-                    ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const LastfmSettingsView(),
-                        ),
-                      );
-                    }
-                    : null,
+            trailing: isMobile
+                ? const Icon(Icons.chevron_right)
+                : Switch(value: true, onChanged: (_) {}),
+            onTap: isMobile
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const LastfmSettingsView(),
+                      ),
+                    );
+                  }
+                : null,
           ),
           CaptionedListTile(
             title: 'Spotify',
@@ -60,7 +58,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
             caption:
                 "Search and scrobble from Spotify's database"
                 '${isMobile ? ' and ensure that your Spotify listens are being '
-                        'scrobbled' : ''}.',
+                          'scrobbled' : ''}.',
             onTap: () {
               Navigator.push(
                 context,

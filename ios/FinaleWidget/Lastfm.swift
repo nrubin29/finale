@@ -1,7 +1,6 @@
 import CryptoKit
 import Foundation
 
-@available(iOS 13.0, *)
 class Lastfm {
     private static func buildUrl(_ method: String, _ data: [String: Any]) -> URL {
         var allData = data.merging(["api_key": Env.apiKey, "method": method]) { (a, _) in return a }
@@ -53,7 +52,6 @@ class Lastfm {
     }
 }
 
-@available(iOS 13.0, *)
 class GetRecentTracksRequest: LastfmApiRequest {
     var username: String
     var period: Period
@@ -73,7 +71,6 @@ class GetRecentTracksRequest: LastfmApiRequest {
     }
 }
 
-@available(iOS 13.0, *)
 class GetTopTracksRequest: LastfmApiRequest {
     var username: String
     var period: Period
@@ -88,7 +85,6 @@ class GetTopTracksRequest: LastfmApiRequest {
     }
 }
 
-@available(iOS 13.0, *)
 class GetTopArtistsRequest: LastfmApiRequest {
     var username: String
     var period: Period
@@ -103,7 +99,6 @@ class GetTopArtistsRequest: LastfmApiRequest {
     }
 }
 
-@available(iOS 13.0, *)
 class GetTopAlbumsRequest: LastfmApiRequest {
     var username: String
     var period: Period

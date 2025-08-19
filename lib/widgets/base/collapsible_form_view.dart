@@ -53,56 +53,56 @@ class CollapsibleFormViewState<R extends Object>
   @override
   Widget build(BuildContext context) =>
       _isLoading && widget.loadingWidgetBuilder != null
-          ? Center(child: widget.loadingWidgetBuilder!.call(context))
-          : CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: ExpansionPanelList(
-                  expandedHeaderPadding: EdgeInsets.zero,
-                  expansionCallback: (_, isExpanded) {
-                    setState(() {
-                      _isSettingsExpanded = isExpanded;
-                    });
-                  },
-                  children: [
-                    ExpansionPanel(
-                      headerBuilder:
-                          (_, __) => const ListTile(title: Text('Settings')),
-                      canTapOnHeader: true,
-                      isExpanded: _isSettingsExpanded,
-                      body: Form(
-                        key: _formKey,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        child: Column(
-                          children: [
-                            ...widget.formWidgetsBuilder(context),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: OutlinedButton(
-                                onPressed: onFormSubmit,
-                                child: Text(widget.submitButtonText),
-                              ),
+      ? Center(child: widget.loadingWidgetBuilder!.call(context))
+      : CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: ExpansionPanelList(
+                expandedHeaderPadding: EdgeInsets.zero,
+                expansionCallback: (_, isExpanded) {
+                  setState(() {
+                    _isSettingsExpanded = isExpanded;
+                  });
+                },
+                children: [
+                  ExpansionPanel(
+                    headerBuilder: (_, _) =>
+                        const ListTile(title: Text('Settings')),
+                    canTapOnHeader: true,
+                    isExpanded: _isSettingsExpanded,
+                    body: Form(
+                      key: _formKey,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      child: Column(
+                        children: [
+                          ...widget.formWidgetsBuilder(context),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: OutlinedButton(
+                              onPressed: onFormSubmit,
+                              child: Text(widget.submitButtonText),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+            if (_isLoading)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child:
+                    widget.loadingWidgetBuilder?.call(context) ??
+                    const LoadingComponent(),
+              )
+            else if (_result case R result)
+              SliverSafeArea(
+                sliver: SliverToBoxAdapter(
+                  child: widget.bodyBuilder(context, result),
                 ),
               ),
-              if (_isLoading)
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child:
-                      widget.loadingWidgetBuilder?.call(context) ??
-                      const LoadingComponent(),
-                )
-              else if (_result case R result)
-                SliverSafeArea(
-                  sliver: SliverToBoxAdapter(
-                    child: widget.bodyBuilder(context, result),
-                  ),
-                ),
-            ],
-          );
+          ],
+        );
 }

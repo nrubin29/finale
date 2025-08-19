@@ -46,10 +46,9 @@ Future<Map<String, dynamic>> _doRequest(
   bool libre = false,
 }) async {
   final uri = _buildUri(method, data, libre: libre);
-  final response =
-      post
-          ? await httpClient.post(uri, body: libre ? uri.queryParameters : null)
-          : await httpClient.get(uri);
+  final response = post
+      ? await httpClient.post(uri, body: libre ? uri.queryParameters : null)
+      : await httpClient.get(uri);
 
   dynamic jsonObject;
 

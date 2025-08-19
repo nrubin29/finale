@@ -152,8 +152,10 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
       var title = resultMusicItem.title;
 
       if (Preferences.stripTags.value) {
-        title =
-            title.replaceAll(_tagRegex, '').replaceAll(_spaceRegex, ' ').trim();
+        title = title
+            .replaceAll(_tagRegex, '')
+            .replaceAll(_spaceRegex, ' ')
+            .trim();
       }
 
       final track = ListenContinuouslyTrack(
@@ -166,10 +168,9 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
         track.status = ListenContinuouslyTrackStatus.skipped;
       } else {
         final response = await Lastfm.scrobble([track], [track.timestamp]);
-        track.status =
-            response.accepted == 1
-                ? ListenContinuouslyTrackStatus.scrobbled
-                : ListenContinuouslyTrackStatus.scrobbleError;
+        track.status = response.accepted == 1
+            ? ListenContinuouslyTrackStatus.scrobbled
+            : ListenContinuouslyTrackStatus.scrobbleError;
       }
 
       setState(() {
@@ -223,8 +224,8 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
           child: EntityDisplay<ListenContinuouslyTrack>(
             items: _tracks.toList(growable: false),
             displayImages: false,
-            leadingWidgetBuilder:
-                (track) => Icon(_iconForTrackStatus[track.status]),
+            leadingWidgetBuilder: (track) =>
+                Icon(_iconForTrackStatus[track.status]),
             noResultsMessage: null,
           ),
         ),

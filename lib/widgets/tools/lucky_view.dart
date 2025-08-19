@@ -106,111 +106,100 @@ class _LuckyViewState extends State<LuckyView> {
       key: _formKey,
       submitButtonText: 'Roll the Dice',
       onFormSubmit: _loadData,
-      formWidgetsBuilder:
-          (_) => [
-            ListTileTextField(
-              title: 'Username',
-              controller: _usernameTextController,
-              validator: _validator,
-            ),
-            ListTile(
-              title: const Text('Period'),
-              trailing: PeriodDropdownButton(
-                periodChanged: (period) {
-                  _period = period;
-                },
-              ),
-            ),
-            ListTile(
-              title: const Text('Type'),
-              trailing: DropdownButton<EntityType>(
-                value: _entityType,
-                items: const [
-                  DropdownMenuItem(
-                    value: EntityType.track,
-                    child: Text('Tracks'),
-                  ),
-                  DropdownMenuItem(
-                    value: EntityType.album,
-                    child: Text('Albums'),
-                  ),
-                  DropdownMenuItem(
-                    value: EntityType.artist,
-                    child: Text('Artists'),
-                  ),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _entityType = value;
-                    });
-                  }
-                },
-              ),
-            ),
-          ],
-      bodyBuilder:
-          (context, entity) => Column(
-            children: [
-              const SizedBox(height: 8),
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.height / 2,
-                ),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: EntityImage(
-                    entity: entity,
-                    quality: ImageQuality.high,
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  pushLastfmEntityDetailView(context, entity);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            entity.displayTitle,
-                            style: const TextStyle(fontSize: 22),
-                            textAlign: TextAlign.center,
-                          ),
-                          if (entity.displaySubtitle != null) ...[
-                            const SizedBox(height: 4),
-                            Text(
-                              entity.displaySubtitle!,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                          ],
-                          if (entity.displayTrailing != null) ...[
-                            const SizedBox(height: 4),
-                            Text(entity.displayTrailing!),
-                          ],
-                        ],
-                      ),
-                      const Align(
-                        alignment: Alignment.centerRight,
-                        child: SafeArea(
-                          minimum: EdgeInsets.only(right: 16),
-                          child: Icon(Icons.chevron_right),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              OutlinedButton(
-                onPressed: _formKey.currentState?.onFormSubmit,
-                child: const Text('Choose Another'),
+      formWidgetsBuilder: (_) => [
+        ListTileTextField(
+          title: 'Username',
+          controller: _usernameTextController,
+          validator: _validator,
+        ),
+        ListTile(
+          title: const Text('Period'),
+          trailing: PeriodDropdownButton(
+            periodChanged: (period) {
+              _period = period;
+            },
+          ),
+        ),
+        ListTile(
+          title: const Text('Type'),
+          trailing: DropdownButton<EntityType>(
+            value: _entityType,
+            items: const [
+              DropdownMenuItem(value: EntityType.track, child: Text('Tracks')),
+              DropdownMenuItem(value: EntityType.album, child: Text('Albums')),
+              DropdownMenuItem(
+                value: EntityType.artist,
+                child: Text('Artists'),
               ),
             ],
+            onChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  _entityType = value;
+                });
+              }
+            },
           ),
+        ),
+      ],
+      bodyBuilder: (context, entity) => Column(
+        children: [
+          const SizedBox(height: 8),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.height / 2,
+            ),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: EntityImage(entity: entity, quality: ImageQuality.high),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              pushLastfmEntityDetailView(context, entity);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        entity.displayTitle,
+                        style: const TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (entity.displaySubtitle != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          entity.displaySubtitle!,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ],
+                      if (entity.displayTrailing != null) ...[
+                        const SizedBox(height: 4),
+                        Text(entity.displayTrailing!),
+                      ],
+                    ],
+                  ),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: SafeArea(
+                      minimum: EdgeInsets.only(right: 16),
+                      child: Icon(Icons.chevron_right),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          OutlinedButton(
+            onPressed: _formKey.currentState?.onFormSubmit,
+            child: const Text('Choose Another'),
+          ),
+        ],
+      ),
     ),
   );
 

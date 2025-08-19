@@ -21,13 +21,12 @@ class ThemeSettingsView extends StatelessWidget {
         decoration: BoxDecoration(
           color: themeColor.color,
           borderRadius: BorderRadius.circular(16),
-          border:
-              Preferences.themeColor.value == themeColor
-                  ? Border.all(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    width: 3,
-                  )
-                  : null,
+          border: Preferences.themeColor.value == themeColor
+              ? Border.all(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  width: 3,
+                )
+              : null,
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),

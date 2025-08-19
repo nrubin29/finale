@@ -15,35 +15,32 @@ class ProfileScrobbleDistributionComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ScrobbleDistributionComponent(
     username: username,
-    fetchScrobbleCounts:
-        (ranges) => ranges.map(
-          (range) =>
-              GetRecentTracksRequest(
-                username,
-                from: range.start,
-                to: range.end,
-              ).getNumItems(),
-        ),
+    fetchScrobbleCounts: (ranges) => ranges.map(
+      (range) => GetRecentTracksRequest(
+        username,
+        from: range.start,
+        to: range.end,
+      ).getNumItems(),
+    ),
     onDayTapped: (item) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder:
-              (context) => Scaffold(
-                appBar: createAppBar(
-                  context,
-                  dateFormatWithYear.format(item.dateTime),
-                  subtitle: pluralize(item.scrobbles),
-                ),
-                body: EntityDisplay<LRecentTracksResponseTrack>(
-                  request: GetRecentTracksRequest(
-                    username,
-                    from: item.dateTimeRange.start,
-                    to: item.dateTimeRange.end,
-                  ),
-                  detailWidgetBuilder: (track) => TrackView(track: track),
-                ),
+          builder: (context) => Scaffold(
+            appBar: createAppBar(
+              context,
+              dateFormatWithYear.format(item.dateTime),
+              subtitle: pluralize(item.scrobbles),
+            ),
+            body: EntityDisplay<LRecentTracksResponseTrack>(
+              request: GetRecentTracksRequest(
+                username,
+                from: item.dateTimeRange.start,
+                to: item.dateTimeRange.end,
               ),
+              detailWidgetBuilder: (track) => TrackView(track: track),
+            ),
+          ),
         ),
       );
     },

@@ -121,8 +121,9 @@ class _ScrobbleModificationViewState extends State<ScrobbleModificationView> {
       final success = await LastfmCookie.deleteScrobble(scrobble);
 
       setState(() {
-        scrobble._status =
-            success ? _ScrobbleStatus.success : _ScrobbleStatus.error;
+        scrobble._status = success
+            ? _ScrobbleStatus.success
+            : _ScrobbleStatus.error;
       });
     }
   }
@@ -137,13 +138,12 @@ class _ScrobbleModificationViewState extends State<ScrobbleModificationView> {
     ),
     body: EntityDisplay(
       items: _scrobbles,
-      trailingWidgetBuilder:
-          (item) => switch (item._status) {
-            _ScrobbleStatus.pending => const SizedBox(),
-            _ScrobbleStatus.processing => const LoadingComponent.small(),
-            _ScrobbleStatus.success => const Icon(Icons.check),
-            _ScrobbleStatus.error => const Icon(Icons.error),
-          },
+      trailingWidgetBuilder: (item) => switch (item._status) {
+        _ScrobbleStatus.pending => const SizedBox(),
+        _ScrobbleStatus.processing => const LoadingComponent.small(),
+        _ScrobbleStatus.success => const Icon(Icons.check),
+        _ScrobbleStatus.error => const Icon(Icons.error),
+      },
     ),
   );
 }

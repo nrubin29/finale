@@ -37,12 +37,11 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
       _selectedTracks = null;
     });
 
-    var result =
-        await GetRecentTracksRequest(
-          Preferences.name.value!,
-          from: _dateRange!.start,
-          to: _dateRange!.end,
-        ).getAllData();
+    var result = await GetRecentTracksRequest(
+      Preferences.name.value!,
+      from: _dateRange!.start,
+      to: _dateRange!.end,
+    ).getAllData();
 
     if (result.isEmpty) {
       if (!mounted) return const [];
@@ -119,27 +118,26 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
     body: CollapsibleFormView<List<LRecentTracksResponseTrack>>(
       submitButtonText: 'Load Scrobbles',
       onFormSubmit: _fetchTracks,
-      formWidgetsBuilder:
-          (_) => [
-            DateRangeField(
-              lowerBound: ProfileStack.of(context).me.registered.date,
-              onChanged: (dateRange) {
-                setState(() {
-                  _dateRange = dateRange;
-                });
-              },
-            ),
-            ScrobbleFiltersListTile(
-              filters: _scrobbleFilters,
-              onChanged: (value) {
-                setState(() {
-                  _scrobbleFilters = value;
-                });
-              },
-            ),
-          ],
-      bodyBuilder:
-          (_, tracks) => EntityCheckboxList<LRecentTracksResponseTrack>(
+      formWidgetsBuilder: (_) => [
+        DateRangeField(
+          lowerBound: ProfileStack.of(context).me.registered.date,
+          onChanged: (dateRange) {
+            setState(() {
+              _dateRange = dateRange;
+            });
+          },
+        ),
+        ScrobbleFiltersListTile(
+          filters: _scrobbleFilters,
+          onChanged: (value) {
+            setState(() {
+              _scrobbleFilters = value;
+            });
+          },
+        ),
+      ],
+      bodyBuilder: (_, tracks) =>
+          EntityCheckboxList<LRecentTracksResponseTrack>(
             scrollable: false,
             items: tracks,
             onSelectionChanged: (selection) {

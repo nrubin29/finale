@@ -17,117 +17,114 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
       appBar: createAppBar(context, 'Settings'),
       body: Builder(
-        builder:
-            (context) => ListView(
-              children: [
-                ListTile(
-                  title: const Text('About'),
-                  leading: const Icon(Icons.info),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AboutView()),
-                    );
-                  },
-                ),
-                ListTile(
-                  title: const Text('General'),
-                  leading: const Icon(Icons.settings),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const GeneralSettingsView(),
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
-                  title: const Text('Accounts'),
-                  leading: const Icon(Icons.switch_account),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AccountsSettingsView(),
-                      ),
-                    );
-                  },
-                ),
-                if (isMobile)
-                  ListTile(
-                    title: const Text('Listen Continuously'),
-                    leading: const Icon(Icons.all_inclusive),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (_) => const ListenContinuouslySettingsView(),
-                        ),
-                      );
-                    },
-                  ),
-                ListTile(
-                  title: const Text('Theme'),
-                  leading: const Icon(Icons.format_paint),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => ThemeSettingsView()),
-                    );
-                  },
-                ),
-                if (!isWeb)
-                  ListTile(
-                    title: const Text('Empty image cache'),
-                    leading: const Icon(Icons.delete),
-                    onTap: () async {
-                      await DefaultCacheManager().emptyCache();
-                      await ImageIdCache().drop();
-
-                      if (!context.mounted) return;
-                      showDialog(
-                        context: context,
-                        builder:
-                            (context) => AlertDialog(
-                              title: const Text('Success'),
-                              content: const Text('Image cache emptied.'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('Dismiss'),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ],
-                            ),
-                      );
-                    },
-                  ),
-                ListTile(
-                  title: const Text('Log out'),
-                  leading: const Icon(Icons.logout),
-                  onTap: () {
-                    LoginView.logOutAndShow(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text('Reset all settings'),
-                  leading: const Icon(Icons.clear),
-                  onTap: () async {
-                    await Preferences.clearAll();
-                    await DefaultCacheManager().emptyCache();
-                    await ImageIdCache().drop();
-                    if (!context.mounted) return;
-                    LoginView.logOutAndShow(context);
-                  },
-                ),
-              ],
+        builder: (context) => ListView(
+          children: [
+            ListTile(
+              title: const Text('About'),
+              leading: const Icon(Icons.info),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutView()),
+                );
+              },
             ),
+            ListTile(
+              title: const Text('General'),
+              leading: const Icon(Icons.settings),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const GeneralSettingsView(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Accounts'),
+              leading: const Icon(Icons.switch_account),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AccountsSettingsView(),
+                  ),
+                );
+              },
+            ),
+            if (isMobile)
+              ListTile(
+                title: const Text('Listen Continuously'),
+                leading: const Icon(Icons.all_inclusive),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ListenContinuouslySettingsView(),
+                    ),
+                  );
+                },
+              ),
+            ListTile(
+              title: const Text('Theme'),
+              leading: const Icon(Icons.format_paint),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ThemeSettingsView()),
+                );
+              },
+            ),
+            if (!isWeb)
+              ListTile(
+                title: const Text('Empty image cache'),
+                leading: const Icon(Icons.delete),
+                onTap: () async {
+                  await DefaultCacheManager().emptyCache();
+                  await ImageIdCache().drop();
+
+                  if (!context.mounted) return;
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Success'),
+                      content: const Text('Image cache emptied.'),
+                      actions: [
+                        TextButton(
+                          child: const Text('Dismiss'),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ListTile(
+              title: const Text('Log out'),
+              leading: const Icon(Icons.logout),
+              onTap: () {
+                LoginView.logOutAndShow(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Reset all settings'),
+              leading: const Icon(Icons.clear),
+              onTap: () async {
+                await Preferences.clearAll();
+                await DefaultCacheManager().emptyCache();
+                await ImageIdCache().drop();
+                if (!context.mounted) return;
+                LoginView.logOutAndShow(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -62,26 +62,22 @@ class LoginView extends StatelessWidget {
                   MediaQuery.of(context).size.width ~/ 200,
                   3,
                 ),
-                children:
-                    snapshot.data!
-                        .map(
-                          (artist) => FutureBuilder<List<LArtistTopAlbum>>(
-                            future: ArtistGetTopAlbumsRequest(
-                              artist.name,
-                            ).getData(1, 1),
-                            builder:
-                                (context, snapshot) =>
-                                    snapshot.hasData
-                                        ? EntityImage(
-                                          entity: snapshot.data!.first,
-                                          quality: ImageQuality.high,
-                                          placeholderBehavior:
-                                              PlaceholderBehavior.none,
-                                        )
-                                        : Container(),
-                          ),
-                        )
-                        .toList(),
+                children: snapshot.data!
+                    .map(
+                      (artist) => FutureBuilder<List<LArtistTopAlbum>>(
+                        future: ArtistGetTopAlbumsRequest(
+                          artist.name,
+                        ).getData(1, 1),
+                        builder: (context, snapshot) => snapshot.hasData
+                            ? EntityImage(
+                                entity: snapshot.data!.first,
+                                quality: ImageQuality.high,
+                                placeholderBehavior: PlaceholderBehavior.none,
+                              )
+                            : Container(),
+                      ),
+                    )
+                    .toList(),
               );
             },
           ),

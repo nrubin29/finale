@@ -29,13 +29,9 @@ class AboutView extends StatelessWidget {
                     const Text('Finale', style: TextStyle(fontSize: 24)),
                     FutureBuilder<PackageInfo>(
                       future: PackageInfo.fromPlatform(),
-                      builder:
-                          (_, snapshot) =>
-                              snapshot.hasData
-                                  ? Text(
-                                    'Version ${snapshot.data!.fullVersion}',
-                                  )
-                                  : const SizedBox(),
+                      builder: (_, snapshot) => snapshot.hasData
+                          ? Text('Version ${snapshot.data!.fullVersion}')
+                          : const SizedBox(),
                     ),
                   ],
                 ),

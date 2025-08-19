@@ -63,7 +63,7 @@ class _EntityCheckboxList<T extends Entity>
 
   void _updateAll({required bool isSelected}) {
     setState(() {
-      _items.updateAll((_, __) => isSelected);
+      _items.updateAll((_, _) => isSelected);
     });
 
     widget.onSelectionChanged(
@@ -93,22 +93,20 @@ class _EntityCheckboxList<T extends Entity>
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed:
-                      _items.values.any((value) => !value)
-                          ? () {
-                            _updateAll(isSelected: true);
-                          }
-                          : null,
+                  onPressed: _items.values.any((value) => !value)
+                      ? () {
+                          _updateAll(isSelected: true);
+                        }
+                      : null,
                   child: const Text('Select all'),
                 ),
                 const SizedBox(width: 16),
                 TextButton(
-                  onPressed:
-                      _items.values.any((value) => value)
-                          ? () {
-                            _updateAll(isSelected: false);
-                          }
-                          : null,
+                  onPressed: _items.values.any((value) => value)
+                      ? () {
+                          _updateAll(isSelected: false);
+                        }
+                      : null,
                   child: const Text('Deselect all'),
                 ),
               ],
@@ -116,15 +114,14 @@ class _EntityCheckboxList<T extends Entity>
           ),
         ),
     ],
-    leadingWidgetBuilder:
-        (item) => Checkbox(
-          value: _items[item],
-          onChanged: (value) {
-            if (value != null) {
-              _updateItem(item, value);
-            }
-          },
-        ),
+    leadingWidgetBuilder: (item) => Checkbox(
+      value: _items[item],
+      onChanged: (value) {
+        if (value != null) {
+          _updateItem(item, value);
+        }
+      },
+    ),
     trailingWidgetBuilder: widget.trailingWidgetBuilder,
   );
 }

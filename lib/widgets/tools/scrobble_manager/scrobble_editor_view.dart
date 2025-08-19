@@ -58,10 +58,9 @@ class _ScrobbleEditorViewState extends State<ScrobbleEditorView> {
 
   String? _initialValue(
     String Function(LRecentTracksResponseTrack track) getter,
-  ) =>
-      widget.tracks.map(getter).toSet().length == 1
-          ? getter(widget.tracks.first)
-          : null;
+  ) => widget.tracks.map(getter).toSet().length == 1
+      ? getter(widget.tracks.first)
+      : null;
 
   void _submit() async {
     final result = ScrobbleEditRequest(

@@ -66,26 +66,25 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
       _loaded = false;
     });
 
-    final (tracks, albums, artists, recentTracks) =
-        await (
-          Lastfm.getWeeklyTrackChart(
-            widget.user,
-            widget.chart,
-          ).then((value) => value.tracks),
-          Lastfm.getWeeklyAlbumChart(
-            widget.user,
-            widget.chart,
-          ).then((value) => value.albums),
-          Lastfm.getWeeklyArtistChart(
-            widget.user,
-            widget.chart,
-          ).then((value) => value.artists),
-          GetRecentTracksRequest(
-            widget.user.name,
-            from: widget.chart.fromDate,
-            to: widget.chart.toDate,
-          ).getAllData(),
-        ).wait;
+    final (tracks, albums, artists, recentTracks) = await (
+      Lastfm.getWeeklyTrackChart(
+        widget.user,
+        widget.chart,
+      ).then((value) => value.tracks),
+      Lastfm.getWeeklyAlbumChart(
+        widget.user,
+        widget.chart,
+      ).then((value) => value.albums),
+      Lastfm.getWeeklyArtistChart(
+        widget.user,
+        widget.chart,
+      ).then((value) => value.artists),
+      GetRecentTracksRequest(
+        widget.user.name,
+        from: widget.chart.fromDate,
+        to: widget.chart.toDate,
+      ).getAllData(),
+    ).wait;
 
     final numScrobbles = tracks.fold(
       0,
@@ -144,204 +143,199 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
     return !_loaded
         ? const LoadingComponent()
         : SafeArea(
-          child: ListView(
-            children: [
-              const SizedBox(height: 10),
-              Scoreboard(
-                items: [
-                  ScoreboardItemModel.value(
-                    label: 'Scrobbles',
-                    value: _numScrobbles,
-                  ),
-                  ScoreboardItemModel.value(
-                    label: 'Artists',
-                    value: _artists.length,
-                  ),
-                  ScoreboardItemModel.value(
-                    label: 'Albums',
-                    value: _albums.length,
-                  ),
-                  ScoreboardItemModel.value(
-                    label: 'Tracks',
-                    value: _tracks.length,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: SizedBox(
-                  height: 200,
-                  child: BarChart(
-                    BarChartData(
-                      barGroups: _barGroups,
-                      alignment: BarChartAlignment.center,
-                      titlesData: FlTitlesData(
-                        leftTitles: const AxisTitles(
-                          axisNameWidget: Text('Scrobbles'),
-                          axisNameSize: 32,
-                        ),
-                        topTitles: const AxisTitles(),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 48,
-                            maxIncluded: false,
-                            getTitlesWidget:
-                                (value, meta) => SideTitleWidget(
-                                  meta: meta,
-                                  child: Text(meta.formattedValue),
-                                ),
+            child: ListView(
+              children: [
+                const SizedBox(height: 10),
+                Scoreboard(
+                  items: [
+                    ScoreboardItemModel.value(
+                      label: 'Scrobbles',
+                      value: _numScrobbles,
+                    ),
+                    ScoreboardItemModel.value(
+                      label: 'Artists',
+                      value: _artists.length,
+                    ),
+                    ScoreboardItemModel.value(
+                      label: 'Albums',
+                      value: _albums.length,
+                    ),
+                    ScoreboardItemModel.value(
+                      label: 'Tracks',
+                      value: _tracks.length,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(
+                    height: 200,
+                    child: BarChart(
+                      BarChartData(
+                        barGroups: _barGroups,
+                        alignment: BarChartAlignment.center,
+                        titlesData: FlTitlesData(
+                          leftTitles: const AxisTitles(
+                            axisNameWidget: Text('Scrobbles'),
+                            axisNameSize: 32,
                           ),
-                        ),
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 24,
-                            getTitlesWidget:
-                                (value, meta) => SideTitleWidget(
-                                  meta: meta,
-                                  child: Text(_weekdays[value.toInt()]),
-                                ),
-                          ),
-                        ),
-                      ),
-                      barTouchData: BarTouchData(
-                        touchTooltipData: BarTouchTooltipData(
-                          getTooltipItem:
-                              (_, __, rod, ___) => BarTooltipItem(
-                                pluralize(rod.toY),
-                                Theme.of(context).textTheme.bodyMedium!
-                                    .copyWith(color: Colors.white),
+                          topTitles: const AxisTitles(),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 48,
+                              maxIncluded: false,
+                              getTitlesWidget: (value, meta) => SideTitleWidget(
+                                meta: meta,
+                                child: Text(meta.formattedValue),
                               ),
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 24,
+                              getTitlesWidget: (value, meta) => SideTitleWidget(
+                                meta: meta,
+                                child: Text(_weekdays[value.toInt()]),
+                              ),
+                            ),
+                          ),
                         ),
+                        barTouchData: BarTouchData(
+                          touchTooltipData: BarTouchTooltipData(
+                            getTooltipItem: (_, _, rod, _) => BarTooltipItem(
+                              pluralize(rod.toY),
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        gridData: const FlGridData(drawVerticalLine: false),
+                        borderData: FlBorderData(show: false),
                       ),
-                      gridData: const FlGridData(drawVerticalLine: false),
-                      borderData: FlBorderData(show: false),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              if (_tracks.isNotEmpty) const HeaderListTile('Top Tracks'),
-              for (final track in _tracks.take(3))
-                ListTile(
-                  title: Text(track.name),
-                  subtitle: Text(track.artistName),
-                  trailing: Text('${track.playCount} scrobbles'),
-                  leading: EntityImage(entity: track),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TrackView(track: track),
-                      ),
-                    );
-                  },
-                ),
-              if (_tracks.length > 3)
-                ListTile(
-                  title: const Text('See more'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => Scaffold(
-                              appBar: createAppBar(context, 'Top Tracks'),
-                              body: EntityDisplay<LUserWeeklyTrackChartTrack>(
-                                items: _tracks,
-                                detailWidgetBuilder:
-                                    (track) => TrackView(track: track),
-                              ),
-                            ),
-                      ),
-                    );
-                  },
-                ),
-              if (_albums.isNotEmpty) const HeaderListTile('Top Albums'),
-              for (final album in _albums.take(3))
-                ListTile(
-                  title: Text(album.name),
-                  subtitle: Text(album.artist.name),
-                  trailing: Text('${album.playCount} scrobbles'),
-                  leading: EntityImage(entity: album),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AlbumView(album: album),
-                      ),
-                    );
-                  },
-                ),
-              if (_albums.length > 3)
-                ListTile(
-                  title: const Text('See more'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => Scaffold(
-                              appBar: createAppBar(context, 'Top Albums'),
-                              body: EntityDisplay<LUserWeeklyAlbumChartAlbum>(
-                                items: _albums,
-                                displayType: DisplayType.grid,
-                                detailWidgetBuilder:
-                                    (album) => AlbumView(album: album),
-                              ),
-                            ),
-                      ),
-                    );
-                  },
-                ),
-              if (_artists.isNotEmpty) const HeaderListTile('Top Artists'),
-              for (final artist in _artists.take(3))
-                ListTile(
-                  title: Text(artist.name),
-                  trailing: Text('${artist.playCount} scrobbles'),
-                  leading: EntityImage(entity: artist),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 16,
+                const SizedBox(height: 10),
+                if (_tracks.isNotEmpty) const HeaderListTile('Top Tracks'),
+                for (final track in _tracks.take(3))
+                  ListTile(
+                    title: Text(track.name),
+                    subtitle: Text(track.artistName),
+                    trailing: Text('${track.playCount} scrobbles'),
+                    leading: EntityImage(entity: track),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TrackView(track: track),
+                        ),
+                      );
+                    },
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ArtistView(artist: artist),
-                      ),
-                    );
-                  },
-                ),
-              if (_artists.length > 3)
-                ListTile(
-                  title: const Text('See more'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => Scaffold(
-                              appBar: createAppBar(context, 'Top Artists'),
-                              body: EntityDisplay<LUserWeeklyArtistChartArtist>(
-                                items: _artists,
-                                displayType: DisplayType.grid,
-                                detailWidgetBuilder:
-                                    (artist) => ArtistView(artist: artist),
-                              ),
+                if (_tracks.length > 3)
+                  ListTile(
+                    title: const Text('See more'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                            appBar: createAppBar(context, 'Top Tracks'),
+                            body: EntityDisplay<LUserWeeklyTrackChartTrack>(
+                              items: _tracks,
+                              detailWidgetBuilder: (track) =>
+                                  TrackView(track: track),
                             ),
-                      ),
-                    );
-                  },
-                ),
-            ],
-          ),
-        );
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                if (_albums.isNotEmpty) const HeaderListTile('Top Albums'),
+                for (final album in _albums.take(3))
+                  ListTile(
+                    title: Text(album.name),
+                    subtitle: Text(album.artist.name),
+                    trailing: Text('${album.playCount} scrobbles'),
+                    leading: EntityImage(entity: album),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AlbumView(album: album),
+                        ),
+                      );
+                    },
+                  ),
+                if (_albums.length > 3)
+                  ListTile(
+                    title: const Text('See more'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                            appBar: createAppBar(context, 'Top Albums'),
+                            body: EntityDisplay<LUserWeeklyAlbumChartAlbum>(
+                              items: _albums,
+                              displayType: DisplayType.grid,
+                              detailWidgetBuilder: (album) =>
+                                  AlbumView(album: album),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                if (_artists.isNotEmpty) const HeaderListTile('Top Artists'),
+                for (final artist in _artists.take(3))
+                  ListTile(
+                    title: Text(artist.name),
+                    trailing: Text('${artist.playCount} scrobbles'),
+                    leading: EntityImage(entity: artist),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 16,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ArtistView(artist: artist),
+                        ),
+                      );
+                    },
+                  ),
+                if (_artists.length > 3)
+                  ListTile(
+                    title: const Text('See more'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                            appBar: createAppBar(context, 'Top Artists'),
+                            body: EntityDisplay<LUserWeeklyArtistChartArtist>(
+                              items: _artists,
+                              displayType: DisplayType.grid,
+                              detailWidgetBuilder: (artist) =>
+                                  ArtistView(artist: artist),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+              ],
+            ),
+          );
   }
 
   @override

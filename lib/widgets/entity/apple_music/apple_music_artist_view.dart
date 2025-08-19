@@ -20,32 +20,30 @@ class AppleMusicArtistView extends StatelessWidget {
   Widget build(BuildContext context) => FutureBuilderView<AMArtist>(
     futureFactory: () => AppleMusic.getArtist(artistId),
     baseEntity: artistId,
-    builder:
-        (artist) => Scaffold(
-          appBar: createAppBar(
-            context,
-            artist.name,
-            backgroundColor: appleMusicPink,
+    builder: (artist) => Scaffold(
+      appBar: createAppBar(
+        context,
+        artist.name,
+        backgroundColor: appleMusicPink,
+      ),
+      body: TwoUp(
+        entity: artist,
+        listItems: [
+          ArtistTabs(
+            color: appleMusicPink,
+            albumsWidget: EntityDisplay<AMAlbum>(
+              scrollable: false,
+              request: AMSearchAlbumsRequest.forArtist(artist),
+              detailWidgetBuilder: (album) => AppleMusicAlbumView(album: album),
+            ),
+            tracksWidget: EntityDisplay<AMSong>(
+              scrollable: false,
+              request: AMSearchSongsRequest.forArtist(artist),
+              scrobbleableEntity: (track) async => track,
+            ),
           ),
-          body: TwoUp(
-            entity: artist,
-            listItems: [
-              ArtistTabs(
-                color: appleMusicPink,
-                albumsWidget: EntityDisplay<AMAlbum>(
-                  scrollable: false,
-                  request: AMSearchAlbumsRequest.forArtist(artist),
-                  detailWidgetBuilder:
-                      (album) => AppleMusicAlbumView(album: album),
-                ),
-                tracksWidget: EntityDisplay<AMSong>(
-                  scrollable: false,
-                  request: AMSearchSongsRequest.forArtist(artist),
-                  scrobbleableEntity: (track) async => track,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
+      ),
+    ),
   );
 }

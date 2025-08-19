@@ -7,14 +7,13 @@ part 'common.g.dart';
 
 bool convertStringToBoolean(String? text) => text == '1';
 
-int? intParseSafe(value) =>
-    value == null
-        ? null
-        : value is int
-        ? value
-        : int.tryParse(value);
+int? intParseSafe(dynamic value) => value == null
+    ? null
+    : value is int
+    ? value
+    : int.tryParse(value);
 
-int parseInt(value) => intParseSafe(value) ?? 0;
+int parseInt(dynamic value) => intParseSafe(value) ?? 0;
 
 DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
     DateTime.fromMillisecondsSinceEpoch(
@@ -109,17 +108,16 @@ class LTopTags {
 
   // If there are no tags, the Last.fm API in its infinite wisdom will return
   // an empty string instead of an empty array.
-  static LTopTags fromJsonSafe(json) =>
+  static LTopTags fromJsonSafe(dynamic json) =>
       json == '' ? const LTopTags([]) : LTopTags.fromJson(json);
 
   // If there's only one tag, the Last.fm API in its infinite wisdom doesn't
   // wrap it in an array literal.
-  static List<LTag> parseTags(json) =>
-      json == null
-          ? const []
-          : json is List<dynamic>
-          ? json.map((json) => LTag.fromJson(json)).toList(growable: false)
-          : [LTag.fromJson(json)];
+  static List<LTag> parseTags(dynamic json) => json == null
+      ? const []
+      : json is List<dynamic>
+      ? json.map((json) => LTag.fromJson(json)).toList(growable: false)
+      : [LTag.fromJson(json)];
 }
 
 @JsonSerializable()

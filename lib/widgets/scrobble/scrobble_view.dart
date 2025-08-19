@@ -138,18 +138,16 @@ class _ScrobbleViewState extends State<ScrobbleView> {
         'Scrobble',
         actions: [
           Builder(
-            builder:
-                (context) =>
-                    _isLoading
-                        ? const AppBarLoadingIndicator()
-                        : IconButton(
-                          icon: const Icon(scrobbleIcon),
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              _scrobble(context);
-                            }
-                          },
-                        ),
+            builder: (context) => _isLoading
+                ? const AppBarLoadingIndicator()
+                : IconButton(
+                    icon: const Icon(scrobbleIcon),
+                    onPressed: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        _scrobble(context);
+                      }
+                    },
+                  ),
           ),
         ],
       ),

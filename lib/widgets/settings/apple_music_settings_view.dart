@@ -93,11 +93,11 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
               leading: const Icon(Icons.vpn_key),
               trailing:
                   _authorizationStatus == AuthorizationStatus.notDetermined
-                      ? TextButton(
-                        onPressed: _authorize,
-                        child: const Text('Authorize'),
-                      )
-                      : null,
+                  ? TextButton(
+                      onPressed: _authorize,
+                      child: const Text('Authorize'),
+                    )
+                  : null,
             ),
             if (_authorizationStatus == AuthorizationStatus.authorized)
               SettingsListTile(

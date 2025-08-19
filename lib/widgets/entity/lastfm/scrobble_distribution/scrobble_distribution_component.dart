@@ -99,8 +99,9 @@ class _ScrobbleDistributionComponentState
     _dateTime = switch (_level) {
       ScrobbleDistributionLevel.overall => _scrobblingSince,
       ScrobbleDistributionLevel.year => DateTime(_dateTime.year),
-      ScrobbleDistributionLevel.month =>
-        throw Exception('Tried to drill up to month level.'),
+      ScrobbleDistributionLevel.month => throw Exception(
+        'Tried to drill up to month level.',
+      ),
     };
     await _update();
   }
@@ -193,10 +194,9 @@ class _ScrobbleDistributionComponentState
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_upward),
-                  onPressed:
-                      _level == ScrobbleDistributionLevel.overall
-                          ? null
-                          : _drillUp,
+                  onPressed: _level == ScrobbleDistributionLevel.overall
+                      ? null
+                      : _drillUp,
                 ),
                 Text(_levelTitle),
               ],
@@ -217,14 +217,13 @@ class _ScrobbleDistributionComponentState
             ],
           ),
         Expanded(
-          child:
-              _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ScrobbleDistributionBarChart(
-                    level: _level,
-                    items: _items,
-                    onTap: _drillDown,
-                  ),
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ScrobbleDistributionBarChart(
+                  level: _level,
+                  items: _items,
+                  onTap: _drillDown,
+                ),
         ),
       ],
     );

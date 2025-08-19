@@ -40,7 +40,7 @@ class ScrobbleDistributionBarChart extends StatelessWidget {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 72,
-            getTitlesWidget: (_, __) => const SizedBox(),
+            getTitlesWidget: (_, _) => const SizedBox(),
           ),
         ),
         rightTitles: AxisTitles(
@@ -48,22 +48,18 @@ class ScrobbleDistributionBarChart extends StatelessWidget {
             showTitles: true,
             reservedSize: 48,
             maxIncluded: false,
-            getTitlesWidget:
-                (value, meta) => SideTitleWidget(
-                  meta: meta,
-                  child: Text(meta.formattedValue),
-                ),
+            getTitlesWidget: (value, meta) =>
+                SideTitleWidget(meta: meta, child: Text(meta.formattedValue)),
           ),
         ),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 48,
-            getTitlesWidget:
-                (value, meta) => SideTitleWidget(
-                  meta: meta,
-                  child: Text(items[value.toInt()].shortTitle),
-                ),
+            getTitlesWidget: (value, meta) => SideTitleWidget(
+              meta: meta,
+              child: Text(items[value.toInt()].shortTitle),
+            ),
           ),
         ),
       ),
@@ -79,14 +75,12 @@ class ScrobbleDistributionBarChart extends StatelessWidget {
         },
         touchTooltipData: BarTouchTooltipData(
           getTooltipColor: (_) => Colors.transparent,
-          getTooltipItem:
-              (_, __, rod, ___) =>
-                  rod.toY == 0
-                      ? null
-                      : BarTooltipItem(
-                        numberFormat.format(rod.toY),
-                        Theme.of(context).textTheme.bodyMedium!,
-                      ),
+          getTooltipItem: (_, _, rod, _) => rod.toY == 0
+              ? null
+              : BarTooltipItem(
+                  numberFormat.format(rod.toY),
+                  Theme.of(context).textTheme.bodyMedium!,
+                ),
         ),
       ),
       gridData: const FlGridData(drawVerticalLine: false),

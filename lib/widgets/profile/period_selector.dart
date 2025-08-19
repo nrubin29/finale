@@ -114,13 +114,10 @@ class _PeriodSelectorState<T extends HasPlayCount>
           scoreboardItems: [
             ScoreboardItemModel.future(
               label: 'Scrobbles',
-              futureProvider:
-                  () =>
-                      GetRecentTracksRequest.forPeriod(widget.username, _period)
-                          .getNumItems()
-                          .errorToNull<
-                            RecentListeningInformationHiddenException
-                          >(),
+              futureProvider: () =>
+                  GetRecentTracksRequest.forPeriod(widget.username, _period)
+                      .getNumItems()
+                      .errorToNull<RecentListeningInformationHiddenException>(),
             ),
             ScoreboardItemModel.future(
               label: '${widget.entityType.displayName}s',

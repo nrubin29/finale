@@ -19,43 +19,35 @@ class SpotifyArtistView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<SArtist>(
-    futureFactory:
-        artist is SArtist
-            ? () => Future.value(artist)
-            : () => Spotify.getFullArtist(artist),
+    futureFactory: artist is SArtist
+        ? () => Future.value(artist)
+        : () => Spotify.getFullArtist(artist),
     baseEntity: artist,
-    builder:
-        (artist) => Scaffold(
-          appBar: createAppBar(
-            context,
-            artist.name,
-            backgroundColor: spotifyGreen,
-          ),
-          body: TwoUp(
-            entity: artist,
-            listItems: [
-              ArtistTabs(
-                color: spotifyGreen,
-                albumsWidget: EntityDisplay<SAlbumSimple>(
-                  scrollable: false,
-                  request: SArtistAlbumsRequest(artist),
-                  detailWidgetBuilder:
-                      (album) => SpotifyAlbumView(album: album),
-                ),
-                tracksWidget: FutureBuilderView<List<STrack>>(
-                  futureFactory: () => Spotify.getTopTracksForArtist(artist),
-                  baseEntity: artist,
-                  isView: false,
-                  builder:
-                      (tracks) => EntityDisplay<STrack>(
-                        scrollable: false,
-                        items: tracks,
-                        scrobbleableEntity: (track) => Future.value(track),
-                      ),
-                ),
+    builder: (artist) => Scaffold(
+      appBar: createAppBar(context, artist.name, backgroundColor: spotifyGreen),
+      body: TwoUp(
+        entity: artist,
+        listItems: [
+          ArtistTabs(
+            color: spotifyGreen,
+            albumsWidget: EntityDisplay<SAlbumSimple>(
+              scrollable: false,
+              request: SArtistAlbumsRequest(artist),
+              detailWidgetBuilder: (album) => SpotifyAlbumView(album: album),
+            ),
+            tracksWidget: FutureBuilderView<List<STrack>>(
+              futureFactory: () => Spotify.getTopTracksForArtist(artist),
+              baseEntity: artist,
+              isView: false,
+              builder: (tracks) => EntityDisplay<STrack>(
+                scrollable: false,
+                items: tracks,
+                scrobbleableEntity: (track) => Future.value(track),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
+      ),
+    ),
   );
 }

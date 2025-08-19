@@ -432,62 +432,58 @@ class _CollageViewState extends State<CollageView> {
   Widget build(BuildContext context) => Scaffold(
     appBar: createAppBar(context, 'Collage Generator'),
     body: Builder(
-      builder:
-          (context) => CollapsibleFormView<Uint8List>(
-            formWidgetsBuilder: _formWidgetsBuilder,
-            loadingWidgetBuilder: _loadingWidgetBuilder,
-            submitButtonText: 'Generate',
-            bodyBuilder:
-                (context, image) => Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    Center(
-                      child: ConstrainedBox(
-                        constraints:
-                            _type == _CollageType.grid
-                                ? const BoxConstraints(maxWidth: 600)
-                                : const BoxConstraints(maxWidth: 400),
-                        child: Image.memory(image),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (!isWeb) ...[
-                          OutlinedButton(
-                            onPressed: () async {
-                              final box =
-                                  context.findRenderObject() as RenderBox;
-                              final position =
-                                  box.localToGlobal(Offset.zero) & box.size;
+      builder: (context) => CollapsibleFormView<Uint8List>(
+        formWidgetsBuilder: _formWidgetsBuilder,
+        loadingWidgetBuilder: _loadingWidgetBuilder,
+        submitButtonText: 'Generate',
+        bodyBuilder: (context, image) => Column(
+          children: [
+            const SizedBox(height: 16),
+            Center(
+              child: ConstrainedBox(
+                constraints: _type == _CollageType.grid
+                    ? const BoxConstraints(maxWidth: 600)
+                    : const BoxConstraints(maxWidth: 400),
+                child: Image.memory(image),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: () async {
+                    final box = context.findRenderObject() as RenderBox;
+                    final position = box.localToGlobal(Offset.zero) & box.size;
 
-                              await Share.shareXFiles([
-                                XFile.fromData(
-                                  image,
-                                  mimeType: 'image/png',
-                                  name: 'collage.png',
-                                ),
-                              ], sharePositionOrigin: position);
-                            },
-                            child: const Text('Share'),
+                    await SharePlus.instance.share(
+                      ShareParams(
+                        files: [
+                          XFile.fromData(
+                            image,
+                            mimeType: 'image/png',
+                            name: 'collage.png',
                           ),
-                          const SizedBox(width: 10),
                         ],
-                        OutlinedButton(
-                          onPressed: () {
-                            _saveImage(image);
-                          },
-                          child: const Text(
-                            isWeb ? 'Download' : 'Save to gallery',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        sharePositionOrigin: position,
+                      ),
+                    );
+                  },
+                  child: const Text('Share'),
                 ),
-            onFormSubmit: () => _doRequest(context),
-          ),
+                const SizedBox(width: 10),
+                OutlinedButton(
+                  onPressed: () {
+                    _saveImage(image);
+                  },
+                  child: const Text(isWeb ? 'Download' : 'Save to gallery'),
+                ),
+              ],
+            ),
+          ],
+        ),
+        onFormSubmit: () => _doRequest(context),
+      ),
     ),
   );
 

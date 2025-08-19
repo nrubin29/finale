@@ -77,11 +77,10 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.primaryColor,
                     ),
-                    recognizer:
-                        TapGestureRecognizer()
-                          ..onTap = () {
-                            launchUrl(Lastfm.applicationSettingsUri);
-                          },
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(Lastfm.applicationSettingsUri);
+                      },
                   ),
                   TextSpan(style: theme.textTheme.bodyMedium, text: '.'),
                 ],

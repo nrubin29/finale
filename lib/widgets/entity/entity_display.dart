@@ -247,54 +247,52 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     return ListTile(
       visualDensity: VisualDensity.compact,
       title: Text(item.displayTitle),
-      contentPadding:
-          widget.shouldLeftPadListItems
-              ? null
-              : const EdgeInsets.only(right: 16),
-      onTap:
-          widget.onTap != null || widget.detailWidgetBuilder != null
-              ? () {
-                _onTap(item);
-              }
-              : null,
+      contentPadding: widget.shouldLeftPadListItems
+          ? null
+          : const EdgeInsets.only(right: 16),
+      onTap: widget.onTap != null || widget.detailWidgetBuilder != null
+          ? () {
+              _onTap(item);
+            }
+          : null,
       subtitle:
           item.displaySubtitle != null || widget.subtitleWidgetBuilder != null
-              ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (item.displaySubtitle != null) Text(item.displaySubtitle!),
-                  if (widget.subtitleWidgetBuilder != null)
-                    widget.subtitleWidgetBuilder!(item, items),
-                ],
-              )
-              : null,
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (item.displaySubtitle != null) Text(item.displaySubtitle!),
+                if (widget.subtitleWidgetBuilder != null)
+                  widget.subtitleWidgetBuilder!(item, items),
+              ],
+            )
+          : null,
       leading:
           widget.leadingWidgetBuilder != null ||
-                  widget.displayImages ||
-                  widget.displayNumbers
-              ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (widget.leadingWidgetBuilder != null)
-                    widget.leadingWidgetBuilder!(item),
-                  if (widget.displayImages)
-                    Stack(
-                      alignment: const Alignment(1.5, -1.5),
-                      children: [
-                        EntityImage(
-                          entity: item,
-                          isCircular: widget.displayCircularImages,
-                          shouldAnimate: widget.shouldAnimateImages,
-                          onLoaded: widget.onImageLoaded,
-                        ),
-                        if (widget.badgeWidgetBuilder != null)
-                          widget.badgeWidgetBuilder!(item),
-                      ],
-                    ),
-                  if (widget.displayNumbers) Text('${index + 1}'),
-                ],
-              )
-              : null,
+              widget.displayImages ||
+              widget.displayNumbers
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.leadingWidgetBuilder != null)
+                  widget.leadingWidgetBuilder!(item),
+                if (widget.displayImages)
+                  Stack(
+                    alignment: const Alignment(1.5, -1.5),
+                    children: [
+                      EntityImage(
+                        entity: item,
+                        isCircular: widget.displayCircularImages,
+                        shouldAnimate: widget.shouldAnimateImages,
+                        onLoaded: widget.onImageLoaded,
+                      ),
+                      if (widget.badgeWidgetBuilder != null)
+                        widget.badgeWidgetBuilder!(item),
+                    ],
+                  ),
+                if (widget.displayNumbers) Text('${index + 1}'),
+              ],
+            )
+          : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         spacing: 4,
@@ -309,10 +307,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (widget.scrobbleableEntity != null)
             ScrobbleButton(
               entityProvider: () => widget.scrobbleableEntity!(item),
-              color:
-                  Theme.of(context).brightness == Brightness.light
-                      ? Colors.grey
-                      : null,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.grey
+                  : null,
             ),
           if (item is LRecentTracksResponseTrack)
             TrackMenuButton(
@@ -331,18 +328,17 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   Widget _gridTileBuilder(BuildContext context, int index) {
     final item = items[index];
     return GridTile(
-      header:
-          widget.scrobbleableEntity != null
-              ? Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  ScrobbleButton(
-                    entityProvider: () => widget.scrobbleableEntity!(item),
-                    color: Colors.white,
-                  ),
-                ],
-              )
-              : null,
+      header: widget.scrobbleableEntity != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                ScrobbleButton(
+                  entityProvider: () => widget.scrobbleableEntity!(item),
+                  color: Colors.white,
+                ),
+              ],
+            )
+          : null,
       footer: Container(
         margin: EdgeInsets.all(widget.gridTileTextPadding),
         child: Column(
@@ -437,10 +433,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     }
 
     return CustomScrollView(
-      physics:
-          widget.scrollable
-              ? const AlwaysScrollableScrollPhysics()
-              : const NeverScrollableScrollPhysics(),
+      physics: widget.scrollable
+          ? const AlwaysScrollableScrollPhysics()
+          : const NeverScrollableScrollPhysics(),
       shrinkWrap: !widget.scrollable,
       slivers: [
         ...?widget.slivers,
@@ -476,19 +471,18 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             key: UniqueKey(),
             sliver: SliverToBoxAdapter(
               child: SafeArea(
-                child:
-                    isDoingRequest
-                        ? const ListTile(
-                          leading: CircularProgressIndicator(),
-                          title: Text('Loading...'),
-                        )
-                        : const ListTile(
-                          leading: Padding(
-                            padding: EdgeInsets.only(left: 6),
-                            child: Icon(Icons.arrow_upward, size: 36),
-                          ),
-                          title: Text('Scroll to load more items'),
+                child: isDoingRequest
+                    ? const ListTile(
+                        leading: CircularProgressIndicator(),
+                        title: Text('Loading...'),
+                      )
+                    : const ListTile(
+                        leading: Padding(
+                          padding: EdgeInsets.only(left: 6),
+                          child: Icon(Icons.arrow_upward, size: 36),
                         ),
+                        title: Text('Scroll to load more items'),
+                      ),
               ),
             ),
             onVisibilityChanged: (visibilityInfo) {
@@ -522,8 +516,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
 
     return RefreshIndicator(
       key: _refreshIndicatorKey,
-      onRefresh:
-          widget.onRefresh != null ? widget.onRefresh! : _getInitialItems,
+      onRefresh: widget.onRefresh != null
+          ? widget.onRefresh!
+          : _getInitialItems,
       child: _mainBuilder(context),
     );
   }

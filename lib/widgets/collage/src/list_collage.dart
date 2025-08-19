@@ -29,103 +29,102 @@ class ListCollage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ScaledBox(
     targetWidth: 400,
-    builder:
-        (context, scale) => Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 24 * scale,
-            vertical: 16 * scale,
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [themeColor.color.shade500, themeColor.color.shade900],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 8 * scale,
-            children: [
-              if (includeTitle)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  spacing: 12 * scale,
-                  children: [
-                    Text(
-                      'Top ${entityType.displayName}s',
-                      style: TextStyle(
-                        color: themeColor.foregroundColor,
-                        fontSize: 28 * scale,
-                      ),
-                    ),
-                    Text(
-                      period.display,
-                      style: TextStyle(
-                        color: themeColor.foregroundColor,
-                        fontSize: 16 * scale,
-                      ),
-                    ),
-                  ],
-                ),
-              for (final item in items)
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16 * scale),
-                  child: Row(
-                    spacing: 20 * scale,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: EntityImage(
-                          entity: item,
-                          quality: ImageQuality.high,
-                          width: 128 * scale,
-                          shouldAnimate: false,
-                          onLoaded: onImageLoaded,
-                        ),
-                      ),
-                      Flexible(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item.displayTitle,
-                              style: TextStyle(
-                                color: themeColor.foregroundColor,
-                                fontSize: 20 * scale,
-                              ),
-                            ),
-                            if (item.displaySubtitle != null) ...[
-                              Text(
-                                item.displaySubtitle!,
-                                style: TextStyle(
-                                  color: themeColor.foregroundColor,
-                                  fontSize: 16 * scale,
-                                ),
-                              ),
-                            ],
-                            if (item.displayTrailing != null) ...[
-                              SizedBox(height: 2 * scale),
-                              Text(
-                                item.displayTrailing!,
-                                style: TextStyle(
-                                  color: themeColor.foregroundColor,
-                                  fontSize: 12 * scale,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
+    builder: (context, scale) => Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 24 * scale,
+        vertical: 16 * scale,
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [themeColor.color.shade500, themeColor.color.shade900],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8 * scale,
+        children: [
+          if (includeTitle)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              spacing: 12 * scale,
+              children: [
+                Text(
+                  'Top ${entityType.displayName}s',
+                  style: TextStyle(
+                    color: themeColor.foregroundColor,
+                    fontSize: 28 * scale,
                   ),
                 ),
-              if (includeBranding)
-                CollageBranding(themeColor: themeColor, scale: scale),
-            ],
-          ),
-        ),
+                Text(
+                  period.display,
+                  style: TextStyle(
+                    color: themeColor.foregroundColor,
+                    fontSize: 16 * scale,
+                  ),
+                ),
+              ],
+            ),
+          for (final item in items)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16 * scale),
+              child: Row(
+                spacing: 20 * scale,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: EntityImage(
+                      entity: item,
+                      quality: ImageQuality.high,
+                      width: 128 * scale,
+                      shouldAnimate: false,
+                      onLoaded: onImageLoaded,
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.displayTitle,
+                          style: TextStyle(
+                            color: themeColor.foregroundColor,
+                            fontSize: 20 * scale,
+                          ),
+                        ),
+                        if (item.displaySubtitle != null) ...[
+                          Text(
+                            item.displaySubtitle!,
+                            style: TextStyle(
+                              color: themeColor.foregroundColor,
+                              fontSize: 16 * scale,
+                            ),
+                          ),
+                        ],
+                        if (item.displayTrailing != null) ...[
+                          SizedBox(height: 2 * scale),
+                          Text(
+                            item.displayTrailing!,
+                            style: TextStyle(
+                              color: themeColor.foregroundColor,
+                              fontSize: 12 * scale,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          if (includeBranding)
+            CollageBranding(themeColor: themeColor, scale: scale),
+        ],
+      ),
+    ),
   );
 }

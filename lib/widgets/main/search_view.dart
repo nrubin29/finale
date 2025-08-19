@@ -250,14 +250,13 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                           ),
                         ),
                     ],
-                    selectedItemBuilder:
-                        (_) => [
-                          for (final searchEngine in _enabledSearchEngines)
-                            Icon(
-                              searchEngine.icon,
-                              color: _searchEngine.foregroundColor,
-                            ),
-                        ],
+                    selectedItemBuilder: (_) => [
+                      for (final searchEngine in _enabledSearchEngines)
+                        Icon(
+                          searchEngine.icon,
+                          color: _searchEngine.foregroundColor,
+                        ),
+                    ],
                     value: _searchEngine,
                     onChanged: (choice) async {
                       if (choice == _searchEngine) {
@@ -350,95 +349,81 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     ),
     body: TabBarView(
       controller: _tabController,
-      children:
-          _currentQuery.text != ''
-              ? [
-                EntityDisplay<Track>(
-                  scrobbleableEntity:
-                      (item) async =>
-                          item is LTrackMatch
-                              ? await Lastfm.getTrack(item)
-                              : item,
-                  requestStream: _query
-                      .debounceWhere(_shouldDebounce, _debounceDuration)
-                      .map(
-                        (query) => query.searchEngine.searchTracks(query.text),
-                      ),
-                  detailWidgetBuilder:
-                      _searchEngine == SearchEngine.lastfm
-                          ? (track) => TrackView(track: track)
-                          : null,
-                ),
-                EntityDisplay<BasicArtist>(
+      children: _currentQuery.text != ''
+          ? [
+              EntityDisplay<Track>(
+                scrobbleableEntity: (item) async =>
+                    item is LTrackMatch ? await Lastfm.getTrack(item) : item,
+                requestStream: _query
+                    .debounceWhere(_shouldDebounce, _debounceDuration)
+                    .map(
+                      (query) => query.searchEngine.searchTracks(query.text),
+                    ),
+                detailWidgetBuilder: _searchEngine == SearchEngine.lastfm
+                    ? (track) => TrackView(track: track)
+                    : null,
+              ),
+              EntityDisplay<BasicArtist>(
+                displayType: DisplayType.grid,
+                requestStream: _query
+                    .debounceWhere(_shouldDebounce, _debounceDuration)
+                    .map(
+                      (query) => query.searchEngine.searchArtists(query.text),
+                    ),
+                detailWidgetBuilder: (artist) =>
+                    _searchEngine == SearchEngine.lastfm
+                    ? ArtistView(artist: artist)
+                    : _searchEngine == SearchEngine.appleMusic
+                    ? AppleMusicArtistView(artistId: (artist as AMArtist).id)
+                    : SpotifyArtistView(artist: artist),
+              ),
+              EntityDisplay<BasicAlbum>(
+                scrobbleableEntity: (item) => item is SAlbumSimple
+                    ? Spotify.getFullAlbum(item)
+                    : item is AMAlbum
+                    ? AppleMusic.getFullAlbum(item)
+                    : Lastfm.getAlbum(item),
+                displayType: DisplayType.grid,
+                requestStream: _query
+                    .debounceWhere(_shouldDebounce, _debounceDuration)
+                    .map(
+                      (query) => query.searchEngine.searchAlbums(query.text),
+                    ),
+                detailWidgetBuilder: (album) =>
+                    _searchEngine == SearchEngine.spotify
+                    ? SpotifyAlbumView(album: album as SAlbumSimple)
+                    : _searchEngine == SearchEngine.appleMusic
+                    ? AppleMusicAlbumView(album: album as AMAlbum)
+                    : AlbumView(album: album),
+              ),
+              if (_searchEngine != SearchEngine.lastfm)
+                EntityDisplay<BasicPlaylist>(
+                  scrobbleableEntity: (item) => item is SPlaylistSimple
+                      ? Spotify.getFullPlaylist(item)
+                      : AMFullPlaylist.get(item as AMPlaylist),
                   displayType: DisplayType.grid,
                   requestStream: _query
                       .debounceWhere(_shouldDebounce, _debounceDuration)
                       .map(
-                        (query) => query.searchEngine.searchArtists(query.text),
+                        (query) =>
+                            query.searchEngine.searchPlaylists(query.text),
                       ),
-                  detailWidgetBuilder:
-                      (artist) =>
-                          _searchEngine == SearchEngine.lastfm
-                              ? ArtistView(artist: artist)
-                              : _searchEngine == SearchEngine.appleMusic
-                              ? AppleMusicArtistView(
-                                artistId: (artist as AMArtist).id,
-                              )
-                              : SpotifyArtistView(artist: artist),
-                ),
-                EntityDisplay<BasicAlbum>(
-                  scrobbleableEntity:
-                      (item) =>
-                          item is SAlbumSimple
-                              ? Spotify.getFullAlbum(item)
-                              : item is AMAlbum
-                              ? AppleMusic.getFullAlbum(item)
-                              : Lastfm.getAlbum(item),
-                  displayType: DisplayType.grid,
-                  requestStream: _query
-                      .debounceWhere(_shouldDebounce, _debounceDuration)
-                      .map(
-                        (query) => query.searchEngine.searchAlbums(query.text),
-                      ),
-                  detailWidgetBuilder:
-                      (album) =>
-                          _searchEngine == SearchEngine.spotify
-                              ? SpotifyAlbumView(album: album as SAlbumSimple)
-                              : _searchEngine == SearchEngine.appleMusic
-                              ? AppleMusicAlbumView(album: album as AMAlbum)
-                              : AlbumView(album: album),
-                ),
-                if (_searchEngine != SearchEngine.lastfm)
-                  EntityDisplay<BasicPlaylist>(
-                    scrobbleableEntity:
-                        (item) =>
-                            item is SPlaylistSimple
-                                ? Spotify.getFullPlaylist(item)
-                                : AMFullPlaylist.get(item as AMPlaylist),
-                    displayType: DisplayType.grid,
-                    requestStream: _query
-                        .debounceWhere(_shouldDebounce, _debounceDuration)
-                        .map(
-                          (query) =>
-                              query.searchEngine.searchPlaylists(query.text),
+                  detailWidgetBuilder: (playlist) =>
+                      _searchEngine == SearchEngine.spotify
+                      ? SpotifyPlaylistView(
+                          playlist: playlist as SPlaylistSimple,
+                        )
+                      : AppleMusicPlaylistView(
+                          playlist: playlist as AMPlaylist,
                         ),
-                    detailWidgetBuilder:
-                        (playlist) =>
-                            _searchEngine == SearchEngine.spotify
-                                ? SpotifyPlaylistView(
-                                  playlist: playlist as SPlaylistSimple,
-                                )
-                                : AppleMusicPlaylistView(
-                                  playlist: playlist as AMPlaylist,
-                                ),
-                  ),
-              ]
-              : [
-                const SizedBox(),
-                const SizedBox(),
-                const SizedBox(),
-                if (_searchEngine != SearchEngine.lastfm) const SizedBox(),
-              ],
+                ),
+            ]
+          : [
+              const SizedBox(),
+              const SizedBox(),
+              const SizedBox(),
+              if (_searchEngine != SearchEngine.lastfm) const SizedBox(),
+            ],
     ),
   );
 

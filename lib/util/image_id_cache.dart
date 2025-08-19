@@ -18,9 +18,8 @@ class ImageIdCache {
     db = await openDatabase(
       'imageId.db',
       version: 1,
-      onCreate:
-          (Database db, int version) =>
-              db.execute('CREATE TABLE ImageId (url TEXT, imageId TEXT)'),
+      onCreate: (Database db, int version) =>
+          db.execute('CREATE TABLE ImageId (url TEXT, imageId TEXT)'),
     );
   }
 

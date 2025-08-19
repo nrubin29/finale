@@ -156,8 +156,10 @@ class AppleMusic {
     final success = response.ignored == 0;
 
     if (success && songs.isNotEmpty) {
-      Preferences.lastAppleMusicScrobble.value =
-          maxBy(songs, (song) => song.date)!.date;
+      Preferences.lastAppleMusicScrobble.value = maxBy(
+        songs,
+        (song) => song.date,
+      )!.date;
     }
 
     return success;

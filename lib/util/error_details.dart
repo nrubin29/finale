@@ -45,10 +45,9 @@ class ErrorDetails {
         // not found.
         if (error.message == 'User not found') {
           title = 'User not found';
-          errorObject =
-              detailObject != null
-                  ? 'User $detailObject does not exist.'
-                  : 'User does not exist.';
+          errorObject = detailObject != null
+              ? 'User $detailObject does not exist.'
+              : 'User does not exist.';
           icon = Icons.person_off;
         }
       } else if (error.code == 8) {

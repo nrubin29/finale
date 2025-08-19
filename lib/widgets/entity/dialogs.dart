@@ -8,13 +8,12 @@ Future<void> showNoEntityTypePeriodDialog(
   required String username,
 }) => showDialog(
   context: context,
-  builder:
-      (_) => _MessageDialog(
-        title: 'No ${entityType.name}s',
-        content:
-            "$username hasn't scrobbled any ${entityType.name}s in this "
-            "period.",
-      ),
+  builder: (_) => _MessageDialog(
+    title: 'No ${entityType.name}s',
+    content:
+        "$username hasn't scrobbled any ${entityType.name}s in this "
+        "period.",
+  ),
 );
 
 Future<void> showExceptionDialog(
@@ -30,12 +29,11 @@ Future<void> showExceptionDialog(
   );
   return showDialog(
     context: context,
-    builder:
-        (_) => _MessageDialog(
-          title: details.title,
-          content: '${details.error}',
-          icon: details.icon,
-        ),
+    builder: (_) => _MessageDialog(
+      title: details.title,
+      content: '${details.error}',
+      icon: details.icon,
+    ),
   );
 }
 

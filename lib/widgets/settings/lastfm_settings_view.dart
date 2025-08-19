@@ -58,10 +58,9 @@ class _LastfmSettingsViewState extends State<LastfmSettingsView> {
         CaptionedListTile(
           title: 'Advanced Features',
           icon: Icons.key,
-          trailing:
-              _hasCookies
-                  ? TextButton(onPressed: _reset, child: const Text('Reset'))
-                  : TextButton(onPressed: _logIn, child: const Text('Log In')),
+          trailing: _hasCookies
+              ? TextButton(onPressed: _reset, child: const Text('Reset'))
+              : TextButton(onPressed: _logIn, child: const Text('Log In')),
           // It would be great to show the expiration date in the caption, but
           // Android doesn't return it even though it stores it.
         ),

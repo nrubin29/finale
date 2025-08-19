@@ -41,12 +41,11 @@ extension ListBinarySearchIndexWhere<T> on List<T> {
 }
 
 extension DateTimeRangeCompareContains on DateTimeRange {
-  int compareContains(DateTime dateTime) =>
-      dateTime.isBefore(start)
-          ? 1
-          : dateTime.isAfter(end)
-          ? -1
-          : 0;
+  int compareContains(DateTime dateTime) => dateTime.isBefore(start)
+      ? 1
+      : dateTime.isAfter(end)
+      ? -1
+      : 0;
 }
 
 extension FutureErrorToNull<T> on Future<T> {

@@ -143,12 +143,11 @@ class LAlbumTracks {
   factory LAlbumTracks.fromJson(Map<String, dynamic> json) =>
       _$LAlbumTracksFromJson(json);
 
-  static List<LAlbumTrack> parseTracks(json) =>
-      json == null
-          ? const []
-          : json is List<dynamic>
-          ? json.map((e) => LAlbumTrack.fromJson(e)).toList(growable: false)
-          : List.unmodifiable([LAlbumTrack.fromJson(json)]);
+  static List<LAlbumTrack> parseTracks(dynamic json) => json == null
+      ? const []
+      : json is List<dynamic>
+      ? json.map((e) => LAlbumTrack.fromJson(e)).toList(growable: false)
+      : List.unmodifiable([LAlbumTrack.fromJson(json)]);
 }
 
 @JsonSerializable()

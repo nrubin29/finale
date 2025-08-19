@@ -36,67 +36,65 @@ class _AlbumScrobblesViewState extends State<AlbumScrobblesView> {
 
   @override
   Widget build(BuildContext context) => FutureBuilderView<List<LTrack>>(
-    futureFactory:
-        () => Future.wait(
-          widget.album.tracks.map(
-            (track) => Lastfm.getTrack(
-              track,
-              username: widget.username ?? Preferences.name.value,
-            ),
-          ),
+    futureFactory: () => Future.wait(
+      widget.album.tracks.map(
+        (track) => Lastfm.getTrack(
+          track,
+          username: widget.username ?? Preferences.name.value,
         ),
-    builder:
-        (value) => Scaffold(
-          appBar: createAppBar(
-            context,
-            widget.album.name,
-            leadingEntity: widget.album,
-            subtitle: pluralize(widget.album.userPlayCount),
-          ),
-          body: Column(
-            children: [
-              ColoredBox(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SegmentedButton<_Sort>(
-                        showSelectedIcon: false,
-                        style: minimumSizeButtonStyle,
-                        segments: const [
-                          ButtonSegment(
-                            value: _Sort.ordinal,
-                            icon: Icon(Icons.format_list_numbered),
-                          ),
-                          ButtonSegment(
-                            value: _Sort.scrobbleCount,
-                            icon: Icon(Icons.numbers),
-                          ),
-                        ],
-                        selected: {_sort},
-                        onSelectionChanged: (newSelection) {
-                          setState(() {
-                            _sort = newSelection.single;
-                          });
-                        },
+      ),
+    ),
+    builder: (value) => Scaffold(
+      appBar: createAppBar(
+        context,
+        widget.album.name,
+        leadingEntity: widget.album,
+        subtitle: pluralize(widget.album.userPlayCount),
+      ),
+      body: Column(
+        children: [
+          ColoredBox(
+            color: Theme.of(context).colorScheme.surfaceContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SegmentedButton<_Sort>(
+                    showSelectedIcon: false,
+                    style: minimumSizeButtonStyle,
+                    segments: const [
+                      ButtonSegment(
+                        value: _Sort.ordinal,
+                        icon: Icon(Icons.format_list_numbered),
+                      ),
+                      ButtonSegment(
+                        value: _Sort.scrobbleCount,
+                        icon: Icon(Icons.numbers),
                       ),
                     ],
+                    selected: {_sort},
+                    onSelectionChanged: (newSelection) {
+                      setState(() {
+                        _sort = newSelection.single;
+                      });
+                    },
                   ),
-                ),
+                ],
               ),
-              Expanded(
-                child: EntityDisplay(
-                  items: value.sorted(_comparator),
-                  displayImages: false,
-                  displayNumbers: true,
-                  detailWidgetBuilder: (track) => TrackView(track: track),
-                  subtitleWidgetBuilder: FractionalBar.forEntity,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            child: EntityDisplay(
+              items: value.sorted(_comparator),
+              displayImages: false,
+              displayNumbers: true,
+              detailWidgetBuilder: (track) => TrackView(track: track),
+              subtitleWidgetBuilder: FractionalBar.forEntity,
+            ),
+          ),
+        ],
+      ),
+    ),
   );
 }

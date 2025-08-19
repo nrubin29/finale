@@ -44,34 +44,33 @@ class _WorkoutViewState extends State<WorkoutView> {
           IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
       ],
     ),
-    body:
-        Preferences.hasStravaAuthData
-            ? EntityDisplay<AthleteActivity>(
-              request: const StravaListActivitiesRequest(),
-              displayImages: false,
-              leadingWidgetBuilder: (item) => Icon(item.icon),
-              trailingWidgetBuilder: (_) => const Icon(Icons.chevron_right),
-              onTap: (item) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => WorkoutDetails(activity: item),
-                  ),
-                );
-              },
-            )
-            : Center(
-              child: OutlinedButton(
-                onPressed: _authenticate,
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(SocialMediaIcons.strava),
-                    SizedBox(width: 8),
-                    Text('Log in with Strava'),
-                  ],
+    body: Preferences.hasStravaAuthData
+        ? EntityDisplay<AthleteActivity>(
+            request: const StravaListActivitiesRequest(),
+            displayImages: false,
+            leadingWidgetBuilder: (item) => Icon(item.icon),
+            trailingWidgetBuilder: (_) => const Icon(Icons.chevron_right),
+            onTap: (item) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => WorkoutDetails(activity: item),
                 ),
+              );
+            },
+          )
+        : Center(
+            child: OutlinedButton(
+              onPressed: _authenticate,
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(SocialMediaIcons.strava),
+                  SizedBox(width: 8),
+                  Text('Log in with Strava'),
+                ],
               ),
             ),
+          ),
   );
 }

@@ -47,13 +47,12 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     List<LRecentTracksResponseTrack> response;
 
     try {
-      response =
-          await GetRecentTracksRequest(
-            username,
-            from: _dateRange!.start,
-            to: _dateRange!.end,
-            includeCurrentScrobble: true,
-          ).getAllData();
+      response = await GetRecentTracksRequest(
+        username,
+        from: _dateRange!.start,
+        to: _dateRange!.end,
+        includeCurrentScrobble: true,
+      ).getAllData();
     } on LException catch (e) {
       if (e.code == 6) {
         response = <LRecentTracksResponseTrack>[];
@@ -130,44 +129,40 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     body: CollapsibleFormView<List<LRecentTracksResponseTrack>>(
       submitButtonText: 'Load Scrobbles',
       onFormSubmit: _loadData,
-      formWidgetsBuilder:
-          (_) => [
-            ListTileTextField(
-              title: 'Username',
-              controller: _usernameTextController,
-              validator: _validator,
-            ),
-            DateRangeField(
-              onChanged: (dateRange) {
-                setState(() {
-                  _dateRange = dateRange;
-                });
-              },
-            ),
-            ScrobbleFiltersListTile(
-              filters: _filters,
-              onChanged: (value) {
-                setState(() {
-                  _filters = value;
-                });
-              },
-            ),
-          ],
-      bodyBuilder:
-          (_, items) => EntityCheckboxList<LRecentTracksResponseTrack>(
-            items: items,
-            scrollable: false,
-            onSelectionChanged: (selection) {
-              setState(() {
-                _selection = selection;
-              });
-            },
-            trailingWidgetBuilder:
-                (track) =>
-                    track.timestamp != null
-                        ? const SizedBox()
-                        : const NowPlayingAnimation(),
-          ),
+      formWidgetsBuilder: (_) => [
+        ListTileTextField(
+          title: 'Username',
+          controller: _usernameTextController,
+          validator: _validator,
+        ),
+        DateRangeField(
+          onChanged: (dateRange) {
+            setState(() {
+              _dateRange = dateRange;
+            });
+          },
+        ),
+        ScrobbleFiltersListTile(
+          filters: _filters,
+          onChanged: (value) {
+            setState(() {
+              _filters = value;
+            });
+          },
+        ),
+      ],
+      bodyBuilder: (_, items) => EntityCheckboxList<LRecentTracksResponseTrack>(
+        items: items,
+        scrollable: false,
+        onSelectionChanged: (selection) {
+          setState(() {
+            _selection = selection;
+          });
+        },
+        trailingWidgetBuilder: (track) => track.timestamp != null
+            ? const SizedBox()
+            : const NowPlayingAnimation(),
+      ),
     ),
   );
 

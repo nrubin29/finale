@@ -29,12 +29,11 @@ final isIos = device.contains('iPhone') || device.contains('iPad');
 final isIpad = device.contains('iPad');
 final isMacOS = device.contains('macOS');
 final isAndroid = !isIos && !isMacOS;
-final directory =
-    isIos
-        ? '/Users/noahrubin/Documents/DartProjects/finale/screenshots/$device'
-        : isMacOS
-        ? '/Users/noahrubin/Downloads/$device'
-        : '/sdcard/Documents/$device';
+final directory = isIos
+    ? '/Users/noahrubin/Documents/DartProjects/finale/screenshots/$device'
+    : isMacOS
+    ? '/Users/noahrubin/Downloads/$device'
+    : '/sdcard/Documents/$device';
 
 Future<void> main() async {
   if (!isIos) {
@@ -74,13 +73,9 @@ Future<void> main() async {
           title: 'Finale',
           theme: finaleTheme(ThemeColor.red, Brightness.light),
           debugShowCheckedModeBanner: false,
-          home:
-              asPage || widgetBehindModal != null
-                  ? _AsPage(
-                    widget: widget,
-                    widgetBehindModal: widgetBehindModal,
-                  )
-                  : widget,
+          home: asPage || widgetBehindModal != null
+              ? _AsPage(widget: widget, widgetBehindModal: widgetBehindModal)
+              : widget,
         ),
       ),
     );

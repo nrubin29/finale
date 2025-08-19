@@ -1,4 +1,3 @@
-import 'package:finale/util/constants.dart';
 import 'package:finale/util/preference.dart';
 import 'package:universal_io/io.dart';
 import 'package:workmanager/workmanager.dart';
@@ -12,12 +11,9 @@ final _tasks = [
 ];
 
 Future<void> setup() async {
-  await Workmanager().initialize(
-    backgroundTaskDispatcher,
-    isInDebugMode: isDebug,
-  );
+  await Workmanager().initialize(backgroundTaskDispatcher);
 
-  await Future.wait(_tasks.map((task) => task.setup()));
+  await _tasks.map((task) => task.setup()).wait;
 }
 
 @pragma('vm:entry-point')
@@ -27,7 +23,7 @@ void backgroundTaskDispatcher() {
 
     await Preference.setup();
 
-    if (!await task.shouldRun) return false;
+    if (!await task.isEnabled()) return false;
 
     return await task.run();
   });

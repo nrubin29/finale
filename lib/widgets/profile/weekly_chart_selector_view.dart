@@ -39,46 +39,44 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
     return !_loaded
         ? const LoadingComponent()
         : Column(
-          children: [
-            ColoredBox(
-              color: Theme.of(context).colorScheme.surfaceContainer,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.chevron_left),
-                    onPressed:
-                        _index > 0
-                            ? () {
+            children: [
+              ColoredBox(
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.chevron_left),
+                      onPressed: _index > 0
+                          ? () {
                               setState(() {
                                 _index--;
                               });
                             }
-                            : null,
-                  ),
-                  Text(_charts[_index].title),
-                  IconButton(
-                    icon: const Icon(Icons.chevron_right),
-                    onPressed:
-                        _index < _charts.length - 1
-                            ? () {
+                          : null,
+                    ),
+                    Text(_charts[_index].title),
+                    IconButton(
+                      icon: const Icon(Icons.chevron_right),
+                      onPressed: _index < _charts.length - 1
+                          ? () {
                               setState(() {
                                 _index++;
                               });
                             }
-                            : null,
-                  ),
-                ],
+                          : null,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: WeeklyChartComponent(
-                user: widget.user,
-                chart: _charts[_index],
+              Expanded(
+                child: WeeklyChartComponent(
+                  user: widget.user,
+                  chart: _charts[_index],
+                ),
               ),
-            ),
-          ],
-        );
+            ],
+          );
   }
 
   @override

@@ -19,15 +19,16 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
     super.initState();
 
     final preferencesTabOrder = Preferences.profileTabsOrder.value;
-    _tabOrder = [...ProfileTab.values]..sort((a, b) {
-      var aIndex = preferencesTabOrder.indexOf(a);
-      if (aIndex == -1) aIndex = 10;
+    _tabOrder = [...ProfileTab.values]
+      ..sort((a, b) {
+        var aIndex = preferencesTabOrder.indexOf(a);
+        if (aIndex == -1) aIndex = 10;
 
-      var bIndex = preferencesTabOrder.indexOf(b);
-      if (bIndex == -1) bIndex = 10;
+        var bIndex = preferencesTabOrder.indexOf(b);
+        if (bIndex == -1) bIndex = 10;
 
-      return aIndex.compareTo(bIndex);
-    });
+        return aIndex.compareTo(bIndex);
+      });
     _tabEnabled = Map.fromEntries(
       ProfileTab.values.map(
         (e) => MapEntry(e, preferencesTabOrder.contains(e)),
@@ -58,7 +59,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
     });
   }
 
-  Future<bool> _save(_, __) async {
+  Future<bool> _save(_, _) async {
     Preferences.profileTabsOrder.value = _tabOrder
         .where((e) => _tabEnabled[e]!)
         .toList(growable: false);

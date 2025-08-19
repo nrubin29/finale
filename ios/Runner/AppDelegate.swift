@@ -1,25 +1,26 @@
 import UIKit
 import Flutter
-import workmanager
+import workmanager_apple
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
-  private static let backgroundTasks = ["BackgroundScrobbling", "SpotifyChecker"]
-    
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
 
-    WorkmanagerPlugin.setPluginRegistrantCallback { registry in
-      GeneratedPluginRegistrant.register(with: registry)
-    }
-    
-    AppDelegate.backgroundTasks.forEach { WorkmanagerPlugin.registerTask(withIdentifier: "com.nrubintech.finale.\($0)") }
+    WorkmanagerPlugin.registerPeriodicTask(
+        withIdentifier: "com.nrubintech.finale.BackgroundScrobbling",
+        frequency: NSNumber(value: 60 * 60) // 1 hour
+    )
+    WorkmanagerPlugin.registerPeriodicTask(
+        withIdentifier: "com.nrubintech.finale.SpotifyChecker",
+        frequency: NSNumber(value: 3 * 60 * 60) // 3 hours
+    )
 
     // For local notifications
-    UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+    UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

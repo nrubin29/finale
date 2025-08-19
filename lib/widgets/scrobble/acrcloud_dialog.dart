@@ -56,12 +56,11 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      error != null
-          ? _ErrorDialog(error!)
-          : results != null
-          ? _ResultsDialog(results!)
-          : _ListeningDialog(session);
+  Widget build(BuildContext context) => error != null
+      ? _ErrorDialog(error!)
+      : results != null
+      ? _ResultsDialog(results!)
+      : _ListeningDialog(session);
 }
 
 class _ListeningDialog extends StatelessWidget {
@@ -72,20 +71,19 @@ class _ListeningDialog extends StatelessWidget {
   Widget _audioIndicator(BuildContext context) => StreamBuilder<double>(
     stream: session.volumeStream,
     initialData: 0.0,
-    builder:
-        (_, snapshot) => SizedBox(
-          width: 100,
-          height: 100,
-          child: Center(
-            child: ClipOval(
-              child: SizedBox(
-                width: 90 * snapshot.data! + 10,
-                height: 90 * snapshot.data! + 10,
-                child: Container(color: Theme.of(context).colorScheme.primary),
-              ),
-            ),
+    builder: (_, snapshot) => SizedBox(
+      width: 100,
+      height: 100,
+      child: Center(
+        child: ClipOval(
+          child: SizedBox(
+            width: 90 * snapshot.data! + 10,
+            height: 90 * snapshot.data! + 10,
+            child: Container(color: Theme.of(context).colorScheme.primary),
           ),
         ),
+      ),
+    ),
   );
 
   @override
@@ -118,10 +116,9 @@ class _ResultsDialog extends StatelessWidget {
           isThreeLine: true,
           trailing: IconButton(
             icon: const Icon(Icons.info),
-            color:
-                Theme.of(context).brightness == Brightness.light
-                    ? Colors.grey
-                    : null,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.grey
+                : null,
             onPressed: () {
               launchUrl(
                 Uri.https('aha-music.com', track.acrId, {

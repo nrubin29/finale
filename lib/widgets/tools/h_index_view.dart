@@ -116,10 +116,12 @@ class _HIndexViewState extends State<HIndexView> {
 
   Widget _entityListTile(Entity entity) => ListTile(
     title: Text(entity.displayTitle),
-    subtitle:
-        entity.displaySubtitle == null ? null : Text(entity.displaySubtitle!),
-    trailing:
-        entity.displayTrailing == null ? null : Text(entity.displayTrailing!),
+    subtitle: entity.displaySubtitle == null
+        ? null
+        : Text(entity.displaySubtitle!),
+    trailing: entity.displayTrailing == null
+        ? null
+        : Text(entity.displayTrailing!),
     leading: EntityImage(entity: entity),
     onTap: () {
       pushLastfmEntityDetailView(context, entity);
@@ -131,8 +133,9 @@ class _HIndexViewState extends State<HIndexView> {
     final hIndexOrdinal = formatOrdinal(result.hIndex);
     final hIndexPlusOne = numberFormat.format(result.hIndex + 1);
     final hIndexPlusOneOrdinal = formatOrdinal(result.hIndex + 1);
-    final username =
-        result.username == Preferences.name.value ? null : result.username;
+    final username = result.username == Preferences.name.value
+        ? null
+        : result.username;
     final entityName = result.entityType.displayName.toLowerCase();
     final period = result.period.formattedForSentence;
 
@@ -194,49 +197,42 @@ class _HIndexViewState extends State<HIndexView> {
     body: CollapsibleFormView<_HIndexResult>(
       submitButtonText: 'Calculate',
       onFormSubmit: _loadData,
-      formWidgetsBuilder:
-          (_) => [
-            ListTileTextField(
-              title: 'Username',
-              controller: _usernameTextController,
-              validator: _validator,
-            ),
-            ListTile(
-              title: const Text('Period'),
-              trailing: PeriodDropdownButton(
-                periodChanged: (period) {
-                  _period = period;
-                },
+      formWidgetsBuilder: (_) => [
+        ListTileTextField(
+          title: 'Username',
+          controller: _usernameTextController,
+          validator: _validator,
+        ),
+        ListTile(
+          title: const Text('Period'),
+          trailing: PeriodDropdownButton(
+            periodChanged: (period) {
+              _period = period;
+            },
+          ),
+        ),
+        ListTile(
+          title: const Text('Type'),
+          trailing: DropdownButton<EntityType>(
+            value: _entityType,
+            items: const [
+              DropdownMenuItem(
+                value: EntityType.artist,
+                child: Text('Artists'),
               ),
-            ),
-            ListTile(
-              title: const Text('Type'),
-              trailing: DropdownButton<EntityType>(
-                value: _entityType,
-                items: const [
-                  DropdownMenuItem(
-                    value: EntityType.artist,
-                    child: Text('Artists'),
-                  ),
-                  DropdownMenuItem(
-                    value: EntityType.album,
-                    child: Text('Albums'),
-                  ),
-                  DropdownMenuItem(
-                    value: EntityType.track,
-                    child: Text('Tracks'),
-                  ),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _entityType = value;
-                    });
-                  }
-                },
-              ),
-            ),
-          ],
+              DropdownMenuItem(value: EntityType.album, child: Text('Albums')),
+              DropdownMenuItem(value: EntityType.track, child: Text('Tracks')),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  _entityType = value;
+                });
+              }
+            },
+          ),
+        ),
+      ],
       bodyBuilder: _body,
     ),
   );

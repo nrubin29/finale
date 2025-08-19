@@ -57,10 +57,9 @@ String formatDateTimeDelta(DateTime? date, {bool withYear = false}) {
 }
 
 String formatDateRange(DateTime start, DateTime end, {String separator = '-'}) {
-  final startFormatted =
-      start.year == end.year
-          ? dateFormat.format(start)
-          : dateFormatWithYear.format(start);
+  final startFormatted = start.year == end.year
+      ? dateFormat.format(start)
+      : dateFormatWithYear.format(start);
   final endFormatted = dateFormatWithYear.format(end);
   return '$startFormatted $separator $endFormatted';
 }

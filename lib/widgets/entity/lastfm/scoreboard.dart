@@ -133,8 +133,8 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
             ? const LoadingComponent.small()
             : _value != null
             ? Text(
-              _value is num ? numberFormat.format(_value) : _value.toString(),
-            )
+                _value is num ? numberFormat.format(_value) : _value.toString(),
+              )
             : widget.model.isLazy
             ? const Text('Tap to load')
             : const Text('---'),
@@ -145,18 +145,16 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
   @override
   Widget build(BuildContext context) =>
       widget.model.callback != null || (widget.model.isLazy && _value == null)
-          ? OutlinedButton(
-            style: ButtonStyle(
-              side: WidgetStateProperty.all(
-                BorderSide(color: Theme.of(context).colorScheme.primary),
-              ),
+      ? OutlinedButton(
+          style: ButtonStyle(
+            side: WidgetStateProperty.all(
+              BorderSide(color: Theme.of(context).colorScheme.primary),
             ),
-            onPressed:
-                () =>
-                    widget.model.isLazy
-                        ? _loadValue(forceLoad: true)
-                        : widget.model.callback?.call(),
-            child: _scoreTile,
-          )
-          : _scoreTile;
+          ),
+          onPressed: () => widget.model.isLazy
+              ? _loadValue(forceLoad: true)
+              : widget.model.callback?.call(),
+          child: _scoreTile,
+        )
+      : _scoreTile;
 }

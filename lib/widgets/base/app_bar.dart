@@ -19,49 +19,47 @@ PreferredSizeWidget createAppBar(
   List<Widget>? actions,
   PreferredSizeWidget? bottom,
 }) => _PreferredSizeWrapper(
-  parentBuilder:
-      (child) => Theme(
-        data: themeDataForAppBar(context, Preferences.themeColor.value),
-        child: child,
-      ),
+  parentBuilder: (child) => Theme(
+    data: themeDataForAppBar(context, Preferences.themeColor.value),
+    child: child,
+  ),
   child: AppBar(
     backgroundColor: backgroundColor,
     centerTitle: true,
-    title:
-        leadingEntity != null
-            ? FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  EntityImage(
-                    entity: leadingEntity,
-                    width: 40,
-                    isCircular: circularLeadingImage,
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title),
-                      if (subtitle != null)
-                        Text(subtitle, style: const TextStyle(fontSize: 12)),
-                    ],
-                  ),
-                ],
-              ),
-            )
-            : Column(
+    title: leadingEntity != null
+        ? FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                FittedBox(fit: BoxFit.fitWidth, child: Text(title)),
-                if (subtitle != null)
-                  FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Text(subtitle, style: const TextStyle(fontSize: 12)),
-                  ),
+                EntityImage(
+                  entity: leadingEntity,
+                  width: 40,
+                  isCircular: circularLeadingImage,
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title),
+                    if (subtitle != null)
+                      Text(subtitle, style: const TextStyle(fontSize: 12)),
+                  ],
+                ),
               ],
             ),
+          )
+        : Column(
+            children: [
+              FittedBox(fit: BoxFit.fitWidth, child: Text(title)),
+              if (subtitle != null)
+                FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(subtitle, style: const TextStyle(fontSize: 12)),
+                ),
+            ],
+          ),
     actions: actions,
     bottom: bottom,
   ),

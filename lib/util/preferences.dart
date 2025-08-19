@@ -101,14 +101,13 @@ class Preferences {
       stravaRefreshToken.hasValue &&
       stravaExpiresAt.hasValue;
 
-  static TokenResponse? get stravaAuthData =>
-      hasStravaAuthData
-          ? TokenResponse(
-            stravaAccessToken.value!,
-            stravaExpiresAt.value!,
-            stravaRefreshToken.value!,
-          )
-          : null;
+  static TokenResponse? get stravaAuthData => hasStravaAuthData
+      ? TokenResponse(
+          stravaAccessToken.value!,
+          stravaExpiresAt.value!,
+          stravaRefreshToken.value!,
+        )
+      : null;
 
   static set stravaAuthData(TokenResponse? tokenResponse) {
     assert(tokenResponse != null);

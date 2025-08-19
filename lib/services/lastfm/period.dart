@@ -64,20 +64,18 @@ class Period {
 
   bool get isCustom => start != null;
 
-  String get serializedValue =>
-      isCustom
-          ? '${start!.millisecondsSinceEpoch}:${end!.millisecondsSinceEpoch}'
-          : value!;
+  String get serializedValue => isCustom
+      ? '${start!.millisecondsSinceEpoch}:${end!.millisecondsSinceEpoch}'
+      : value!;
 
   /// The start date of this period.
   ///
   /// If this is an API period, the date is relative to now.
-  DateTime? get relativeStart =>
-      isCustom
-          ? start!
-          : this == overall
-          ? null
-          : DateTime.now().subtract(Duration(days: days!));
+  DateTime? get relativeStart => isCustom
+      ? start!
+      : this == overall
+      ? null
+      : DateTime.now().subtract(Duration(days: days!));
 
   @override
   bool operator ==(Object other) =>

@@ -1,5 +1,6 @@
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/functions.dart';
 import 'package:flutter/material.dart';
 
@@ -32,10 +33,9 @@ class TrackMenuButton extends StatelessWidget {
       const PopupMenuDivider(),
       PopupMenuItem(
         child: ListTile(
-          leading:
-              track.isLoved
-                  ? const Icon(Icons.favorite_border)
-                  : const Icon(Icons.favorite),
+          leading: track.isLoved
+              ? const Icon(Icons.favorite_border)
+              : const Icon(Icons.favorite),
           title: track.isLoved ? const Text('Unlove') : const Text('Love'),
         ),
         onTap: () async {

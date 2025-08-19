@@ -36,153 +36,152 @@ class WrappedCollage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ScaledBox(
     targetWidth: 400,
-    builder:
-        (context, scale) => Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 24 * scale,
-            vertical: 16 * scale,
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [themeColor.color.shade500, themeColor.color.shade900],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+    builder: (context, scale) => Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 24 * scale,
+        vertical: 16 * scale,
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [themeColor.color.shade500, themeColor.color.shade900],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16 * scale,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16 * scale),
+            child: Align(
+              child: EntityImage(
+                entity: items.single,
+                width: 200 * scale,
+                quality: ImageQuality.high,
+                onLoaded: onImageLoaded,
+              ),
             ),
           ),
-          child: Column(
+          Row(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 16 * scale,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16 * scale),
-                child: Align(
-                  child: EntityImage(
-                    entity: items.single,
-                    width: 200 * scale,
-                    quality: ImageQuality.high,
-                    onLoaded: onImageLoaded,
-                  ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Top Artists',
+                      style: TextStyle(
+                        color: themeColor.foregroundColor,
+                        fontSize: 12 * scale,
+                      ),
+                    ),
+                    SizedBox(height: 4 * scale),
+                    for (final (i, topArtist) in topArtists.indexed)
+                      Text(
+                        '${i + 1}. ${topArtist.name}',
+                        style: TextStyle(
+                          color: themeColor.foregroundColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14 * scale,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Top Artists',
-                          style: TextStyle(
-                            color: themeColor.foregroundColor,
-                            fontSize: 12 * scale,
-                          ),
-                        ),
-                        SizedBox(height: 4 * scale),
-                        for (final (i, topArtist) in topArtists.indexed)
-                          Text(
-                            '${i + 1}. ${topArtist.name}',
-                            style: TextStyle(
-                              color: themeColor.foregroundColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14 * scale,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                      ],
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Top Songs',
+                      style: TextStyle(
+                        color: themeColor.foregroundColor,
+                        fontSize: 12 * scale,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Top Songs',
-                          style: TextStyle(
-                            color: themeColor.foregroundColor,
-                            fontSize: 12 * scale,
-                          ),
+                    SizedBox(height: 4 * scale),
+                    for (final (i, topTrack) in topTracks.indexed)
+                      Text(
+                        '${i + 1}. ${topTrack.name}',
+                        style: TextStyle(
+                          color: themeColor.foregroundColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14 * scale,
                         ),
-                        SizedBox(height: 4 * scale),
-                        for (final (i, topTrack) in topTracks.indexed)
-                          Text(
-                            '${i + 1}. ${topTrack.name}',
-                            style: TextStyle(
-                              color: themeColor.foregroundColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14 * scale,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Scrobbles',
-                          style: TextStyle(
-                            color: themeColor.foregroundColor,
-                            fontSize: 12 * scale,
-                          ),
-                        ),
-                        Text(
-                          numberFormat.format(numScrobbles),
-                          style: TextStyle(
-                            color: themeColor.foregroundColor,
-                            fontSize: 24 * scale,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Period',
-                          style: TextStyle(
-                            color: themeColor.foregroundColor,
-                            fontSize: 12 * scale,
-                          ),
-                        ),
-                        SizedBox(height: 4 * scale),
-                        Text(
-                          period.display,
-                          style: TextStyle(
-                            color: themeColor.foregroundColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14 * scale,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              if (includeBranding)
-                CollageBranding(themeColor: themeColor, scale: scale)
-              else
-                SizedBox(height: 8 * scale),
             ],
           ),
-        ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Scrobbles',
+                      style: TextStyle(
+                        color: themeColor.foregroundColor,
+                        fontSize: 12 * scale,
+                      ),
+                    ),
+                    Text(
+                      numberFormat.format(numScrobbles),
+                      style: TextStyle(
+                        color: themeColor.foregroundColor,
+                        fontSize: 24 * scale,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Period',
+                      style: TextStyle(
+                        color: themeColor.foregroundColor,
+                        fontSize: 12 * scale,
+                      ),
+                    ),
+                    SizedBox(height: 4 * scale),
+                    Text(
+                      period.display,
+                      style: TextStyle(
+                        color: themeColor.foregroundColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14 * scale,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (includeBranding)
+            CollageBranding(themeColor: themeColor, scale: scale)
+          else
+            SizedBox(height: 8 * scale),
+        ],
+      ),
+    ),
   );
 }

@@ -72,13 +72,12 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
     }
   }
 
-  Widget get _loadingView =>
-      widget.isView
-          ? Scaffold(
-            appBar: createAppBar(context, 'Loading'),
-            body: const LoadingComponent(),
-          )
-          : const LoadingComponent();
+  Widget get _loadingView => widget.isView
+      ? Scaffold(
+          appBar: createAppBar(context, 'Loading'),
+          body: const LoadingComponent(),
+        )
+      : const LoadingComponent();
 
   Widget get _errorView {
     final errorComponent = ErrorComponent(
@@ -90,34 +89,33 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
 
     return widget.isView
         ? Scaffold(
-          appBar: createAppBar(
-            context,
-            'Error',
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => SettingsView()),
-                  );
-                },
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(10),
-            child: errorComponent,
-          ),
-        )
+            appBar: createAppBar(
+              context,
+              'Error',
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SettingsView()),
+                    );
+                  },
+                ),
+              ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(10),
+              child: errorComponent,
+            ),
+          )
         : errorComponent;
   }
 
   @override
-  Widget build(BuildContext context) =>
-      _isLoading
-          ? _loadingView
-          : _exception != null && _stackTrace != null
-          ? _errorView
-          : widget.builder(_value);
+  Widget build(BuildContext context) => _isLoading
+      ? _loadingView
+      : _exception != null && _stackTrace != null
+      ? _errorView
+      : widget.builder(_value);
 }

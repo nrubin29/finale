@@ -123,14 +123,11 @@ class _ProfileViewState extends State<ProfileView>
           includeCurrentScrobble: true,
           extended: true,
         ),
-        badgeWidgetBuilder:
-            (track) =>
-                track.isLoved ? const OutlinedLoveIcon() : const SizedBox(),
-        trailingWidgetBuilder:
-            (track) =>
-                track.timestamp != null
-                    ? const SizedBox()
-                    : const NowPlayingAnimation(),
+        badgeWidgetBuilder: (track) =>
+            track.isLoved ? const OutlinedLoveIcon() : const SizedBox(),
+        trailingWidgetBuilder: (track) => track.timestamp != null
+            ? const SizedBox()
+            : const NowPlayingAnimation(),
         detailWidgetBuilder: (track) => TrackView(track: track),
         slivers: [
           SliverToBoxAdapter(
@@ -146,37 +143,29 @@ class _ProfileViewState extends State<ProfileView>
         scoreboardItems: [
           ScoreboardItemModel.future(
             label: 'Scrobbles',
-            futureProvider:
-                () => Lastfm.getUser(
-                  widget.username,
-                ).then((user) => user.playCount),
+            futureProvider: () =>
+                Lastfm.getUser(widget.username).then((user) => user.playCount),
           ),
           ScoreboardItemModel.future(
             label: 'Artists',
-            futureProvider:
-                () =>
-                    GetTopArtistsRequest(
-                      widget.username,
-                      Period.overall,
-                    ).getNumItems(),
+            futureProvider: () => GetTopArtistsRequest(
+              widget.username,
+              Period.overall,
+            ).getNumItems(),
           ),
           ScoreboardItemModel.future(
             label: 'Albums',
-            futureProvider:
-                () =>
-                    GetTopAlbumsRequest(
-                      widget.username,
-                      Period.overall,
-                    ).getNumItems(),
+            futureProvider: () => GetTopAlbumsRequest(
+              widget.username,
+              Period.overall,
+            ).getNumItems(),
           ),
           ScoreboardItemModel.future(
             label: 'Tracks',
-            futureProvider:
-                () =>
-                    GetTopTracksRequest(
-                      widget.username,
-                      Period.overall,
-                    ).getNumItems(),
+            futureProvider: () => GetTopTracksRequest(
+              widget.username,
+              Period.overall,
+            ).getNumItems(),
           ),
         ],
       ),
@@ -231,13 +220,12 @@ class _ProfileViewState extends State<ProfileView>
       tabs: [
         for (final tab in _tabOrder)
           Tab(
-            icon:
-                tab.iconRotationDegrees != null
-                    ? Transform.rotate(
-                      angle: tab.iconRotationDegrees! * pi / 180,
-                      child: Icon(tab.icon, size: iconSize),
-                    )
-                    : Icon(tab.icon, size: iconSize),
+            icon: tab.iconRotationDegrees != null
+                ? Transform.rotate(
+                    angle: tab.iconRotationDegrees! * pi / 180,
+                    child: Icon(tab.icon, size: iconSize),
+                  )
+                : Icon(tab.icon, size: iconSize),
           ),
       ],
     );
@@ -260,49 +248,48 @@ class _ProfileViewState extends State<ProfileView>
       if (!widget.isTab) return;
       _profileStack.me = user;
     },
-    builder:
-        (user) => Scaffold(
-          appBar: createAppBar(
-            context,
-            user.name,
-            leadingEntity: user,
-            circularLeadingImage: true,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.adaptive.share),
-                onPressed: () {
-                  Share.share(user.url);
-                },
-              ),
-              if (widget.isTab)
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SettingsView()),
-                    );
-                  },
-                )
-              else
-                IconButton(
-                  icon: const Icon(scrobbleIcon),
-                  onPressed: () {
-                    showBarModalBottomSheet(
-                      context: context,
-                      duration: const Duration(milliseconds: 200),
-                      builder: (_) => FriendScrobbleView(username: user.name),
-                    );
-                  },
-                ),
-            ],
-            bottom: _tabBar(context),
+    builder: (user) => Scaffold(
+      appBar: createAppBar(
+        context,
+        user.name,
+        leadingEntity: user,
+        circularLeadingImage: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.adaptive.share),
+            onPressed: () {
+              SharePlus.instance.share(ShareParams(text: user.url));
+            },
           ),
-          body: TabBarView(
-            controller: _tabController,
-            children: [for (final tab in _tabOrder) _widgetForTab(tab, user)],
-          ),
-        ),
+          if (widget.isTab)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsView()),
+                );
+              },
+            )
+          else
+            IconButton(
+              icon: const Icon(scrobbleIcon),
+              onPressed: () {
+                showBarModalBottomSheet(
+                  context: context,
+                  duration: const Duration(milliseconds: 200),
+                  builder: (_) => FriendScrobbleView(username: user.name),
+                );
+              },
+            ),
+        ],
+        bottom: _tabBar(context),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [for (final tab in _tabOrder) _widgetForTab(tab, user)],
+      ),
+    ),
   );
 
   @override

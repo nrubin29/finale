@@ -41,12 +41,11 @@ ThemeData finaleTheme(
     seedColor: themeColor.color,
     brightness: brightness,
     primary: themeColor.color,
-    surface:
-        brightness == Brightness.dark
-            ? offBlackBackground == true
-                ? _offBlackBackgroundColor
-                : Colors.black
-            : null,
+    surface: brightness == Brightness.dark
+        ? offBlackBackground == true
+              ? _offBlackBackgroundColor
+              : Colors.black
+        : null,
     onPrimary: themeColor.foregroundColor,
   );
 

@@ -172,10 +172,9 @@ class ScrobbleFiltersListTile extends StatelessWidget {
 extension WhereAllFiltersMatch on List<LRecentTracksResponseTrack> {
   List<LRecentTracksResponseTrack> whereAllFiltersMatch(
     List<ScrobbleFilter> filters,
-  ) =>
-      isEmpty || filters.isEmpty
-          ? this
-          : where(
-            (track) => filters.every((predicate) => predicate.matches(track)),
-          ).toList(growable: false);
+  ) => isEmpty || filters.isEmpty
+      ? this
+      : where(
+          (track) => filters.every((predicate) => predicate.matches(track)),
+        ).toList(growable: false);
 }

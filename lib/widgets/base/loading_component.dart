@@ -10,26 +10,25 @@ class LoadingComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    child:
-        small
-            ? const SizedBox.square(
-              dimension: 16,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-            : Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const CircularProgressIndicator(),
-                    if (message != null) ...[
-                      const SizedBox(height: 10),
-                      Text(message!),
-                    ],
+    child: small
+        ? const SizedBox.square(
+            dimension: 16,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          )
+        : Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(),
+                  if (message != null) ...[
+                    const SizedBox(height: 10),
+                    Text(message!),
                   ],
-                ),
+                ],
               ),
             ),
+          ),
   );
 }

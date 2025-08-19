@@ -45,10 +45,9 @@ class _EntityImageState extends State<EntityImage> {
     _fetchImageId();
   }
 
-  PlaceholderBehavior get _placeholderBehavior =>
-      isScreenshotTest
-          ? PlaceholderBehavior.active
-          : widget.placeholderBehavior;
+  PlaceholderBehavior get _placeholderBehavior => isScreenshotTest
+      ? PlaceholderBehavior.active
+      : widget.placeholderBehavior;
 
   Future<void> _fetchImageId() async {
     if (widget.entity.imageData != null) {
@@ -108,10 +107,9 @@ class _EntityImageState extends State<EntityImage> {
       return widget.isCircular ? _buildCircularImage(image) : image;
     }
 
-    final placeholder =
-        _placeholderBehavior == PlaceholderBehavior.none
-            ? const SizedBox()
-            : _Placeholder(widget.entity, widget.quality, widget.width);
+    final placeholder = _placeholderBehavior == PlaceholderBehavior.none
+        ? const SizedBox()
+        : _Placeholder(widget.entity, widget.quality, widget.width);
 
     if (_imageId == null) {
       if (!_isLoading) {
@@ -129,11 +127,10 @@ class _EntityImageState extends State<EntityImage> {
           widget.onLoaded?.call();
           return child;
         },
-        placeholderBuilder:
-            (_) =>
-                _placeholderBehavior == PlaceholderBehavior.active
-                    ? const CircularProgressIndicator()
-                    : placeholder,
+        placeholderBuilder: (_) =>
+            _placeholderBehavior == PlaceholderBehavior.active
+            ? const CircularProgressIndicator()
+            : placeholder,
         errorBuilder: (_, error, stackTrace) {
           FlutterError.dumpErrorToConsole(
             FlutterErrorDetails(
@@ -162,46 +159,44 @@ class _EntityImageState extends State<EntityImage> {
               imageWidget,
               Positioned.fill(
                 child: LayoutBuilder(
-                  builder:
-                      (_, constraints) => BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: constraints.maxWidth / 30,
-                          sigmaY: constraints.maxWidth / 30,
-                        ),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Stack(
-                              children: [
-                                AutoSizeText(
-                                  'Image hidden due to copyright',
-                                  textAlign: TextAlign.center,
-                                  minFontSize: 4,
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    foreground:
-                                        Paint()
-                                          ..style = PaintingStyle.stroke
-                                          ..strokeWidth = 2
-                                          ..color = Colors.black,
-                                  ),
-                                ),
-                                const AutoSizeText(
-                                  'Image hidden due to copyright',
-                                  textAlign: TextAlign.center,
-                                  minFontSize: 4,
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                  builder: (_, constraints) => BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: constraints.maxWidth / 30,
+                      sigmaY: constraints.maxWidth / 30,
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Stack(
+                          children: [
+                            AutoSizeText(
+                              'Image hidden due to copyright',
+                              textAlign: TextAlign.center,
+                              minFontSize: 4,
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                foreground: Paint()
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 2
+                                  ..color = Colors.black,
+                              ),
                             ),
-                          ),
+                            const AutoSizeText(
+                              'Image hidden due to copyright',
+                              textAlign: TextAlign.center,
+                              minFontSize: 4,
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -234,10 +229,9 @@ class _Placeholder extends StatelessWidget {
   Widget build(BuildContext context) => FittedBox(
     fit: BoxFit.contain,
     child: Container(
-      color:
-          Theme.of(context).brightness == Brightness.light
-              ? Colors.grey
-              : Colors.grey.shade800,
+      color: Theme.of(context).brightness == Brightness.light
+          ? Colors.grey
+          : Colors.grey.shade800,
       width: width,
       height: width,
       child: Center(

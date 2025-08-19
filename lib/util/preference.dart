@@ -43,11 +43,9 @@ class Preference<T, U extends Object> {
     key,
     defaultValue: defaultValue,
     serialize: (value) => value.index,
-    deserialize:
-        (serialized) =>
-            serialized < enumValues.length
-                ? enumValues[serialized]
-                : enumValues.first,
+    deserialize: (serialized) => serialized < enumValues.length
+        ? enumValues[serialized]
+        : enumValues.first,
   );
 
   static Preference<List<T>, List<String>> forEnumList<T extends Enum>(
@@ -74,10 +72,9 @@ class Preference<T, U extends Object> {
       return _defaultValue;
     }
 
-    final preferenceValue =
-        U == _StringList
-            ? _preferences.getStringList(_key) as U
-            : _preferences.get(_key) as U;
+    final preferenceValue = U == _StringList
+        ? _preferences.getStringList(_key) as U
+        : _preferences.get(_key) as U;
 
     if (deserialize != null) {
       return deserialize!(preferenceValue);

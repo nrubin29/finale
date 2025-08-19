@@ -9,10 +9,11 @@ import 'background_task.dart';
 class SpotifyCheckerBackgroundTask extends BackgroundTask {
   static const _maxDelta = Duration(minutes: 15);
 
-  const SpotifyCheckerBackgroundTask() : super('SpotifyChecker');
+  const SpotifyCheckerBackgroundTask()
+    : super('SpotifyChecker', frequency: const Duration(hours: 3));
 
   @override
-  Future<bool> get shouldRun async =>
+  Future<bool> isEnabled() async =>
       Preferences.spotifyEnabled.value &&
       Preferences.hasSpotifyAuthData &&
       Preferences.spotifyCheckerEnabled.value;
@@ -27,13 +28,13 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
 
   @override
   Future<bool> run() async {
-    final latestLastfmTrack =
-        (await GetRecentTracksRequest(
-          Preferences.name.value!,
-        ).getData(1, 1)).lastOrNull;
+    final latestLastfmTrack = (await GetRecentTracksRequest(
+      Preferences.name.value!,
+    ).getData(1, 1)).lastOrNull;
 
-    final latestSpotifyTrack =
-        (await Spotify.getRecentTracks(limit: 1)).lastOrNull;
+    final latestSpotifyTrack = (await Spotify.getRecentTracks(
+      limit: 1,
+    )).lastOrNull;
 
     if (latestLastfmTrack != null &&
         latestSpotifyTrack != null &&
@@ -41,8 +42,6 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
             _maxDelta) {
       showNotification(NotificationType.spotifyCheckerOutOfSync);
     }
-
-    await register(initialDelay: const Duration(hours: 3));
 
     return true;
   }
