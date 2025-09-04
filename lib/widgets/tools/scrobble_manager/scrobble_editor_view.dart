@@ -7,8 +7,14 @@ import 'package:flutter/material.dart';
 
 class ScrobbleEditorView extends StatefulWidget {
   final List<LRecentTracksResponseTrack> tracks;
+  final bool isSingleScrobble;
 
-  const ScrobbleEditorView({required this.tracks});
+  const ScrobbleEditorView({required this.tracks}) : isSingleScrobble = false;
+
+  ScrobbleEditorView.forSingleScrobble({
+    required LRecentTracksResponseTrack track,
+  }) : tracks = [track],
+       isSingleScrobble = true;
 
   @override
   State<ScrobbleEditorView> createState() => _ScrobbleEditorViewState();
@@ -59,16 +65,18 @@ class _ScrobbleEditorViewState extends State<ScrobbleEditorView> {
       return;
     }
 
-    final confirmation = await showConfirmationDialog(
-      context,
-      content:
-          'Are you sure that you want to apply the following edits to '
-          '${pluralize(widget.tracks.length)}?\n\n'
-          '${result.toSentence()}',
-    );
-    if (!confirmation) return;
+    if (!widget.isSingleScrobble) {
+      final confirmation = await showConfirmationDialog(
+        context,
+        content:
+            'Are you sure that you want to apply the following edits to '
+            '${pluralize(widget.tracks.length)}?\n\n'
+            '${result.toSentence()}',
+      );
+      if (!confirmation) return;
+      if (!mounted) return;
+    }
 
-    if (!mounted) return;
     Navigator.pop(context, result);
   }
 
@@ -82,17 +90,23 @@ class _ScrobbleEditorViewState extends State<ScrobbleEditorView> {
   Widget build(BuildContext context) => Scaffold(
     appBar: createAppBar(
       context,
-      'Edit ${pluralize(widget.tracks.length)}',
+      widget.isSingleScrobble
+          ? 'Edit scrobble'
+          : 'Edit ${pluralize(widget.tracks.length)}',
       actions: [IconButton(onPressed: _submit, icon: const Icon(Icons.send))],
     ),
     body: Form(
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Text(
-              "If a field is left blank, its value won't be updated. You "
-              'will be able to confirm your edits before they are applied.',
+              [
+                "If a field is left blank, its value won't be updated.",
+                if (!widget.isSingleScrobble)
+                  'You will be able to confirm your edits before they are '
+                      'applied.',
+              ].join(' '),
             ),
           ),
           Padding(

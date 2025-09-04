@@ -323,6 +323,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (widget.shouldShowTrackMenu)
             TrackMenuButton(
               track: item as LRecentTracksResponseTrack,
+              enabled: !item.isEdited && !item.isDeleted,
               onTrackChange: (track) {
                 setState(() {
                   items[index] = track as T;
@@ -338,7 +339,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       ),
     );
     return Opacity(
-      opacity: item is LRecentTracksResponseTrack && item.isDeleted ? 0.5 : 1,
+      opacity:
+          item is LRecentTracksResponseTrack &&
+              (item.isEdited || item.isDeleted)
+          ? 0.5
+          : 1,
       child: listTile,
     );
   }

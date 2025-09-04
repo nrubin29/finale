@@ -4,13 +4,20 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/functions.dart';
 import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
+import 'package:finale/widgets/tools/scrobble_manager/scrobble_editor_view.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TrackMenuButton extends StatelessWidget {
   final LRecentTracksResponseTrack track;
+  final bool enabled;
   final void Function(LRecentTracksResponseTrack track) onTrackChange;
 
-  const TrackMenuButton({required this.track, required this.onTrackChange});
+  const TrackMenuButton({
+    required this.track,
+    required this.enabled,
+    required this.onTrackChange,
+  });
 
   List<PopupMenuEntry> _buildItems(BuildContext context) {
     return [
@@ -49,7 +56,30 @@ class TrackMenuButton extends StatelessWidget {
           }
         },
       ),
-      if (isMobile && track.date != null)
+      if (isMobile && track.date != null) ...[
+        if (DateTime.now().difference(track.date!) < const Duration(days: 14))
+          PopupMenuItem(
+            child: const ListTile(
+              leading: Icon(Icons.edit),
+              title: Text('Edit scrobble'),
+            ),
+            onTap: () async {
+              if (!await ensureCookies(context)) {
+                return;
+              }
+
+              if (!context.mounted) return;
+              final request = await showBarModalBottomSheet(
+                context: context,
+                builder: (_) =>
+                    ScrobbleEditorView.forSingleScrobble(track: track),
+              );
+              if (request == null) return;
+              if (await LastfmCookie.editScrobble(track, request)) {
+                onTrackChange(track.copyWith(isEdited: true));
+              }
+            },
+          ),
         PopupMenuItem(
           child: const ListTile(
             leading: Icon(Icons.delete),
@@ -66,6 +96,7 @@ class TrackMenuButton extends StatelessWidget {
             }
           },
         ),
+      ],
     ];
   }
 
@@ -73,6 +104,7 @@ class TrackMenuButton extends StatelessWidget {
   Widget build(BuildContext context) => PopupMenuButton(
     itemBuilder: _buildItems,
     tooltip: 'Actions',
+    enabled: enabled,
     child: const Icon(Icons.more_vert, color: Colors.grey),
   );
 }
