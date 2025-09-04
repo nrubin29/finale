@@ -109,6 +109,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   var _numInitialRequests = 0;
   var isDoingRequest = false;
   var hasMorePages = true;
+  var _itemWasDeleted = false;
 
   PagedRequest<T>? _request;
   StreamSubscription? _subscription;
@@ -167,6 +168,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
 
           _exception = null;
           _stackTrace = null;
+          _itemWasDeleted = false;
         });
       }
     } on Exception catch (error, stackTrace) {
@@ -251,11 +253,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
 
   Widget _listItemBuilder(BuildContext context, int index) {
     final item = items[index];
-    return ListTile(
+    var listTile = ListTile(
       visualDensity: VisualDensity.compact,
       title: Text(item.displayTitle),
       contentPadding: widget.shouldLeftPadListItems
-          ? null
+          ? const EdgeInsets.symmetric(horizontal: 16)
           : const EdgeInsets.only(right: 16),
       onTap: widget.onTap != null || widget.detailWidgetBuilder != null
           ? () {
@@ -324,11 +326,20 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               onTrackChange: (track) {
                 setState(() {
                   items[index] = track as T;
+                  if (track.isDeleted) {
+                    setState(() {
+                      _itemWasDeleted = true;
+                    });
+                  }
                 });
               },
             ),
         ],
       ),
+    );
+    return Opacity(
+      opacity: item is LRecentTracksResponseTrack && item.isDeleted ? 0.5 : 1,
+      child: listTile,
     );
   }
 
@@ -474,30 +485,42 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             ),
           ),
         if (_request != null && hasMorePages)
-          SliverVisibilityDetector(
-            key: UniqueKey(),
-            sliver: SliverToBoxAdapter(
-              child: SafeArea(
-                child: isDoingRequest
-                    ? const ListTile(
-                        leading: CircularProgressIndicator(),
-                        title: Text('Loading...'),
-                      )
-                    : const ListTile(
-                        leading: Padding(
-                          padding: EdgeInsets.only(left: 6),
-                          child: Icon(Icons.arrow_upward, size: 36),
-                        ),
-                        title: Text('Scroll to load more items'),
-                      ),
+          if (_itemWasDeleted)
+            SliverToBoxAdapter(
+              child: ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text(
+                  'You must refresh after deleting a scrobble before '
+                  'loading more pages.',
+                ),
+                onTap: _getInitialItems,
               ),
+            )
+          else
+            SliverVisibilityDetector(
+              key: UniqueKey(),
+              sliver: SliverToBoxAdapter(
+                child: SafeArea(
+                  child: isDoingRequest
+                      ? const ListTile(
+                          leading: CircularProgressIndicator(),
+                          title: Text('Loading...'),
+                        )
+                      : const ListTile(
+                          leading: Padding(
+                            padding: EdgeInsets.only(left: 6),
+                            child: Icon(Icons.arrow_upward, size: 36),
+                          ),
+                          title: Text('Scroll to load more items'),
+                        ),
+                ),
+              ),
+              onVisibilityChanged: (visibilityInfo) {
+                if (visibilityInfo.visibleFraction > 0.95) {
+                  _getMoreItems();
+                }
+              },
             ),
-            onVisibilityChanged: (visibilityInfo) {
-              if (visibilityInfo.visibleFraction > 0.95) {
-                _getMoreItems();
-              }
-            },
-          ),
       ],
     );
   }

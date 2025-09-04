@@ -4,6 +4,15 @@ import 'package:finale/widgets/settings/lastfm_login_web_view.dart';
 import 'package:finale/widgets/settings/lastfm_settings_view.dart';
 import 'package:flutter/material.dart';
 
+Future<bool> ensureCookies(BuildContext context) async {
+  if (await LastfmCookie.hasCookies()) {
+    return true;
+  }
+
+  if (!context.mounted) return false;
+  return await showCookieDialog(context);
+}
+
 Future<bool> showCookieDialog(BuildContext context) async {
   return await showDialog<bool>(
         context: context,

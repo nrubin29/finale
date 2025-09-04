@@ -1,4 +1,3 @@
-import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
@@ -40,11 +39,8 @@ class ToolsView extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             caption: 'Edit and delete scrobbles.',
             onTap: () async {
-              if (!await LastfmCookie.hasCookies()) {
-                if (!context.mounted) return;
-                if (!await showCookieDialog(context)) {
-                  return;
-                }
+              if (!await ensureCookies(context)) {
+                return;
               }
 
               if (!context.mounted) return;

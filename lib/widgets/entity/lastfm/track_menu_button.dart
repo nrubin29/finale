@@ -1,7 +1,9 @@
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/functions.dart';
+import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
 import 'package:flutter/material.dart';
 
 class TrackMenuButton extends StatelessWidget {
@@ -47,6 +49,23 @@ class TrackMenuButton extends StatelessWidget {
           }
         },
       ),
+      if (isMobile && track.date != null)
+        PopupMenuItem(
+          child: const ListTile(
+            leading: Icon(Icons.delete),
+            title: Text('Delete scrobble'),
+          ),
+          onTap: () async {
+            if (!await ensureCookies(context)) {
+              return;
+            }
+
+            if (!context.mounted) return;
+            if (await LastfmCookie.deleteScrobble(track)) {
+              onTrackChange(track.copyWith(isDeleted: true));
+            }
+          },
+        ),
     ];
   }
 
@@ -54,6 +73,6 @@ class TrackMenuButton extends StatelessWidget {
   Widget build(BuildContext context) => PopupMenuButton(
     itemBuilder: _buildItems,
     tooltip: 'Actions',
-    child: const Icon(Icons.more_vert),
+    child: const Icon(Icons.more_vert, color: Colors.grey),
   );
 }

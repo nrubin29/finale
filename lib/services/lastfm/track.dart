@@ -85,6 +85,9 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   @JsonKey(name: 'loved', fromJson: convertStringToBoolean)
   final bool isLoved;
 
+  @JsonKey(includeFromJson: false)
+  final bool isDeleted;
+
   LRecentTracksResponseTrack(
     this.name,
     this.url,
@@ -92,8 +95,9 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
     this.artist,
     this.album,
     this.timestamp,
-    this.isLoved,
-  ) {
+    this.isLoved, {
+    this.isDeleted = false,
+  }) {
     album.artist = artist;
   }
 
@@ -118,7 +122,7 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
       'LRecentTracksResponseTrack(name=$name, artist=$artistName, '
       'album=$albumName)';
 
-  LRecentTracksResponseTrack copyWith({bool? isLoved}) =>
+  LRecentTracksResponseTrack copyWith({bool? isLoved, bool? isDeleted}) =>
       LRecentTracksResponseTrack(
         name,
         url,
@@ -127,6 +131,7 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
         album,
         timestamp,
         isLoved ?? this.isLoved,
+        isDeleted: isDeleted ?? this.isDeleted,
       );
 }
 
