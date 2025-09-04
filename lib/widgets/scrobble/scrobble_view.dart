@@ -14,7 +14,6 @@ import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/music_recognition_component.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:universal_io/io.dart';
 
 class ScrobbleView extends StatefulWidget {
   final Track? track;
@@ -173,7 +172,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 TitledBox(
                   title: 'Sources',
                   actions: [
-                    if (Platform.isIOS && _isAppleMusicEnabled)
+                    if (isIos && _isAppleMusicEnabled)
                       ButtonAction('Apple Music', SocialMediaIcons.apple, () {
                         Navigator.push(
                           context,

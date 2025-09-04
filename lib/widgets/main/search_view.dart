@@ -26,7 +26,6 @@ import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/entity/spotify/spotify_playlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:universal_io/io.dart';
 
 extension on SearchEngine {
   IconData get icon {
@@ -190,7 +189,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   }
 
   void _setAppleMusicEnabled() async {
-    if (!Platform.isIOS) {
+    if (!isIos) {
       return;
     }
 

@@ -1,11 +1,14 @@
-import 'package:flutter/foundation.dart' show kIsWeb, kDebugMode;
+import 'package:flutter/foundation.dart'
+    show kIsWeb, kDebugMode, defaultTargetPlatform;
 import 'package:flutter/material.dart';
-import 'package:universal_io/io.dart';
 
 const isDebug = kDebugMode;
 const isWeb = kIsWeb;
-final isDesktop = !isWeb && Platform.isMacOS;
-final isMobile = !isWeb && !isDesktop;
+// The [isWeb] checks are necessary because on web, [defaultTargetPlatform] is
+// the platform that the browser is running on.
+final isIos = !isWeb && defaultTargetPlatform == TargetPlatform.iOS;
+final isAndroid = !isWeb && defaultTargetPlatform == TargetPlatform.android;
+final isMobile = isIos || isAndroid;
 
 const isScreenshotTest = bool.fromEnvironment(
   'isScreenshotTest',

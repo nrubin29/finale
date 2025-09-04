@@ -1,12 +1,12 @@
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/preference.dart';
-import 'package:universal_io/io.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'apple_music_scrobble.dart';
 import 'spotify_checker.dart';
 
 final _tasks = [
-  if (Platform.isIOS) const AppleMusicScrobbleBackgroundTask(),
+  if (isIos) const AppleMusicScrobbleBackgroundTask(),
   const SpotifyCheckerBackgroundTask(),
 ];
 

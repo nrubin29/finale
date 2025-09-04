@@ -1,6 +1,6 @@
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/external_actions/external_actions.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:universal_io/io.dart';
 
 import 'time_safe_stream.dart';
 
@@ -36,14 +36,14 @@ Future<void> setup() async {
 }
 
 Future<bool> requestPermission() async {
-  if (Platform.isIOS) {
+  if (isIos) {
     return await FlutterLocalNotificationsPlugin()
             .resolvePlatformSpecificImplementation<
               IOSFlutterLocalNotificationsPlugin
             >()!
             .requestPermissions(alert: true, badge: true, sound: true) ??
         false;
-  } else if (Platform.isAndroid) {
+  } else if (isAndroid) {
     return await FlutterLocalNotificationsPlugin()
             .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin

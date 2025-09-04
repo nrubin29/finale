@@ -11,7 +11,6 @@ import 'package:finale/widgets/settings/lastfm_settings_view.dart';
 import 'package:finale/widgets/settings/spotify_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:universal_io/io.dart';
 
 class AccountsSettingsView extends StatefulWidget {
   @override
@@ -66,7 +65,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
               );
             },
           ),
-          if (Platform.isIOS)
+          if (isIos)
             CaptionedListTile(
               title: 'Apple Music',
               icon: SocialMediaIcons.apple,
