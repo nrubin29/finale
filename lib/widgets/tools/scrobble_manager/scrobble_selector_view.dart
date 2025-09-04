@@ -1,5 +1,6 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';

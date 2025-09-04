@@ -1,12 +1,10 @@
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
-import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:finale/widgets/tools/scrobble_manager/scrobble_editor_view.dart';
 import 'package:flutter/material.dart';
 
 enum _ScrobbleStatus { pending, processing, success, error }
@@ -24,27 +22,6 @@ class _Scrobble extends BasicScrobbledTrack {
       date = track.date {
     cachedImageId = track.cachedImageId;
   }
-
-  _Scrobble._({
-    required this.name,
-    required this.artistName,
-    required this.albumName,
-    required this.albumArtist,
-    required this.url,
-    required this.imageId,
-    required this.date,
-  });
-
-  _Scrobble copyApplyingRequest(ScrobbleEditRequest request) => _Scrobble._(
-    name: request.newTitle ?? name,
-    artistName: request.newArtist ?? artistName,
-    albumName: request.newAlbum ?? albumName,
-    albumArtist: albumArtist,
-    url: url,
-    imageId: imageId,
-    // Avoid two scrobbles at the exact same timestamp.
-    date: date?.add(const Duration(seconds: 1)),
-  );
 
   @override
   final String name;
@@ -104,21 +81,13 @@ class _ScrobbleModificationViewState extends State<ScrobbleModificationView> {
         scrobble._status = _ScrobbleStatus.processing;
       });
 
-      if (widget.editRequest case ScrobbleEditRequest request) {
-        final newScrobble = scrobble.copyApplyingRequest(request);
-        final result = await Lastfm.scrobble(
-          [newScrobble],
-          [newScrobble.date!],
-        );
-        if (result.accepted != 1) {
-          setState(() {
-            scrobble._status = _ScrobbleStatus.error;
-          });
-          continue;
-        }
-      }
+      bool success;
 
-      final success = await LastfmCookie.deleteScrobble(scrobble);
+      if (widget.editRequest case ScrobbleEditRequest request) {
+        success = await LastfmCookie.editScrobble(scrobble, request);
+      } else {
+        success = await LastfmCookie.deleteScrobble(scrobble);
+      }
 
       setState(() {
         scrobble._status = success

@@ -1,5 +1,5 @@
+import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:finale/widgets/tools/scrobble_manager/scrobble_editor_view.dart';
 import 'package:finale/widgets/tools/scrobble_manager/scrobble_modification_view.dart';
 import 'package:finale/widgets/tools/scrobble_manager/scrobble_selector_view.dart';
 import 'package:flutter/material.dart';

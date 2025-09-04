@@ -1,28 +1,9 @@
+import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:flutter/material.dart';
-
-class ScrobbleEditRequest {
-  final String? newTitle;
-  final String? newArtist;
-  final String? newAlbum;
-
-  const ScrobbleEditRequest({
-    required this.newTitle,
-    required this.newArtist,
-    required this.newAlbum,
-  });
-
-  bool get isValid => newTitle != null || newArtist != null || newAlbum != null;
-
-  String toSentence() => [
-    if (newTitle != null) 'Edit title to $newTitle',
-    if (newArtist != null) 'Edit artist to $newArtist',
-    if (newAlbum != null) 'Edit album to $newAlbum',
-  ].join('\n');
-}
 
 class ScrobbleEditorView extends StatefulWidget {
   final List<LRecentTracksResponseTrack> tracks;
