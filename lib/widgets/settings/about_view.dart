@@ -7,128 +7,132 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutView extends StatelessWidget {
-  int get year => DateTime.now().year;
+  final int year = DateTime.now().year;
+
+  Widget _listTile({
+    required String title,
+    required IconData icon,
+    required void Function() onTap,
+  }) => SliverToBoxAdapter(
+    child: ListTile(
+      title: Text(title),
+      leading: Icon(icon),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: onTap,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar(context, 'About'),
-      body: CustomScrollView(
-        physics: const ScrollPhysics(),
-        slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppIcon(size: 84),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 640),
+          child: CustomScrollView(
+            physics: const ScrollPhysics(),
+            slivers: [
+              const SliverPadding(padding: EdgeInsets.only(top: 24)),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 18,
                   children: [
-                    const Text('Finale', style: TextStyle(fontSize: 24)),
-                    FutureBuilder<PackageInfo>(
-                      future: PackageInfo.fromPlatform(),
-                      builder: (_, snapshot) => snapshot.hasData
-                          ? Text('Version ${snapshot.data!.fullVersion}')
-                          : const SizedBox(),
+                    const AppIcon(size: 92),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Finale', style: TextStyle(fontSize: 32)),
+                        FutureBuilder<PackageInfo>(
+                          future: PackageInfo.fromPlatform(),
+                          builder: (_, snapshot) => snapshot.hasData
+                              ? Text(
+                                  'v${snapshot.data!.fullVersion}',
+                                  style: const TextStyle(fontSize: 18),
+                                )
+                              : const SizedBox(),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          SliverToBoxAdapter(
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: Theme.of(context).textTheme.bodyMedium,
-                children: const [
-                  TextSpan(text: 'Made with '),
-                  WidgetSpan(child: Icon(Icons.favorite, size: 16)),
-                  TextSpan(text: ' and '),
-                  WidgetSpan(child: Icon(Icons.music_note, size: 16)),
-                  TextSpan(text: ' by Noah Rubin'),
-                ],
               ),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 10)),
-          SliverToBoxAdapter(
-            child: ListTile(
-              title: const Text('Follow me on Twitter'),
-              leading: const Icon(SocialMediaIcons.twitter),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                launchUrl(Uri.https('x.com', 'nrubin29'));
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ListTile(
-              title: const Text('My website'),
-              leading: const Icon(Icons.web),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                launchUrl(Uri.https('noahzrubin.com'));
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ListTile(
-              title: const Text('r/FinaleApp'),
-              leading: const Icon(SocialMediaIcons.reddit),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                launchUrl(Uri.https('reddit.com', 'r/FinaleApp'));
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ListTile(
-              title: const Text('Source code'),
-              leading: const Icon(SocialMediaIcons.github),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                launchUrl(Uri.https('github.com', 'nrubin29/finale'));
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ListTile(
-              title: const Text('Privacy policy'),
-              leading: const Icon(Icons.privacy_tip),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                launchUrl(Uri.https('finale.app', 'privacy'));
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ListTile(
-              title: const Text('Licenses'),
-              leading: const Icon(Icons.integration_instructions),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                showLicensePage(context: context);
-              },
-            ),
-          ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: SafeArea(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text('\u00a9 2020-$year Noah Rubin Technologies LLC'),
-                  const Text('All rights reserved'),
-                ],
+              const SliverPadding(padding: EdgeInsets.only(top: 18)),
+              SliverToBoxAdapter(
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    children: const [
+                      TextSpan(text: 'Made with '),
+                      WidgetSpan(child: Icon(Icons.favorite, size: 16)),
+                      TextSpan(text: ' and '),
+                      WidgetSpan(child: Icon(Icons.music_note, size: 16)),
+                      TextSpan(text: ' by Noah Rubin'),
+                    ],
+                  ),
+                ),
               ),
-            ),
+              const SliverPadding(padding: EdgeInsets.only(top: 18)),
+              _listTile(
+                title: 'My website',
+                icon: Icons.web,
+                onTap: () {
+                  launchUrl(Uri.https('noahzrubin.com'));
+                },
+              ),
+              _listTile(
+                title: 'Follow me on Twitter',
+                icon: SocialMediaIcons.twitter,
+                onTap: () {
+                  launchUrl(Uri.https('x.com', 'nrubin29'));
+                },
+              ),
+              _listTile(
+                title: 'r/FinaleApp',
+                icon: SocialMediaIcons.reddit,
+                onTap: () {
+                  launchUrl(Uri.https('reddit.com', 'r/FinaleApp'));
+                },
+              ),
+              _listTile(
+                title: 'Source code',
+                icon: SocialMediaIcons.github,
+                onTap: () {
+                  launchUrl(Uri.https('github.com', 'nrubin29/finale'));
+                },
+              ),
+              _listTile(
+                title: 'Privacy policy',
+                icon: Icons.privacy_tip,
+                onTap: () {
+                  launchUrl(Uri.https('finale.app', 'privacy'));
+                },
+              ),
+              _listTile(
+                title: 'Licenses',
+                icon: Icons.integration_instructions,
+                onTap: () {
+                  showLicensePage(context: context);
+                },
+              ),
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: SafeArea(
+                  minimum: const EdgeInsets.only(bottom: 24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('\u00a9 2020-$year Noah Rubin Technologies LLC'),
+                      const Text('All rights reserved'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
