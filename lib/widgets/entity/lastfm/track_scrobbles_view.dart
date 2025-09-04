@@ -1,13 +1,16 @@
 import 'package:collection/collection.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/base/loading_component.dart';
+import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_distribution/scrobble_distribution_component.dart';
 import 'package:flutter/material.dart';
 
@@ -63,6 +66,47 @@ class _TrackScrobblesViewState extends State<TrackScrobblesView> {
     },
   );
 
+  Widget _listTile(LUserTrackScrobble scrobble, {bool includeDate = false}) =>
+      ListTile(
+        title: Text(
+          (includeDate ? dateTimeFormatWithSeconds : timeFormatWithSeconds)
+              .format(scrobble.date),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 4,
+          children: [
+            Text(scrobble.album.name),
+            if (isMobile && widget.username == null)
+              PopupMenuButton(
+                itemBuilder: (_) => [
+                  PopupMenuItem(
+                    child: const ListTile(
+                      leading: Icon(Icons.delete),
+                      title: Text('Delete scrobble'),
+                    ),
+                    onTap: () async {
+                      if (!await ensureCookies(context)) {
+                        return;
+                      }
+
+                      if (!context.mounted) return;
+                      if (await LastfmCookie.deleteScrobble(scrobble)) {
+                        setState(() {
+                          _scrobbles!.remove(scrobble);
+                          _selectedDate = _scrobbles!.first.date.beginningOfDay;
+                        });
+                      }
+                    },
+                  ),
+                ],
+                tooltip: 'Actions',
+                child: const Icon(Icons.more_vert, color: Colors.grey),
+              ),
+          ],
+        ),
+      );
+
   List<Widget> get _calendarView => [
     CalendarDatePicker(
       initialDate: _selectedDate!,
@@ -81,10 +125,7 @@ class _TrackScrobblesViewState extends State<TrackScrobblesView> {
     for (final scrobble in _scrobbles!.where(
       (scrobble) => scrobble.date.beginningOfDay == _selectedDate,
     ))
-      ListTile(
-        title: Text(timeFormatWithSeconds.format(scrobble.date)),
-        trailing: Text(scrobble.album.name),
-      ),
+      _listTile(scrobble),
   ];
 
   List<Widget> get _listView => [
@@ -97,10 +138,7 @@ class _TrackScrobblesViewState extends State<TrackScrobblesView> {
         trailing: Text(pluralize(entry.value.length)),
       ),
       for (final scrobble in entry.value)
-        ListTile(
-          title: Text(dateTimeFormatWithSeconds.format(scrobble.date)),
-          trailing: Text(scrobble.album.name),
-        ),
+        _listTile(scrobble, includeDate: true),
     ],
   ];
 
