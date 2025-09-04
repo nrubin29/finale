@@ -27,8 +27,14 @@ class GeneralSettingsView extends StatelessWidget {
             description:
                 'If enabled, date/time inputs will default to using text '
                 'fields rather than calendars/clocks.',
-            icon: Icons.date_range,
+            icon: Icons.edit_calendar,
             preference: Preferences.inputDateTimeAsText,
+          ),
+          SettingsListTile(
+            title: 'Default date range',
+            description: 'The default value for date range fields.',
+            icon: Icons.date_range,
+            preference: Preferences.defaultDateRange,
           ),
           CaptionedListTile(
             title: 'Profile tabs',

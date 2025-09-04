@@ -1,3 +1,4 @@
+import 'package:finale/util/preferences.dart';
 import 'package:finale/util/preset_date_range.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class _DateRangeFieldState extends State<DateRangeField> {
   @override
   void initState() {
     super.initState();
+    _presetDateRange = Preferences.defaultDateRange.value;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setValue();
     });

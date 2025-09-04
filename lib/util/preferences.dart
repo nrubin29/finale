@@ -2,6 +2,7 @@ import 'package:finale/services/auth.dart';
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/preference.dart';
+import 'package:finale/util/preset_date_range.dart';
 import 'package:finale/util/profile_tab.dart';
 import 'package:finale/util/theme.dart';
 
@@ -43,6 +44,7 @@ class Preferences {
     lastAppleMusicScrobble,
     showAlbumArtistField,
     inputDateTimeAsText,
+    defaultDateRange,
     profileTabsOrder,
   ];
 
@@ -192,6 +194,11 @@ class Preferences {
   static final inputDateTimeAsText = Preference<bool, bool>(
     'inputDateTimeAsText',
     defaultValue: false,
+  );
+  static final defaultDateRange = Preference.forEnum(
+    'defaultDateRange',
+    PresetDateRange.values,
+    defaultValue: PresetDateRange.pastHour,
   );
 
   static final profileTabsOrder = Preference.forEnumList<ProfileTab>(
