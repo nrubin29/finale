@@ -1,6 +1,7 @@
+import 'package:finale/util/preference.dart';
 import 'package:flutter/material.dart';
 
-enum ThemeColor {
+enum ThemeColor with PreferenceEnum {
   red('Red', Colors.red),
   pink('Pink', Colors.pink),
   purple('Purple', Colors.purple),
@@ -17,6 +18,7 @@ enum ThemeColor {
   blueGrey('Blue-Grey', Colors.blueGrey),
   yellow('Yellow', Colors.yellow, isBestInDarkMode: true);
 
+  @override
   final String displayName;
   final MaterialColor color;
   final bool isBestInDarkMode;

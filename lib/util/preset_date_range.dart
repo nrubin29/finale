@@ -1,4 +1,6 @@
-enum PresetDateRange {
+import 'package:finale/util/preference.dart';
+
+enum PresetDateRange with PreferenceEnum {
   pastHour('Past hour'),
   pastDay('Past day'),
   pastWeek('Past week'),
@@ -6,6 +8,7 @@ enum PresetDateRange {
   pastYear('Past year'),
   custom('Custom');
 
+  @override
   final String displayName;
 
   const PresetDateRange(this.displayName);

@@ -5,7 +5,16 @@ import 'package:finale/util/preference.dart';
 import 'package:finale/util/profile_tab.dart';
 import 'package:finale/util/theme.dart';
 
-enum SearchEngine { lastfm, spotify, appleMusic }
+enum SearchEngine with PreferenceEnum {
+  lastfm('Last.fm'),
+  spotify('Spotify'),
+  appleMusic('Apple Music');
+
+  @override
+  final String displayName;
+
+  const SearchEngine(this.displayName);
+}
 
 class Preferences {
   const Preferences._();

@@ -35,18 +35,11 @@ class Preference<T, U extends Object> {
         deserialize: DateTime.fromMillisecondsSinceEpoch,
       );
 
-  static Preference<T, int> forEnum<T extends Enum>(
+  static EnumPreference<T> forEnum<T extends PreferenceEnum>(
     String key,
     List<T> enumValues, {
     required T defaultValue,
-  }) => Preference<T, int>(
-    key,
-    defaultValue: defaultValue,
-    serialize: (value) => value.index,
-    deserialize: (serialized) => serialized < enumValues.length
-        ? enumValues[serialized]
-        : enumValues.first,
-  );
+  }) => EnumPreference<T>._(key, enumValues, defaultValue: defaultValue);
 
   static Preference<List<T>, List<String>> forEnumList<T extends Enum>(
     String key,
@@ -115,4 +108,20 @@ class Preference<T, U extends Object> {
     _preferences.remove(_key);
     _changes.add(_defaultValue);
   }
+}
+
+mixin PreferenceEnum on Enum {
+  String get displayName;
+}
+
+class EnumPreference<T extends PreferenceEnum> extends Preference<T, int> {
+  final List<T> enumValues;
+
+  EnumPreference._(super.key, this.enumValues, {super.defaultValue})
+    : super(
+        serialize: (value) => value.index,
+        deserialize: (serialized) => serialized < enumValues.length
+            ? enumValues[serialized]
+            : enumValues.first,
+      );
 }
