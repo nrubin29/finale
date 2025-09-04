@@ -1,3 +1,4 @@
+import 'package:finale/util/preset_date_range.dart';
 import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class DateRangeField extends StatefulWidget {
 }
 
 class _DateRangeFieldState extends State<DateRangeField> {
+  var _presetDateRange = PresetDateRange.pastHour;
   DateTime? _start, _end;
 
   String? _validator(DateTime? value) {
@@ -24,6 +26,20 @@ class _DateRangeFieldState extends State<DateRangeField> {
     return null;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setValue();
+    });
+  }
+
+  void _setValue() {
+    _start = _presetDateRange.startDate;
+    _end = _presetDateRange.endDate;
+    _onChanged();
+  }
+
   void _onChanged() {
     if (_start == null || _end == null || _start!.isAfter(_end!)) return;
     widget.onChanged(DateTimeRange(start: _start!, end: _end!));
@@ -33,40 +49,63 @@ class _DateRangeFieldState extends State<DateRangeField> {
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      SafeArea(
-        top: false,
-        bottom: false,
-        minimum: const EdgeInsets.symmetric(horizontal: 16),
-        child: DateTimeField(
-          label: 'Start',
-          lowerBound: widget.lowerBound,
-          validator: _validator,
-          onChanged: (dateTime) {
+      ListTile(
+        title: const Text('Date range'),
+        trailing: DropdownButton(
+          value: _presetDateRange,
+          items: [
+            for (final presetDateRange in PresetDateRange.values)
+              DropdownMenuItem(
+                value: presetDateRange,
+                child: Text(presetDateRange.displayName),
+              ),
+          ],
+          onChanged: (value) {
             setState(() {
-              _start = dateTime;
-              _onChanged();
+              if (value != null) {
+                _presetDateRange = value;
+                _setValue();
+              }
             });
           },
         ),
       ),
-      SafeArea(
-        top: false,
-        bottom: false,
-        minimum: const EdgeInsets.symmetric(horizontal: 16),
-        child: DateTimeField(
-          label: 'End',
-          showNowIcon: true,
-          includeEndOfMinute: true,
-          lowerBound: widget.lowerBound,
-          validator: _validator,
-          onChanged: (dateTime) {
-            setState(() {
-              _end = dateTime;
-              _onChanged();
-            });
-          },
+      if (_presetDateRange == PresetDateRange.custom) ...[
+        SafeArea(
+          top: false,
+          bottom: false,
+          minimum: const EdgeInsets.symmetric(horizontal: 16),
+          child: DateTimeField(
+            label: 'Start',
+            lowerBound: widget.lowerBound,
+            validator: _validator,
+            onChanged: (dateTime) {
+              setState(() {
+                _start = dateTime;
+                _onChanged();
+              });
+            },
+          ),
         ),
-      ),
+        SafeArea(
+          top: false,
+          bottom: false,
+          minimum: const EdgeInsets.symmetric(horizontal: 16),
+          child: DateTimeField(
+            label: 'End',
+            showNowIcon: true,
+            includeEndOfMinute: true,
+            lowerBound: widget.lowerBound,
+            validator: _validator,
+            onChanged: (dateTime) {
+              setState(() {
+                _end = dateTime;
+                _onChanged();
+              });
+            },
+          ),
+        ),
+      ],
     ],
   );
 }
