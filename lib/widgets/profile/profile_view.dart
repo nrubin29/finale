@@ -123,6 +123,7 @@ class _ProfileViewState extends State<ProfileView>
           includeCurrentScrobble: true,
           extended: true,
         ),
+        shouldShowTrackMenu: widget.isTab,
         badgeWidgetBuilder: (track) =>
             track.isLoved ? const OutlinedLoveIcon() : const SizedBox(),
         trailingWidgetBuilder: (track) => track.timestamp != null

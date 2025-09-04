@@ -48,6 +48,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final bool shouldAnimateImages;
   final bool shouldLeftPadListItems;
   final bool displayCircularImages;
+  final bool shouldShowTrackMenu;
   final String? noResultsMessage;
   final bool showGridTileGradient;
   final double gridTileSize;
@@ -77,6 +78,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
     this.shouldAnimateImages = true,
     this.shouldLeftPadListItems = true,
     this.displayCircularImages = false,
+    this.shouldShowTrackMenu = false,
     this.noResultsMessage = 'No results.',
     this.showGridTileGradient = true,
     this.gridTileSize = 250,
@@ -88,7 +90,12 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
          displayType == DisplayType.list ||
              (!displayNumbers && leadingWidgetBuilder == null),
        ),
-       assert(badgeWidgetBuilder == null || displayImages);
+       assert(badgeWidgetBuilder == null || displayImages),
+       assert(
+         !shouldShowTrackMenu ||
+             (T == LRecentTracksResponseTrack &&
+                 displayType == DisplayType.list),
+       );
 
   @override
   State<StatefulWidget> createState() => EntityDisplayState<T>();
@@ -311,9 +318,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                   ? Colors.grey
                   : null,
             ),
-          if (item is LRecentTracksResponseTrack)
+          if (widget.shouldShowTrackMenu)
             TrackMenuButton(
-              track: item,
+              track: item as LRecentTracksResponseTrack,
               onTrackChange: (track) {
                 setState(() {
                   items[index] = track as T;
