@@ -39,8 +39,8 @@ dependencies:
   share_plus: ^11.1.0
   shared_preferences: ^2.5.3
   sqflite: ^2.4.2
-  universal_html: ^2.2.4
   universal_io: ^2.2.2
+  universal_web: ^1.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
   wakelock_plus: ^1.3.2

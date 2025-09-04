@@ -20,7 +20,7 @@ import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:gal/gal.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:universal_html/html.dart' show AnchorElement;
+import 'package:universal_web/web.dart' show HTMLAnchorElement;
 
 enum _CollageType { grid, list, wrapped }
 
@@ -419,7 +419,7 @@ class _CollageViewState extends State<CollageView> {
         await Gal.putImageBytes(image, name: 'collage');
       }
     } else {
-      AnchorElement()
+      HTMLAnchorElement()
         ..href = Uri.dataFromBytes(image).toString()
         ..download = 'collage.png'
         ..style.display = 'none'
