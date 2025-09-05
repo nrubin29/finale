@@ -9,10 +9,10 @@ import 'package:finale/util/functions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
-import 'package:finale/widgets/base/list_tile_text_field.dart';
+import 'package:finale/widgets/base/list_tile_username_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
-import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
+import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:flutter/material.dart';
 
 class LuckyView extends StatefulWidget {
@@ -26,16 +26,13 @@ class _LuckyViewState extends State<LuckyView> {
   static final _random = Random();
 
   final _formKey = GlobalKey<CollapsibleFormViewState>();
-  late final TextEditingController _usernameTextController;
+  final _usernameTextController = TextEditingController();
   late Period _period;
   var _entityType = EntityType.track;
 
   @override
   void initState() {
     super.initState();
-    _usernameTextController = TextEditingController(
-      text: Preferences.name.value,
-    );
     _period = Preferences.period.value;
   }
 
@@ -96,9 +93,6 @@ class _LuckyViewState extends State<LuckyView> {
     return null;
   }
 
-  String? _validator(String? value) =>
-      value == null || value.isEmpty ? 'This field is required.' : null;
-
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: createAppBar(context, "I'm Feeling Lucky"),
@@ -107,11 +101,7 @@ class _LuckyViewState extends State<LuckyView> {
       submitButtonText: 'Roll the Dice',
       onFormSubmit: _loadData,
       formWidgetsBuilder: (_) => [
-        ListTileTextField(
-          title: 'Username',
-          controller: _usernameTextController,
-          validator: _validator,
-        ),
+        ListTileUsernameField(controller: _usernameTextController),
         ListTile(
           title: const Text('Period'),
           trailing: PeriodDropdownButton(

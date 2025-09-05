@@ -10,7 +10,7 @@ import 'package:finale/util/theme.dart';
 import 'package:finale/util/widget_image_capturer.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
-import 'package:finale/widgets/base/list_tile_text_field.dart';
+import 'package:finale/widgets/base/list_tile_username_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/collage/collage_web_warning_dialog.dart';
 import 'package:finale/widgets/collage/src/grid_collage.dart';
@@ -32,9 +32,7 @@ class CollageView extends StatefulWidget {
 }
 
 class _CollageViewState extends State<CollageView> {
-  final _usernameTextController = TextEditingController(
-    text: Preferences.name.value,
-  );
+  final _usernameTextController = TextEditingController();
   var _chart = EntityType.album;
   var _type = _CollageType.grid;
   late Period _period;
@@ -228,7 +226,7 @@ class _CollageViewState extends State<CollageView> {
   }
 
   List<Widget> _formWidgetsBuilder(BuildContext context) => [
-    ListTileTextField(title: 'Username', controller: _usernameTextController),
+    ListTileUsernameField(controller: _usernameTextController),
     ListTile(
       title: const Text('Type'),
       trailing: DropdownButton<_CollageType>(

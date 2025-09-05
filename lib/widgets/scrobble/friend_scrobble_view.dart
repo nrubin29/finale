@@ -6,7 +6,7 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
 import 'package:finale/widgets/base/date_range_field.dart';
-import 'package:finale/widgets/base/list_tile_text_field.dart';
+import 'package:finale/widgets/base/list_tile_username_field.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
@@ -24,17 +24,13 @@ class FriendScrobbleView extends StatefulWidget {
 }
 
 class _FriendScrobbleViewState extends State<FriendScrobbleView> {
-  late TextEditingController _usernameTextController;
+  late final _usernameTextController = TextEditingController(
+    text: widget.username,
+  );
   DateTimeRange? _dateRange;
   var _filters = <ScrobbleFilter>[];
 
   List<LRecentTracksResponseTrack>? _selection;
-
-  @override
-  void initState() {
-    super.initState();
-    _usernameTextController = TextEditingController(text: widget.username);
-  }
 
   bool get _hasItemsToScrobble => _selection?.isNotEmpty ?? false;
 
@@ -106,14 +102,6 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     }
   }
 
-  String? _validator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'This field is required.';
-    }
-
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: createAppBar(
@@ -130,10 +118,9 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
       submitButtonText: 'Load Scrobbles',
       onFormSubmit: _loadData,
       formWidgetsBuilder: (_) => [
-        ListTileTextField(
-          title: 'Username',
+        ListTileUsernameField(
           controller: _usernameTextController,
-          validator: _validator,
+          includeSelf: false,
         ),
         DateRangeField(
           onChanged: (dateRange) {

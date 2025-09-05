@@ -8,7 +8,7 @@ import 'package:finale/util/functions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/collapsible_form_view.dart';
-import 'package:finale/widgets/base/list_tile_text_field.dart';
+import 'package:finale/widgets/base/list_tile_username_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
@@ -40,16 +40,13 @@ class HIndexView extends StatefulWidget {
 }
 
 class _HIndexViewState extends State<HIndexView> {
-  late final TextEditingController _usernameTextController;
+  final _usernameTextController = TextEditingController();
   late Period _period;
   var _entityType = EntityType.artist;
 
   @override
   void initState() {
     super.initState();
-    _usernameTextController = TextEditingController(
-      text: Preferences.name.value,
-    );
     _period = Preferences.period.value;
   }
 
@@ -110,9 +107,6 @@ class _HIndexViewState extends State<HIndexView> {
       hPlusOneEntity: hPlusOneEntity,
     );
   }
-
-  String? _validator(String? value) =>
-      value == null || value.isEmpty ? 'This field is required.' : null;
 
   Widget _entityListTile(Entity entity) => ListTile(
     title: Text(entity.displayTitle),
@@ -198,11 +192,7 @@ class _HIndexViewState extends State<HIndexView> {
       submitButtonText: 'Calculate',
       onFormSubmit: _loadData,
       formWidgetsBuilder: (_) => [
-        ListTileTextField(
-          title: 'Username',
-          controller: _usernameTextController,
-          validator: _validator,
-        ),
+        ListTileUsernameField(controller: _usernameTextController),
         ListTile(
           title: const Text('Period'),
           trailing: PeriodDropdownButton(

@@ -1,4 +1,5 @@
-import 'package:finale/widgets/base/list_tile_text_field.dart';
+import 'package:finale/util/theme.dart';
+import 'package:finale/widgets/base/custom_list_tile.dart';
 import 'package:flutter/material.dart';
 
 enum StringFilterType {
@@ -101,7 +102,14 @@ class _StringFilterFormState extends State<StringFilterForm> {
           widget.onFilterChanged(widget.filter.copyWith(caseSensitive: value));
         },
       ),
-      ListTileTextField(title: 'Value', controller: _textController),
+      CustomListTile(
+        title: 'Value',
+        trailing: TextFormField(
+          controller: _textController,
+          textAlign: TextAlign.end,
+          decoration: formElementBottomBorderDecoration,
+        ),
+      ),
     ],
   );
 

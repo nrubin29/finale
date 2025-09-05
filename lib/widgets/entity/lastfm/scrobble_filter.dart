@@ -1,5 +1,5 @@
 import 'package:finale/services/lastfm/track.dart';
-import 'package:finale/widgets/base/list_tile_text_field.dart';
+import 'package:finale/widgets/base/custom_list_tile.dart';
 import 'package:finale/widgets/base/string_filter_form.dart';
 import 'package:flutter/material.dart';
 

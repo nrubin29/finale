@@ -95,3 +95,12 @@ final minimumSizeButtonStyle = SegmentedButton.styleFrom(
     vertical: VisualDensity.minimumDensity,
   ),
 );
+
+/// [InputDecoration] for a form element that should have a bottom border.
+///
+/// Copied from material/dropdown.dart:1621
+const formElementBottomBorderDecoration = InputDecoration(
+  enabledBorder: UnderlineInputBorder(
+    borderSide: BorderSide(color: Color(0xFFBDBDBD), width: 0.0),
+  ),
+);

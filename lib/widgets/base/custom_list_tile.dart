@@ -28,25 +28,3 @@ class CustomListTile extends StatelessWidget {
     );
   }
 }
-
-class ListTileTextField extends StatelessWidget {
-  final String title;
-  final TextEditingController controller;
-  final FormFieldValidator<String>? validator;
-
-  const ListTileTextField({
-    required this.title,
-    required this.controller,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) => CustomListTile(
-    title: title,
-    trailing: TextFormField(
-      controller: controller,
-      textAlign: TextAlign.end,
-      validator: validator,
-    ),
-  );
-}
