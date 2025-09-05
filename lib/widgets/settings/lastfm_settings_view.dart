@@ -1,6 +1,4 @@
-import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
-import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/settings/lastfm_login_web_view.dart';
@@ -64,19 +62,6 @@ class _LastfmSettingsViewState extends State<LastfmSettingsView> {
           // It would be great to show the expiration date in the caption, but
           // Android doesn't return it even though it stores it.
         ),
-        if (_hasCookies)
-          TextButton(
-            onPressed: () async {
-              final latestScrobbles = await GetRecentTracksRequest(
-                Preferences.name.value!,
-              ).getData(1, 1);
-              final latestScrobble = latestScrobbles.single;
-              print('Going to delete $latestScrobble');
-              final result = await LastfmCookie.deleteScrobble(latestScrobble);
-              print('Result: $result');
-            },
-            child: const Text("Delete latest scrobble"),
-          ),
       ],
     ),
   );
