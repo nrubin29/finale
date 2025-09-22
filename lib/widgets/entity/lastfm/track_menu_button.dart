@@ -4,6 +4,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/functions.dart';
 import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
+import 'package:finale/widgets/entity/lastfm/set_obsession_button.dart';
 import 'package:finale/widgets/tools/scrobble_manager/scrobble_editor_view.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -56,12 +57,44 @@ class TrackMenuButton extends StatelessWidget {
           }
         },
       ),
-      if (isMobile && track.date != null) ...[
-        if (DateTime.now().difference(track.date!) < const Duration(days: 14))
+      if (isMobile) ...[
+        PopupMenuItem(
+          child: const ListTile(
+            leading: Icon(Icons.star),
+            title: Text('Set as obsession'),
+          ),
+          onTap: () {
+            setObsessionInUi(context, track);
+          },
+        ),
+        if (track.date != null) ...[
+          if (DateTime.now().difference(track.date!) < const Duration(days: 14))
+            PopupMenuItem(
+              child: const ListTile(
+                leading: Icon(Icons.edit),
+                title: Text('Edit scrobble'),
+              ),
+              onTap: () async {
+                if (!await ensureCookies(context)) {
+                  return;
+                }
+
+                if (!context.mounted) return;
+                final request = await showBarModalBottomSheet(
+                  context: context,
+                  builder: (_) =>
+                      ScrobbleEditorView.forSingleScrobble(track: track),
+                );
+                if (request == null) return;
+                if (await LastfmCookie.editScrobble(track, request)) {
+                  onTrackChange(track.copyWith(isEdited: true));
+                }
+              },
+            ),
           PopupMenuItem(
             child: const ListTile(
-              leading: Icon(Icons.edit),
-              title: Text('Edit scrobble'),
+              leading: Icon(Icons.delete),
+              title: Text('Delete scrobble'),
             ),
             onTap: () async {
               if (!await ensureCookies(context)) {
@@ -69,33 +102,12 @@ class TrackMenuButton extends StatelessWidget {
               }
 
               if (!context.mounted) return;
-              final request = await showBarModalBottomSheet(
-                context: context,
-                builder: (_) =>
-                    ScrobbleEditorView.forSingleScrobble(track: track),
-              );
-              if (request == null) return;
-              if (await LastfmCookie.editScrobble(track, request)) {
-                onTrackChange(track.copyWith(isEdited: true));
+              if (await LastfmCookie.deleteScrobble(track)) {
+                onTrackChange(track.copyWith(isDeleted: true));
               }
             },
           ),
-        PopupMenuItem(
-          child: const ListTile(
-            leading: Icon(Icons.delete),
-            title: Text('Delete scrobble'),
-          ),
-          onTap: () async {
-            if (!await ensureCookies(context)) {
-              return;
-            }
-
-            if (!context.mounted) return;
-            if (await LastfmCookie.deleteScrobble(track)) {
-              onTrackChange(track.copyWith(isDeleted: true));
-            }
-          },
-        ),
+        ],
       ],
     ];
   }

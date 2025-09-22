@@ -1,6 +1,7 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
@@ -11,6 +12,7 @@ import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
+import 'package:finale/widgets/entity/lastfm/set_obsession_button.dart';
 import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_scrobbles_view.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
@@ -102,7 +104,10 @@ class TrackView extends StatelessWidget {
                     ),
                   ),
               ],
-              actions: [LoveButton(track: track)],
+              actions: [
+                LoveButton(track: track),
+                if (isMobile) SetObsessionButton(track: track),
+              ],
             ),
             if (track.topTags.tags.isNotEmpty) ...[
               const Divider(),
