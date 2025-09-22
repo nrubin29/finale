@@ -7,6 +7,7 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/preferences.dart';
+import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_cookie_manager_plus/webview_cookie_manager_plus.dart';
@@ -73,23 +74,11 @@ class LastfmCookie {
   static Future<void> clear() => _cookieJar.deleteAll();
 
   static Future<bool> deleteScrobble(BasicScrobbledTrack scrobble) async {
-    final csrfCookie = (await _csrfCookie())!.value;
-
-    final requestBody = {
-      'csrfmiddlewaretoken': csrfCookie,
+    final response = await _postWithCookie('library/delete', {
       'artist_name': scrobble.artistName,
       'track_name': scrobble.name,
       'timestamp': scrobble.date!.secondsSinceEpoch.toString(),
-      'ajax': '1',
-    };
-    final response = await httpClient.post(
-      _userUri(path: 'library/delete'),
-      headers: {
-        'Cookie': await _cookieHeaderValue(),
-        'Referer': _userUri().toString(),
-      },
-      body: requestBody,
-    );
+    });
 
     dynamic jsonObject;
 
@@ -115,6 +104,38 @@ class LastfmCookie {
     final newScrobble = request.applyToTrack(scrobble);
     final result = await Lastfm.scrobble([newScrobble], [scrobble.date!]);
     return result.accepted == 1;
+  }
+
+  static Future<bool> setObsession(Track track, String reason) async {
+    final response = await _postWithCookie('obsessions', {
+      'artist_name': track.artistName,
+      'name': track.name,
+      'reason': reason,
+    });
+
+    print(response.body);
+    return response.statusCode == 200;
+  }
+
+  static Future<Response> _postWithCookie(
+    String path,
+    Map<String, String?> requestBody,
+  ) async {
+    final csrfCookie = (await _csrfCookie())!.value;
+
+    final fullRequestBody = {
+      'csrfmiddlewaretoken': csrfCookie,
+      ...requestBody,
+      'ajax': '1',
+    };
+    return await httpClient.post(
+      _userUri(path: path),
+      headers: {
+        'Cookie': await _cookieHeaderValue(),
+        'Referer': _userUri().toString(),
+      },
+      body: fullRequestBody,
+    );
   }
 
   static Uri _userUri({String? path}) => Uri.https(
