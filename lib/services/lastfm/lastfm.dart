@@ -88,8 +88,8 @@ class GetRecentTracksRequest extends PagedRequest<LRecentTracksResponseTrack> {
     this.username,
     Period period, {
     this.extended = false,
-  }) : from = period.relativeStart,
-       to = period.end,
+  }) : from = period.start,
+       to = period is CustomPeriod ? period.end : null,
        includeCurrentScrobble = false;
 
   Future<LRecentTracksResponseRecentTracks> _doRecentTracksRequest(
@@ -155,7 +155,7 @@ class GetTopArtistsRequest
   GetTopArtistsRequest(super.username, super.period);
 
   @override
-  doPeriodRequest(Period period, int limit, int page) async {
+  doPeriodRequest(ApiPeriod period, int limit, int page) async {
     final rawResponse = await _doRequest('user.getTopArtists', {
       'user': username,
       'limit': limit,
@@ -184,7 +184,7 @@ class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
   GetTopAlbumsRequest(super.username, super.period);
 
   @override
-  doPeriodRequest(Period period, int limit, int page) async {
+  doPeriodRequest(ApiPeriod period, int limit, int page) async {
     final rawResponse = await _doRequest('user.getTopAlbums', {
       'user': username,
       'limit': limit,
@@ -224,7 +224,7 @@ class GetTopTracksRequest extends PeriodPagedRequest<LTopTracksResponseTrack> {
   GetTopTracksRequest(super.username, super.period);
 
   @override
-  doPeriodRequest(Period period, int limit, int page) async {
+  doPeriodRequest(ApiPeriod period, int limit, int page) async {
     final rawResponse = await _doRequest('user.getTopTracks', {
       'user': username,
       'limit': limit,

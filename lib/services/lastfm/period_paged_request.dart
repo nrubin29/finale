@@ -42,7 +42,11 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
 
   PeriodPagedRequest(this.username, this.period);
 
-  Future<LPagedResponse<T>> doPeriodRequest(Period period, int limit, int page);
+  Future<LPagedResponse<T>> doPeriodRequest(
+    ApiPeriod period,
+    int limit,
+    int page,
+  );
 
   String groupBy(LRecentTracksResponseTrack track);
 
@@ -81,7 +85,7 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
   @override
   @nonVirtual
   doRequest(int limit, int page) async {
-    if (!period.isCustom) {
+    if (period case ApiPeriod period) {
       return (await doPeriodRequest(period, limit, page)).items;
     }
 
@@ -103,7 +107,7 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
 
   @nonVirtual
   Future<int> getNumItems() async {
-    if (!period.isCustom) {
+    if (period case ApiPeriod period) {
       return (await doPeriodRequest(period, 1, 1)).attr.total;
     }
 

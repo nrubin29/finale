@@ -50,7 +50,7 @@ class Preferences {
 
   static final period = Preference<Period, String>(
     'periodValue',
-    defaultValue: Period.sevenDays,
+    defaultValue: ApiPeriod.sevenDays,
     serialize: (value) => value.serializedValue,
     deserialize: Period.deserialized,
   );

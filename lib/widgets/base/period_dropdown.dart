@@ -36,15 +36,15 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
     return DropdownButton<Period>(
       value: _period,
       items: [
-        for (final period in Period.apiValues)
+        for (final period in ApiPeriod.values)
           DropdownMenuItem(value: period, child: Text(period.display)),
-        if (_period.isCustom)
+        if (_period is CustomPeriod)
           DropdownMenuItem(value: _period, child: Text(_period.display))
         else
           const DropdownMenuItem(value: null, child: Text('Custom')),
       ],
       onChanged: (value) async {
-        if (value?.isCustom ?? true) {
+        if (value == null || value is CustomPeriod) {
           final dateRange = await showDateRangePicker(
             context: context,
             firstDate: DateTime(2010),
@@ -56,7 +56,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
 
           if (dateRange != null) {
             setState(() {
-              _period = Preferences.period.value = Period(
+              _period = Preferences.period.value = CustomPeriod(
                 start: dateRange.start,
                 end: dateRange.end.add(
                   const Duration(hours: 23, minutes: 59, seconds: 59),
@@ -65,7 +65,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
               widget.periodChanged?.call(_period);
             });
           }
-        } else if (value != null && value != _period) {
+        } else if (value != _period) {
           setState(() {
             _period = Preferences.period.value = value;
             widget.periodChanged?.call(value);

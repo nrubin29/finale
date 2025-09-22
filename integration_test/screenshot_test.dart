@@ -48,7 +48,7 @@ Future<void> main() async {
     SharedPreferences.setMockInitialValues({
       'name': testName,
       'key': testKey,
-      'periodValue': Period.overall.serializedValue,
+      'periodValue': ApiPeriod.overall.serializedValue,
     });
     await Preference.setup();
     await ImageIdCache().setup();

@@ -153,7 +153,7 @@ class _HIndexViewState extends State<HIndexView> {
           'more:';
     }
 
-    if (result.period == Period.overall) {
+    if (result.period == ApiPeriod.overall) {
       leadIn = '$your h-index for ${entityName}s is:';
       explanation =
           "This means that $youve scrobbled $hIndex "

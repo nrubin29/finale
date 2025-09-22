@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
+import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/constants.dart';
@@ -538,7 +539,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       String? message;
 
       if (_request case PeriodPagedRequest request
-          when request.period.isCustom) {
+          when request.period is CustomPeriod) {
         message = 'Custom date ranges can take a long time to load.';
       }
 

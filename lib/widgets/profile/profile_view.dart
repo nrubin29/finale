@@ -151,21 +151,21 @@ class _ProfileViewState extends State<ProfileView>
             label: 'Artists',
             futureProvider: () => GetTopArtistsRequest(
               widget.username,
-              Period.overall,
+              ApiPeriod.overall,
             ).getNumItems(),
           ),
           ScoreboardItemModel.future(
             label: 'Albums',
             futureProvider: () => GetTopAlbumsRequest(
               widget.username,
-              Period.overall,
+              ApiPeriod.overall,
             ).getNumItems(),
           ),
           ScoreboardItemModel.future(
             label: 'Tracks',
             futureProvider: () => GetTopTracksRequest(
               widget.username,
-              Period.overall,
+              ApiPeriod.overall,
             ).getNumItems(),
           ),
         ],
