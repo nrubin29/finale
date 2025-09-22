@@ -211,13 +211,18 @@ class _ProfileViewState extends State<ProfileView>
 
   PreferredSizeWidget _tabBar(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final maxIconSize = screenWidth / _tabOrder.length - 32;
-    final iconSize = min(maxIconSize, 24.0);
+    final maxIconSize = screenWidth / _tabOrder.length - 32.0;
+    final iconSize = maxIconSize.clamp(20.0, 24.0);
+    final totalIconsSize = iconSize * _tabOrder.length;
+    final remainingSpace = screenWidth - totalIconsSize;
+    final padding = EdgeInsets.symmetric(
+      horizontal: min(remainingSpace / (_tabOrder.length * 2), 16.0),
+    );
 
     return TabBar(
       controller: _tabController,
-      isScrollable: true,
       tabAlignment: TabAlignment.center,
+      labelPadding: padding,
       tabs: [
         for (final tab in _tabOrder)
           Tab(
