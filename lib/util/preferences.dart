@@ -202,7 +202,7 @@ class Preferences {
   );
 
   static final profileTabsOrder = Preference.forEnumList<ProfileTab>(
-    'profileTabsOrder2',
+    'profileTabsOrder3',
     ProfileTab.values,
     defaultValue: ProfileTab.values,
   );

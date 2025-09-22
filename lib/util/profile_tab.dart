@@ -6,6 +6,7 @@ enum ProfileTab {
   topAlbums('Top Albums', Icons.album),
   topTracks('Top Tracks', Icons.audiotrack),
   lovedTracks('Loved Tracks', Icons.favorite),
+  obsessions('Obsessions', Icons.star),
   friends('Friends', Icons.person),
   charts('Charts', Icons.access_time_filled),
   scrobbleDistribution(

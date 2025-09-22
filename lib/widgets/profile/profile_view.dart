@@ -6,6 +6,7 @@ import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/obsessions.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/services/lastfm/user.dart';
@@ -195,6 +196,10 @@ class _ProfileViewState extends State<ProfileView>
       ),
       ProfileTab.lovedTracks => EntityDisplay<LUserLovedTrack>(
         request: UserGetLovedTracksRequest(widget.username),
+        detailWidgetBuilder: (track) => TrackView(track: track),
+      ),
+      ProfileTab.obsessions => EntityDisplay<LObsession>(
+        request: LUserObsessions(username: widget.username),
         detailWidgetBuilder: (track) => TrackView(track: track),
       ),
       ProfileTab.friends => EntityDisplay<LUser>(
