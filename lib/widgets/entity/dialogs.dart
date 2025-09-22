@@ -57,6 +57,16 @@ Future<bool> showConfirmationDialog(
     ) ??
     false;
 
+Future<String?> showInputDialog(
+  BuildContext context, {
+  required String title,
+  required String content,
+  required IconData icon,
+}) async => await showDialog<String?>(
+  context: context,
+  builder: (_) => _InputDialog(title: title, content: content, icon: icon),
+);
+
 class _MessageDialog extends StatelessWidget {
   final String title;
   final String content;
@@ -111,4 +121,62 @@ class _ConfirmationDialog extends StatelessWidget {
       ),
     ],
   );
+}
+
+class _InputDialog extends StatefulWidget {
+  final String title;
+  final String content;
+  final IconData icon;
+
+  const _InputDialog({
+    required this.title,
+    required this.content,
+    required this.icon,
+  });
+
+  @override
+  State<_InputDialog> createState() => _InputDialogState();
+}
+
+class _InputDialogState extends State<_InputDialog> {
+  final _textController = TextEditingController();
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.requestFocus();
+  }
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+    title: Row(spacing: 10, children: [Icon(widget.icon), Text(widget.title)]),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(widget.content),
+        TextField(controller: _textController, focusNode: _focusNode),
+      ],
+    ),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context, _textController.text);
+        },
+        child: const Text('Save'),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context, null);
+        },
+        child: const Text('Cancel'),
+      ),
+    ],
+  );
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 }
