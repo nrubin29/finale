@@ -28,6 +28,7 @@
 		7B72D80E2755FBAB006E591D /* StatisticsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72D80D2755FBAB006E591D /* StatisticsWidget.swift */; };
 		7B861659275AFF9E00014F95 /* EntityImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B861658275AFF9E00014F95 /* EntityImage.swift */; };
 		7B9660BF2D49BDB7009000DD /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 7B9660BE2D49BDB7009000DD /* SwiftSoup */; };
+		7BB260062E7E70B1003114E9 /* icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 7BB260052E7E70B1003114E9 /* icon.icon */; };
 		7BB5470F2759D667009FEAC8 /* Scoreboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB5470E2759D667009FEAC8 /* Scoreboard.swift */; };
 		7BB547112759DDB9009FEAC8 /* FinaleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB547102759DDB9009FEAC8 /* FinaleWidget.swift */; };
 		7BEC398D275CC59B0008A832 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEC398C275CC59B0008A832 /* Track.swift */; };
@@ -100,6 +101,7 @@
 		7B56AA0C2755F8A700D0F545 /* FinaleWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinaleWidgets.swift; sourceTree = "<group>"; };
 		7B72D80D2755FBAB006E591D /* StatisticsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWidget.swift; sourceTree = "<group>"; };
 		7B861658275AFF9E00014F95 /* EntityImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityImage.swift; sourceTree = "<group>"; };
+		7BB260052E7E70B1003114E9 /* icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = icon.icon; sourceTree = "<group>"; };
 		7BB5470E2759D667009FEAC8 /* Scoreboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoreboard.swift; sourceTree = "<group>"; };
 		7BB547102759DDB9009FEAC8 /* FinaleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinaleWidget.swift; sourceTree = "<group>"; };
 		7BEC398C275CC59B0008A832 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				7BB260052E7E70B1003114E9 /* icon.icon */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -344,6 +347,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				7BB260062E7E70B1003114E9 /* icon.icon in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
@@ -543,7 +547,7 @@
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = icon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -802,7 +806,7 @@
 			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = icon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -838,7 +842,7 @@
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = icon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

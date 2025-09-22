@@ -6,8 +6,6 @@ class AppIcon extends StatelessWidget {
   const AppIcon({required this.size});
 
   @override
-  Widget build(BuildContext context) => ClipRRect(
-    borderRadius: BorderRadius.circular(size * .22),
-    child: Image.asset('assets/images/icon.png', width: size),
-  );
+  Widget build(BuildContext context) =>
+      Image.asset('assets/images/icon.png', width: size);
 }

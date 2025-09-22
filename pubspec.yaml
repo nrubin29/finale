@@ -75,10 +75,5 @@ icons_launcher:
       enable: true
       adaptive_background_color: "#ff0000"
       adaptive_foreground_image: 'android/icon_foreground.png'
-    ios:
-      enable: true
-    macos:
-      enable: true
-      image_path: 'assets/images/icon_rounded.png'
     web:
       enable: true
