@@ -16,11 +16,14 @@ class LObsession extends Track {
 
   final DateTime date;
 
+  final bool wasFirst;
+
   LObsession({
     required this.name,
     required this.artistName,
     required this.url,
     required this.date,
+    required this.wasFirst,
   });
 
   @override
@@ -87,11 +90,13 @@ class LUserObsessions extends PagedRequest<LObsession> {
         .querySelector('.obsession-history-item-date')!
         .text
         .trim();
+    final wasFirst = element.querySelector('.obsession-first') != null;
     return LObsession(
       name: name,
       artistName: artistName,
       url: url,
       date: _dateFromLastfmFormat(dateText),
+      wasFirst: wasFirst,
     );
   }
 

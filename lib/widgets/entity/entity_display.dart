@@ -22,6 +22,9 @@ typedef OnTap<T extends Entity> = void Function(T item);
 
 typedef EntityWidgetBuilder<T extends Entity> = Widget Function(T item);
 
+typedef EntityNullableWidgetBuilder<T extends Entity> =
+    Widget? Function(T item);
+
 typedef EntityAndItemsWidgetBuilder<T extends Entity> =
     Widget Function(T item, List<T> items);
 
@@ -34,7 +37,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? detailWidgetBuilder;
   final EntityAndItemsWidgetBuilder<T>? subtitleWidgetBuilder;
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
-  final EntityWidgetBuilder<T>? badgeWidgetBuilder;
+  final EntityNullableWidgetBuilder<T>? badgeWidgetBuilder;
   final EntityWidgetBuilder<T>? trailingWidgetBuilder;
   final List<Widget>? slivers;
   final List<ScoreboardItemModel>? scoreboardItems;
@@ -295,8 +298,9 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                         shouldAnimate: widget.shouldAnimateImages,
                         onLoaded: widget.onImageLoaded,
                       ),
-                      if (widget.badgeWidgetBuilder != null)
-                        widget.badgeWidgetBuilder!(item),
+                      if (widget.badgeWidgetBuilder?.call(item)
+                          case Widget badgeWidget)
+                        badgeWidget,
                     ],
                   ),
                 if (widget.displayNumbers) Text('${index + 1}'),
