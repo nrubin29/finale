@@ -212,8 +212,12 @@ class _ProfileViewState extends State<ProfileView>
         detailWidgetBuilder: (track) => TrackView(track: track),
         badgeWidgetBuilder: (obsession) =>
             obsession.wasFirst ? const NumberOneBadge() : null,
-        menuWidgetBuilder: (item, onChange) =>
-            ObsessionMenuButton(obsession: item, onObsessionChange: onChange),
+        menuWidgetBuilder: isMobile
+            ? (item, onChange) => ObsessionMenuButton(
+                obsession: item,
+                onObsessionChange: onChange,
+              )
+            : null,
       ),
       ProfileTab.friends => EntityDisplay<LUser>(
         displayCircularImages: true,

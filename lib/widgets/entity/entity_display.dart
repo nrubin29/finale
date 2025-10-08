@@ -489,7 +489,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               child: ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text(
-                  'You must refresh after deleting a scrobble before '
+                  'You must refresh after deleting an item before '
                   'loading more pages.',
                 ),
                 onTap: _getInitialItems,

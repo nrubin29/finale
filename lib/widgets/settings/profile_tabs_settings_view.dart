@@ -19,7 +19,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
     super.initState();
 
     final preferencesTabOrder = Preferences.profileTabsOrder.value;
-    _tabOrder = [...ProfileTab.values]
+    _tabOrder = [...ProfileTab.allowedValues]
       ..sort((a, b) {
         var aIndex = preferencesTabOrder.indexOf(a);
         if (aIndex == -1) aIndex = 10;
@@ -30,7 +30,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
         return aIndex.compareTo(bIndex);
       });
     _tabEnabled = Map.fromEntries(
-      ProfileTab.values.map(
+      ProfileTab.allowedValues.map(
         (e) => MapEntry(e, preferencesTabOrder.contains(e)),
       ),
     );
@@ -54,8 +54,11 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
 
   void _reset() {
     setState(() {
-      _tabOrder = [...ProfileTab.values];
-      _tabEnabled = Map.fromIterable(ProfileTab.values, value: (_) => true);
+      _tabOrder = [...ProfileTab.allowedValues];
+      _tabEnabled = Map.fromIterable(
+        ProfileTab.allowedValues,
+        value: (_) => true,
+      );
     });
   }
 

@@ -203,8 +203,8 @@ class Preferences {
 
   static final profileTabsOrder = Preference.forEnumList<ProfileTab>(
     'profileTabsOrder3',
-    ProfileTab.values,
-    defaultValue: ProfileTab.values,
+    ProfileTab.allowedValues,
+    defaultValue: ProfileTab.allowedValues,
   );
 
   static Future<void> clearAll() async {
