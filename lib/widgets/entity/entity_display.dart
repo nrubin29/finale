@@ -4,14 +4,12 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
-import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/util/request_sequencer.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
-import 'package:finale/widgets/entity/lastfm/track_menu_button.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -28,6 +26,9 @@ typedef EntityNullableWidgetBuilder<T extends Entity> =
 typedef EntityAndItemsWidgetBuilder<T extends Entity> =
     Widget Function(T item, List<T> items);
 
+typedef EntityAndCallbackWidgetBuilder<T extends Entity> =
+    Widget Function(T item, void Function(Editable item) onChange);
+
 class EntityDisplay<T extends Entity> extends StatefulWidget {
   final List<T>? items;
   final PagedRequest<T>? request;
@@ -39,6 +40,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final EntityWidgetBuilder<T>? leadingWidgetBuilder;
   final EntityNullableWidgetBuilder<T>? badgeWidgetBuilder;
   final EntityWidgetBuilder<T>? trailingWidgetBuilder;
+  final EntityAndCallbackWidgetBuilder<T>? menuWidgetBuilder;
   final List<Widget>? slivers;
   final List<ScoreboardItemModel>? scoreboardItems;
   final Future<Entity> Function(T item)? scrobbleableEntity;
@@ -52,7 +54,6 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   final bool shouldAnimateImages;
   final bool shouldLeftPadListItems;
   final bool displayCircularImages;
-  final bool shouldShowTrackMenu;
   final String? noResultsMessage;
   final bool showGridTileGradient;
   final double gridTileSize;
@@ -70,6 +71,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
     this.leadingWidgetBuilder,
     this.badgeWidgetBuilder,
     this.trailingWidgetBuilder,
+    this.menuWidgetBuilder,
     this.slivers,
     this.scoreboardItems,
     this.scrobbleableEntity,
@@ -82,7 +84,6 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
     this.shouldAnimateImages = true,
     this.shouldLeftPadListItems = true,
     this.displayCircularImages = false,
-    this.shouldShowTrackMenu = false,
     this.noResultsMessage = 'No results.',
     this.showGridTileGradient = true,
     this.gridTileSize = 250,
@@ -92,14 +93,11 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
        assert(onTap == null || detailWidgetBuilder == null),
        assert(
          displayType == DisplayType.list ||
-             (!displayNumbers && leadingWidgetBuilder == null),
+             (!displayNumbers &&
+                 leadingWidgetBuilder == null &&
+                 menuWidgetBuilder == null),
        ),
-       assert(badgeWidgetBuilder == null || displayImages),
-       assert(
-         !shouldShowTrackMenu ||
-             (T == LRecentTracksResponseTrack &&
-                 displayType == DisplayType.list),
-       );
+       assert(badgeWidgetBuilder == null || displayImages);
 
   @override
   State<StatefulWidget> createState() => EntityDisplayState<T>();
@@ -325,30 +323,21 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                   ? Colors.grey
                   : null,
             ),
-          if (widget.shouldShowTrackMenu)
-            TrackMenuButton(
-              track: item as LRecentTracksResponseTrack,
-              enabled: !item.isEdited && !item.isDeleted,
-              onTrackChange: (track) {
+          if (widget.menuWidgetBuilder
+              case EntityAndCallbackWidgetBuilder<T> menuWidgetBuilder)
+            menuWidgetBuilder(item, (newItem) {
+              items[index] = newItem as T;
+              if (newItem.isDeleted) {
                 setState(() {
-                  items[index] = track as T;
-                  if (track.isDeleted) {
-                    setState(() {
-                      _itemWasDeleted = true;
-                    });
-                  }
+                  _itemWasDeleted = true;
                 });
-              },
-            ),
+              }
+            }),
         ],
       ),
     );
     return Opacity(
-      opacity:
-          item is LRecentTracksResponseTrack &&
-              (item.isEdited || item.isDeleted)
-          ? 0.5
-          : 1,
+      opacity: item is Editable && (item.isEdited || item.isDeleted) ? 0.5 : 1,
       child: listTile,
     );
   }

@@ -137,6 +137,12 @@ abstract class Entity {
   }
 }
 
+mixin Editable on Entity {
+  bool get isEdited;
+
+  bool get isDeleted;
+}
+
 abstract class Track extends Entity {
   String get name;
 

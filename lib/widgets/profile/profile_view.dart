@@ -25,6 +25,7 @@ import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/number_one_badge.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
+import 'package:finale/widgets/entity/lastfm/track_menu_button.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/profile/period_selector.dart';
@@ -125,7 +126,13 @@ class _ProfileViewState extends State<ProfileView>
           includeCurrentScrobble: true,
           extended: true,
         ),
-        shouldShowTrackMenu: widget.isTab,
+        menuWidgetBuilder: widget.isTab
+            ? (item, onChange) => TrackMenuButton(
+                track: item,
+                enabled: !item.isEdited && !item.isDeleted,
+                onTrackChange: onChange,
+              )
+            : null,
         badgeWidgetBuilder: (track) =>
             track.isLoved ? const OutlinedLoveIcon() : null,
         trailingWidgetBuilder: (track) => track.timestamp != null

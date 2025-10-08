@@ -64,7 +64,7 @@ class LRecentTracksResponseTrackDate {
 }
 
 @JsonSerializable()
-class LRecentTracksResponseTrack extends BasicScrobbledTrack {
+class LRecentTracksResponseTrack extends BasicScrobbledTrack with Editable {
   @override
   final String name;
 
@@ -86,9 +86,11 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack {
   final bool isLoved;
 
   @JsonKey(includeFromJson: false)
+  @override
   final bool isEdited;
 
   @JsonKey(includeFromJson: false)
+  @override
   final bool isDeleted;
 
   LRecentTracksResponseTrack(
