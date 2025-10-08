@@ -5,6 +5,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/services/lastfm/obsessions.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:http/http.dart';
@@ -113,8 +114,17 @@ class LastfmCookie {
       'reason': reason,
     });
 
-    print(response.body);
     return response.statusCode == 200;
+  }
+
+  static Future<bool> deleteObsession(LObsession obsession) async {
+    final response = await _postWithCookie('obsessions/${obsession.id}', {
+      'action': 'delete',
+    });
+
+    // This endpoint deletes the obsession and then redirects to the Obsessions
+    // page so we expect a 302 (redirect) response.
+    return response.statusCode == 302;
   }
 
   static Future<Response> _postWithCookie(

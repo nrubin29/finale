@@ -4,7 +4,9 @@ import 'package:finale/util/formatters.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
-class LObsession extends Track {
+class LObsession extends Track with Editable {
+  final String id;
+
   @override
   final String name;
 
@@ -18,12 +20,17 @@ class LObsession extends Track {
 
   final bool wasFirst;
 
+  @override
+  bool isDeleted;
+
   LObsession({
+    required this.id,
     required this.name,
     required this.artistName,
     required this.url,
     required this.date,
     required this.wasFirst,
+    this.isDeleted = false,
   });
 
   @override
@@ -35,6 +42,19 @@ class LObsession extends Track {
 
   @override
   String? get displayTrailing => dateFormatWithYear.format(date);
+
+  @override
+  bool get isEdited => false;
+
+  LObsession copyWith({bool? isDeleted}) => LObsession(
+    id: id,
+    name: name,
+    artistName: artistName,
+    url: url,
+    date: date,
+    wasFirst: wasFirst,
+    isDeleted: isDeleted ?? this.isDeleted,
+  );
 }
 
 final _datePattern = RegExp(r'(.+) (\d{1,2}), (\d{4})');
@@ -86,12 +106,14 @@ class LUserObsessions extends PagedRequest<LObsession> {
     final url = element
         .querySelector('.obsession-history-item-heading-link')!
         .attributes['href']!;
+    final id = url.substring(url.lastIndexOf('/') + 1);
     final dateText = element
         .querySelector('.obsession-history-item-date')!
         .text
         .trim();
     final wasFirst = element.querySelector('.obsession-first') != null;
     return LObsession(
+      id: id,
       name: name,
       artistName: artistName,
       url: url,

@@ -23,6 +23,7 @@ import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/number_one_badge.dart';
+import 'package:finale/widgets/entity/lastfm/obsession_menu_button.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_menu_button.dart';
@@ -211,6 +212,8 @@ class _ProfileViewState extends State<ProfileView>
         detailWidgetBuilder: (track) => TrackView(track: track),
         badgeWidgetBuilder: (obsession) =>
             obsession.wasFirst ? const NumberOneBadge() : null,
+        menuWidgetBuilder: (item, onChange) =>
+            ObsessionMenuButton(obsession: item, onObsessionChange: onChange),
       ),
       ProfileTab.friends => EntityDisplay<LUser>(
         displayCircularImages: true,

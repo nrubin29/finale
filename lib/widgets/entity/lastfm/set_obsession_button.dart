@@ -1,5 +1,6 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
+import 'package:finale/services/lastfm/obsessions.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,23 @@ Future<void> setObsessionInUi(BuildContext context, Track track) async {
           : const Text('Failed to set obsession.'),
     ),
   );
+}
+
+Future<bool> deleteObsessionInUi(
+  BuildContext context,
+  LObsession obsession,
+) async {
+  if (!await ensureCookies(context)) {
+    return false;
+  }
+
+  if (!context.mounted) return false;
+  final success = await LastfmCookie.deleteObsession(obsession);
+  if (!context.mounted || success) return success;
+  ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(const SnackBar(content: Text('Failed to delete obsession.')));
+  return false;
 }
 
 class SetObsessionButton extends StatelessWidget {
