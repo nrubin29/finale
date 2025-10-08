@@ -5,6 +5,7 @@ import 'package:finale/services/lastfm/top_listeners_ranking.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/fractional_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
+import 'package:finale/widgets/base/share_button.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
@@ -15,7 +16,6 @@ import 'package:finale/widgets/entity/lastfm/tag_chips.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ArtistView extends StatelessWidget {
   final BasicArtist artist;
@@ -34,14 +34,7 @@ class ArtistView extends StatelessWidget {
         appBar: createAppBar(
           context,
           artist.name,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.adaptive.share),
-              onPressed: () {
-                SharePlus.instance.share(ShareParams(text: artist.url));
-              },
-            ),
-          ],
+          actions: [ShareButton(text: artist.url)],
         ),
         body: TwoUp(
           entity: artist,

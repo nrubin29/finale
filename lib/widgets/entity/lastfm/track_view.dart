@@ -5,6 +5,7 @@ import 'package:finale/util/constants.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
+import 'package:finale/widgets/base/share_button.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
@@ -18,7 +19,6 @@ import 'package:finale/widgets/entity/lastfm/track_scrobbles_view.dart';
 import 'package:finale/widgets/entity/lastfm/wiki_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 class TrackView extends StatelessWidget {
   final Track track;
@@ -39,12 +39,7 @@ class TrackView extends StatelessWidget {
           track.name,
           subtitle: track.artist?.name,
           actions: [
-            IconButton(
-              icon: Icon(Icons.adaptive.share),
-              onPressed: () {
-                SharePlus.instance.share(ShareParams(text: track.url));
-              },
-            ),
+            ShareButton(text: track.url),
             ScrobbleButton(entity: track),
           ],
         ),

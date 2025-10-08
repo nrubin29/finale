@@ -18,6 +18,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/fractional_bar.dart';
 import 'package:finale/widgets/base/future_builder_view.dart';
 import 'package:finale/widgets/base/now_playing_animation.dart';
+import 'package:finale/widgets/base/share_button.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/album_view.dart';
 import 'package:finale/widgets/entity/lastfm/artist_view.dart';
@@ -37,7 +38,6 @@ import 'package:finale/widgets/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileView extends StatefulWidget {
@@ -283,12 +283,7 @@ class _ProfileViewState extends State<ProfileView>
         leadingEntity: user,
         circularLeadingImage: true,
         actions: [
-          IconButton(
-            icon: Icon(Icons.adaptive.share),
-            onPressed: () {
-              SharePlus.instance.share(ShareParams(text: user.url));
-            },
-          ),
+          ShareButton(text: user.url),
           if (widget.isTab)
             IconButton(
               icon: const Icon(Icons.settings),
