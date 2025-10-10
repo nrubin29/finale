@@ -326,12 +326,12 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (widget.menuWidgetBuilder
               case EntityAndCallbackWidgetBuilder<T> menuWidgetBuilder)
             menuWidgetBuilder(item, (newItem) {
-              items[index] = newItem as T;
-              if (newItem.isDeleted) {
-                setState(() {
+              setState(() {
+                items[index] = newItem as T;
+                if (newItem.isDeleted) {
                   _itemWasDeleted = true;
-                });
-              }
+                }
+              });
             }),
         ],
       ),
