@@ -79,7 +79,7 @@ class AlbumView extends StatelessWidget {
                 ScoreboardItemModel.value(
                   label: 'Your scrobbles',
                   value: album.userPlayCount,
-                  callback: album.userPlayCount > 0
+                  callback: album.userPlayCount > 0 && album.tracks.isNotEmpty
                       ? () {
                           Navigator.push(
                             context,
@@ -97,17 +97,19 @@ class AlbumView extends StatelessWidget {
                       album,
                       username: friendUsername,
                     ).then((value) => value.userPlayCount),
-                    callback: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => AlbumScrobblesView(
-                            album: album,
-                            username: friendUsername,
-                          ),
-                        ),
-                      );
-                    },
+                    callback: album.tracks.isNotEmpty
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AlbumScrobblesView(
+                                  album: album,
+                                  username: friendUsername,
+                                ),
+                              ),
+                            );
+                          }
+                        : null,
                   ),
                 if (album.userPlayCount > 0 && album.tracks.isNotEmpty)
                   ScoreboardItemModel.future(

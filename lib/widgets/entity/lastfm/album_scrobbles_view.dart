@@ -27,6 +27,22 @@ class AlbumScrobblesView extends StatefulWidget {
 class _AlbumScrobblesViewState extends State<AlbumScrobblesView> {
   var _sort = _Sort.ordinal;
 
+  Future<LAlbum> _loadAlbum() async {
+    final username = widget.username ?? Preferences.name.value!;
+    return widget.username == null
+        ? widget.album
+        : await Lastfm.getAlbum(widget.album, username: username);
+  }
+
+  Future<List<LTrack>> _loadTracks(LAlbum album) async {
+    final username = widget.username ?? Preferences.name.value!;
+
+    return [
+      for (final track in album.tracks)
+        await Lastfm.getTrack(track, username: username),
+    ];
+  }
+
   int _comparator(LTrack a, LTrack b) {
     return switch (_sort) {
       _Sort.ordinal => 0,
@@ -35,65 +51,63 @@ class _AlbumScrobblesViewState extends State<AlbumScrobblesView> {
   }
 
   @override
-  Widget build(BuildContext context) => FutureBuilderView<List<LTrack>>(
-    futureFactory: () => Future.wait(
-      widget.album.tracks.map(
-        (track) => Lastfm.getTrack(
-          track,
-          username: widget.username ?? Preferences.name.value,
-        ),
-      ),
-    ),
-    builder: (value) => Scaffold(
+  Widget build(BuildContext context) => FutureBuilderView<LAlbum>(
+    futureFactory: _loadAlbum,
+    baseEntity: widget.album,
+    builder: (album) => Scaffold(
       appBar: createAppBar(
         context,
-        widget.album.name,
-        leadingEntity: widget.album,
-        subtitle: pluralize(widget.album.userPlayCount),
+        album.name,
+        leadingEntity: album,
+        subtitle: pluralize(album.userPlayCount),
       ),
-      body: Column(
-        children: [
-          ColoredBox(
-            color: Theme.of(context).colorScheme.surfaceContainer,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SegmentedButton<_Sort>(
-                    showSelectedIcon: false,
-                    style: minimumSizeButtonStyle,
-                    segments: const [
-                      ButtonSegment(
-                        value: _Sort.ordinal,
-                        icon: Icon(Icons.format_list_numbered),
-                      ),
-                      ButtonSegment(
-                        value: _Sort.scrobbleCount,
-                        icon: Icon(Icons.numbers),
-                      ),
-                    ],
-                    selected: {_sort},
-                    onSelectionChanged: (newSelection) {
-                      setState(() {
-                        _sort = newSelection.single;
-                      });
-                    },
-                  ),
-                ],
+      body: FutureBuilderView(
+        futureFactory: () => _loadTracks(album),
+        isView: false,
+        builder: (tracks) => Column(
+          children: [
+            ColoredBox(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SegmentedButton<_Sort>(
+                      showSelectedIcon: false,
+                      style: minimumSizeButtonStyle,
+                      segments: const [
+                        ButtonSegment(
+                          value: _Sort.ordinal,
+                          icon: Icon(Icons.format_list_numbered),
+                        ),
+                        ButtonSegment(
+                          value: _Sort.scrobbleCount,
+                          icon: Icon(Icons.numbers),
+                        ),
+                      ],
+                      selected: {_sort},
+                      onSelectionChanged: (newSelection) {
+                        setState(() {
+                          _sort = newSelection.single;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: EntityDisplay(
-              items: value.sorted(_comparator),
-              displayImages: false,
-              displayNumbers: true,
-              detailWidgetBuilder: (track) => TrackView(track: track),
-              subtitleWidgetBuilder: FractionalBar.forEntity,
+            Expanded(
+              child: EntityDisplay(
+                items: tracks.sorted(_comparator),
+                displayImages: false,
+                displayNumbers: true,
+                detailWidgetBuilder: (track) => TrackView(track: track),
+                subtitleWidgetBuilder: FractionalBar.forEntity,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );
