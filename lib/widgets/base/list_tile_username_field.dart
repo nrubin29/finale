@@ -34,6 +34,7 @@ class _ListTileUsernameFieldState extends State<ListTileUsernameField> {
   void _loadFriendUsernames() async {
     final myUsername = Preferences.name.value!;
     final friends = await GetFriendsRequest(myUsername).getAllData();
+    if (!mounted) return;
     setState(() {
       _friendUsernames = [
         if (widget.includeSelf) myUsername,

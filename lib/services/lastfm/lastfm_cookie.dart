@@ -6,6 +6,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/obsessions.dart';
+import 'package:finale/util/constants.dart';
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:http/http.dart';
@@ -63,7 +64,7 @@ class LastfmCookie {
   }
 
   static Future<bool> hasCookies() async {
-    return (await _csrfCookie()) != null;
+    return isScreenshotTest ? true : (await _csrfCookie()) != null;
   }
 
   static Future<void> loadCookiesFromWebView() async {

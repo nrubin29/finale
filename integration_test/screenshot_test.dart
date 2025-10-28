@@ -18,7 +18,6 @@ import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/main/main_view.dart';
 import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show OffsetLayer;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,11 +28,9 @@ final isIos = device.contains('iPhone') || device.contains('iPad');
 final isIpad = device.contains('iPad');
 final isMacOS = device.contains('macOS');
 final isAndroid = !isIos && !isMacOS;
-final directory = isIos
+final directory = isIos || isAndroid
     ? '/Users/noahrubin/Documents/DartProjects/finale/screenshots/$device'
-    : isMacOS
-    ? '/Users/noahrubin/Downloads/$device'
-    : '/sdcard/Documents/$device';
+    : '/Users/noahrubin/Downloads/$device';
 
 Future<void> main() async {
   if (!isIos) {
@@ -142,6 +139,27 @@ Future<void> main() async {
     await tester.saveScreenshot('4_collage');
   });
 
+  testWidgets('Scrobble manager screen', (tester) async {
+    await pumpWidget(tester, const MainView(username: testName));
+    await tester.tap(find.byIcon(Icons.construction));
+    await tester.pumpAndSettle();
+
+    // Tools page
+    await tester.tap(find.byIcon(Icons.edit));
+    await tester.pumpAndSettle();
+
+    // Scrobble Manager page
+    await tester.tap(
+      find.text('Load Scrobbles', skipOffstage: !isAndroid),
+      warnIfMissed: !isAndroid,
+    );
+    await tester.pumpMany();
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+
+    await tester.saveScreenshot('5_scrobble_manager');
+  }, skip: isMacOS);
+
   testWidgets('Track screen', (tester) async {
     final track = await Lastfm.getTrack(
       BasicConcreteTrack(
@@ -152,14 +170,14 @@ Future<void> main() async {
     );
 
     await pumpWidget(tester, TrackView(track: track), asPage: true);
-    await tester.saveScreenshot('5_track');
+    await tester.saveScreenshot('6_track');
   });
 
   testWidgets('Artist screen', (tester) async {
     final artist = await Lastfm.getArtist(ConcreteBasicArtist('Valley'));
 
     await pumpWidget(tester, ArtistView(artist: artist), asPage: true);
-    await tester.saveScreenshot('6_artist');
+    await tester.saveScreenshot('7_artist');
   });
 
   testWidgets('Album screen', (tester) async {
@@ -168,7 +186,7 @@ Future<void> main() async {
     );
 
     await pumpWidget(tester, AlbumView(album: album), asPage: true);
-    await tester.saveScreenshot('7_album');
+    await tester.saveScreenshot('8_album');
   });
 
   testWidgets('Album scrobble screen', (tester) async {
@@ -185,7 +203,7 @@ Future<void> main() async {
     await tester.tap(find.text('Tracks'), warnIfMissed: !isAndroid);
     await tester.pumpAndSettle();
 
-    await tester.saveScreenshot('8_album_scrobble');
+    await tester.saveScreenshot('9_album_scrobble');
   });
 }
 
@@ -204,20 +222,19 @@ class _AsPageState extends State<_AsPage> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 100), () async {
-      if (widget.widgetBehindModal != null) {
-        await showBarModalBottomSheet(
-          context: context,
-          duration: Duration.zero,
-          builder: (_) => widget.widget,
-        );
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => widget.widget),
-        );
-      }
-    });
+    Future.delayed(const Duration(milliseconds: 100), _showWidget);
+  }
+
+  void _showWidget() {
+    if (widget.widgetBehindModal != null) {
+      showBarModalBottomSheet(
+        context: context,
+        duration: Duration.zero,
+        builder: (_) => widget.widget,
+      );
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => widget.widget));
+    }
   }
 
   @override
@@ -227,24 +244,10 @@ class _AsPageState extends State<_AsPage> {
 
 extension on WidgetTester {
   Future<void> saveScreenshot(String name) async {
-    final element = find.byType(MaterialApp).evaluate().single;
-
-    // BEGIN: Copied from flutter_test/lib/src/_matchers_io.dart:23 because I
-    // need to set [pixelRatio].
-    assert(element.renderObject != null);
-    var renderObject = element.renderObject!;
-    while (!renderObject.isRepaintBoundary) {
-      renderObject = renderObject.parent!;
-    }
-    assert(!renderObject.debugNeedsPaint);
-    final layer = renderObject.debugLayer! as OffsetLayer;
-    final image = layer.toImage(
-      renderObject.paintBounds,
-      pixelRatio: isIpad || isMacOS ? 2 : 3,
+    await expectLater(
+      find.byType(MaterialApp),
+      matchesGoldenFile('$directory/$name.png'),
     );
-    // END: Copied code.
-
-    await expectLater(image, matchesGoldenFile('$directory/$name.png'));
   }
 
   /// Pumps for 15 seconds, 100 milliseconds at a time.

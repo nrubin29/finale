@@ -45,22 +45,11 @@ if [ $RUN_MACOS = true ]; then
 fi
 
 # Android
-# Android can't write to the Documents folder, so we have to put the screenshots
-# on the SD card and then pull them.
 if [ $RUN_ANDROID = true ]; then
   for device in "Pixel_8_API_35" "7_WSVGA_Tablet_API_34" "Medium_Tablet"; do
     ~/Library/Android/sdk/emulator/emulator -avd "$device" &
     sleep 5
-    ~/Library/Android/sdk/platform-tools/adb shell rm -rR "sdcard/Documents/$device"
-    sleep 5
     flutter_test "$device" "emulator-5554"
-    sleep 5
-    (
-      cd screenshots || exit
-      ~/Library/Android/sdk/platform-tools/adb pull "sdcard/Documents/$device"
-    )
-    sleep 5
-    ~/Library/Android/sdk/platform-tools/adb shell rm -rR "sdcard/Documents/$device"
     sleep 5
     killall qemu-system-aarch64
     sleep 5

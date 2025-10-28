@@ -30,6 +30,7 @@ class _ProfileStackState extends State<ProfileStack> {
       });
     },
     onPop: () {
+      if (!mounted) return;
       setState(() {
         _usernames = _usernames.sublist(0, _usernames.length - 1);
       });
