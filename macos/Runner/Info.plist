@@ -20,10 +20,8 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Save collages to the camera roll</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Save collages to the camera roll</string>
+	<key>FLTEnableImpeller</key>
+	<true/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
 	<key>LSMinimumSystemVersion</key>
@@ -32,6 +30,10 @@
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save collages to the camera roll</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Save collages to the camera roll</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
