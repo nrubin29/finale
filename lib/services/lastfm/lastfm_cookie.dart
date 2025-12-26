@@ -71,6 +71,9 @@ class LastfmCookie {
     final userUri = _userUri();
     final cookies = await WebviewCookieManager().getCookies(userUri.toString());
     _cookieJar.saveFromResponse(userUri, cookies);
+    Preferences.cookieExpirationDate.value = DateTime.now().add(
+      const Duration(days: 365),
+    );
   }
 
   static Future<void> clear() => _cookieJar.deleteAll();

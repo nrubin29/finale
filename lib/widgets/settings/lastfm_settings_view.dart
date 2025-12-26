@@ -1,4 +1,6 @@
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
+import 'package:finale/util/formatters.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/settings/lastfm_login_web_view.dart';
@@ -59,8 +61,10 @@ class _LastfmSettingsViewState extends State<LastfmSettingsView> {
           trailing: _hasCookies
               ? TextButton(onPressed: _reset, child: const Text('Reset'))
               : TextButton(onPressed: _logIn, child: const Text('Log In')),
-          // It would be great to show the expiration date in the caption, but
-          // Android doesn't return it even though it stores it.
+          caption: _hasCookies
+              ? 'Your credentials will expire on '
+                    '${dateFormatWithYear.format(Preferences.cookieExpirationDate.value)}'
+              : null,
         ),
       ],
     ),

@@ -1,39 +1,59 @@
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
+import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/settings/lastfm_login_web_view.dart';
 import 'package:finale/widgets/settings/lastfm_settings_view.dart';
 import 'package:flutter/material.dart';
 
 Future<bool> ensureCookies(BuildContext context) async {
-  if (await LastfmCookie.hasCookies()) {
+  final hasCookies = await LastfmCookie.hasCookies();
+  final isExpired = DateTime.now().isAfter(
+    Preferences.cookieExpirationDate.value,
+  );
+
+  if (hasCookies && !isExpired) {
     return true;
   }
 
   if (!context.mounted) return false;
-  return await showCookieDialog(context);
+  return await _showCookieDialog(context, isExpired: hasCookies && isExpired);
 }
 
-Future<bool> showCookieDialog(BuildContext context) async {
+Future<bool> _showCookieDialog(
+  BuildContext context, {
+  bool isExpired = false,
+}) async {
   return await showDialog<bool>(
         context: context,
-        builder: (_) => const CookieDialog(),
+        builder: (_) => CookieDialog(isExpired: isExpired),
       ) ??
       false;
 }
 
 class CookieDialog extends StatelessWidget {
-  const CookieDialog();
+  final bool isExpired;
+
+  const CookieDialog({this.isExpired = false});
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Row(
+    title: Row(
       spacing: 8,
-      children: [Icon(SocialMediaIcons.lastfm), Text('Advanced Feature')],
+      children: [
+        const Icon(SocialMediaIcons.lastfm),
+        isExpired
+            ? const Text('Credentials expired')
+            : const Text('Advanced Feature'),
+      ],
     ),
-    content: const Text(
-      'This feature requires you to log in again using a different '
-      'method.',
-    ),
+    content: isExpired
+        ? const Text(
+            'Your credentials have expired and you need to log in again.',
+          )
+        : const Text(
+            'This feature requires you to log in again using a different '
+            'method.',
+          ),
     actions: [
       TextButton(
         child: const Text('Cancel'),

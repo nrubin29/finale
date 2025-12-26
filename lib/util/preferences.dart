@@ -46,6 +46,7 @@ class Preferences {
     inputDateTimeAsText,
     defaultDateRange,
     profileTabsOrder,
+    // don't include [cookieExpirationDate] as it is handled elsewhere
   ];
 
   static final period = Preference<Period, String>(
@@ -205,6 +206,11 @@ class Preferences {
     'profileTabsOrder3',
     ProfileTab.allowedValues,
     defaultValue: ProfileTab.allowedValues,
+  );
+
+  static final cookieExpirationDate = Preference.dateTime(
+    'cookieCreationDate',
+    defaultValue: DateTime(2026, 10, 28),
   );
 
   static Future<void> clearAll() async {

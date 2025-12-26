@@ -28,12 +28,15 @@ class Preference<T, U extends Object> {
       assert((serialize != null) == (deserialize != null)),
       _defaultValue = null is T ? defaultValue as T : defaultValue!;
 
-  static Preference<DateTime?, int> dateTime(String key) =>
-      Preference<DateTime?, int>(
-        key,
-        serialize: (value) => value?.millisecondsSinceEpoch,
-        deserialize: DateTime.fromMillisecondsSinceEpoch,
-      );
+  static Preference<T, int> dateTime<T extends DateTime?>(
+    String key, {
+    T? defaultValue,
+  }) => Preference<T, int>(
+    key,
+    defaultValue: defaultValue,
+    serialize: (value) => value?.millisecondsSinceEpoch,
+    deserialize: (value) => DateTime.fromMillisecondsSinceEpoch(value) as T,
+  );
 
   static EnumPreference<T> forEnum<T extends PreferenceEnum>(
     String key,
