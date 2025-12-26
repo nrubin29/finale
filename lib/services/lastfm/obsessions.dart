@@ -58,7 +58,7 @@ class LObsession extends Track with Editable {
 }
 
 final _datePattern = RegExp(r'(.+) (\d{1,2}), (\d{4})');
-final List<String> _months = [
+const _months = [
   'Jan.',
   'Feb.',
   'March',
@@ -124,9 +124,9 @@ class LUserObsessions extends PagedRequest<LObsession> {
 
   DateTime _dateFromLastfmFormat(String dateText) {
     final match = _datePattern.matchAsPrefix(dateText)!;
-    final month = _months.indexOf(match.group(1)!);
+    final month = _months.indexOf(match.group(1)!) + 1;
     final day = int.parse(match.group(2)!);
-    final int year = int.parse(match.group(3)!);
+    final year = int.parse(match.group(3)!);
     return DateTime(year, month, day);
   }
 }
