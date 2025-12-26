@@ -8,8 +8,8 @@ class NowPlayingAnimation extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
     height: 15,
     child: Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: .min,
+      crossAxisAlignment: .end,
       children: [
         for (var i = 0; i < 3; i++) ...[
           _AnimatedBar(start: i / 2),

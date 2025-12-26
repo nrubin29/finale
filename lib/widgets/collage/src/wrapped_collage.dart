@@ -1,5 +1,4 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/track.dart';
@@ -37,40 +36,37 @@ class WrappedCollage extends StatelessWidget {
   Widget build(BuildContext context) => ScaledBox(
     targetWidth: 400,
     builder: (context, scale) => Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 24 * scale,
-        vertical: 16 * scale,
-      ),
+      padding: .symmetric(horizontal: 24 * scale, vertical: 16 * scale),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [themeColor.color.shade500, themeColor.color.shade900],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+          begin: .topCenter,
+          end: .bottomCenter,
         ),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
         spacing: 16 * scale,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 16 * scale),
+            padding: .symmetric(vertical: 16 * scale),
             child: Align(
               child: EntityImage(
                 entity: items.single,
                 width: 200 * scale,
-                quality: ImageQuality.high,
+                quality: .high,
                 onLoaded: onImageLoaded,
               ),
             ),
           ),
           Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: .min,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(
                       'Top Artists',
@@ -85,19 +81,19 @@ class WrappedCollage extends StatelessWidget {
                         '${i + 1}. ${topArtist.name}',
                         style: TextStyle(
                           color: themeColor.foregroundColor,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: .bold,
                           fontSize: 14 * scale,
                         ),
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        overflow: .ellipsis,
                       ),
                   ],
                 ),
               ),
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: .min,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(
                       'Top Songs',
@@ -112,11 +108,11 @@ class WrappedCollage extends StatelessWidget {
                         '${i + 1}. ${topTrack.name}',
                         style: TextStyle(
                           color: themeColor.foregroundColor,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: .bold,
                           fontSize: 14 * scale,
                         ),
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        overflow: .ellipsis,
                       ),
                   ],
                 ),
@@ -124,13 +120,13 @@ class WrappedCollage extends StatelessWidget {
             ],
           ),
           Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
             children: [
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: .min,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(
                       'Scrobbles',
@@ -144,7 +140,7 @@ class WrappedCollage extends StatelessWidget {
                       style: TextStyle(
                         color: themeColor.foregroundColor,
                         fontSize: 24 * scale,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ],
@@ -152,8 +148,8 @@ class WrappedCollage extends StatelessWidget {
               ),
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: .min,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(
                       'Period',
@@ -167,7 +163,7 @@ class WrappedCollage extends StatelessWidget {
                       period.display,
                       style: TextStyle(
                         color: themeColor.foregroundColor,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                         fontSize: 14 * scale,
                       ),
                     ),

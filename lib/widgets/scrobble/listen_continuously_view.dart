@@ -32,30 +32,18 @@ class ListenContinuouslyTrack extends BasicConcreteTrack {
     super.artistName,
     super.albumName, [
     this.status,
-  ]) : timestamp = DateTime.now();
+  ]) : timestamp = .now();
 
   ListenContinuouslyTrack.noResults()
-    : this(
-        'No music detected',
-        null,
-        null,
-        ListenContinuouslyTrackStatus.noResults,
-      );
+    : this('No music detected', null, null, .noResults);
 
   ListenContinuouslyTrack.acrCloudError(String errorMessage)
-    : this(
-        errorMessage,
-        null,
-        null,
-        ListenContinuouslyTrackStatus.acrCloudError,
-      );
+    : this(errorMessage, null, null, .acrCloudError);
 
   ListenContinuouslyTrack.listening()
-    : this('Listening...', null, null, ListenContinuouslyTrackStatus.listening);
+    : this('Listening...', null, null, .listening);
 
-  bool get hasResult =>
-      status == ListenContinuouslyTrackStatus.scrobbled ||
-      status == ListenContinuouslyTrackStatus.skipped;
+  bool get hasResult => status == .scrobbled || status == .skipped;
 
   @override
   String get displayTrailing => timeFormatWithSeconds.format(timestamp);
@@ -80,13 +68,13 @@ class ListenContinuouslyView extends StatefulWidget {
 }
 
 class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
-  static const _iconForTrackStatus = {
-    ListenContinuouslyTrackStatus.listening: Icons.mic,
-    ListenContinuouslyTrackStatus.scrobbled: Icons.check_circle,
-    ListenContinuouslyTrackStatus.skipped: Icons.skip_next,
-    ListenContinuouslyTrackStatus.acrCloudError: Icons.error,
-    ListenContinuouslyTrackStatus.scrobbleError: Icons.error,
-    ListenContinuouslyTrackStatus.noResults: Icons.cancel,
+  static const _iconForTrackStatus = <ListenContinuouslyTrackStatus, IconData>{
+    .listening: Icons.mic,
+    .scrobbled: Icons.check_circle,
+    .skipped: Icons.skip_next,
+    .acrCloudError: Icons.error,
+    .scrobbleError: Icons.error,
+    .noResults: Icons.cancel,
   };
 
   static final _tagRegex = RegExp(r'[[(].*?[\])]');
@@ -95,8 +83,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   final _tracks = Queue<ListenContinuouslyTrack>();
 
   bool get _isListening =>
-      _tracks.isNotEmpty &&
-      _tracks.first.status == ListenContinuouslyTrackStatus.listening;
+      _tracks.isNotEmpty && _tracks.first.status == .listening;
 
   @override
   void initState() {
@@ -123,7 +110,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
     }
 
     setState(() {
-      _tracks.addFirst(ListenContinuouslyTrack.listening());
+      _tracks.addFirst(.listening());
     });
 
     final session = ACRCloud.startSession();
@@ -142,7 +129,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
     final errorMessage = result?.errorMessage;
     if (errorMessage != null) {
       setState(() {
-        _tracks.addFirst(ListenContinuouslyTrack.acrCloudError(errorMessage));
+        _tracks.addFirst(.acrCloudError(errorMessage));
       });
       return;
     }
@@ -165,12 +152,10 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
       );
 
       if (_tracks.firstWhereOrNull((t) => t.hasResult) == track) {
-        track.status = ListenContinuouslyTrackStatus.skipped;
+        track.status = .skipped;
       } else {
         final response = await Lastfm.scrobble([track], [track.timestamp]);
-        track.status = response.accepted == 1
-            ? ListenContinuouslyTrackStatus.scrobbled
-            : ListenContinuouslyTrackStatus.scrobbleError;
+        track.status = response.accepted == 1 ? .scrobbled : .scrobbleError;
       }
 
       setState(() {
@@ -178,7 +163,7 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
       });
     } else {
       setState(() {
-        _tracks.addFirst(ListenContinuouslyTrack.noResults());
+        _tracks.addFirst(.noResults());
       });
     }
   }
@@ -210,14 +195,14 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
     body: Column(
       children: [
         SafeArea(
-          minimum: const EdgeInsets.all(8),
+          minimum: const .all(8),
           child: Text(
             'Keep your device on this page with the screen on. Your device '
             'will listen for music every '
             '${Preferences.listenMoreFrequently.value ? '30 seconds' : 'minute'} '
             'or so and automatically scrobble the songs it detects. '
             'Duplicate songs will be skipped.',
-            textAlign: TextAlign.center,
+            textAlign: .center,
           ),
         ),
         Expanded(

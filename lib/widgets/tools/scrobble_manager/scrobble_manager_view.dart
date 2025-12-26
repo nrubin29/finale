@@ -25,14 +25,14 @@ class _ScrobbleManagerViewState extends State<ScrobbleManagerView> {
     setState(() {
       _selectedTracks = selectedTracks;
       _editRequest = editRequest;
-      _mode = _Mode.modify;
+      _mode = .modify;
     });
   }
 
   @override
   Widget build(BuildContext context) => switch (_mode) {
-    _Mode.select => ScrobbleSelectorView(onOperationReady: _changeModeToModify),
-    _Mode.modify => ScrobbleModificationView(
+    .select => ScrobbleSelectorView(onOperationReady: _changeModeToModify),
+    .modify => ScrobbleModificationView(
       selectedTracks: _selectedTracks!,
       editRequest: _editRequest,
     ),

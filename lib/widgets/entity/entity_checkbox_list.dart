@@ -48,7 +48,7 @@ class _EntityCheckboxList<T extends Entity>
   }
 
   void _itemsDidChange() {
-    _items = Map.fromIterable(widget.items, value: (_) => true);
+    _items = .fromIterable(widget.items, value: (_) => true);
   }
 
   void _updateItem(T item, bool selected) {
@@ -87,10 +87,10 @@ class _EntityCheckboxList<T extends Entity>
         SliverSafeArea(
           top: false,
           bottom: false,
-          minimum: const EdgeInsets.only(right: 16),
+          minimum: const .only(right: 16),
           sliver: SliverToBoxAdapter(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: .end,
               children: [
                 TextButton(
                   onPressed: _items.values.any((value) => !value)

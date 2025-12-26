@@ -149,7 +149,7 @@ class Preferences {
   static final searchEngine = Preference.forEnum<SearchEngine>(
     'searchEngine2',
     SearchEngine.values,
-    defaultValue: SearchEngine.lastfm,
+    defaultValue: .lastfm,
   );
 
   static final stripTags = Preference<bool, bool>(
@@ -165,7 +165,7 @@ class Preferences {
   static final themeColor = Preference.forEnum<ThemeColor>(
     'themeColorIndex',
     ThemeColor.values,
-    defaultValue: ThemeColor.red,
+    defaultValue: .red,
   );
 
   static final themeBackground = Preference<bool, bool>(
@@ -196,10 +196,10 @@ class Preferences {
     'inputDateTimeAsText',
     defaultValue: false,
   );
-  static final defaultDateRange = Preference.forEnum(
+  static final defaultDateRange = Preference.forEnum<PresetDateRange>(
     'defaultDateRange',
     PresetDateRange.values,
-    defaultValue: PresetDateRange.pastHour,
+    defaultValue: .pastHour,
   );
 
   static final profileTabsOrder = Preference.forEnumList<ProfileTab>(

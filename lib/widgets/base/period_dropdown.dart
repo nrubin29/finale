@@ -48,10 +48,10 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
           final dateRange = await showDateRangePicker(
             context: context,
             firstDate: DateTime(2010),
-            lastDate: DateTime.now(),
+            lastDate: .now(),
             initialEntryMode: Preferences.inputDateTimeAsText.value
-                ? DatePickerEntryMode.input
-                : DatePickerEntryMode.calendar,
+                ? .input
+                : .calendar,
           );
 
           if (dateRange != null) {

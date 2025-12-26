@@ -12,7 +12,7 @@ class CustomListTile extends StatelessWidget {
     return SafeArea(
       top: false,
       bottom: false,
-      minimum: const EdgeInsets.symmetric(horizontal: 16),
+      minimum: const .symmetric(horizontal: 16),
       child: Row(
         spacing: 16,
         children: [

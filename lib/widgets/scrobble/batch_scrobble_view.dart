@@ -49,13 +49,8 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
     var tracks = _selection;
     List<DateTime> timestamps;
 
-    if (_behavior == ScrobbleTimestampBehavior.startingNow ||
-        _behavior == ScrobbleTimestampBehavior.startingCustom) {
-      timestamps = [
-        _behavior == ScrobbleTimestampBehavior.startingNow
-            ? DateTime.now()
-            : _customTimestamp!,
-      ];
+    if (_behavior == .startingNow || _behavior == .startingCustom) {
+      timestamps = [_behavior == .startingNow ? .now() : _customTimestamp!];
 
       for (var track in tracks) {
         timestamps.add(
@@ -65,11 +60,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
         );
       }
     } else {
-      timestamps = [
-        _behavior == ScrobbleTimestampBehavior.endingNow
-            ? DateTime.now()
-            : _customTimestamp!,
-      ];
+      timestamps = [_behavior == .endingNow ? .now() : _customTimestamp!];
 
       tracks = tracks.reversed.toList(growable: false);
       for (var track in tracks) {
@@ -133,9 +124,9 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 const SizedBox(height: 16)
               else ...[
                 Card(
-                  margin: const EdgeInsets.all(8),
+                  margin: const .all(8),
                   child: Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const .all(8),
                     child: RichText(
                       text: TextSpan(
                         style: TextStyle(color: theme.colorScheme.onSurface),
@@ -168,19 +159,19 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 child: const Column(
                   children: [
                     RadioListTile<ScrobbleTimestampBehavior>(
-                      value: ScrobbleTimestampBehavior.startingNow,
+                      value: .startingNow,
                       title: Text('Starting now'),
                     ),
                     RadioListTile<ScrobbleTimestampBehavior>(
-                      value: ScrobbleTimestampBehavior.startingCustom,
+                      value: .startingCustom,
                       title: Text('Starting at a custom timestamp'),
                     ),
                     RadioListTile<ScrobbleTimestampBehavior>(
-                      value: ScrobbleTimestampBehavior.endingNow,
+                      value: .endingNow,
                       title: Text('Ending now'),
                     ),
                     RadioListTile<ScrobbleTimestampBehavior>(
-                      value: ScrobbleTimestampBehavior.endingCustom,
+                      value: .endingCustom,
                       title: Text('Ending at a custom timestamp'),
                     ),
                   ],
@@ -188,10 +179,9 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
               ),
               Visibility(
                 visible:
-                    _behavior == ScrobbleTimestampBehavior.startingCustom ||
-                    _behavior == ScrobbleTimestampBehavior.endingCustom,
+                    _behavior == .startingCustom || _behavior == .endingCustom,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const .symmetric(horizontal: 16),
                   child: DateTimeField(
                     initialValue: _customTimestamp,
                     onChanged: (dateTime) {
@@ -203,7 +193,7 @@ class _BatchScrobbleViewState extends State<BatchScrobbleView> {
                 ),
               ),
               ExpansionPanelList(
-                expandedHeaderPadding: EdgeInsets.zero,
+                expandedHeaderPadding: .zero,
                 expansionCallback: (_, isExpanded) {
                   setState(() {
                     _isTracksExpanded = isExpanded;

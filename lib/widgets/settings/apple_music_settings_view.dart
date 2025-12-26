@@ -80,7 +80,7 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
     return Scaffold(
       appBar: createAppBar(context, 'Apple Music Settings'),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           SettingsListTile(
             title: 'Enabled',
@@ -91,15 +91,14 @@ class _AppleMusicSettingsViewState extends State<AppleMusicSettingsView> {
             ListTile(
               title: Text(_authorizationStatusName),
               leading: const Icon(Icons.vpn_key),
-              trailing:
-                  _authorizationStatus == AuthorizationStatus.notDetermined
+              trailing: _authorizationStatus == .notDetermined
                   ? TextButton(
                       onPressed: _authorize,
                       child: const Text('Authorize'),
                     )
                   : null,
             ),
-            if (_authorizationStatus == AuthorizationStatus.authorized)
+            if (_authorizationStatus == .authorized)
               SettingsListTile(
                 title: 'Background scrobbling',
                 description:

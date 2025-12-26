@@ -30,7 +30,7 @@ class TrackView extends StatelessWidget {
     final friendUsername = ProfileStack.of(context).friendUsername;
     return FutureBuilderView<LTrack>(
       futureFactory: track is LTrack
-          ? () => Future.value(track as LTrack)
+          ? () => .value(track as LTrack)
           : () => Lastfm.getTrack(track),
       baseEntity: track,
       builder: (track) => Scaffold(
@@ -48,15 +48,9 @@ class TrackView extends StatelessWidget {
           listItems: [
             Scoreboard(
               items: [
-                ScoreboardItemModel.value(
-                  label: 'Scrobbles',
-                  value: track.globalPlayCount,
-                ),
-                ScoreboardItemModel.value(
-                  label: 'Listeners',
-                  value: track.listeners,
-                ),
-                ScoreboardItemModel.value(
+                .value(label: 'Scrobbles', value: track.globalPlayCount),
+                .value(label: 'Listeners', value: track.listeners),
+                .value(
                   label: 'Your scrobbles',
                   value: track.userPlayCount,
                   callback: track.userPlayCount > 0
@@ -71,7 +65,7 @@ class TrackView extends StatelessWidget {
                       : null,
                 ),
                 if (friendUsername != null)
-                  ScoreboardItemModel.future(
+                  .future(
                     label: "$friendUsername's scrobbles",
                     futureProvider: () => Lastfm.getTrack(
                       track,
@@ -90,7 +84,7 @@ class TrackView extends StatelessWidget {
                     },
                   ),
                 if (track.userPlayCount > 0 && track.duration > 0)
-                  ScoreboardItemModel.value(
+                  .value(
                     label: 'Total listen time',
                     value: formatDuration(
                       Duration(

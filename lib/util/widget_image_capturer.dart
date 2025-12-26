@@ -3,7 +3,6 @@
 
 import 'dart:async';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -51,7 +50,7 @@ class _HelperState extends State<_Helper> {
       final boundary =
           _key.currentContext!.findRenderObject() as RenderRepaintBoundary;
       final image = await boundary.toImage(pixelRatio: 3);
-      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      final byteData = await image.toByteData(format: .png);
       completer.complete(byteData!.buffer.asUint8List());
     });
 
@@ -65,7 +64,7 @@ class _HelperState extends State<_Helper> {
   Widget build(BuildContext context) => Transform.translate(
     offset: Offset(MediaQuery.of(context).size.width, 0),
     child: Material(
-      type: MaterialType.transparency,
+      type: .transparency,
       child: Stack(
         children: [RepaintBoundary(key: _key, child: widget.widget)],
       ),

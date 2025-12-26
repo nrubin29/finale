@@ -39,7 +39,7 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
     try {
       final authorizationStatus = await AppleMusic.authorize();
 
-      if (authorizationStatus == AuthorizationStatus.authorized) {
+      if (authorizationStatus == .authorized) {
         final tracks = await const AMRecentTracksRequest().getAllData();
         setState(() {
           _authorizationStatus = authorizationStatus;
@@ -89,31 +89,31 @@ class _AppleMusicScrobbleViewState extends State<AppleMusicScrobbleView> {
       return ErrorComponent(error: _exception!, stackTrace: _stackTrace!);
     } else if (_authorizationStatus == null || _items == null) {
       return const LoadingComponent();
-    } else if (_authorizationStatus != AuthorizationStatus.authorized) {
+    } else if (_authorizationStatus != .authorized) {
       return const Center(child: Text('Unable to access your music library.'));
     } else {
       return Column(
         children: [
           const SafeArea(
-            minimum: EdgeInsets.all(8),
+            minimum: .all(8),
             bottom: false,
             child: Text(
               'Due to limitations imposed by Apple, Finale can only scrobble '
               'music that has been added to your library. Additionally, if you '
               'listen to a song multiple times before scrobbling, Finale will '
               'only scrobble your last listen.',
-              textAlign: TextAlign.center,
+              textAlign: .center,
             ),
           ),
           if (Preferences.lastAppleMusicScrobble.value != null)
             SafeArea(
-              minimum: const EdgeInsets.all(8),
+              minimum: const .all(8),
               top: false,
               bottom: false,
               child: Text(
                 'Last scrobbled: '
                 '${dateTimeFormat.format(Preferences.lastAppleMusicScrobble.value!)}',
-                textAlign: TextAlign.center,
+                textAlign: .center,
               ),
             ),
           Expanded(

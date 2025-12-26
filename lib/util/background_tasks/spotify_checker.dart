@@ -40,7 +40,7 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
         latestSpotifyTrack != null &&
         latestSpotifyTrack.playedAt.difference(latestLastfmTrack.date!) >
             _maxDelta) {
-      showNotification(NotificationType.spotifyCheckerOutOfSync);
+      showNotification(.spotifyCheckerOutOfSync);
     }
 
     return true;

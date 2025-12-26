@@ -10,7 +10,6 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -25,7 +24,7 @@ class PeriodSelector<T extends HasPlayCount> extends StatefulWidget {
 
   const PeriodSelector({
     required this.entityType,
-    this.displayType = DisplayType.list,
+    this.displayType = .list,
     required this.requestConstructor,
     required this.username,
     required this.detailWidgetBuilder,
@@ -72,25 +71,19 @@ class _PeriodSelectorState<T extends HasPlayCount>
       ColoredBox(
         color: Theme.of(context).colorScheme.surfaceContainer,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const .symmetric(horizontal: 10),
           child: SafeArea(
             top: false,
             bottom: false,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: .spaceBetween,
               children: [
                 SegmentedButton<DisplayType>(
                   showSelectedIcon: false,
                   style: minimumSizeButtonStyle,
                   segments: const [
-                    ButtonSegment(
-                      value: DisplayType.list,
-                      icon: Icon(Icons.list),
-                    ),
-                    ButtonSegment(
-                      value: DisplayType.grid,
-                      icon: Icon(Icons.grid_view),
-                    ),
+                    ButtonSegment(value: .list, icon: Icon(Icons.list)),
+                    ButtonSegment(value: .grid, icon: Icon(Icons.grid_view)),
                   ],
                   selected: {_displayType},
                   onSelectionChanged: (newSelection) {
@@ -112,14 +105,14 @@ class _PeriodSelectorState<T extends HasPlayCount>
           detailWidgetBuilder: widget.detailWidgetBuilder,
           subtitleWidgetBuilder: widget.subtitleWidgetBuilder,
           scoreboardItems: [
-            ScoreboardItemModel.future(
+            .future(
               label: 'Scrobbles',
               futureProvider: () =>
                   GetRecentTracksRequest.forPeriod(widget.username, _period)
                       .getNumItems()
                       .errorToNull<RecentListeningInformationHiddenException>(),
             ),
-            ScoreboardItemModel.future(
+            .future(
               label: '${widget.entityType.displayName}s',
               futureProvider: () => _requestSubject.value.getNumItems(),
             ),

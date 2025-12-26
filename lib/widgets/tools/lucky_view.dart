@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
@@ -75,13 +74,13 @@ class _LuckyViewState extends State<LuckyView> {
       final responseEntity = response.single;
       Entity entity;
 
-      if (_entityType == EntityType.album) {
+      if (_entityType == .album) {
         entity = await Lastfm.getAlbum(
           ConcreteBasicAlbum(responseEntity.albumName, responseEntity.artist),
         );
-      } else if (_entityType == EntityType.artist) {
+      } else if (_entityType == .artist) {
         entity = await Lastfm.getArtist(responseEntity.artist);
-      } else if (_entityType == EntityType.track) {
+      } else if (_entityType == .track) {
         entity = await Lastfm.getTrack(responseEntity);
       } else {
         throw Exception('This will never happen.');
@@ -115,12 +114,9 @@ class _LuckyViewState extends State<LuckyView> {
           trailing: DropdownButton<EntityType>(
             value: _entityType,
             items: const [
-              DropdownMenuItem(value: EntityType.track, child: Text('Tracks')),
-              DropdownMenuItem(value: EntityType.album, child: Text('Albums')),
-              DropdownMenuItem(
-                value: EntityType.artist,
-                child: Text('Artists'),
-              ),
+              DropdownMenuItem(value: .track, child: Text('Tracks')),
+              DropdownMenuItem(value: .album, child: Text('Albums')),
+              DropdownMenuItem(value: .artist, child: Text('Artists')),
             ],
             onChanged: (value) {
               if (value != null) {
@@ -141,7 +137,7 @@ class _LuckyViewState extends State<LuckyView> {
             ),
             child: AspectRatio(
               aspectRatio: 1,
-              child: EntityImage(entity: entity, quality: ImageQuality.high),
+              child: EntityImage(entity: entity, quality: .high),
             ),
           ),
           InkWell(
@@ -149,16 +145,16 @@ class _LuckyViewState extends State<LuckyView> {
               pushLastfmEntityDetailView(context, entity);
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: const .symmetric(vertical: 8),
               child: Stack(
-                alignment: Alignment.center,
+                alignment: .center,
                 children: [
                   Column(
                     children: [
                       Text(
                         entity.displayTitle,
                         style: const TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
+                        textAlign: .center,
                       ),
                       if (entity.displaySubtitle != null) ...[
                         const SizedBox(height: 4),
@@ -174,9 +170,9 @@ class _LuckyViewState extends State<LuckyView> {
                     ],
                   ),
                   const Align(
-                    alignment: Alignment.centerRight,
+                    alignment: .centerRight,
                     child: SafeArea(
-                      minimum: EdgeInsets.only(right: 16),
+                      minimum: .only(right: 16),
                       child: Icon(Icons.chevron_right),
                     ),
                   ),

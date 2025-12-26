@@ -32,7 +32,7 @@ class ScrobbleDistributionBarChart extends StatelessWidget {
             showingTooltipIndicators: [0],
           ),
       ],
-      alignment: BarChartAlignment.center,
+      alignment: .center,
       rotationQuarterTurns: 1,
       titlesData: FlTitlesData(
         leftTitles: const AxisTitles(),

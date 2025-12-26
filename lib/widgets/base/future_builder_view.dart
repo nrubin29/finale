@@ -104,10 +104,7 @@ class _FutureBuilderViewState<T> extends State<FutureBuilderView<T>> {
                 ),
               ],
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(10),
-              child: errorComponent,
-            ),
+            body: Padding(padding: const .all(10), child: errorComponent),
           )
         : errorComponent;
   }

@@ -29,9 +29,9 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
 
     _subscription = externalActionsStream.listen((action) async {
       await Future.delayed(const Duration(milliseconds: 250));
-      if (action.type == ExternalActionType.scrobbleOnce) {
+      if (action.type == .scrobbleOnce) {
         _scrobbleOnce();
-      } else if (action.type == ExternalActionType.scrobbleContinuously) {
+      } else if (action.type == .scrobbleContinuously) {
         _scrobbleContinuously();
       }
     });
@@ -84,14 +84,14 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
     title: 'Music Recognition',
     trailing: TextButton(
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           Text('Powered by ', style: Theme.of(context).textTheme.bodySmall),
           Image.asset('assets/images/acrcloud.png', height: 20),
         ],
       ),
       onPressed: () {
-        launchUrl(Uri.https('acrcloud.com', ''));
+        launchUrl(.https('acrcloud.com', ''));
       },
     ),
     actions: [

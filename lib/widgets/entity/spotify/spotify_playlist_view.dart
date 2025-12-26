@@ -32,7 +32,7 @@ class SpotifyPlaylistView extends StatelessWidget {
         EntityDisplay<STrack>(
           request: SPlaylistTracksRequest(playlist),
           scrollable: false,
-          scrobbleableEntity: (track) => Future.value(track),
+          scrobbleableEntity: (track) => .value(track),
         ),
       ],
     ),

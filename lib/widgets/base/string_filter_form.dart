@@ -20,7 +20,7 @@ class StringFilter {
   final String value;
 
   const StringFilter({
-    this.type = StringFilterType.equals,
+    this.type = .equals,
     this.caseSensitive = false,
     this.value = '',
   });
@@ -42,10 +42,10 @@ class StringFilter {
     final realValue = caseSensitive ? value : value.toLowerCase();
 
     return switch (type) {
-      StringFilterType.equals => realTest == realValue,
-      StringFilterType.startsWith => realTest.startsWith(realValue),
-      StringFilterType.endsWith => realTest.endsWith(realValue),
-      StringFilterType.contains => realTest.contains(realValue),
+      .equals => realTest == realValue,
+      .startsWith => realTest.startsWith(realValue),
+      .endsWith => realTest.endsWith(realValue),
+      .contains => realTest.contains(realValue),
     };
   }
 
@@ -106,7 +106,7 @@ class _StringFilterFormState extends State<StringFilterForm> {
         title: 'Value',
         trailing: TextFormField(
           controller: _textController,
-          textAlign: TextAlign.end,
+          textAlign: .end,
           decoration: formElementBottomBorderDecoration,
         ),
       ),

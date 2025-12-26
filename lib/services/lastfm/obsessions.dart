@@ -81,7 +81,7 @@ class LUserObsessions extends PagedRequest<LObsession> {
   @override
   Future<List<LObsession>> doRequest(int limit, int page) async {
     final lastfmResponse = await httpClient.get(
-      Uri.https('last.fm', 'user/$username/obsessions', {'page': '$page'}),
+      .https('last.fm', 'user/$username/obsessions', {'page': '$page'}),
     );
     if (lastfmResponse.statusCode != 200) return const <LObsession>[];
 

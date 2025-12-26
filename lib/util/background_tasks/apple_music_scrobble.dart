@@ -11,7 +11,7 @@ class AppleMusicScrobbleBackgroundTask extends BackgroundTask {
   Future<bool> isEnabled() async =>
       Preferences.appleMusicEnabled.value &&
       Preferences.appleMusicBackgroundScrobblingEnabled.value &&
-      await AppleMusic.authorizationStatus == AuthorizationStatus.authorized;
+      await AppleMusic.authorizationStatus == .authorized;
 
   @override
   Future<void> setup() async {

@@ -27,11 +27,11 @@ class _LastfmLoginWebViewState extends State<LastfmLoginWebView> {
         onNavigationRequest: (request) async {
           if (request.url.startsWith(authCallbackUrl)) {
             await LastfmCookie.loadCookiesFromWebView();
-            if (!mounted) return NavigationDecision.prevent;
+            if (!mounted) return .prevent;
             Navigator.of(context).pop();
-            return NavigationDecision.prevent;
+            return .prevent;
           }
-          return NavigationDecision.navigate;
+          return .navigate;
         },
       ),
     );

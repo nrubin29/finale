@@ -22,13 +22,13 @@ class TitledBox extends StatelessWidget {
       HeaderListTile(title, trailing: trailing),
       const SizedBox(height: 8),
       Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: .spaceEvenly,
         children: [
           for (final action in actions)
             OutlinedButton(
               onPressed: action.onPressed,
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: .min,
                 children: [
                   Icon(action.icon),
                   const SizedBox(width: 8),

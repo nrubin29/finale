@@ -7,7 +7,7 @@ import 'package:finale/services/strava/activity.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/web_auth.dart';
 
-Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
+Uri _buildUri(String method, Map<String, dynamic>? data) => .https(
   'www.strava.com',
   'api/v3/$method',
   data?.map((key, value) => MapEntry(key, value.toString())),

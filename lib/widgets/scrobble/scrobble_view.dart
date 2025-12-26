@@ -96,7 +96,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
               : null,
         ),
       ],
-      [_useCustomTimestamp ? _customTimestamp! : DateTime.now()],
+      [_useCustomTimestamp ? _customTimestamp! : .now()],
     );
 
     setState(() {
@@ -195,7 +195,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 const HeaderListTile('Manual'),
               ],
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const .symmetric(horizontal: 16),
                 child: TextFormField(
                   controller: _trackController,
                   decoration: const InputDecoration(labelText: 'Song *'),
@@ -203,7 +203,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const .symmetric(horizontal: 16),
                 child: TextFormField(
                   controller: _artistController,
                   decoration: const InputDecoration(labelText: 'Artist *'),
@@ -211,7 +211,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const .symmetric(horizontal: 16),
                 child: TextFormField(
                   controller: _albumController,
                   decoration: const InputDecoration(labelText: 'Album'),
@@ -219,7 +219,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
               ),
               if (_showAlbumArtistField)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const .symmetric(horizontal: 16),
                   child: TextFormField(
                     controller: _albumArtistController,
                     decoration: const InputDecoration(
@@ -228,10 +228,10 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                   ),
                 ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const .symmetric(horizontal: 8),
                 child: SwitchListTile(
-                  controlAffinity: ListTileControlAffinity.leading,
-                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: .leading,
+                  contentPadding: .zero,
                   title: const Text('Custom timestamp'),
                   value: _useCustomTimestamp,
                   onChanged: (value) {
@@ -239,7 +239,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                       _useCustomTimestamp = value;
 
                       if (_useCustomTimestamp) {
-                        _customTimestamp = DateTime.now();
+                        _customTimestamp = .now();
                       }
                     });
                   },
@@ -248,7 +248,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
               Visibility(
                 visible: _useCustomTimestamp,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const .symmetric(horizontal: 16),
                   child: DateTimeField(
                     initialValue: _customTimestamp,
                     onChanged: (dateTime) {

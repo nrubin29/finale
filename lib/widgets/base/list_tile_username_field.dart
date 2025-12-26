@@ -65,7 +65,7 @@ class _ListTileUsernameFieldState extends State<ListTileUsernameField> {
               TextFormField(
                 controller: textEditingController,
                 focusNode: focusNode,
-                textAlign: TextAlign.end,
+                textAlign: .end,
                 validator: _validator,
                 decoration: formElementBottomBorderDecoration,
                 onFieldSubmitted: (_) => onFieldSubmitted(),

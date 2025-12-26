@@ -127,9 +127,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
               toY: group.value.toDouble(),
               color: color,
               width: 25,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(5),
-              ),
+              borderRadius: const .vertical(top: .circular(5)),
             ),
           ],
         ),
@@ -148,33 +146,21 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                 const SizedBox(height: 10),
                 Scoreboard(
                   items: [
-                    ScoreboardItemModel.value(
-                      label: 'Scrobbles',
-                      value: _numScrobbles,
-                    ),
-                    ScoreboardItemModel.value(
-                      label: 'Artists',
-                      value: _artists.length,
-                    ),
-                    ScoreboardItemModel.value(
-                      label: 'Albums',
-                      value: _albums.length,
-                    ),
-                    ScoreboardItemModel.value(
-                      label: 'Tracks',
-                      value: _tracks.length,
-                    ),
+                    .value(label: 'Scrobbles', value: _numScrobbles),
+                    .value(label: 'Artists', value: _artists.length),
+                    .value(label: 'Albums', value: _albums.length),
+                    .value(label: 'Tracks', value: _tracks.length),
                   ],
                 ),
                 const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const .symmetric(horizontal: 8),
                   child: SizedBox(
                     height: 200,
                     child: BarChart(
                       BarChartData(
                         barGroups: _barGroups,
-                        alignment: BarChartAlignment.center,
+                        alignment: .center,
                         titlesData: FlTitlesData(
                           leftTitles: const AxisTitles(
                             axisNameWidget: Text('Scrobbles'),
@@ -284,7 +270,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                             appBar: createAppBar(context, 'Top Albums'),
                             body: EntityDisplay<LUserWeeklyAlbumChartAlbum>(
                               items: _albums,
-                              displayType: DisplayType.grid,
+                              displayType: .grid,
                               detailWidgetBuilder: (album) =>
                                   AlbumView(album: album),
                             ),
@@ -299,7 +285,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                     title: Text(artist.name),
                     trailing: Text('${artist.playCount} scrobbles'),
                     leading: EntityImage(entity: artist),
-                    contentPadding: const EdgeInsets.symmetric(
+                    contentPadding: const .symmetric(
                       vertical: 8,
                       horizontal: 16,
                     ),
@@ -324,7 +310,7 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                             appBar: createAppBar(context, 'Top Artists'),
                             body: EntityDisplay<LUserWeeklyArtistChartArtist>(
                               items: _artists,
-                              displayType: DisplayType.grid,
+                              displayType: .grid,
                               detailWidgetBuilder: (artist) =>
                                   ArtistView(artist: artist),
                             ),

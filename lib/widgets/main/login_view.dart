@@ -1,7 +1,5 @@
 import 'dart:math';
-import 'dart:ui' as ui;
 
-import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/preferences.dart';
@@ -50,8 +48,8 @@ class LoginView extends StatelessWidget {
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: Stack(
-        alignment: Alignment.center,
-        fit: StackFit.expand,
+        alignment: .center,
+        fit: .expand,
         children: [
           FutureBuilder<List<LTopArtistsResponseArtist>>(
             future: Lastfm.getGlobalTopArtists(50),
@@ -62,7 +60,7 @@ class LoginView extends StatelessWidget {
 
               return GridView.count(
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
+                padding: .zero,
                 crossAxisCount: max(
                   MediaQuery.of(context).size.width ~/ 200,
                   3,
@@ -76,8 +74,8 @@ class LoginView extends StatelessWidget {
                         builder: (context, snapshot) => snapshot.hasData
                             ? EntityImage(
                                 entity: snapshot.data!.first,
-                                quality: ImageQuality.high,
-                                placeholderBehavior: PlaceholderBehavior.none,
+                                quality: .high,
+                                placeholderBehavior: .none,
                               )
                             : Container(),
                       ),
@@ -87,7 +85,7 @@ class LoginView extends StatelessWidget {
             },
           ),
           BackdropFilter(
-            filter: ui.ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+            filter: .blur(sigmaX: 4, sigmaY: 4),
             child: Container(color: Colors.transparent),
           ),
           DecoratedBox(
@@ -96,7 +94,7 @@ class LoginView extends StatelessWidget {
             ),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: .center,
             spacing: 12,
             children: [
               const AppIcon(size: 96),
@@ -106,16 +104,14 @@ class LoginView extends StatelessWidget {
               ),
               Text(
                 'A fully-featured Last.fm client and scrobbler',
-                textAlign: TextAlign.center,
+                textAlign: .center,
                 style: textTheme.titleMedium!.copyWith(color: Colors.white),
               ),
               OutlinedButton.icon(
                 onPressed: () {
                   _logIn(context);
                 },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.red),
-                ),
+                style: ButtonStyle(backgroundColor: .all(Colors.red)),
                 icon: const Icon(SocialMediaIcons.lastfm, color: Colors.white),
                 label: Text(
                   'Log in with Last.fm',

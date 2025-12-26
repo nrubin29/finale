@@ -11,7 +11,7 @@ class ListenContinuouslySettingsView extends StatelessWidget {
     return Scaffold(
       appBar: createAppBar(context, 'Listen Continuously Settings'),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           SettingsListTile(
             title: 'Strip tags',

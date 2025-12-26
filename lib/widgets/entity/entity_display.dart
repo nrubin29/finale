@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/period_paged_request.dart';
 import 'package:finale/util/constants.dart';
@@ -77,7 +76,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
     this.scrobbleableEntity,
     this.onRefresh,
     this.onImageLoaded,
-    this.displayType = DisplayType.list,
+    this.displayType = .list,
     this.scrollable = true,
     this.displayNumbers = false,
     this.displayImages = true,
@@ -92,7 +91,7 @@ class EntityDisplay<T extends Entity> extends StatefulWidget {
   }) : assert(items != null || request != null || requestStream != null),
        assert(onTap == null || detailWidgetBuilder == null),
        assert(
-         displayType == DisplayType.list ||
+         displayType == .list ||
              (!displayNumbers &&
                  leadingWidgetBuilder == null &&
                  menuWidgetBuilder == null),
@@ -256,11 +255,11 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
   Widget _listItemBuilder(BuildContext context, int index) {
     final item = items[index];
     var listTile = ListTile(
-      visualDensity: VisualDensity.compact,
+      visualDensity: .compact,
       title: Text(item.displayTitle),
       contentPadding: widget.shouldLeftPadListItems
-          ? const EdgeInsets.symmetric(horizontal: 16)
-          : const EdgeInsets.only(right: 16),
+          ? const .symmetric(horizontal: 16)
+          : const .only(right: 16),
       onTap: widget.onTap != null || widget.detailWidgetBuilder != null
           ? () {
               _onTap(item);
@@ -269,7 +268,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
       subtitle:
           item.displaySubtitle != null || widget.subtitleWidgetBuilder != null
           ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: .start,
               children: [
                 if (item.displaySubtitle != null) Text(item.displaySubtitle!),
                 if (widget.subtitleWidgetBuilder != null)
@@ -282,7 +281,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
               widget.displayImages ||
               widget.displayNumbers
           ? Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: .min,
               children: [
                 if (widget.leadingWidgetBuilder != null)
                   widget.leadingWidgetBuilder!(item),
@@ -306,7 +305,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             )
           : null,
       trailing: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         spacing: 4,
         children: [
           if (item.displayTrailing != null)
@@ -319,7 +318,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
           if (widget.scrobbleableEntity != null)
             ScrobbleButton(
               entityProvider: () => widget.scrobbleableEntity!(item),
-              color: Theme.of(context).brightness == Brightness.light
+              color: Theme.of(context).brightness == .light
                   ? Colors.grey
                   : null,
             ),
@@ -347,7 +346,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
     return GridTile(
       header: widget.scrobbleableEntity != null
           ? Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: .end,
               children: [
                 ScrobbleButton(
                   entityProvider: () => widget.scrobbleableEntity!(item),
@@ -357,16 +356,16 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             )
           : null,
       footer: Container(
-        margin: EdgeInsets.all(widget.gridTileTextPadding),
+        margin: .all(widget.gridTileTextPadding),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             if (widget.fontSize > 0)
               Text(
                 item.displayTitle,
                 style: TextStyle(
                   fontSize: widget.fontSize,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: .bold,
                   color: Colors.white,
                 ),
               ),
@@ -390,13 +389,13 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
         ),
       ),
       child: Stack(
-        fit: StackFit.expand,
+        fit: .expand,
         children: [
           if (widget.displayImages)
             EntityImage(
               entity: item,
-              quality: ImageQuality.high,
-              fit: BoxFit.cover,
+              quality: .high,
+              fit: .cover,
               shouldAnimate: widget.shouldAnimateImages,
               onLoaded: widget.onImageLoaded,
             ),
@@ -404,8 +403,8 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
+                  begin: .topCenter,
+                  end: .bottomCenter,
                   colors: [
                     Colors.grey.withValues(alpha: 0),
                     Colors.black.withValues(alpha: 0.75),
@@ -459,21 +458,21 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
         if (widget.scoreboardItems != null)
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const .symmetric(vertical: 10),
               child: Scoreboard(
                 key: ValueKey(_numInitialRequests),
                 items: widget.scoreboardItems!,
               ),
             ),
           ),
-        if (widget.displayType == DisplayType.list)
+        if (widget.displayType == .list)
           SliverList(
             delegate: SliverChildBuilderDelegate(
               _listItemBuilder,
               childCount: items.length,
             ),
           ),
-        if (widget.displayType == DisplayType.grid)
+        if (widget.displayType == .grid)
           SliverGrid(
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: widget.gridTileSize,
@@ -507,7 +506,7 @@ class EntityDisplayState<T extends Entity> extends State<EntityDisplay<T>>
                         )
                       : const ListTile(
                           leading: Padding(
-                            padding: EdgeInsets.only(left: 6),
+                            padding: .only(left: 6),
                             child: Icon(Icons.arrow_upward, size: 36),
                           ),
                           title: Text('Scroll to load more items'),

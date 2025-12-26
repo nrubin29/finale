@@ -91,9 +91,7 @@ abstract class Entity {
   ImageId? cachedImageId;
 
   /// Attempts to populate [cachedImageId] and download the image.
-  Future<void> tryCacheImageId([
-    ImageQuality quality = ImageQuality.high,
-  ]) async {
+  Future<void> tryCacheImageId([ImageQuality quality = .high]) async {
     if (cachedImageId != null || url == null) {
       return;
     }
@@ -153,7 +151,7 @@ abstract class Track extends Entity {
   String? get albumArtist => null;
 
   @override
-  EntityType get type => EntityType.track;
+  EntityType get type => .track;
 
   @override
   String get displayTitle => name;
@@ -219,7 +217,7 @@ abstract class BasicAlbum extends Entity {
   BasicArtist get artist;
 
   @override
-  EntityType get type => EntityType.album;
+  EntityType get type => .album;
 
   @override
   String get displayTitle => name;
@@ -295,7 +293,7 @@ abstract class BasicArtist extends Entity {
   );
 
   @override
-  EntityType get type => EntityType.artist;
+  EntityType get type => .artist;
 
   @override
   String get displayTitle => name;
@@ -324,7 +322,7 @@ abstract class FullArtist extends BasicArtist {}
 
 abstract class BasicPlaylist extends Entity {
   @override
-  EntityType get type => EntityType.playlist;
+  EntityType get type => .playlist;
 }
 
 abstract class FullPlaylist = BasicPlaylist with HasTracks;

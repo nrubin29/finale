@@ -90,7 +90,7 @@ class AthleteActivity extends Entity {
       '${timeFormat.format(endDateLocal)}';
 
   @override
-  EntityType get type => EntityType.other;
+  EntityType get type => .other;
 
   @override
   String? get url => null;

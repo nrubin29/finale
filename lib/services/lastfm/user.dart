@@ -51,7 +51,7 @@ class LUser extends Entity {
   );
 
   @override
-  EntityType get type => EntityType.user;
+  EntityType get type => .user;
 
   @override
   String get displayTitle => name;

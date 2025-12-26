@@ -43,7 +43,7 @@ class _WeeklyChartSelectorViewState extends State<WeeklyChartSelectorView>
               ColoredBox(
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: .spaceAround,
                   children: [
                     IconButton(
                       icon: const Icon(Icons.chevron_left),

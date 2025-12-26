@@ -58,7 +58,7 @@ class CollapsibleFormViewState<R extends Object>
           slivers: [
             SliverToBoxAdapter(
               child: ExpansionPanelList(
-                expandedHeaderPadding: EdgeInsets.zero,
+                expandedHeaderPadding: .zero,
                 expansionCallback: (_, isExpanded) {
                   setState(() {
                     _isSettingsExpanded = isExpanded;
@@ -72,12 +72,12 @@ class CollapsibleFormViewState<R extends Object>
                     isExpanded: _isSettingsExpanded,
                     body: Form(
                       key: _formKey,
-                      autovalidateMode: AutovalidateMode.disabled,
+                      autovalidateMode: .disabled,
                       child: Column(
                         children: [
                           ...widget.formWidgetsBuilder(context),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            padding: const .symmetric(vertical: 10),
                             child: OutlinedButton(
                               onPressed: onFormSubmit,
                               child: Text(widget.submitButtonText),

@@ -7,7 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutView extends StatelessWidget {
-  final int year = DateTime.now().year;
+  final year = DateTime.now().year;
 
   Widget _listTile({
     required String title,
@@ -32,15 +32,15 @@ class AboutView extends StatelessWidget {
           child: CustomScrollView(
             physics: const ScrollPhysics(),
             slivers: [
-              const SliverPadding(padding: EdgeInsets.only(top: 24)),
+              const SliverPadding(padding: .only(top: 24)),
               SliverToBoxAdapter(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: .center,
                   spacing: 18,
                   children: [
                     const AppIcon(size: 92),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: .start,
                       children: [
                         const Text('Finale', style: TextStyle(fontSize: 32)),
                         FutureBuilder<PackageInfo>(
@@ -57,10 +57,10 @@ class AboutView extends StatelessWidget {
                   ],
                 ),
               ),
-              const SliverPadding(padding: EdgeInsets.only(top: 18)),
+              const SliverPadding(padding: .only(top: 18)),
               SliverToBoxAdapter(
                 child: RichText(
-                  textAlign: TextAlign.center,
+                  textAlign: .center,
                   text: TextSpan(
                     style: Theme.of(context).textTheme.bodyMedium,
                     children: const [
@@ -73,40 +73,40 @@ class AboutView extends StatelessWidget {
                   ),
                 ),
               ),
-              const SliverPadding(padding: EdgeInsets.only(top: 18)),
+              const SliverPadding(padding: .only(top: 18)),
               _listTile(
                 title: 'My website',
                 icon: Icons.web,
                 onTap: () {
-                  launchUrl(Uri.https('noahzrubin.com'));
+                  launchUrl(.https('noahzrubin.com'));
                 },
               ),
               _listTile(
                 title: 'Follow me on Twitter',
                 icon: SocialMediaIcons.twitter,
                 onTap: () {
-                  launchUrl(Uri.https('x.com', 'nrubin29'));
+                  launchUrl(.https('x.com', 'nrubin29'));
                 },
               ),
               _listTile(
                 title: 'r/FinaleApp',
                 icon: SocialMediaIcons.reddit,
                 onTap: () {
-                  launchUrl(Uri.https('reddit.com', 'r/FinaleApp'));
+                  launchUrl(.https('reddit.com', 'r/FinaleApp'));
                 },
               ),
               _listTile(
                 title: 'Source code',
                 icon: SocialMediaIcons.github,
                 onTap: () {
-                  launchUrl(Uri.https('github.com', 'nrubin29/finale'));
+                  launchUrl(.https('github.com', 'nrubin29/finale'));
                 },
               ),
               _listTile(
                 title: 'Privacy policy',
                 icon: Icons.privacy_tip,
                 onTap: () {
-                  launchUrl(Uri.https('finale.app', 'privacy'));
+                  launchUrl(.https('finale.app', 'privacy'));
                 },
               ),
               _listTile(
@@ -119,10 +119,10 @@ class AboutView extends StatelessWidget {
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: SafeArea(
-                  minimum: const EdgeInsets.only(bottom: 24),
+                  minimum: const .only(bottom: 24),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: .min,
+                    mainAxisAlignment: .end,
                     children: [
                       Text('\u00a9 2020-$year Noah Rubin Technologies LLC'),
                       const Text('All rights reserved'),

@@ -63,7 +63,7 @@ class _WorkoutViewState extends State<WorkoutView> {
             child: OutlinedButton(
               onPressed: _authenticate,
               child: const Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: .min,
                 children: [
                   Icon(SocialMediaIcons.strava),
                   SizedBox(width: 8),

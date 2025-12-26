@@ -17,12 +17,12 @@ class FractionalBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 5),
+    padding: const .symmetric(vertical: 5),
     child: SizedBox(
       height: 4,
       child: FractionallySizedBox(
         widthFactor: percent,
-        alignment: Alignment.centerRight,
+        alignment: .centerRight,
         child: Material(color: Theme.of(context).colorScheme.primary),
       ),
     ),

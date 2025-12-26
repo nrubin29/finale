@@ -29,7 +29,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
 
         return aIndex.compareTo(bIndex);
       });
-    _tabEnabled = Map.fromEntries(
+    _tabEnabled = .fromEntries(
       ProfileTab.allowedValues.map(
         (e) => MapEntry(e, preferencesTabOrder.contains(e)),
       ),
@@ -55,10 +55,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
   void _reset() {
     setState(() {
       _tabOrder = [...ProfileTab.allowedValues];
-      _tabEnabled = Map.fromIterable(
-        ProfileTab.allowedValues,
-        value: (_) => true,
-      );
+      _tabEnabled = .fromIterable(ProfileTab.allowedValues, value: (_) => true);
     });
   }
 
@@ -93,7 +90,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
                 title: Text(tab.displayName),
                 leading: Icon(tab.icon),
                 trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: .min,
                   children: [
                     Checkbox(
                       value: _tabEnabled[tab],

@@ -152,7 +152,7 @@ class _InputDialogState extends State<_InputDialog> {
   Widget build(BuildContext context) => AlertDialog(
     title: Row(spacing: 10, children: [Icon(widget.icon), Text(widget.title)]),
     content: Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         Text(widget.content),
         TextField(controller: _textController, focusNode: _focusNode),

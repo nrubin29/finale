@@ -25,5 +25,5 @@ enum PresetDateRange with PreferenceEnum {
     };
   }
 
-  DateTime? get endDate => this == custom ? null : DateTime.now();
+  DateTime? get endDate => this == custom ? null : .now();
 }

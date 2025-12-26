@@ -45,8 +45,7 @@ class _Scrobble extends BasicScrobbledTrack {
   final DateTime? date;
 
   @override
-  String? get displayTrailing =>
-      _status == _ScrobbleStatus.pending ? 'Pending' : null;
+  String? get displayTrailing => _status == .pending ? 'Pending' : null;
 }
 
 class ScrobbleModificationView extends StatefulWidget {
@@ -78,7 +77,7 @@ class _ScrobbleModificationViewState extends State<ScrobbleModificationView> {
   void start() async {
     for (final scrobble in _scrobbles) {
       setState(() {
-        scrobble._status = _ScrobbleStatus.processing;
+        scrobble._status = .processing;
       });
 
       bool success;
@@ -90,9 +89,7 @@ class _ScrobbleModificationViewState extends State<ScrobbleModificationView> {
       }
 
       setState(() {
-        scrobble._status = success
-            ? _ScrobbleStatus.success
-            : _ScrobbleStatus.error;
+        scrobble._status = success ? .success : .error;
       });
     }
   }
@@ -108,10 +105,10 @@ class _ScrobbleModificationViewState extends State<ScrobbleModificationView> {
     body: EntityDisplay(
       items: _scrobbles,
       trailingWidgetBuilder: (item) => switch (item._status) {
-        _ScrobbleStatus.pending => const SizedBox(),
-        _ScrobbleStatus.processing => const LoadingComponent.small(),
-        _ScrobbleStatus.success => const Icon(Icons.check),
-        _ScrobbleStatus.error => const Icon(Icons.error),
+        .pending => const SizedBox(),
+        .processing => const LoadingComponent.small(),
+        .success => const Icon(Icons.check),
+        .error => const Icon(Icons.error),
       },
     ),
   );

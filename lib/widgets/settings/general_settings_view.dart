@@ -13,7 +13,7 @@ class GeneralSettingsView extends StatelessWidget {
     return Scaffold(
       appBar: createAppBar(context, 'General Settings'),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           SettingsListTile(
             title: 'Show album artist field',

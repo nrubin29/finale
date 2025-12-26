@@ -45,8 +45,8 @@ class _AlbumScrobblesViewState extends State<AlbumScrobblesView> {
 
   int _comparator(LTrack a, LTrack b) {
     return switch (_sort) {
-      _Sort.ordinal => 0,
-      _Sort.scrobbleCount => b.userPlayCount.compareTo(a.userPlayCount),
+      .ordinal => 0,
+      .scrobbleCount => b.userPlayCount.compareTo(a.userPlayCount),
     };
   }
 
@@ -69,20 +69,20 @@ class _AlbumScrobblesViewState extends State<AlbumScrobblesView> {
             ColoredBox(
               color: Theme.of(context).colorScheme.surfaceContainer,
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const .all(12),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: .end,
                   children: [
                     SegmentedButton<_Sort>(
                       showSelectedIcon: false,
                       style: minimumSizeButtonStyle,
                       segments: const [
                         ButtonSegment(
-                          value: _Sort.ordinal,
+                          value: .ordinal,
                           icon: Icon(Icons.format_list_numbered),
                         ),
                         ButtonSegment(
-                          value: _Sort.scrobbleCount,
+                          value: .scrobbleCount,
                           icon: Icon(Icons.numbers),
                         ),
                       ],

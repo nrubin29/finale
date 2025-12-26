@@ -4,7 +4,7 @@ const _duration = Duration(seconds: 1);
 
 extension TimeSafeStream<T> on ReplaySubject<Timestamped<T>> {
   void addTimestamped(T value) {
-    add(Timestamped(DateTime.now(), value));
+    add(Timestamped(.now(), value));
   }
 
   /// A time-safe [Stream] of values from this [ReplaySubject].

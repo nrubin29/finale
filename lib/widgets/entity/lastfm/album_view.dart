@@ -50,7 +50,7 @@ class AlbumView extends StatelessWidget {
     final friendUsername = ProfileStack.of(context).friendUsername;
     return FutureBuilderView<LAlbum>(
       futureFactory: album is LAlbum
-          ? () => Future.value(album as LAlbum)
+          ? () => .value(album as LAlbum)
           : () => Lastfm.getAlbum(album),
       baseEntity: album,
       builder: (album) => Scaffold(
@@ -68,15 +68,9 @@ class AlbumView extends StatelessWidget {
           listItems: [
             Scoreboard(
               items: [
-                ScoreboardItemModel.value(
-                  label: 'Scrobbles',
-                  value: album.playCount,
-                ),
-                ScoreboardItemModel.value(
-                  label: 'Listeners',
-                  value: album.listeners,
-                ),
-                ScoreboardItemModel.value(
+                .value(label: 'Scrobbles', value: album.playCount),
+                .value(label: 'Listeners', value: album.listeners),
+                .value(
                   label: 'Your scrobbles',
                   value: album.userPlayCount,
                   callback: album.userPlayCount > 0 && album.tracks.isNotEmpty
@@ -91,7 +85,7 @@ class AlbumView extends StatelessWidget {
                       : null,
                 ),
                 if (friendUsername != null)
-                  ScoreboardItemModel.future(
+                  .future(
                     label: "$friendUsername's scrobbles",
                     futureProvider: () => Lastfm.getAlbum(
                       album,
@@ -112,7 +106,7 @@ class AlbumView extends StatelessWidget {
                         : null,
                   ),
                 if (album.userPlayCount > 0 && album.tracks.isNotEmpty)
-                  ScoreboardItemModel.future(
+                  .future(
                     label: 'Total listen time',
                     futureProvider: () => _totalListenTime(album),
                   ),

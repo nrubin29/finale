@@ -31,7 +31,7 @@ class _AccountsSettingsViewState extends State<AccountsSettingsView> {
     return Scaffold(
       appBar: createAppBar(context, 'Accounts'),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           CaptionedListTile(
             title: 'Last.fm',

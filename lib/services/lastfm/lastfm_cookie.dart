@@ -152,7 +152,7 @@ class LastfmCookie {
     );
   }
 
-  static Uri _userUri({String? path}) => Uri.https(
+  static Uri _userUri({String? path}) => .https(
     'www.last.fm',
     'user/${Preferences.name.value!}${path == null ? '' : '/$path'}',
   );

@@ -48,7 +48,7 @@ class _LastfmSettingsViewState extends State<LastfmSettingsView> {
     body: Column(
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: .symmetric(vertical: 8, horizontal: 16),
           child: Text(
             'Certain advanced Last.fm features require you to sign in '
             'again using a different method. This authorization must be '

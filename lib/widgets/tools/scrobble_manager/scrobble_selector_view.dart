@@ -1,4 +1,3 @@
-import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
@@ -48,7 +47,7 @@ class _ScrobbleSelectorViewState extends State<ScrobbleSelectorView> {
       if (!mounted) return const [];
       showNoEntityTypePeriodDialog(
         context,
-        entityType: EntityType.track,
+        entityType: .track,
         username: Preferences.name.value!,
       );
       return const [];

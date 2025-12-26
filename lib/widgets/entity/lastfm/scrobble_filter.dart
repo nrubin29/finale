@@ -20,9 +20,9 @@ class ScrobbleFilter {
   const ScrobbleFilter({required this.field, required this.filter});
 
   bool matches(LRecentTracksResponseTrack track) => switch (field) {
-    ScrobbleField.title => filter.matches(track.name),
-    ScrobbleField.album => filter.matches(track.albumName),
-    ScrobbleField.artist => filter.matches(track.artistName),
+    .title => filter.matches(track.name),
+    .album => filter.matches(track.albumName),
+    .artist => filter.matches(track.artistName),
   };
 
   @override
@@ -53,7 +53,7 @@ class _ScrobbleFilterDialogState extends State<_ScrobbleFilterDialog> {
   @override
   void initState() {
     super.initState();
-    _field = widget.initialValue?.field ?? ScrobbleField.title;
+    _field = widget.initialValue?.field ?? .title;
     _stringFilter = widget.initialValue?.filter ?? const StringFilter();
   }
 
@@ -70,7 +70,7 @@ class _ScrobbleFilterDialogState extends State<_ScrobbleFilterDialog> {
   Widget build(BuildContext context) => AlertDialog(
     title: const Text('Add Filter'),
     content: Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         ListTile(
           title: const Text('Field'),
@@ -132,7 +132,7 @@ class ScrobbleFiltersListTile extends StatelessWidget {
     trailing: SizedBox(
       height: 48,
       child: ListView(
-        scrollDirection: Axis.horizontal,
+        scrollDirection: .horizontal,
         children: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -144,7 +144,7 @@ class ScrobbleFiltersListTile extends StatelessWidget {
           ),
           for (final (i, filter) in filters.indexed)
             Padding(
-              padding: const EdgeInsets.only(right: 8),
+              padding: const .only(right: 8),
               child: InputChip(
                 label: Text('$filter'),
                 onPressed: () async {

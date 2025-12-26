@@ -72,7 +72,7 @@ class ImageId {
       return null;
     }
 
-    final lastfmResponse = await httpClient.get(Uri.parse(url));
+    final lastfmResponse = await httpClient.get(.parse(url));
 
     try {
       final doc = parse(lastfmResponse.body);
@@ -86,13 +86,13 @@ class ImageId {
         rawUrl.lastIndexOf('/') + 1,
         endUrlAtPeriod ? rawUrl.lastIndexOf('.') : null,
       );
-      return ImageId.lastfm(imageId);
+      return .lastfm(imageId);
     } on Exception {
       return null;
     }
   };
 
   String getUrl(ImageQuality quality) {
-    return quality == ImageQuality.low ? _lowQualityUrl : _highQualityUrl;
+    return quality == .low ? _lowQualityUrl : _highQualityUrl;
   }
 }

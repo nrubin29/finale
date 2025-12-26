@@ -73,7 +73,7 @@ class _TrackScrobblesViewState extends State<TrackScrobblesView> {
               .format(scrobble.date),
         ),
         trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           spacing: 4,
           children: [
             Text(scrobble.album.name),

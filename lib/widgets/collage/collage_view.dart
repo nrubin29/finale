@@ -80,27 +80,27 @@ class _CollageViewState extends State<CollageView> {
     setState(() {
       _loadingProgress = 0;
       _numItemsToLoad = switch (_type) {
-        _CollageType.grid => _numGridItems,
-        _CollageType.list => _includeTitle ? 4 : 5,
-        _CollageType.wrapped => 1,
+        .grid => _numGridItems,
+        .list => _includeTitle ? 4 : 5,
+        .wrapped => 1,
       };
     });
 
     PagedRequest<Entity> request;
     final username = _usernameTextController.text;
 
-    if (_chart == EntityType.artist || _type == _CollageType.wrapped) {
+    if (_chart == .artist || _type == .wrapped) {
       request = GetTopArtistsRequest(username, _period);
-    } else if (_chart == EntityType.album) {
+    } else if (_chart == .album) {
       request = GetTopAlbumsRequest(username, _period);
-    } else if (_chart == EntityType.track) {
+    } else if (_chart == .track) {
       request = GetTopTracksRequest(username, _period);
     } else {
       throw Exception('$_chart is not supported for collages.');
     }
 
     var otherRequests = <Future<Object>>[];
-    if (_type == _CollageType.wrapped) {
+    if (_type == .wrapped) {
       otherRequests = [
         GetTopArtistsRequest(username, _period).getData(5, 1),
         GetTopTracksRequest(username, _period).getData(5, 1),
@@ -192,7 +192,7 @@ class _CollageViewState extends State<CollageView> {
 
     if (!context.mounted) return null;
     capturer.setup(context, switch (_type) {
-      _CollageType.grid => GridCollage(
+      .grid => GridCollage(
         _gridSize,
         _includeTitle,
         _includeText,
@@ -202,7 +202,7 @@ class _CollageViewState extends State<CollageView> {
         items,
         onImageLoaded,
       ),
-      _CollageType.list => ListCollage(
+      .list => ListCollage(
         _themeColor,
         _includeTitle,
         _includeBranding,
@@ -211,7 +211,7 @@ class _CollageViewState extends State<CollageView> {
         items,
         onImageLoaded,
       ),
-      _CollageType.wrapped => WrappedCollage(
+      .wrapped => WrappedCollage(
         _themeColor,
         _includeBranding,
         username,
@@ -232,9 +232,9 @@ class _CollageViewState extends State<CollageView> {
       trailing: DropdownButton<_CollageType>(
         value: _type,
         items: const [
-          DropdownMenuItem(value: _CollageType.grid, child: Text('Grid')),
-          DropdownMenuItem(value: _CollageType.list, child: Text('List')),
-          DropdownMenuItem(value: _CollageType.wrapped, child: Text('Wrapped')),
+          DropdownMenuItem(value: .grid, child: Text('Grid')),
+          DropdownMenuItem(value: .list, child: Text('List')),
+          DropdownMenuItem(value: .wrapped, child: Text('Wrapped')),
         ],
         onChanged: (value) async {
           if (value != null) {
@@ -245,31 +245,22 @@ class _CollageViewState extends State<CollageView> {
         },
       ),
     ),
-    if (_type != _CollageType.wrapped)
+    if (_type != .wrapped)
       ListTile(
         title: const Text('Chart'),
         trailing: DropdownButton<EntityType>(
           value: _chart,
           items: const [
-            DropdownMenuItem(
-              value: EntityType.album,
-              child: Text('Top Albums'),
-            ),
-            DropdownMenuItem(
-              value: EntityType.artist,
-              child: Text('Top Artists'),
-            ),
-            DropdownMenuItem(
-              value: EntityType.track,
-              child: Text('Top Tracks'),
-            ),
+            DropdownMenuItem(value: .album, child: Text('Top Albums')),
+            DropdownMenuItem(value: .artist, child: Text('Top Artists')),
+            DropdownMenuItem(value: .track, child: Text('Top Tracks')),
           ],
           onChanged: (value) async {
             if (value != null) {
               var shouldSet = true;
 
               if (isWeb &&
-                  value == EntityType.artist &&
+                  value == .artist &&
                   !Preferences.hasSpotifyAuthData) {
                 shouldSet =
                     (await showDialog(
@@ -298,7 +289,7 @@ class _CollageViewState extends State<CollageView> {
         },
       ),
     ),
-    if (_type == _CollageType.grid)
+    if (_type == .grid)
       ListTile(
         title: const Text('Grid size'),
         trailing: DropdownButton<int>(
@@ -316,7 +307,7 @@ class _CollageViewState extends State<CollageView> {
           },
         ),
       ),
-    if (_type != _CollageType.wrapped)
+    if (_type != .wrapped)
       ListTile(
         title: const Text('Include title'),
         trailing: Switch(
@@ -330,7 +321,7 @@ class _CollageViewState extends State<CollageView> {
           },
         ),
       ),
-    if (_type == _CollageType.grid)
+    if (_type == .grid)
       ListTile(
         title: const Text('Include text'),
         trailing: Switch(
@@ -354,7 +345,7 @@ class _CollageViewState extends State<CollageView> {
               DropdownMenuItem(
                 value: themeColor,
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: .min,
                   children: [
                     Icon(Icons.circle, color: themeColor.color),
                     const SizedBox(width: 4),
@@ -388,9 +379,9 @@ class _CollageViewState extends State<CollageView> {
   ];
 
   Widget _loadingWidgetBuilder(BuildContext context) => SafeArea(
-    minimum: const EdgeInsets.symmetric(horizontal: 16),
+    minimum: const .symmetric(horizontal: 16),
     child: Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         LinearProgressIndicator(
           value: _loadingProgress / _numItemsToLoad,
@@ -398,7 +389,7 @@ class _CollageViewState extends State<CollageView> {
         ),
         const SizedBox(height: 5),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: .end,
           children: [
             Text('$_loadingProgress / $_numItemsToLoad images loaded'),
           ],
@@ -439,7 +430,7 @@ class _CollageViewState extends State<CollageView> {
             const SizedBox(height: 16),
             Center(
               child: ConstrainedBox(
-                constraints: _type == _CollageType.grid
+                constraints: _type == .grid
                     ? const BoxConstraints(maxWidth: 600)
                     : const BoxConstraints(maxWidth: 400),
                 child: Image.memory(image),
@@ -447,17 +438,17 @@ class _CollageViewState extends State<CollageView> {
             ),
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: .center,
               children: [
                 OutlinedButton(
                   onPressed: () async {
                     final box = context.findRenderObject() as RenderBox;
-                    final position = box.localToGlobal(Offset.zero) & box.size;
+                    final position = box.localToGlobal(.zero) & box.size;
 
                     await SharePlus.instance.share(
                       ShareParams(
                         files: [
-                          XFile.fromData(
+                          .fromData(
                             image,
                             mimeType: 'image/png',
                             name: 'collage.png',

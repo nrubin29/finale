@@ -53,9 +53,9 @@ class _HIndexViewState extends State<HIndexView> {
   Future<_HIndexResult?> _loadData() async {
     final username = _usernameTextController.text;
     final PeriodPagedRequest request = switch (_entityType) {
-      EntityType.artist => GetTopArtistsRequest(username, _period),
-      EntityType.album => GetTopAlbumsRequest(username, _period),
-      EntityType.track => GetTopTracksRequest(username, _period),
+      .artist => GetTopArtistsRequest(username, _period),
+      .album => GetTopAlbumsRequest(username, _period),
+      .track => GetTopTracksRequest(username, _period),
       _ => throw StateError('Unsupported entity type'),
     };
 
@@ -168,7 +168,7 @@ class _HIndexViewState extends State<HIndexView> {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const .all(8),
       child: Column(
         spacing: 8,
         children: [
@@ -206,12 +206,9 @@ class _HIndexViewState extends State<HIndexView> {
           trailing: DropdownButton<EntityType>(
             value: _entityType,
             items: const [
-              DropdownMenuItem(
-                value: EntityType.artist,
-                child: Text('Artists'),
-              ),
-              DropdownMenuItem(value: EntityType.album, child: Text('Albums')),
-              DropdownMenuItem(value: EntityType.track, child: Text('Tracks')),
+              DropdownMenuItem(value: .artist, child: Text('Artists')),
+              DropdownMenuItem(value: .album, child: Text('Albums')),
+              DropdownMenuItem(value: .track, child: Text('Tracks')),
             ],
             onChanged: (value) {
               if (value != null) {

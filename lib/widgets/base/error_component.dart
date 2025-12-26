@@ -22,23 +22,23 @@ class ErrorComponent extends StatelessWidget {
     final theme = Theme.of(context);
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const .all(8),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: [
             Icon(details.icon, size: 48, color: theme.colorScheme.primary),
             const SizedBox(height: 10),
             Text(
               details.title,
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.titleLarge,
             ),
             const SizedBox(height: 10),
-            Text('${details.error}', textAlign: TextAlign.center),
+            Text('${details.error}', textAlign: .center),
             if (onRetry != null) ...[
               const SizedBox(height: 10),
               Wrap(
-                alignment: WrapAlignment.center,
+                alignment: .center,
                 spacing: 8,
                 children: [
                   if (details.canLogOut)

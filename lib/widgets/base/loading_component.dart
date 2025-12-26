@@ -17,9 +17,9 @@ class LoadingComponent extends StatelessWidget {
           )
         : Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const .symmetric(vertical: 10),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: .min,
                 children: [
                   const CircularProgressIndicator(),
                   if (message != null) ...[

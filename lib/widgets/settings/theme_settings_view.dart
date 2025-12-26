@@ -17,19 +17,16 @@ class ThemeSettingsView extends StatelessWidget {
 
   Widget themeColorTile(BuildContext context, ThemeColor themeColor) =>
       Container(
-        margin: const EdgeInsets.all(4),
+        margin: const .all(4),
         decoration: BoxDecoration(
           color: themeColor.color,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: .circular(16),
           border: Preferences.themeColor.value == themeColor
-              ? Border.all(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  width: 3,
-                )
+              ? .all(color: Theme.of(context).colorScheme.onSurface, width: 3)
               : null,
         ),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: .circular(16),
           onTap: () {
             _onOptionTapped(themeColor);
           },
@@ -45,7 +42,7 @@ class ThemeSettingsView extends StatelessWidget {
   Widget themeColorGrid(BuildContext context, bool isBestInDarkMode) =>
       GridView.extent(
         maxCrossAxisExtent: 120,
-        padding: const EdgeInsets.all(4),
+        padding: const .all(4),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         children: [

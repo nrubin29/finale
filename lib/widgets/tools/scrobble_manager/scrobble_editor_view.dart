@@ -99,7 +99,7 @@ class _ScrobbleEditorViewState extends State<ScrobbleEditorView> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            padding: const .symmetric(vertical: 8, horizontal: 16),
             child: Text(
               [
                 "If a field is left blank, its value won't be updated.",
@@ -110,21 +110,21 @@ class _ScrobbleEditorViewState extends State<ScrobbleEditorView> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const .symmetric(horizontal: 16),
             child: TextFormField(
               controller: _titleController,
               decoration: const InputDecoration(labelText: 'Title'),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const .symmetric(horizontal: 16),
             child: TextFormField(
               controller: _artistController,
               decoration: const InputDecoration(labelText: 'Artist'),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const .symmetric(horizontal: 16),
             child: TextFormField(
               controller: _albumController,
               decoration: const InputDecoration(labelText: 'Album'),

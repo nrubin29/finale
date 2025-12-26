@@ -45,15 +45,15 @@ class GridCollage extends StatelessWidget {
       color: Colors.white,
       width: gridTileSize * gridSize,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
         children: [
           if (includeTitle)
             Padding(
-              padding: const EdgeInsets.all(3),
+              padding: const .all(3),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
+                crossAxisAlignment: .baseline,
+                textBaseline: .alphabetic,
                 children: [
                   Text(
                     'Top ${entityType.displayName}s',
@@ -76,7 +76,7 @@ class GridCollage extends StatelessWidget {
           Flexible(
             child: EntityDisplay(
               items: items,
-              displayType: DisplayType.grid,
+              displayType: .grid,
               scrollable: false,
               showGridTileGradient: includeText,
               gridTileSize: gridTileSize,
@@ -88,7 +88,7 @@ class GridCollage extends StatelessWidget {
           ),
           if (includeBranding)
             Padding(
-              padding: const EdgeInsets.all(3),
+              padding: const .all(3),
               child: Row(
                 children: [
                   AppIcon(size: gridTileSize / 8),

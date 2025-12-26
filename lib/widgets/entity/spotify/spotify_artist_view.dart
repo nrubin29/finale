@@ -20,7 +20,7 @@ class SpotifyArtistView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FutureBuilderView<SArtist>(
     futureFactory: artist is SArtist
-        ? () => Future.value(artist)
+        ? () => .value(artist)
         : () => Spotify.getFullArtist(artist),
     baseEntity: artist,
     builder: (artist) => Scaffold(
@@ -42,7 +42,7 @@ class SpotifyArtistView extends StatelessWidget {
               builder: (tracks) => EntityDisplay<STrack>(
                 scrollable: false,
                 items: tracks,
-                scrobbleableEntity: (track) => Future.value(track),
+                scrobbleableEntity: (track) => .value(track),
               ),
             ),
           ),

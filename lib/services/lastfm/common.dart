@@ -11,12 +11,12 @@ int? intParseSafe(dynamic value) => value == null
     ? null
     : value is int
     ? value
-    : int.tryParse(value);
+    : .tryParse(value);
 
 int parseInt(dynamic value) => intParseSafe(value) ?? 0;
 
 DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
-    DateTime.fromMillisecondsSinceEpoch(
+    .fromMillisecondsSinceEpoch(
       (timestamp is int ? timestamp : int.parse(timestamp)) * 1000,
     );
 
@@ -31,7 +31,7 @@ ImageId? extractImageId(
   }
 
   final String imageUrl = images.first['#text'];
-  return ImageId.lastfm(
+  return .lastfm(
     imageUrl.substring(
       imageUrl.lastIndexOf('/') + 1,
       imageUrl.lastIndexOf('.'),
@@ -109,7 +109,7 @@ class LTopTags {
   // If there are no tags, the Last.fm API in its infinite wisdom will return
   // an empty string instead of an empty array.
   static LTopTags fromJsonSafe(dynamic json) =>
-      json == '' ? const LTopTags([]) : LTopTags.fromJson(json);
+      json == '' ? const LTopTags([]) : .fromJson(json);
 
   // If there's only one tag, the Last.fm API in its infinite wisdom doesn't
   // wrap it in an array literal.
@@ -117,7 +117,7 @@ class LTopTags {
       ? const []
       : json is List<dynamic>
       ? json.map((json) => LTag.fromJson(json)).toList(growable: false)
-      : [LTag.fromJson(json)];
+      : [.fromJson(json)];
 }
 
 @JsonSerializable()

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/services/generic.dart';
@@ -22,12 +20,12 @@ class EntityImage extends StatefulWidget {
 
   EntityImage({
     required this.entity,
-    this.quality = ImageQuality.low,
-    this.fit = BoxFit.contain,
+    this.quality = .low,
+    this.fit = .contain,
     double? width,
     this.isCircular = false,
     this.shouldAnimate = true,
-    this.placeholderBehavior = PlaceholderBehavior.image,
+    this.placeholderBehavior = .image,
     this.onLoaded,
   }) : width = width ?? quality.width;
 
@@ -45,9 +43,8 @@ class _EntityImageState extends State<EntityImage> {
     _fetchImageId();
   }
 
-  PlaceholderBehavior get _placeholderBehavior => isScreenshotTest
-      ? PlaceholderBehavior.active
-      : widget.placeholderBehavior;
+  PlaceholderBehavior get _placeholderBehavior =>
+      isScreenshotTest ? .active : widget.placeholderBehavior;
 
   Future<void> _fetchImageId() async {
     if (widget.entity.imageData != null) {
@@ -82,14 +79,14 @@ class _EntityImageState extends State<EntityImage> {
     width: widget.width,
     child: Material(
       shape: const CircleBorder(),
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: .hardEdge,
       child: image,
     ),
   );
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading && _placeholderBehavior == PlaceholderBehavior.active) {
+    if (_isLoading && _placeholderBehavior == .active) {
       return const CircularProgressIndicator();
     }
 
@@ -107,7 +104,7 @@ class _EntityImageState extends State<EntityImage> {
       return widget.isCircular ? _buildCircularImage(image) : image;
     }
 
-    final placeholder = _placeholderBehavior == PlaceholderBehavior.none
+    final placeholder = _placeholderBehavior == .none
         ? const SizedBox()
         : _Placeholder(widget.entity, widget.quality, widget.width);
 
@@ -127,8 +124,7 @@ class _EntityImageState extends State<EntityImage> {
           widget.onLoaded?.call();
           return child;
         },
-        placeholderBuilder: (_) =>
-            _placeholderBehavior == PlaceholderBehavior.active
+        placeholderBuilder: (_) => _placeholderBehavior == .active
             ? const CircularProgressIndicator()
             : placeholder,
         errorBuilder: (_, error, stackTrace) {
@@ -142,8 +138,8 @@ class _EntityImageState extends State<EntityImage> {
           widget.onLoaded?.call();
           return placeholder;
         },
-        fadeOutDuration: widget.shouldAnimate ? null : Duration.zero,
-        fadeInDuration: widget.shouldAnimate ? null : Duration.zero,
+        fadeOutDuration: widget.shouldAnimate ? null : .zero,
+        fadeInDuration: widget.shouldAnimate ? null : .zero,
         fit: widget.fit,
       ),
     );
@@ -151,44 +147,44 @@ class _EntityImageState extends State<EntityImage> {
     var imageWidget = widget.isCircular ? _buildCircularImage(image) : image;
 
     if (isDebug) {
-      if (censorImages && widget.entity.type != EntityType.user) {
+      if (censorImages && widget.entity.type != .user) {
         imageWidget = ClipRect(
           child: Stack(
-            fit: StackFit.passthrough,
+            fit: .passthrough,
             children: [
               imageWidget,
               Positioned.fill(
                 child: LayoutBuilder(
                   builder: (_, constraints) => BackdropFilter(
-                    filter: ImageFilter.blur(
+                    filter: .blur(
                       sigmaX: constraints.maxWidth / 30,
                       sigmaY: constraints.maxWidth / 30,
                     ),
                     child: Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(4),
+                        padding: const .all(4),
                         child: Stack(
                           children: [
                             AutoSizeText(
                               'Image hidden due to copyright',
-                              textAlign: TextAlign.center,
+                              textAlign: .center,
                               minFontSize: 4,
                               style: TextStyle(
                                 fontSize: 22,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: .bold,
                                 foreground: Paint()
-                                  ..style = PaintingStyle.stroke
+                                  ..style = .stroke
                                   ..strokeWidth = 2
                                   ..color = Colors.black,
                               ),
                             ),
                             const AutoSizeText(
                               'Image hidden due to copyright',
-                              textAlign: TextAlign.center,
+                              textAlign: .center,
                               minFontSize: 4,
                               style: TextStyle(
                                 fontSize: 22,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: .bold,
                                 color: Colors.white,
                               ),
                             ),
@@ -210,12 +206,12 @@ class _EntityImageState extends State<EntityImage> {
 }
 
 class _Placeholder extends StatelessWidget {
-  static const _iconMap = {
-    EntityType.track: Icons.music_note,
-    EntityType.album: Icons.album,
-    EntityType.artist: Icons.people,
-    EntityType.user: Icons.person,
-    EntityType.playlist: Icons.queue_music,
+  static const _iconMap = <EntityType, IconData>{
+    .track: Icons.music_note,
+    .album: Icons.album,
+    .artist: Icons.people,
+    .user: Icons.person,
+    .playlist: Icons.queue_music,
   };
 
   final Entity entity;
@@ -227,9 +223,9 @@ class _Placeholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FittedBox(
-    fit: BoxFit.contain,
+    fit: .contain,
     child: Container(
-      color: Theme.of(context).brightness == Brightness.light
+      color: Theme.of(context).brightness == .light
           ? Colors.grey
           : Colors.grey.shade800,
       width: width,

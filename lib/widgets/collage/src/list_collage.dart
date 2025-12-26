@@ -1,5 +1,4 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/scaled_box.dart';
@@ -30,26 +29,23 @@ class ListCollage extends StatelessWidget {
   Widget build(BuildContext context) => ScaledBox(
     targetWidth: 400,
     builder: (context, scale) => Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 24 * scale,
-        vertical: 16 * scale,
-      ),
+      padding: .symmetric(horizontal: 24 * scale, vertical: 16 * scale),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [themeColor.color.shade500, themeColor.color.shade900],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+          begin: .topCenter,
+          end: .bottomCenter,
         ),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
         spacing: 8 * scale,
         children: [
           if (includeTitle)
             Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
+              crossAxisAlignment: .baseline,
+              textBaseline: .alphabetic,
               spacing: 12 * scale,
               children: [
                 Text(
@@ -70,7 +66,7 @@ class ListCollage extends StatelessWidget {
             ),
           for (final item in items)
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 16 * scale),
+              padding: .symmetric(vertical: 16 * scale),
               child: Row(
                 spacing: 20 * scale,
                 children: [
@@ -78,7 +74,7 @@ class ListCollage extends StatelessWidget {
                     flex: 1,
                     child: EntityImage(
                       entity: item,
-                      quality: ImageQuality.high,
+                      quality: .high,
                       width: 128 * scale,
                       shouldAnimate: false,
                       onLoaded: onImageLoaded,
@@ -87,7 +83,7 @@ class ListCollage extends StatelessWidget {
                   Flexible(
                     flex: 2,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: .start,
                       children: [
                         Text(
                           item.displayTitle,

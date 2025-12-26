@@ -25,17 +25,15 @@ class ScrobbleDistributionItem {
   });
 
   String get title => switch (level) {
-    ScrobbleDistributionLevel.overall => '${dateTime.year}',
-    ScrobbleDistributionLevel.year => monthNameFormat.format(dateTime),
-    ScrobbleDistributionLevel.month => '${dateTime.day}',
+    .overall => '${dateTime.year}',
+    .year => monthNameFormat.format(dateTime),
+    .month => '${dateTime.day}',
   };
 
   String get shortTitle => switch (level) {
-    ScrobbleDistributionLevel.overall => '${dateTime.year}',
-    ScrobbleDistributionLevel.year => abbreviatedMonthNameFormat.format(
-      dateTime,
-    ),
-    ScrobbleDistributionLevel.month => '${dateTime.day}',
+    .overall => '${dateTime.year}',
+    .year => abbreviatedMonthNameFormat.format(dateTime),
+    .month => '${dateTime.day}',
   };
 
   String get subtitle => pluralize(scrobbles);
@@ -84,24 +82,22 @@ class _ScrobbleDistributionComponentState
   }
 
   Future<void> _drillDown(ScrobbleDistributionItem item) async {
-    if (_level == ScrobbleDistributionLevel.month) {
+    if (_level == .month) {
       widget.onDayTapped?.call(item);
       return;
     }
 
-    _level = ScrobbleDistributionLevel.values[_level.index + 1];
+    _level = .values[_level.index + 1];
     _dateTime = item.dateTime;
     await _update();
   }
 
   Future<void> _drillUp() async {
-    _level = ScrobbleDistributionLevel.values[_level.index - 1];
+    _level = .values[_level.index - 1];
     _dateTime = switch (_level) {
-      ScrobbleDistributionLevel.overall => _scrobblingSince,
-      ScrobbleDistributionLevel.year => DateTime(_dateTime.year),
-      ScrobbleDistributionLevel.month => throw Exception(
-        'Tried to drill up to month level.',
-      ),
+      .overall => _scrobblingSince,
+      .year => DateTime(_dateTime.year),
+      .month => throw Exception('Tried to drill up to month level.'),
     };
     await _update();
   }
@@ -114,17 +110,17 @@ class _ScrobbleDistributionComponentState
     });
 
     final dateTimes = switch (_level) {
-      ScrobbleDistributionLevel.overall => _listGenerateRange(
+      .overall => _listGenerateRange(
         _dateTime.year,
         DateTime.now().year + 1,
         DateTime.new,
       ),
-      ScrobbleDistributionLevel.year => _listGenerateRange(
+      .year => _listGenerateRange(
         1,
         13,
         (month) => DateTime(_dateTime.year, month),
       ),
-      ScrobbleDistributionLevel.month => _listGenerateRange(
+      .month => _listGenerateRange(
         1,
         DateUtils.getDaysInMonth(_dateTime.year, _dateTime.month) + 1,
         (day) => DateTime(_dateTime.year, _dateTime.month, day),
@@ -152,13 +148,9 @@ class _ScrobbleDistributionComponentState
         .toList(growable: false);
     _totalScrobbles = scrobbleCounts.fold(0, (a, b) => a + b);
     final totalDays = switch (_level) {
-      ScrobbleDistributionLevel.overall =>
-        DateTime.now().difference(_scrobblingSince).inDays,
-      ScrobbleDistributionLevel.year => 365,
-      ScrobbleDistributionLevel.month => DateUtils.getDaysInMonth(
-        _dateTime.year,
-        _dateTime.month,
-      ),
+      .overall => DateTime.now().difference(_scrobblingSince).inDays,
+      .year => 365,
+      .month => DateUtils.getDaysInMonth(_dateTime.year, _dateTime.month),
     };
 
     _scrobblesPerDay = _totalScrobbles / totalDays;
@@ -174,9 +166,9 @@ class _ScrobbleDistributionComponentState
   }
 
   String get _levelTitle => switch (_level) {
-    ScrobbleDistributionLevel.overall => 'Overall',
-    ScrobbleDistributionLevel.year => '${_dateTime.year}',
-    ScrobbleDistributionLevel.month => monthFormat.format(_dateTime),
+    .overall => 'Overall',
+    .year => '${_dateTime.year}',
+    .month => monthFormat.format(_dateTime),
   };
 
   @override
@@ -188,15 +180,13 @@ class _ScrobbleDistributionComponentState
         ColoredBox(
           color: Theme.of(context).colorScheme.surfaceContainer,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const .symmetric(horizontal: 10),
             child: Row(
               spacing: 8,
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_upward),
-                  onPressed: _level == ScrobbleDistributionLevel.overall
-                      ? null
-                      : _drillUp,
+                  onPressed: _level == .overall ? null : _drillUp,
                 ),
                 Text(_levelTitle),
               ],
@@ -206,14 +196,8 @@ class _ScrobbleDistributionComponentState
         if (!_isLoading)
           Scoreboard(
             items: [
-              ScoreboardItemModel.value(
-                label: 'Scrobbles',
-                value: _totalScrobbles,
-              ),
-              ScoreboardItemModel.value(
-                label: 'Scrobbles/Day (Avg)',
-                value: _scrobblesPerDay,
-              ),
+              .value(label: 'Scrobbles', value: _totalScrobbles),
+              .value(label: 'Scrobbles/Day (Avg)', value: _scrobblesPerDay),
             ],
           ),
         Expanded(

@@ -171,12 +171,10 @@ class GetTopArtistsRequest
   @override
   Future<LTopArtistsResponseArtist> map(
     MapEntry<String, List<LRecentTracksResponseTrack>> entry,
-  ) => Future.value(
-    LTopArtistsResponseArtist(
-      entry.key,
-      entry.value.first.artist.url!,
-      entry.value.length,
-    ),
+  ) async => LTopArtistsResponseArtist(
+    entry.key,
+    entry.value.first.artist.url!,
+    entry.value.length,
   );
 }
 
@@ -240,16 +238,14 @@ class GetTopTracksRequest extends PeriodPagedRequest<LTopTracksResponseTrack> {
   @override
   Future<LTopTracksResponseTrack> map(
     MapEntry<String, List<LRecentTracksResponseTrack>> entry,
-  ) => Future.value(
-    LTopTracksResponseTrack(
-      entry.key,
-      entry.value.first.url,
-      LTrackArtist(
-        entry.value.first.artist.nameString!,
-        entry.value.first.artist.url!,
-      ),
-      entry.value.length,
+  ) async => LTopTracksResponseTrack(
+    entry.key,
+    entry.value.first.url,
+    LTrackArtist(
+      entry.value.first.artist.nameString!,
+      entry.value.first.artist.url!,
     ),
+    entry.value.length,
   );
 }
 
@@ -445,12 +441,12 @@ class Lastfm {
       post: true,
       libre: libre,
     );
-    return LAuthenticationResponseSession.fromJson(rawResponse['session']);
+    return .fromJson(rawResponse['session']);
   }
 
   static Future<LUser> getUser(String username) async {
     final rawResponse = await _doRequest('user.getInfo', {'user': username});
-    return LUser.fromJson(rawResponse['user']);
+    return .fromJson(rawResponse['user']);
   }
 
   static Future<LTrack> getTrack(Track track, {String? username}) async {
@@ -459,7 +455,7 @@ class Lastfm {
       'artist': track.artistName,
       'username': username ?? Preferences.name.value,
     });
-    return LTrack.fromJson(rawResponse['track']);
+    return .fromJson(rawResponse['track']);
   }
 
   static Future<LAlbum> getAlbum(BasicAlbum album, {String? username}) async {
@@ -468,7 +464,7 @@ class Lastfm {
       'artist': album.artist.name,
       'username': username ?? Preferences.name.value,
     });
-    return LAlbum.fromJson(rawResponse['album']);
+    return .fromJson(rawResponse['album']);
   }
 
   static Future<LArtist> getArtist(
@@ -479,7 +475,7 @@ class Lastfm {
       'artist': artist.name,
       'username': username ?? Preferences.name.value,
     });
-    return LArtist.fromJson(rawResponse['artist']);
+    return .fromJson(rawResponse['artist']);
   }
 
   static Future<List<LSimilarArtist>> getSimilarArtists(
@@ -499,7 +495,7 @@ class Lastfm {
     final rawResponse = await _doRequest('user.getWeeklyChartList', {
       'user': user.name,
     });
-    return LUserWeeklyChartList.fromJson(rawResponse['weeklychartlist']);
+    return .fromJson(rawResponse['weeklychartlist']);
   }
 
   static Future<LUserWeeklyTrackChart> getWeeklyTrackChart(
@@ -511,7 +507,7 @@ class Lastfm {
       'from': chart.from,
       'to': chart.to,
     });
-    return LUserWeeklyTrackChart.fromJson(rawResponse['weeklytrackchart']);
+    return .fromJson(rawResponse['weeklytrackchart']);
   }
 
   static Future<LUserWeeklyAlbumChart> getWeeklyAlbumChart(
@@ -523,7 +519,7 @@ class Lastfm {
       'from': chart.from,
       'to': chart.to,
     });
-    return LUserWeeklyAlbumChart.fromJson(rawResponse['weeklyalbumchart']);
+    return .fromJson(rawResponse['weeklyalbumchart']);
   }
 
   static Future<LUserWeeklyArtistChart> getWeeklyArtistChart(
@@ -535,7 +531,7 @@ class Lastfm {
       'from': chart.from,
       'to': chart.to,
     });
-    return LUserWeeklyArtistChart.fromJson(rawResponse['weeklyartistchart']);
+    return .fromJson(rawResponse['weeklyartistchart']);
   }
 
   static Future<List<LTopArtistsResponseArtist>> getGlobalTopArtists(
@@ -609,9 +605,7 @@ class Lastfm {
       ...data,
       'sk': Preferences.key.value,
     }, post: true);
-    return LScrobbleResponseScrobblesAttr.fromJson(
-      rawResponse['scrobbles']['@attr'],
-    );
+    return .fromJson(rawResponse['scrobbles']['@attr']);
   }
 
   /// Loves or unloves a track. If [love] is true, the track will be loved;

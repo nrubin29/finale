@@ -105,12 +105,12 @@ class _ResultsDialog extends StatelessWidget {
     width: double.maxFinite,
     child: ListView.builder(
       shrinkWrap: true,
-      padding: EdgeInsets.zero,
+      padding: .zero,
       itemCount: results.length,
       itemBuilder: (context, index) {
         final track = results[index];
         return ListTile(
-          contentPadding: EdgeInsets.zero,
+          contentPadding: .zero,
           title: Text(track.title),
           subtitle: Text('${track.artists.first.name}\n${track.album.name}'),
           isThreeLine: true,
@@ -121,7 +121,7 @@ class _ResultsDialog extends StatelessWidget {
                 : null,
             onPressed: () {
               launchUrl(
-                Uri.https('aha-music.com', track.acrId, {
+                .https('aha-music.com', track.acrId, {
                   'utm_source': 'finale',
                   'utm_medium': 'app',
                 }),

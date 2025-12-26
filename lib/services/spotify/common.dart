@@ -25,7 +25,7 @@ ImageId? extractImageId(
     highQualityImageId.lastIndexOf('/') + 1,
   );
 
-  return ImageId.spotify(lowQualityImageId, highQualityImageId);
+  return .spotify(lowQualityImageId, highQualityImageId);
 }
 
 @JsonSerializable(genericArgumentFactories: true)

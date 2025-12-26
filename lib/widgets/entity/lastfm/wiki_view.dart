@@ -11,7 +11,7 @@ class WikiTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListTile(
-    title: Text(wiki.summary, maxLines: 3, overflow: TextOverflow.ellipsis),
+    title: Text(wiki.summary, maxLines: 3, overflow: .ellipsis),
     trailing: const Icon(Icons.chevron_right),
     onTap: () {
       Navigator.push(
@@ -34,7 +34,7 @@ class _WikiPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     appBar: createAppBar(context, entity.displayTitle, leadingEntity: entity),
     body: ListView(
-      padding: const EdgeInsets.all(10),
+      padding: const .all(10),
       children: [
         Text(wiki.content),
         const SizedBox(height: 10),

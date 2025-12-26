@@ -12,32 +12,24 @@ class ExternalAction {
   final ExternalActionType type;
   final dynamic value;
 
-  ExternalAction.scrobbleOnce()
-    : type = ExternalActionType.scrobbleOnce,
-      value = null;
+  ExternalAction.scrobbleOnce() : type = .scrobbleOnce, value = null;
 
   ExternalAction.scrobbleContinuously()
-    : type = ExternalActionType.scrobbleContinuously,
+    : type = .scrobbleContinuously,
       value = null;
 
-  ExternalAction.viewAlbum(BasicAlbum album)
-    : type = ExternalActionType.viewAlbum,
-      value = album;
+  ExternalAction.viewAlbum(BasicAlbum album) : type = .viewAlbum, value = album;
 
   ExternalAction.viewArtist(BasicArtist artist)
-    : type = ExternalActionType.viewArtist,
+    : type = .viewArtist,
       value = artist;
 
-  ExternalAction.viewTrack(Track track)
-    : type = ExternalActionType.viewTrack,
-      value = track;
+  ExternalAction.viewTrack(Track track) : type = .viewTrack, value = track;
 
-  ExternalAction.viewTab(ProfileTab tab)
-    : type = ExternalActionType.viewTab,
-      value = tab;
+  ExternalAction.viewTab(ProfileTab tab) : type = .viewTab, value = tab;
 
   ExternalAction.openSpotifyChecker()
-    : type = ExternalActionType.openSpotifyChecker,
+    : type = .openSpotifyChecker,
       value = null;
 }
 

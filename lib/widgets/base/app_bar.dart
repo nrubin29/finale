@@ -28,10 +28,10 @@ PreferredSizeWidget createAppBar(
     centerTitle: true,
     title: leadingEntity != null
         ? FittedBox(
-            fit: BoxFit.fitWidth,
+            fit: .fitWidth,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: .center,
+              mainAxisSize: .min,
               children: [
                 EntityImage(
                   entity: leadingEntity,
@@ -40,7 +40,7 @@ PreferredSizeWidget createAppBar(
                 ),
                 const SizedBox(width: 8),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(title),
                     if (subtitle != null)
@@ -52,10 +52,10 @@ PreferredSizeWidget createAppBar(
           )
         : Column(
             children: [
-              FittedBox(fit: BoxFit.fitWidth, child: Text(title)),
+              FittedBox(fit: .fitWidth, child: Text(title)),
               if (subtitle != null)
                 FittedBox(
-                  fit: BoxFit.fitWidth,
+                  fit: .fitWidth,
                   child: Text(subtitle, style: const TextStyle(fontSize: 12)),
                 ),
             ],

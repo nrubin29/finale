@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/album.dart';
 import 'package:finale/services/lastfm/artist.dart';
 import 'package:finale/services/lastfm/common.dart';
@@ -26,7 +25,6 @@ import 'package:finale/widgets/entity/lastfm/love_button.dart';
 import 'package:finale/widgets/entity/lastfm/number_one_badge.dart';
 import 'package:finale/widgets/entity/lastfm/obsession_menu_button.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
-import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_menu_button.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:finale/widgets/main/login_view.dart';
@@ -94,7 +92,7 @@ class _ProfileViewState extends State<ProfileView>
         action,
       ) async {
         await Future.delayed(const Duration(milliseconds: 250));
-        if (action.type == ExternalActionType.viewTab) {
+        if (action.type == .viewTab) {
           final tab = action.value as ProfileTab;
           final index = _tabOrder.indexOf(tab);
 
@@ -103,7 +101,7 @@ class _ProfileViewState extends State<ProfileView>
               _tabController!.index = index;
             });
           }
-        } else if (action.type == ExternalActionType.openSpotifyChecker) {
+        } else if (action.type == .openSpotifyChecker) {
           launchUrl(Lastfm.applicationSettingsUri);
         }
       });
@@ -120,7 +118,7 @@ class _ProfileViewState extends State<ProfileView>
 
   Widget _widgetForTab(ProfileTab tab, LUser user) {
     return switch (tab) {
-      ProfileTab.recentScrobbles => EntityDisplay<LRecentTracksResponseTrack>(
+      .recentScrobbles => EntityDisplay<LRecentTracksResponseTrack>(
         key: _recentScrobblesKey,
         request: GetRecentTracksRequest(
           widget.username,
@@ -143,35 +141,35 @@ class _ProfileViewState extends State<ProfileView>
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const .only(top: 10),
               child: Text(
                 'Scrobbling since ${user.registered.dateFormatted}',
-                textAlign: TextAlign.center,
+                textAlign: .center,
               ),
             ),
           ),
         ],
         scoreboardItems: [
-          ScoreboardItemModel.future(
+          .future(
             label: 'Scrobbles',
             futureProvider: () =>
                 Lastfm.getUser(widget.username).then((user) => user.playCount),
           ),
-          ScoreboardItemModel.future(
+          .future(
             label: 'Artists',
             futureProvider: () => GetTopArtistsRequest(
               widget.username,
               ApiPeriod.overall,
             ).getNumItems(),
           ),
-          ScoreboardItemModel.future(
+          .future(
             label: 'Albums',
             futureProvider: () => GetTopAlbumsRequest(
               widget.username,
               ApiPeriod.overall,
             ).getNumItems(),
           ),
-          ScoreboardItemModel.future(
+          .future(
             label: 'Tracks',
             futureProvider: () => GetTopTracksRequest(
               widget.username,
@@ -180,34 +178,34 @@ class _ProfileViewState extends State<ProfileView>
           ),
         ],
       ),
-      ProfileTab.topArtists => PeriodSelector<LTopArtistsResponseArtist>(
-        entityType: EntityType.artist,
-        displayType: DisplayType.grid,
+      .topArtists => PeriodSelector<LTopArtistsResponseArtist>(
+        entityType: .artist,
+        displayType: .grid,
         requestConstructor: GetTopArtistsRequest.new,
         username: widget.username,
         detailWidgetBuilder: (artist) => ArtistView(artist: artist),
         subtitleWidgetBuilder: FractionalBar.forEntity,
       ),
-      ProfileTab.topAlbums => PeriodSelector<LTopAlbumsResponseAlbum>(
-        entityType: EntityType.album,
-        displayType: DisplayType.grid,
+      .topAlbums => PeriodSelector<LTopAlbumsResponseAlbum>(
+        entityType: .album,
+        displayType: .grid,
         requestConstructor: GetTopAlbumsRequest.new,
         username: widget.username,
         detailWidgetBuilder: (album) => AlbumView(album: album),
         subtitleWidgetBuilder: FractionalBar.forEntity,
       ),
-      ProfileTab.topTracks => PeriodSelector<LTopTracksResponseTrack>(
-        entityType: EntityType.track,
+      .topTracks => PeriodSelector<LTopTracksResponseTrack>(
+        entityType: .track,
         requestConstructor: GetTopTracksRequest.new,
         username: widget.username,
         detailWidgetBuilder: (track) => TrackView(track: track),
         subtitleWidgetBuilder: FractionalBar.forEntity,
       ),
-      ProfileTab.lovedTracks => EntityDisplay<LUserLovedTrack>(
+      .lovedTracks => EntityDisplay<LUserLovedTrack>(
         request: UserGetLovedTracksRequest(widget.username),
         detailWidgetBuilder: (track) => TrackView(track: track),
       ),
-      ProfileTab.obsessions => EntityDisplay<LObsession>(
+      .obsessions => EntityDisplay<LObsession>(
         request: LUserObsessions(username: widget.username),
         detailWidgetBuilder: (track) => TrackView(track: track),
         badgeWidgetBuilder: (obsession) =>
@@ -219,13 +217,13 @@ class _ProfileViewState extends State<ProfileView>
               )
             : null,
       ),
-      ProfileTab.friends => EntityDisplay<LUser>(
+      .friends => EntityDisplay<LUser>(
         displayCircularImages: true,
         request: GetFriendsRequest(widget.username),
         detailWidgetBuilder: (user) => ProfileView(username: user.name),
       ),
-      ProfileTab.charts => WeeklyChartSelectorView(user: user),
-      ProfileTab.scrobbleDistribution => ProfileScrobbleDistributionComponent(
+      .charts => WeeklyChartSelectorView(user: user),
+      .scrobbleDistribution => ProfileScrobbleDistributionComponent(
         username: widget.username,
       ),
     };
@@ -243,7 +241,7 @@ class _ProfileViewState extends State<ProfileView>
 
     return TabBar(
       controller: _tabController,
-      tabAlignment: TabAlignment.center,
+      tabAlignment: .center,
       labelPadding: padding,
       tabs: [
         for (final tab in _tabOrder)
@@ -318,12 +316,11 @@ class _ProfileViewState extends State<ProfileView>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final now = DateTime.now();
-    if (state == AppLifecycleState.resumed) {
+    if (state == .resumed) {
       if (now.isAfter(_nextAutoUpdate)) {
         _recentScrobblesKey.currentState?.reload();
       }
-    } else if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive) {
+    } else if (state == .paused || state == .inactive) {
       _nextAutoUpdate = now.add(const Duration(minutes: 5));
     }
   }

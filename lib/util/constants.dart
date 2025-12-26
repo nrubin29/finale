@@ -6,8 +6,8 @@ const isDebug = kDebugMode;
 const isWeb = kIsWeb;
 // The [isWeb] checks are necessary because on web, [defaultTargetPlatform] is
 // the platform that the browser is running on.
-final isIos = !isWeb && defaultTargetPlatform == TargetPlatform.iOS;
-final isAndroid = !isWeb && defaultTargetPlatform == TargetPlatform.android;
+final isIos = !isWeb && defaultTargetPlatform == .iOS;
+final isAndroid = !isWeb && defaultTargetPlatform == .android;
 final isMobile = isIos || isAndroid;
 
 const isScreenshotTest = bool.fromEnvironment(

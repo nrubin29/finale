@@ -19,7 +19,7 @@ Future<TopListenersRanking?> fetchTopListenersRanking(LArtist artist) async {
 
   do {
     final lastfmResponse = await httpClient.get(
-      Uri.parse('${artist.url}/+listeners?page=$page'),
+      .parse('${artist.url}/+listeners?page=$page'),
     );
     if (lastfmResponse.statusCode != 200) return null;
 
@@ -40,5 +40,5 @@ Future<TopListenersRanking?> fetchTopListenersRanking(LArtist artist) async {
     }
   } while (page <= 9);
 
-  return const TopListenersRanking.notFound();
+  return const .notFound();
 }

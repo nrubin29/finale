@@ -43,7 +43,7 @@ ThemeData finaleTheme(
     seedColor: themeColor.color,
     brightness: brightness,
     primary: themeColor.color,
-    surface: brightness == Brightness.dark
+    surface: brightness == .dark
         ? offBlackBackground == true
               ? _offBlackBackgroundColor
               : Colors.black
@@ -60,7 +60,7 @@ ThemeData finaleTheme(
       backgroundColor: themeColor.color,
     ),
     datePickerTheme: DatePickerThemeData(
-      todayForegroundColor: WidgetStateProperty.all(themeColor.foregroundColor),
+      todayForegroundColor: .all(themeColor.foregroundColor),
     ),
     tabBarTheme: TabBarThemeData(
       indicatorColor: themeColor.color,

@@ -43,7 +43,7 @@ class OutlinedLoveIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Stack(
-      alignment: Alignment.center,
+      alignment: .center,
       children: [
         Icon(Icons.favorite, color: theme.colorScheme.primary, size: 18),
         Icon(

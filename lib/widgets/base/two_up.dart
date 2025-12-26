@@ -15,26 +15,22 @@ class TwoUp extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final isTwoUp =
-        mediaQuery.size.width > 600 &&
-        mediaQuery.orientation == Orientation.landscape;
+        mediaQuery.size.width > 600 && mediaQuery.orientation == .landscape;
     return isTwoUp
         ? Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: .stretch,
             children: [
               if (entity != null)
                 Flexible(
-                  fit: FlexFit.tight,
+                  fit: .tight,
                   child: FractionallySizedBox(
                     widthFactor: .8,
                     heightFactor: .8,
-                    child: EntityImage(
-                      entity: entity!,
-                      quality: ImageQuality.high,
-                    ),
+                    child: EntityImage(entity: entity!, quality: .high),
                   ),
                 ),
               Flexible(
-                fit: FlexFit.tight,
+                fit: .tight,
                 child: FractionallySizedBox(
                   widthFactor: entity == null ? .8 : 1,
                   child: ListView(

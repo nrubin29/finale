@@ -68,14 +68,12 @@ class _DateTimeFieldState extends State<DateTimeField> {
   Future<DateTime?> _showDatePicker() async {
     final date = await showDatePicker(
       context: context,
-      initialDate: _value ?? DateTime.now(),
-      firstDate:
-          widget.lowerBound ??
-          DateTime.now().subtract(const Duration(days: 14)),
-      lastDate: DateTime.now().add(const Duration(days: 1)),
+      initialDate: _value ?? .now(),
+      firstDate: widget.lowerBound ?? .now().subtract(const Duration(days: 14)),
+      lastDate: .now().add(const Duration(days: 1)),
       initialEntryMode: Preferences.inputDateTimeAsText.value
-          ? DatePickerEntryMode.input
-          : DatePickerEntryMode.calendar,
+          ? .input
+          : .calendar,
     );
 
     if (date == null) {
@@ -93,10 +91,8 @@ class _DateTimeFieldState extends State<DateTimeField> {
   Future<DateTime?> _showTimePicker({DateTime? dateToCombineWith}) async {
     final time = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(_value ?? DateTime.now()),
-      initialEntryMode: Preferences.inputDateTimeAsText.value
-          ? TimePickerEntryMode.input
-          : TimePickerEntryMode.dial,
+      initialTime: .fromDateTime(_value ?? .now()),
+      initialEntryMode: Preferences.inputDateTimeAsText.value ? .input : .dial,
     );
 
     if (time != null) {
@@ -111,8 +107,8 @@ class _DateTimeFieldState extends State<DateTimeField> {
   @override
   Widget build(BuildContext context) => Row(
     spacing: 8,
-    textBaseline: TextBaseline.ideographic,
-    crossAxisAlignment: CrossAxisAlignment.baseline,
+    textBaseline: .ideographic,
+    crossAxisAlignment: .baseline,
     children: [
       Expanded(
         child: GestureDetector(
@@ -154,7 +150,7 @@ class _DateTimeFieldState extends State<DateTimeField> {
           icon: const Icon(Icons.access_time),
           tooltip: 'Set to now',
           onPressed: () {
-            _updateValue(DateTime.now());
+            _updateValue(.now());
           },
         ),
     ],

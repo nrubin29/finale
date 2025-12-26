@@ -28,14 +28,14 @@ class CaptionedListTile extends StatelessWidget {
   Widget build(BuildContext context) => InkWell(
     onTap: onTap,
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: [
         ListTile(title: title, leading: Icon(icon), trailing: trailing),
         if (caption.isNotEmpty)
           SafeArea(
             top: false,
             bottom: false,
-            minimum: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+            minimum: const .only(left: 16, right: 16, bottom: 12),
             child: RichText(
               text: TextSpan(
                 style: Theme.of(context).textTheme.bodySmall,

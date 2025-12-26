@@ -61,11 +61,11 @@ class Scoreboard extends StatelessWidget {
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        scrollDirection: .horizontal,
+        padding: const .symmetric(horizontal: 16),
         child: IntrinsicHeight(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: .center,
             children: [
               for (var i = 0; i < widgets.length; i++) ...[
                 widgets[i],
@@ -95,7 +95,7 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
   @override
   void initState() {
     super.initState();
-    unawaited(_loadValue());
+    _loadValue();
   }
 
   @override
@@ -106,7 +106,7 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
     }
   }
 
-  Future<void> _loadValue({bool forceLoad = false}) async {
+  void _loadValue({bool forceLoad = false}) async {
     if (widget.model.isLazy && !forceLoad) return;
 
     setState(() {
@@ -126,7 +126,7 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
 
   Widget get _scoreTile {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: [
         Text(widget.model.label),
         _isLoading && widget.model._value == null
@@ -147,7 +147,7 @@ class _ScoreboardItemState extends State<_ScoreboardItem> {
       widget.model.callback != null || (widget.model.isLazy && _value == null)
       ? OutlinedButton(
           style: ButtonStyle(
-            side: WidgetStateProperty.all(
+            side: .all(
               BorderSide(color: Theme.of(context).colorScheme.primary),
             ),
           ),

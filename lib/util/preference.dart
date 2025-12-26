@@ -13,7 +13,7 @@ class Preference<T, U extends Object> {
   static late final SharedPreferences _preferences;
 
   static Future<void> setup() async {
-    _preferences = await SharedPreferences.getInstance();
+    _preferences = await .getInstance();
   }
 
   final String _key;

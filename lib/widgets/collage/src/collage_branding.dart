@@ -9,11 +9,11 @@ class CollageBranding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
+    mainAxisSize: .min,
     children: [
       Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
         children: [
           Text(
             'Created with Finale for Last.fm',

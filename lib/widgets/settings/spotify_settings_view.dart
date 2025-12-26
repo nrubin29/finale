@@ -57,10 +57,10 @@ class _SpotifySettingsViewState extends State<SpotifySettingsView> {
     return Scaffold(
       appBar: createAppBar(context, 'Spotify Settings'),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            padding: const .symmetric(vertical: 8, horizontal: 16),
             child: RichText(
               text: TextSpan(
                 children: [

@@ -40,7 +40,7 @@ abstract class BackgroundTask {
       name,
       frequency: frequency,
       constraints: Constraints(
-        networkType: NetworkType.connected,
+        networkType: .connected,
         requiresCharging: false,
       ),
     );

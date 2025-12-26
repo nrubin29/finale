@@ -30,34 +30,34 @@ class _MainViewState extends State<MainView> {
     super.initState();
     _subscription = externalActionsStream.listen((action) {
       if (!mounted) return;
-      if (action.type == ExternalActionType.scrobbleOnce ||
-          action.type == ExternalActionType.scrobbleContinuously) {
+      if (action.type == .scrobbleOnce ||
+          action.type == .scrobbleContinuously) {
         setState(() {
           Navigator.popUntil(context, (route) => route.isFirst);
           _index = 2;
         });
-      } else if (action.type == ExternalActionType.viewAlbum) {
+      } else if (action.type == .viewAlbum) {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => AlbumView(album: action.value as BasicAlbum),
           ),
         );
-      } else if (action.type == ExternalActionType.viewArtist) {
+      } else if (action.type == .viewArtist) {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => ArtistView(artist: action.value as BasicArtist),
           ),
         );
-      } else if (action.type == ExternalActionType.viewTrack) {
+      } else if (action.type == .viewTrack) {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => TrackView(track: action.value as Track),
           ),
         );
-      } else if (action.type == ExternalActionType.viewTab) {
+      } else if (action.type == .viewTab) {
         setState(() {
           Navigator.popUntil(context, (route) => route.isFirst);
           _index = 0;
@@ -70,7 +70,7 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+        type: .fixed,
         currentIndex: _index,
         onTap: (index) {
           setState(() {

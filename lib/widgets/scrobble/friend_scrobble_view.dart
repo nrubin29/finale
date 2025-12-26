@@ -1,4 +1,3 @@
-import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
@@ -61,7 +60,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
       if (!mounted) return null;
       showNoEntityTypePeriodDialog(
         context,
-        entityType: EntityType.track,
+        entityType: .track,
         username: username,
       );
       return null;
@@ -80,7 +79,7 @@ class _FriendScrobbleViewState extends State<FriendScrobbleView> {
     final response = await Lastfm.scrobble(
       _selection!,
       _selection!
-          .map((track) => track.timestamp?.date ?? DateTime.now())
+          .map((track) => track.timestamp?.date ?? .now())
           .toList(growable: false),
     );
 

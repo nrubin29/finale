@@ -38,27 +38,23 @@ void _handleLink(Uri? uri) {
   if (uri == null) {
     return;
   } else if (uri.host == 'scrobbleonce') {
-    externalActions.addTimestamped(ExternalAction.scrobbleOnce());
+    externalActions.addTimestamped(.scrobbleOnce());
   } else if (uri.host == 'scrobblecontinuously') {
-    externalActions.addTimestamped(ExternalAction.scrobbleContinuously());
+    externalActions.addTimestamped(.scrobbleContinuously());
   } else if (uri.host == 'album') {
     final name = uri.queryParameters['name']!;
     final artist = uri.queryParameters['artist']!;
     externalActions.addTimestamped(
-      ExternalAction.viewAlbum(
-        ConcreteBasicAlbum(name, ConcreteBasicArtist(artist)),
-      ),
+      .viewAlbum(ConcreteBasicAlbum(name, ConcreteBasicArtist(artist))),
     );
   } else if (uri.host == 'artist') {
     final name = uri.queryParameters['name']!;
-    externalActions.addTimestamped(
-      ExternalAction.viewArtist(ConcreteBasicArtist(name)),
-    );
+    externalActions.addTimestamped(.viewArtist(ConcreteBasicArtist(name)));
   } else if (uri.host == 'track') {
     final name = uri.queryParameters['name']!;
     final artist = uri.queryParameters['artist']!;
     externalActions.addTimestamped(
-      ExternalAction.viewTrack(BasicConcreteTrack(name, artist, null)),
+      .viewTrack(BasicConcreteTrack(name, artist, null)),
     );
   } else if (uri.host == 'profiletab') {
     final tabString = uri.queryParameters['tab'];
@@ -66,21 +62,21 @@ void _handleLink(Uri? uri) {
 
     switch (tabString) {
       case 'scrobble':
-        tab = ProfileTab.recentScrobbles;
+        tab = .recentScrobbles;
         break;
       case 'artist':
-        tab = ProfileTab.topArtists;
+        tab = .topArtists;
         break;
       case 'album':
-        tab = ProfileTab.topAlbums;
+        tab = .topAlbums;
         break;
       case 'track':
-        tab = ProfileTab.topTracks;
+        tab = .topTracks;
         break;
       default:
         throw ArgumentError.value(tabString, 'tab', 'Unknown tab');
     }
 
-    externalActions.addTimestamped(ExternalAction.viewTab(tab));
+    externalActions.addTimestamped(.viewTab(tab));
   }
 }

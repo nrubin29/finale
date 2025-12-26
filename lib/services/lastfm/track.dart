@@ -166,7 +166,7 @@ class LRecentTracksResponseRecentTracks {
       ? []
       : json is List<dynamic>
       ? json.map((json) => LRecentTracksResponseTrack.fromJson(json)).toList()
-      : [LRecentTracksResponseTrack.fromJson(json)];
+      : [.fromJson(json)];
 }
 
 @JsonSerializable()

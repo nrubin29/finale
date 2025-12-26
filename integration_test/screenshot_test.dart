@@ -68,7 +68,7 @@ Future<void> main() async {
       ProfileStack(
         child: MaterialApp(
           title: 'Finale',
-          theme: finaleTheme(ThemeColor.red, Brightness.light),
+          theme: finaleTheme(.red, .light),
           debugShowCheckedModeBanner: false,
           home: asPage || widgetBehindModal != null
               ? _AsPage(widget: widget, widgetBehindModal: widgetBehindModal)
@@ -102,7 +102,7 @@ Future<void> main() async {
     await tester.enterText(formFields.at(0), 'Trapdoor');
     await tester.enterText(formFields.at(1), 'The Dear Hunter');
     await tester.enterText(formFields.at(2), 'The Color Spectrum');
-    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.testTextInput.receiveAction(.done);
     await tester.pumpAndSettle();
 
     await tester.saveScreenshot('2_scrobble');

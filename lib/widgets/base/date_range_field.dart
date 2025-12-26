@@ -49,7 +49,7 @@ class _DateRangeFieldState extends State<DateRangeField> {
 
   @override
   Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
+    mainAxisSize: .min,
     children: [
       ListTile(
         title: const Text('Date range'),
@@ -72,11 +72,11 @@ class _DateRangeFieldState extends State<DateRangeField> {
           },
         ),
       ),
-      if (_presetDateRange == PresetDateRange.custom) ...[
+      if (_presetDateRange == .custom) ...[
         SafeArea(
           top: false,
           bottom: false,
-          minimum: const EdgeInsets.symmetric(horizontal: 16),
+          minimum: const .symmetric(horizontal: 16),
           child: DateTimeField(
             label: 'Start',
             lowerBound: widget.lowerBound,
@@ -92,7 +92,7 @@ class _DateRangeFieldState extends State<DateRangeField> {
         SafeArea(
           top: false,
           bottom: false,
-          minimum: const EdgeInsets.symmetric(horizontal: 16),
+          minimum: const .symmetric(horizontal: 16),
           child: DateTimeField(
             label: 'End',
             showNowIcon: true,

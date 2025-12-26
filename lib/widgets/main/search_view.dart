@@ -30,29 +30,29 @@ import 'package:rxdart/rxdart.dart';
 extension on SearchEngine {
   IconData get icon {
     switch (this) {
-      case SearchEngine.lastfm:
+      case .lastfm:
         return SocialMediaIcons.lastfm;
-      case SearchEngine.spotify:
+      case .spotify:
         return SocialMediaIcons.spotify;
-      case SearchEngine.appleMusic:
+      case .appleMusic:
         return SocialMediaIcons.apple;
     }
   }
 
   Color? get color {
     switch (this) {
-      case SearchEngine.lastfm:
+      case .lastfm:
         return null;
-      case SearchEngine.spotify:
+      case .spotify:
         return spotifyGreen;
-      case SearchEngine.appleMusic:
+      case .appleMusic:
         return appleMusicPink;
     }
   }
 
   Color get foregroundColor {
     switch (this) {
-      case SearchEngine.lastfm:
+      case .lastfm:
         // This is safe because if the themeColor changes, the entire app will
         // update (see main.dart).
         return Preferences.themeColor.value.foregroundColor;
@@ -63,44 +63,44 @@ extension on SearchEngine {
 
   PagedRequest<Track> searchTracks(String query) {
     switch (this) {
-      case SearchEngine.lastfm:
+      case .lastfm:
         return LSearchTracksRequest(query);
-      case SearchEngine.spotify:
+      case .spotify:
         return SSearchTracksRequest(query);
-      case SearchEngine.appleMusic:
+      case .appleMusic:
         return AMSearchSongsRequest(query);
     }
   }
 
   PagedRequest<BasicArtist> searchArtists(String query) {
     switch (this) {
-      case SearchEngine.lastfm:
+      case .lastfm:
         return LSearchArtistsRequest(query);
-      case SearchEngine.spotify:
+      case .spotify:
         return SSearchArtistsRequest(query);
-      case SearchEngine.appleMusic:
+      case .appleMusic:
         return AMSearchArtistsRequest(query);
     }
   }
 
   PagedRequest<BasicAlbum> searchAlbums(String query) {
     switch (this) {
-      case SearchEngine.lastfm:
+      case .lastfm:
         return LSearchAlbumsRequest(query);
-      case SearchEngine.spotify:
+      case .spotify:
         return SSearchAlbumsRequest(query);
-      case SearchEngine.appleMusic:
+      case .appleMusic:
         return AMSearchAlbumsRequest(query);
     }
   }
 
   PagedRequest<BasicPlaylist> searchPlaylists(String query) {
     switch (this) {
-      case SearchEngine.lastfm:
+      case .lastfm:
         throw Exception('Last.fm does not support searching for playlists.');
-      case SearchEngine.spotify:
+      case .spotify:
         return SSearchPlaylistsRequest(query);
-      case SearchEngine.appleMusic:
+      case .appleMusic:
         return AMSearchPlaylistsRequest(query);
     }
   }
@@ -137,7 +137,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   final _textFieldFocusNode = FocusNode();
   late TabController _tabController;
   final _query = ReplaySubject<SearchQuery>(maxSize: 2)
-    ..add(SearchQuery.empty(Preferences.searchEngine.value));
+    ..add(.empty(Preferences.searchEngine.value));
   var _isSpotifyEnabled = true;
   var _isAppleMusicEnabled = false;
 
@@ -147,7 +147,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     _setSpotifyEnabled();
     _setAppleMusicEnabled();
     _tabController = TabController(
-      length: _searchEngine == SearchEngine.lastfm ? 3 : 4,
+      length: _searchEngine == .lastfm ? 3 : 4,
       vsync: this,
     );
     Preferences.spotifyEnabled.changes.listen((_) {
@@ -167,7 +167,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   void _updateTabController([SearchEngine? searchEngine]) {
     _tabController.dispose();
 
-    var length = (searchEngine ?? _searchEngine) == SearchEngine.lastfm ? 3 : 4;
+    var length = (searchEngine ?? _searchEngine) == .lastfm ? 3 : 4;
     setState(() {
       _tabController = TabController(
         initialIndex: min(_tabController.index, length - 1),
@@ -180,10 +180,10 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   void _setSpotifyEnabled() {
     _isSpotifyEnabled = Preferences.spotifyEnabled.value;
 
-    if (_searchEngine == SearchEngine.spotify &&
+    if (_searchEngine == .spotify &&
         (!_isSpotifyEnabled || !Preferences.hasSpotifyAuthData)) {
       setState(() {
-        _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
+        _query.add(_currentQuery.copyWith(searchEngine: .lastfm));
       });
     }
   }
@@ -195,17 +195,17 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 
     _isAppleMusicEnabled = Preferences.appleMusicEnabled.value;
 
-    if (_searchEngine == SearchEngine.appleMusic && !_isAppleMusicEnabled) {
+    if (_searchEngine == .appleMusic && !_isAppleMusicEnabled) {
       setState(() {
-        _query.add(_currentQuery.copyWith(searchEngine: SearchEngine.lastfm));
+        _query.add(_currentQuery.copyWith(searchEngine: .lastfm));
       });
     }
   }
 
   List<SearchEngine> get _enabledSearchEngines => [
-    SearchEngine.lastfm,
-    if (_isSpotifyEnabled) SearchEngine.spotify,
-    if (_isAppleMusicEnabled) SearchEngine.appleMusic,
+    .lastfm,
+    if (_isSpotifyEnabled) .spotify,
+    if (_isAppleMusicEnabled) .appleMusic,
   ];
 
   SearchQuery get _currentQuery => _query.values.last;
@@ -226,7 +226,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
       backgroundColor: _searchEngine.color,
       titleSpacing: _enabledSearchEngines.length > 1 ? 0 : null,
       title: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           if (_enabledSearchEngines.length > 1)
             Row(
@@ -264,7 +264,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 
                       var updateSearchEngine = true;
 
-                      if (choice == SearchEngine.spotify &&
+                      if (choice == .spotify &&
                           !Preferences.hasSpotifyAuthData) {
                         updateSearchEngine =
                             await showDialog<bool>(
@@ -272,10 +272,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                               builder: (context) => SpotifyDialog(),
                             ) ??
                             false;
-                      } else if (choice == SearchEngine.appleMusic) {
+                      } else if (choice == .appleMusic) {
                         updateSearchEngine =
-                            (await AppleMusic.authorize()) ==
-                            AuthorizationStatus.authorized;
+                            (await AppleMusic.authorize()) == .authorized;
                       }
 
                       if (updateSearchEngine) {
@@ -324,7 +323,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
             icon: Icon(Icons.clear, color: _searchEngine.foregroundColor),
             onPressed: () {
               setState(() {
-                _textController.value = TextEditingValue.empty;
+                _textController.value = .empty;
                 _query.add(_currentQuery.copyWith(text: ''));
                 _textFieldFocusNode.requestFocus();
               });
@@ -341,7 +340,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           const Tab(icon: Icon(Icons.audiotrack)),
           const Tab(icon: Icon(Icons.people)),
           const Tab(icon: Icon(Icons.album)),
-          if (_searchEngine != SearchEngine.lastfm)
+          if (_searchEngine != .lastfm)
             const Tab(icon: Icon(Icons.queue_music)),
         ],
       ),
@@ -358,21 +357,20 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                     .map(
                       (query) => query.searchEngine.searchTracks(query.text),
                     ),
-                detailWidgetBuilder: _searchEngine == SearchEngine.lastfm
+                detailWidgetBuilder: _searchEngine == .lastfm
                     ? (track) => TrackView(track: track)
                     : null,
               ),
               EntityDisplay<BasicArtist>(
-                displayType: DisplayType.grid,
+                displayType: .grid,
                 requestStream: _query
                     .debounceWhere(_shouldDebounce, _debounceDuration)
                     .map(
                       (query) => query.searchEngine.searchArtists(query.text),
                     ),
-                detailWidgetBuilder: (artist) =>
-                    _searchEngine == SearchEngine.lastfm
+                detailWidgetBuilder: (artist) => _searchEngine == .lastfm
                     ? ArtistView(artist: artist)
-                    : _searchEngine == SearchEngine.appleMusic
+                    : _searchEngine == .appleMusic
                     ? AppleMusicArtistView(artistId: (artist as AMArtist).id)
                     : SpotifyArtistView(artist: artist),
               ),
@@ -382,33 +380,31 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                     : item is AMAlbum
                     ? AppleMusic.getFullAlbum(item)
                     : Lastfm.getAlbum(item),
-                displayType: DisplayType.grid,
+                displayType: .grid,
                 requestStream: _query
                     .debounceWhere(_shouldDebounce, _debounceDuration)
                     .map(
                       (query) => query.searchEngine.searchAlbums(query.text),
                     ),
-                detailWidgetBuilder: (album) =>
-                    _searchEngine == SearchEngine.spotify
+                detailWidgetBuilder: (album) => _searchEngine == .spotify
                     ? SpotifyAlbumView(album: album as SAlbumSimple)
-                    : _searchEngine == SearchEngine.appleMusic
+                    : _searchEngine == .appleMusic
                     ? AppleMusicAlbumView(album: album as AMAlbum)
                     : AlbumView(album: album),
               ),
-              if (_searchEngine != SearchEngine.lastfm)
+              if (_searchEngine != .lastfm)
                 EntityDisplay<BasicPlaylist>(
                   scrobbleableEntity: (item) => item is SPlaylistSimple
                       ? Spotify.getFullPlaylist(item)
                       : AMFullPlaylist.get(item as AMPlaylist),
-                  displayType: DisplayType.grid,
+                  displayType: .grid,
                   requestStream: _query
                       .debounceWhere(_shouldDebounce, _debounceDuration)
                       .map(
                         (query) =>
                             query.searchEngine.searchPlaylists(query.text),
                       ),
-                  detailWidgetBuilder: (playlist) =>
-                      _searchEngine == SearchEngine.spotify
+                  detailWidgetBuilder: (playlist) => _searchEngine == .spotify
                       ? SpotifyPlaylistView(
                           playlist: playlist as SPlaylistSimple,
                         )
@@ -421,7 +417,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               const SizedBox(),
               const SizedBox(),
               const SizedBox(),
-              if (_searchEngine != SearchEngine.lastfm) const SizedBox(),
+              if (_searchEngine != .lastfm) const SizedBox(),
             ],
     ),
   );
@@ -438,7 +434,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 extension _DebounceWhere<T> on Stream<T> {
   Stream<T> debounceWhere(bool Function(T) test, Duration duration) {
     return debounce(
-      (e) => test(e) ? TimerStream(null, duration) : Stream.value(null),
+      (e) => test(e) ? TimerStream(null, duration) : .value(null),
     );
   }
 }

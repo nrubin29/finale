@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:finale/env.dart';
+import 'package:finale/services/auth.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
-import 'package:finale/services/auth.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/playlist.dart';
 import 'package:finale/services/spotify/track.dart';
@@ -14,7 +14,7 @@ import 'package:pkce/pkce.dart';
 
 import 'recent_track.dart';
 
-Uri _buildUri(String method, Map<String, dynamic>? data) => Uri.https(
+Uri _buildUri(String method, Map<String, dynamic>? data) => .https(
   'api.spotify.com',
   'v1/$method',
   data?.map((key, value) => MapEntry(key, value.toString())),
@@ -219,7 +219,7 @@ class Spotify {
   }
 
   static Uri _createAuthorizationUri(PkcePair pkcePair) =>
-      Uri.https('accounts.spotify.com', 'authorize', {
+      .https('accounts.spotify.com', 'authorize', {
         'client_id': spotifyClientId,
         'response_type': 'code',
         'redirect_uri': authCallbackUrl,
@@ -230,7 +230,7 @@ class Spotify {
 
   static Future<void> _callTokenEndpoint(Map<String, dynamic> body) async {
     final rawResponse = await httpClient.post(
-      Uri.https('accounts.spotify.com', 'api/token'),
+      .https('accounts.spotify.com', 'api/token'),
       body: body,
     );
     final response = TokenResponse.fromJson(json.decode(rawResponse.body));

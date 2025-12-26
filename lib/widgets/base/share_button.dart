@@ -11,7 +11,7 @@ class ShareButton extends StatelessWidget {
     icon: Icon(Icons.adaptive.share),
     onPressed: () {
       final box = context.findRenderObject() as RenderBox;
-      final position = box.localToGlobal(Offset.zero) & box.size;
+      final position = box.localToGlobal(.zero) & box.size;
       SharePlus.instance.share(
         ShareParams(text: text, sharePositionOrigin: position),
       );

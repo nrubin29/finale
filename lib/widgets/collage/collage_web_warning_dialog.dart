@@ -27,7 +27,7 @@ class CollageWebWarningDialog extends StatelessWidget {
         TextButton(
           child: const Text('Download Finale for Mobile'),
           onPressed: () async {
-            await launchUrl(Uri.https('finale.app', ''));
+            await launchUrl(.https('finale.app', ''));
             if (!context.mounted) return;
             Navigator.pop(context, false);
           },
