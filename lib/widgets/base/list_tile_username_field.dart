@@ -26,7 +26,7 @@ class _ListTileUsernameFieldState extends State<ListTileUsernameField> {
     super.initState();
     _loadFriendUsernames();
 
-    if (widget.includeSelf) {
+    if (widget.includeSelf && widget.controller.text.isEmpty) {
       widget.controller.text = Preferences.name.value!;
     }
   }
