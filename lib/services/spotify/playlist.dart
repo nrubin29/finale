@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -18,12 +18,18 @@ class SPlaylistSimple extends BasicPlaylist {
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   @JsonKey(name: 'tracks', fromJson: extractIsNotEmpty)
   final bool isNotEmpty;
 
-  SPlaylistSimple(this.url, this.name, this.id, this.imageId, this.isNotEmpty);
+  SPlaylistSimple(
+    this.url,
+    this.name,
+    this.id,
+    this.imageProvider,
+    this.isNotEmpty,
+  );
 
   factory SPlaylistSimple.fromJson(Map<String, dynamic> json) =>
       _$SPlaylistSimpleFromJson(json);
@@ -47,7 +53,7 @@ class SPlaylistFull extends FullPlaylist {
   SPlaylistFull(this._playlist, this.tracks);
 
   @override
-  ImageId? get imageId => _playlist.imageId;
+  ImageProvider? get imageProvider => _playlist.imageProvider;
 
   @override
   String get displayTitle => _playlist.displayTitle;

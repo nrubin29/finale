@@ -1,11 +1,11 @@
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ImageProvider;
 
 enum _ScrobbleStatus { pending, processing, success, error }
 
@@ -18,10 +18,8 @@ class _Scrobble extends BasicScrobbledTrack {
       albumName = track.albumName,
       albumArtist = track.albumArtist,
       url = track.url,
-      imageId = track.imageId,
-      date = track.date {
-    cachedImageId = track.cachedImageId;
-  }
+      date = track.date,
+      imageProvider = track.imageProvider;
 
   @override
   final String name;
@@ -39,7 +37,7 @@ class _Scrobble extends BasicScrobbledTrack {
   final String url;
 
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   @override
   final DateTime? date;

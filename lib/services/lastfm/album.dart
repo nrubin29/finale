@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -37,14 +37,14 @@ class LTopAlbumsResponseAlbum extends BasicScrobbledAlbum with HasPlayCount {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   LTopAlbumsResponseAlbum(
     this.name,
     this.url,
     this.playCount,
     this.artist,
-    this.imageId,
+    this.imageProvider,
   );
 
   factory LTopAlbumsResponseAlbum.fromJson(Map<String, dynamic> json) =>
@@ -77,13 +77,13 @@ class LAlbumMatch extends BasicAlbum {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   @override
   BasicArtist get artist =>
       ConcreteBasicArtist(artistName, url.substring(0, url.lastIndexOf('/')));
 
-  LAlbumMatch(this.name, this.url, this.artistName, this.imageId);
+  LAlbumMatch(this.name, this.url, this.artistName, this.imageProvider);
 
   factory LAlbumMatch.fromJson(Map<String, dynamic> json) =>
       _$LAlbumMatchFromJson(json);
@@ -163,7 +163,7 @@ class LAlbum extends FullAlbum {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
@@ -196,7 +196,7 @@ class LAlbum extends FullAlbum {
     this.name,
     this.artistName,
     this.url,
-    this.imageId,
+    this.imageProvider,
     this.playCount,
     this.userPlayCount,
     this.listeners,

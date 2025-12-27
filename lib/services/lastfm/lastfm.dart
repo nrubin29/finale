@@ -213,7 +213,7 @@ class GetTopAlbumsRequest extends PeriodPagedRequest<LTopAlbumsResponseAlbum> {
         fullAlbum.artist.name,
         fullAlbum.artist.url,
       ),
-      fullAlbum.imageId,
+      fullAlbum.imageProvider,
     );
   }
 }

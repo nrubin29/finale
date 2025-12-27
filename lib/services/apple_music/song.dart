@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:finale/services/generic.dart';
 import 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart';
 
@@ -24,7 +22,7 @@ class AMSong extends ScrobbleableTrack {
   int get duration => _song.playbackDuration.toInt();
 
   @override
-  Uint8List? get imageData => _song.artwork;
+  late final imageProvider = .data(_song.artwork);
 
   @override
   String? get url => null;

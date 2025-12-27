@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:finale/services/apple_music/song.dart';
 import 'package:finale/services/generic.dart';
 import 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart' as mp;
@@ -21,7 +19,7 @@ class AMAlbum extends BasicAlbum {
   String? get url => null;
 
   @override
-  Uint8List? get imageData => _album.artwork;
+  late final imageProvider = .data(_album.artwork);
 }
 
 class AMFullAlbum extends FullAlbum {
@@ -45,5 +43,5 @@ class AMFullAlbum extends FullAlbum {
   String? get url => null;
 
   @override
-  Uint8List? get imageData => _album.artwork;
+  late final imageProvider = .data(_album.artwork);
 }

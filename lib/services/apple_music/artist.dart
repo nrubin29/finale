@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:finale/services/generic.dart';
 import 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart';
 
@@ -17,7 +15,7 @@ class AMArtist extends BasicArtist {
   String? get url => null;
 
   @override
-  Uint8List? get imageData => _artist.artwork;
+  late final imageProvider = .data(_artist.artwork);
 
   @override
   String toString() => 'AMArtist(name=$name)';

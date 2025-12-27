@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -18,8 +18,7 @@ class SArtistSimple extends BasicArtist {
   final String? url;
 
   @override
-  ImageIdProvider get imageIdProvider =>
-      () async => (await Spotify.getFullArtist(this)).imageId;
+  late final imageProvider = .delegated(url, Spotify.getFullArtist(this));
 
   SArtistSimple(this.id, this.name, this.url);
 
@@ -43,9 +42,9 @@ class SArtist extends FullArtist {
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
-  SArtist(this.id, this.name, this.url, this.imageId);
+  SArtist(this.id, this.name, this.url, this.imageProvider);
 
   factory SArtist.fromJson(Map<String, dynamic> json) =>
       _$SArtistFromJson(json);

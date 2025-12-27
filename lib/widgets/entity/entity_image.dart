@@ -2,8 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/util/constants.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ImageProvider;
 import 'package:octo_image/octo_image.dart';
 
 enum PlaceholderBehavior { image, active, none }
@@ -40,14 +41,15 @@ class _EntityImageState extends State<EntityImage> {
   @override
   void initState() {
     super.initState();
-    _fetchImageId();
+    _loadImage();
   }
 
   PlaceholderBehavior get _placeholderBehavior =>
       isScreenshotTest ? .active : widget.placeholderBehavior;
 
-  Future<void> _fetchImageId() async {
-    if (widget.entity.imageData != null) {
+  Future<void> _loadImage() async {
+    final imageProvider = widget.entity.imageProvider;
+    if (imageProvider is DataImageProvider) {
       return;
     }
 
@@ -55,11 +57,11 @@ class _EntityImageState extends State<EntityImage> {
       _isLoading = true;
     });
 
-    await widget.entity.tryCacheImageId(widget.quality);
+    final imageId = await imageProvider?.loadImageId();
 
     if (mounted) {
       setState(() {
-        _imageId = widget.entity.cachedImageId;
+        _imageId = imageId;
         _isLoading = false;
       });
     }
@@ -71,7 +73,7 @@ class _EntityImageState extends State<EntityImage> {
 
     if (widget.entity != oldWidget.entity) {
       _imageId = null;
-      _fetchImageId();
+      _loadImage();
     }
   }
 
@@ -95,10 +97,13 @@ class _EntityImageState extends State<EntityImage> {
       maxHeight: widget.width,
     );
 
-    if (widget.entity.imageData != null) {
+    final imageProvider = widget.entity.imageProvider;
+    if (imageProvider case DataImageProvider(
+      :final imageData,
+    ) when imageData != null) {
       final image = ConstrainedBox(
         constraints: constraints,
-        child: Image.memory(widget.entity.imageData!, fit: widget.fit),
+        child: Image.memory(imageData, fit: widget.fit),
       );
 
       return widget.isCircular ? _buildCircularImage(image) : image;

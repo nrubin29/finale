@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -58,7 +58,7 @@ class STrack extends ScrobbleableTrack {
   String get artistName => artists.first.name;
 
   @override
-  ImageId? get imageId => album.imageId;
+  ImageProvider? get imageProvider => album.imageProvider;
 
   @override
   int get duration => durationMs ~/ 1000;

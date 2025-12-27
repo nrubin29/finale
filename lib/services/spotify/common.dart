@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/spotify/album.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/playlist.dart';
@@ -8,7 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';
 
-ImageId? extractImageId(
+ImageProvider? extractImageId(
   List<dynamic>? /* List<Map<String, dynamic>>? */ images,
 ) {
   if (images == null || images.isEmpty) {
@@ -25,7 +25,7 @@ ImageId? extractImageId(
     highQualityImageId.lastIndexOf('/') + 1,
   );
 
-  return .spotify(lowQualityImageId, highQualityImageId);
+  return .imageId(.spotify(lowQualityImageId, highQualityImageId));
 }
 
 @JsonSerializable(genericArgumentFactories: true)

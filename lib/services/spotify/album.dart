@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/spotify/artist.dart';
 import 'package:finale/services/spotify/common.dart';
 import 'package:finale/services/spotify/track.dart';
@@ -22,12 +22,12 @@ class SAlbumSimple extends BasicAlbum {
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   @override
   BasicArtist get artist => artists.first;
 
-  SAlbumSimple(this.artists, this.url, this.name, this.id, this.imageId);
+  SAlbumSimple(this.artists, this.url, this.name, this.id, this.imageProvider);
 
   factory SAlbumSimple.fromJson(Map<String, dynamic> json) =>
       _$SAlbumSimpleFromJson(json);
@@ -51,7 +51,7 @@ class SAlbumFull extends FullAlbum {
 
   @JsonKey(name: 'images', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   @JsonKey(name: 'tracks', fromJson: extractItems)
   final List<STrackSimple> rawTracks;
@@ -69,7 +69,7 @@ class SAlbumFull extends FullAlbum {
     this.url,
     this.name,
     this.id,
-    this.imageId,
+    this.imageProvider,
     this.rawTracks,
   );
 

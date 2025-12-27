@@ -34,8 +34,7 @@ class LObsession extends Track with Editable {
   });
 
   @override
-  ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getTrack(this)).imageId;
+  late final imageProvider = .delegated(url, Lastfm.getTrack(this));
 
   @override
   String? get albumName => null;

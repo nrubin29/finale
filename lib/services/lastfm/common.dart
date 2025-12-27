@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -20,7 +20,7 @@ DateTime fromSecondsSinceEpoch(dynamic timestamp) =>
       (timestamp is int ? timestamp : int.parse(timestamp)) * 1000,
     );
 
-ImageId? extractImageId(
+ImageProvider? extractImageId(
   List<dynamic>? /* List<Map<String, dynamic>>? */ images,
 ) {
   if (images == null ||
@@ -31,10 +31,12 @@ ImageId? extractImageId(
   }
 
   final String imageUrl = images.first['#text'];
-  return .lastfm(
-    imageUrl.substring(
-      imageUrl.lastIndexOf('/') + 1,
-      imageUrl.lastIndexOf('.'),
+  return .imageId(
+    .lastfm(
+      imageUrl.substring(
+        imageUrl.lastIndexOf('/') + 1,
+        imageUrl.lastIndexOf('.'),
+      ),
     ),
   );
 }

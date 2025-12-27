@@ -1,8 +1,3 @@
-import 'package:finale/services/generic.dart';
-import 'package:finale/util/constants.dart';
-import 'package:finale/util/preferences.dart';
-import 'package:html/parser.dart' show parse;
-
 enum ImageQuality {
   low(64),
   high(470);
@@ -40,57 +35,6 @@ class ImageId {
 
     return ImageId.lastfm(serializedValue);
   }
-
-  /// Creates an [ImageIdProvider] that scrapes an ImageId from the web.
-  ///
-  /// First, it loads [url], then it finds the element matching [selector], then
-  /// it access attribute [attribute] which should contain the image url.
-  /// Finally, it extracts the image id from the image url.
-  ///
-  /// The web app can't scrape images due to CORS, so if [spotifyFallback] is
-  /// specified and the user is logged in with Spotify, the web app will execute
-  /// the request and return the image id if a result is found.
-  static ImageIdProvider scrape(
-    String? url,
-    String selector, {
-    String attribute = 'href',
-    bool endUrlAtPeriod = false,
-    PagedRequest<Entity>? spotifyFallback,
-  }) => () async {
-    if (isWeb) {
-      if (spotifyFallback != null && Preferences.hasSpotifyAuthData) {
-        final fallbackEntity = await spotifyFallback.getData(1, 1);
-        if (fallbackEntity.isNotEmpty) {
-          return fallbackEntity.single.imageId ??
-              await fallbackEntity.single.imageIdProvider?.call();
-        }
-      }
-      return null;
-    }
-
-    if (url == null) {
-      return null;
-    }
-
-    final lastfmResponse = await httpClient.get(.parse(url));
-
-    try {
-      final doc = parse(lastfmResponse.body);
-      final rawUrl = doc.querySelector(selector)?.attributes[attribute];
-
-      if (rawUrl == null) {
-        return null;
-      }
-
-      final imageId = rawUrl.substring(
-        rawUrl.lastIndexOf('/') + 1,
-        endUrlAtPeriod ? rawUrl.lastIndexOf('.') : null,
-      );
-      return .lastfm(imageId);
-    } on Exception {
-      return null;
-    }
-  };
 
   String getUrl(ImageQuality quality) {
     return quality == .low ? _lowQualityUrl : _highQualityUrl;

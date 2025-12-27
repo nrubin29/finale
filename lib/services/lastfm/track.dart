@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/formatters.dart';
@@ -73,7 +73,7 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack with Editable {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   final LRecentTracksResponseTrackArtist artist;
 
@@ -96,7 +96,7 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack with Editable {
   LRecentTracksResponseTrack(
     this.name,
     this.url,
-    this.imageId,
+    this.imageProvider,
     this.artist,
     this.album,
     this.timestamp,
@@ -135,7 +135,7 @@ class LRecentTracksResponseTrack extends BasicScrobbledTrack with Editable {
   }) => LRecentTracksResponseTrack(
     name,
     url,
-    imageId,
+    imageProvider,
     artist,
     album,
     timestamp,
@@ -188,8 +188,7 @@ class LTrackMatch extends Track {
   String get artistName => artist;
 
   @override
-  ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getTrack(this)).imageId;
+  late final imageProvider = .delegated(url, Lastfm.getTrack(this));
 
   LTrackMatch(this.name, this.url, this.artist);
 
@@ -236,12 +235,12 @@ class LTrackAlbum extends BasicAlbum {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   @override
   BasicArtist get artist => ConcreteBasicArtist(artistName);
 
-  LTrackAlbum(this.name, this.url, this.artistName, this.imageId);
+  LTrackAlbum(this.name, this.url, this.artistName, this.imageProvider);
 
   factory LTrackAlbum.fromJson(Map<String, dynamic> json) =>
       _$LTrackAlbumFromJson(json);
@@ -280,7 +279,7 @@ class LTrack extends Track with HasPlayCount {
   final LWiki? wiki;
 
   @override
-  ImageId? get imageId => album?.imageId;
+  ImageProvider? get imageProvider => album?.imageProvider;
 
   @override
   String? get artistName => artist?.name;
@@ -294,6 +293,7 @@ class LTrack extends Track with HasPlayCount {
   @Deprecated("Don't use directly; use [userPlayCount] instead.")
   @override
   int get playCount => userPlayCount;
+
   LTrack(
     this.name,
     this.url,
@@ -332,8 +332,7 @@ class LTopTracksResponseTrack extends Track with HasPlayCount {
   String? get albumName => null;
 
   @override
-  ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getTrack(this)).imageId;
+  late final imageProvider = .delegated(url, Lastfm.getTrack(this));
 
   @override
   String get displayTrailing => pluralize(playCount);

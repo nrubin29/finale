@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/spotify/spotify.dart';
-import 'package:finale/util/constants.dart';
 import 'package:finale/util/http_throttle.dart';
-import 'package:finale/util/image_id_cache.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart'
-    show DefaultCacheManager, HttpExceptionWithStatus;
 import 'package:json_annotation/json_annotation.dart';
 
 final httpClient = ThrottleClient(15);
@@ -66,8 +62,6 @@ enum EntityType {
   const EntityType(this.displayName);
 }
 
-typedef ImageIdProvider = Future<ImageId?> Function();
-
 abstract class Entity {
   EntityType get type;
 
@@ -79,60 +73,8 @@ abstract class Entity {
 
   String? get displayTrailing => null;
 
-  ImageId? get imageId => null;
-
-  ImageIdProvider? get imageIdProvider => null;
-
-  Uint8List? get imageData => null;
-
-  /// Used by ImageComponent. Should not be overridden.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  @nonVirtual
-  ImageId? cachedImageId;
-
-  /// Attempts to populate [cachedImageId] and download the image.
-  Future<void> tryCacheImageId([ImageQuality quality = .high]) async {
-    if (cachedImageId != null || url == null) {
-      return;
-    }
-
-    ImageId? result;
-    var insertIntoCache = false;
-
-    if (imageId != null) {
-      result = imageId;
-    } else if (imageIdProvider != null) {
-      // We have to fetch the ImageId.
-      try {
-        // We'll try the cache first.
-        result = await ImageIdCache().get(url!);
-
-        // If it's not in the cache, we'll await the future and insert the
-        // result into the cache if it's not null.
-        if (result == null) {
-          result = await imageIdProvider!();
-          insertIntoCache = true;
-        }
-      } on Exception {
-        // Do nothing.
-      }
-    }
-
-    if (result != null) {
-      if (insertIntoCache) {
-        await ImageIdCache().insert(url!, result);
-      }
-
-      try {
-        await DefaultCacheManager().downloadFile(result.getUrl(quality));
-      } on HttpExceptionWithStatus {
-        if (!isDebug || !isScreenshotTest) {
-          rethrow;
-        }
-      }
-      cachedImageId = result;
-    }
-  }
+  ImageProvider? get imageProvider => null;
 }
 
 mixin Editable on Entity {
@@ -286,9 +228,9 @@ abstract class BasicArtist extends Entity {
   String get name;
 
   @override
-  ImageIdProvider get imageIdProvider => ImageId.scrape(
+  ImageProvider? get imageProvider => .scrapeLastfmImageId(
     url,
-    '.header-new-gallery--link',
+    selector: '.header-new-gallery--link',
     spotifyFallback: SSearchArtistsRequest(name),
   );
 

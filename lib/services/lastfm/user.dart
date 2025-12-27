@@ -1,5 +1,5 @@
 import 'package:finale/services/generic.dart';
-import 'package:finale/services/image_id.dart';
+import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/extensions.dart';
@@ -34,7 +34,7 @@ class LUser extends Entity {
 
   @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  final ImageId? imageId;
+  final ImageProvider? imageProvider;
 
   @JsonKey(name: 'playcount', fromJson: parseInt)
   final int playCount;
@@ -45,7 +45,7 @@ class LUser extends Entity {
     this.name,
     this.realName,
     this.url,
-    this.imageId,
+    this.imageProvider,
     this.playCount,
     this.registered,
   );
@@ -171,8 +171,7 @@ class LUserWeeklyTrackChartTrack extends Track {
   String get displayTrailing => pluralize(playCount ?? 0);
 
   @override
-  ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getTrack(this)).imageId;
+  late final imageProvider = .delegated(url, Lastfm.getTrack(this));
 }
 
 @JsonSerializable()
@@ -229,8 +228,7 @@ class LUserWeeklyAlbumChartAlbum extends BasicAlbum {
   );
 
   @override
-  ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getAlbum(this)).imageId;
+  late final imageProvider = .delegated(url, Lastfm.getAlbum(this));
 }
 
 @JsonSerializable()
@@ -249,10 +247,8 @@ class LUserWeeklyArtistChartArtist extends BasicArtist {
   @override
   final String url;
 
-  @JsonKey(name: 'image', fromJson: extractImageId)
   @override
-  ImageIdProvider get imageIdProvider =>
-      () async => await (await Lastfm.getArtist(this)).imageIdProvider();
+  late final imageProvider = .delegated(url, Lastfm.getArtist(this));
 
   @override
   final String name;
@@ -399,6 +395,5 @@ class LUserLovedTrack extends Track {
   String? get displayTrailing => dateFormatWithYear.format(timestamp.date);
 
   @override
-  ImageIdProvider get imageIdProvider =>
-      () async => (await Lastfm.getTrack(this)).imageId;
+  late final imageProvider = .delegated(url, Lastfm.getTrack(this));
 }
