@@ -6,7 +6,7 @@ import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 class _CacheKey {
   final String username;

@@ -1,6 +1,6 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/profile_tab.dart';
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'time_safe_stream.dart';

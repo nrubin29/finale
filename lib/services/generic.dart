@@ -4,8 +4,8 @@ import 'package:finale/services/image_provider.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/services/spotify/spotify.dart';
 import 'package:finale/util/http_throttle.dart';
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 
 final httpClient = ThrottleClient(15);
 
