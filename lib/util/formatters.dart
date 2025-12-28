@@ -7,6 +7,7 @@ String pluralize(num howMany, [String noun = 'scrobble']) => Intl.plural(
 );
 
 final numberFormat = NumberFormat();
+final decimalFormat = NumberFormat.decimalPatternDigits(decimalDigits: 1);
 final dateFormat = DateFormat('d MMM');
 final dateFormatWithYear = DateFormat('d MMM yyyy');
 final monthFormat = DateFormat('MMMM yyyy');
@@ -70,3 +71,22 @@ String formatOrdinal(int number) => switch (number % 10) {
   3 && != 13 => '${number}rd',
   _ => '${number}th',
 };
+
+String formatFileSize(int bytes) {
+  final gigs = bytes / 1e9;
+  if (gigs >= 1) {
+    return '${decimalFormat.format(gigs)} GB';
+  }
+
+  final megs = bytes / 1e6;
+  if (megs >= 1) {
+    return '${decimalFormat.format(megs)} MB';
+  }
+
+  final kilos = bytes / 1e3;
+  if (kilos >= 1) {
+    return '${decimalFormat.format(kilos)} KB';
+  }
+
+  return '${decimalFormat.format(bytes)} B';
+}

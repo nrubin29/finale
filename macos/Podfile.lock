@@ -89,22 +89,22 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/window_to_front/macos
 
 SPEC CHECKSUMS:
-  app_links: c3185399a5cabc2e610ee5ad52fb7269b84ff869
-  desktop_webview_window: d4365e71bcd4e1aa0c14cf0377aa24db0c16a7e2
-  flutter_local_notifications: 4ccab5b7a22835214a6672e3f9c5e8ae207dab36
-  flutter_web_auth_2: 2e1dc2d2139973e4723c5286ce247dd590390d70
+  app_links: 05a6ec2341985eb05e9f97dc63f5837c39895c3f
+  desktop_webview_window: 7e37af677d6d19294cb433d9b1d878ef78dffa4d
+  flutter_local_notifications: 4bf37a31afde695b56091b4ae3e4d9c7a7e6cda0
+  flutter_web_auth_2: 62b08da29f15a20fa63f144234622a1488d45b65
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
-  gal: 6a522c75909f1244732d4596d11d6a2f86ff37a5
-  in_app_review: a6a031b9acd03c7d103e341aa334adf2c493fb93
-  package_info_plus: 12f1c5c2cfe8727ca46cbd0b26677728972d9a5b
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  share_plus: 1fa619de8392a4398bfaf176d441853922614e89
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
-  url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404
-  wakelock_plus: 4783562c9a43d209c458cb9b30692134af456269
-  webview_flutter_wkwebview: a4af96a051138e28e29f60101d094683b9f82188
-  window_to_front: 4cdc24ddd8461ad1a55fa06286d6a79d8b29e8d8
+  gal: baecd024ebfd13c441269ca7404792a7152fde89
+  in_app_review: 1a86975f350b614709d08c90e337033ccfec4c23
+  package_info_plus: f0052d280d17aa382b932f399edf32507174e870
+  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
+  share_plus: 510bf0af1a42cd602274b4629920c9649c52f4cc
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
+  url_launcher_macos: f87a979182d112f911de6820aefddaf56ee9fbfd
+  wakelock_plus: 917609be14d812ddd9e9528876538b2263aaa03b
+  webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
+  window_to_front: 9e76fd432e36700a197dac86a0011e49c89abe0a
 
 PODFILE CHECKSUM: f123aa273a6e264bc3e7f1cdc07e8b0ccfdecac7
 

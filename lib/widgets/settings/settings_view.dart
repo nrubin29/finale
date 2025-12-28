@@ -6,6 +6,7 @@ import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/settings/about_view.dart';
 import 'package:finale/widgets/settings/accounts_settings_view.dart';
 import 'package:finale/widgets/settings/general_settings_view.dart';
+import 'package:finale/widgets/settings/image_cache_settings_view.dart';
 import 'package:finale/widgets/settings/listen_continuously_settings_view.dart';
 import 'package:finale/widgets/settings/theme_settings_view.dart';
 import 'package:flutter/material.dart';
@@ -83,24 +84,14 @@ class SettingsView extends StatelessWidget {
             ),
             if (!isWeb)
               ListTile(
-                title: const Text('Empty image cache'),
-                leading: const Icon(Icons.delete),
-                onTap: () async {
-                  await DefaultCacheManager().emptyCache();
-                  await ImageIdCache().drop();
-
-                  if (!context.mounted) return;
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Success'),
-                      content: const Text('Image cache emptied.'),
-                      actions: [
-                        TextButton(
-                          child: const Text('Dismiss'),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
+                title: const Text('Image cache'),
+                leading: const Icon(Icons.image),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageCacheSettingsView(),
                     ),
                   );
                 },
