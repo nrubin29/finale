@@ -16,8 +16,9 @@ class SpotifyDialog extends StatelessWidget {
       content: const Text(
         'Sign in with your Spotify account to search and scrobble from '
         'Spotify\'s database. Spotify\'s database is much cleaner than '
-        'Last.fm\'s, but it may not have some tracks.\n\nIf you don\'t want '
-        'to use this feature, you can disable it in the in-app settings.',
+        'Last.fm\'s, but it may not have some tracks.\n\nNote that you will '
+        'have to sign in again every 6 months.\n\nIf you don\'t want to use '
+        'this feature, you can disable it in the in-app settings.',
       ),
       actions: [
         TextButton(

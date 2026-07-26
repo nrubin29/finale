@@ -27,6 +27,7 @@ class Preferences {
     spotifyAccessToken,
     spotifyRefreshToken,
     spotifyExpiration,
+    spotifyRefreshExpiration,
     spotifyEnabled,
     spotifyCheckerEnabled,
     stravaAccessToken,
@@ -76,6 +77,10 @@ class Preferences {
 
   static final spotifyExpiration = Preference.dateTime('spotifyExpiration2');
 
+  static final spotifyRefreshExpiration = Preference.dateTime(
+    'spotifyRefreshExpiration',
+  );
+
   static final spotifyEnabled = Preference<bool, bool>(
     'spotifyEnabled',
     defaultValue: true,
@@ -86,16 +91,19 @@ class Preferences {
     defaultValue: false,
   );
 
-  /// Returns true if Spotify auth data is saved.
+  /// Returns true if Spotify auth data is saved and usable.
   static bool get hasSpotifyAuthData =>
       spotifyAccessToken.hasValue &&
       spotifyRefreshToken.hasValue &&
-      spotifyExpiration.hasValue;
+      spotifyExpiration.hasValue &&
+      spotifyRefreshExpiration.hasValue &&
+      spotifyRefreshExpiration.value!.isAfter(DateTime.now());
 
   static void clearSpotify() {
     spotifyAccessToken.clear();
     spotifyRefreshToken.clear();
     spotifyExpiration.clear();
+    spotifyRefreshExpiration.clear();
   }
 
   static final stravaAccessToken = Preference<String?, String>(

@@ -212,6 +212,9 @@ class Spotify {
 
     if (code != null) {
       await _getAccessToken(code, pkcePair);
+      Preferences.spotifyRefreshExpiration.value = DateTime.now().add(
+        const Duration(days: 30 * 6), // Approx. 6 months
+      );
       return true;
     } else {
       return false;
