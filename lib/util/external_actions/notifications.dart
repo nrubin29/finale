@@ -29,7 +29,7 @@ Future<void> setup() async {
   );
 
   await FlutterLocalNotificationsPlugin().initialize(
-    initializationSettings,
+    settings: initializationSettings,
     onDidReceiveNotificationResponse: didReceiveNotification,
     onDidReceiveBackgroundNotificationResponse: didReceiveNotification,
   );
@@ -57,10 +57,10 @@ Future<bool> requestPermission() async {
 
 Future<void> showNotification(NotificationType type) async {
   await FlutterLocalNotificationsPlugin().show(
-    type.index,
-    type.title,
-    type.body,
-    NotificationDetails(
+    id: type.index,
+    title: type.title,
+    body: type.body,
+    notificationDetails: NotificationDetails(
       android: AndroidNotificationDetails(type.name, type.name),
     ),
   );

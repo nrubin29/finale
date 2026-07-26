@@ -56,17 +56,13 @@ class ProfileStackData extends InheritedWidget {
   final void Function(LUser me) _onSetMe;
 
   const ProfileStackData({
-    required List<String> usernames,
-    required LUser? me,
-    required void Function(String username) onPush,
-    required void Function() onPop,
-    required void Function(LUser me) onSetMe,
+    required this._usernames,
+    required this._me,
+    required this._onPush,
+    required this._onPop,
+    required this._onSetMe,
     required super.child,
-  }) : _usernames = usernames,
-       _me = me,
-       _onPush = onPush,
-       _onPop = onPop,
-       _onSetMe = onSetMe;
+  });
 
   LUser get me => _me!;
 

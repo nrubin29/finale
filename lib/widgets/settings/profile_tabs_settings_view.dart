@@ -82,7 +82,7 @@ class _ProfileTabsSettingsViewState extends State<ProfileTabsSettingsView> {
       body: PopScope(
         onPopInvokedWithResult: _save,
         child: ReorderableListView(
-          onReorder: _onReorder,
+          onReorderItem: _onReorder,
           children: [
             for (final tab in _tabOrder)
               ListTile(
