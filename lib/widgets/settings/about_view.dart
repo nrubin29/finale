@@ -75,10 +75,10 @@ class AboutView extends StatelessWidget {
               ),
               const SliverPadding(padding: .only(top: 18)),
               _listTile(
-                title: 'My website',
+                title: 'My apps',
                 icon: Icons.web,
                 onTap: () {
-                  launchUrl(.https('noahzrubin.com'));
+                  launchUrl(.https('nrubintech.com'));
                 },
               ),
               _listTile(
