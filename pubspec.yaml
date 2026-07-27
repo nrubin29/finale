@@ -1,7 +1,7 @@
 name: finale
 description: A fully-featured Last.fm client
 publish_to: 'none'
-version: 5.1.0+50
+version: 5.1.1+51
 
 environment:
   sdk: ">=3.12.0 <4.0.0"
