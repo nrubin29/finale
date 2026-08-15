@@ -19,14 +19,19 @@ typedef OnTap<T extends Entity> = void Function(T item);
 
 typedef EntityWidgetBuilder<T extends Entity> = Widget Function(T item);
 
-typedef EntityNullableWidgetBuilder<T extends Entity> =
-    Widget? Function(T item);
+typedef EntityNullableWidgetBuilder<T extends Entity> = Widget? Function(
+  T item,
+);
 
-typedef EntityAndItemsWidgetBuilder<T extends Entity> =
-    Widget Function(T item, List<T> items);
+typedef EntityAndItemsWidgetBuilder<T extends Entity> = Widget Function(
+  T item,
+  List<T> items,
+);
 
-typedef EntityAndCallbackWidgetBuilder<T extends Entity> =
-    Widget Function(T item, void Function(Editable item) onChange);
+typedef EntityAndCallbackWidgetBuilder<T extends Entity> = Widget Function(
+  T item,
+  void Function(Editable item) onChange,
+);
 
 class EntityDisplay<T extends Entity> extends StatefulWidget {
   final List<T>? items;

@@ -243,7 +243,6 @@ struct TopEntitiesWidgetEntryViewLarge : View {
     }
 }
 
-@available(iOS 15.0, *)
 struct TopEntitiesWidget: Widget {
     let kind: String = "TopEntitiesWidget"
     

@@ -280,9 +280,8 @@ class LSearchTracksRequest extends PagedRequest<LTrackMatch> {
       'limit': limit,
       'page': page,
     });
-    return LTrackSearchResponse.fromJson(
-      rawResponse['results']['trackmatches'],
-    ).tracks;
+    return LTrackSearchResponse.fromJson(rawResponse['results']['trackmatches'])
+        .tracks;
   }
 
   @override
@@ -322,9 +321,8 @@ class LSearchAlbumsRequest extends PagedRequest<LAlbumMatch> {
       'limit': limit,
       'page': page,
     });
-    return LAlbumSearchResponse.fromJson(
-      rawResponse['results']['albummatches'],
-    ).albums;
+    return LAlbumSearchResponse.fromJson(rawResponse['results']['albummatches'])
+        .albums;
   }
 
   @override
@@ -343,9 +341,8 @@ class ArtistGetTopAlbumsRequest extends PagedRequest<LArtistTopAlbum> {
       'limit': limit,
       'page': page,
     });
-    return LArtistGetTopAlbumsResponse.fromJson(
-      rawResponse['topalbums'],
-    ).albums;
+    return LArtistGetTopAlbumsResponse.fromJson(rawResponse['topalbums'])
+        .albums;
   }
 
   @override
@@ -364,9 +361,8 @@ class ArtistGetTopTracksRequest extends PagedRequest<LArtistTopTrack> {
       'limit': limit,
       'page': page,
     });
-    return LArtistGetTopTracksResponse.fromJson(
-      rawResponse['toptracks'],
-    ).tracks;
+    return LArtistGetTopTracksResponse.fromJson(rawResponse['toptracks'])
+        .tracks;
   }
 
   @override
@@ -389,9 +385,8 @@ class UserGetTrackScrobblesRequest extends PagedRequest<LUserTrackScrobble> {
       'page': page,
       'sk': Preferences.key.value,
     });
-    return LUserTrackScrobblesResponse.fromJson(
-      rawResponse['trackscrobbles'],
-    ).tracks;
+    return LUserTrackScrobblesResponse.fromJson(rawResponse['trackscrobbles'])
+        .tracks;
   }
 
   @override
@@ -486,9 +481,8 @@ class Lastfm {
       'artist': artist.name,
       'limit': limit,
     });
-    return LSimilarArtistsResponse.fromJson(
-      rawResponse['similarartists'],
-    ).artists;
+    return LSimilarArtistsResponse.fromJson(rawResponse['similarartists'])
+        .artists;
   }
 
   static Future<LUserWeeklyChartList> getWeeklyChartList(LUser user) async {

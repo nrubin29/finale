@@ -98,9 +98,8 @@ class _EntityImageState extends State<EntityImage> {
     );
 
     final imageProvider = widget.entity.imageProvider;
-    if (imageProvider case DataImageProvider(
-      :final imageData,
-    ) when imageData != null) {
+    if (imageProvider case DataImageProvider(:final imageData)
+        when imageData != null) {
       final image = ConstrainedBox(
         constraints: constraints,
         child: Image.memory(imageData, fit: widget.fit),

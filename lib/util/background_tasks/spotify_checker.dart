@@ -32,9 +32,8 @@ class SpotifyCheckerBackgroundTask extends BackgroundTask {
       Preferences.name.value!,
     ).getData(1, 1)).lastOrNull;
 
-    final latestSpotifyTrack = (await Spotify.getRecentTracks(
-      limit: 1,
-    )).lastOrNull;
+    final latestSpotifyTrack = (await Spotify.getRecentTracks(limit: 1))
+        .lastOrNull;
 
     if (latestLastfmTrack != null &&
         latestSpotifyTrack != null &&

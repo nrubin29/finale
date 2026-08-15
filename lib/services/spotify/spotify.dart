@@ -159,9 +159,10 @@ class SPlaylistTracksRequest extends PagedRequest<STrack> {
       'limit': limit,
       'offset': (page - 1) * limit,
     });
-    return SPage<SPlaylistItem>.fromJson(
-      rawResponse,
-    ).items.map((e) => e.track).nonNulls.toList();
+    return SPage<SPlaylistItem>.fromJson(rawResponse).items
+        .map((e) => e.track)
+        .nonNulls
+        .toList();
   }
 
   @override

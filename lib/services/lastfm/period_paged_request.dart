@@ -77,9 +77,8 @@ abstract class PeriodPagedRequest<T extends HasPlayCount>
     // string group which will mess up the request. The best we can do is
     // filter it out.
     groupedData.remove('');
-    _localCachedData = (await Future.wait(
-      groupedData.entries.map(map),
-    )).sorted((a, b) => b.playCount.compareTo(a.playCount));
+    _localCachedData = (await Future.wait(groupedData.entries.map(map)))
+        .sorted((a, b) => b.playCount.compareTo(a.playCount));
   }
 
   @override

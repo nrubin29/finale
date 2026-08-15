@@ -174,7 +174,6 @@ extension WhereAllFiltersMatch on List<LRecentTracksResponseTrack> {
     List<ScrobbleFilter> filters,
   ) => isEmpty || filters.isEmpty
       ? this
-      : where(
-          (track) => filters.every((predicate) => predicate.matches(track)),
-        ).toList(growable: false);
+      : where((track) => filters.every((predicate) => predicate.matches(track)))
+            .toList(growable: false);
 }

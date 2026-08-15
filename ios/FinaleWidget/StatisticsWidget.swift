@@ -129,7 +129,6 @@ struct StatisticsWidgetEntryViewLarge : View {
     }
 }
 
-@available(iOS 15.0, *)
 struct StatisticsWidget: Widget {
     let kind: String = "StatisticsWidget"
     

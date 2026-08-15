@@ -6,15 +6,12 @@ PODS:
     - Flutter
   - webview_cookie_manager_plus (0.0.1):
     - Flutter
-  - workmanager_apple (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_acrcloud (from `.symlinks/plugins/flutter_acrcloud/ios`)
   - flutter_mpmediaplayer (from `.symlinks/plugins/flutter_mpmediaplayer/ios`)
   - webview_cookie_manager_plus (from `.symlinks/plugins/webview_cookie_manager_plus/ios`)
-  - workmanager_apple (from `.symlinks/plugins/workmanager_apple/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
@@ -25,16 +22,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_mpmediaplayer/ios"
   webview_cookie_manager_plus:
     :path: ".symlinks/plugins/webview_cookie_manager_plus/ios"
-  workmanager_apple:
-    :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
-  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   flutter_acrcloud: 8dc6ee574321bc08390c1e79900aad5ef683248d
   flutter_mpmediaplayer: d6fda8913387edcbc6a1fd798087c693ac6937cb
   webview_cookie_manager_plus: bb56cf9e53c086a22a2aa033ec6ce374da3095b6
-  workmanager_apple: 7bac258335c310689a641e2d66e88d4845d372e9
 
-PODFILE CHECKSUM: 775997f741c536251164e3eacf6e34abf2eb7a17
+PODFILE CHECKSUM: 57c8aed26fba39d3ec9424816221f294a07c58eb
 
 COCOAPODS: 1.16.2

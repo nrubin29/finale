@@ -68,9 +68,8 @@ class LoginView extends StatelessWidget {
                 children: snapshot.data!
                     .map(
                       (artist) => FutureBuilder<List<LArtistTopAlbum>>(
-                        future: ArtistGetTopAlbumsRequest(
-                          artist.name,
-                        ).getData(1, 1),
+                        future: ArtistGetTopAlbumsRequest(artist.name)
+                            .getData(1, 1),
                         builder: (context, snapshot) => snapshot.hasData
                             ? EntityImage(
                                 entity: snapshot.data!.first,

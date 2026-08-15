@@ -193,9 +193,8 @@ class _WeeklyChartComponentState extends State<WeeklyChartComponent>
                           touchTooltipData: BarTouchTooltipData(
                             getTooltipItem: (_, _, rod, _) => BarTooltipItem(
                               pluralize(rod.toY),
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Colors.white,
-                              ),
+                              Theme.of(context).textTheme.bodyMedium!
+                                  .copyWith(color: Colors.white),
                             ),
                           ),
                         ),
