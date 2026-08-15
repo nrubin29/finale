@@ -9,7 +9,7 @@ import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/settings/apple_music_settings_view.dart';
 import 'package:finale/widgets/settings/lastfm_settings_view.dart';
 import 'package:finale/widgets/settings/spotify_settings_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
 class AccountsSettingsView extends StatefulWidget {

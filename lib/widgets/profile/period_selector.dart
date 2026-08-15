@@ -10,7 +10,7 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PeriodSelector<T extends HasPlayCount> extends StatefulWidget {

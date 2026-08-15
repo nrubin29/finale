@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart'
     show kIsWeb, kDebugMode, defaultTargetPlatform;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 const isDebug = kDebugMode;
 const isWeb = kIsWeb;

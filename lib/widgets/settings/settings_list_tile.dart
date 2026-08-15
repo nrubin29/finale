@@ -1,6 +1,6 @@
 import 'package:finale/util/preference.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SettingsListTile<T> extends StatelessWidget {
   final String title;

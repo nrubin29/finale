@@ -5,7 +5,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_distribution/scrobble_distribution_component.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ProfileScrobbleDistributionComponent extends StatelessWidget {
   final String username;

@@ -4,7 +4,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/services/image_provider.dart';
 import 'package:finale/util/constants.dart';
-import 'package:flutter/material.dart' hide ImageProvider;
+import 'package:material_ui/material_ui.dart' hide ImageProvider;
 import 'package:octo_image/octo_image.dart';
 
 enum PlaceholderBehavior { image, active, none }

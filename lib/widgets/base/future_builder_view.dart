@@ -3,7 +3,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/error_component.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/settings/settings_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef FutureFactory<T> = Future<T> Function();
 

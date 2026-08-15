@@ -9,7 +9,7 @@ import 'package:finale/widgets/entity/apple_music/apple_music_artist_view.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class AppleMusicAlbumView extends StatelessWidget {
   final AMAlbum album;

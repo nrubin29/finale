@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Calculates the scale to which [builder] should build its subtree based on
 /// [targetWidth] and the screen size.

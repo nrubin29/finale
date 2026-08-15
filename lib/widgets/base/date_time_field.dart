@@ -1,7 +1,7 @@
 import 'package:finale/util/extensions.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 DateTime _combine(DateTime date, TimeOfDay? time) => DateTime(
   date.year,

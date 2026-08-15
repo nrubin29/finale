@@ -6,7 +6,7 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class WorkoutDetails extends StatelessWidget {
   final AthleteActivity activity;

@@ -28,6 +28,7 @@ dependencies:
   in_app_review: ^2.0.12
   intl: ^0.20.3
   json_annotation: ^4.12.0
+  material_ui: ^1.0.0
   meta: ^1.18.0
   modal_bottom_sheet: ^3.0.0
   octo_image: ^2.1.0

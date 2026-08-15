@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:finale/services/lastfm/common.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class FractionalBar extends StatelessWidget {
   final double percent;

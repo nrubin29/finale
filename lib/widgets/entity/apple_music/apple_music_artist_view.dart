@@ -9,7 +9,7 @@ import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/apple_music/apple_music_album_view.dart';
 import 'package:finale/widgets/entity/artist_tabs.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class AppleMusicArtistView extends StatelessWidget {
   final String artistId;

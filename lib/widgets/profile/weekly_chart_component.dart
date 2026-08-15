@@ -15,7 +15,7 @@ import 'package:finale/widgets/entity/lastfm/artist_view.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
 import 'package:finale/widgets/entity/lastfm/track_view.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart' hide Color;
+import 'package:material_ui/material_ui.dart' hide Color;
 
 class WeeklyChartComponent extends StatefulWidget {
   final LUser user;

@@ -1,7 +1,7 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/common.dart';
 import 'package:finale/widgets/base/app_bar.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class WikiTile extends StatelessWidget {
   final Entity entity;

@@ -11,7 +11,7 @@ import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_filter.dart';
 import 'package:finale/widgets/tools/scrobble_manager/scrobble_editor_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ScrobbleSelectorView extends StatefulWidget {

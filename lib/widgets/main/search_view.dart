@@ -24,7 +24,7 @@ import 'package:finale/widgets/entity/spotify/spotify_album_view.dart';
 import 'package:finale/widgets/entity/spotify/spotify_artist_view.dart';
 import 'package:finale/widgets/entity/spotify/spotify_dialog.dart';
 import 'package:finale/widgets/entity/spotify/spotify_playlist_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:rxdart/rxdart.dart';
 
 extension on SearchEngine {

@@ -4,8 +4,8 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/util/constants.dart';
 import 'package:finale/widgets/scrobble/batch_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
-import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 /// A button that, when tapped, opens the appropriate scrobble view.

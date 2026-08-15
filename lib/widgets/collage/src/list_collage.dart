@@ -4,7 +4,7 @@ import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/base/scaled_box.dart';
 import 'package:finale/widgets/collage/src/collage_branding.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ListCollage extends StatelessWidget {
   final ThemeColor themeColor;

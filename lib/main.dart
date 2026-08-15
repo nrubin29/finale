@@ -13,7 +13,7 @@ import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/lastfm/profile_stack.dart';
 import 'package:finale/widgets/main/login_view.dart';
 import 'package:finale/widgets/main/main_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,6 +72,10 @@ class _MyAppState extends State<MyApp> {
       theme: finaleTheme(_themeColor, .light),
       darkTheme: finaleTheme(_themeColor, .dark, _offBlackBackground),
       home: name == null ? const LoginView() : MainView(username: name),
+      builder: (context, child) {
+        // Needed for modal_bottom_sheet which uses MaterialLocalizations.
+        return MaterialUiCompatibilityBridge(child: child!);
+      },
     );
   }
 }

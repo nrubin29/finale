@@ -8,7 +8,7 @@ import 'package:finale/util/web_auth.dart';
 import 'package:finale/widgets/base/app_icon.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
 import 'package:finale/widgets/main/main_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView();

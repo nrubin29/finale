@@ -1,5 +1,5 @@
 import 'package:finale/services/lastfm/common.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:universal_io/io.dart';
 
 class ErrorDetails {

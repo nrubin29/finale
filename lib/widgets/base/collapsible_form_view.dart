@@ -1,5 +1,5 @@
 import 'package:finale/widgets/base/loading_component.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef WidgetListBuilder = List<Widget> Function(BuildContext context);
 

@@ -6,7 +6,7 @@ import 'package:finale/util/external_actions/external_actions.dart';
 import 'package:finale/widgets/base/titled_box.dart';
 import 'package:finale/widgets/scrobble/acrcloud_dialog.dart';
 import 'package:finale/widgets/scrobble/listen_continuously_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -5,7 +5,7 @@ import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/tools/workout_details.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class WorkoutView extends StatefulWidget {
   const WorkoutView();

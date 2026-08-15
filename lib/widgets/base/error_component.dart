@@ -1,6 +1,6 @@
 import 'package:finale/util/error_details.dart';
 import 'package:finale/widgets/main/login_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ErrorComponent extends StatelessWidget {
   final ErrorDetails details;

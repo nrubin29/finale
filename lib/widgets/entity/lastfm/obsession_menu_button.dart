@@ -1,6 +1,6 @@
 import 'package:finale/services/lastfm/obsessions.dart';
 import 'package:finale/widgets/entity/lastfm/set_obsession_button.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ObsessionMenuButton extends StatelessWidget {
   final LObsession obsession;

@@ -5,7 +5,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:flutter/material.dart' hide ImageProvider;
+import 'package:material_ui/material_ui.dart' hide ImageProvider;
 
 enum _ScrobbleStatus { pending, processing, success, error }
 

@@ -1,5 +1,5 @@
 import 'package:finale/util/constants.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum ProfileTab {
   recentScrobbles('Recent Scrobbles', Icons.queue_music),

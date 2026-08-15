@@ -1,6 +1,6 @@
 import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/track.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LoveButton extends StatefulWidget {
   final LTrack track;

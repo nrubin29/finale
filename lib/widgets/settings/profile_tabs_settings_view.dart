@@ -1,7 +1,7 @@
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/profile_tab.dart';
 import 'package:finale/widgets/base/app_bar.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ProfileTabsSettingsView extends StatefulWidget {
   const ProfileTabsSettingsView();

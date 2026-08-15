@@ -3,7 +3,7 @@ import 'package:finale/services/lastfm/track.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ScrobbleEditorView extends StatefulWidget {
   final List<LRecentTracksResponseTrack> tracks;

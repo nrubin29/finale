@@ -12,7 +12,7 @@ import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/base/loading_component.dart';
 import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_distribution/scrobble_distribution_component.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TrackScrobblesView extends StatefulWidget {
   final LTrack track;

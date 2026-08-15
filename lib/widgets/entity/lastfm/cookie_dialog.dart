@@ -3,7 +3,7 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/util/social_media_icons_icons.dart';
 import 'package:finale/widgets/settings/lastfm_login_web_view.dart';
 import 'package:finale/widgets/settings/lastfm_settings_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 Future<bool> ensureCookies(BuildContext context) async {
   final hasCookies = await LastfmCookie.hasCookies();

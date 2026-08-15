@@ -6,7 +6,7 @@ import 'package:finale/util/functions.dart';
 import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
 import 'package:finale/widgets/entity/lastfm/set_obsession_button.dart';
 import 'package:finale/widgets/tools/scrobble_manager/scrobble_editor_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TrackMenuButton extends StatelessWidget {

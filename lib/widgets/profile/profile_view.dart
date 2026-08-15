@@ -33,7 +33,7 @@ import 'package:finale/widgets/profile/profile_scrobble_distribution_component.d
 import 'package:finale/widgets/profile/weekly_chart_selector_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/settings/settings_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';

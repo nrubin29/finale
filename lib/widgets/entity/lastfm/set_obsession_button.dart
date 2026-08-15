@@ -3,7 +3,7 @@ import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/services/lastfm/obsessions.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/lastfm/cookie_dialog.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 Future<void> setObsessionInUi(BuildContext context, Track track) async {
   if (!await ensureCookies(context)) {

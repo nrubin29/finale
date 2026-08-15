@@ -9,7 +9,7 @@ import 'package:finale/widgets/settings/general_settings_view.dart';
 import 'package:finale/widgets/settings/image_cache_settings_view.dart';
 import 'package:finale/widgets/settings/listen_continuously_settings_view.dart';
 import 'package:finale/widgets/settings/theme_settings_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class SettingsView extends StatelessWidget {

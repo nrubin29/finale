@@ -1,6 +1,6 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/error_details.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 Future<void> showNoEntityTypePeriodDialog(
   BuildContext context, {

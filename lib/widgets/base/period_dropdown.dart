@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finale/services/lastfm/period.dart';
 import 'package:finale/util/preferences.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class PeriodDropdownButton extends StatefulWidget {
   final ValueChanged<Period>? periodChanged;

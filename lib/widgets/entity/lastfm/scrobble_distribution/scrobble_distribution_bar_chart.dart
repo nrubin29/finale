@@ -1,7 +1,7 @@
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'scrobble_distribution_component.dart';
 

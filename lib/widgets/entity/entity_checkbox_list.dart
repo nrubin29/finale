@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class EntityCheckboxList<T extends Entity> extends StatefulWidget {
   final List<T> items;

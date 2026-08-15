@@ -2,7 +2,7 @@ import 'package:finale/services/generic.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:finale/util/theme.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Creates an [AppBar] whose content will always fit.
 ///

@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/image_id_cache.dart';
 import 'package:finale/widgets/base/app_bar.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
 

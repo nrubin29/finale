@@ -1,5 +1,5 @@
 import 'package:finale/util/preference.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum ThemeColor with PreferenceEnum {
   red('Red', Colors.red),

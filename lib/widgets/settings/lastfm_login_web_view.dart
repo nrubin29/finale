@@ -2,7 +2,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/util/web_auth.dart';
 import 'package:finale/widgets/base/app_bar.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class LastfmLoginWebView extends StatefulWidget {

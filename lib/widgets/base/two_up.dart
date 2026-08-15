@@ -1,7 +1,7 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/image_id.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Displays [image] and [listItems] side-by-side if there's enough room;
 /// otherwise, displays [image] above [listItems].

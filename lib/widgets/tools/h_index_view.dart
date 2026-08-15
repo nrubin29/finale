@@ -12,7 +12,7 @@ import 'package:finale/widgets/base/list_tile_username_field.dart';
 import 'package:finale/widgets/base/period_dropdown.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class _HIndexResult {
   final String username;

@@ -10,7 +10,7 @@ import 'package:finale/widgets/base/now_playing_animation.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:finale/widgets/entity/lastfm/scrobble_filter.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:in_app_review/in_app_review.dart';
 
 class FriendScrobbleView extends StatefulWidget {

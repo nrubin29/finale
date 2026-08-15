@@ -1,6 +1,6 @@
 import 'package:finale/services/generic.dart';
 import 'package:finale/util/formatters.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'activity.g.dart';

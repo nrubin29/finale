@@ -9,7 +9,7 @@ import 'package:finale/widgets/base/date_time_field.dart';
 import 'package:finale/widgets/base/header_list_tile.dart';
 import 'package:finale/widgets/entity/entity_checkbox_list.dart';
 import 'package:finale/widgets/entity/entity_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum ScrobbleTimestampBehavior {
   startingNow,

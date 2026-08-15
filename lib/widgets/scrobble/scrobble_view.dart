@@ -12,7 +12,7 @@ import 'package:finale/widgets/base/titled_box.dart';
 import 'package:finale/widgets/scrobble/apple_music_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/music_recognition_component.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:in_app_review/in_app_review.dart';
 
 class ScrobbleView extends StatefulWidget {

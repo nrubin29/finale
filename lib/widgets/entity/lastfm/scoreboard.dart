@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finale/util/formatters.dart';
 import 'package:finale/widgets/base/loading_component.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// An item in a [Scoreboard].
 class ScoreboardItemModel {

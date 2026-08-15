@@ -17,7 +17,7 @@ import 'package:finale/widgets/collage/src/grid_collage.dart';
 import 'package:finale/widgets/collage/src/list_collage.dart';
 import 'package:finale/widgets/collage/src/wrapped_collage.dart';
 import 'package:finale/widgets/entity/dialogs.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:gal/gal.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:universal_web/web.dart' show HTMLAnchorElement;

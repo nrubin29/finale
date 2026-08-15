@@ -10,7 +10,7 @@ import 'package:finale/widgets/main/search_view.dart';
 import 'package:finale/widgets/profile/profile_view.dart';
 import 'package:finale/widgets/scrobble/scrobble_view.dart';
 import 'package:finale/widgets/tools/tools_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MainView extends StatefulWidget {
   final String username;

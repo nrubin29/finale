@@ -3,7 +3,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/captioned_list_tile.dart';
 import 'package:finale/widgets/settings/profile_tabs_settings_view.dart';
 import 'package:finale/widgets/settings/settings_list_tile.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class GeneralSettingsView extends StatelessWidget {
   const GeneralSettingsView();

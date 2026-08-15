@@ -6,7 +6,7 @@ import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/base/two_up.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/scrobble/scrobble_button.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SpotifyPlaylistView extends StatelessWidget {
   final SPlaylistSimple playlist;

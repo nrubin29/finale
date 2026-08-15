@@ -5,7 +5,7 @@ import 'package:finale/services/lastfm/lastfm.dart';
 import 'package:finale/util/formatters.dart';
 import 'package:finale/util/request_sequencer.dart';
 import 'package:finale/widgets/entity/lastfm/scoreboard.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'scrobble_distribution_bar_chart.dart';
 
