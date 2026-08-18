@@ -1,32 +1,20 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_acrcloud (0.0.1):
-    - Flutter
-  - flutter_mpmediaplayer (0.0.1):
-    - Flutter
   - webview_cookie_manager_plus (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - flutter_acrcloud (from `.symlinks/plugins/flutter_acrcloud/ios`)
-  - flutter_mpmediaplayer (from `.symlinks/plugins/flutter_mpmediaplayer/ios`)
   - webview_cookie_manager_plus (from `.symlinks/plugins/webview_cookie_manager_plus/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  flutter_acrcloud:
-    :path: ".symlinks/plugins/flutter_acrcloud/ios"
-  flutter_mpmediaplayer:
-    :path: ".symlinks/plugins/flutter_mpmediaplayer/ios"
   webview_cookie_manager_plus:
     :path: ".symlinks/plugins/webview_cookie_manager_plus/ios"
 
 SPEC CHECKSUMS:
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
-  flutter_acrcloud: 8dc6ee574321bc08390c1e79900aad5ef683248d
-  flutter_mpmediaplayer: d6fda8913387edcbc6a1fd798087c693ac6937cb
   webview_cookie_manager_plus: bb56cf9e53c086a22a2aa033ec6ce374da3095b6
 
 PODFILE CHECKSUM: 57c8aed26fba39d3ec9424816221f294a07c58eb

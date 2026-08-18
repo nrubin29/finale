@@ -6,8 +6,8 @@ import 'package:finale/util/external_actions/external_actions.dart';
 import 'package:finale/widgets/base/titled_box.dart';
 import 'package:finale/widgets/scrobble/acrcloud_dialog.dart';
 import 'package:finale/widgets/scrobble/listen_continuously_view.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MusicRecognitionComponent extends StatefulWidget {
@@ -38,12 +38,12 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
   }
 
   Future<void> _setUp() async {
-    if (!ACRCloud.isSetUp) {
-      await ACRCloud.setUp(
+    if (!ACRCloud.instance.isConfigured) {
+      await ACRCloud.instance.configure(
         const ACRCloudConfig(
-          acrCloudAccessKey,
-          acrCloudAccessSecret,
-          acrCloudHost,
+          accessKey: acrCloudAccessKey,
+          accessSecret: acrCloudAccessSecret,
+          host: acrCloudHost,
         ),
       );
     }
@@ -59,14 +59,17 @@ class _MusicRecognitionComponentState extends State<MusicRecognitionComponent> {
     );
 
     if (!mounted) return;
-    if (result?.wasCancelled ?? true) return;
 
-    if (result!.track != null) {
-      widget.onTrackRecognized(result.track!);
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Could not recognize song')));
+    switch (result) {
+      case null:
+      case ACRCloudDialogResultCancelled():
+        return;
+      case ACRCloudDialogResultTrack(:final track):
+        widget.onTrackRecognized(track);
+      case ACRCloudDialogResultNoMatch():
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not recognize song')),
+        );
     }
   }
 

@@ -12,8 +12,8 @@ import 'package:finale/widgets/base/titled_box.dart';
 import 'package:finale/widgets/scrobble/apple_music_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/friend_scrobble_view.dart';
 import 'package:finale/widgets/scrobble/music_recognition_component.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ScrobbleView extends StatefulWidget {
   final Track? track;
@@ -162,7 +162,7 @@ class _ScrobbleViewState extends State<ScrobbleView> {
                     onTrackRecognized: (track) {
                       setState(() {
                         _trackController.text = track.title;
-                        _albumController.text = track.album.name;
+                        _albumController.text = track.album?.name ?? '';
                         _artistController.text = track.artists.first.name;
                       });
                     },

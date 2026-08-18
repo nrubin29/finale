@@ -9,8 +9,8 @@ import 'package:finale/util/preferences.dart';
 import 'package:finale/widgets/base/app_bar.dart';
 import 'package:finale/widgets/entity/entity_display.dart';
 import 'package:finale/widgets/settings/listen_continuously_settings_view.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -113,9 +113,8 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
       _tracks.addFirst(.listening());
     });
 
-    final session = ACRCloud.startSession();
+    final session = await ACRCloud.instance.startSession();
     final result = await session.result;
-    session.dispose();
 
     // If the user navigated away while we were listening, discard the result.
     if (!mounted) {
@@ -126,45 +125,43 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
       _tracks.removeFirst();
     });
 
-    final errorMessage = result?.errorMessage;
-    if (errorMessage != null) {
-      setState(() {
-        _tracks.addFirst(.acrCloudError(errorMessage));
-      });
-      return;
-    }
-
-    if (result?.metadata?.music.isNotEmpty ?? false) {
-      final resultMusicItem = result!.metadata!.music.first;
-      var title = resultMusicItem.title;
-
-      if (Preferences.stripTags.value) {
-        title = title
-            .replaceAll(_tagRegex, '')
-            .replaceAll(_spaceRegex, ' ')
-            .trim();
-      }
-
-      final track = ListenContinuouslyTrack(
-        title,
-        resultMusicItem.artists.first.name,
-        resultMusicItem.album.name,
-      );
-
-      if (_tracks.firstWhereOrNull((t) => t.hasResult) == track) {
-        track.status = .skipped;
-      } else {
-        final response = await Lastfm.scrobble([track], [track.timestamp]);
-        track.status = response.accepted == 1 ? .scrobbled : .scrobbleError;
-      }
-
-      setState(() {
-        _tracks.addFirst(track);
-      });
-    } else {
-      setState(() {
+    switch (result) {
+      case ACRCloudNoMatch():
         _tracks.addFirst(.noResults());
-      });
+      case ACRCloudCancelled():
+        // This should never happen since the user can't cancel the request.
+        return;
+      case ACRCloudFailure():
+        setState(() {
+          _tracks.addFirst(.acrCloudError(result.errorMessage));
+        });
+      case ACRCloudRecognized(:final music):
+        final resultMusicItem = music.first;
+        var title = resultMusicItem.title;
+
+        if (Preferences.stripTags.value) {
+          title = title
+              .replaceAll(_tagRegex, '')
+              .replaceAll(_spaceRegex, ' ')
+              .trim();
+        }
+
+        final track = ListenContinuouslyTrack(
+          title,
+          resultMusicItem.artists.first.name,
+          resultMusicItem.album?.name,
+        );
+
+        if (_tracks.firstWhereOrNull((t) => t.hasResult) == track) {
+          track.status = .skipped;
+        } else {
+          final response = await Lastfm.scrobble([track], [track.timestamp]);
+          track.status = response.accepted == 1 ? .scrobbled : .scrobbleError;
+        }
+
+        setState(() {
+          _tracks.addFirst(track);
+        });
     }
   }
 
@@ -222,5 +219,6 @@ class _ListenContinuouslyViewState extends State<ListenContinuouslyView> {
   void dispose() {
     super.dispose();
     WakelockPlus.disable();
+    ACRCloud.instance.dispose();
   }
 }

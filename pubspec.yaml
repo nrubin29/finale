@@ -17,11 +17,11 @@ dependencies:
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
-  flutter_acrcloud: ^1.0.0
+  flutter_acrcloud: ^2.0.0
   flutter_cache_manager: ^3.4.2
-  flutter_local_notifications: ^22.2.0
-  flutter_mpmediaplayer: ^0.3.0
-  flutter_web_auth_2: ^5.0.3
+  flutter_local_notifications: ^22.3.0
+  flutter_mpmediaplayer: ^1.0.0
+  flutter_web_auth_2: ^5.1.0
   gal: ^2.3.3
   html: ^0.15.6
   http: ^1.6.0
@@ -29,7 +29,7 @@ dependencies:
   intl: ^0.20.3
   json_annotation: ^4.12.0
   material_ui: ^1.0.0
-  meta: ^1.18.0
+  meta: ^1.19.0
   modal_bottom_sheet: ^3.0.0
   octo_image: ^2.1.0
   package_info_plus: ^10.2.1
@@ -48,17 +48,17 @@ dependencies:
   wakelock_plus: ^1.7.0
   webview_cookie_manager_plus: ^2.0.17
   webview_flutter: ^4.14.1
-  workmanager: ^0.9.0+3
+  workmanager: ^0.10.7
 
 dev_dependencies:
-  build_runner: ^2.15.1
+  build_runner: ^2.16.0
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
   icons_launcher: ^3.1.0
   integration_test:
     sdk: flutter
-  json_serializable: ^6.14.0
+  json_serializable: ^6.14.1
 
 flutter:
   uses-material-design: true

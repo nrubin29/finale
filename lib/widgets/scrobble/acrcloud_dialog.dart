@@ -1,15 +1,24 @@
 import 'package:finale/services/acrcloud/acrcloud.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ACRCloudDialogResult {
-  final bool wasCancelled;
-  final ACRCloudResponseMusicItem? track;
+sealed class ACRCloudDialogResult {
+  const new();
+}
 
-  const ACRCloudDialogResult([this.track]) : wasCancelled = false;
+class ACRCloudDialogResultTrack extends ACRCloudDialogResult {
+  final ACRCloudResponseMusicItem track;
 
-  const ACRCloudDialogResult.cancelled() : wasCancelled = true, track = null;
+  new({required this.track});
+}
+
+class ACRCloudDialogResultCancelled extends ACRCloudDialogResult {
+  const new();
+}
+
+class ACRCloudDialogResultNoMatch extends ACRCloudDialogResult {
+  const new();
 }
 
 class ACRCloudDialog extends StatefulWidget {
@@ -18,41 +27,40 @@ class ACRCloudDialog extends StatefulWidget {
 }
 
 class _ACRCloudDialogState extends State<ACRCloudDialog> {
-  late final ACRCloudSession session;
+  ACRCloudSession? session;
   String? error;
   List<ACRCloudResponseMusicItem>? results;
 
   @override
   void initState() {
     super.initState();
-    session = ACRCloud.startSession();
+    _startSession();
+  }
 
-    session.result.then((result) {
-      session.dispose();
-
-      if (result == null) {
-        if (!mounted) return;
-        Navigator.pop(context, const ACRCloudDialogResult.cancelled());
-        return;
-      }
-
-      final errorMessage = result.errorMessage;
-      if (errorMessage != null) {
-        setState(() {
-          error = errorMessage;
-        });
-        return;
-      }
-
-      if (result.metadata != null && result.metadata!.music.isNotEmpty) {
-        setState(() {
-          results = result.metadata!.music;
-        });
-      } else {
-        if (!mounted) return;
-        Navigator.pop(context, const ACRCloudDialogResult());
-      }
+  void _startSession() async {
+    final session = await ACRCloud.instance.startSession();
+    setState(() {
+      this.session = session;
     });
+
+    final result = await session.result;
+    if (!mounted) return;
+
+    switch (result) {
+      case ACRCloudRecognized(:final music):
+        setState(() {
+          results = music;
+        });
+      case ACRCloudNoMatch():
+        Navigator.pop(context, const ACRCloudDialogResultNoMatch());
+      case ACRCloudCancelled():
+        Navigator.pop(context, const ACRCloudDialogResultCancelled());
+        return;
+      case ACRCloudFailure():
+        setState(() {
+          error = result.errorMessage;
+        });
+    }
   }
 
   @override
@@ -60,7 +68,9 @@ class _ACRCloudDialogState extends State<ACRCloudDialog> {
       ? _ErrorDialog(error!)
       : results != null
       ? _ResultsDialog(results!)
-      : _ListeningDialog(session);
+      : session != null
+      ? _ListeningDialog(session!)
+      : const SizedBox();
 }
 
 class _ListeningDialog extends StatelessWidget {
@@ -69,7 +79,7 @@ class _ListeningDialog extends StatelessWidget {
   const _ListeningDialog(this.session);
 
   Widget _audioIndicator(BuildContext context) => StreamBuilder<double>(
-    stream: session.volumeStream,
+    stream: session.volume,
     initialData: 0.0,
     builder: (_, snapshot) => SizedBox(
       width: 100,
@@ -112,8 +122,10 @@ class _ResultsDialog extends StatelessWidget {
         return ListTile(
           contentPadding: .zero,
           title: Text(track.title),
-          subtitle: Text('${track.artists.first.name}\n${track.album.name}'),
-          isThreeLine: true,
+          subtitle: track.album == null
+              ? Text(track.artists.first.name)
+              : Text('${track.artists.first.name}\n${track.album!.name}'),
+          isThreeLine: track.album != null,
           trailing: IconButton(
             icon: const Icon(Icons.info),
             color: Theme.of(context).brightness == Brightness.light
@@ -129,7 +141,7 @@ class _ResultsDialog extends StatelessWidget {
             },
           ),
           onTap: () {
-            Navigator.pop(context, ACRCloudDialogResult(track));
+            Navigator.pop(context, ACRCloudDialogResultTrack(track: track));
           },
         );
       },
@@ -143,7 +155,7 @@ class _ResultsDialog extends StatelessWidget {
     actions: [
       TextButton(
         onPressed: () {
-          Navigator.pop(context, const ACRCloudDialogResult.cancelled());
+          Navigator.pop(context, const ACRCloudDialogResultCancelled());
         },
         child: const Text('Cancel'),
       ),
@@ -163,7 +175,7 @@ class _ErrorDialog extends StatelessWidget {
     actions: [
       TextButton(
         onPressed: () {
-          Navigator.pop(context, const ACRCloudDialogResult.cancelled());
+          Navigator.pop(context, const ACRCloudDialogResultCancelled());
         },
         child: const Text('Close'),
       ),

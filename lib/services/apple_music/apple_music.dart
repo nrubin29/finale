@@ -68,9 +68,9 @@ class AMSearchArtistsRequest extends PagedRequest<AMArtist> {
   @override
   Future<List<AMArtist>> doRequest(int limit, int page) async =>
       (await FlutterMPMediaPlayer.searchArtists(
-        query,
-        limit,
-        page,
+        query: query,
+        limit: limit,
+        page: page,
       )).map(AMArtist.new).toList(growable: false);
 
   @override
@@ -85,9 +85,9 @@ class AMSearchPlaylistsRequest extends PagedRequest<AMPlaylist> {
   @override
   Future<List<AMPlaylist>> doRequest(int limit, int page) async =>
       (await FlutterMPMediaPlayer.searchPlaylists(
-        query,
-        limit,
-        page,
+        query: query,
+        limit: limit,
+        page: page,
       )).map(AMPlaylist.new).toList(growable: false);
 
   @override
@@ -124,9 +124,9 @@ class AMPlaylistSongsRequest extends PagedRequest<AMSong> {
   @override
   Future<List<AMSong>> doRequest(int limit, int page) async =>
       (await FlutterMPMediaPlayer.getPlaylistSongs(
-        playlistId,
-        limit,
-        page,
+        playlistId: playlistId,
+        limit: limit,
+        page: page,
       )).map(AMSong.new).toList(growable: false);
 
   @override
