@@ -239,7 +239,9 @@ class Spotify {
     );
     final response = TokenResponse.fromJson(json.decode(rawResponse.body));
     Preferences.spotifyAccessToken.value = response.accessToken;
-    Preferences.spotifyRefreshToken.value = response.refreshToken;
+    if (response.refreshToken case final refreshToken?) {
+      Preferences.spotifyRefreshToken.value = refreshToken;
+    }
     Preferences.spotifyExpiration.value = response.expiresAt;
   }
 

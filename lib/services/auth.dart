@@ -14,7 +14,7 @@ class TokenResponse {
   final DateTime expiresAt;
 
   @JsonKey(name: 'refresh_token')
-  final String refreshToken;
+  final String? refreshToken;
 
   const TokenResponse(this.accessToken, this.expiresAt, this.refreshToken);
 
