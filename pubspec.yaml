@@ -46,7 +46,7 @@ dependencies:
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
   wakelock_plus: ^1.7.0
-  webview_cookie_manager_plus: ^2.0.17
+  webview_cookie_manager_flutter: ^3.1.0
   webview_flutter: ^4.14.1
   workmanager: ^0.10.7
 

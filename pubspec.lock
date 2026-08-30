@@ -1321,14 +1321,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  webview_cookie_manager_plus:
+  webview_cookie_manager_flutter:
     dependency: "direct main"
     description:
-      name: webview_cookie_manager_plus
-      sha256: "629e455d9e9917228f69ff31366aa9cf6dc209df716a2b8746a3fcc9904944a0"
+      name: webview_cookie_manager_flutter
+      sha256: "1ca16fc54ccbc63bc8abbfae059cb39aed38013e3e1a64864b248e8f6bfa2f05"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.17"
+    version: "3.1.0"
   webview_flutter:
     dependency: "direct main"
     description:

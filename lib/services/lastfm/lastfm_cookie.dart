@@ -12,7 +12,7 @@ import 'package:finale/util/preferences.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:webview_cookie_manager_plus/webview_cookie_manager_plus.dart';
+import 'package:webview_cookie_manager_flutter/webview_cookie_manager.dart';
 
 part 'lastfm_cookie.g.dart';
 
