@@ -1,7 +1,7 @@
 name: finale
 description: A fully-featured Last.fm client
 publish_to: 'none'
-version: 5.1.1+51
+version: 5.1.2+52
 
 environment:
   sdk: ">=3.13.0 <4.0.0"
@@ -17,7 +17,7 @@ dependencies:
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
-  flutter_acrcloud: ^2.0.0
+  flutter_acrcloud: ^2.0.1
   flutter_cache_manager: ^3.4.2
   flutter_local_notifications: ^22.3.0
   flutter_mpmediaplayer: ^1.0.0

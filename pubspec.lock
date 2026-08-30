@@ -338,10 +338,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_acrcloud
-      sha256: e00239fb04363cddbdb2d845ce80fecb471b85d05e5991f9cf1b9e9488e9d4db
+      sha256: "71944419de30816535f544f9effe36fcf7136a17f68e7a404c116d95b3386f11"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   flutter_cache_manager:
     dependency: "direct main"
     description:
