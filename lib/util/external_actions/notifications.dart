@@ -20,6 +20,9 @@ enum NotificationType {
 
 Future<void> setup() async {
   const initializationSettings = InitializationSettings(
+    // The Android drawable is resolved by name at runtime, so it must be listed
+    // in android/app/src/main/res/raw/keep.xml or the resource shrinker will
+    // strip it from release builds.
     android: AndroidInitializationSettings('@drawable/music_note'),
     iOS: DarwinInitializationSettings(
       requestAlertPermission: false,

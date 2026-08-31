@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- These drawables are only referenced by name from Dart, so the resource shrinker
+     can't see the references and strips them from release builds. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/music_note,@drawable/add,@drawable/all_inclusive" />

@@ -16,6 +16,9 @@ Future<void> setup() async {
   await quickActions.initialize((type) {
     _handleLink(Uri(host: type));
   });
+  // The Android drawables ('add', 'all_inclusive') are resolved by name at
+  // runtime, so they must be listed in android/app/src/main/res/raw/keep.xml or
+  // the resource shrinker will strip them from release builds.
   await quickActions.setShortcutItems(const [
     ShortcutItem(
       type: 'scrobbleonce',
