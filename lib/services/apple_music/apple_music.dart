@@ -171,4 +171,17 @@ class AppleMusic {
 
     return success;
   }
+
+  /// Scrobbles all tracks played since the last Apple Music scrobble.
+  ///
+  /// Returns the number of tracks scrobbled, or null if scrobbling failed.
+  static Future<int?> scrobbleRecentTracks() async {
+    final tracks = await const AMRecentTracksRequest().getAllData();
+
+    if (tracks.isEmpty) {
+      return 0;
+    }
+
+    return await scrobble(tracks) ? tracks.length : null;
+  }
 }
