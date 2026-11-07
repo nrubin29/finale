@@ -16,6 +16,12 @@ class Preference<T, U extends Object> {
     _preferences = await .getInstance();
   }
 
+  /// Re-reads all preferences from disk.
+  ///
+  /// Needed before reading values that another engine (e.g. a background task)
+  /// may have written, since [SharedPreferences] caches them.
+  static Future<void> reload() => _preferences.reload();
+
   final String _key;
   final T _defaultValue;
   final U? Function(T value)? serialize;
