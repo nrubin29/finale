@@ -2,6 +2,8 @@ import 'package:finale/services/lastfm/lastfm_cookie.dart';
 import 'package:finale/util/background_tasks/background_task_manager.dart'
     as background_task_manager;
 import 'package:finale/util/constants.dart';
+import 'package:finale/util/external_actions/apple_music_sync.dart'
+    as apple_music_sync;
 import 'package:finale/util/external_actions/notifications.dart'
     as notifications;
 import 'package:finale/util/external_actions/quick_actions_manager.dart'
@@ -32,6 +34,12 @@ Future<void> main() async {
 
   runApp(const ProfileStack(child: MyApp()));
 }
+
+/// Entrypoint for the "Scrobble Apple Music" iOS shortcut.
+///
+/// Run in a headless engine by ios/Runner/ScrobbleAppleMusicIntent.swift.
+@pragma('vm:entry-point')
+Future<void> appleMusicSyncMain() => apple_music_sync.run();
 
 class MyApp extends StatefulWidget {
   const MyApp();

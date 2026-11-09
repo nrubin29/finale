@@ -24,15 +24,7 @@ class AppleMusicScrobbleBackgroundTask extends BackgroundTask {
   }
 
   @override
-  Future<bool> run() async {
-    final tracks = await const AMRecentTracksRequest().getAllData();
-
-    if (tracks.isEmpty) {
-      return true;
-    }
-
-    return await AppleMusic.scrobble(tracks);
-  }
+  Future<bool> run() async => await AppleMusic.scrobbleRecentTracks() != null;
 
   void _onAppleMusicChange(_) {
     register();
