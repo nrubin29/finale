@@ -6,6 +6,7 @@ import 'package:finale/services/apple_music/playlist.dart';
 import 'package:finale/services/apple_music/song.dart';
 import 'package:finale/services/generic.dart';
 import 'package:finale/services/lastfm/lastfm.dart';
+import 'package:finale/util/preference.dart';
 import 'package:finale/util/preferences.dart';
 import 'package:flutter_mpmediaplayer/flutter_mpmediaplayer.dart';
 
@@ -99,6 +100,12 @@ class AMRecentTracksRequest extends PagedRequest<AMPlayedSong> {
 
   @override
   Future<List<AMPlayedSong>> doRequest(int limit, int page) async {
+    if (page == 1) {
+      // Another engine (e.g. a background task) may have scrobbled since the
+      // preferences were cached.
+      await Preference.reload();
+    }
+
     var after = DateTime.now().subtract(const Duration(days: 14));
     final last = Preferences.lastAppleMusicScrobble.value;
     if (last != null && last.isAfter(after)) {

@@ -11,19 +11,26 @@ import workmanager_apple
     // For local notifications
     UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
 
+    // BGTaskScheduler only delivers tasks if their handlers are registered
+    // before launch finishes, which is before the implicit engine exists.
+    WorkmanagerPlugin.registerPeriodicTask(
+        withIdentifier: "com.nrubintech.finale.BackgroundScrobbling",
+        earliestBeginInSeconds: NSNumber(value: 60 * 60) // 1 hour
+    )
+    WorkmanagerPlugin.registerPeriodicTask(
+        withIdentifier: "com.nrubintech.finale.SpotifyChecker",
+        earliestBeginInSeconds: NSNumber(value: 3 * 60 * 60) // 3 hours
+    )
+
+    // Background tasks run in their own engine, which needs plugins too.
+    WorkmanagerPlugin.setPluginRegistrantCallback { registry in
+      GeneratedPluginRegistrant.register(with: registry)
+    }
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
-
-    WorkmanagerPlugin.registerPeriodicTask(
-        withIdentifier: "com.nrubintech.finale.BackgroundScrobbling",
-        frequency: NSNumber(value: 60 * 60) // 1 hour
-    )
-    WorkmanagerPlugin.registerPeriodicTask(
-        withIdentifier: "com.nrubintech.finale.SpotifyChecker",
-        frequency: NSNumber(value: 3 * 60 * 60) // 3 hours
-    )
   }
 }
